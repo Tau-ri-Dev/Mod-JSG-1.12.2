@@ -1,16 +1,9 @@
 # AUNIS
 
-[![Aunis Curse statistics](http://cf.way2muchnoise.eu/aunis.svg)](http://minecraft.curseforge.com/projects/aunis)
-[![Discord invite](https://img.shields.io/discord/595152041962373120?logo=discord&color=%235D70B3&style=flat-square)](https://discord.gg/wfba6Dcyxe)
-
-[![Downloads](https://img.shields.io/github/downloads/MrJake222/AUNIS/total?color=%23B3451B&label=downloads%20(github)&style=flat-square)](https://github.com/MrJake222/AUNIS/releases)<br>
-[![Releases](https://img.shields.io/github/v/release/MrJake222/AUNIS?color=%23B3451B&label=beta&style=flat-square)](https://github.com/MrJake222/AUNIS/releases)<br>
-[![Releases](https://img.shields.io/github/v/release/MrJake222/AUNIS?color=%23B3451B&include_prereleases&label=alpha&style=flat-square)](https://github.com/MrJake222/AUNIS/releases)
-
 
 **All You Need is Stargate** is a Stargate-based Minecraft mod. It aims to closely resemble the franchise and be the most immersive Stargate mod out there.
 
->Created and coded by MrJake222<br>
+>Created and coded by MrJake222 && MineDragonCZ_<br>
 Models by MarcelMPL
 
 ## Resources used by AUNIS
