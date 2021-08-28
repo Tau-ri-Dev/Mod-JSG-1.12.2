@@ -1,0 +1,23 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"   ",
+		"N N",
+		"RNR"
+	],
+	
+	"key": {
+		"N": {
+			"item": "aunis:naquadah_alloy"
+		},
+		
+		"R": {
+			"item": "aunis:crystal_red"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:holder_crystal",
+		"count": 1
+	}
+}

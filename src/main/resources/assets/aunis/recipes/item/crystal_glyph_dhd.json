@@ -1,0 +1,23 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"   ",
+		"ECE",
+		"   "
+	],
+	
+	"key": {
+		"C": {
+			"item": "aunis:circuit_control_crystal"
+		},
+		
+		"E": {
+			"item": "aunis:crystal_ender"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:crystal_glyph_dhd",
+		"count": 1
+	}
+}

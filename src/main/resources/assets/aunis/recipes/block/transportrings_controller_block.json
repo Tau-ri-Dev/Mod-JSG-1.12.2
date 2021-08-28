@@ -1,0 +1,35 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"BGB",
+		"GIG",
+		"NEN"
+	],
+	
+	"key": {
+		"G": {
+			"item": "minecraft:gold_ingot"
+		},
+		
+		"N": {
+			"item": "aunis:naquadah_alloy"
+		},
+
+		"B": {
+			"item": "minecraft:stone_button"
+		},
+		
+		"E": {
+			"item": "aunis:crystal_ender"
+		},
+		
+		"I": {
+			"item": "aunis:circuit_control_naquadah"
+		}		
+	},
+	
+	"result": {
+		"item": "aunis:transportrings_controller_block",
+		"count": 1
+	}
+}

@@ -1,0 +1,15 @@
+{
+	"forge_marker": 1,
+	
+	"defaults": {},
+	
+	"variants": {
+		"normal": [{}],
+		"inventory": [{}],
+	
+		"collisions": {
+			"false": {},
+			"true": {}
+		}
+	}
+}

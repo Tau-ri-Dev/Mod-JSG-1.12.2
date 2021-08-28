@@ -1,0 +1,43 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"FGF",
+		"BAR",
+		"OIO"
+	],
+	
+	"key": {
+	    "G": {
+            "item": "minecraft:glass_pane"
+        },
+	
+		"O": {
+			"item": "aunis:naquadah_block"
+		},
+	
+		"F": {
+			"item": "aunis:naquadah_alloy"
+		},
+		
+		"A": {
+			"item": "minecraft:ghast_tear"
+		},
+		
+		"R": {
+			"item": "aunis:crystal_red"
+		},
+		
+		"B": {
+			"item": "aunis:crystal_blue"
+		},
+		
+		"I": {
+			"item": "aunis:circuit_control_naquadah"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:beamer_block",
+		"count": 1
+	}
+}

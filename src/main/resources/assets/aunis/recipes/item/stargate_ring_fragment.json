@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"NNN",
+		"   ",
+		"NNN"
+	],
+	
+	"key": {
+		"N": {
+			"item": "aunis:naquadah_alloy"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:stargate_ring_fragment",
+		"count": 4
+	}
+}

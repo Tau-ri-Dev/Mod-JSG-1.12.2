@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"NNN",
+		"NNN",
+		"NNN"
+	],
+	
+	"key": {
+		"N": {
+			"item": "aunis:naquadah_alloy"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:naquadah_block",
+		"count": 1
+	}
+}

@@ -1,0 +1,27 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"   ",
+		"BCE",
+		"   "
+	],
+	
+	"key": {
+		"C": {
+			"item": "aunis:circuit_control_crystal"
+		},
+		
+		"B": {
+			"item": "aunis:crystal_blue"
+		},
+		
+		"E": {
+			"item": "aunis:crystal_ender"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:crystal_glyph_stargate",
+		"count": 1
+	}
+}

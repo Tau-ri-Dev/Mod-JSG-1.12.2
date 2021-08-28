@@ -1,0 +1,23 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" R ",
+		"RSR",
+		" R "
+	],
+	
+	"key": {
+		"R": {
+			"item": "aunis:crystal_red"
+		},
+		
+		"S": {
+			"item": "minecraft:redstone"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:crystal_control_dhd",
+		"count": 1
+	}
+}

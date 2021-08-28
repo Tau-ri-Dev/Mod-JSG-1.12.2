@@ -1,0 +1,43 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"SGS",
+		"RIE",
+		"NHN"
+	],
+	
+	"key": {
+		"S": {
+			"item": "minecraft:stone_button"
+		},
+
+		"G": {
+			"item": "aunis:dhd_brb"
+		},
+
+		"N": {
+			"item": "aunis:naquadah_alloy"
+		},
+		
+		"H": {
+			"item": "aunis:holder_crystal"
+		},
+		
+		"I": {
+			"item": "aunis:circuit_control_naquadah"
+		},
+		
+		"E": {
+			"item": "aunis:crystal_ender"
+		},
+		
+		"R": {
+			"item": "aunis:crystal_red"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:dhd_block",
+		"count": 1
+	}
+}

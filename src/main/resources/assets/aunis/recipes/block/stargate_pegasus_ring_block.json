@@ -1,0 +1,28 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" N ",
+		"RBR",
+		" N "
+	],
+	
+	"key": {
+		"N": {
+			"item": "aunis:naquadah_alloy"
+		},
+		
+		"B": {
+			"item": "aunis:crystal_blue"
+		},
+		
+		"R": {
+			"item": "aunis:stargate_ring_fragment"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:stargate_pegasus_member_block",
+		"count": 2,
+		"data": 6
+	}
+}
