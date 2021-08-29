@@ -133,6 +133,7 @@ commands.sgcloseall.closed=Closed %s gates.
 commands.sgcloseall.number_expected=Number or "current" expected as dimension ID
 
 death.attack.eventHorizon=%s was given a kawoosh cremation
+death.attack.irisDeath=%s was given a iris cremation
 
 
 glyph.aunis.milkyway.sculptor=Sculptor
@@ -211,6 +212,8 @@ glyph.aunis.pegasus.abrin=Abrin
 glyph.aunis.pegasus.ramnon=Ramnon
 glyph.aunis.pegasus.olavii=Olavii
 glyph.aunis.pegasus.hacemill=Hacemill
+glyph.aunis.pegasus.unknow1=Unknow 1
+glyph.aunis.pegasus.unknow2=Unknow 2
 
 glyph.aunis.universe.g1=Glyph 1
 glyph.aunis.universe.g2=Glyph 2

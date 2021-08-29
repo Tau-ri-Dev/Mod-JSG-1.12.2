@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.vecmath.Vector2f;
 
+import mrjake.aunis.AunisDamageSources;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.api.event.StargateTeleportEntityEvent;
 import mrjake.aunis.packet.AunisPacketHandler;
@@ -13,7 +14,7 @@ import mrjake.aunis.packet.stargate.StargateMotionToClient;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.network.StargatePos;
-import mrjake.aunis.tileentity.irises.EnumIrisState;
+import mrjake.aunis.irises.EnumIrisState;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.entity.Entity;
@@ -22,7 +23,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import static mrjake.aunis.tileentity.irises.EnumIrisState.irisState;
+import static mrjake.aunis.irises.EnumIrisState.irisState;
 
 public class EventHorizon {	
 	private World world;
@@ -91,18 +92,24 @@ public class EventHorizon {
 					Vector2f motion = new Vector2f( (float)entity.motionX, (float)entity.motionZ );
 					
 					if (TeleportHelper.frontSide(sourceFacing, motion)) {
-						for (Entity passenger : entity.getPassengers())
-							timeoutMap.put(passenger.getEntityId(), 40);
-						timeoutMap.put(entityId, 40);
-						
-						scheduledTeleportMap.put(entityId, packet.setMotion(motion) );
-						teleportEntity(entityId);
+						if(EnumIrisState.isNull() || EnumIrisState.opened()) {
+							for (Entity passenger : entity.getPassengers())
+								timeoutMap.put(passenger.getEntityId(), 40);
+							timeoutMap.put(entityId, 40);
+
+							scheduledTeleportMap.put(entityId, packet.setMotion(motion));
+							teleportEntity(entityId);
+						}
+						else{
+							System.out.println("byl jsi zabit irisem! xD");
+							entity.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS, 20);
+						}
 					}
-					
 					/*else {
+						//entity.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_HORIZON, 20);
+						//System.out.println("Test!!!");
 						// TODO Back side killing
 						// Make custom message appear
-						entity.onKillCommand();
 					}*/
 				}
 			}
@@ -114,11 +121,8 @@ public class EventHorizon {
 		
 		if (!new StargateTeleportEntityEvent((StargateAbstractBaseTile) world.getTileEntity(pos), packet.getTargetGatePos().getTileEntity(), packet.getEntity()).post()) {
 			// Not cancelled
-			if(irisState == EnumIrisState.OPENED || irisState == null) {
-				packet.teleport();
-				AunisSoundHelper.playSoundEvent(world, gateCenter, SoundEventEnum.WORMHOLE_GO);
-			}
-			else System.out.println("byl jsi zabit irisem! xD");
+			packet.teleport();
+			AunisSoundHelper.playSoundEvent(world, gateCenter, SoundEventEnum.WORMHOLE_GO);
 		};
 		
 		scheduledTeleportMap.remove(entityId);

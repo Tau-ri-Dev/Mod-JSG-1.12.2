@@ -1,4 +1,4 @@
-package mrjake.aunis.tileentity.irises;
+package mrjake.aunis.irises;
 
 import mrjake.aunis.stargate.network.StargatePos;
 

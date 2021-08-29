@@ -1,4 +1,4 @@
-package mrjake.aunis.tileentity.irises;
+package mrjake.aunis.irises;
 
 
 import mrjake.aunis.stargate.network.StargatePos;
@@ -35,5 +35,9 @@ public enum EnumIrisState {
 
         }
     }
+
+    public static boolean opened(){ return irisState == OPENED; }
+    public static boolean closed(){ return irisState == CLOSED; }
+    public static boolean isNull(){ return irisState == null; }
 
 }
