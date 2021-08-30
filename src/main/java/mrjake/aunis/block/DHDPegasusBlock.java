@@ -107,13 +107,13 @@ public class DHDPegasusBlock extends Block {
   @Override
   public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
     EnumFacing dhdFacingOpposite = EnumFacing.getHorizontal(Math.round(state.getValue(AunisProps.ROTATION_HORIZONTAL) / 4.0f));
-    boolean backActivation = (facing == dhdFacingOpposite);
+    boolean frontActivation = (facing == dhdFacingOpposite);
 
     if (!world.isRemote) {
       // Server
 
-      if (!player.isSneaking() && backActivation) {
-        // Not sneaking and activating from the back
+      if (!player.isSneaking() && frontActivation) {
+        // Not sneaking and activating from the <-back-> front
         // Try: fluid interaction, upgrade insertion, gui opening
 
         if (!FluidUtil.interactWithFluidHandler(player, hand, world, pos, null)) {
@@ -125,8 +125,8 @@ public class DHDPegasusBlock extends Block {
       }
     }
 
-    // Only activate when not sneaking and activating from the back
-    return !player.isSneaking() && backActivation;
+    // Only activate when not sneaking and activating from the <-back-> front
+    return !player.isSneaking() && frontActivation;
   }
 
   @Override

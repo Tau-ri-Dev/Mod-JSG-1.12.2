@@ -124,8 +124,8 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 	
 	public static NBTTagCompound getCompoundFromAddress(StargateAddress address, boolean hasUpgrade, String registryPath) {
 		NBTTagCompound compound = new NBTTagCompound();
-		compound.setInteger("symbolType", address.getSymbolType().id);
-		compound.setTag("address", address.serializeNBT());
+		if(address.getSymbolType() != null) compound.setInteger("symbolType", address.getSymbolType().id);
+		if(address.serializeNBT() != null) compound.setTag("address", address.serializeNBT());
 		compound.setBoolean("hasUpgrade", hasUpgrade);
 		compound.setInteger("color", PageNotebookItem.getColorForBiome(registryPath));
 		
