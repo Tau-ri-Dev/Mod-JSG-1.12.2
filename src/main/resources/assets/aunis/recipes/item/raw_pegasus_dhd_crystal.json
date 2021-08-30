@@ -1,0 +1,23 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" R ",
+		"RSR",
+		" R "
+	],
+	
+	"key": {
+		"R": {
+			"item": "minecraft:redstone"
+		},
+		
+		"S": {
+			"item": "aunis:crystal_ender"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:crystal_control_pegasus_dhd",
+		"count": 1
+	}
+}

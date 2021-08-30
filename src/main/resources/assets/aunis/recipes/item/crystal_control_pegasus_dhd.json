@@ -1,0 +1,26 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"CRC",
+		"RSR",
+		"CRC"
+	],
+	
+	"key": {
+		"R": {
+			"item": "aunis:crystal_blue"
+		},
+		
+		"S": {
+			"item": "minecraft:lapis"
+		},
+		"C": {
+			"item": "aunis:raw_pegasus_dhd_crystal"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:crystal_control_pegasus_dhd",
+		"count": 1
+	}
+}

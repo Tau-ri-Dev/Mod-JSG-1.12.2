@@ -225,7 +225,11 @@ public class DHDPegasusTile extends TileEntity implements ILinkable, IUpgradable
     return null;
   }
 
-  public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.SOOTY, BiomeOverlayEnum.AGED);
+  public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(
+          BiomeOverlayEnum.NORMAL,
+          BiomeOverlayEnum.FROST,
+          BiomeOverlayEnum.MOSSY,
+          BiomeOverlayEnum.AGED);
 
   public static EnumSet<BiomeOverlayEnum> getSupportedOverlays() {
     return SUPPORTED_OVERLAYS;
@@ -405,7 +409,7 @@ public class DHDPegasusTile extends TileEntity implements ILinkable, IUpgradable
 
       switch (slot) {
         case 0:
-          return item == AunisItems.CRYSTAL_CONTROL_DHD;
+          return item == AunisItems.CRYSTAL_CONTROL_PEGASUS_DHD;
 
         case 1:
         case 2:

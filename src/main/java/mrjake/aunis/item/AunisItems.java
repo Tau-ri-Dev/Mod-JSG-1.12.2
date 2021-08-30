@@ -19,7 +19,10 @@ public class AunisItems {
 	 * DHD power/control crystal
 	 */
 	public static final Item CRYSTAL_CONTROL_DHD = ItemHelper.createGenericItem("crystal_control_dhd");
-	
+	public static final Item CRYSTAL_CONTROL_PEGASUS_DHD = ItemHelper.createGenericItem("crystal_control_pegasus_dhd");
+
+	public static final Item CRYSTAL_RAW_PEGASUS_DHD = ItemHelper.createGenericItem("raw_pegasus_dhd_crystal");
+
 	/**
 	 * These allow for dialing 8th glyph(cross dimension travel) and show different address spaces
 	 */
@@ -68,7 +71,9 @@ public class AunisItems {
 	
 	private static Item[] items = {		
 		CRYSTAL_CONTROL_DHD,
-		
+		CRYSTAL_CONTROL_PEGASUS_DHD,
+		CRYSTAL_RAW_PEGASUS_DHD,
+
 		CRYSTAL_GLYPH_DHD,
 		CRYSTAL_GLYPH_STARGATE,
 		CRYSTAL_GLYPH_MILKYWAY,
