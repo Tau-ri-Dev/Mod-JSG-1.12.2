@@ -1,7 +1,7 @@
 package mrjake.aunis.irises;
 
 
-import mrjake.aunis.stargate.network.StargatePos;
+import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 
 public enum EnumIrisState {
 
@@ -17,7 +17,7 @@ public enum EnumIrisState {
 
     public static EnumIrisState irisState;
 
-    public static void setIrisState(EnumIrisState state, StargatePos pos) {
+    public static void setIrisState(EnumIrisState state, StargateAbstractBaseTile gateTile) {
         switch (state) {
             case OPEN:
                 irisState = OPENING;

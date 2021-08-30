@@ -339,12 +339,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
     for (int k = (backOnly ? 1 : 0); k < 2; k++) {
       if (k == 1) {
-        //				GlStateManager.popMatrix();
-        //
-        //				GlStateManager.pushMatrix();
-        //				GlStateManager.translate(x, y, z);
         GlStateManager.rotate(180, 0, 1, 0);
-        //glColor4f(1,1,1,0.7f);
       }
 
       if (alpha == null) alpha = 0.0f;

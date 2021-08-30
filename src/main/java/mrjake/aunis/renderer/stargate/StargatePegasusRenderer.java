@@ -1,7 +1,10 @@
 package mrjake.aunis.renderer.stargate;
 
+import mrjake.aunis.Aunis;
 import mrjake.aunis.loader.ElementEnum;
+import mrjake.aunis.loader.texture.Texture;
 import mrjake.aunis.loader.texture.TextureLoader;
+import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.util.math.MathFunction;
 import mrjake.aunis.util.math.MathFunctionImpl;
 import mrjake.aunis.util.math.MathRange;
@@ -81,6 +84,8 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
     ElementEnum.PEGASUS_RING.bindTextureAndRender(rendererState.getBiomeOverlay());
 
     GlStateManager.popMatrix();
+    //renderShield(rendererState.horizontalRotation);
+    renderShield(partialTicks, false, null, false, 1);
   }
 
 
@@ -169,5 +174,63 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
     GlStateManager.enableLighting();
     GlStateManager.popMatrix();
+  }
+
+
+  /*public void renderShield(float gateRotation) {
+    if (gateRotation == 90 || gateRotation == 270) {
+      GlStateManager.translate(RING_LOC.y, RING_LOC.z, RING_LOC.x);
+      GlStateManager.rotate(0, 2, 0, 0);
+      GlStateManager.translate(-RING_LOC.y, -RING_LOC.z, -RING_LOC.x);
+    } else {
+      GlStateManager.translate(RING_LOC.x, RING_LOC.z, RING_LOC.y);
+      GlStateManager.rotate(0, 0, 0, 2);
+      GlStateManager.translate(-RING_LOC.x, -RING_LOC.z, -RING_LOC.y);
+    }
+    GlStateManager.glEnd();
+
+    GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK,GL11.GL_FILL);
+    GlStateManager.color(1, 1, 1, 1);
+    GlStateManager.enableTexture2D();
+    GlStateManager.enableLighting();
+    ElementEnum.PEGASUS_SHIELD.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
+  }*/
+
+  protected static final ResourceLocation PEGASUS_SHIELD_TEXTURE_LOC =
+          new ResourceLocation(Aunis.ModID, "textures/tesr/pegasus/shield/gate_pegasus_shield.jpg");
+
+  protected void renderShield(double partialTicks, boolean white, Float alpha, boolean backOnly, float mul) {
+
+    Texture ehTexture = TextureLoader.getTexture(PEGASUS_SHIELD_TEXTURE_LOC);
+    if (ehTexture != null) ehTexture.bindTexture();
+
+    float tick = (float) (getWorld().getTotalWorldTime() + partialTicks);
+
+    GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+    GlStateManager.enableBlend();
+
+    for (int k = (backOnly ? 1 : 0); k < 2; k++) {
+      if (k == 1) {
+        GlStateManager.rotate(180, 0, 1, 0);
+      }
+
+      if (alpha == null) alpha = 0.0f;
+
+      if (k == 1) alpha += 0.3f;
+
+
+      if (white) StargateRendererStatic.innerCircle.render(tick, true, alpha, mul);
+
+      StargateRendererStatic.innerCircle.render(tick, false, 1.0f - alpha, mul);
+
+
+      for (StargateRendererStatic.QuadStrip strip : StargateRendererStatic.quadStrips) {
+        if (white) strip.render(tick, true, alpha, mul);
+
+        strip.render(tick, false, 1.0f - alpha, mul);
+      }
+    }
+
+    GlStateManager.disableBlend();
   }
 }
