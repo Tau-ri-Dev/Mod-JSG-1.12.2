@@ -90,7 +90,7 @@ public class DHDPegasusContainer extends Container implements OpenTabHolderInter
         
 		// Transfering from player's inventory to DHD
         else {
-        	if (stack.getItem() == AunisItems.CRYSTAL_CONTROL_DHD) {
+        	if (stack.getItem() == AunisItems.CRYSTAL_CONTROL_PEGASUS_DHD) {
         		if (!slotCrystal.getHasStack()) {
         			ItemStack stack1 = stack.copy();
     				stack1.setCount(1);
