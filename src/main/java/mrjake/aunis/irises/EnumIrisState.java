@@ -17,7 +17,7 @@ public enum EnumIrisState {
 
     public static EnumIrisState irisState;
 
-    public void setIrisState(EnumIrisState state, StargatePos pos) {
+    public static void setIrisState(EnumIrisState state, StargatePos pos) {
         switch (state) {
             case OPEN:
                 irisState = OPENING;

@@ -14,6 +14,7 @@ import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.container.StargateContainerGuiState;
 import mrjake.aunis.gui.container.StargateContainerGuiUpdate;
+import mrjake.aunis.irises.EnumIrisState;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.packet.AunisPacketHandler;
@@ -665,7 +666,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
 
     public static enum StargateUpgradeEnum implements EnumKeyInterface<Item> {
-    MILKYWAY_GLYPHS(AunisItems.CRYSTAL_GLYPH_MILKYWAY), PEGASUS_GLYPHS(AunisItems.CRYSTAL_GLYPH_PEGASUS), UNIVERSE_GLYPHS(AunisItems.CRYSTAL_GLYPH_UNIVERSE), CHEVRON_UPGRADE(AunisItems.CRYSTAL_GLYPH_STARGATE);
+      MILKYWAY_GLYPHS(AunisItems.CRYSTAL_GLYPH_MILKYWAY),
+      PEGASUS_GLYPHS(AunisItems.CRYSTAL_GLYPH_PEGASUS),
+      UNIVERSE_GLYPHS(AunisItems.CRYSTAL_GLYPH_UNIVERSE),
+      CHEVRON_UPGRADE(AunisItems.CRYSTAL_GLYPH_STARGATE);
 
     public Item item;
 
@@ -790,6 +794,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
   // -----------------------------------------------------------------
   // OpenComputers methods
+/*
+  @Optional.Method(modid = "opencomputers")
+  @Callback(doc = "function() -- closes the iris/shield")
+  public Object[] closeIris(Context context, Arguments args) {
+    EnumIrisState.setIrisState(EnumIrisState.CLOSE, pos);
+  }*/
 
   @Optional.Method(modid = "opencomputers")
   @Callback(doc = "function(symbolName:string) -- Spins the ring to the given symbol and engages/locks it")

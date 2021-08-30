@@ -16,9 +16,6 @@ public enum EnumScheduledTask {
 
   HORIZON_FLASH(7, -1, false),
 
-  OPEN_IRIS(47, -1, false),
-  CLOSE_IRIS(47, -1, false),
-
   STARGATE_ORLIN_OPEN(8, 144), // 8.93s(duration of dial sound) * 20(tps) - 25(STARGATE_OPEN_SOUND wait time)
   STARGATE_ORLIN_SPARK(9, 27, false),
 
