@@ -4,6 +4,9 @@ item.aunis.analyzer_ancient.name=古人的分析仪
 item.aunis.crystal_control_dhd.name=DHD控制水晶
 item.aunis.dialer_fast.name=快速拨号程序（调试）
 
+item.aunis.crystal_control_pegasus_dhd.name=Pegasus DHD Control Crystal
+item.aunis.raw_pegasus_dhd_crystal.name=Pegasus DHD Raw Crystal
+
 item.aunis.crystal_glyph_dhd.name=DHD升级水晶
 item.aunis.crystal_glyph_stargate.name=星门升级水晶
 item.aunis.crystal_glyph_milkyway.name=银河系星门升级水晶
@@ -21,6 +24,7 @@ tile.aunis.stargate_milkyway_base_block.name=银河系星门基础方块
 tile.aunis.stargate_milkyway_ring_block.name=银河系星门环方块
 tile.aunis.stargate_milkyway_chevron_block.name=银河系星门标记方块
 tile.aunis.dhd_block.name=拨号回家装置(DHD)
+tile.aunis.dhd_pegasus_block.name=Dial Home Device (DHD Pegas)
 tile.aunis.capacitor_block.name=电容储存器
 
 tile.aunis.stargate_orlin_base_block.name=人造迷你星门基础方块
@@ -39,15 +43,18 @@ item.aunis.crystal_red.name=能量水晶
 item.aunis.crystal_ender.name=末影水晶
 item.aunis.crystal_yellow.name=光能水晶
 item.aunis.crystal_white.name=白色水晶
+item.aunis.crystal_blue_pegasus.name=Pegasus Crystal
 
 item.aunis.circuit_control_base.name=控制电路基础
 item.aunis.circuit_control_naquadah.name=Naquadah控制电路
 item.aunis.circuit_control_crystal.name=水晶控制电路
 
 item.aunis.dhd_brb.name=亮红色的按钮(BRB)
+item.aunis.dhd_bbb.name=Bright Blue Button (BBB)
 
 item.aunis.stargate_ring_fragment.name=星门环方块碎片
 item.aunis.holder_crystal.name=水晶稳定器
+item.aunis.holder_crystal_pegasus.name=Crystal Holder (pegasus)
 
 item.aunis.page_notebook.name=笔记本页面
 item.aunis.page_mysterious.name=神秘之页
@@ -71,6 +78,12 @@ tile.aunis.dhd_block.not_linked_warn=DHD未链接到该星门
 tile.aunis.dhd_block.no_crystal_warn=DHD没有控制水晶
 tile.aunis.dhd_block.no_enough_power=DHD至少需要10,000uI的能量才能正常运行
 tile.aunis.dhd_block.computer_dial=电脑拨号正在进行中
+
+tile.aunis.dhd_pegasus_block.incoming_wormhole_warn=Unable to close the gate on this end
+tile.aunis.dhd_pegasus_block.not_linked_warn=DHD is not linked to the gate
+tile.aunis.dhd_pegasus_block.no_crystal_warn=DHD has no control crystal
+tile.aunis.dhd_pegasus_block.no_enough_power=DHD requires at least 10,000uI to operate properly
+tile.aunis.dhd_pegasus_block.computer_dial=Computer dial is in progress
 
 tile.aunis.stargatebase_block.not_enough_power=能量不足
 
@@ -180,6 +193,8 @@ glyph.aunis.pegasus.abrin=Abrin
 glyph.aunis.pegasus.ramnon=Ramnon
 glyph.aunis.pegasus.olavii=Olavii
 glyph.aunis.pegasus.hacemill=Hacemill
+glyph.aunis.pegasus.unknow1=Unknow 1
+glyph.aunis.pegasus.unknow2=Unknow 2
 
 glyph.aunis.universe.g1=Glyph 1
 glyph.aunis.universe.g2=Glyph 2

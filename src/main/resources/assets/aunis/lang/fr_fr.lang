@@ -5,6 +5,9 @@ item.aunis.analyzer_ancient.name=Analyseur Ancien
 item.aunis.crystal_control_dhd.name=Cristal de contrôle du DHD
 item.aunis.dialer_fast.name=Numérotation rapide (débogage)
 
+item.aunis.crystal_control_pegasus_dhd.name=Pegasus DHD Control Crystal
+item.aunis.raw_pegasus_dhd_crystal.name=Pegasus DHD Raw Crystal
+
 item.aunis.crystal_glyph_dhd.name=Cristal des glyphes du DHD
 item.aunis.crystal_glyph_stargate.name=Cristal des glyphes de StarGate
 item.aunis.crystal_glyph_milkyway.name=Cristal des glyphes de la Voie lactée
@@ -24,6 +27,7 @@ tile.aunis.stargate_milkyway_base_block.name=Base StarGate (Voie lactée)
 tile.aunis.stargate_milkyway_ring_block.name=Anneau StarGate (Voie lactée)
 tile.aunis.stargate_milkyway_chevron_block.name=Chevron StarGate (Voie lactée)
 tile.aunis.dhd_block.name=Dial Home Device (DHD)
+tile.aunis.dhd_pegasus_block.name=Dial Home Device (DHD Pegas)
 tile.aunis.capacitor_block.name=Banque de condensateurs
 tile.aunis.capacitor_block_empty.name=Banque de condensateurs (vide)
 
@@ -42,16 +46,19 @@ item.aunis.crystal_red.name=Cristal de puissance
 item.aunis.crystal_ender.name=Cristal du Néant
 item.aunis.crystal_yellow.name=Cristal lumineux
 item.aunis.crystal_white.name=Cristal blanc
+item.aunis.crystal_blue_pegasus.name=Pegasus Crystal
 
 item.aunis.circuit_control_base.name=Base du circuit de contrôle
 item.aunis.circuit_control_naquadah.name=Circuit de contrôle de Naquadah 
 item.aunis.circuit_control_crystal.name=Circuit de contrôle de cristal
 
 item.aunis.dhd_brb.name=Bouton rouge lumineux (BRB)
+item.aunis.dhd_bbb.name=Bright Blue Button (BBB)
 
 item.aunis.stargate_ring_fragment.name=Fragment d'anneau de StarGate
 item.aunis.universe_ring_fragment.name=Fragment d'anneau d'univers
 item.aunis.holder_crystal.name=Porte-cristal
+item.aunis.holder_crystal_pegasus.name=Crystal Holder (pegasus)
 
 item.aunis.page_notebook.name=Page de Carnet
 item.aunis.page_mysterious.name=Page mystérieuse
@@ -75,6 +82,12 @@ tile.aunis.dhd_block.not_linked_warn=Le DHD n'est pas lié à une porte
 tile.aunis.dhd_block.no_crystal_warn=Le DHD n'a pas de cristal de contrôle
 tile.aunis.dhd_block.no_enough_power=Le DHD nécessite au moins 10 000 uI pour fonctionner correctement
 tile.aunis.dhd_block.computer_dial=Composition informatique en cour
+
+tile.aunis.dhd_pegasus_block.incoming_wormhole_warn=Unable to close the gate on this end
+tile.aunis.dhd_pegasus_block.not_linked_warn=DHD is not linked to the gate
+tile.aunis.dhd_pegasus_block.no_crystal_warn=DHD has no control crystal
+tile.aunis.dhd_pegasus_block.no_enough_power=DHD requires at least 10,000uI to operate properly
+tile.aunis.dhd_pegasus_block.computer_dial=Computer dial is in progress
 
 tile.aunis.stargatebase_block.not_enough_power=Puissance insuffisante
 
@@ -200,6 +213,8 @@ glyph.aunis.pegasus.abrin=Abrin
 glyph.aunis.pegasus.ramnon=Ramnon
 glyph.aunis.pegasus.olavii=Olavii
 glyph.aunis.pegasus.hacemill=Hacemill
+glyph.aunis.pegasus.unknow1=Unknow 1
+glyph.aunis.pegasus.unknow2=Unknow 2
 
 glyph.aunis.universe.g1=Glyph 1
 glyph.aunis.universe.g2=Glyph 2

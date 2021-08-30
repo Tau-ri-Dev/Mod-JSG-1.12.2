@@ -7,17 +7,17 @@
 	],
 	
 	"key": {
-		"R": {
-			"item": "minecraft:redstone"
+		"S": {
+			"item": "aunis:crystal_white"
 		},
 		
-		"S": {
+		"R": {
 			"item": "aunis:crystal_ender"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:raw_pegasus_dhd_crystal",
+		"item": "aunis:crystal_blue_pegasus",
 		"count": 1
 	}
 }

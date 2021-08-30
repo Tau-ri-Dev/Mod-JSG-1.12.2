@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 public class DHDPegasusContainerGui extends GuiContainer implements TabbedContainerInterface {
 
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_dhd.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_dhd_pegasus.png");
 
 	private DHDPegasusContainer container;
 	private FluidTankElement tank;

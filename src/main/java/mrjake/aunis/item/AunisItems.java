@@ -20,8 +20,12 @@ public class AunisItems {
 	 */
 	public static final Item CRYSTAL_CONTROL_DHD = ItemHelper.createGenericItem("crystal_control_dhd");
 	public static final Item CRYSTAL_CONTROL_PEGASUS_DHD = ItemHelper.createGenericItem("crystal_control_pegasus_dhd");
-
+	/**
+	 * DHD Pegasus control crystal crafting
+	 */
 	public static final Item CRYSTAL_RAW_PEGASUS_DHD = ItemHelper.createGenericItem("raw_pegasus_dhd_crystal");
+
+	public static final Item CRYSTAL_BLUE_PEGASUS = ItemHelper.createGenericItem("crystal_blue_pegasus");
 
 	/**
 	 * These allow for dialing 8th glyph(cross dimension travel) and show different address spaces
@@ -57,9 +61,11 @@ public class AunisItems {
 	public static final Item UNIVERSE_RING_FRAGMENT = ItemHelper.createGenericItem("universe_ring_fragment");
 	public static final Item TR_RING_FRAGMENT = ItemHelper.createGenericItem("transportrings_ring_fragment");
 	public static final Item HOLDER_CRYSTAL = ItemHelper.createGenericItem("holder_crystal");
-	
+	public static final Item HOLDER_CRYSTAL_PEGASUS = ItemHelper.createGenericItem("holder_crystal_pegasus");
+
 	public static final Item DHD_BRB = ItemHelper.createGenericItem("dhd_brb");
-	
+	public static final Item DHD_BBB = ItemHelper.createGenericItem("dhd_bbb");
+
 	public static final NotebookItem NOTEBOOK_ITEM = new NotebookItem();
 	public static final PageNotebookItem PAGE_NOTEBOOK_ITEM = new PageNotebookItem();
 	public static final PageMysteriousItem PAGE_MYSTERIOUS_ITEM = new PageMysteriousItem();
@@ -90,7 +96,8 @@ public class AunisItems {
 		CRYSTAL_ENDER,
 		CRYSTAL_YELLOW,
 		CRYSTAL_WHITE,
-		
+		CRYSTAL_BLUE_PEGASUS,
+
 		CIRCUIT_CONTROL_BASE,
 		CIRCUIT_CONTROL_CRYSTAL,
 		CIRCUIT_CONTROL_NAQUADAH,
@@ -99,8 +106,10 @@ public class AunisItems {
 		UNIVERSE_RING_FRAGMENT,
 		TR_RING_FRAGMENT,
 		HOLDER_CRYSTAL,
-		
+		HOLDER_CRYSTAL_PEGASUS,
+
 		DHD_BRB,
+		DHD_BBB,
 		NOTEBOOK_ITEM,
 		PAGE_NOTEBOOK_ITEM,
 		PAGE_MYSTERIOUS_ITEM,

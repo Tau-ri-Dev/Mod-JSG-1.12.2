@@ -5,6 +5,9 @@ item.aunis.analyzer_ancient.name=Antiker Analysator
 item.aunis.crystal_control_dhd.name=DHD Kontrolkrystall
 item.aunis.dialer_fast.name=Fast dialer (debug)
 
+item.aunis.crystal_control_pegasus_dhd.name=Pegasus DHD Control Crystal
+item.aunis.raw_pegasus_dhd_crystal.name=Pegasus DHD Raw Crystal
+
 item.aunis.crystal_glyph_dhd.name=DHD Glyphenkristall
 item.aunis.crystal_glyph_stargate.name=Stargate Glyphenkristall
 item.aunis.crystal_glyph_milkyway.name=Milchstraße Glyphenkristall
@@ -24,6 +27,7 @@ tile.aunis.stargate_milkyway_base_block.name=Stargate Basis (Milchstraße)
 tile.aunis.stargate_milkyway_ring_block.name=Stargate Ring (Milchstraße)
 tile.aunis.stargate_milkyway_chevron_block.name=Stargate Chevron (Milchstraße)
 tile.aunis.dhd_block.name=Dial Home Device (DHD)
+tile.aunis.dhd_pegasus_block.name=Dial Home Device (DHD Pegas)
 tile.aunis.capacitor_block.name=Kondensatorbatterie
 tile.aunis.capacitor_block_empty.name=Kondensatorbatterie (Leer)
 
@@ -41,16 +45,19 @@ item.aunis.crystal_red.name=Energiekristall
 item.aunis.crystal_ender.name=Enderkristall
 item.aunis.crystal_yellow.name=Lichtkristall
 item.aunis.crystal_white.name=Weißer Kristall
+item.aunis.crystal_blue_pegasus.name=Pegasus Crystal
 
 item.aunis.circuit_control_base.name=Kontrollschaltkreisbasis
 item.aunis.circuit_control_naquadah.name=Naquadah Kontrollschaltkreis
 item.aunis.circuit_control_crystal.name=Kristall Kontrollschaltkreis
 
 item.aunis.dhd_brb.name=Beleuchteter Roter Button (BRB)
+item.aunis.dhd_bbb.name=Bright Blue Button (BBB)
 
 item.aunis.stargate_ring_fragment.name=Stargate Ring Fragment
 item.aunis.universe_ring_fragment.name=Universe Ring Fragment
 item.aunis.holder_crystal.name=Kristallhalter
+item.aunis.holder_crystal_pegasus.name=Crystal Holder (pegasus)
 
 item.aunis.page_notebook.name=Notebook Seite
 item.aunis.page_mysterious.name=Geheimnisvolle Seite
@@ -74,6 +81,12 @@ tile.aunis.dhd_block.not_linked_warn=DHD ist mit keinem Stargate verbunden
 tile.aunis.dhd_block.no_crystal_warn=DHD hat kein Kontrollkristall
 tile.aunis.dhd_block.no_enough_power=DHD benötigt mindestens 10,000uI zum Ordnungsgemäß zu funktionieren
 tile.aunis.dhd_block.computer_dial=Computeranwahl ist im Ablauf
+
+tile.aunis.dhd_pegasus_block.incoming_wormhole_warn=Unable to close the gate on this end
+tile.aunis.dhd_pegasus_block.not_linked_warn=DHD is not linked to the gate
+tile.aunis.dhd_pegasus_block.no_crystal_warn=DHD has no control crystal
+tile.aunis.dhd_pegasus_block.no_enough_power=DHD requires at least 10,000uI to operate properly
+tile.aunis.dhd_pegasus_block.computer_dial=Computer dial is in progress
 
 tile.aunis.stargatebase_block.not_enough_power=Unzureichende Energie
 
@@ -197,6 +210,8 @@ glyph.aunis.pegasus.abrin=Abrin
 glyph.aunis.pegasus.ramnon=Ramnon
 glyph.aunis.pegasus.olavii=Olavii
 glyph.aunis.pegasus.hacemill=Hacemill
+glyph.aunis.pegasus.unknow1=Unknow 1
+glyph.aunis.pegasus.unknow2=Unknow 2
 
 glyph.aunis.universe.g1=Glyph 1
 glyph.aunis.universe.g2=Glyph 2

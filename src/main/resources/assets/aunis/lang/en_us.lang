@@ -5,6 +5,9 @@ item.aunis.analyzer_ancient.name=Ancient Analyzer
 item.aunis.crystal_control_dhd.name=DHD Control Crystal
 item.aunis.dialer_fast.name=Fast dialer (debug)
 
+item.aunis.crystal_control_pegasus_dhd.name=Pegasus DHD Control Crystal
+item.aunis.raw_pegasus_dhd_crystal.name=Pegasus DHD Raw Crystal
+
 item.aunis.crystal_glyph_dhd.name=DHD Glyph Crystal
 item.aunis.crystal_glyph_stargate.name=Stargate Glyph Crystal
 item.aunis.crystal_glyph_milkyway.name=Milky Way Glyphs Crystal
@@ -47,16 +50,19 @@ item.aunis.crystal_red.name=Power Crystal
 item.aunis.crystal_ender.name=Ender Crystal
 item.aunis.crystal_yellow.name=Light Crystal
 item.aunis.crystal_white.name=White Crystal
+item.aunis.crystal_blue_pegasus.name=Pegasus Crystal
 
 item.aunis.circuit_control_base.name=Control Circuit Base 
 item.aunis.circuit_control_naquadah.name=Naquadah Control Circuit 
 item.aunis.circuit_control_crystal.name=Crystal Control Circuit 
 
 item.aunis.dhd_brb.name=Bright Red Button (BRB)
+item.aunis.dhd_bbb.name=Bright Blue Button (BBB)
 
 item.aunis.stargate_ring_fragment.name=Stargate Ring Fragment
 item.aunis.universe_ring_fragment.name=Universe Ring Fragment
 item.aunis.holder_crystal.name=Crystal Holder
+item.aunis.holder_crystal_pegasus.name=Crystal Holder (pegasus)
 
 item.aunis.page_notebook.name=Notebook Page
 item.aunis.page_mysterious.name=Mysterious Page

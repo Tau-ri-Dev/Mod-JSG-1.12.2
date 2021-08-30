@@ -5,6 +5,9 @@ item.aunis.analyzer_ancient.name=Анализатор Древних
 item.aunis.crystal_control_dhd.name=Контрольный кристалл наборного устройства
 item.aunis.dialer_fast.name=Быстрый Набор (отладка)
 
+item.aunis.crystal_control_pegasus_dhd.name=Pegasus DHD Control Crystal
+item.aunis.raw_pegasus_dhd_crystal.name=Pegasus DHD Raw Crystal
+
 item.aunis.crystal_glyph_dhd.name=Символьный кристалл наборного устройства
 item.aunis.crystal_glyph_stargate.name=Символьный кристалл звёздных врат
 item.aunis.crystal_glyph_milkyway.name=Кристалл адреса Млечного Пути
@@ -24,6 +27,7 @@ tile.aunis.stargate_milkyway_base_block.name=Основание звёздных
 tile.aunis.stargate_milkyway_ring_block.name=Кольцо звёздных врат (Млечный Путь)
 tile.aunis.stargate_milkyway_chevron_block.name=Шеврон звёздных врат (Млечный Путь)
 tile.aunis.dhd_block.name=Наборное устройство
+tile.aunis.dhd_pegasus_block.name=Dial Home Device (DHD Pegas)
 tile.aunis.capacitor_block.name=Конденсатор
 tile.aunis.capacitor_block_empty.name=Конденсатор (пустой)
 
@@ -42,16 +46,19 @@ item.aunis.crystal_red.name=Энергетический кристалл
 item.aunis.crystal_ender.name=Эндер кристалл
 item.aunis.crystal_yellow.name=Световой кристалл
 item.aunis.crystal_white.name=Белый кристалл
+item.aunis.crystal_blue_pegasus.name=Pegasus Crystal
 
 item.aunis.circuit_control_base.name=Основа главной микросхемы
 item.aunis.circuit_control_naquadah.name=Главная микросхема из наквадаха
 item.aunis.circuit_control_crystal.name=Кристальная главная микросхема
 
 item.aunis.dhd_brb.name=Большая красная кнопка
+item.aunis.dhd_bbb.name=Bright Blue Button (BBB)
 
 item.aunis.stargate_ring_fragment.name=Сегмент кольца звёздных врат
 item.aunis.universe_ring_fragment.name=Сегмент кольца звёздных врат (Вселенная)
 item.aunis.holder_crystal.name=Держатель кристалла
+item.aunis.holder_crystal_pegasus.name=Crystal Holder (pegasus)
 
 item.aunis.page_notebook.name=Страница блокнота
 item.aunis.page_mysterious.name=Мистическая страница
@@ -75,6 +82,12 @@ tile.aunis.dhd_block.not_linked_warn=Наборное устройство не 
 tile.aunis.dhd_block.no_crystal_warn=Наборное устройство не имеет контрольного кристалла
 tile.aunis.dhd_block.no_enough_power=Наборному устройству необходимо минимум 10,000uI для корректной работы
 tile.aunis.dhd_block.computer_dial=Запущен набор с компьютера
+
+tile.aunis.dhd_pegasus_block.incoming_wormhole_warn=Unable to close the gate on this end
+tile.aunis.dhd_pegasus_block.not_linked_warn=DHD is not linked to the gate
+tile.aunis.dhd_pegasus_block.no_crystal_warn=DHD has no control crystal
+tile.aunis.dhd_pegasus_block.no_enough_power=DHD requires at least 10,000uI to operate properly
+tile.aunis.dhd_pegasus_block.computer_dial=Computer dial is in progress
 
 tile.aunis.stargatebase_block.not_enough_power=Недостаточно энергии
 
@@ -199,6 +212,8 @@ glyph.aunis.pegasus.abrin=Abrin
 glyph.aunis.pegasus.ramnon=Ramnon
 glyph.aunis.pegasus.olavii=Olavii
 glyph.aunis.pegasus.hacemill=Hacemill
+glyph.aunis.pegasus.unknow1=Unknow 1
+glyph.aunis.pegasus.unknow2=Unknow 2
 
 glyph.aunis.universe.g1=Glyph 1
 glyph.aunis.universe.g2=Glyph 2

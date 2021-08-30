@@ -1,23 +1,23 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"pattern": [
-		" R ",
-		"RSR",
-		" R "
+		"   ",
+		"N N",
+		"RNR"
 	],
 	
 	"key": {
-		"R": {
-			"item": "minecraft:redstone"
+		"N": {
+			"item": "aunis:naquadah_alloy"
 		},
 		
-		"S": {
+		"R": {
 			"item": "aunis:crystal_ender"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:raw_pegasus_dhd_crystal",
+		"item": "aunis:holder_crystal_pegasus",
 		"count": 1
 	}
 }
