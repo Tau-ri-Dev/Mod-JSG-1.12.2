@@ -15,6 +15,15 @@ item.aunis.crystal_glyph_pegasus.name=Pegasus Glyphenkristall
 item.aunis.crystal_glyph_universe.name=Universe Glyphenkristall
 
 
+item.aunis.iris_blade.name=Iris Upgrade (Titanium)
+item.aunis.iris_blade_trinium.name=Iris Upgrade (Trinium)
+item.aunis.crystal_upgrade_iris.name=Iris Upgrade (Titanium)
+item.aunis.crystal_upgrade_iris_trinium.name=Iris Upgrade (Trinium)
+
+item.aunis.shield_emitor.name=Shield Emitor
+item.aunis.crystal_upgrade_shield.name=Shield Upgrade
+
+
 tile.aunis.naquadah_ore.name=Naquadah Erz
 tile.aunis.naquadah_ore_stone.name=Naquadah Erz (Stein)
 tile.aunis.naquadah_block.name=Naquadah Block

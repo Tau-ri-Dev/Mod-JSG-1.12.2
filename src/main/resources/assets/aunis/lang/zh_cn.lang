@@ -14,6 +14,15 @@ item.aunis.crystal_glyph_pegasus.name=飞马系星门升级水晶
 item.aunis.crystal_glyph_universe.name=宇宙星门升级水晶
 
 
+item.aunis.iris_blade.name=Iris Upgrade (Titanium)
+item.aunis.iris_blade_trinium.name=Iris Upgrade (Trinium)
+item.aunis.crystal_upgrade_iris.name=Iris Upgrade (Titanium)
+item.aunis.crystal_upgrade_iris_trinium.name=Iris Upgrade (Trinium)
+
+item.aunis.shield_emitor.name=Shield Emitor
+item.aunis.crystal_upgrade_shield.name=Shield Upgrade
+
+
 tile.aunis.naquadah_ore.name=Naquadah矿石
 tile.aunis.naquadah_block.name=Naquadah方块
 item.aunis.naquadah_shard.name=Naquadah碎片
