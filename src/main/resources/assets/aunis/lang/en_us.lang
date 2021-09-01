@@ -14,6 +14,16 @@ item.aunis.crystal_glyph_milkyway.name=Milky Way Glyphs Crystal
 item.aunis.crystal_glyph_pegasus.name=Pegasus Glyphs Crystal
 item.aunis.crystal_glyph_universe.name=Universe Glyphs Crystal
 
+
+item.aunis.iris_blade.name=Iris Upgrade (Titanium)
+item.aunis.iris_blade_trinium.name=Iris Upgrade (Trinium)
+item.aunis.crystal_upgrade_iris.name=Iris Upgrade (Titanium)
+item.aunis.crystal_upgrade_iris_trinium.name=Iris Upgrade (Trinium)
+
+item.aunis.shield_emitor.name=Shield Emitor
+item.aunis.crystal_upgrade_shield.name=Shield Upgrade
+
+
 tile.aunis.naquadah_ore.name=Naquadah Ore
 tile.aunis.naquadah_ore_stone.name=Naquadah Ore (Stone)
 tile.aunis.naquadah_block.name=Naquadah Block
@@ -62,7 +72,7 @@ item.aunis.dhd_bbb.name=Bright Blue Button (BBB)
 item.aunis.stargate_ring_fragment.name=Stargate Ring Fragment
 item.aunis.universe_ring_fragment.name=Universe Ring Fragment
 item.aunis.holder_crystal.name=Crystal Holder
-item.aunis.holder_crystal_pegasus.name=Crystal Holder (pegasus)
+item.aunis.holder_crystal_pegasus.name=Crystal Holder (Pegasus)
 
 item.aunis.page_notebook.name=Notebook Page
 item.aunis.page_mysterious.name=Mysterious Page

@@ -29,7 +29,13 @@ public class AunisItems {
 	/**
 	 * Iris/Shield upgrade
 	 */
+	public static final Item IRIS_BLADE = ItemHelper.createGenericItem("iris_blade");
 	public static final Item CRYSTAL_UPGRADE_IRIS = ItemHelper.createGenericItem("crystal_upgrade_iris");
+	public static final Item IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("iris_blade_trinium");
+	public static final Item CRYSTAL_UPGRADE_IRIS_TRINIUM = ItemHelper.createGenericItem("crystal_upgrade_iris_trinium");
+
+	public static final Item CRYSTAL_UPGRADE_SHIELD = ItemHelper.createGenericItem("crystal_upgrade_shield");
+	public static final Item SHIELD_EMITOR = ItemHelper.createGenericItem("shield_emitor");
 
 	/**
 	 * These allow for dialing 8th glyph(cross dimension travel) and show different address spaces
@@ -84,7 +90,12 @@ public class AunisItems {
 		CRYSTAL_CONTROL_PEGASUS_DHD,
 		CRYSTAL_RAW_PEGASUS_DHD,
 
+		IRIS_BLADE,
 		CRYSTAL_UPGRADE_IRIS,
+		IRIS_BLADE_TRINIUM,
+		CRYSTAL_UPGRADE_IRIS_TRINIUM,
+		CRYSTAL_UPGRADE_SHIELD,
+		SHIELD_EMITOR,
 
 		CRYSTAL_GLYPH_DHD,
 		CRYSTAL_GLYPH_STARGATE,

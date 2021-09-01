@@ -622,7 +622,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     if (override == null) return false;
 
                     return getSupportedOverlays().contains(override);
-
+                case 11:
+                    return StargateIrisUpgradeEnum.contains(item);
                 default:
                     return true;
             }

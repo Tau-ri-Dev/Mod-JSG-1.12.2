@@ -78,7 +78,7 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
 		addSlotToContainer(new SlotItemHandler(itemHandler, 10, 0, 0));
 
 		// Shield/Iris Upgrade (index 11)
-		addSlotToContainer(new SlotItemHandler(itemHandler, 11, 9+18*3, 36));
+		addSlotToContainer(new SlotItemHandler(itemHandler, 11, 16+18*3, 27));
 
 		for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 86))
 			addSlotToContainer(slot);
