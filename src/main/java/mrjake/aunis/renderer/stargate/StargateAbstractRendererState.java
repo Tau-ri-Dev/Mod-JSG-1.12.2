@@ -54,6 +54,13 @@ public class StargateAbstractRendererState extends State {
 	public boolean zeroAlphaSet;	
 	public boolean horizonUnstable = false;
 	public int horizonSegments = 0;
+
+
+	// Shield
+
+	public StargatePegasusShieldRenderer.EnumShieldState shieldState;
+	public boolean renderShield = false;
+	public float shieldAlpha = 0.0f;
 	
 	public void openGate(long totalWorldTime) {		
 		gateWaitStart = totalWorldTime;

@@ -123,7 +123,7 @@ public enum SymbolPegasusEnum implements SymbolInterface {
   public static SymbolPegasusEnum getRandomSymbol(Random random) {
     int id = 0;
     do {
-      id = random.nextInt(36);
+      id = random.nextInt(38);
     } while (id == SUBIDO.id || id == UNKNOW2.id || id == UNKNOW1.id );
 
     return valueOf(id);

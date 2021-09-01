@@ -5,15 +5,11 @@ import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateDimensionConfig;
 import mrjake.aunis.config.StargateSizeEnum;
-import mrjake.aunis.gui.container.DHDContainerGuiUpdate;
 import mrjake.aunis.gui.container.StargateContainerGuiUpdate;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
-import mrjake.aunis.renderer.DHDPegasusRendererState;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
-import mrjake.aunis.renderer.stargate.ChevronEnum;
-import mrjake.aunis.renderer.stargate.StargateAbstractRendererState;
-import mrjake.aunis.renderer.stargate.StargatePegasusRendererState;
+import mrjake.aunis.renderer.stargate.*;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.sound.SoundPositionedEnum;
 import mrjake.aunis.sound.StargateSoundEventEnum;
@@ -27,7 +23,6 @@ import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.state.*;
 import mrjake.aunis.state.StargateRendererActionState.EnumGateAction;
 import mrjake.aunis.tileentity.DHDPegasusTile;
-import mrjake.aunis.tileentity.DHDTile;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import mrjake.aunis.util.ILinkable;
@@ -42,10 +37,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class StargatePegasusBaseTile extends StargateClassicBaseTile implements ILinkable {
   // ------------------------------------------------------------------------

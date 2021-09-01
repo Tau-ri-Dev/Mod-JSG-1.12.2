@@ -26,6 +26,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
+import static mrjake.aunis.renderer.stargate.PegasusShieldRendererhbtumzm.renderShield;
+
 public abstract class StargateAbstractRenderer<S extends StargateAbstractRendererState> extends TileEntitySpecialRenderer<StargateAbstractBaseTile> {
 
   // ---------------------------------------------------------------------------------------

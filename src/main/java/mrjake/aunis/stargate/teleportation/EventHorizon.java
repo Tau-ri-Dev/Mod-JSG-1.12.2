@@ -14,16 +14,14 @@ import mrjake.aunis.packet.stargate.StargateMotionToClient;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.network.StargatePos;
-import mrjake.aunis.irises.EnumIrisState;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
+import mrjake.aunis.tileentity.stargate.StargatePegasusBaseTile;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import static mrjake.aunis.irises.EnumIrisState.irisState;
 
 public class EventHorizon {	
 	private World world;
@@ -92,7 +90,16 @@ public class EventHorizon {
 					Vector2f motion = new Vector2f( (float)entity.motionX, (float)entity.motionZ );
 					
 					if (TeleportHelper.frontSide(sourceFacing, motion)) {
-						if(EnumIrisState.isNull() || EnumIrisState.opened()) {
+						boolean irisOpen = false;
+
+						if(targetGate.getTileEntity() instanceof StargatePegasusBaseTile){
+							if(PegasusShieldRendererhbtumzm.isOpen()) irisOpen = true;
+						}
+						else{
+							irisOpen = true;
+						}
+
+						if(irisOpen) {
 							for (Entity passenger : entity.getPassengers())
 								timeoutMap.put(passenger.getEntityId(), 40);
 							timeoutMap.put(entityId, 40);

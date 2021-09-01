@@ -24,8 +24,12 @@ public class AunisItems {
 	 * DHD Pegasus control crystal crafting
 	 */
 	public static final Item CRYSTAL_RAW_PEGASUS_DHD = ItemHelper.createGenericItem("raw_pegasus_dhd_crystal");
-
 	public static final Item CRYSTAL_BLUE_PEGASUS = ItemHelper.createGenericItem("crystal_blue_pegasus");
+
+	/**
+	 * Iris/Shield upgrade
+	 */
+	public static final Item CRYSTAL_UPGRADE_IRIS = ItemHelper.createGenericItem("crystal_upgrade_iris");
 
 	/**
 	 * These allow for dialing 8th glyph(cross dimension travel) and show different address spaces
@@ -79,6 +83,8 @@ public class AunisItems {
 		CRYSTAL_CONTROL_DHD,
 		CRYSTAL_CONTROL_PEGASUS_DHD,
 		CRYSTAL_RAW_PEGASUS_DHD,
+
+		CRYSTAL_UPGRADE_IRIS,
 
 		CRYSTAL_GLYPH_DHD,
 		CRYSTAL_GLYPH_STARGATE,

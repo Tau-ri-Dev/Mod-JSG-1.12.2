@@ -76,7 +76,10 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
 		
 		// Biome overlay slot (index 10)
 		addSlotToContainer(new SlotItemHandler(itemHandler, 10, 0, 0));
-		
+
+		// Shield/Iris Upgrade (index 11)
+		addSlotToContainer(new SlotItemHandler(itemHandler, 11, 9+18*3, 36));
+
 		for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 86))
 			addSlotToContainer(slot);
 	}
@@ -96,8 +99,8 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
 		ItemStack stack = getSlot(index).getStack();
 		
 		// Transfering from Stargate to player's inventory
-        if (index < 11) {
-        	if (!mergeItemStack(stack, 11, inventorySlots.size(), false)) {
+        if (index < 12) {
+        	if (!mergeItemStack(stack, 12, inventorySlots.size(), false)) {
         		return ItemStack.EMPTY;
         	}
         	
@@ -159,6 +162,20 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
     				return ItemStack.EMPTY;
         		}
         	}
+        	// Iris upgrade
+			else if (StargateClassicBaseTile.StargateIrisUpgradeEnum.contains(stack.getItem()) && !gateTile.hasUpgrade(stack.getItem())) {
+				for (int i=0; i<4; i++) {
+					if (!getSlot(i).getHasStack()) {
+						ItemStack stack1 = stack.copy();
+						stack1.setCount(1);
+
+						putStackInSlot(i, stack1);
+						stack.shrink(1);
+
+						return ItemStack.EMPTY;
+					}
+				}
+			}
         	
         	return ItemStack.EMPTY;
         }
