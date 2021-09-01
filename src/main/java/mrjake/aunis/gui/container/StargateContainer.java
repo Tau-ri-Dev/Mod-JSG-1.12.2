@@ -164,16 +164,14 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
         	}
         	// Iris upgrade
 			else if (StargateClassicBaseTile.StargateIrisUpgradeEnum.contains(stack.getItem()) && !gateTile.hasUpgrade(stack.getItem())) {
-				for (int i=0; i<4; i++) {
-					if (!getSlot(i).getHasStack()) {
-						ItemStack stack1 = stack.copy();
-						stack1.setCount(1);
+				if (!getSlot(11).getHasStack()) {
+					ItemStack stack1 = stack.copy();
+					stack1.setCount(1);
 
-						putStackInSlot(i, stack1);
-						stack.shrink(1);
+					putStackInSlot(11, stack1);
+					stack.shrink(1);
 
-						return ItemStack.EMPTY;
-					}
+					return ItemStack.EMPTY;
 				}
 			}
         	

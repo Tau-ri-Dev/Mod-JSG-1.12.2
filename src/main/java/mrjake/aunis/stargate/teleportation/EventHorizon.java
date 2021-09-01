@@ -90,14 +90,14 @@ public class EventHorizon {
 					Vector2f motion = new Vector2f( (float)entity.motionX, (float)entity.motionZ );
 					
 					if (TeleportHelper.frontSide(sourceFacing, motion)) {
-						boolean irisOpen = false;
+						boolean irisOpen = true;
 
-						if(targetGate.getTileEntity() instanceof StargatePegasusBaseTile){
+						/*if(targetGate.getTileEntity() instanceof StargatePegasusBaseTile){
 							if(PegasusShieldRendererhbtumzm.isOpen()) irisOpen = true;
 						}
 						else{
 							irisOpen = true;
-						}
+						}*/
 
 						if(irisOpen) {
 							for (Entity passenger : entity.getPassengers())

@@ -1,0 +1,27 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"SBS",
+		"SCS",
+		"SBS"
+	],
+	
+	"key": {
+		"C": {
+			"item": "aunis:circuit_control_crystal"
+		},
+		
+		"B": {
+			"item": "aunis:crystal_white"
+		},
+
+		"S": {
+			"item": "minecraft:iron_ingot"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:crystal_upgrade_iris",
+		"count": 1
+	}
+}

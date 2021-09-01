@@ -22,6 +22,7 @@ import mrjake.aunis.stargate.network.SymbolPegasusEnum;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.stargate.network.SymbolUniverseEnum;
 import mrjake.aunis.stargate.power.StargateClassicEnergyStorage;
+import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.StargateUpgradeEnum;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
