@@ -135,6 +135,53 @@
       "aunis:eh/wormhole_flicker"
     ]
   },
+  "iris_hit": {
+    "category": "ambient",
+    "subtitle": "aunis.subtitle.iris_hit",
+    "sounds": [
+      "aunis:iris/iris_hit_1",
+      "aunis:iris/iris_hit_2",
+      "aunis:iris/iris_hit_3"
+    ]
+  },
+
+  "iris_opening": {
+    "category": "ambient",
+    "subtitle": "aunis.subtitle.iris_opening",
+    "sounds": [
+      "aunis:iris/iris_opening"
+    ]
+  },
+  "iris_closing": {
+    "category": "ambient",
+    "subtitle": "aunis.subtitle.iris_closing",
+    "sounds": [
+      "aunis:iris/iris_closing"
+    ]
+  },
+  "shield_hit": {
+    "category": "ambient",
+    "subtitle": "aunis.subtitle.shield_hit",
+    "sounds": [
+      "aunis:shield/shield_hit_1",
+      "aunis:shield/shield_hit_2",
+      "aunis:shield/shield_hit_3"
+    ]
+  },
+  "shield_opening": {
+    "category": "ambient",
+    "subtitle": "aunis.subtitle.shield_opening",
+    "sounds": [
+      "aunis:shield/shield_opening"
+    ]
+  },
+  "shield_closing": {
+    "category": "ambient",
+    "subtitle": "aunis.subtitle.shield_closing",
+    "sounds": [
+      "aunis:shield/shield_closing"
+    ]
+  },
   "rings_transport": {
     "category": "ambient",
     "subtitle": "aunis.subtitle.rings_transport",

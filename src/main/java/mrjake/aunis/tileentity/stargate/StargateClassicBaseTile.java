@@ -21,6 +21,7 @@ import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState.StargateClassicRendererStateBuilder;
+import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.sound.StargateSoundEventEnum;
 import mrjake.aunis.sound.StargateSoundPositionedEnum;
 import mrjake.aunis.stargate.*;
@@ -130,6 +131,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         super.onGateBroken();
         updateChevronLight(0, false);
         isSpinning = false;
+        irisState = EnumIrisStates.OPENED;
+        irisType = EnumIrisTypes.NULL;
         currentRingSymbol = getSymbolType().getTopSymbol();
         AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(currentRingSymbol, spinDirection, true)), targetPoint);
 
@@ -150,6 +153,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         BeamerLinkingHelper.findBeamersInFront(world, pos, facing);
         updateBeamers();
+        updateIrisType();
     }
 
 
@@ -165,6 +169,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (!world.isRemote) {
             updateBeamers();
             updatePowerTier();
+            updateIrisType();
         }
     }
 
@@ -292,6 +297,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         for (BlockPos vect : linkedBeamers)
             linkedBeamersTagList.appendTag(new NBTTagLong(vect.toLong()));
         compound.setTag("linkedBeamers", linkedBeamersTagList);
+        compound.setByte("irisState", irisState.id);
 
         return super.writeToNBT(compound);
     }
@@ -314,6 +320,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         for (NBTBase tag : compound.getTagList("linkedBeamers", NBT.TAG_LONG))
             linkedBeamers.add(BlockPos.fromLong(((NBTTagLong) tag).getLong()));
+
+        irisState = EnumIrisStates.getValue(compound.getByte("irisState"));
 
         super.readFromNBT(compound);
     }
@@ -426,6 +434,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     case CHEVRON_DIM:
                         getRendererStateClient().chevronTextureList.deactivateFinalChevron(world.getTotalWorldTime());
                         break;
+
+                    case IRIS_OPEN:
+
 
                     default:
                         break;
@@ -648,7 +659,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 case BIOME_OVERRIDE_SLOT:
                     sendState(StateTypeEnum.BIOME_OVERRIDE_STATE, new StargateBiomeOverrideState(determineBiomeOverride()));
                     break;
-
+                // iris update state
+                case 11:
+                    updateIrisType();
+                    break;
                 default:
                     break;
             }
@@ -688,10 +702,16 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     }
 
+    // ----------------------------------------------------------
+    // IRISES
+
+    protected EnumIrisStates irisState = EnumIrisStates.OPENED;
+    protected EnumIrisTypes irisType = EnumIrisTypes.NULL;
+
     public static enum StargateIrisUpgradeEnum implements EnumKeyInterface<Item> {
-        IRIS_UPGRADE_TRINIUM(AunisItems.CRYSTAL_UPGRADE_IRIS_TRINIUM),
-        IRIS_UPGRADE_CLASSIC(AunisItems.CRYSTAL_UPGRADE_IRIS),
-        SHIELD_UPGRADE(AunisItems.CRYSTAL_UPGRADE_SHIELD);
+        IRIS_UPGRADE_CLASSIC(AunisItems.UPGRADE_IRIS),
+        IRIS_UPGRADE_TRINIUM(AunisItems.UPGRADE_IRIS_TRINIUM),
+        IRIS_UPGRADE_SHIELD(AunisItems.UPGRADE_SHIELD);
 
         public Item item;
 
@@ -715,6 +735,55 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             return idMap.contains(item);
         }
     }
+
+    public void updateIrisType() {
+        irisType = EnumIrisTypes.byItem(itemStackHandler.getStackInSlot(11).getItem());
+    }
+
+    public boolean isClosed() {
+        return irisState == EnumIrisStates.CLOSED;
+    }
+
+    public EnumIrisStates getIrisState() {
+        return irisState;
+    }
+    public EnumIrisTypes getIrisType() {
+        return irisType;
+    }
+    public boolean isPhysicalIris(){
+        switch(irisType){
+            case IRIS_TITANIUM:
+            case IRIS_TRINIUM:
+                return true;
+            default:
+                return false;
+        }
+    }
+    public boolean isShieldIris(){
+        return irisType == EnumIrisTypes.SHIELD;
+    }
+
+    protected boolean toggleIris() {
+        if (irisType == EnumIrisTypes.NULL) return false;
+        switch (irisState) {
+            case OPENED:
+                irisState = EnumIrisStates.CLOSING;
+                //playSoundEvent(SoundEventEnum.IRIS_CLOSING);
+                irisState = EnumIrisStates.CLOSED;
+                return true;
+
+            case CLOSED:
+                irisState = EnumIrisStates.OPENING;
+                //playSoundEvent(StargateSoundEventEnum.IRIS_OPENING);
+                irisState = EnumIrisStates.OPENED;
+                return true;
+            default:
+                return false;
+        }
+    }
+
+
+    // -----------------------------------------------------------
 
     @Override
     public Iterator<Integer> getUpgradeSlotsIterator() {
@@ -817,12 +886,33 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     // -----------------------------------------------------------------
     // OpenComputers methods
-/*
-  @Optional.Method(modid = "opencomputers")
-  @Callback(doc = "function() -- closes the iris/shield")
-  public Object[] closeIris(Context context, Arguments args) {
-    EnumIrisState.setIrisState(EnumIrisState.CLOSE, pos);
-  }*/
+
+    @Optional.Method(modid = "opencomputers")
+    @Callback(doc = "function() -- close/open the iris/shield")
+    public Object[] toggleIris(Context context, Arguments args) {
+        return new Object[]{toggleIris()};
+    }
+
+    @Optional.Method(modid = "opencomputers")
+    @Callback(doc = "function() -- get info about iris")
+    public Object[] getIrisState(Context context, Arguments args) {
+        return new Object[]{irisState.toString()};
+    }
+
+    @Optional.Method(modid = "opencomputers")
+    @Callback(doc = "function() -- get info about iris")
+    public Object[] getIrisType(Context context, Arguments args) {
+        return new Object[]{irisType.toString()};
+    }
+
+    //todo getIrisDurability
+//    @Optional.Method(modid = "opencomputers")
+//    @Callback(doc = "function() -- get info about iris")
+//    public Object[] getIrisDurability(Context context, Arguments args) {
+//        return new Object[]{durability};
+//        // return "type", "state", "durability"
+//    }
+
 
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(symbolName:string) -- Spins the ring to the given symbol and engages/locks it")

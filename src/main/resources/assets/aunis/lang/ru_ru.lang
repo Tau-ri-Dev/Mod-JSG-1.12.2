@@ -1,4 +1,5 @@
-itemGroup.aunis=Aunis
+itemGroup.aunis=AunisitemGroup.aunis
+
 soundCategory.aunis=Aunis
 
 item.aunis.analyzer_ancient.name=Анализатор Древних
@@ -17,11 +18,11 @@ item.aunis.crystal_glyph_universe.name=Кристалл адреса Вселе�
 
 item.aunis.iris_blade.name=Iris Upgrade (Titanium)
 item.aunis.iris_blade_trinium.name=Iris Upgrade (Trinium)
-item.aunis.crystal_upgrade_iris.name=Iris Upgrade (Titanium)
-item.aunis.crystal_upgrade_iris_trinium.name=Iris Upgrade (Trinium)
+item.aunis.upgrade_iris.name=Iris Upgrade (Titanium)
+item.aunis.upgrade_iris_trinium.name=Iris Upgrade (Trinium)
 
 item.aunis.shield_emitor.name=Shield Emitor
-item.aunis.crystal_upgrade_shield.name=Shield Upgrade
+item.aunis.upgrade_shield.name=Shield Upgrade
 
 
 tile.aunis.naquadah_ore.name=Руда наквадаха
@@ -30,9 +31,6 @@ tile.aunis.naquadah_block.name=Блок наквадаха
 item.aunis.naquadah_shard.name=Осколок наквадаха
 item.aunis.naquadah_alloy.name=Обработанный слиток из сплава наквадаха
 item.aunis.naquadah_alloy_raw.name=Слиток из сплава наквадаха
-
-tile.aunis.trinium_ore.name=Trinium Ore
-item.aunis.trinium_ingot.name=Trinium Ingot
 
 tile.aunis.invisible_block.name=Невидимый блок :P
 
@@ -51,6 +49,10 @@ tile.aunis.stargate_orlin_member_block.name=Кольцо звёздных вра
 tile.aunis.stargate_universe_base_block.name=Основание звёздных врат (Вселенная)
 tile.aunis.stargate_universe_chevron_block.name=Шеврон звёздных врат (Вселенная)
 tile.aunis.stargate_universe_ring_block.name=Кольцо звёздных врат (Вселенная)
+
+tile.aunis.stargate_pegasus_base_block.name=Stargate Base (Pegasus)
+tile.aunis.stargate_pegasus_ring_block.name=Stargate Ring (Pegasus)
+tile.aunis.stargate_pegasus_chevron_block.name=Stargate Chevron (Pegasus)
 
 item.aunis.crystal_fragment.name=Семя кристалла
 item.aunis.crystal_blank.name=Пустой кристалл
@@ -122,18 +124,19 @@ tile.aunis.transportrings_block.rings_address=Адрес
 tile.aunis.transportrings_block.rings_name=Название
 tile.aunis.transportrings_block.rings_save=Сохранить
 
-commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim=X] [map=Y] [id=Z]
+commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim
 commands.sgquery.number_expected=Number expected
 commands.sgquery.no_map=No such map
 commands.sgquery.stargates=Stargates %s
 commands.sgquery.wrong_id=Wrong ID or not given any
 commands.sgquery.wrong_map=Wrong map or not given any
 commands.sgquery.wrong_sender=Wrong sender (not a player)
+commands.sgquery.wrong_quantity=Wrong quantity of pages given
 commands.sgquery.giving_page=Giving page to %s
-commands.sggivepage.usage=/sggivepage (player) (map=X) [biome=Y] (Symbol)x8/6
+commands.sggivepage.usage=/sggivepage (player) (map
 commands.sggivepage.no_map=No map or wrong map given
 commands.sggivepage.give_page=Giving Page to %s
-commands.sgsetaddress.usage=/sgsetaddress (x y z) (map=X) (Symbol)x8
+commands.sgsetaddress.usage=/sgsetaddress (x y z) (map
 commands.sgsetaddress.notstargate=Targeted block is not a Stargate Base
 commands.sgsetaddress.noaddressspace=No map or wrong map given
 commands.sgsetaddress.wrongaddress=Address should be a space-separated list of 7 symbols (English names)
@@ -141,12 +144,13 @@ commands.sgsetaddress.wrongsymbol=Wrong %s. symbol name
 commands.sgsetaddress.duplicatesymbol=Duplicate %s. symbol name
 commands.sgsetaddress.exists=Stargate with given address already exists
 commands.sgsetaddress.success=Set Stargate's address at %s to %s
-commands.sgcloseall.usage=/sgcloseall [(x y z) (x y z)] [dim=X]
-commands.sgcloseall.closing=Closing Stargates in dim=%s, %s.
+commands.sgcloseall.usage=/sgcloseall [(x y z) (x y z)] [dim
+commands.sgcloseall.closing=Closing Stargates in dim
 commands.sgcloseall.closed=Closed %s gates.
 commands.sgcloseall.number_expected=Number or "current" expected as dimension ID
 
 death.attack.eventHorizon=%s был кремирован кавушем
+death.attack.irisDeath=%s was given a iris cremation
 
 
 glyph.aunis.milkyway.sculptor=Sculptor
@@ -283,6 +287,13 @@ gui.dhd.no_fuel=Нет топлива
 gui.stargate.milky_way_address=Адрес млечного пути
 gui.stargate.pegasus_address=Адрес пегаса
 gui.stargate.universe_address=Адрес вселенной
+gui.stargate.biome_overlay=Biome overlay
+gui.stargate.biome_overlay.help=Insert blocks to override
+gui.stargate.biome_overlay.normal=Normal
+gui.stargate.biome_overlay.frost=Frosty
+gui.stargate.biome_overlay.mossy=Mossy
+gui.stargate.biome_overlay.aged=Aged
+gui.stargate.biome_overlay.sooty=Sooty
 gui.stargate.capacitors=Конденсаторы
 gui.stargate.energyBuffer=Буфер энергии
 
@@ -300,6 +311,7 @@ gui.beamer.beamer_link_ok=Соединено
 gui.beamer.role_status=Роль:
 gui.beamer.role_ok=Выбрана
 gui.beamer.disabled=Излучатель отключён
+gui.beamer.disabled=Отключен
 gui.beamer.disabled_target=Излучатель на той стороне отключён
 gui.beamer.obstructed=Заблокирован
 gui.beamer.obstructed_target=Излучатель на той стороне заблокирован
@@ -316,7 +328,6 @@ gui.beamer.no_crystal=Нет кристалла
 
 gui.beamer.transmit=Передача
 gui.beamer.receive=Получение
-gui.beamer.disabled=Отключен
 gui.beamer.activation=Включение излучателя
 gui.beamer.auto=Авто
 gui.beamer.on_high=При сигнале
@@ -332,6 +343,7 @@ gui.beamer.invalid=Неправильно
 chat.orlins.energyStored=Накоплено Энергии: %s RF (Необходимо: %s RF, %s s)
 
 item.aunis.universe_dialer.name=Портативный наборщик
+item.aunis.universe_dialer.saved_gates=Saved gates: %s
 item.aunis.universe_dialer.not_linked=Не подключено
 item.aunis.universe_dialer.gate_busy=Врата заняты
 item.aunis.universe_dialer.mode_scan=Ближайшие
@@ -339,6 +351,7 @@ item.aunis.universe_dialer.mode_saved=Память
 item.aunis.universe_dialer.mode_rings=Кольца
 item.aunis.universe_dialer.mode_oc=OpnCom
 item.aunis.universe_dialer.aborting=Отменить набор
+item.aunis.universe_dialer.not_dialing=Not dialing
 item.aunis.universe_dialer.oc_name=Введите имя
 item.aunis.universe_dialer.oc_address=Адрес модема OpenComputers (Оставьте пустым для трансляции)
 item.aunis.universe_dialer.oc_port=Порт модема
@@ -349,13 +362,52 @@ item.aunis.universe_dialer.oc_message_received=Полученный отклик
 item.aunis.notebook.name=Блокнот
 item.aunis.notebook.rename_gui=Новое имя
 item.aunis.notebook.unnamed=<Не названо>
+item.aunis.gui.name=Name
+item.aunis.gui.address=Address
+item.aunis.gui.rename=Rename
+item.aunis.gui.oc_address=Modem address
+item.aunis.gui.oc_port=Port
+item.aunis.gui.oc_params=Parameters
+item.aunis.gui.oc_port_invalid=Invalid port
+
 config.aunis.mode_scroll=Прокрутка режимов (портативный наборщик)
 config.aunis.mode_up=Предыдущий режим (портативный наборщик)
 config.aunis.mode_down=Следующий режим (портативный наборщик)
 config.aunis.address_scroll=Прокрутка адресов (портативный наборщик)
 config.aunis.address_up=Предыдущий адрес (портативный наборщик)
 config.aunis.address_down=Следующий адрес (портативный наборщик)
+config.aunis.address_edit=Open address edit menu
+
+
+aunis.subtitle.dhd_milkyway_press=DHD symbol pressed
+aunis.subtitle.dhd_milkyway_press_brb=DHD bright red button pressed
+aunis.subtitle.gate_milkyway_open=Stargate wormhole opens
+aunis.subtitle.gate_milkyway_close=Stargate wormhole closes
+aunis.subtitle.gate_milkyway_ring_roll=Stargate ring rolls
+aunis.subtitle.gate_milkyway_dial_fail=Stargate fails to connect
+aunis.subtitle.gate_milkyway_dial_fail_computer=Stargate computer dialing fails
+aunis.subtitle.gate_milkyway_incoming=Stargate chevrons lock
+aunis.subtitle.wormhole_loop=Stargate wormhole ripples
+aunis.subtitle.wormhole_go=Stargate wormhole receives traveller
+aunis.subtitle.wormhole_flicker=Stargate wormhole flickers
+aunis.subtitle.rings_transport=Transport rings activate
+aunis.subtitle.rings_controller_button=Transport rings controller button pressed
+aunis.subtitle.gate_milkyway_chevron_shut=Stargate chevron shuts
+aunis.subtitle.gate_milkyway_chevron_open=Stargate chevron opens
+aunis.subtitle.gate_orlin_dial=Orlin gate dials
+aunis.subtitle.gate_universe_dial_start=Universe gate starts to dial
+aunis.subtitle.gate_universe_roll=Universe gate rolls
+aunis.subtitle.gate_universe_chevron_lock=Universe gate chevron locks
+aunis.subtitle.gate_universe_fail=Universe gate fails to connect
+aunis.subtitle.gate_universe_chevron_top_lock=Universe gate top chevron locks
+aunis.subtitle.gate_universe_open=Universe gate wormhole opens
+aunis.subtitle.gate_universe_close=Universe gate wormhole closes
+aunis.subtitle.beamer_start=Beamer starts
+aunis.subtitle.beamer_stop=Beamer stops
+aunis.subtitle.beamer_loop=Beamer beams
+aunis.subtitle.page_flip=Page flips
 config.aunis.address_remove=Удалить адрес (портативный наборщик)
+config.aunis.gui.rename=Переименовать страницу блокнота
 config.aunis.universe_dialer.abort=Отменить набор (портативный наборщик)
 config.aunis.universe_dialer.oc_program=Сообщение OpenComputers (портативный наборщик)
-config.aunis.page_notebook.rename=Переименовать страницу блокнота
+item.aunis.crystal_upgrade_shield.name=Shield Upgrade

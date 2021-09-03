@@ -20,8 +20,10 @@ public class StargateRendererActionState extends State {
 		CHEVRON_OPEN(9),
 		CHEVRON_CLOSE(10),
 		CHEVRON_ACTIVATE_BOTH(11),
-		CHEVRON_DIM(12);
-		
+		CHEVRON_DIM(12),
+		IRIS_OPEN(13),
+		IRIS_CLOSE(14);
+
 		public int actionID;
 		private static Map<Integer, EnumGateAction> map = new HashMap<Integer, EnumGateAction>();
 		

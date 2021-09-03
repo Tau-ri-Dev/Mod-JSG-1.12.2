@@ -30,14 +30,12 @@ public class AunisItems {
 	 * Iris/Shield upgrade
 	 */
 	public static final Item IRIS_BLADE = ItemHelper.createGenericItem("iris_blade");
-	public static final Item CRYSTAL_UPGRADE_IRIS = ItemHelper.createGenericItem("crystal_upgrade_iris");
+	public static final Item UPGRADE_IRIS = ItemHelper.createGenericItem("upgrade_iris");
 	public static final Item IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("iris_blade_trinium");
-	public static final Item CRYSTAL_UPGRADE_IRIS_TRINIUM = ItemHelper.createGenericItem("crystal_upgrade_iris_trinium");
+	public static final Item UPGRADE_IRIS_TRINIUM = ItemHelper.createGenericItem("upgrade_iris_trinium");
 
-	public static final Item CRYSTAL_UPGRADE_SHIELD = ItemHelper.createGenericItem("crystal_upgrade_shield");
+	public static final Item UPGRADE_SHIELD = ItemHelper.createGenericItem("upgrade_shield");
 	public static final Item SHIELD_EMITOR = ItemHelper.createGenericItem("shield_emitor");
-
-	public static final Item TRINIUM_INGOT = ItemHelper.createGenericItem("trinium_ingot");
 
 	/**
 	 * These allow for dialing 8th glyph(cross dimension travel) and show different address spaces
@@ -93,13 +91,11 @@ public class AunisItems {
 		CRYSTAL_RAW_PEGASUS_DHD,
 
 		IRIS_BLADE,
-		CRYSTAL_UPGRADE_IRIS,
+		UPGRADE_IRIS,
 		IRIS_BLADE_TRINIUM,
-		CRYSTAL_UPGRADE_IRIS_TRINIUM,
-		CRYSTAL_UPGRADE_SHIELD,
+		UPGRADE_IRIS_TRINIUM,
+		UPGRADE_SHIELD,
 		SHIELD_EMITOR,
-
-		TRINIUM_INGOT,
 
 		CRYSTAL_GLYPH_DHD,
 		CRYSTAL_GLYPH_STARGATE,

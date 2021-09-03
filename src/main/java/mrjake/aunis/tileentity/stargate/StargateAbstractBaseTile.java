@@ -803,7 +803,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         // Kill them
         for (EntityLivingBase entity : entities) {
-          entity.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_HORIZON, 20);
+          entity.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_HORIZON, entity.getHealth());
           AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.STARGATE_VAPORIZE_BLOCK_PARTICLES, new StargateVaporizeBlockParticlesRequest(entity.getPosition())), targetPoint);
         }
 

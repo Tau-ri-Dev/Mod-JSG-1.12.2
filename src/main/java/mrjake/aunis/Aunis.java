@@ -50,8 +50,8 @@ public class Aunis {
     public static final String CLIENT = "mrjake.aunis.proxy.ProxyClient";
     public static final String SERVER = "mrjake.aunis.proxy.ProxyServer";
     
-    public static final AunisCreativeTab aunisCreativeTab = new AunisCreativeTab();
-    
+  public static final AunisCreativeTab aunisCreativeTab= new AunisCreativeTab();
+
     @Instance(ModID)
 	public static Aunis instance;
     

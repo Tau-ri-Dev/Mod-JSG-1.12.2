@@ -29,9 +29,6 @@ public class AunisWorldGen implements IWorldGenerator {
 				if (AunisConfig.worldgenConfig.naquadahEnable) {
 					runGenerator(AunisBlocks.ORE_NAQUADAH_BLOCK.getDefaultState(), AunisConfig.worldgenConfig.naquadahVeinSize, AunisConfig.worldgenConfig.naquadahMaxVeinInChunk, 0, 128, BlockMatcher.forBlock(Blocks.NETHERRACK), world, rand, chunkX, chunkZ);
 				}
-				if (AunisConfig.worldgenConfig.triniumEnable) {
-					runGenerator(AunisBlocks.ORE_NAQUADAH_BLOCK.getDefaultState(), AunisConfig.worldgenConfig.triniumVeinSize, AunisConfig.worldgenConfig.triniumMaxVeinInChunk, 0, 128, BlockMatcher.forBlock(Blocks.NETHERRACK), world, rand, chunkX, chunkZ);
-				}
 				
 				break;
 				

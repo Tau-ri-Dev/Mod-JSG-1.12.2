@@ -1,4 +1,5 @@
 itemGroup.aunis=Aunis
+
 soundCategory.aunis=Aunis
 
 item.aunis.analyzer_ancient.name=Ancient Analyzer
@@ -15,13 +16,13 @@ item.aunis.crystal_glyph_pegasus.name=Pegasus Glyphs Crystal
 item.aunis.crystal_glyph_universe.name=Universe Glyphs Crystal
 
 
-item.aunis.iris_blade.name=Iris Upgrade (Titanium)
-item.aunis.iris_blade_trinium.name=Iris Upgrade (Trinium)
-item.aunis.crystal_upgrade_iris.name=Iris Upgrade (Titanium)
-item.aunis.crystal_upgrade_iris_trinium.name=Iris Upgrade (Trinium)
+item.aunis.iris_blade.name=Iris Blade (Titanium)
+item.aunis.iris_blade_trinium.name=Iris Blade (Trinium)
+item.aunis.upgrade_iris.name=Iris Upgrade (Titanium)
+item.aunis.upgrade_iris_trinium.name=Iris Upgrade (Trinium)
 
 item.aunis.shield_emitor.name=Shield Emitor
-item.aunis.crystal_upgrade_shield.name=Shield Upgrade
+item.aunis.upgrade_shield.name=Shield Upgrade
 
 
 tile.aunis.naquadah_ore.name=Naquadah Ore
@@ -30,9 +31,6 @@ tile.aunis.naquadah_block.name=Naquadah Block
 item.aunis.naquadah_shard.name=Naquadah Shard
 item.aunis.naquadah_alloy.name=Refined Naquadah Alloy Ingot
 item.aunis.naquadah_alloy_raw.name=Naquadah Alloy Ingot
-
-tile.aunis.trinium_ore.name=Trinium Ore
-item.aunis.trinium_ingot.name=Trinium Ingot
 
 tile.aunis.invisible_block.name=You can't see me block
 
@@ -312,7 +310,6 @@ gui.beamer.beamer_link_status=Beamer link status:
 gui.beamer.beamer_link_ok=Beamer link ok
 gui.beamer.role_status=Role status:
 gui.beamer.role_ok=Role ok
-gui.beamer.disabled=Beamer disabled
 gui.beamer.disabled_target=Target beamer disabled
 gui.beamer.obstructed=Obstructed
 gui.beamer.obstructed_target=Obstructed (Target)

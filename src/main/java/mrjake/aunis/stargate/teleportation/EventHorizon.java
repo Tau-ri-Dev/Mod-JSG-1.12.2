@@ -13,8 +13,11 @@ import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.stargate.StargateMotionToClient;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
+import mrjake.aunis.stargate.EnumIrisStates;
+import mrjake.aunis.stargate.EnumIrisTypes;
 import mrjake.aunis.stargate.network.StargatePos;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
+import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.stargate.StargatePegasusBaseTile;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.entity.Entity;
@@ -90,27 +93,13 @@ public class EventHorizon {
 					Vector2f motion = new Vector2f( (float)entity.motionX, (float)entity.motionZ );
 					
 					if (TeleportHelper.frontSide(sourceFacing, motion)) {
-						boolean irisOpen = true;
 
-						/*if(targetGate.getTileEntity() instanceof StargatePegasusBaseTile){
-							if(PegasusShieldRendererhbtumzm.isOpen()) irisOpen = true;
-						}
-						else{
-							irisOpen = true;
-						}*/
+						for (Entity passenger : entity.getPassengers())
+							timeoutMap.put(passenger.getEntityId(), 40);
+						timeoutMap.put(entityId, 40);
 
-						if(irisOpen) {
-							for (Entity passenger : entity.getPassengers())
-								timeoutMap.put(passenger.getEntityId(), 40);
-							timeoutMap.put(entityId, 40);
-
-							scheduledTeleportMap.put(entityId, packet.setMotion(motion));
-							teleportEntity(entityId);
-						}
-						else{
-							System.out.println("byl jsi zabit irisem! xD");
-							entity.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS, 20);
-						}
+						scheduledTeleportMap.put(entityId, packet.setMotion(motion));
+						teleportEntity(entityId);
 					}
 					/*else {
 						//entity.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_HORIZON, 20);
@@ -125,10 +114,29 @@ public class EventHorizon {
 	
 	public void teleportEntity(int entityId) {
 		TeleportPacket packet = scheduledTeleportMap.get(entityId);
+
+		boolean a1 = packet.getTargetGatePos().getTileEntity() instanceof StargateClassicBaseTile;
+		boolean a2 = ((StargateClassicBaseTile) packet.getTargetGatePos().getTileEntity()).isClosed();
 		
 		if (!new StargateTeleportEntityEvent((StargateAbstractBaseTile) world.getTileEntity(pos), packet.getTargetGatePos().getTileEntity(), packet.getEntity()).post()) {
 			// Not cancelled
 			packet.teleport();
+			if(a1 && a2) {
+
+				System.out.println("byl jsi zabit irisem! xD");
+				packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS, 20);
+
+				if(((StargateClassicBaseTile) packet.getTargetGatePos().getTileEntity()).isPhysicalIris()) {
+					AunisSoundHelper.playSoundEvent(packet.getTargetGatePos().getWorld(),
+							packet.getTargetGatePos().getTileEntity().getGateCenterPos(),
+							SoundEventEnum.IRIS_HIT);
+				}
+				else if(((StargateClassicBaseTile) packet.getTargetGatePos().getTileEntity()).isShieldIris()){
+					AunisSoundHelper.playSoundEvent(packet.getTargetGatePos().getWorld(),
+							packet.getTargetGatePos().getTileEntity().getGateCenterPos(),
+							SoundEventEnum.SHIELD_HIT);
+				}
+			}
 			AunisSoundHelper.playSoundEvent(world, gateCenter, SoundEventEnum.WORMHOLE_GO);
 		};
 		

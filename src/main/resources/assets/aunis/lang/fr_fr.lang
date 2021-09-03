@@ -1,4 +1,5 @@
 itemGroup.aunis=Aunis
+
 soundCategory.aunis=Aunis
 
 item.aunis.analyzer_ancient.name=Analyseur Ancien
@@ -17,11 +18,11 @@ item.aunis.crystal_glyph_universe.name=Cristal des glyphes de l'univers
 
 item.aunis.iris_blade.name=Iris Upgrade (Titanium)
 item.aunis.iris_blade_trinium.name=Iris Upgrade (Trinium)
-item.aunis.crystal_upgrade_iris.name=Iris Upgrade (Titanium)
-item.aunis.crystal_upgrade_iris_trinium.name=Iris Upgrade (Trinium)
+item.aunis.upgrade_iris.name=Iris Upgrade (Titanium)
+item.aunis.upgrade_iris_trinium.name=Iris Upgrade (Trinium)
 
 item.aunis.shield_emitor.name=Shield Emitor
-item.aunis.crystal_upgrade_shield.name=Shield Upgrade
+item.aunis.upgrade_shield.name=Shield Upgradeitem.aunis.crystal_upgrade_shield.name
 
 
 tile.aunis.naquadah_ore.name=Minerai de Naquadah
@@ -30,9 +31,6 @@ tile.aunis.naquadah_block.name=Bloc de Naquadah
 item.aunis.naquadah_shard.name=Éclat de Naquadah
 item.aunis.naquadah_alloy.name=Lingot d'alliage de Naquadah raffiné
 item.aunis.naquadah_alloy_raw.name=Lingot d'alliage de Naquadah
-
-tile.aunis.trinium_ore.name=Trinium Ore
-item.aunis.trinium_ingot.name=Trinium Ingot
 
 tile.aunis.invisible_block.name=Tu ne peux pas me voir bloc
 
@@ -51,6 +49,10 @@ tile.aunis.stargate_orlin_member_block.name=Anneau StarGate (Orlin)
 tile.aunis.stargate_universe_base_block.name=Base StarGate (Univers)
 tile.aunis.stargate_universe_chevron_block.name=Chevron StarGate (Univers)
 tile.aunis.stargate_universe_ring_block.name=Anneau StarGate (Univers)
+
+tile.aunis.stargate_pegasus_base_block.name=Stargate Base (Pegasus)
+tile.aunis.stargate_pegasus_ring_block.name=Stargate Ring (Pegasus)
+tile.aunis.stargate_pegasus_chevron_block.name=Stargate Chevron (Pegasus)
 
 item.aunis.crystal_fragment.name=graine de cristal
 item.aunis.crystal_blank.name=Cristal vierge
@@ -122,7 +124,7 @@ tile.aunis.transportrings_block.rings_address=Adresse
 tile.aunis.transportrings_block.rings_name=Nom
 tile.aunis.transportrings_block.rings_save=Sauvegarder
 
-commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim=X] [map=Y] [id=Z]
+commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim
 commands.sgquery.number_expected=Nombre attendu
 commands.sgquery.no_map=Pas une telle carte
 commands.sgquery.stargates=Stargates %s
@@ -131,10 +133,10 @@ commands.sgquery.wrong_map=Mauvaise carte ou aucune donnée
 commands.sgquery.wrong_sender=Mauvais expéditeur (pas un joueur)
 commands.sgquery.wrong_quantity=Mauvaise quantité de pages données
 commands.sgquery.giving_page=Donner la page à %s
-commands.sggivepage.usage=/sggivepage (player) (map=X) [biome=Y] (Symbol)x8/6
+commands.sggivepage.usage=/sggivepage (player) (map
 commands.sggivepage.no_map=Aucune carte ou mauvaise carte donnée
 commands.sggivepage.give_page=Donner la page à %s
-commands.sgsetaddress.usage=/sgsetaddress (x y z) (map=X) (Symbol)x8
+commands.sgsetaddress.usage=/sgsetaddress (x y z) (map
 commands.sgsetaddress.notstargate=Le bloc ciblé n'est pas une base Stargate
 commands.sgsetaddress.noaddressspace=Aucune carte ou mauvaise carte donnée
 commands.sgsetaddress.wrongaddress=L'adresse doit être une liste de 7 symboles séparés par des espaces (noms anglais)
@@ -142,12 +144,13 @@ commands.sgsetaddress.wrongsymbol=Incorrect %s. nom du symbole
 commands.sgsetaddress.duplicatesymbol=Nom du symbole %s. en double
 commands.sgsetaddress.exists=Stargate with given address already exists
 commands.sgsetaddress.success=Définissez l'adresse de Stargate entre %s et %s
-commands.sgcloseall.usage=/sgcloseall [(x y z) (x y z)] [dim=X]
-commands.sgcloseall.closing=Fermer Stargates en dim=%s, %s.
+commands.sgcloseall.usage=/sgcloseall [(x y z) (x y z)] [dim
+commands.sgcloseall.closing=Fermer Stargates en dim
 commands.sgcloseall.closed=Portes %s fermées.
 commands.sgcloseall.number_expected=Nombre ou "actuel" attendu comme ID de dimension
 
 death.attack.eventHorizon=%s a reçu une crémation kawoosh
+death.attack.irisDeath=%s was given a iris cremation
 
 
 glyph.aunis.milkyway.sculptor=Sculptor
@@ -308,6 +311,7 @@ gui.beamer.beamer_link_ok=Lien du Beamer ok
 gui.beamer.role_status=Statut du rôle:
 gui.beamer.role_ok=Rôle ok
 gui.beamer.disabled=Beamer désactivé
+gui.beamer.disabled=désactivé
 gui.beamer.disabled_target=Beamer cible désactivé
 gui.beamer.obstructed=Beamer obstrué
 gui.beamer.obstructed_target=Beamer cible obstrué
@@ -324,7 +328,6 @@ gui.beamer.no_crystal=Pas de cristal
 
 gui.beamer.transmit=Transmettre
 gui.beamer.receive=Recevoir
-gui.beamer.disabled=désactivé
 gui.beamer.activation=Activation du Beamer
 gui.beamer.auto=Auto
 gui.beamer.on_high=Avec signal
@@ -373,10 +376,7 @@ config.aunis.mode_down=Mode du dialer de l'univers vers le bas
 config.aunis.address_scroll=Défilement de l'adresse du dialer de l'univers
 config.aunis.address_up=Adresse du dial univers vers le haut
 config.aunis.address_down=Adresse du dial univers vers le bas
-config.aunis.address_remove=Supprimer l'adresse du dial univers
-config.aunis.universe_dialer.abort=Le dialer de l'univers annule la numérotation
-config.aunis.universe_dialer.oc_program=Message OC du programme du dial univers
-config.aunis.page_notebook.rename=Renommer la page du carnet
+config.aunis.address_edit=Open address edit menu
 
 
 aunis.subtitle.dhd_milkyway_press=Symbole du DHD enfoncé
@@ -405,4 +405,8 @@ aunis.subtitle.gate_universe_close=Fermeture du vortex de la porte de l'univers
 aunis.subtitle.beamer_start=Démarrage du Beamer
 aunis.subtitle.beamer_stop=Arrêt du Beamer
 aunis.subtitle.beamer_loop=Faisceaux du Beamer
-aunis.subtitle.page_flip=Feuillets de page
+aunis.subtitle.page_flip=Feuillets de pageitem.aunis.upgrade_shield.name
+config.aunis.address_remove=Supprimer l'adresse du dial univers
+config.aunis.page_notebook.rename=Renommer la page du carnet
+config.aunis.universe_dialer.abort=Le dialer de l'univers annule la numérotation
+config.aunis.universe_dialer.oc_program=Message OC du programme du dial univers
