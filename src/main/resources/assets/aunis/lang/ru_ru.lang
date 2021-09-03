@@ -31,6 +31,9 @@ item.aunis.naquadah_shard.name=Осколок наквадаха
 item.aunis.naquadah_alloy.name=Обработанный слиток из сплава наквадаха
 item.aunis.naquadah_alloy_raw.name=Слиток из сплава наквадаха
 
+tile.aunis.trinium_ore.name=Trinium Ore
+item.aunis.trinium_ingot.name=Trinium Ingot
+
 tile.aunis.invisible_block.name=Невидимый блок :P
 
 tile.aunis.stargate_milkyway_base_block.name=Основание звёздных врат (Млечный Путь)

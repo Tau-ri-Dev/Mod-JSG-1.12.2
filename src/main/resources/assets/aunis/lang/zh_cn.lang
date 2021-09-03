@@ -28,6 +28,9 @@ tile.aunis.naquadah_block.name=Naquadah方块
 item.aunis.naquadah_shard.name=Naquadah碎片
 item.aunis.naquadah_alloy.name=Naquadah合金锭
 
+tile.aunis.trinium_ore.name=Trinium Ore
+item.aunis.trinium_ingot.name=Trinium Ingot
+
 tile.aunis.invisible_block.name=你看不到我这个方块
 
 tile.aunis.stargate_milkyway_base_block.name=银河系星门基础方块

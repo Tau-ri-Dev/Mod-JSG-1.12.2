@@ -37,6 +37,8 @@ public class AunisItems {
 	public static final Item CRYSTAL_UPGRADE_SHIELD = ItemHelper.createGenericItem("crystal_upgrade_shield");
 	public static final Item SHIELD_EMITOR = ItemHelper.createGenericItem("shield_emitor");
 
+	public static final Item TRINIUM_INGOT = ItemHelper.createGenericItem("trinium_ingot");
+
 	/**
 	 * These allow for dialing 8th glyph(cross dimension travel) and show different address spaces
 	 */
@@ -96,6 +98,8 @@ public class AunisItems {
 		CRYSTAL_UPGRADE_IRIS_TRINIUM,
 		CRYSTAL_UPGRADE_SHIELD,
 		SHIELD_EMITOR,
+
+		TRINIUM_INGOT,
 
 		CRYSTAL_GLYPH_DHD,
 		CRYSTAL_GLYPH_STARGATE,

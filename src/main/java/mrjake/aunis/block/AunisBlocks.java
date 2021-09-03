@@ -36,6 +36,8 @@ public class AunisBlocks {
   public static final NaquadahOreBlock ORE_NAQUADAH_BLOCK_STONE = new NaquadahOreBlock("naquadah_ore_stone");
   public static final Block NAQUADAH_BLOCK = new Block(Material.IRON).setRegistryName(Aunis.ModID, "naquadah_block").setUnlocalizedName(Aunis.ModID + ".naquadah_block");
 
+  public static final TriniumOreBlock ORE_TRINIUM_BLOCK = new TriniumOreBlock("trinium_ore");
+
   public static final StargateMilkyWayBaseBlock STARGATE_MILKY_WAY_BASE_BLOCK = new StargateMilkyWayBaseBlock();
   public static final StargateUniverseBaseBlock STARGATE_UNIVERSE_BASE_BLOCK = new StargateUniverseBaseBlock();
   public static final StargateOrlinBaseBlock STARGATE_ORLIN_BASE_BLOCK = new StargateOrlinBaseBlock();
@@ -59,7 +61,7 @@ public class AunisBlocks {
   public static final BeamerBlock BEAMER_BLOCK = new BeamerBlock();
 
 
-  private static Block[] blocks = {ORE_NAQUADAH_BLOCK, ORE_NAQUADAH_BLOCK_STONE, NAQUADAH_BLOCK,
+  private static Block[] blocks = {ORE_NAQUADAH_BLOCK, ORE_NAQUADAH_BLOCK_STONE, NAQUADAH_BLOCK, ORE_TRINIUM_BLOCK,
 
     STARGATE_MILKY_WAY_BASE_BLOCK, STARGATE_UNIVERSE_BASE_BLOCK, STARGATE_ORLIN_BASE_BLOCK, STARGATE_ORLIN_MEMBER_BLOCK, STARGATE_PEGASUS_BASE_BLOCK,
 

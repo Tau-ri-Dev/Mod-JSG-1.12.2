@@ -689,7 +689,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public static enum StargateIrisUpgradeEnum implements EnumKeyInterface<Item> {
-        IRIS_UPGRADE_CLASSIC(AunisItems.CRYSTAL_UPGRADE_IRIS);
+        IRIS_UPGRADE_TRINIUM(AunisItems.CRYSTAL_UPGRADE_IRIS_TRINIUM),
+        IRIS_UPGRADE_CLASSIC(AunisItems.CRYSTAL_UPGRADE_IRIS),
+        SHIELD_UPGRADE(AunisItems.CRYSTAL_UPGRADE_SHIELD);
 
         public Item item;
 

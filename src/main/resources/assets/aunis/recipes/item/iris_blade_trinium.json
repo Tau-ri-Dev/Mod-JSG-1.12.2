@@ -1,0 +1,23 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"SRR",
+		"RR ",
+		"R  "
+	],
+
+	"key": {
+		"S": {
+			"item": "aunis:circuit_control_crystal"
+		},
+
+		"R": {
+			"item": "aunis:trinium_ingot"
+		}
+	},
+
+	"result": {
+		"item": "aunis:iris_blade",
+		"count": 1
+	}
+}

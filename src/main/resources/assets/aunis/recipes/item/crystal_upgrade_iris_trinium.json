@@ -12,12 +12,12 @@
 		},
 
 		"R": {
-			"item": "aunis:iris_blade"
+			"item": "aunis:iris_blade_trinium"
 		}
 	},
 
 	"result": {
-		"item": "aunis:crystal_upgrade_iris",
+		"item": "aunis:crystal_upgrade_iris_trinium",
 		"count": 1
 	}
 }
