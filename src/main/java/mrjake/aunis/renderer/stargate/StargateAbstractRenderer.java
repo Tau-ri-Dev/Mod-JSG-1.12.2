@@ -40,10 +40,6 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
       GlStateManager.pushMatrix();
       GlStateManager.translate(x, y, z);
 
-      if(te instanceof StargateClassicBaseTile){
-        StargateClassicRenderer.renderIris(partialTicks, alpha, getWorld(), (StargateClassicBaseTile) te);
-      }
-
       if (shouldRender(rendererState)) {
         if (AunisConfig.debugConfig.renderBoundingBoxes || AunisConfig.debugConfig.renderWholeKawooshBoundingBox) {
           te.getEventHorizonLocalBox().render();
@@ -210,6 +206,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         float arg = (tick - VORTEX_START) / SPEED_FACTOR;
 
         if (!(rendererState.vortexState == EnumVortexState.CLOSING)) {
+          // todo disable kawoosh when iris is closed
           if (!(rendererState.vortexState == EnumVortexState.SHRINKING)) {
             if (rendererState.vortexState == EnumVortexState.FORMING && arg >= 1.342f) {
               rendererState.vortexState = EnumVortexState.FULL;

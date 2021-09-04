@@ -12,6 +12,7 @@ import mrjake.aunis.stargate.EnumIrisTypes;
 import mrjake.aunis.stargate.EnumMemberVariant;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
+import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.util.FacingToRotation;
 import net.minecraft.block.state.IBlockState;
@@ -83,6 +84,12 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
 
     protected static ResourceLocation getIrisTexture(boolean physicsOrShield) {
         return physicsOrShield ? IRIS_TEXTURE : SHIELD_TEXTURE;
+    }
+
+    @Override
+    public void render(StargateAbstractBaseTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+        super.render(te, x, y, z, partialTicks, destroyStage, alpha);
+        if(te instanceof StargateClassicBaseTile) renderIris(partialTicks, alpha, getWorld(), (StargateClassicBaseTile) te);
     }
 
     public static void renderIris(double partialTicks, Float alpha, World world, StargateClassicBaseTile te) {
