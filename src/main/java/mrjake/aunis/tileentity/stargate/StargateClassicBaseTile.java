@@ -16,21 +16,15 @@ import mrjake.aunis.gui.container.StargateContainerGuiState;
 import mrjake.aunis.gui.container.StargateContainerGuiUpdate;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.notebook.PageNotebookItem;
-import mrjake.aunis.loader.texture.Texture;
-import mrjake.aunis.loader.texture.TextureLoader;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
-import mrjake.aunis.renderer.stargate.StargateAbstractRenderer;
-import mrjake.aunis.renderer.stargate.StargateClassicRenderer;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState.StargateClassicRendererStateBuilder;
-import mrjake.aunis.renderer.stargate.StargateRendererStatic;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.sound.StargateSoundEventEnum;
 import mrjake.aunis.sound.StargateSoundPositionedEnum;
 import mrjake.aunis.stargate.*;
-import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
 import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
 import mrjake.aunis.stargate.power.StargateClassicEnergyStorage;
@@ -51,7 +45,6 @@ import mrjake.aunis.util.EnumKeyMap;
 import mrjake.aunis.util.FacingToRotation;
 import mrjake.aunis.util.ItemHandlerHelper;
 import mrjake.aunis.util.ItemMetaPair;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -59,7 +52,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -139,8 +131,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         super.onGateBroken();
         updateChevronLight(0, false);
         isSpinning = false;
-        irisState = EnumIrisStates.OPENED;
-        irisType = EnumIrisTypes.NULL;
+        irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
+        irisType = EnumIrisType.NULL;
         currentRingSymbol = getSymbolType().getTopSymbol();
         AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(currentRingSymbol, spinDirection, true)), targetPoint);
 
@@ -329,7 +321,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         for (NBTBase tag : compound.getTagList("linkedBeamers", NBT.TAG_LONG))
             linkedBeamers.add(BlockPos.fromLong(((NBTTagLong) tag).getLong()));
 
-        irisState = EnumIrisStates.getValue(compound.getByte("irisState"));
+        irisState = mrjake.aunis.stargate.EnumIrisState.getValue(compound.getByte("irisState"));
 
         super.readFromNBT(compound);
     }
@@ -355,7 +347,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     protected StargateClassicRendererStateBuilder getRendererStateServer() {
-        return new StargateClassicRendererStateBuilder(super.getRendererStateServer()).setSymbolType(getSymbolType()).setActiveChevrons(dialedAddress.size()).setFinalActive(isFinalActive).setCurrentRingSymbol(currentRingSymbol).setSpinDirection(spinDirection).setSpinning(isSpinning).setTargetRingSymbol(targetRingSymbol).setSpinStartTime(spinStartTime).setBiomeOverride(determineBiomeOverride());
+        return new StargateClassicRendererStateBuilder(super.getRendererStateServer()).setSymbolType(getSymbolType()).setActiveChevrons(dialedAddress.size()).setFinalActive(isFinalActive).setCurrentRingSymbol(currentRingSymbol).setSpinDirection(spinDirection).setSpinning(isSpinning).setTargetRingSymbol(targetRingSymbol).setSpinStartTime(spinStartTime).setBiomeOverride(determineBiomeOverride()).setIrisState(irisState).setIrisType(irisType);
     }
 
     @Override
@@ -443,8 +435,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         getRendererStateClient().chevronTextureList.deactivateFinalChevron(world.getTotalWorldTime());
                         break;
 
-                    case IRIS_OPEN:
-
+                    case IRIS_UPDATE:
+                        getRendererStateClient().irisState = irisState;
+                        getRendererStateClient().irisType = irisType;
+                        break;
 
                     default:
                         break;
@@ -713,8 +707,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // ----------------------------------------------------------
     // IRISES
 
-    private EnumIrisStates irisState = EnumIrisStates.OPENED;
-    private EnumIrisTypes irisType = EnumIrisTypes.NULL;
+    private EnumIrisState irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
+    private EnumIrisType irisType = EnumIrisType.NULL;
     protected float irisMaxDurability = 0;
     protected float irisDurability = 0;
 
@@ -747,11 +741,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public void updateIrisType() {
-        irisType = EnumIrisTypes.byItem(itemStackHandler.getStackInSlot(11).getItem());
+        irisType = EnumIrisType.byItem(itemStackHandler.getStackInSlot(11).getItem());
         // TODO iris durability
         // irisDurability = 0;
-        if(irisType == EnumIrisTypes.NULL)
-            irisState = EnumIrisStates.OPENED;
+        if(irisType == EnumIrisType.NULL)
+            irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
 
         switch(irisType){
             case IRIS_TITANIUM:
@@ -766,15 +760,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     }
 
-    public EnumIrisTypes getIrisType(){
+    public EnumIrisType getIrisType(){
         return irisType;
     }
-    public EnumIrisStates getIrisState(){
+    public EnumIrisState getIrisState(){
         return irisState;
     }
 
     public boolean isClosed() {
-        return irisState == EnumIrisStates.CLOSED;
+        return irisState == mrjake.aunis.stargate.EnumIrisState.CLOSED;
     }
 
     public boolean isPhysicalIris(){
@@ -787,29 +781,30 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     }
     public boolean isShieldIris() {
-        return irisType == EnumIrisTypes.SHIELD;
+        return irisType == EnumIrisType.SHIELD;
     }
 
     protected boolean toggleIris() {
-        if (irisType == EnumIrisTypes.NULL) return false;
+        if (irisType == EnumIrisType.NULL) return false;
         switch (irisState) {
             case OPENED:
-                irisState = EnumIrisStates.CLOSING;
+                irisState = mrjake.aunis.stargate.EnumIrisState.CLOSING;
                 markDirty();
                 playSoundEvent(SoundEventEnum.IRIS_CLOSING);
-                irisState = EnumIrisStates.CLOSED;
+                irisState = mrjake.aunis.stargate.EnumIrisState.CLOSED;
                 break;
 
             case CLOSED:
-                irisState = EnumIrisStates.OPENING;
+                irisState = mrjake.aunis.stargate.EnumIrisState.OPENING;
                 markDirty();
                 playSoundEvent(SoundEventEnum.IRIS_OPENING);
-                irisState = EnumIrisStates.OPENED;
+                irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
                 break;
             default:
                 return false;
         }
         markDirty();
+        sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false);
         return true;
     }
     // -----------------------------------------------------------

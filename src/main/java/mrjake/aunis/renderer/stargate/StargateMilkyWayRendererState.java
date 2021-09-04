@@ -77,6 +77,8 @@ public class StargateMilkyWayRendererState extends StargateClassicRendererState 
 			setTargetRingSymbol(superBuilder.targetRingSymbol);
 			setSpinStartTime(superBuilder.spinStartTime);
 			setBiomeOverride(superBuilder.biomeOverride);
+			setIrisState(superBuilder.irisState);
+			setIrisType(superBuilder.irisType);
 		}
 		
 		public StargateMilkyWayRendererStateBuilder setStargateSize(StargateSizeEnum stargateSize) {

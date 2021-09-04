@@ -2,9 +2,7 @@ package mrjake.aunis.renderer.stargate;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
-import mrjake.aunis.stargate.EnumSpinDirection;
-import mrjake.aunis.stargate.ISpinHelper;
-import mrjake.aunis.stargate.StargateClassicSpinHelper;
+import mrjake.aunis.stargate.*;
 import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import net.minecraft.util.EnumFacing;
@@ -20,6 +18,8 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     this.chevronTextureList = new ChevronTextureList(getChevronTextureBase(), builder.activeChevrons, builder.isFinalActive);
     this.spinHelper = new StargateClassicSpinHelper(builder.symbolType, builder.currentRingSymbol, builder.spinDirection, builder.isSpinning, builder.targetRingSymbol, builder.spinStartTime);
     this.biomeOverride = builder.biomeOverride;
+    this.irisState = builder.irisState;
+    this.irisType = builder.irisType;
   }
 
   @Override
@@ -43,6 +43,12 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
   // Biome override
   // Saved
   public BiomeOverlayEnum biomeOverride;
+
+  // Iris
+  public EnumIrisType irisType;
+    // Saved
+  public EnumIrisState irisState;
+
 
   @Override
   public BiomeOverlayEnum getBiomeOverlay() {
@@ -69,7 +75,8 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     } else {
       buf.writeBoolean(false);
     }
-
+    buf.writeByte(irisState.id);
+    buf.writeByte(irisType.id);
     super.toBytes(buf);
   }
 
@@ -84,7 +91,8 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     if (buf.readBoolean()) {
       biomeOverride = BiomeOverlayEnum.values()[buf.readInt()];
     }
-
+    irisState = EnumIrisState.getValue(buf.readByte());
+    irisType = EnumIrisType.byId(buf.readByte());
     super.fromBytes(buf);
   }
 
@@ -115,6 +123,10 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
 
     // Biome override
     public BiomeOverlayEnum biomeOverride;
+
+    //Iris
+    protected EnumIrisState irisState;
+    protected EnumIrisType irisType;
 
     public StargateClassicRendererStateBuilder(StargateAbstractRendererStateBuilder superBuilder) {
       setStargateState(superBuilder.stargateState);
@@ -162,6 +174,16 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
 
     public StargateClassicRendererStateBuilder setBiomeOverride(BiomeOverlayEnum biomeOverride) {
       this.biomeOverride = biomeOverride;
+      return this;
+    }
+
+    public StargateClassicRendererStateBuilder setIrisState(EnumIrisState irisState) {
+      this.irisState = irisState;
+      return this;
+    }
+
+    public StargateClassicRendererStateBuilder setIrisType(EnumIrisType irisType) {
+      this.irisType = irisType;
       return this;
     }
   }

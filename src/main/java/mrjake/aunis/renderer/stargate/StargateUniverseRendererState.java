@@ -123,6 +123,8 @@ public class StargateUniverseRendererState extends StargateClassicRendererState 
 			setTargetRingSymbol(superBuilder.targetRingSymbol);
 			setSpinStartTime(superBuilder.spinStartTime);
 			setBiomeOverride(superBuilder.biomeOverride);
+			setIrisState(superBuilder.irisState);
+			setIrisType(superBuilder.irisType);
 		}
 		
 		public StargateUniverseRendererStateBuilder setDialedAddress(StargateAddressDynamic dialedAddress) {

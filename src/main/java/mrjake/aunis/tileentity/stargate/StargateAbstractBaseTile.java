@@ -35,6 +35,7 @@ import mrjake.aunis.particle.ParticleWhiteSmoke;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateAbstractRendererState;
 import mrjake.aunis.renderer.stargate.StargateAbstractRendererState.StargateAbstractRendererStateBuilder;
+import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.renderer.stargate.StargatePegasusRendererState;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
@@ -207,6 +208,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     if (targetPoint != null) {
       AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, type, state), targetPoint);
+      if (state instanceof StargateRendererActionState) {
+        System.out.println("Updante se: "+((StargateRendererActionState) state).action.name());
+      }
     } else {
       Aunis.logger.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
     }

@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateSizeEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
+import mrjake.aunis.stargate.EnumIrisState;
+import mrjake.aunis.stargate.EnumIrisType;
 import mrjake.aunis.stargate.StargatePegasusSpinHelper;
 
 import java.util.HashMap;
@@ -93,6 +95,8 @@ public class StargatePegasusRendererState extends StargateClassicRendererState {
     if (buf.readBoolean()) {
       biomeOverride = BiomeOverlayEnum.values()[buf.readInt()];
     }
+    irisState = EnumIrisState.getValue(buf.readByte());
+    irisType = EnumIrisType.byId(buf.readByte());
   }
 
 
@@ -120,6 +124,8 @@ public class StargatePegasusRendererState extends StargateClassicRendererState {
       setTargetRingSymbol(superBuilder.targetRingSymbol);
       setSpinStartTime(superBuilder.spinStartTime);
       setBiomeOverride(superBuilder.biomeOverride);
+      setIrisState(superBuilder.irisState);
+      setIrisType(superBuilder.irisType);
     }
 
     public StargatePegasusRendererStateBuilder setStargateSize(StargateSizeEnum stargateSize) {

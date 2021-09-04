@@ -7,8 +7,8 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.loader.texture.Texture;
 import mrjake.aunis.loader.texture.TextureLoader;
-import mrjake.aunis.stargate.EnumIrisStates;
-import mrjake.aunis.stargate.EnumIrisTypes;
+import mrjake.aunis.stargate.EnumIrisState;
+import mrjake.aunis.stargate.EnumIrisType;
 import mrjake.aunis.stargate.EnumMemberVariant;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
@@ -25,6 +25,7 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
 public abstract class StargateClassicRenderer<S extends StargateClassicRendererState> extends StargateAbstractRenderer<S> {
+
 
 
     @Override
@@ -70,5 +71,65 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             renderChevron(rendererState, partialTicks, chevron);
 
         rendererState.chevronTextureList.iterate(getWorld(), partialTicks);
+    }
+
+    // ----------------------------------------------------------------------------------------
+    // Iris rendering
+
+    protected static final ResourceLocation SHIELD_TEXTURE =
+            new ResourceLocation(Aunis.ModID, "textures/tesr/pegasus/shield/gate_pegasus_shield7.jpg");
+    protected static final ResourceLocation IRIS_TEXTURE =
+            new ResourceLocation(Aunis.ModID, "textures/tesr/milkyway/iris/gate_milkyway_iris7.jpg");
+
+    protected ResourceLocation getIrisTexture(boolean physicsOrShield) {
+        return physicsOrShield ? IRIS_TEXTURE : SHIELD_TEXTURE;
+    }
+
+    @Override
+    public void renderIris(double partialTicks, Float alpha, World world, S rendererState) {
+        EnumIrisState irisState = rendererState.irisState;
+        EnumIrisType irisType = rendererState.irisType;
+        boolean fuck = false;
+        if (irisType == null) {
+            System.out.println("iris type je kokotina");
+            fuck = true;
+        }
+        if (irisState == null) {
+            System.out.println("iris state je picovina");
+            fuck = true;
+        }
+        if(fuck) return;
+
+        if(irisType != EnumIrisType.NULL) System.out.println("Stav Iris:" + irisState.name());
+        if (irisState != EnumIrisState.OPENED) {
+            System.out.println("není otevřená");
+        }
+        if (irisType != EnumIrisType.NULL && irisState != mrjake.aunis.stargate.EnumIrisState.OPENED) {
+            System.out.println("renderuje");
+            GlStateManager.pushMatrix();
+
+            Texture irisTexture = TextureLoader.getTexture(getIrisTexture(!(irisType == EnumIrisType.SHIELD)));
+            if (irisTexture != null) irisTexture.bindTexture();
+            float tick = (float) (getWorld().getTotalWorldTime() + partialTicks);
+
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            GlStateManager.enableBlend();
+            GlStateManager.translate(0, 0, 0.01);
+            for (int k = 0; k < 2; k++) {
+                if (k == 1) {
+                    GlStateManager.rotate(180, 0, 1, 0);
+                }
+
+                StargateRendererStatic.innerCircle.render(tick, false, 1.0f, 0);
+
+
+                for (StargateRendererStatic.QuadStrip strip : StargateRendererStatic.quadStrips) {
+                    strip.render(tick, false, 1f, 0);
+                }
+            }
+
+            GlStateManager.disableBlend();
+            GlStateManager.popMatrix();
+        }
     }
 }

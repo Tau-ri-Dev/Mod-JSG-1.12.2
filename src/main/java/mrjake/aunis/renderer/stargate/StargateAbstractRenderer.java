@@ -3,7 +3,7 @@ package mrjake.aunis.renderer.stargate;
 import java.util.HashMap;
 import java.util.Map;
 
-import mrjake.aunis.stargate.EnumIrisTypes;
+import mrjake.aunis.stargate.EnumIrisType;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
@@ -42,7 +42,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
       GlStateManager.pushMatrix();
       GlStateManager.translate(x, y, z);
 
-      if(te instanceof StargateClassicBaseTile) renderIris(partialTicks, alpha, getWorld(), (StargateClassicBaseTile) te);
+
 
       if (shouldRender(rendererState)) {
         if (AunisConfig.debugConfig.renderBoundingBoxes || AunisConfig.debugConfig.renderWholeKawooshBoundingBox) {
@@ -65,6 +65,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         applyLightMap(rendererState, partialTicks);
 
         renderGate(rendererState, partialTicks);
+        renderIris(partialTicks, alpha, getWorld(), rendererState);
 
         if (rendererState.doEventHorizonRender) renderKawoosh(rendererState, partialTicks);
       } else {
@@ -373,47 +374,5 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
     return true;
   }
 
-  // ----------------------------------------------------------------------------------------
-  // Iris rendering
-
-  protected static final ResourceLocation SHIELD_TEXTURE =
-          new ResourceLocation(Aunis.ModID, "textures/tesr/pegasus/shield/gate_pegasus_shield7.jpg");
-  protected static final ResourceLocation IRIS_TEXTURE =
-          new ResourceLocation(Aunis.ModID, "textures/tesr/milkyway/iris/gate_milkyway_iris7.jpg");
-
-  protected ResourceLocation getIrisTexture(boolean physicsOrShield) {
-    return physicsOrShield ? IRIS_TEXTURE : SHIELD_TEXTURE;
-  }
-
-  public void renderIris(double partialTicks, Float alpha, World world, StargateClassicBaseTile te) {
-    if (te.getIrisType() != EnumIrisTypes.NULL){ //&& te.getIrisState() != EnumIrisStates.OPENED) {
-
-      BlockPos gateCenter = te.getGateCenterPos();
-      GlStateManager.translate(gateCenter.getX(), gateCenter.getY(), gateCenter.getZ());
-      GlStateManager.pushMatrix();
-
-      Texture irisTexture = TextureLoader.getTexture(getIrisTexture(te.isPhysicalIris()));
-      if (irisTexture != null) irisTexture.bindTexture();
-      float tick = (float) (getWorld().getTotalWorldTime() + partialTicks);
-
-      GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-      GlStateManager.enableBlend();
-
-      for (int k = 0; k < 2; k++) {
-        if (k == 1) {
-          GlStateManager.rotate(180, 0, 1, 0);
-        }
-
-        StargateRendererStatic.innerCircle.render(tick, false, 1.0f, 0);
-
-
-        for (StargateRendererStatic.QuadStrip strip : StargateRendererStatic.quadStrips) {
-          strip.render(tick, false, 1.0f, 0);
-        }
-      }
-
-      GlStateManager.disableBlend();
-      GlStateManager.popMatrix();
-    }
-  }
+  protected void renderIris(double partialTicks, Float alpha, World world, S rendererState) {}
 }

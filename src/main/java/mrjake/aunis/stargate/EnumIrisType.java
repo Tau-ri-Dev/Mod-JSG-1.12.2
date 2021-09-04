@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum EnumIrisTypes {
+public enum EnumIrisType {
     NULL((byte) 0, Items.AIR),
 
     IRIS_TITANIUM((byte) 1, AunisItems.UPGRADE_IRIS),
@@ -18,26 +18,26 @@ public enum EnumIrisTypes {
     public final byte id;
     public final Item item;
 
-    EnumIrisTypes(byte id, Item item) {
+    EnumIrisType(byte id, Item item) {
         this.id = id;
         this.item = item;
     }
 
-    public final static Map<Item, EnumIrisTypes> itemMap = new HashMap<Item, EnumIrisTypes>();
+    public final static Map<Item, EnumIrisType> itemMap = new HashMap<Item, EnumIrisType>();
 
     static {
-        for (EnumIrisTypes type : values()) {
+        for (EnumIrisType type : values()) {
             itemMap.put(type.item, type);
         }
     }
 
 
-    public static EnumIrisTypes byId(byte id) {
+    public static EnumIrisType byId(byte id) {
         return (id < (values().length - 1)) ? values()[id] : NULL;
     }
 
-    public static EnumIrisTypes byItem(Item item) {
-        EnumIrisTypes type = itemMap.get(item);
+    public static EnumIrisType byItem(Item item) {
+        EnumIrisType type = itemMap.get(item);
         if (type == null) return NULL;
         return type;
     }
