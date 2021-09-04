@@ -9,6 +9,7 @@ import javax.vecmath.Vector2f;
 import mrjake.aunis.AunisDamageSources;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.api.event.StargateTeleportEntityEvent;
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.stargate.StargateMotionToClient;
 import mrjake.aunis.sound.AunisSoundHelper;
@@ -122,9 +123,10 @@ public class EventHorizon {
 			// Not cancelled
 			packet.teleport();
 			if(a1 && a2) {
-
-				System.out.println("byl jsi zabit irisem! xD");
-				packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS, 20);
+				if(AunisConfig.irisConfig.allowCreative)
+					packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS, 20);
+				else
+					packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS_CREATIVE, 20);
 
 				if(((StargateClassicBaseTile) packet.getTargetGatePos().getTileEntity()).isPhysicalIris()) {
 					AunisSoundHelper.playSoundEvent(packet.getTargetGatePos().getWorld(),

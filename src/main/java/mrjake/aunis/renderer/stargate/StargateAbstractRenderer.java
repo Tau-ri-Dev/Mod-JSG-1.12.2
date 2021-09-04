@@ -41,7 +41,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
       GlStateManager.translate(x, y, z);
 
       if(te instanceof StargateClassicBaseTile){
-        StargateClassicBaseTile.renderIris(partialTicks, alpha, getWorld());
+        StargateClassicRenderer.renderIris(partialTicks, alpha, getWorld(), (StargateClassicBaseTile) te);
       }
 
       if (shouldRender(rendererState)) {
