@@ -209,7 +209,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     if (targetPoint != null) {
       AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, type, state), targetPoint);
       if (state instanceof StargateRendererActionState) {
-        System.out.println("Updante se: "+((StargateRendererActionState) state).action.name());
+        //System.out.println("Updante se: "+((StargateRendererActionState) state).action.name());
       }
     } else {
       Aunis.logger.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());

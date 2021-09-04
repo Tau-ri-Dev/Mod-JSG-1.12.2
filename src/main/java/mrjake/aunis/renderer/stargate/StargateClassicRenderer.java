@@ -85,6 +85,10 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
         return physicsOrShield ? IRIS_TEXTURE : SHIELD_TEXTURE;
     }
 
+    public EnumIrisState getIrisState(S rendererState){
+        return rendererState.irisState;
+    }
+
     @Override
     public void renderIris(double partialTicks, Float alpha, World world, S rendererState) {
         EnumIrisState irisState = rendererState.irisState;
@@ -107,7 +111,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
                 if (k == 1) {
                     GlStateManager.rotate(180, 0, 1, 0);
                 }
-                if(irisType == EnumIrisType.SHIELD) alpha = 0.3f;
+                if(irisType == EnumIrisType.SHIELD) alpha += 0.3f;
                 else alpha = 0f;
 
                 StargateRendererStatic.innerCircle.render(tick, false, 1.0f - alpha, 0);
