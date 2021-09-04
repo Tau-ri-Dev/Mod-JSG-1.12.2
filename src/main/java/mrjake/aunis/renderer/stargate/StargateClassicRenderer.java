@@ -24,8 +24,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-
 public abstract class StargateClassicRenderer<S extends StargateClassicRendererState> extends StargateAbstractRenderer<S> {
 
 
@@ -82,7 +80,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     protected static final ResourceLocation IRIS_TEXTURE =
             new ResourceLocation(Aunis.ModID, "textures/tesr/milkyway/iris/gate_milkyway_iris7.jpg");
 
-    protected static ResourceLocation getIrisTexture(boolean physicsOrShield) {
+    protected ResourceLocation getIrisTexture(boolean physicsOrShield) {
         return physicsOrShield ? IRIS_TEXTURE : SHIELD_TEXTURE;
     }
 
@@ -92,33 +90,31 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
         if(te instanceof StargateClassicBaseTile) renderIris(partialTicks, alpha, getWorld(), (StargateClassicBaseTile) te);
     }
 
-    public static void renderIris(double partialTicks, Float alpha, World world, StargateClassicBaseTile te) {
-        if (te.getIrisType() == EnumIrisTypes.NULL || te.getIrisState() == EnumIrisStates.OPENED)
-            return;
-        GlStateManager.pushMatrix();
-        Texture irisTexture = TextureLoader.getTexture(getIrisTexture(te.isPhysicalIris()));
-        if (irisTexture != null) irisTexture.bindTexture();
+    public void renderIris(double partialTicks, Float alpha, World world, StargateClassicBaseTile te) {
+        if (te.getIrisType() != EnumIrisTypes.NULL){ //&& te.getIrisState() != EnumIrisStates.OPENED) {
+            GlStateManager.pushMatrix();
+            Texture irisTexture = TextureLoader.getTexture(getIrisTexture(te.isPhysicalIris()));
+            if (irisTexture != null) irisTexture.bindTexture();
+            float tick = (float) (getWorld().getTotalWorldTime() + partialTicks);
 
-        float tick = (float) (world.getTotalWorldTime() + partialTicks);
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            GlStateManager.enableBlend();
 
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.enableBlend();
+            for (int k = 0; k < 2; k++) {
+                if (k == 1) {
+                    GlStateManager.rotate(180, 0, 1, 0);
+                }
 
-        for (int k = 0; k < 2; k++) {
-            if (k == 1) {
-                GlStateManager.rotate(180, 0, 1, 0);
+                StargateRendererStatic.innerCircle.render(tick, false, 1.0f, 0);
+
+
+                for (StargateRendererStatic.QuadStrip strip : StargateRendererStatic.quadStrips) {
+                    strip.render(tick, false, 1.0f, 0);
+                }
             }
 
-            if (alpha == null) alpha = 0.0f;
-
-            StargateRendererStatic.innerCircle.render(tick, false, 1.0f, 0);
-
-            for (StargateRendererStatic.QuadStrip strip : StargateRendererStatic.quadStrips) {
-                strip.render(tick, false, 1.0f, 0);
-            }
+            GlStateManager.disableBlend();
+            GlStateManager.popMatrix();
         }
-
-        GlStateManager.disableBlend();
-        GlStateManager.popMatrix();
     }
 }

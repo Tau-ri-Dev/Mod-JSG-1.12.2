@@ -22,12 +22,12 @@ import net.minecraft.util.math.MathHelper;
 public class StargateRendererStatic {
 	static final float eventHorizonRadius = 3.790975f;
 
-	public static final int quads = 16;
+	private static final int quads = 16;
 	private static final int sections = 36 * 2;
 	private static final float sectionAngle = (float) (2*Math.PI/sections);
-	
-	public static final float innerCircleRadius = 0.25f;
-	public static final float quadStep = (eventHorizonRadius - innerCircleRadius) / quads;
+
+	private static final float innerCircleRadius = 0.25f;
+	private static final float quadStep = (eventHorizonRadius - innerCircleRadius) / quads;
 
 	private static List<Float> offsetList = new ArrayList<Float>();
 	// private long horizonStateChange = 0;
@@ -36,23 +36,23 @@ public class StargateRendererStatic {
 
 	private static List<Float> quadRadius = new ArrayList<Float>();
 
-	protected static InnerCircle innerCircle;
-	protected static List<QuadStrip> quadStrips = new ArrayList<QuadStrip>();
+	static InnerCircle innerCircle;
+	static List<QuadStrip> quadStrips = new ArrayList<QuadStrip>();
 
-	protected static Random rand = new Random();
-	
+	private static Random rand = new Random();
+
 	private static float getRandomFloat() {
 		return rand.nextFloat()*2-1;
 	}
-	
+
 	private static float getOffset(int index, float tick, float mul, int quadStripIndex) {
 		return (float) (Math.sin(tick/4f + offsetList.get(index)) * mul * (quadStripIndex/4f) * (quadStripIndex - quadStrips.size()) / 400f);
 	}
-	
+
 	private static float toUV(float coord) {
 		return (coord + 1) / 2f;
 	}
-	
+
 	static {
 		initEventHorizon();
 		initKawoosh();
