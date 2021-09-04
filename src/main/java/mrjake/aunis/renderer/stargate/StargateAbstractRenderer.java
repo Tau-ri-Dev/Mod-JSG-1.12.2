@@ -162,7 +162,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
     GlStateManager.enableCull();
 
     GlStateManager.pushMatrix();
-    GlStateManager.translate(0, 0, 0.1);
+    GlStateManager.translate(0, 0, 0.05);
 
     Texture ehTexture = TextureLoader.getTexture(getEventHorizonTextureResource(rendererState));
     if (ehTexture != null) ehTexture.bindTexture();

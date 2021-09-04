@@ -763,7 +763,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
         switch (irisState) {
             case OPENED:
-                sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false);
+                sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true);
             case CLOSED:
                 sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false);
         }

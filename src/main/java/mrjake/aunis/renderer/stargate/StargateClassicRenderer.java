@@ -93,7 +93,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             System.out.println("iris type/iris state is null");
             return;
         }
-        if (irisType != EnumIrisType.NULL && irisState != mrjake.aunis.stargate.EnumIrisState.OPENED) {
+        if (irisType != EnumIrisType.NULL && irisState == mrjake.aunis.stargate.EnumIrisState.OPENED) {
             GlStateManager.pushMatrix();
 
             Texture irisTexture = TextureLoader.getTexture(getIrisTexture(!(irisType == EnumIrisType.SHIELD)));
@@ -102,17 +102,19 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
 
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             GlStateManager.enableBlend();
-            GlStateManager.translate(0, 0, 0.01);
+            GlStateManager.translate(0, 0, 0.13);
             for (int k = 0; k < 2; k++) {
                 if (k == 1) {
                     GlStateManager.rotate(180, 0, 1, 0);
                 }
+                if(irisType == EnumIrisType.SHIELD) alpha = 0.3f;
+                else alpha = 0f;
 
-                StargateRendererStatic.innerCircle.render(tick, false, 1.0f, 0);
+                StargateRendererStatic.innerCircle.render(tick, false, 1.0f - alpha, 0);
 
 
                 for (StargateRendererStatic.QuadStrip strip : StargateRendererStatic.quadStrips) {
-                    strip.render(tick, false, 1f, 0);
+                    strip.render(tick, false, 1f - alpha, 0);
                 }
             }
 
