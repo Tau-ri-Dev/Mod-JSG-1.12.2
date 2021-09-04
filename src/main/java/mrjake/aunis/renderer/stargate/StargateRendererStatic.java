@@ -33,13 +33,13 @@ public class StargateRendererStatic {
 	// private long horizonStateChange = 0;
 	private static List<Float> sin = new ArrayList<Float>();
 	private static List<Float> cos = new ArrayList<Float>();
-	
-	public static List<Float> quadRadius = new ArrayList<Float>();
 
-	public static InnerCircle innerCircle;
-	public static List<QuadStrip> quadStrips = new ArrayList<QuadStrip>();
-	
-	private static Random rand = new Random();
+	private static List<Float> quadRadius = new ArrayList<Float>();
+
+	protected static InnerCircle innerCircle;
+	protected static List<QuadStrip> quadStrips = new ArrayList<QuadStrip>();
+
+	protected static Random rand = new Random();
 	
 	private static float getRandomFloat() {
 		return rand.nextFloat()*2-1;
