@@ -59,8 +59,8 @@ public enum ElementEnum {
   // --------------------------------------------------------------------------------------------
   // Irises/Shields
 
-  PEGASUS_SHIELD("pegasus/shield.obj", "pegasus/shield/gate_pegasus_shield"),
-  MILKYWAY_IRIS("milkyway/iris.obj", "milkyway/iris/gate_milkyway_iris");
+  SHIELD("pegasus/shield.obj", "pegasus/shield/gate_pegasus_shield7"),
+  IRIS("milkyway/iris.obj", "milkyway/iris/gate_milkyway_iris7");
 
   // --------------------------------------------------------------------------------------------
 

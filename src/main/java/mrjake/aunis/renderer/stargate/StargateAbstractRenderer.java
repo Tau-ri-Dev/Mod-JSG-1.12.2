@@ -3,6 +3,7 @@ package mrjake.aunis.renderer.stargate;
 import java.util.HashMap;
 import java.util.Map;
 
+import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
@@ -38,6 +39,10 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
     if (rendererState != null) {
       GlStateManager.pushMatrix();
       GlStateManager.translate(x, y, z);
+
+      if(te instanceof StargateClassicBaseTile){
+        StargateClassicBaseTile.renderIris(partialTicks, alpha, getWorld());
+      }
 
       if (shouldRender(rendererState)) {
         if (AunisConfig.debugConfig.renderBoundingBoxes || AunisConfig.debugConfig.renderWholeKawooshBoundingBox) {

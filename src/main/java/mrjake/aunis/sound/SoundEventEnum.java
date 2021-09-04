@@ -15,6 +15,8 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
   WORMHOLE_FLICKER(1, "wormhole_flicker", 0.5f),
 
   IRIS_HIT(130, "iris_hit", 1.0f),
+  IRIS_CLOSING(131, "iris_closing", 1.0f),
+  IRIS_OPENING(132, "iris_opening", 1.0f),
 
   SHIELD_HIT(133, "shield_hit", 1.0f),
   SHIELD_CLOSING(134, "shield_closing", 1.0f),
@@ -54,7 +56,7 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
   // ----------------------------------------------------------
   // Misc
   PAGE_FLIP(120, "page_flip", 1.0f);
-    // ----------------------------------------------------------
+  // ----------------------------------------------------------
     public int id;
   public SoundEvent soundEvent;
   public float volume;

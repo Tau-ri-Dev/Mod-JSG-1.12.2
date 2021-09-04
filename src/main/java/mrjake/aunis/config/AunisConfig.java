@@ -24,6 +24,9 @@ public class AunisConfig {
 	
 	@Name("Stargate config options")
 	public static StargateConfig stargateConfig = new StargateConfig();
+
+	@Name("Iris/shield config options")
+	public static IrisConfig irisConfig = new IrisConfig();
 	
 	@Name("DHD config options")
 	public static DHDConfig dhdConfig = new DHDConfig();
@@ -231,6 +234,38 @@ public class AunisConfig {
 			return cachedBiomeOverrideBlocksReverse;
 		}
 				
+	}
+
+	public static class IrisConfig {
+		@Name("Titanium iris durability")
+		@Comment({
+				"Durability of Titanium iris",
+				"set it to 0, if u want to make it unbreakable"
+		})
+		@RangeInt(min = 0)
+		public int titaniumIrisDurability = 250;
+
+		@Name("Trinium iris durability")
+		@Comment({
+				"Durability of Trinium iris",
+				"set it to 0, if u want to make it unbreakable"
+		})
+		@RangeInt(min = 0)
+		public int triniumIrisDurability = 500;
+
+		@Name("Shield power draw")
+		@Comment({
+				"Energy/tick used for make shield closed"
+		})
+		@RangeInt(min = 0)
+		public int shieldPowerDraw = 50;
+
+		@Name("Allow creative")
+		@Comment({
+				"Set it to true, if u want to bypass",
+				"shield/iris by creative gamemode"
+		})
+		public boolean allowCreative = false;
 	}
 	
 	public static class PowerConfig {

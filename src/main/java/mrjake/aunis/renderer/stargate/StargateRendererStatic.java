@@ -21,23 +21,23 @@ import net.minecraft.util.math.MathHelper;
 
 public class StargateRendererStatic {
 	static final float eventHorizonRadius = 3.790975f;
-	
-	private static final int quads = 16;
+
+	public static final int quads = 16;
 	private static final int sections = 36 * 2;
 	private static final float sectionAngle = (float) (2*Math.PI/sections);
 	
-	private static final float innerCircleRadius = 0.25f;
-	private static final float quadStep = (eventHorizonRadius - innerCircleRadius) / quads;
-	
+	public static final float innerCircleRadius = 0.25f;
+	public static final float quadStep = (eventHorizonRadius - innerCircleRadius) / quads;
+
 	private static List<Float> offsetList = new ArrayList<Float>();
 	// private long horizonStateChange = 0;
 	private static List<Float> sin = new ArrayList<Float>();
 	private static List<Float> cos = new ArrayList<Float>();
 	
-	private static List<Float> quadRadius = new ArrayList<Float>();
-	
-	static InnerCircle innerCircle;
-	static List<QuadStrip> quadStrips = new ArrayList<QuadStrip>();
+	public static List<Float> quadRadius = new ArrayList<Float>();
+
+	public static InnerCircle innerCircle;
+	public static List<QuadStrip> quadStrips = new ArrayList<QuadStrip>();
 	
 	private static Random rand = new Random();
 	

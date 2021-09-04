@@ -3,16 +3,27 @@ package mrjake.aunis.renderer.stargate;
 import java.util.HashMap;
 import java.util.Map;
 
+import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.loader.ElementEnum;
+import mrjake.aunis.loader.texture.Texture;
+import mrjake.aunis.loader.texture.TextureLoader;
+import mrjake.aunis.stargate.EnumIrisStates;
+import mrjake.aunis.stargate.EnumIrisTypes;
 import mrjake.aunis.stargate.EnumMemberVariant;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
+import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.util.FacingToRotation;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.World;
 
 public abstract class StargateClassicRenderer<S extends StargateClassicRendererState> extends StargateAbstractRenderer<S> {
 	

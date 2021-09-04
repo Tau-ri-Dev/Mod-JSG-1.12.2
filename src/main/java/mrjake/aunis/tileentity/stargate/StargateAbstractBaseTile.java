@@ -685,6 +685,13 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     if (world.isRemote) AunisSoundHelper.playSoundEventClientSide(world, getGateCenterPos(), soundEvent);
     else AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), soundEvent);
   }
+  public void playSoundEvent(SoundEventEnum soundEnum) {
+    if (soundEnum == null)
+      throw new IllegalArgumentException("Tried to play " + soundEnum + " on " + getClass().getCanonicalName() + " which apparently doesn't support it.");
+
+    if (world.isRemote) AunisSoundHelper.playSoundEventClientSide(world, getGateCenterPos(), soundEnum);
+    else AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), soundEnum);
+  }
 
   // ------------------------------------------------------------------------
   // Ticking and loading
