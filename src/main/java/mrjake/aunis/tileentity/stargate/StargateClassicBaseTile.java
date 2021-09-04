@@ -436,7 +436,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         break;
 
                     case IRIS_UPDATE:
-                        getRendererStateClient().irisState = irisState;
+                        if (gateActionState.modifyFinal)
+                            getRendererStateClient().irisState = EnumIrisState.OPENED;
+                        else
+                            getRendererStateClient().irisState = EnumIrisState.CLOSED;
                         getRendererStateClient().irisType = irisType;
                         break;
 
@@ -744,10 +747,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         irisType = EnumIrisType.byItem(itemStackHandler.getStackInSlot(11).getItem());
         // TODO iris durability
         // irisDurability = 0;
-        if(irisType == EnumIrisType.NULL)
+        if (irisType == EnumIrisType.NULL)
             irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
 
-        switch(irisType){
+        switch (irisType) {
             case IRIS_TITANIUM:
                 irisMaxDurability = AunisConfig.irisConfig.titaniumIrisDurability;
                 break;
@@ -758,12 +761,20 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 irisMaxDurability = 0;
                 break;
         }
+        switch (irisState) {
+            case OPENED:
+                sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false);
+            case CLOSED:
+                sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false);
+        }
+        markDirty();
     }
 
-    public EnumIrisType getIrisType(){
+    public EnumIrisType getIrisType() {
         return irisType;
     }
-    public EnumIrisState getIrisState(){
+
+    public EnumIrisState getIrisState() {
         return irisState;
     }
 
@@ -771,8 +782,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return irisState == mrjake.aunis.stargate.EnumIrisState.CLOSED;
     }
 
-    public boolean isPhysicalIris(){
-        switch(irisType){
+    public boolean isPhysicalIris() {
+        switch (irisType) {
             case IRIS_TITANIUM:
             case IRIS_TRINIUM:
                 return true;
@@ -780,6 +791,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 return false;
         }
     }
+
     public boolean isShieldIris() {
         return irisType == EnumIrisType.SHIELD;
     }
@@ -792,19 +804,19 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 markDirty();
                 playSoundEvent(SoundEventEnum.IRIS_CLOSING);
                 irisState = mrjake.aunis.stargate.EnumIrisState.CLOSED;
+                sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true);
                 break;
-
             case CLOSED:
                 irisState = mrjake.aunis.stargate.EnumIrisState.OPENING;
                 markDirty();
                 playSoundEvent(SoundEventEnum.IRIS_OPENING);
                 irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
+                sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false);
                 break;
             default:
                 return false;
         }
         markDirty();
-        sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false);
         return true;
     }
     // -----------------------------------------------------------
@@ -916,7 +928,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public Object[] toggleIris(Context context, Arguments args) {
         boolean result = toggleIris();
         markDirty();
-        if(!result)
+        if (!result)
             return new Object[]{null, "stargate_iris_missing", "The stargate does not have iris", "or iris is already closing/opening"};
         return new Object[]{null, "stargate_iris_toggled", "Iris is opening/closing"};
     }

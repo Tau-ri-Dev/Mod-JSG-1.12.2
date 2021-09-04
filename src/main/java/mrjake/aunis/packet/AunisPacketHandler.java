@@ -33,6 +33,7 @@ import mrjake.aunis.packet.transportrings.StartPlayerFadeOutToClient;
 import mrjake.aunis.packet.transportrings.StartPlayerFadeOutToClient.StartPlayerFadeOutToClientHandler;
 import mrjake.aunis.packet.transportrings.TRControllerActivatedToServer;
 import mrjake.aunis.packet.transportrings.TRControllerActivatedToServer.TRControllerActivatedServerHandler;
+import mrjake.aunis.stargate.EnumIrisState;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;

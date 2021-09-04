@@ -89,23 +89,11 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     public void renderIris(double partialTicks, Float alpha, World world, S rendererState) {
         EnumIrisState irisState = rendererState.irisState;
         EnumIrisType irisType = rendererState.irisType;
-        boolean fuck = false;
-        if (irisType == null) {
-            System.out.println("iris type je kokotina");
-            fuck = true;
-        }
-        if (irisState == null) {
-            System.out.println("iris state je picovina");
-            fuck = true;
-        }
-        if(fuck) return;
-
-        if(irisType != EnumIrisType.NULL) System.out.println("Stav Iris:" + irisState.name());
-        if (irisState != EnumIrisState.OPENED) {
-            System.out.println("není otevřená");
+        if (irisType == null || irisState == null) {
+            System.out.println("iris type/iris state is null");
+            return;
         }
         if (irisType != EnumIrisType.NULL && irisState != mrjake.aunis.stargate.EnumIrisState.OPENED) {
-            System.out.println("renderuje");
             GlStateManager.pushMatrix();
 
             Texture irisTexture = TextureLoader.getTexture(getIrisTexture(!(irisType == EnumIrisType.SHIELD)));
