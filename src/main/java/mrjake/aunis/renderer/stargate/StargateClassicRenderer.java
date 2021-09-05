@@ -22,7 +22,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import scala.xml.Elem;
 
 public abstract class StargateClassicRenderer<S extends StargateClassicRendererState> extends StargateAbstractRenderer<S> {
 
@@ -121,15 +120,32 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
         }
         if (irisType == EnumIrisType.IRIS_TITANIUM || irisType == EnumIrisType.IRIS_TRINIUM) {
             // iris blades
-            if(irisState == EnumIrisState.CLOSED){
-                for(float i = 0; i < 20; i++) {
-                    float rotateIndex = (float) (Math.cos(18*Math.PI/180*i) + Math.sin(18*Math.PI/180*i));
+            if(irisState == EnumIrisState.CLOSED){ // iris is open
+               for(float i = 0; i < 20; i++){
+                   float rotateIndex = 18f * i;
 
                     GlStateManager.pushMatrix();
 
+                    //GlStateManager.translate(0, 0, -0.05);
                     GlStateManager.translate(0, 0, 0.1);
                     ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
-                    GlStateManager.rotate(-0.7f, rotateIndex,0, rotateIndex);
+                    GlStateManager.rotate(rotateIndex, 0, 0, 1);
+                    ElementEnum.IRIS.render();
+
+                    GlStateManager.popMatrix();
+                }
+            }
+            if(irisState == EnumIrisState.OPENED){ // iris is closed
+                for(float i = 0; i < 20; i++){
+                    float rotateIndex = 18f * i;
+
+                    GlStateManager.pushMatrix();
+
+                    //GlStateManager.translate(0, 0, -0.05);
+                    GlStateManager.translate(0, 0, 0.1);
+                    ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
+                    GlStateManager.rotate(rotateIndex, 0, 0, 1);
+                    GlStateManager.rotate(18f, 0, 0, 1);
                     ElementEnum.IRIS.render();
 
                     GlStateManager.popMatrix();
