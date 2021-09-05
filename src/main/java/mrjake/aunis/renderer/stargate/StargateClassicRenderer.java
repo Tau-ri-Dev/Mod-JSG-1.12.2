@@ -22,6 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
 
 public abstract class StargateClassicRenderer<S extends StargateClassicRendererState> extends StargateAbstractRenderer<S> {
 
@@ -126,8 +127,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
 
                     GlStateManager.pushMatrix();
 
-                    //GlStateManager.translate(0, 0, -0.05);
-                    GlStateManager.translate(0, 0, 0.1);
+                    GlStateManager.translate(0, 0, -0.05);
                     ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
                     GlStateManager.rotate(rotateIndex, 0, 0, 1);
                     ElementEnum.IRIS.render();
@@ -141,11 +141,11 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
 
                     GlStateManager.pushMatrix();
 
-                    //GlStateManager.translate(0, 0, -0.05);
-                    GlStateManager.translate(0, 0, 0.1);
+                    GlStateManager.translate(0, 0, -0.05);
                     ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
                     GlStateManager.rotate(rotateIndex, 0, 0, 1);
-                    GlStateManager.rotate(18f, 0, 0, 1);
+                    GlStateManager.rotate(5f, 1, 0, 0);
+                    GlStateManager.translate(-2.5, -4, 0);
                     ElementEnum.IRIS.render();
 
                     GlStateManager.popMatrix();
