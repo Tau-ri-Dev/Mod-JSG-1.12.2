@@ -7,6 +7,7 @@ import mrjake.aunis.loader.texture.TextureLoader;
 import mrjake.aunis.stargate.network.SymbolUniverseEnum;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUniverseRendererState> {
 

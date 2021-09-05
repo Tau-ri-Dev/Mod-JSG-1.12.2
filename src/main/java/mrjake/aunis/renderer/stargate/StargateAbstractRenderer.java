@@ -148,6 +148,9 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
     protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
 
+        if((((StargateClassicRendererState) rendererState).irisState == EnumIrisState.OPENED) && (rendererState.vortexState == EnumVortexState.FORMING))
+            rendererState.vortexState = EnumVortexState.STILL;
+
         //		rendererState.vortexState = EnumVortexState.FULL;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 15 * 16, 15 * 16);
 
@@ -162,7 +165,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         GlStateManager.enableCull();
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(0, 0, 0.05);
+        GlStateManager.translate(0, 0, -0.02);
 
         Texture ehTexture = TextureLoader.getTexture(getEventHorizonTextureResource(rendererState));
         if (ehTexture != null) ehTexture.bindTexture();
