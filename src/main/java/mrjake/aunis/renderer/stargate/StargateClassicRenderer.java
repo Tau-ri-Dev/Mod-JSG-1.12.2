@@ -22,6 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import scala.xml.Elem;
 
 public abstract class StargateClassicRenderer<S extends StargateClassicRendererState> extends StargateAbstractRenderer<S> {
 
@@ -122,12 +123,14 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             // iris blades
             if(irisState == EnumIrisState.CLOSED){
                 for(float i = 0; i < 20; i++) {
+                    float rotateIndex = (float) (Math.cos(18*Math.PI/180*i) + Math.sin(18*Math.PI/180*i));
+
                     GlStateManager.pushMatrix();
 
                     GlStateManager.translate(0, 0, 0.1);
-                    for(float y = 0; y < i; y++)
-                        GlStateManager.rotate(0, 1, 0, 0);
-                    ElementEnum.IRIS.bindTextureAndRender(rendererState.getBiomeOverlay());
+                    ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
+                    GlStateManager.rotate(-0.7f, rotateIndex,0, rotateIndex);
+                    ElementEnum.IRIS.render();
 
                     GlStateManager.popMatrix();
                 }
