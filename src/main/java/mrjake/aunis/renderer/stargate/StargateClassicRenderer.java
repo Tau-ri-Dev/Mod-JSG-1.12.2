@@ -132,22 +132,15 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
         if (irisType == EnumIrisType.IRIS_TITANIUM || irisType == EnumIrisType.IRIS_TRINIUM) {
             // iris blades
             if(irisState == EnumIrisState.CLOSED){
+                for(float i = 0; i < 20; i++) {
+                    GlStateManager.pushMatrix();
 
-                GlStateManager.pushMatrix();
+                    GlStateManager.translate(0, 0, 0.1);
+                    GlStateManager.rotate(-0.17f, 0.0f, (18.0f * i), 0.0f);
+                    ElementEnum.IRIS.bindTextureAndRender(rendererState.getBiomeOverlay());
 
-                GlStateManager.translate(0, 0, 0.1);
-                GlStateManager.rotate(-0.17f, 1.0f, 0.0f, 0.0f);
-                ElementEnum.IRIS.bindTextureAndRender(rendererState.getBiomeOverlay());
-
-                GlStateManager.popMatrix();
-
-                GlStateManager.pushMatrix();
-
-                GlStateManager.translate(0, 0, 0.1);
-                GlStateManager.rotate(-0.17f, 0.0f, 1.0f, 0.0f);
-                ElementEnum.IRIS.bindTextureAndRender(rendererState.getBiomeOverlay());
-
-                GlStateManager.popMatrix();
+                    GlStateManager.popMatrix();
+                }
             }
         }
     }
