@@ -143,9 +143,9 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
 
                     GlStateManager.translate(0, 0, -0.05);
                     ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
+                    GlStateManager.rotate(1.2f, 1, 0, 0);
                     GlStateManager.rotate(rotateIndex, 0, 0, 1);
-                    GlStateManager.rotate(5f, 1, 0, 0);
-                    GlStateManager.translate(-2.5, -4, 0);
+                    GlStateManager.translate(-2, -4.3, 0);
                     ElementEnum.IRIS.render();
 
                     GlStateManager.popMatrix();
