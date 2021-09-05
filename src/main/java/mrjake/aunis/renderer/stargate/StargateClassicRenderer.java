@@ -8,14 +8,11 @@ import mrjake.aunis.AunisProps;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.loader.texture.Texture;
 import mrjake.aunis.loader.texture.TextureLoader;
-import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.stargate.EnumIrisState;
 import mrjake.aunis.stargate.EnumIrisType;
 import mrjake.aunis.stargate.EnumMemberVariant;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
-import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
-import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.util.FacingToRotation;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
@@ -25,10 +22,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
-
-import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
-import static org.lwjgl.opengl.GL11.GL_PROJECTION;
 
 public abstract class StargateClassicRenderer<S extends StargateClassicRendererState> extends StargateAbstractRenderer<S> {
 
@@ -54,7 +47,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
 
     @Override
     protected Map<BlockPos, IBlockState> getMemberBlockStates(StargateAbstractMergeHelper mergeHelper, EnumFacing facing) {
-        Map<BlockPos, IBlockState> map = new HashMap<BlockPos, IBlockState>();
+        Map<BlockPos, IBlockState> map = new HashMap<>();
 
         for (BlockPos pos : mergeHelper.getRingBlocks())
             map.put(pos, mergeHelper.getMemberBlock().getDefaultState().withProperty(AunisProps.MEMBER_VARIANT, EnumMemberVariant.RING).withProperty(AunisProps.FACING_HORIZONTAL, facing));
@@ -88,10 +81,6 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
 
     protected ResourceLocation getIrisTexture(boolean physicsOrShield) {
         return physicsOrShield ? IRIS_TEXTURE : SHIELD_TEXTURE;
-    }
-
-    public EnumIrisState getIrisState(S rendererState) {
-        return rendererState.irisState;
     }
 
     @Override
@@ -136,7 +125,8 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
                     GlStateManager.pushMatrix();
 
                     GlStateManager.translate(0, 0, 0.1);
-                    GlStateManager.rotate(-0.17f, (float) (18.0f * Math.PI / 180.0f), 0.0f, 0.0f);
+                    for(float y = 0; y < i; y++)
+                        GlStateManager.rotate(0, 1, 0, 0);
                     ElementEnum.IRIS.bindTextureAndRender(rendererState.getBiomeOverlay());
 
                     GlStateManager.popMatrix();
