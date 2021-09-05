@@ -5,8 +5,10 @@ import java.util.Map;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.loader.texture.Texture;
 import mrjake.aunis.loader.texture.TextureLoader;
+import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.stargate.EnumIrisState;
 import mrjake.aunis.stargate.EnumIrisType;
 import mrjake.aunis.stargate.EnumMemberVariant;
@@ -23,9 +25,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
+
+import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
+import static org.lwjgl.opengl.GL11.GL_PROJECTION;
 
 public abstract class StargateClassicRenderer<S extends StargateClassicRendererState> extends StargateAbstractRenderer<S> {
-
 
 
     @Override
@@ -79,13 +84,13 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     protected static final ResourceLocation SHIELD_TEXTURE =
             new ResourceLocation(Aunis.ModID, "textures/tesr/pegasus/shield/gate_pegasus_shield7.jpg");
     protected static final ResourceLocation IRIS_TEXTURE =
-            new ResourceLocation(Aunis.ModID, "textures/tesr/milkyway/iris/gate_milkyway_iris7.jpg");
+            new ResourceLocation(Aunis.ModID, "textures/tesr/milkyway/iris/iris.jpg");
 
     protected ResourceLocation getIrisTexture(boolean physicsOrShield) {
         return physicsOrShield ? IRIS_TEXTURE : SHIELD_TEXTURE;
     }
 
-    public EnumIrisState getIrisState(S rendererState){
+    public EnumIrisState getIrisState(S rendererState) {
         return rendererState.irisState;
     }
 
@@ -97,10 +102,12 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             System.out.println("iris type/iris state is null");
             return;
         }
-        if (irisType != EnumIrisType.NULL && irisState == mrjake.aunis.stargate.EnumIrisState.OPENED) {
+        if (irisType == EnumIrisType.SHIELD && irisState == mrjake.aunis.stargate.EnumIrisState.OPENED){
             GlStateManager.pushMatrix();
+            // shield
+            alpha = 0.3f;
 
-            Texture irisTexture = TextureLoader.getTexture(getIrisTexture(!(irisType == EnumIrisType.SHIELD)));
+            Texture irisTexture = TextureLoader.getTexture(getIrisTexture(false));
             if (irisTexture != null) irisTexture.bindTexture();
             float tick = (float) (getWorld().getTotalWorldTime() + partialTicks);
 
@@ -111,8 +118,6 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
                 if (k == 1) {
                     GlStateManager.rotate(180, 0, 1, 0);
                 }
-                if(irisType == EnumIrisType.SHIELD) alpha += 0.3f;
-                else alpha = 0f;
 
                 StargateRendererStatic.innerCircle.render(tick, false, 1.0f - alpha, 0);
 
@@ -121,9 +126,29 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
                     strip.render(tick, false, 1f - alpha, 0);
                 }
             }
-
             GlStateManager.disableBlend();
             GlStateManager.popMatrix();
+        }
+        if (irisType == EnumIrisType.IRIS_TITANIUM || irisType == EnumIrisType.IRIS_TRINIUM) {
+            // iris blades
+            if(irisState == EnumIrisState.CLOSED){
+
+                GlStateManager.pushMatrix();
+
+                GlStateManager.translate(0, 0, 0.1);
+                GlStateManager.rotate(-0.17f, 1.0f, 0.0f, 0.0f);
+                ElementEnum.IRIS.bindTextureAndRender(rendererState.getBiomeOverlay());
+
+                GlStateManager.popMatrix();
+
+                GlStateManager.pushMatrix();
+
+                GlStateManager.translate(0, 0, 0.1);
+                GlStateManager.rotate(-0.17f, 0.0f, 1.0f, 0.0f);
+                ElementEnum.IRIS.bindTextureAndRender(rendererState.getBiomeOverlay());
+
+                GlStateManager.popMatrix();
+            }
         }
     }
 }
