@@ -436,11 +436,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         break;
 
                     case IRIS_UPDATE:
-                        if (gateActionState.modifyFinal)
-                            getRendererStateClient().irisState = EnumIrisState.OPENED;
-                        else
-                            getRendererStateClient().irisState = EnumIrisState.CLOSED;
+                        getRendererStateClient().irisState = getRendererStateServer().irisState;
                         getRendererStateClient().irisType = irisType;
+                        if (getRendererStateClient().animationStart == -1 && irisState != EnumIrisState.CLOSED && irisState != EnumIrisState.OPENED) {
+                            getRendererStateClient().animationStart = world.getTotalWorldTime();
+                        }
                         break;
 
                     default:
@@ -796,6 +796,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return irisType == EnumIrisType.SHIELD;
     }
 
+    //todo stav se se přecvakne na closed/opened po určitém potu ticků od uběhnutí animace
     protected boolean toggleIris() {
         if (irisType == EnumIrisType.NULL) return false;
         switch (irisState) {

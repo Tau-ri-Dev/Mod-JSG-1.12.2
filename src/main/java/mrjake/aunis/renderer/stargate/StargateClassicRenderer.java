@@ -82,6 +82,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     protected ResourceLocation getIrisTexture(boolean physicsOrShield) {
         return physicsOrShield ? IRIS_TEXTURE : SHIELD_TEXTURE;
     }
+
     public float irisAnimation;
 
     @Override
@@ -92,7 +93,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             System.out.println("iris type/iris state is null");
             return;
         }
-        if (irisType == EnumIrisType.SHIELD && irisState == mrjake.aunis.stargate.EnumIrisState.OPENED){
+        if (irisType == EnumIrisType.SHIELD && irisState == EnumIrisState.CLOSED) {
             GlStateManager.pushMatrix();
             // shield
             alpha = 0.3f;
@@ -121,41 +122,40 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
         }
         if (irisType == EnumIrisType.IRIS_TITANIUM || irisType == EnumIrisType.IRIS_TRINIUM) {
             // iris blades
-            if(irisState == EnumIrisState.CLOSED){ // iris is open
-                if(irisAnimation > 0.0) {
+            if (irisState == EnumIrisState.OPENED) { // iris is open
+                if (irisAnimation > 0.0) {
                     if (irisAnimation < 1.5)
                         irisAnimation -= 0.0040;
                     else
                         irisAnimation -= 0.0010;
                 }
-                for(float i = 0; i < 20; i++){
-                   float rotateIndex = 18f * i;
+                for (float i = 0; i < 20; i++) {
+                    float rotateIndex = 18f * i;
 
                     GlStateManager.pushMatrix();
 
                     ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
                     GlStateManager.rotate(rotateIndex, 0, 0, 1);
-                    GlStateManager.translate(-irisAnimation, -(irisAnimation*2), 0.00);
+                    GlStateManager.translate(-irisAnimation, -(irisAnimation * 2), 0.00);
                     ElementEnum.IRIS.render();
 
                     GlStateManager.popMatrix();
                 }
-            }
-            else if(irisState == EnumIrisState.OPENED){ // iris is closed
-                if(irisAnimation < 1.7) {
+            } else if (irisState == EnumIrisState.CLOSED) { // iris is closed
+                if (irisAnimation < 1.7) {
                     if (irisAnimation < 1.5)
                         irisAnimation += 0.0040;
                     else
                         irisAnimation += 0.0010;
                 }
-                for(float i = 0; i < 20; i++){
+                for (float i = 0; i < 20; i++) {
                     float rotateIndex = 18f * i;
 
                     GlStateManager.pushMatrix();
                     ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
                     //GlStateManager.rotate(1.5f, 1, 0, 0);
                     GlStateManager.rotate(rotateIndex, 0, 0, 1);
-                    GlStateManager.translate(-irisAnimation, -(irisAnimation*2), 0.00);
+                    GlStateManager.translate(-irisAnimation, -(irisAnimation * 2), 0.00);
                     ElementEnum.IRIS.render();
 
                     GlStateManager.popMatrix();
