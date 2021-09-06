@@ -243,7 +243,6 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                         }
 
                         // Rendering the vortex
-                        // todo disable kawoosh when iris enabled
                         //if(rendererState.irisState == EnumIrisState.CLOSED) {
                             for (Map.Entry<Float, Float> e : StargateRendererStatic.Z_RadiusMap.entrySet()) {
                                 if (first) {

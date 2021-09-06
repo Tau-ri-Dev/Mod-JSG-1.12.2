@@ -83,6 +83,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     protected ResourceLocation getIrisTexture(boolean physicsOrShield) {
         return physicsOrShield ? IRIS_TEXTURE : SHIELD_TEXTURE;
     }
+    public float irisAnimation;
 
     @Override
     public void renderIris(double partialTicks, Float alpha, World world, S rendererState) {
@@ -122,31 +123,40 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
         if (irisType == EnumIrisType.IRIS_TITANIUM || irisType == EnumIrisType.IRIS_TRINIUM) {
             // iris blades
             if(irisState == EnumIrisState.CLOSED){ // iris is open
+                if(irisAnimation > 0.0) {
+                    if (irisAnimation < 1.5)
+                        irisAnimation -= 0.0040;
+                    else
+                        irisAnimation -= 0.0010;
+                }
                for(float i = 0; i < 20; i++){
                    float rotateIndex = 18f * i;
 
                     GlStateManager.pushMatrix();
 
-                    GlStateManager.translate(0, 0, -0.05);
                     ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
                     GlStateManager.rotate(rotateIndex, 0, 0, 1);
+                    GlStateManager.translate(-irisAnimation, -(irisAnimation*2), 0.00);
                     ElementEnum.IRIS.render();
 
                     GlStateManager.popMatrix();
                 }
             }
-            if(irisState == EnumIrisState.OPENED){ // iris is closed
+            else if(irisState == EnumIrisState.OPENED){ // iris is closed
+                if(irisAnimation < 1.7) {
+                    if (irisAnimation < 1.5)
+                        irisAnimation += 0.0040;
+                    else
+                        irisAnimation += 0.0010;
+                }
                 for(float i = 0; i < 20; i++){
                     float rotateIndex = 18f * i;
 
                     GlStateManager.pushMatrix();
                     ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
-                    // rotating blades on their axis
                     //GlStateManager.rotate(1.5f, 1, 0, 0);
-                    // rotating blades over gate
                     GlStateManager.rotate(rotateIndex, 0, 0, 1);
-                    // final closing
-                    GlStateManager.translate(-1.7, -3.4, 0.04);
+                    GlStateManager.translate(-irisAnimation, -(irisAnimation*2), 0.00);
                     ElementEnum.IRIS.render();
 
                     GlStateManager.popMatrix();
