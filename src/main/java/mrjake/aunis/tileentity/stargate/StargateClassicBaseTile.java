@@ -802,14 +802,20 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             case OPENED:
                 irisState = mrjake.aunis.stargate.EnumIrisState.CLOSING;
                 markDirty();
-                playSoundEvent(SoundEventEnum.IRIS_CLOSING);
+                if(isPhysicalIris())
+                    playSoundEvent(SoundEventEnum.IRIS_CLOSING);
+                else
+                    playSoundEvent(SoundEventEnum.SHIELD_CLOSING);
                 irisState = mrjake.aunis.stargate.EnumIrisState.CLOSED;
                 sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true);
                 break;
             case CLOSED:
                 irisState = mrjake.aunis.stargate.EnumIrisState.OPENING;
                 markDirty();
-                playSoundEvent(SoundEventEnum.IRIS_OPENING);
+                if(isPhysicalIris())
+                    playSoundEvent(SoundEventEnum.IRIS_OPENING);
+                else
+                    playSoundEvent(SoundEventEnum.SHIELD_OPENING);
                 irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
                 sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false);
                 break;
