@@ -48,7 +48,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
   public EnumIrisType irisType;
     // Saved
   public EnumIrisState irisState;
-
+  public double animationStart = -1;
 
   @Override
   public BiomeOverlayEnum getBiomeOverlay() {
@@ -125,8 +125,8 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     public BiomeOverlayEnum biomeOverride;
 
     //Iris
-    protected EnumIrisState irisState;
-    protected EnumIrisType irisType;
+    public EnumIrisState irisState;
+    public EnumIrisType irisType;
 
     public StargateClassicRendererStateBuilder(StargateAbstractRendererStateBuilder superBuilder) {
       setStargateState(superBuilder.stargateState);
