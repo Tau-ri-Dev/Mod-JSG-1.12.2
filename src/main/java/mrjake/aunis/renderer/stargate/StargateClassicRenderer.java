@@ -129,7 +129,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
                     else
                         irisAnimation -= 0.0010;
                 }
-               for(float i = 0; i < 20; i++){
+                for(float i = 0; i < 20; i++){
                    float rotateIndex = 18f * i;
 
                     GlStateManager.pushMatrix();
