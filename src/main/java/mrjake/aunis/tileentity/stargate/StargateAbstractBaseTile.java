@@ -42,11 +42,7 @@ import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.sound.SoundPositionedEnum;
 import mrjake.aunis.sound.StargateSoundEventEnum;
 import mrjake.aunis.sound.StargateSoundPositionedEnum;
-import mrjake.aunis.stargate.AutoCloseManager;
-import mrjake.aunis.stargate.EnumScheduledTask;
-import mrjake.aunis.stargate.EnumStargateState;
-import mrjake.aunis.stargate.StargateClosedReasonEnum;
-import mrjake.aunis.stargate.StargateOpenResult;
+import mrjake.aunis.stargate.*;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.StargateAddressDynamic;
@@ -197,7 +193,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
       return isMerged && stargateState.idle();
     }
   }
-
+  protected void sendRenderingUpdate(EnumGateAction gateAction, int chevronCount, boolean modifyFinal, EnumIrisType irisType, EnumIrisState irisState) {
+    sendState(StateTypeEnum.RENDERER_UPDATE, new StargateRendererActionState(gateAction, chevronCount, modifyFinal, irisType, irisState));
+  }
   protected void sendRenderingUpdate(EnumGateAction gateAction, int chevronCount, boolean modifyFinal) {
     sendState(StateTypeEnum.RENDERER_UPDATE, new StargateRendererActionState(gateAction, chevronCount, modifyFinal));
   }
