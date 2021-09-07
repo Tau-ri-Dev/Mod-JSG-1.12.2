@@ -126,6 +126,7 @@ public class StargatePegasusRendererState extends StargateClassicRendererState {
       setBiomeOverride(superBuilder.biomeOverride);
       setIrisState(superBuilder.irisState);
       setIrisType(superBuilder.irisType);
+      setIrisAnimation(superBuilder.irisAnimation);
     }
 
     public StargatePegasusRendererStateBuilder setStargateSize(StargateSizeEnum stargateSize) {

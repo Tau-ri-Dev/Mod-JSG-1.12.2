@@ -50,15 +50,18 @@ public class StargateRendererActionState extends State {
     //	public boolean computer;
     public int chevronCount;
     public boolean modifyFinal;
-    public EnumIrisState irisState;
-    public EnumIrisType irisType;
+    public EnumIrisState irisState = null;
+    public EnumIrisType irisType = null;
 
     public StargateRendererActionState(EnumGateAction action) {
         this.action = action;
     }
 
     public StargateRendererActionState(EnumGateAction action, int chevronCount, boolean modifyFinal) {
-        new StargateRendererActionState(action, chevronCount, modifyFinal, null, null);
+        this.action = action;
+//		this.computer = computer;
+        this.chevronCount = chevronCount;
+        this.modifyFinal = modifyFinal;
     }
 
     public StargateRendererActionState(EnumGateAction action, int chevronCount, boolean modifyFinal, EnumIrisType irisType, EnumIrisState irisState) {

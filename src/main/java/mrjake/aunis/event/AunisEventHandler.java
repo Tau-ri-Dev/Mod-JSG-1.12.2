@@ -19,6 +19,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickEmpty;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
+import net.minecraftforge.event.world.GetCollisionBoxesEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -26,24 +27,24 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class AunisEventHandler {
 
 	@SubscribeEvent
-	public static void onRightClickBlock(RightClickBlock event) {	
-		onRightClick(event);
-	}
-	
-	@SubscribeEvent
-	public static void onRightClickItem(RightClickItem event) {	
-		onRightClick(event);
-	}
-	
-	@SubscribeEvent
-	public static void onRightClickEmpty(RightClickEmpty event) {	
+	public static void onRightClickBlock(RightClickBlock event) {
 		onRightClick(event);
 	}
 
-	private static void onRightClick(PlayerInteractEvent event) {		
+	@SubscribeEvent
+	public static void onRightClickItem(RightClickItem event) {
+		onRightClick(event);
+	}
+
+	@SubscribeEvent
+	public static void onRightClickEmpty(RightClickEmpty event) {
+		onRightClick(event);
+	}
+
+	private static void onRightClick(PlayerInteractEvent event) {
 		EntityPlayer player = event.getEntityPlayer();
 		World world = player.getEntityWorld();
-		
+
 		if (!player.isSneaking() && !player.isSpectator()) {
 			BlockPos pos = player.getPosition();
 			EnumFacing playerFacing = player.getHorizontalFacing(); //EnumFacing.getDirectionFromEntityLiving(pos, player).getOpposite()
@@ -69,15 +70,16 @@ public class AunisEventHandler {
 				}
 			}
 		}
-    }
+	}
 
 	@SubscribeEvent
 	public static void onLootTableLoad(LootTableLoadEvent event) {
-	    if (event.getName().toString().equals("minecraft:chests/end_city_treasure")) {
-	    	LootEntry entry = new LootEntryTable(new ResourceLocation(Aunis.ModID, "end_city_treasure"), 1, 0, new LootCondition[] {}, "universe_dialer");  
-	    	LootPool pool = new LootPool(new LootEntry[] {entry}, new LootCondition[] {}, new RandomValueRange(1), new RandomValueRange(0), "univese_dialer_pool");
-	    	
-	    	event.getTable().addPool(pool);
-	    }
+		if (event.getName().toString().equals("minecraft:chests/end_city_treasure")) {
+			LootEntry entry = new LootEntryTable(new ResourceLocation(Aunis.ModID, "end_city_treasure"), 1, 0, new LootCondition[]{}, "universe_dialer");
+			LootPool pool = new LootPool(new LootEntry[]{entry}, new LootCondition[]{}, new RandomValueRange(1), new RandomValueRange(0), "univese_dialer_pool");
+
+			event.getTable().addPool(pool);
+		}
 	}
+
 }

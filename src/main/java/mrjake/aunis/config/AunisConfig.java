@@ -260,10 +260,10 @@ public class AunisConfig {
 		@RangeInt(min = 0)
 		public int shieldPowerDraw = 50;
 
-		@Name("Allow creative")
+		@Name("Allow creative bypass")
 		@Comment({
 				"Set it to true, if u want to bypass",
-				"shield/iris by creative gamemode"
+				"shield/iris damage by creative gamemode"
 		})
 		public boolean allowCreative = false;
 	}

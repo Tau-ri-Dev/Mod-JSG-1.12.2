@@ -7,8 +7,10 @@ import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public abstract class StargateClassicRendererState extends StargateAbstractRendererState {
+
   public StargateClassicRendererState() {
   }
 
@@ -20,6 +22,11 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     this.biomeOverride = builder.biomeOverride;
     this.irisState = builder.irisState;
     this.irisType = builder.irisType;
+    this.irisAnimation = builder.irisAnimation;
+  }
+
+  public void startIrisAnimation(float animationStart) {
+    this.irisAnimation = animationStart;
   }
 
   @Override
@@ -48,7 +55,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
   public EnumIrisType irisType;
     // Saved
   public EnumIrisState irisState;
-  public double animationStart = -1;
+  public float irisAnimation;
 
   @Override
   public BiomeOverlayEnum getBiomeOverlay() {
@@ -77,6 +84,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     }
     buf.writeByte(irisState.id);
     buf.writeByte(irisType.id);
+    buf.writeFloat(irisAnimation);
     super.toBytes(buf);
   }
 
@@ -93,6 +101,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     }
     irisState = EnumIrisState.getValue(buf.readByte());
     irisType = EnumIrisType.byId(buf.readByte());
+    irisAnimation = buf.readFloat();
     super.fromBytes(buf);
   }
 
@@ -105,6 +114,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
   }
 
   public static class StargateClassicRendererStateBuilder extends StargateAbstractRendererStateBuilder {
+
     public StargateClassicRendererStateBuilder() {
     }
 
@@ -127,6 +137,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     //Iris
     public EnumIrisState irisState;
     public EnumIrisType irisType;
+    public float irisAnimation;
 
     public StargateClassicRendererStateBuilder(StargateAbstractRendererStateBuilder superBuilder) {
       setStargateState(superBuilder.stargateState);
@@ -184,6 +195,11 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
 
     public StargateClassicRendererStateBuilder setIrisType(EnumIrisType irisType) {
       this.irisType = irisType;
+      return this;
+    }
+
+    public StargateClassicRendererStateBuilder setIrisAnimation(float irisAnimation) {
+      this.irisAnimation = irisAnimation;
       return this;
     }
   }

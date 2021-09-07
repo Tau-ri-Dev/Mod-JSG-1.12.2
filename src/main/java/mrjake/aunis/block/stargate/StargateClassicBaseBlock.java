@@ -7,6 +7,7 @@ import mrjake.aunis.stargate.CamoPropertiesHelper;
 import mrjake.aunis.stargate.EnumMemberVariant;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,6 +17,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public abstract class StargateClassicBaseBlock extends StargateAbstractBaseBlock {
 	
@@ -68,5 +72,10 @@ public abstract class StargateClassicBaseBlock extends StargateAbstractBaseBlock
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess access, BlockPos pos) {
 		return CamoPropertiesHelper.getStargateBlockBoundingBox(state, access, pos, true);
+	}
+
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
+		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
 	}
 }

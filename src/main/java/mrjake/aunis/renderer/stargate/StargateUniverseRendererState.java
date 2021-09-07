@@ -125,6 +125,7 @@ public class StargateUniverseRendererState extends StargateClassicRendererState 
 			setBiomeOverride(superBuilder.biomeOverride);
 			setIrisState(superBuilder.irisState);
 			setIrisType(superBuilder.irisType);
+			setIrisAnimation(superBuilder.irisAnimation);
 		}
 		
 		public StargateUniverseRendererStateBuilder setDialedAddress(StargateAddressDynamic dialedAddress) {

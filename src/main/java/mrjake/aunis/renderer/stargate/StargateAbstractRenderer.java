@@ -148,7 +148,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
     protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
 
-        if((((StargateClassicRendererState) rendererState).irisState == EnumIrisState.OPENED) && (rendererState.vortexState == EnumVortexState.FORMING))
+        if((((StargateClassicRendererState) rendererState).irisState == EnumIrisState.CLOSED) && (rendererState.vortexState == EnumVortexState.FORMING))
             rendererState.vortexState = EnumVortexState.STILL;
 
         //		rendererState.vortexState = EnumVortexState.FULL;

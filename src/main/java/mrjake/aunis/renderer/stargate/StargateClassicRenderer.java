@@ -82,21 +82,35 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     protected ResourceLocation getIrisTexture(boolean physicsOrShield) {
         return physicsOrShield ? IRIS_TEXTURE : SHIELD_TEXTURE;
     }
-
-    public float irisAnimation;
-
+    public static final int PHYSICAL_IRIS_ANIMATION_LENGTH = 60;
+    public static final int SHIELD_IRIS_ANIMATION_LENGTH = 10;
     @Override
     public void renderIris(double partialTicks, Float alpha, World world, S rendererState) {
+        System.out.println(rendererState.irisAnimation);
+        float irisAnimation = (rendererState.irisType == EnumIrisType.SHIELD ? 0.7f : 1.7f)/(rendererState.irisType == EnumIrisType.SHIELD ? SHIELD_IRIS_ANIMATION_LENGTH : PHYSICAL_IRIS_ANIMATION_LENGTH) * (world.getTotalWorldTime() - rendererState.irisAnimation);
+        /**
+         * SHIELD:
+         * MAX: 0.7
+         * MIN: 0.0
+         *
+         * IRIS:
+         * MAX: 1.7 - zavřený
+         * MIN: 0.0 - otevřený
+         *
+         *
+         * 0ticku -
+         *
+         */
         EnumIrisState irisState = rendererState.irisState;
         EnumIrisType irisType = rendererState.irisType;
         if (irisType == null || irisState == null) {
             System.out.println("iris type/iris state is null");
             return;
         }
-        if (irisType == EnumIrisType.SHIELD && irisState == EnumIrisState.CLOSED) {
+        if (irisType == EnumIrisType.SHIELD && (irisState == EnumIrisState.CLOSED || irisState == EnumIrisState.CLOSING)) {
+            if(irisAnimation > 0.7f) irisAnimation = 0.7f;
+            if(irisAnimation < 0) irisAnimation = 0;
             GlStateManager.pushMatrix();
-            // shield
-            alpha = 0.3f;
 
             Texture irisTexture = TextureLoader.getTexture(getIrisTexture(false));
             if (irisTexture != null) irisTexture.bindTexture();
@@ -110,56 +124,37 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
                     GlStateManager.rotate(180, 0, 1, 0);
                 }
 
-                StargateRendererStatic.innerCircle.render(tick, false, 1.0f - alpha, 0);
+                StargateRendererStatic.innerCircle.render(tick, false, irisAnimation, 0);
 
 
                 for (StargateRendererStatic.QuadStrip strip : StargateRendererStatic.quadStrips) {
-                    strip.render(tick, false, 1f - alpha, 0);
+                    strip.render(tick, false, irisAnimation, 0);
                 }
             }
             GlStateManager.disableBlend();
             GlStateManager.popMatrix();
         }
         if (irisType == EnumIrisType.IRIS_TITANIUM || irisType == EnumIrisType.IRIS_TRINIUM) {
+            if(irisAnimation > 1.7f) irisAnimation = 1.7f;
+            if(irisAnimation < 0) irisAnimation = 0;
             // iris blades
-            if (irisState == EnumIrisState.OPENED) { // iris is open
-                if (irisAnimation > 0.0) {
-                    if (irisAnimation < 1.5)
-                        irisAnimation -= 0.0040;
-                    else
-                        irisAnimation -= 0.0010;
-                }
-                for (float i = 0; i < 20; i++) {
-                    float rotateIndex = 18f * i;
+            /*if (irisAnimation > 0.0) {
+                if (irisAnimation < 1.5)
+                    irisAnimation -= 0.0040;
+                else
+                    irisAnimation -= 0.0010;
+            }*/
+            for (float i = 0; i < 20; i++) {
+                float rotateIndex = 18f * i;
 
-                    GlStateManager.pushMatrix();
+                GlStateManager.pushMatrix();
+                ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
+                //GlStateManager.rotate(1.5f, 1, 0, 0);
+                GlStateManager.rotate(rotateIndex, 0, 0, 1);
+                GlStateManager.translate(-irisAnimation, -(irisAnimation * 2), 0.00);
+                ElementEnum.IRIS.render();
 
-                    ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
-                    GlStateManager.rotate(rotateIndex, 0, 0, 1);
-                    GlStateManager.translate(-irisAnimation, -(irisAnimation * 2), 0.00);
-                    ElementEnum.IRIS.render();
-
-                    GlStateManager.popMatrix();
-                }
-            } else if (irisState == EnumIrisState.CLOSED) { // iris is closed
-                if (irisAnimation < 1.7) {
-                    if (irisAnimation < 1.5)
-                        irisAnimation += 0.0040;
-                    else
-                        irisAnimation += 0.0010;
-                }
-                for (float i = 0; i < 20; i++) {
-                    float rotateIndex = 18f * i;
-
-                    GlStateManager.pushMatrix();
-                    ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
-                    //GlStateManager.rotate(1.5f, 1, 0, 0);
-                    GlStateManager.rotate(rotateIndex, 0, 0, 1);
-                    GlStateManager.translate(-irisAnimation, -(irisAnimation * 2), 0.00);
-                    ElementEnum.IRIS.render();
-
-                    GlStateManager.popMatrix();
-                }
+                GlStateManager.popMatrix();
             }
         }
     }
