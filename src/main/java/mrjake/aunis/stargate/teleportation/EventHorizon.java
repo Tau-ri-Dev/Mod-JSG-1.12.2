@@ -6,12 +6,16 @@ import java.util.Map;
 
 import javax.vecmath.Vector2f;
 
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.Node;
+import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisDamageSources;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.api.event.StargateTeleportEntityEvent;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.stargate.StargateMotionToClient;
+import mrjake.aunis.renderer.stargate.StargateAbstractRendererState;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.EnumIrisState;
@@ -114,33 +118,29 @@ public class EventHorizon {
 	
 	public void teleportEntity(int entityId) {
 		TeleportPacket packet = scheduledTeleportMap.get(entityId);
-
-		/*
-		todo: fix this shit
-		TileEntity sourceGateTile = world.getTileEntity(pos);
-		if (sourceGateTile instanceof StargateClassicBaseTile
-				&& ((StargateClassicBaseTile) sourceGateTile).getIrisState() == EnumIrisState.CLOSED) return;
-		*/
 		if (!new StargateTeleportEntityEvent((StargateAbstractBaseTile) world.getTileEntity(pos), packet.getTargetGatePos().getTileEntity(), packet.getEntity()).post()) {
 			// Not cancelled
 			packet.teleport();
-			if(packet.getTargetGatePos().getTileEntity() instanceof StargateClassicBaseTile
-					&& ((StargateClassicBaseTile) packet.getTargetGatePos().getTileEntity()).isClosed()) {
+			StargatePos targetGatePos = packet.getTargetGatePos();
+			if(targetGatePos.getTileEntity() instanceof StargateClassicBaseTile
+					&& ((StargateClassicBaseTile) targetGatePos.getTileEntity()).isClosed()) {
 				if(AunisConfig.irisConfig.allowCreative)
 					packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS, 20);
-				else
+				else {
 					packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS_CREATIVE, 20);
+				}
 
-				if(((StargateClassicBaseTile) packet.getTargetGatePos().getTileEntity()).isPhysicalIris()) {
+				if(((StargateClassicBaseTile) targetGatePos.getTileEntity()).isPhysicalIris()) {
 					AunisSoundHelper.playSoundEvent(packet.getTargetGatePos().getWorld(),
-							packet.getTargetGatePos().getTileEntity().getGateCenterPos(),
+							targetGatePos.getTileEntity().getGateCenterPos(),
 							SoundEventEnum.IRIS_HIT);
 				}
 				else if(((StargateClassicBaseTile) packet.getTargetGatePos().getTileEntity()).isShieldIris()){
 					AunisSoundHelper.playSoundEvent(packet.getTargetGatePos().getWorld(),
-							packet.getTargetGatePos().getTileEntity().getGateCenterPos(),
+							targetGatePos.getTileEntity().getGateCenterPos(),
 							SoundEventEnum.SHIELD_HIT);
 				}
+				targetGatePos.getTileEntity().sendSignal(null, "stargate_iris_hit_event", new Object[]{"Something just hit the IRIS!"});
 
 			}
 			AunisSoundHelper.playSoundEvent(world, gateCenter, SoundEventEnum.WORMHOLE_GO);

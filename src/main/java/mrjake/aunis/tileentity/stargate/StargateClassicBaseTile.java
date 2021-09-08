@@ -243,10 +243,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     case OPENING:
                         irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
                         sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
+                        sendSignal(null, "stargate_iris_opened", new Object[]{"Iris is opened"});
                         break;
                     case CLOSING:
                         irisState = mrjake.aunis.stargate.EnumIrisState.CLOSED;
                         sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
+                        sendSignal(null, "stargate_iris_closed", new Object[]{"Iris is closed"});
                         break;
                     default:
                         break;
@@ -849,12 +851,14 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             case OPENED:
                 irisState = mrjake.aunis.stargate.EnumIrisState.CLOSING;
                 sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState, irisAnimation);
+                sendSignal(null, "stargate_iris_closing", new Object[]{"Iris is closing"});
                 markDirty();
                 playSoundEvent(closeSound);
                 break;
             case CLOSED:
                 irisState = mrjake.aunis.stargate.EnumIrisState.OPENING;
                 sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState, irisAnimation);
+                sendSignal(null, "stargate_iris_opening", new Object[]{"Iris is opening"});
                 markDirty();
                 playSoundEvent(openSound);
                 break;
@@ -971,11 +975,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function() -- close/open the iris/shield")
     public Object[] toggleIris(Context context, Arguments args) {
+        if (irisType == EnumIrisType.NULL) return new Object[] {false, "stargate_iris_missing", "Iris is not installed!"};
         boolean result = toggleIris();
         markDirty();
         if (!result)
-            return new Object[]{null, "stargate_iris_missing", "The stargate does not have iris", "or iris is already closing/opening"};
-        return new Object[]{null, "stargate_iris_toggled", "Iris is opening/closing"};
+            return new Object[]{false, "stargate_iris_busy", "Iris is busy"};
+        return new Object[]{true};
     }
 
     @Optional.Method(modid = "opencomputers")
