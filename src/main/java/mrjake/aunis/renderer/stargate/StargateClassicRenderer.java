@@ -75,9 +75,9 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     // Iris rendering
 
     protected static final ResourceLocation SHIELD_TEXTURE =
-            new ResourceLocation(Aunis.ModID, "textures/tesr/pegasus/shield/gate_pegasus_shield7.jpg");
+            new ResourceLocation(Aunis.ModID, "textures/tesr/iris/shield.jpg");
     protected static final ResourceLocation IRIS_TEXTURE =
-            new ResourceLocation(Aunis.ModID, "textures/tesr/milkyway/iris/iris.jpg");
+            new ResourceLocation(Aunis.ModID, "textures/tesr/iris/iris_blade.jpg");
 
     protected ResourceLocation getIrisTexture(boolean physicsOrShield) {
         return physicsOrShield ? IRIS_TEXTURE : SHIELD_TEXTURE;
