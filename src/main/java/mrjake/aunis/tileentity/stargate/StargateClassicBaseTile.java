@@ -454,7 +454,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         System.out.println("client" + getRendererStateClient().irisState.name() + " server" + getRendererStateServer().irisState.name());
                         getRendererStateClient().irisType = irisType;
                         if (irisState != EnumIrisState.CLOSED && irisState != EnumIrisState.OPENED) {
-                            getRendererStateClient().startIrisAnimation(world.getTotalWorldTime());
+                            getRendererStateClient().irisAnimation = (float) world.getTotalWorldTime();
                         }
                         break;
 
@@ -762,6 +762,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     public void updateIrisType() {
         irisType = EnumIrisType.byItem(itemStackHandler.getStackInSlot(11).getItem());
+        irisAnimation = getWorld().getTotalWorldTime();
         // TODO iris durability
         // irisDurability = 0;
         if (irisType == EnumIrisType.NULL)
@@ -784,7 +785,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 //            case CLOSED:
 //                sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false);
 //        }
-        sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState);
+        sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
         markDirty();
     }
 
@@ -817,25 +818,25 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     //todo stav se se přecvakne na closed/opened po určitém potu ticků od uběhnutí animace
     protected boolean toggleIris() {
         if (irisType == EnumIrisType.NULL) return false;
+        if(irisState == EnumIrisState.CLOSED || irisState == EnumIrisState.OPENED)
+            irisAnimation = getWorld().getTotalWorldTime();
         if(isPhysicalIris()) {
             switch (irisState) {
                 case OPENED:
-                    irisAnimation = world.getTotalWorldTime();
                     irisState = mrjake.aunis.stargate.EnumIrisState.CLOSING;
-                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState);
+                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState, irisAnimation);
                     markDirty();
                     playSoundEvent(SoundEventEnum.IRIS_CLOSING);
                     irisState = mrjake.aunis.stargate.EnumIrisState.CLOSED;
-                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState);
+                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
                     break;
                 case CLOSED:
-                    irisAnimation = world.getTotalWorldTime();
                     irisState = mrjake.aunis.stargate.EnumIrisState.OPENING;
-                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState);
+                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState, irisAnimation);
                     markDirty();
                     playSoundEvent(SoundEventEnum.IRIS_OPENING);
                     irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
-                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState);
+                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
                     break;
                 default:
                     return false;
@@ -844,22 +845,20 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         else{
             switch (irisState) {
                 case OPENED:
-                    irisAnimation = world.getTotalWorldTime();
                     irisState = mrjake.aunis.stargate.EnumIrisState.CLOSING;
-                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState);
+                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState, irisAnimation);
                     markDirty();
                     playSoundEvent(SoundEventEnum.SHIELD_CLOSING);
                     irisState = mrjake.aunis.stargate.EnumIrisState.CLOSED;
-                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState);
+                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
                     break;
                 case CLOSED:
-                    irisAnimation = world.getTotalWorldTime();
                     irisState = mrjake.aunis.stargate.EnumIrisState.OPENING;
-                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState);
+                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState, irisAnimation);
                     markDirty();
                     playSoundEvent(SoundEventEnum.SHIELD_OPENING);
                     irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
-                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState);
+                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
                     break;
                 default:
                     return false;

@@ -82,13 +82,16 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     protected ResourceLocation getIrisTexture(boolean physicsOrShield) {
         return physicsOrShield ? IRIS_TEXTURE : SHIELD_TEXTURE;
     }
-    public static final int PHYSICAL_IRIS_ANIMATION_LENGTH = 60;
-    public static final int SHIELD_IRIS_ANIMATION_LENGTH = 10;
+
+    public static final int PHYSICAL_IRIS_ANIMATION_LENGTH = 60 * 10;
+    public static final int SHIELD_IRIS_ANIMATION_LENGTH = 10 * 10;
+
     @Override
     public void renderIris(double partialTicks, Float alpha, World world, S rendererState) {
-        System.out.println(rendererState.irisAnimation);
-        float irisAnimation = (rendererState.irisType == EnumIrisType.SHIELD ? 0.7f : 1.7f)/(rendererState.irisType == EnumIrisType.SHIELD ? SHIELD_IRIS_ANIMATION_LENGTH : PHYSICAL_IRIS_ANIMATION_LENGTH) * (world.getTotalWorldTime() - rendererState.irisAnimation);
+        //System.out.println(rendererState.irisAnimation);
+        float irisAnimationStage = (rendererState.irisType == EnumIrisType.SHIELD ? 0.7f : 1.7f)/(rendererState.irisType == EnumIrisType.SHIELD ? SHIELD_IRIS_ANIMATION_LENGTH : PHYSICAL_IRIS_ANIMATION_LENGTH) / ((((float) world.getTotalWorldTime()) - rendererState.irisAnimation) * 10);
         /**
+         *
          * SHIELD:
          * MAX: 0.7
          * MIN: 0.0
@@ -96,9 +99,6 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
          * IRIS:
          * MAX: 1.7 - zavřený
          * MIN: 0.0 - otevřený
-         *
-         *
-         * 0ticku -
          *
          */
         EnumIrisState irisState = rendererState.irisState;
@@ -108,8 +108,8 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             return;
         }
         if (irisType == EnumIrisType.SHIELD && (irisState == EnumIrisState.CLOSED || irisState == EnumIrisState.CLOSING)) {
-            if(irisAnimation > 0.7f) irisAnimation = 0.7f;
-            if(irisAnimation < 0) irisAnimation = 0;
+            if(irisAnimationStage > 0.7f) irisAnimationStage = 0.7f;
+            if(irisAnimationStage < 0) irisAnimationStage = 0;
             GlStateManager.pushMatrix();
 
             Texture irisTexture = TextureLoader.getTexture(getIrisTexture(false));
@@ -124,34 +124,26 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
                     GlStateManager.rotate(180, 0, 1, 0);
                 }
 
-                StargateRendererStatic.innerCircle.render(tick, false, irisAnimation, 0);
+                StargateRendererStatic.innerCircle.render(tick, false, irisAnimationStage, 0);
 
 
                 for (StargateRendererStatic.QuadStrip strip : StargateRendererStatic.quadStrips) {
-                    strip.render(tick, false, irisAnimation, 0);
+                    strip.render(tick, false, irisAnimationStage, 0);
                 }
             }
             GlStateManager.disableBlend();
             GlStateManager.popMatrix();
         }
         if (irisType == EnumIrisType.IRIS_TITANIUM || irisType == EnumIrisType.IRIS_TRINIUM) {
-            if(irisAnimation > 1.7f) irisAnimation = 1.7f;
-            if(irisAnimation < 0) irisAnimation = 0;
-            // iris blades
-            /*if (irisAnimation > 0.0) {
-                if (irisAnimation < 1.5)
-                    irisAnimation -= 0.0040;
-                else
-                    irisAnimation -= 0.0010;
-            }*/
+            if(irisAnimationStage > 1.7f) irisAnimationStage = 1.7f;
+            if(irisAnimationStage < 0) irisAnimationStage = 0;
             for (float i = 0; i < 20; i++) {
                 float rotateIndex = 18f * i;
 
                 GlStateManager.pushMatrix();
                 ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
-                //GlStateManager.rotate(1.5f, 1, 0, 0);
                 GlStateManager.rotate(rotateIndex, 0, 0, 1);
-                GlStateManager.translate(-irisAnimation, -(irisAnimation * 2), 0.00);
+                GlStateManager.translate(-irisAnimationStage, -(irisAnimationStage * 2), 0.00);
                 ElementEnum.IRIS.render();
 
                 GlStateManager.popMatrix();

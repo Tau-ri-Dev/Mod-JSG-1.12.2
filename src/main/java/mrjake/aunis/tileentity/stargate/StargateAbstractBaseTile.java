@@ -193,8 +193,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
       return isMerged && stargateState.idle();
     }
   }
-  protected void sendRenderingUpdate(EnumGateAction gateAction, int chevronCount, boolean modifyFinal, EnumIrisType irisType, EnumIrisState irisState) {
-    sendState(StateTypeEnum.RENDERER_UPDATE, new StargateRendererActionState(gateAction, chevronCount, modifyFinal, irisType, irisState));
+  protected void sendRenderingUpdate(EnumGateAction gateAction, int chevronCount, boolean modifyFinal, EnumIrisType irisType, EnumIrisState irisState, float irisAnimation) {
+    sendState(StateTypeEnum.RENDERER_UPDATE, new StargateRendererActionState(gateAction, chevronCount, modifyFinal, irisType, irisState, irisAnimation));
   }
   protected void sendRenderingUpdate(EnumGateAction gateAction, int chevronCount, boolean modifyFinal) {
     sendState(StateTypeEnum.RENDERER_UPDATE, new StargateRendererActionState(gateAction, chevronCount, modifyFinal));
