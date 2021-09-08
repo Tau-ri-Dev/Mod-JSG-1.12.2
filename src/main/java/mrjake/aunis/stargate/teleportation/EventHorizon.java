@@ -14,12 +14,14 @@ import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.stargate.StargateMotionToClient;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
+import mrjake.aunis.stargate.EnumIrisState;
 import mrjake.aunis.stargate.network.StargatePos;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -113,13 +115,17 @@ public class EventHorizon {
 	public void teleportEntity(int entityId) {
 		TeleportPacket packet = scheduledTeleportMap.get(entityId);
 
-		boolean a1 = packet.getTargetGatePos().getTileEntity() instanceof StargateClassicBaseTile;
-		boolean a2 = ((StargateClassicBaseTile) packet.getTargetGatePos().getTileEntity()).isClosed();
-		
+		/*
+		todo: fix this shit
+		TileEntity sourceGateTile = world.getTileEntity(pos);
+		if (sourceGateTile instanceof StargateClassicBaseTile
+				&& ((StargateClassicBaseTile) sourceGateTile).getIrisState() == EnumIrisState.CLOSED) return;
+		*/
 		if (!new StargateTeleportEntityEvent((StargateAbstractBaseTile) world.getTileEntity(pos), packet.getTargetGatePos().getTileEntity(), packet.getEntity()).post()) {
 			// Not cancelled
 			packet.teleport();
-			if(a1 && a2) {
+			if(packet.getTargetGatePos().getTileEntity() instanceof StargateClassicBaseTile
+					&& ((StargateClassicBaseTile) packet.getTargetGatePos().getTileEntity()).isClosed()) {
 				if(AunisConfig.irisConfig.allowCreative)
 					packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS, 20);
 				else

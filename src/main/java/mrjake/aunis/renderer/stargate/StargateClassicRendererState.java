@@ -25,7 +25,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     this.irisAnimation = builder.irisAnimation;
   }
 
-  public void startIrisAnimation(float animationStart) {
+  public void startIrisAnimation(long animationStart) {
     this.irisAnimation = animationStart;
   }
 
@@ -55,7 +55,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
   public EnumIrisType irisType;
     // Saved
   public EnumIrisState irisState;
-  public float irisAnimation;
+  public long irisAnimation;
 
   @Override
   public BiomeOverlayEnum getBiomeOverlay() {
@@ -84,7 +84,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     }
     buf.writeByte(irisState.id);
     buf.writeByte(irisType.id);
-    buf.writeFloat(irisAnimation);
+    buf.writeLong(irisAnimation);
     super.toBytes(buf);
   }
 
@@ -101,7 +101,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     }
     irisState = EnumIrisState.getValue(buf.readByte());
     irisType = EnumIrisType.byId(buf.readByte());
-    irisAnimation = buf.readFloat();
+    irisAnimation = buf.readLong();
     super.fromBytes(buf);
   }
 
@@ -137,7 +137,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     //Iris
     public EnumIrisState irisState;
     public EnumIrisType irisType;
-    public float irisAnimation;
+    public long irisAnimation;
 
     public StargateClassicRendererStateBuilder(StargateAbstractRendererStateBuilder superBuilder) {
       setStargateState(superBuilder.stargateState);
@@ -198,7 +198,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
       return this;
     }
 
-    public StargateClassicRendererStateBuilder setIrisAnimation(float irisAnimation) {
+    public StargateClassicRendererStateBuilder setIrisAnimation(long irisAnimation) {
       this.irisAnimation = irisAnimation;
       return this;
     }

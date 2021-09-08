@@ -83,13 +83,13 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
         return physicsOrShield ? IRIS_TEXTURE : SHIELD_TEXTURE;
     }
 
-    public static final int PHYSICAL_IRIS_ANIMATION_LENGTH = 60 * 10;
-    public static final int SHIELD_IRIS_ANIMATION_LENGTH = 10 * 10;
+    public static final int PHYSICAL_IRIS_ANIMATION_LENGTH = 60;
+    public static final int SHIELD_IRIS_ANIMATION_LENGTH = 10;
 
     @Override
     public void renderIris(double partialTicks, Float alpha, World world, S rendererState) {
         //System.out.println(rendererState.irisAnimation);
-        float irisAnimationStage = (rendererState.irisType == EnumIrisType.SHIELD ? 0.7f : 1.7f)/(rendererState.irisType == EnumIrisType.SHIELD ? SHIELD_IRIS_ANIMATION_LENGTH : PHYSICAL_IRIS_ANIMATION_LENGTH) / ((((float) world.getTotalWorldTime()) - rendererState.irisAnimation) * 10);
+        float irisAnimationStage = (world.getTotalWorldTime() - rendererState.irisAnimation);
         /**
          *
          * SHIELD:
@@ -107,9 +107,11 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             System.out.println("iris type/iris state is null");
             return;
         }
-        if (irisType == EnumIrisType.SHIELD && (irisState == EnumIrisState.CLOSED || irisState == EnumIrisState.CLOSING)) {
+        if (irisType == EnumIrisType.SHIELD) {
+            irisAnimationStage *= 0.7f/SHIELD_IRIS_ANIMATION_LENGTH;
             if(irisAnimationStage > 0.7f) irisAnimationStage = 0.7f;
             if(irisAnimationStage < 0) irisAnimationStage = 0;
+            if (irisState == EnumIrisState.OPENING) irisAnimationStage = .7f-irisAnimationStage;
             GlStateManager.pushMatrix();
 
             Texture irisTexture = TextureLoader.getTexture(getIrisTexture(false));
@@ -135,15 +137,17 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             GlStateManager.popMatrix();
         }
         if (irisType == EnumIrisType.IRIS_TITANIUM || irisType == EnumIrisType.IRIS_TRINIUM) {
+            irisAnimationStage *= 1.7f/PHYSICAL_IRIS_ANIMATION_LENGTH;
             if(irisAnimationStage > 1.7f) irisAnimationStage = 1.7f;
             if(irisAnimationStage < 0) irisAnimationStage = 0;
+            if (irisState == EnumIrisState.OPENING || irisState == EnumIrisState.OPENED) irisAnimationStage = 1.7f-irisAnimationStage;
             for (float i = 0; i < 20; i++) {
                 float rotateIndex = 18f * i;
 
                 GlStateManager.pushMatrix();
                 ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
                 GlStateManager.rotate(rotateIndex, 0, 0, 1);
-                GlStateManager.translate(-irisAnimationStage, -(irisAnimationStage * 2), 0.00);
+                GlStateManager.translate(-irisAnimationStage, -(irisAnimationStage * 2), -0.02);
                 ElementEnum.IRIS.render();
 
                 GlStateManager.popMatrix();

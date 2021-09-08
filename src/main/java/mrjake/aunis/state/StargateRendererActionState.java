@@ -52,7 +52,7 @@ public class StargateRendererActionState extends State {
     public boolean modifyFinal;
     public EnumIrisState irisState = null;
     public EnumIrisType irisType = null;
-    public float irisAnimation = 0;
+    public long irisAnimation = 0;
 
     public StargateRendererActionState(EnumGateAction action) {
         this.action = action;
@@ -65,7 +65,7 @@ public class StargateRendererActionState extends State {
         this.modifyFinal = modifyFinal;
     }
 
-    public StargateRendererActionState(EnumGateAction action, int chevronCount, boolean modifyFinal, EnumIrisType irisType, EnumIrisState irisState, float irisAnimation) {
+    public StargateRendererActionState(EnumGateAction action, int chevronCount, boolean modifyFinal, EnumIrisType irisType, EnumIrisState irisState, long irisAnimation) {
         this.action = action;
 //		this.computer = computer;
         this.chevronCount = chevronCount;
@@ -85,7 +85,7 @@ public class StargateRendererActionState extends State {
             buf.writeBoolean(true);
             buf.writeByte(irisState.id);
             buf.writeByte(irisType.id);
-            buf.writeFloat(irisAnimation);
+            buf.writeLong(irisAnimation);
         } else buf.writeBoolean(false);
     }
 
@@ -98,7 +98,7 @@ public class StargateRendererActionState extends State {
         if (buf.readBoolean()) {
             irisState = EnumIrisState.getValue(buf.readByte());
             irisType = EnumIrisType.byId(buf.readByte());
-            irisAnimation = buf.readFloat();
+            irisAnimation = buf.readLong();
         }
     }
 
