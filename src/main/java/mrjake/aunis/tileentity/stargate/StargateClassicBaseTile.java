@@ -779,12 +779,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 irisMaxDurability = 0;
                 break;
         }
-//        switch (irisState) {
-//            case OPENED:
-//                sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true);
-//            case CLOSED:
-//                sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false);
-//        }
         sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
         markDirty();
     }
