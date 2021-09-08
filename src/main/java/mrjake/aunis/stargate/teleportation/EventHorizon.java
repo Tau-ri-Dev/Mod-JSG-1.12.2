@@ -141,6 +141,7 @@ public class EventHorizon {
 							packet.getTargetGatePos().getTileEntity().getGateCenterPos(),
 							SoundEventEnum.SHIELD_HIT);
 				}
+
 			}
 			AunisSoundHelper.playSoundEvent(world, gateCenter, SoundEventEnum.WORMHOLE_GO);
 		};
