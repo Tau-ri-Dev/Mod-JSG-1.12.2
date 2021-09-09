@@ -107,7 +107,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             System.out.println("iris type/iris state is null");
             return;
         }
-        if (irisType == EnumIrisType.SHIELD) {
+        if (irisType == EnumIrisType.SHIELD && irisState != EnumIrisState.OPENED) {
             irisAnimationStage *= 0.7f/SHIELD_IRIS_ANIMATION_LENGTH;
             if(irisAnimationStage > 0.7f) irisAnimationStage = 0.7f;
             if(irisAnimationStage < 0) irisAnimationStage = 0;

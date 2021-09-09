@@ -18,6 +18,7 @@ import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
+import mrjake.aunis.packet.StateUpdateRequestToServer;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState.StargateClassicRendererStateBuilder;
@@ -258,8 +259,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             // Client
 
             // Each 2s check for the biome overlay
-            if (world.getTotalWorldTime() % 40 == 0 && rendererStateClient != null && getRendererStateClient().biomeOverride == null) {
-                rendererStateClient.setBiomeOverlay(BiomeOverlayEnum.updateBiomeOverlay(world, getMergeHelper().getTopBlock().add(pos), getSupportedOverlays()));
+            if (world.getTotalWorldTime() % 40 == 0 && rendererStateClient != null) {
+                if (getRendererStateClient().biomeOverride == null)
+                    rendererStateClient.setBiomeOverlay(BiomeOverlayEnum.updateBiomeOverlay(world, getMergeHelper().getTopBlock().add(pos), getSupportedOverlays()));
+            //    if (getRendererStateClient().irisType == EnumIrisType.NULL) AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.IRIS_UPDATE));
+
             }
         }
     }
@@ -411,6 +415,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             case GUI_UPDATE:
                 return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose);
 
+//            case IRIS_UPDATE:
+//                return getRendererStateServer().build();
+
             default:
                 return super.getState(stateType);
         }
@@ -518,7 +525,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 }
 
                 break;
-
+            case IRIS_UPDATE:
+                if (irisType != EnumIrisType.NULL)
+                    getRendererStateClient().irisType = irisType;
             default:
                 break;
         }
@@ -975,7 +984,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function() -- close/open the iris/shield")
     public Object[] toggleIris(Context context, Arguments args) {
-        if (irisType == EnumIrisType.NULL) return new Object[] {false, "stargate_iris_missing", "Iris is not installed!"};
+        if (irisType == EnumIrisType.NULL)
+            return new Object[]{false, "stargate_iris_missing", "Iris is not installed!"};
         boolean result = toggleIris();
         markDirty();
         if (!result)

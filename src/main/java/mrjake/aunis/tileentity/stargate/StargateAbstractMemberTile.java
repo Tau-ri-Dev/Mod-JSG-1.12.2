@@ -1,11 +1,10 @@
 package mrjake.aunis.tileentity.stargate;
 
+import li.cil.oc.api.Network;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.Environment;
-import li.cil.oc.api.network.Message;
-import li.cil.oc.api.network.Node;
+import li.cil.oc.api.network.*;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
@@ -25,8 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers")})
-public abstract class StargateAbstractMemberTile extends TileEntity implements Environment {
+//@Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.EnvironmentHost", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "opencomputers")})
+public abstract class StargateAbstractMemberTile extends TileEntity{
 
     // ---------------------------------------------------------------------------------
     // Base position
@@ -52,7 +51,7 @@ public abstract class StargateAbstractMemberTile extends TileEntity implements E
 
     public void setBasePos(BlockPos basePos) {
         this.basePos = basePos;
-
+        Network.joinOrCreateNetwork(getBaseTile(world));
         markDirty();
     }
 
@@ -101,51 +100,81 @@ public abstract class StargateAbstractMemberTile extends TileEntity implements E
         return getBaseTile(world).getEnergyStorage();
     }
 
-    @Override
-    @Optional.Method(modid = "opencomputers")
-    public Node node() {
-        return isMerged() ? getBaseTile(world).node() : null;
-    }
 
-    @Override
-    @Optional.Method(modid = "opencomputers")
-    public void onConnect(Node node) {
-    }
 
-    @Override
-    @Optional.Method(modid = "opencomputers")
-    public void onDisconnect(Node node) {
-    }
+//    @Override
+//    @Optional.Method(modid = "opencomputers")
+//    public Node node() {
+//        return isMerged() ? getBaseTile(world).node() : null;
+//    }
+//
+//    @Override
+//    @Optional.Method(modid = "opencomputers")
+//    public void onConnect(Node node) {
+//    }
+//
+//    @Override
+//    @Optional.Method(modid = "opencomputers")
+//    public void onDisconnect(Node node) {
+//    }
+//
+//    @Override
+//    @Optional.Method(modid = "opencomputers")
+//    public void onMessage(Message message) {
+//    }
+//
+//    // ------------------------------------------------------------
+//    // Methods
+//    // function(arg:type[, optionArg:type]):resultType; Description.
+//    @Optional.Method(modid = "opencomputers")
+//    @Callback(getter = true)
+//    public Object[] stargateAddress(Context context, Arguments args) {
+//        return isMerged() ? getBaseTile(world).stargateAddress(context, args) : null;
+//    }
+//
+//    @Optional.Method(modid = "opencomputers")
+//    @Callback(getter = true)
+//    public Object[] dialedAddress(Context context, Arguments args) {
+//        return isMerged() ? getBaseTile(world).dialedAddress(context, args) : null;
+//    }
+//
+//    @Optional.Method(modid = "opencomputers")
+//    @Callback
+//    public Object[] getEnergyStored(Context context, Arguments args) {
+//        return isMerged() ? getBaseTile(world).getEnergyStored(context, args) : null;
+//    }
+//
+//    @Optional.Method(modid = "opencomputers")
+//    @Callback
+//    public Object[] getMaxEnergyStored(Context context, Arguments args) {
+//        return isMerged() ? getBaseTile(world).getMaxEnergyStored(context, args) : null;
+//    }
 
-    @Override
-    @Optional.Method(modid = "opencomputers")
-    public void onMessage(Message message) {
-    }
 
-    // ------------------------------------------------------------
-    // Methods
-    // function(arg:type[, optionArg:type]):resultType; Description.
-    @Optional.Method(modid = "opencomputers")
-    @Callback(getter = true)
-    public Object[] stargateAddress(Context context, Arguments args) {
-        return isMerged() ? getBaseTile(world).stargateAddress(context, args) : null;
-    }
+//    @Override
+//    public Node node() {
+//        return isMerged() ? getBaseTile(world).node() : null;
+//    }
+//
+//    @Override
+//    public void onConnect(Node node) {
+//
+//    }
+//
+//    @Override
+//    public void onDisconnect(Node node) {
+//
+//    }
+//
+//    @Override
+//    public void onMessage(Message message) {
+//
+//    }
+//
+//    @Override
+//    public void onLoad() {
+//        if (isMerged()) Network.joinOrCreateNetwork(getBaseTile(world));
+//    }
 
-    @Optional.Method(modid = "opencomputers")
-    @Callback(getter = true)
-    public Object[] dialedAddress(Context context, Arguments args) {
-        return isMerged() ? getBaseTile(world).dialedAddress(context, args) : null;
-    }
 
-    @Optional.Method(modid = "opencomputers")
-    @Callback
-    public Object[] getEnergyStored(Context context, Arguments args) {
-        return isMerged() ? getBaseTile(world).getEnergyStored(context, args) : null;
-    }
-
-    @Optional.Method(modid = "opencomputers")
-    @Callback
-    public Object[] getMaxEnergyStored(Context context, Arguments args) {
-        return isMerged() ? getBaseTile(world).getMaxEnergyStored(context, args) : null;
-    }
 }
