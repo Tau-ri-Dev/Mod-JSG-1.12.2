@@ -165,11 +165,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (!world.isRemote) {
             updateBeamers();
             updatePowerTier();
+
             updateIrisType();
-            System.out.println("type:" + irisType.name() + " state: " + irisState.name());
+
         }
     }
-
 
 
     protected abstract boolean onGateMergeRequested();
@@ -319,8 +319,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         for (BlockPos vect : linkedBeamers)
             linkedBeamersTagList.appendTag(new NBTTagLong(vect.toLong()));
         compound.setTag("linkedBeamers", linkedBeamersTagList);
-//        compound.setByte("irisType", irisType.id);
-//        System.out.println("write nbt:" + irisType.name());
         if (irisState == null) irisState = EnumIrisState.OPENED;
         compound.setByte("irisState", irisState.id);
 
@@ -447,6 +445,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void setState(StateTypeEnum stateType, State state) {
         switch (stateType) {
             case RENDERER_UPDATE:
+                if (getRendererStateClient() == null) return;
                 StargateRendererActionState gateActionState = (StargateRendererActionState) state;
 
                 switch (gateActionState.action) {
@@ -477,7 +476,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
                     case IRIS_UPDATE:
                         getRendererStateClient().irisState = gateActionState.irisState;
-                        getRendererStateClient().irisType = irisType;
+                        getRendererStateClient().irisType = gateActionState.irisType;
                         if (gateActionState.irisState == EnumIrisState.CLOSING || gateActionState.irisState == EnumIrisState.OPENING) {
                             getRendererStateClient().irisAnimation = world.getTotalWorldTime();
                         }
@@ -754,10 +753,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // IRISES
 
     private EnumIrisState irisState = EnumIrisState.OPENED;
-    private EnumIrisType irisType;
+    private EnumIrisType irisType = EnumIrisType.NULL;
     private long irisAnimation = 0;
-    protected float irisMaxDurability = 0;
-    protected float irisDurability = 0;
+
 
     public static enum StargateIrisUpgradeEnum implements EnumKeyInterface<Item> {
         IRIS_UPGRADE_CLASSIC(AunisItems.UPGRADE_IRIS),
@@ -786,9 +784,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             return idMap.contains(item);
         }
     }
+
     public void updateIrisType() {
         updateIrisType(true);
     }
+
     public void updateIrisType(boolean markDirty) {
         irisType = EnumIrisType.byItem(itemStackHandler.getStackInSlot(11).getItem());
         irisAnimation = getWorld().getTotalWorldTime();
@@ -796,18 +796,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         // irisDurability = 0;
         if (irisType == EnumIrisType.NULL)
             irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
-
-        switch (irisType) {
-            case IRIS_TITANIUM:
-                irisMaxDurability = AunisConfig.irisConfig.titaniumIrisDurability;
-                break;
-            case IRIS_TRINIUM:
-                irisMaxDurability = AunisConfig.irisConfig.triniumIrisDurability;
-                break;
-            default:
-                irisMaxDurability = 0;
-                break;
-        }
         sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
         if (markDirty) markDirty();
     }
@@ -1007,7 +995,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function() -- get info about iris")
     public Object[] getIrisDurability(Context context, Arguments args) {
-        return new Object[]{irisDurability + "/" + irisMaxDurability};
+        return new Object[]{"irisDurability + \"/\" + irisMaxDurability"};
     }
 
 

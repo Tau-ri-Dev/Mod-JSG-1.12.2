@@ -88,7 +88,6 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
 
     @Override
     public void renderIris(double partialTicks, Float alpha, World world, S rendererState) {
-        //System.out.println(rendererState.irisAnimation);
         float irisAnimationStage = (world.getTotalWorldTime() - rendererState.irisAnimation);
         /**
          *
@@ -104,11 +103,11 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
         EnumIrisState irisState = rendererState.irisState;
         EnumIrisType irisType = rendererState.irisType;
         if (irisType == null || irisState == null) {
-            if (irisType == null) System.out.println("iris type to mrví");
-            if (irisState == null) System.out.println("iris state to mrví");
+            Aunis.logger.debug("Iris state/type was null");
             return;
         }
-        if (irisType == EnumIrisType.SHIELD && irisState != EnumIrisState.OPENED) {
+        if (irisState == EnumIrisState.OPENED) return;
+        if (irisType == EnumIrisType.SHIELD) {
             irisAnimationStage *= 0.7f / SHIELD_IRIS_ANIMATION_LENGTH;
             if (irisAnimationStage > 0.7f) irisAnimationStage = 0.7f;
             if (irisAnimationStage < 0) irisAnimationStage = 0;

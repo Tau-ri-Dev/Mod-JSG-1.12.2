@@ -33,7 +33,7 @@ public enum EnumIrisType {
 
 
     public static EnumIrisType byId(byte id) {
-        return (id < (values().length - 1)) ? values()[id] : NULL;
+        return (id < values().length) ? values()[id] : NULL;
     }
 
     public static EnumIrisType byItem(Item item) {
