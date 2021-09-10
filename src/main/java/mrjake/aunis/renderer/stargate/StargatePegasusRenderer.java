@@ -27,7 +27,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
   @Override
   protected void renderGate(StargatePegasusRendererState rendererState, double partialTicks) {
     renderRing(rendererState, partialTicks);
-    GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
+   // GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
     renderChevrons(rendererState, partialTicks);
 
     if (rendererState.spinHelper.getIsSpinning()) {
@@ -68,7 +68,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
       GlStateManager.translate(-RING_LOC.x, -RING_LOC.z, -RING_LOC.y);
     }
 
-    GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
+   // GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
 
     ElementEnum.PEGASUS_RING.bindTextureAndRender(rendererState.getBiomeOverlay());
 

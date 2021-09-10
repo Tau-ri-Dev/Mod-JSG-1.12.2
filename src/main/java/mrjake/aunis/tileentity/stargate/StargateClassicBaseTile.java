@@ -1,10 +1,5 @@
 package mrjake.aunis.tileentity.stargate;
 
-import java.util.*;
-import java.util.stream.IntStream;
-
-import javax.annotation.Nullable;
-
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
@@ -18,7 +13,6 @@ import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
-import mrjake.aunis.packet.StateUpdateRequestToServer;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState.StargateClassicRendererStateBuilder;
@@ -26,26 +20,19 @@ import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.sound.StargateSoundEventEnum;
 import mrjake.aunis.sound.StargateSoundPositionedEnum;
 import mrjake.aunis.stargate.*;
-import mrjake.aunis.stargate.network.*;
+import mrjake.aunis.stargate.network.StargateAddressDynamic;
+import mrjake.aunis.stargate.network.StargatePos;
+import mrjake.aunis.stargate.network.SymbolInterface;
+import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
 import mrjake.aunis.stargate.power.StargateClassicEnergyStorage;
 import mrjake.aunis.stargate.power.StargateEnergyRequired;
-import mrjake.aunis.state.StargateBiomeOverrideState;
-import mrjake.aunis.state.StargateRendererActionState;
+import mrjake.aunis.state.*;
 import mrjake.aunis.state.StargateRendererActionState.EnumGateAction;
-import mrjake.aunis.state.StargateSpinState;
-import mrjake.aunis.state.State;
-import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.tileentity.BeamerTile;
 import mrjake.aunis.tileentity.util.IUpgradable;
 import mrjake.aunis.tileentity.util.ScheduledTask;
-import mrjake.aunis.util.AunisAxisAlignedBB;
-import mrjake.aunis.util.AunisItemStackHandler;
-import mrjake.aunis.util.EnumKeyInterface;
-import mrjake.aunis.util.EnumKeyMap;
-import mrjake.aunis.util.FacingToRotation;
-import mrjake.aunis.util.ItemHandlerHelper;
-import mrjake.aunis.util.ItemMetaPair;
+import mrjake.aunis.util.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -56,11 +43,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.CapabilityItemHandler;
+
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.stream.IntStream;
 
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.PHYSICAL_IRIS_ANIMATION_LENGTH;
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.SHIELD_IRIS_ANIMATION_LENGTH;
@@ -165,6 +155,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // ------------------------------------------------------------------------
     // Loading and ticking
 
+
     @Override
     public void onLoad() {
         super.onLoad();
@@ -175,8 +166,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             updateBeamers();
             updatePowerTier();
             updateIrisType();
+            System.out.println("type:" + irisType.name() + " state: " + irisState.name());
         }
     }
+
+
 
     protected abstract boolean onGateMergeRequested();
 
@@ -254,6 +248,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     default:
                         break;
                 }
+                markDirty();
             }
         } else {
             // Client
@@ -262,8 +257,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             if (world.getTotalWorldTime() % 40 == 0 && rendererStateClient != null) {
                 if (getRendererStateClient().biomeOverride == null)
                     rendererStateClient.setBiomeOverlay(BiomeOverlayEnum.updateBiomeOverlay(world, getMergeHelper().getTopBlock().add(pos), getSupportedOverlays()));
-            //    if (getRendererStateClient().irisType == EnumIrisType.NULL) AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.IRIS_UPDATE));
-
+//               if (getRendererStateClient().irisType != EnumIrisType.NULL
+//                       && (getRendererStateClient().irisType != irisType || getRendererStateClient().irisState != irisState)) {
+//                   sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
+//                }
             }
         }
     }
@@ -322,6 +319,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         for (BlockPos vect : linkedBeamers)
             linkedBeamersTagList.appendTag(new NBTTagLong(vect.toLong()));
         compound.setTag("linkedBeamers", linkedBeamersTagList);
+//        compound.setByte("irisType", irisType.id);
+//        System.out.println("write nbt:" + irisType.name());
+        if (irisState == null) irisState = EnumIrisState.OPENED;
         compound.setByte("irisState", irisState.id);
 
         return super.writeToNBT(compound);
@@ -346,8 +346,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         for (NBTBase tag : compound.getTagList("linkedBeamers", NBT.TAG_LONG))
             linkedBeamers.add(BlockPos.fromLong(((NBTTagLong) tag).getLong()));
 
+//        irisType = mrjake.aunis.stargate.EnumIrisType.byId(compound.getByte("irisType"));
         irisState = mrjake.aunis.stargate.EnumIrisState.getValue(compound.getByte("irisState"));
-
         super.readFromNBT(compound);
     }
 
@@ -476,13 +476,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         break;
 
                     case IRIS_UPDATE:
-                        System.out.println("client" + getRendererStateClient().irisState.name() + " server " + getRendererStateServer().irisState.name());
                         getRendererStateClient().irisState = gateActionState.irisState;
-                        System.out.println("client" + getRendererStateClient().irisState.name() + " server " + getRendererStateServer().irisState.name());
                         getRendererStateClient().irisType = irisType;
                         if (gateActionState.irisState == EnumIrisState.CLOSING || gateActionState.irisState == EnumIrisState.OPENING) {
                             getRendererStateClient().irisAnimation = world.getTotalWorldTime();
-                            System.out.println(world.getTotalWorldTime());
                         }
                         break;
 
@@ -525,9 +522,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 }
 
                 break;
-            case IRIS_UPDATE:
-                if (irisType != EnumIrisType.NULL)
-                    getRendererStateClient().irisType = irisType;
+//            case IRIS_UPDATE:
+//                if (irisType != EnumIrisType.NULL)
+//                    getRendererStateClient().irisType = irisType;
             default:
                 break;
         }
@@ -756,8 +753,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // ----------------------------------------------------------
     // IRISES
 
-    private EnumIrisState irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
-    private EnumIrisType irisType = EnumIrisType.NULL;
+    private EnumIrisState irisState = EnumIrisState.OPENED;
+    private EnumIrisType irisType;
     private long irisAnimation = 0;
     protected float irisMaxDurability = 0;
     protected float irisDurability = 0;
@@ -789,8 +786,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             return idMap.contains(item);
         }
     }
-
     public void updateIrisType() {
+        updateIrisType(true);
+    }
+    public void updateIrisType(boolean markDirty) {
         irisType = EnumIrisType.byItem(itemStackHandler.getStackInSlot(11).getItem());
         irisAnimation = getWorld().getTotalWorldTime();
         // TODO iris durability
@@ -810,7 +809,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 break;
         }
         sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
-        markDirty();
+        if (markDirty) markDirty();
     }
 
     public EnumIrisType getIrisType() {
@@ -1133,4 +1132,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         return new Object[]{energyMap};
     }
+
+
 }

@@ -23,7 +23,7 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
   @Override
   protected void renderGate(StargateMilkyWayRendererState rendererState, double partialTicks) {
     renderRing(rendererState, partialTicks);
-    GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
+//    GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
     renderChevrons(rendererState, partialTicks);
 
     ElementEnum.MILKYWAY_GATE.bindTextureAndRender(rendererState.getBiomeOverlay());
@@ -52,7 +52,7 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
       GlStateManager.translate(-RING_LOC.x, -RING_LOC.z, -RING_LOC.y);
     }
 
-    GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
+   // GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
 
     ElementEnum.MILKYWAY_RING.bindTextureAndRender(rendererState.getBiomeOverlay());
 

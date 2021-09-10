@@ -128,6 +128,7 @@ public class EventHorizon {
 					packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS, 20);
 				else {
 					packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS_CREATIVE, 20);
+
 				}
 
 				if(((StargateClassicBaseTile) targetGatePos.getTileEntity()).isPhysicalIris()) {

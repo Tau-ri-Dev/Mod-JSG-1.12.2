@@ -64,10 +64,13 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                 GlStateManager.disableRescaleNormal();
                 applyLightMap(rendererState, partialTicks);
 
+
+
+                GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
+                if (rendererState.doEventHorizonRender) renderKawoosh(rendererState, partialTicks);
                 renderGate(rendererState, partialTicks);
                 renderIris(partialTicks, alpha, getWorld(), rendererState);
 
-                if (rendererState.doEventHorizonRender) renderKawoosh(rendererState, partialTicks);
             } else {
                 GlStateManager.enableBlend();
                 GlStateManager.blendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
@@ -150,16 +153,18 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
         return rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE_ANIMATED : EV_HORIZON_NORMAL_TEXTURE_ANIMATED;
     }
-
     protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
-        boolean backOnly = false;
+        renderKawoosh(rendererState, partialTicks, false);
+    }
+    protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks, boolean backOnly) {
+//        boolean backOnly = false;
 
-        if (rendererState instanceof StargateClassicRendererState
-                && (((StargateClassicRendererState) rendererState).irisState == EnumIrisState.CLOSED)
-                && (rendererState.vortexState == EnumVortexState.FORMING)) {
-            rendererState.vortexState = EnumVortexState.STILL;
-            backOnly = true;
-        }
+//        if (rendererState instanceof StargateClassicRendererState
+//                && (((StargateClassicRendererState) rendererState).irisState == EnumIrisState.CLOSED)
+//                && (rendererState.vortexState == EnumVortexState.FORMING)) {
+//            rendererState.vortexState = EnumVortexState.STILL;
+//            backOnly = true;
+//        }
 
         //		rendererState.vortexState = EnumVortexState.FULL;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 15 * 16, 15 * 16);

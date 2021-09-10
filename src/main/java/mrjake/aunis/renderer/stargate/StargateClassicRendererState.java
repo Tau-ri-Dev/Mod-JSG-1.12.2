@@ -53,7 +53,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
 
   // Iris
   public EnumIrisType irisType;
-    // Saved
+  // Saved
   public EnumIrisState irisState;
   public long irisAnimation;
 
