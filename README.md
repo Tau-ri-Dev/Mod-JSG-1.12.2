@@ -6,7 +6,7 @@
 >Created and coded by MrJake222 && MineDragonCZ_ && Matousss<br>
 Models by MarcelMPL
 
-This is site is fork, original mod: https://github.com/MrJake222/AUNIS
+This is site of fork, original mod can be found: *https://github.com/MrJake222/AUNIS*
 
 ## Resources used by AUNIS
 * Stargate, transport rings sounds and textures from **Carter's Addon Pack**
