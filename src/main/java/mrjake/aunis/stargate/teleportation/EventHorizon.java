@@ -13,6 +13,7 @@ import mrjake.aunis.AunisDamageSources;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.api.event.StargateTeleportEntityEvent;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.item.UpgradeIris;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.stargate.StargateMotionToClient;
 import mrjake.aunis.renderer.stargate.StargateAbstractRendererState;
@@ -31,6 +32,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import static mrjake.aunis.item.AunisItems.UPGRADE_IRIS;
 
 public class EventHorizon {
     private World world;
@@ -120,7 +123,6 @@ public class EventHorizon {
         TeleportPacket packet = scheduledTeleportMap.get(entityId);
         if (!new StargateTeleportEntityEvent((StargateAbstractBaseTile) world.getTileEntity(pos), packet.getTargetGatePos().getTileEntity(), packet.getEntity()).post()) {
             // Not cancelled
-            packet.teleport();
             StargatePos targetGatePos = packet.getTargetGatePos();
             if (targetGatePos.getTileEntity() instanceof StargateClassicBaseTile
                     && ((StargateClassicBaseTile) targetGatePos.getTileEntity()).isClosed()) {
@@ -130,6 +132,7 @@ public class EventHorizon {
                     else {
                         packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS_CREATIVE, Float.MAX_VALUE);
                     }
+                    packet.teleport();
                 }
                 else {packet.getEntity().setDead();}
 
@@ -143,10 +146,12 @@ public class EventHorizon {
                             SoundEventEnum.SHIELD_HIT);
                 }
                 ItemStack irisItem = ((StargateClassicBaseTile) targetGatePos.getTileEntity()).getItemHandler().getStackInSlot(11);
-                if (irisItem.isItemDamaged()) irisItem.setItemDamage(irisItem.getItemDamage() - 1);
+                if (irisItem.getItem() instanceof UpgradeIris) UPGRADE_IRIS.setDamage(irisItem, UPGRADE_IRIS.getDamage(irisItem) - 1);
                 targetGatePos.getTileEntity().sendSignal(null, "stargate_iris_hit_event", new Object[]{"Something just hit the IRIS!"});
 
-            } else AunisSoundHelper.playSoundEvent(world, gateCenter, SoundEventEnum.WORMHOLE_GO);
+            } else {
+                AunisSoundHelper.playSoundEvent(world, gateCenter, SoundEventEnum.WORMHOLE_GO);
+            }
         }
 
         scheduledTeleportMap.remove(entityId);
