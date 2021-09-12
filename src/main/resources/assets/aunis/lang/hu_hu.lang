@@ -32,6 +32,11 @@ item.aunis.naquadah_shard.name=Nakvada Töredék
 item.aunis.naquadah_alloy.name=Finomított Nakvada Ötvözetrúd
 item.aunis.naquadah_alloy_raw.name=Nakvada Ötvözetrúd
 
+tile.aunis.trinium_ore.name=Trinium Ore
+tile.aunis.titanium_ore.name=Titanium Ore
+tile.aunis.trinium_ingot.name=Trinium Ingot
+tile.aunis.titanium_ingot.name=Titanium Ingot
+
 tile.aunis.invisible_block.name=Nem láthatsz engem blokk
 
 tile.aunis.stargate_milkyway_base_block.name=Csillagkapu Alap (Tejútrendszer)

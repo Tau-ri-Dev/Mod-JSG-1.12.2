@@ -453,6 +453,26 @@ public class AunisConfig {
 		
 		@Name("Naquadah max veins in chunk")
 		public int naquadahMaxVeinInChunk = 16;
+
+
+		@Name("Enable Trinium ore generation")
+		public boolean triniumEnabled = true;
+
+		@Name("Trinium vein size")
+		public int triniumVeinSize = 2;
+
+		@Name("Trinium max veins in chunk")
+		public int triniumMaxVeinInChunk = 4;
+
+
+		@Name("Enable Titanium ore generation")
+		public boolean titaniumEnable = true;
+
+		@Name("Titanium vein size")
+		public int titaniumVeinSize = 4;
+
+		@Name("Titanium max veins in chunk")
+		public int titaniumMaxVeinInChunk = 8;
 	}
 	
 	public static void resetCache() {

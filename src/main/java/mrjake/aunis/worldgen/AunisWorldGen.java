@@ -27,9 +27,27 @@ public class AunisWorldGen implements IWorldGenerator {
 		switch(world.provider.getDimensionType()) {
 			case NETHER:
 				if (AunisConfig.worldgenConfig.naquadahEnable) {
-					runGenerator(AunisBlocks.ORE_NAQUADAH_BLOCK.getDefaultState(), AunisConfig.worldgenConfig.naquadahVeinSize, AunisConfig.worldgenConfig.naquadahMaxVeinInChunk, 0, 128, BlockMatcher.forBlock(Blocks.NETHERRACK), world, rand, chunkX, chunkZ);
+					runGenerator(AunisBlocks.ORE_NAQUADAH_BLOCK.getDefaultState(),
+							AunisConfig.worldgenConfig.naquadahVeinSize,
+							AunisConfig.worldgenConfig.naquadahMaxVeinInChunk, 0, 128,
+							BlockMatcher.forBlock(Blocks.NETHERRACK), world, rand, chunkX, chunkZ);
+				}
+				if (AunisConfig.worldgenConfig.triniumEnabled) {
+					runGenerator(AunisBlocks.ORE_TRINIUM_BLOCK.getDefaultState(),
+							AunisConfig.worldgenConfig.triniumVeinSize,
+							AunisConfig.worldgenConfig.triniumMaxVeinInChunk, 0, 128,
+							BlockMatcher.forBlock(Blocks.NETHERRACK), world, rand, chunkX, chunkZ);
 				}
 				
+				break;
+			case OVERWORLD:
+				if (AunisConfig.worldgenConfig.titaniumEnable) {
+					runGenerator(AunisBlocks.ORE_TITANIUM_BLOCK.getDefaultState(),
+							AunisConfig.worldgenConfig.titaniumVeinSize,
+							AunisConfig.worldgenConfig.titaniumMaxVeinInChunk, 0, 128,
+							BlockMatcher.forBlock(Blocks.STONE), world, rand, chunkX, chunkZ);
+				}
+
 				break;
 				
 			default:

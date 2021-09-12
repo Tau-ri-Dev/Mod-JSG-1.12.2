@@ -1,7 +1,6 @@
 package mrjake.aunis.item;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.stargate.power.StargateItemEnergyStorage;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -31,7 +29,7 @@ public class UpgradeIris extends Item {
 
     @Override
     public void setDamage(ItemStack stack, int damage) {
-        if (damage <= 0) {
+        if (damage >= MAX_DAMAGE) {
             stack.setCount(0);
             return;
         }
@@ -99,27 +97,10 @@ public class UpgradeIris extends Item {
         stack.setTagCompound(nbt);
     }
 
-//    @Override
-//    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-//        if (isInCreativeTab(tab)) {
-//            items.add(new ItemStack(this));
-//
-//            ItemStack stack = new ItemStack(this);
-//            setDamage(stack, MAX_DAMAGE);
-//            items.add(stack);
-//        }
-//    }
-
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
         if (this.isInCreativeTab(tab))
-        {
-//            ItemStack itemStack = new ItemStack(this);
-//            setDamage(itemStack, MAX_DAMAGE);
-//            items.add(itemStack);
-
             items.add(getDefaultInstance());
-        }
     }
 
     @Override

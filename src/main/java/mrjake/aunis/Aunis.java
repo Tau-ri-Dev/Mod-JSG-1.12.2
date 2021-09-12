@@ -101,7 +101,10 @@ public class Aunis {
         OreDictionary.registerOre("ingotNaquadah", AunisItems.NAQUADAH_ALLOY_RAW);
         OreDictionary.registerOre("ingotRefinedNaquadah", AunisItems.NAQUADAH_ALLOY);
         OreDictionary.registerOre("blockRefinedNaquadah", AunisBlocks.NAQUADAH_BLOCK);
-    	
+
+        OreDictionary.registerOre("oreTrinium", AunisBlocks.ORE_TRINIUM_BLOCK);
+        OreDictionary.registerOre("oreTitanium", AunisBlocks.ORE_TITANIUM_BLOCK);
+
     	// ----------------------------------------------------------------------------------------------------------------
     	// OpenComputers
     	

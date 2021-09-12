@@ -26,7 +26,6 @@ import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -126,13 +125,14 @@ public class EventHorizon {
             // Not cancelled
             StargatePos targetGatePos = packet.getTargetGatePos();
             if (targetGatePos.getTileEntity() instanceof StargateClassicBaseTile
-                    && ((StargateClassicBaseTile) targetGatePos.getTileEntity()).isClosed()) {
+                && ((StargateClassicBaseTile) targetGatePos.getTileEntity()).isClosed()) {
 
-                    if (AunisConfig.irisConfig.allowCreative)
-                        packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS, Float.MAX_VALUE);
-                    else
-                        packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS_CREATIVE, Float.MAX_VALUE);
-                    packet.teleport();
+                if (AunisConfig.irisConfig.allowCreative)
+                    packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS, Float.MAX_VALUE);
+                else {
+                    packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS_CREATIVE, Float.MAX_VALUE);
+                }
+                packet.teleport();
 
                 if (((StargateClassicBaseTile) targetGatePos.getTileEntity()).isPhysicalIris()) {
                     AunisSoundHelper.playSoundEvent(packet.getTargetGatePos().getWorld(),

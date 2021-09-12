@@ -56,6 +56,12 @@ public class AunisItems {
     public static final Item NAQUADAH_ALLOY = ItemHelper.createGenericItem("naquadah_alloy");
 
     /**
+     * Titanium & Trinium
+     */
+    public static final Item TITANIUM_INGOT = ItemHelper.createGenericItem("titanium_ingot");
+    public static final Item TRINIUM_INGOT = ItemHelper.createGenericItem("trinium_ingot");
+
+    /**
      * Crafting items
      */
     public static final Item CRYSTAL_SEED = ItemHelper.createGenericItem("crystal_fragment");
@@ -108,6 +114,9 @@ public class AunisItems {
             NAQUADAH_SHARD,
             NAQUADAH_ALLOY,
             NAQUADAH_ALLOY_RAW,
+
+            TRINIUM_INGOT,
+            TITANIUM_INGOT,
 
             CRYSTAL_SEED,
             CRYSTAL_BLUE,
