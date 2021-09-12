@@ -26,6 +26,7 @@ import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -126,15 +127,12 @@ public class EventHorizon {
             StargatePos targetGatePos = packet.getTargetGatePos();
             if (targetGatePos.getTileEntity() instanceof StargateClassicBaseTile
                     && ((StargateClassicBaseTile) targetGatePos.getTileEntity()).isClosed()) {
-                if (packet.getEntity() instanceof EntityLiving) {
+
                     if (AunisConfig.irisConfig.allowCreative)
                         packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS, Float.MAX_VALUE);
-                    else {
+                    else
                         packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS_CREATIVE, Float.MAX_VALUE);
-                    }
                     packet.teleport();
-                }
-                else {packet.getEntity().setDead();}
 
                 if (((StargateClassicBaseTile) targetGatePos.getTileEntity()).isPhysicalIris()) {
                     AunisSoundHelper.playSoundEvent(packet.getTargetGatePos().getWorld(),
@@ -146,11 +144,12 @@ public class EventHorizon {
                             SoundEventEnum.SHIELD_HIT);
                 }
                 ItemStack irisItem = ((StargateClassicBaseTile) targetGatePos.getTileEntity()).getItemHandler().getStackInSlot(11);
-                if (irisItem.getItem() instanceof UpgradeIris) UPGRADE_IRIS.setDamage(irisItem, UPGRADE_IRIS.getDamage(irisItem) - 1);
+                if (irisItem.getItem() instanceof UpgradeIris) UPGRADE_IRIS.setDamage(irisItem, UPGRADE_IRIS.getDamage(irisItem) + 1);
                 targetGatePos.getTileEntity().sendSignal(null, "stargate_iris_hit_event", new Object[]{"Something just hit the IRIS!"});
 
             } else {
                 AunisSoundHelper.playSoundEvent(world, gateCenter, SoundEventEnum.WORMHOLE_GO);
+                packet.teleport();
             }
         }
 

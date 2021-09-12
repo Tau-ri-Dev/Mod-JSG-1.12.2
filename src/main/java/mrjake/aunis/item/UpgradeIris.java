@@ -100,15 +100,15 @@ public class UpgradeIris extends Item {
         return getDamage(stack) == 0;
     }
 
-    @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (isInCreativeTab(tab)) {
-            items.add(new ItemStack(this));
-
-            ItemStack stack = new ItemStack(this);
-            setDamage(stack, MAX_DAMAGE);
-            items.add(stack);
-        }
-    }
+//    @Override
+//    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+//        if (isInCreativeTab(tab)) {
+//            items.add(new ItemStack(this));
+//
+//            ItemStack stack = new ItemStack(this);
+//            setDamage(stack, MAX_DAMAGE);
+//            items.add(stack);
+//        }
+//    }
 
 }
