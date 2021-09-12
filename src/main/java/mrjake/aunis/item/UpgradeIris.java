@@ -111,4 +111,12 @@ public class UpgradeIris extends Item {
 //        }
 //    }
 
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
+    {
+        if (this.isInCreativeTab(tab))
+        {
+            items.add(new ItemStack(this));
+        }
+    }
+
 }
