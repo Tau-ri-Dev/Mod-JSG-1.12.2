@@ -243,7 +243,7 @@ public class AunisConfig {
 				"set it to 0, if u want to make it unbreakable"
 		})
 		@RangeInt(min = 0)
-		public int titaniumIrisDurability = 250;
+		public int titaniumIrisDurability = 500;
 
 		@Name("Trinium iris durability")
 		@Comment({
@@ -251,7 +251,7 @@ public class AunisConfig {
 				"set it to 0, if u want to make it unbreakable"
 		})
 		@RangeInt(min = 0)
-		public int triniumIrisDurability = 500;
+		public int triniumIrisDurability = 1000;
 
 		@Name("Shield power draw")
 		@Comment({

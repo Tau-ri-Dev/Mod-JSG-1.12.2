@@ -31,6 +31,10 @@ public class UpgradeIris extends Item {
 
     @Override
     public void setDamage(ItemStack stack, int damage) {
+        if (damage <= 0) {
+            stack.setCount(0);
+            return;
+        }
         NBTTagCompound nbt;
         if (stack.hasTagCompound()) {
             nbt = stack.getTagCompound();
@@ -64,7 +68,7 @@ public class UpgradeIris extends Item {
             }
         }
 
-        return MAX_DAMAGE;
+        return 0;
 
     }
 
@@ -95,11 +99,6 @@ public class UpgradeIris extends Item {
         stack.setTagCompound(nbt);
     }
 
-    @Override
-    public boolean isDamaged(ItemStack stack) {
-        return getDamage(stack) == 0;
-    }
-
 //    @Override
 //    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 //        if (isInCreativeTab(tab)) {
@@ -115,8 +114,18 @@ public class UpgradeIris extends Item {
     {
         if (this.isInCreativeTab(tab))
         {
-            items.add(new ItemStack(this));
+//            ItemStack itemStack = new ItemStack(this);
+//            setDamage(itemStack, MAX_DAMAGE);
+//            items.add(itemStack);
+
+            items.add(getDefaultInstance());
         }
     }
 
+    @Override
+    public ItemStack getDefaultInstance() {
+        ItemStack itemStack = new ItemStack(this);
+        setDamage(itemStack, 0);
+        return itemStack;
+    }
 }

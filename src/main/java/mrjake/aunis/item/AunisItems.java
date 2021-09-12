@@ -34,7 +34,7 @@ public class AunisItems {
     //	public static final Item UPGRADE_IRIS = ItemHelper.createGenericItem("upgrade_iris");
     public static final Item UPGRADE_IRIS = new UpgradeIris("upgrade_iris", AunisConfig.irisConfig.titaniumIrisDurability);
     public static final Item IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("iris_blade_trinium");
-    public static final Item UPGRADE_IRIS_TRINIUM = ItemHelper.createGenericItem("upgrade_iris_trinium");
+    public static final Item UPGRADE_IRIS_TRINIUM = new UpgradeIris("upgrade_iris_trinium", AunisConfig.irisConfig.triniumIrisDurability);
 
     public static final Item UPGRADE_SHIELD = ItemHelper.createGenericItem("upgrade_shield");
     public static final Item SHIELD_EMITTER = ItemHelper.createGenericItem("shield_emitter");
