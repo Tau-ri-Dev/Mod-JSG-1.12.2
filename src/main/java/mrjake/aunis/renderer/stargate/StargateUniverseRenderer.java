@@ -30,7 +30,7 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
       angularRotation += rendererState.spinHelper.apply(getWorld().getTotalWorldTime() + partialTicks);
 
     GlStateManager.rotate(rendererState.horizontalRotation - 90, 1, 0, 0);
-  //  GlStateManager.rotate((float) angularRotation + 0.6f, 0, 1, 0);
+    GlStateManager.rotate((float) angularRotation + 0.6f, 0, 1, 0);
     renderChevrons(rendererState, partialTicks);
 
     ElementEnum.UNIVERSE_GATE.bindTextureAndRender(rendererState.getBiomeOverlay());
