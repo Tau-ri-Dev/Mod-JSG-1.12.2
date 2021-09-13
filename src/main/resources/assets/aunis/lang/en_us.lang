@@ -24,6 +24,9 @@ item.aunis.upgrade_iris_trinium.name=Iris Upgrade (Trinium)
 item.aunis.shield_emitter.name=Shield Emitter
 item.aunis.upgrade_shield.name=Shield Upgrade
 
+item.aunis.trinium_ingot.name=Trinium Ingot
+item.aunis.titanium_ingot.name=Titanium Ingot
+
 
 tile.aunis.naquadah_ore.name=Naquadah Ore
 tile.aunis.naquadah_ore_stone.name=Naquadah Ore (Stone)
@@ -34,8 +37,6 @@ item.aunis.naquadah_alloy_raw.name=Naquadah Alloy Ingot
 
 tile.aunis.trinium_ore.name=Trinium Ore
 tile.aunis.titanium_ore.name=Titanium Ore
-tile.aunis.trinium_ingot.name=Trinium Ingot
-tile.aunis.titanium_ingot.name=Titanium Ingot
 
 tile.aunis.invisible_block.name=You can't see me block
 

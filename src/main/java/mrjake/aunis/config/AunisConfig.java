@@ -258,7 +258,7 @@ public class AunisConfig {
 				"Energy/tick used for make shield closed"
 		})
 		@RangeInt(min = 0)
-		public int shieldPowerDraw = 50;
+		public int shieldPowerDraw = 500;
 
 		@Name("Allow creative bypass")
 		@Comment({

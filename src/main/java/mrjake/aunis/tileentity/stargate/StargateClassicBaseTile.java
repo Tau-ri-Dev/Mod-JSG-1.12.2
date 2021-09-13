@@ -63,6 +63,17 @@ import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.SHIELD_IRIS
  */
 public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile implements IUpgradable {
 
+    // IRIS/SHIELD VARIABLES/CONSTANTS
+    private EnumIrisState irisState = EnumIrisState.OPENED;
+    private EnumIrisType irisType = EnumIrisType.NULL;
+    private long irisAnimation = 0;
+
+    public int shieldKeepAlive = 0;
+
+    private int irisDurability = 0;
+    private int irisMaxDurability = 0;
+
+
     // ------------------------------------------------------------------------
     // Stargate state
 
@@ -250,6 +261,23 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 }
                 markDirty();
             }
+
+            /*
+             * Draw power (shield)
+             */
+            if(isClosed() && isShieldIris()){
+                shieldKeepAlive = AunisConfig.irisConfig.shieldPowerDraw;
+                getEnergyStorage().extractEnergy(shieldKeepAlive, false);
+                if(getEnergyStorage().getEnergyStored() < shieldKeepAlive) {
+                    irisAnimation = getWorld().getTotalWorldTime();
+                    irisState = EnumIrisState.OPENING;
+                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState, irisAnimation);
+                    sendSignal(null, "stargate_iris_out_of_power", new Object[]{"Shield runs out of power! Opening shield..."});
+                    playSoundEvent(SoundEventEnum.SHIELD_OPENING);
+                }
+                markDirty();
+            }
+
         } else {
             // Client
 
@@ -752,11 +780,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // ----------------------------------------------------------
     // IRISES
 
-    private EnumIrisState irisState = EnumIrisState.OPENED;
-    private EnumIrisType irisType = EnumIrisType.NULL;
-    private long irisAnimation = 0;
-
-
     public static enum StargateIrisUpgradeEnum implements EnumKeyInterface<Item> {
         IRIS_UPGRADE_CLASSIC(AunisItems.UPGRADE_IRIS),
         IRIS_UPGRADE_TRINIUM(AunisItems.UPGRADE_IRIS_TRINIUM),
@@ -792,12 +815,30 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void updateIrisType(boolean markDirty) {
         irisType = EnumIrisType.byItem(itemStackHandler.getStackInSlot(11).getItem());
         irisAnimation = getWorld().getTotalWorldTime();
-        // TODO iris durability
-        // irisDurability = 0;
         if (irisType == EnumIrisType.NULL)
             irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
         sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
+        updateIrisDurability();
         if (markDirty) markDirty();
+    }
+
+    public void updateIrisDurability(){
+        irisDurability = 0;
+        irisMaxDurability = 0;
+        if(isPhysicalIris()) {
+            irisMaxDurability = (irisType == EnumIrisType.IRIS_TITANIUM ? AunisConfig.irisConfig.titaniumIrisDurability : AunisConfig.irisConfig.triniumIrisDurability);
+            irisDurability = irisMaxDurability - itemStackHandler.getStackInSlot(11).getItem().getDamage(itemStackHandler.getStackInSlot(11));
+        }
+    }
+
+    public int getIrisDurability(){
+        updateIrisDurability();
+        return irisDurability;
+    }
+
+    public int getIrisMaxDurability(){
+        updateIrisDurability();
+        return irisDurability;
     }
 
     public EnumIrisType getIrisType() {
@@ -845,6 +886,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
         switch (irisState) {
             case OPENED:
+                if(isShieldIris() && getEnergyStorage().getEnergyStored() < shieldKeepAlive * 3)
+                    return false;
+
                 irisState = mrjake.aunis.stargate.EnumIrisState.CLOSING;
                 sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState, irisAnimation);
                 sendSignal(null, "stargate_iris_closing", new Object[]{"Iris is closing"});
@@ -975,9 +1019,14 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             return new Object[]{false, "stargate_iris_missing", "Iris is not installed!"};
         boolean result = toggleIris();
         markDirty();
-        if (!result)
+        if (!result && (isShieldIris() && isOpened() && getEnergyStorage().getEnergyStored() < shieldKeepAlive * 3))
+            return new Object[]{false, "stargate_iris_not_power", "Not enough power to close shield"};
+        else if(!result)
             return new Object[]{false, "stargate_iris_busy", "Iris is busy"};
-        return new Object[]{true};
+        else if (result)
+            return new Object[]{true};
+        else
+            return new Object[]{false, "stargate_iris_fail", "Unknow error while toggling iris!"};
     }
 
     @Optional.Method(modid = "opencomputers")
@@ -995,7 +1044,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function() -- get info about iris")
     public Object[] getIrisDurability(Context context, Arguments args) {
-        return new Object[]{"irisDurability + \"/\" + irisMaxDurability"};
+        updateIrisDurability();
+        return new Object[]{irisDurability + "/" + irisMaxDurability, irisDurability, irisMaxDurability};
     }
 
 
