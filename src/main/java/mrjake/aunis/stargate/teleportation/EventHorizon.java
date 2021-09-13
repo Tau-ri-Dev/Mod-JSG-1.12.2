@@ -144,7 +144,12 @@ public class EventHorizon {
                             SoundEventEnum.SHIELD_HIT);
                 }
                 ItemStack irisItem = ((StargateClassicBaseTile) targetGatePos.getTileEntity()).getItemHandler().getStackInSlot(11);
-                if (irisItem.getItem() instanceof UpgradeIris) UPGRADE_IRIS.setDamage(irisItem, UPGRADE_IRIS.getDamage(irisItem) + 1);
+                if (irisItem.getItem() instanceof UpgradeIris) {
+                    UPGRADE_IRIS.setDamage(irisItem, UPGRADE_IRIS.getDamage(irisItem) + 1);
+                    if (irisItem.getCount() == 0) {
+                        ((StargateClassicBaseTile) targetGatePos.getTileEntity()).updateIrisType();
+                    }
+                }
                 targetGatePos.getTileEntity().sendSignal(null, "stargate_iris_hit_event", new Object[]{"Something just hit the IRIS!"});
 
             } else {

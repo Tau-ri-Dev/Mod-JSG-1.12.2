@@ -99,8 +99,14 @@ public class StargateRendererStatic {
 				ty.add( toUV( cos.get(i) * texMul ) );
 			}
 		}
-		
 		public void render(float tick, boolean white, Float alpha, float mul) {
+			render(tick, white, alpha, mul, (byte) 0);
+		}
+		public void render(float tick, boolean white, Float alpha, float mul, byte animationOverride) {
+			boolean animated = !AunisConfig.stargateConfig.disableAnimatedEventHorizon;
+			if (animationOverride == -1) animated = false;
+			if (animationOverride == 1) animated = true;
+
 			if (white) {
 				GlStateManager.disableTexture2D();
 				if (alpha > 0.5f)
@@ -116,7 +122,7 @@ public class StargateRendererStatic {
 			float xTex = 0.5f;
 			float yTex = 0.5f;
 			
-			if (!AunisConfig.stargateConfig.disableAnimatedEventHorizon) {
+			if (animated) {
 				xTex /= 14.0f; xTex += xTexOffset;
 				yTex /= 14.0f; yTex += yTexOffset;
 			} else yTex *= -1;
@@ -136,7 +142,7 @@ public class StargateRendererStatic {
 				xTex = tx.get(index);
 				yTex = ty.get(index);
 				
-				if (!AunisConfig.stargateConfig.disableAnimatedEventHorizon) {
+				if (animated) {
 					xTex /= 14.0f; xTex += xTexOffset;
 					yTex /= 14.0f; yTex += yTexOffset;
 				} else yTex *= -1;
@@ -202,21 +208,29 @@ public class StargateRendererStatic {
 				}
 			}
 		}
-		
+
 		public void render(float tick, boolean white, Float alpha, float mul) {
 			render(tick, null, null, white, alpha, mul);
 		}
+
+		public void render(float tick, boolean white, Float alpha, float mul, byte animationOverride) {
+			render(tick, null, null, white, alpha, mul, false, false, animationOverride);
+		}
 		
 		public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul) {
-			render(tick, outerZ, innerZ, white, alpha, mul, false, false);
+			render(tick, outerZ, innerZ, white, alpha, mul, false, false, (byte) 0);
 		}
 		
 		public void renderBoth(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul, boolean red) {
-			render(tick, outerZ, innerZ, white, alpha, mul, true, red);
-			render(tick, outerZ, innerZ, white, alpha, mul, false, red);
+			render(tick, outerZ, innerZ, white, alpha, mul, true, red, (byte) 0);
+			render(tick, outerZ, innerZ, white, alpha, mul, false, red, (byte) 0);
 		}
 		
-		public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul, boolean reversed, boolean red) {
+		public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul, boolean reversed, boolean red, byte animationOverride) {
+			boolean animate = !AunisConfig.stargateConfig.disableAnimatedEventHorizon;
+			if (animationOverride == -1) animate = false;
+			if (animationOverride == 1) animate = true;
+
 			if (white) {
 				GlStateManager.disableTexture2D();
 				if (alpha > 0.5f)
@@ -247,7 +261,7 @@ public class StargateRendererStatic {
 				float xTex = tx.get(index);
 				float yTex = ty.get(index);
 				
-				if (!AunisConfig.stargateConfig.disableAnimatedEventHorizon) {
+				if (animate) {
 					xTex /= 14.0f; xTex += xTexOffset;
 					yTex /= 14.0f; yTex += yTexOffset;
 				} else yTex *= -1;
@@ -262,7 +276,7 @@ public class StargateRendererStatic {
 				xTex = tx.get(index);
 				yTex = ty.get(index);
 				
-				if (!AunisConfig.stargateConfig.disableAnimatedEventHorizon) {
+				if (animate) {
 					xTex /= 14.0f; xTex += xTexOffset;
 					yTex /= 14.0f; yTex += yTexOffset;
 				} else yTex *= -1;

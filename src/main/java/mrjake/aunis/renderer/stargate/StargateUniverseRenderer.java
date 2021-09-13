@@ -60,11 +60,13 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
 
   @Override
   protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
+
     GlStateManager.translate(0, 0.04, 0);
     GlStateManager.rotate(90, 1, 0, 0);
     GlStateManager.scale(0.9, 0.9, 0.9);
 
     super.renderKawoosh(rendererState, partialTicks);
+
   }
 
 

@@ -65,10 +65,15 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                 applyLightMap(rendererState, partialTicks);
 
 
-
                 GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
-                if (rendererState.doEventHorizonRender) renderKawoosh(rendererState, partialTicks);
+
                 renderGate(rendererState, partialTicks);
+                if (rendererState.doEventHorizonRender) {
+                    GlStateManager.pushMatrix();
+                    renderKawoosh(rendererState, partialTicks);
+                    GlStateManager.popMatrix();
+                }
+
                 renderIris(partialTicks, alpha, getWorld(), rendererState);
 
             } else {
@@ -153,20 +158,12 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
         return rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE_ANIMATED : EV_HORIZON_NORMAL_TEXTURE_ANIMATED;
     }
+
     protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
-        renderKawoosh(rendererState, partialTicks, false);
+        renderKawoosh(rendererState, partialTicks, false, true);
     }
-    protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks, boolean backOnly) {
-//        boolean backOnly = false;
 
-//        if (rendererState instanceof StargateClassicRendererState
-//                && (((StargateClassicRendererState) rendererState).irisState == EnumIrisState.CLOSED)
-//                && (rendererState.vortexState == EnumVortexState.FORMING)) {
-//            rendererState.vortexState = EnumVortexState.STILL;
-//            backOnly = true;
-//        }
-
-        //		rendererState.vortexState = EnumVortexState.FULL;
+    protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks, boolean backOnly, boolean doKawoosh) {
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 15 * 16, 15 * 16);
 
         float gateWait = getWorld().getTotalWorldTime() - rendererState.gateWaitStart;
@@ -258,25 +255,39 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                         }
 
                         // Rendering the vortex
-                        //if(rendererState.irisState == EnumIrisState.CLOSED) {
-                        for (Map.Entry<Float, Float> e : StargateRendererStatic.Z_RadiusMap.entrySet()) {
-                            if (first) {
-                                first = false;
-                                prevZ = e.getKey();
-                                prevRad = e.getValue();
-                            } else {
-                                float zOffset = e.getKey();
-                                float rad = e.getValue();
+                        // todo shield stuff
+//                        if (doKawoosh) {
+                            for (Map.Entry<Float, Float> e : StargateRendererStatic.Z_RadiusMap.entrySet()) {
+                                if (first) {
+                                    first = false;
+                                    prevZ = e.getKey();
+                                    prevRad = e.getValue();
+                                } else {
+                                    float zOffset = e.getKey();
+                                    float rad = e.getValue();
 
-                                //								mul = 0.945f;
-                                // Aunis.getRendererInit().new QuadStrip(8, rad, prevRad, tick).render(tick, zOffset*mul, prevZ*mul);
-                                new QuadStrip(8, rad, prevRad, tick).render(tick, zOffset * mul, prevZ * mul, false, 1.0f - rendererState.whiteOverlayAlpha, 1);
+                                    //								mul = 0.945f;
+                                    // Aunis.getRendererInit().new QuadStrip(8, rad, prevRad, tick).render(tick, zOffset*mul, prevZ*mul);
+                                    new QuadStrip(8, rad, prevRad, tick).render(tick, zOffset * mul, prevZ * mul, false, 1.0f - rendererState.whiteOverlayAlpha, 1);
 
-                                prevZ = zOffset;
-                                prevRad = rad;
+                                    prevZ = zOffset;
+                                    prevRad = rad;
+                                }
+
+                                // for end
                             }
-                        } // for end
-                        //} - end of irisstate if
+//                        } else {
+//                            long stateChange = rendererState.gateWaitStart + 35;
+//                            float arg2 = (float) ((getWorld().getTotalWorldTime() - stateChange + partialTicks) / 3f) - 1.0f;
+//
+//                            if (arg2 < StargateRendererStatic.eventHorizonRadius + 0.1f) {
+//                                rendererState.backStrip = new QuadStrip(8, arg2, StargateRendererStatic.eventHorizonRadius, tick);
+//                            } else {
+//                                rendererState.whiteOverlayAlpha = null;
+//
+//
+//                            }
+//                        }
                     } // not shrinking if
 
                     else {
