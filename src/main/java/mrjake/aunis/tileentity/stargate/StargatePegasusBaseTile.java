@@ -105,7 +105,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
     if (symbol.origin() && dialedAddress.size() >= 6 && dialedAddress.equals(StargateNetwork.EARTH_ADDRESS) && !network.isStargateInNetwork(StargateNetwork.EARTH_ADDRESS)) {
       if (StargateDimensionConfig.netherOverworld8thSymbol()) {
-        if (dialedAddress.size() == 7 && dialedAddress.getLast() == SymbolPegasusEnum.ACJESIS) {
+        if (dialedAddress.size() == 7 && dialedAddress.getLast() == SymbolPegasusEnum.SUBIDO) {
           dialedAddress.clear();
           dialedAddress.addAll(network.getLastActivatedOrlins().subList(0, 7));
         }
