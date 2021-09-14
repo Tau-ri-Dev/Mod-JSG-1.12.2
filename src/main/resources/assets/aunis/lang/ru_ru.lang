@@ -18,16 +18,16 @@ item.aunis.crystal_glyph_universe.name=Кристалл адреса Вселе�
 
 item.aunis.iris_blade.name=Лезвие Диафрагмы (Титан)
 item.aunis.iris.blade_trinium.name=Лезвие Диафрагмы (Триниум)
-item.aunis.quad_iris_blade.name=Quad Iris Blade (Titanium)
-item.aunis.quad_iris_blade_trinium.name=Quad Iris Blade (Trinium)
+item.aunis.quad_iris_blade.name=Четвертное лезвие Диафрагмы (Титан)
+item.aunis.quad_iris_blade_trinium.name=Четвертное лезвие Диафрагмы (Триниум)
 item.aunis.upgrade_iris.name=Улучшение "Диафрагма" (Титан)
 item.aunis.upgrade_iris_trinium.name=Улучшение "Диафрагма" (Триниум)
 
 item.aunis.shield_emitter.name=Излучатель Щита
 item.aunis.upgrade_shield.name=Улучшение "Щит"
 
-item.aunis.trinium_ingot.name=Trinium Ingot
-item.aunis.titanium_ingot.name=Titanium Ingot
+item.aunis.trinium_ingot.name=Слиток Триниума
+item.aunis.titanium_ingot.name=Слиток Титана
 
 
 tile.aunis.naquadah_ore.name=Руда Наквадаха
@@ -37,8 +37,8 @@ item.aunis.naquadah_shard.name=Осколок Наквадаха
 item.aunis.naquadah_alloy.name=Обработанный слиток из сплава Наквадаха
 item.aunis.naquadah_alloy_raw.name=Необработанный слиток из сплава Наквадаха
 
-tile.aunis.trinium_ore.name=Trinium Ore
-tile.aunis.titanium_ore.name=Titanium Ore
+tile.aunis.trinium_ore.name=Руда Триниума
+tile.aunis.titanium_ore.name=Руда Титана
 
 tile.aunis.invisible_block.name=Невидимый блок :P
 
@@ -370,7 +370,7 @@ item.aunis.universe_dialer.oc_message_received=Полученный отклик
 item.aunis.notebook.name=Блокнот
 item.aunis.notebook.rename_gui=Новое имя
 item.aunis.notebook.unnamed=<Не названо>
-item.aunis.gui.name=Name
+item.aunis.gui.name=Имя
 item.aunis.gui.address=Адрес
 item.aunis.gui.rename=Переименовать
 item.aunis.gui.oc_address=Адрес модема
