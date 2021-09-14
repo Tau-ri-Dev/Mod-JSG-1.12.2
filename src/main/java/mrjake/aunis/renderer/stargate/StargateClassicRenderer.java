@@ -166,7 +166,9 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
         if (rendererState instanceof StargateClassicRendererState
                 && (((StargateClassicRendererState) rendererState).irisState == EnumIrisState.CLOSED)
                 && (rendererState.vortexState == EnumVortexState.FORMING)) {
-            //rendererState.vortexState = EnumVortexState.STILL;
+
+            rendererState.vortexState = EnumVortexState.STILL;
+
             doKawoosh = false;
             if ((((StargateClassicRendererState) rendererState).irisType != EnumIrisType.SHIELD)
                     && (((StargateClassicRendererState) rendererState).irisType != EnumIrisType.NULL)) backOnly = true;

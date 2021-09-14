@@ -2,6 +2,7 @@ package mrjake.aunis.item;
 
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.dialer.UniverseDialerItem;
+import mrjake.aunis.item.gdo.GDOItem;
 import mrjake.aunis.item.notebook.NotebookItem;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
@@ -90,6 +91,8 @@ public class AunisItems {
     public static final PageMysteriousItem PAGE_MYSTERIOUS_ITEM = new PageMysteriousItem();
     public static final UniverseDialerItem UNIVERSE_DIALER = new UniverseDialerItem();
 
+    public static final GDOItem GDO = new GDOItem();
+
     public static final Item BEAMER_CRYSTAL_POWER = ItemHelper.createGenericItem("beamer_crystal_power");
     public static final Item BEAMER_CRYSTAL_FLUID = ItemHelper.createGenericItem("beamer_crystal_fluid");
     public static final Item BEAMER_CRYSTAL_ITEMS = ItemHelper.createGenericItem("beamer_crystal_items");
@@ -145,6 +148,8 @@ public class AunisItems {
             PAGE_NOTEBOOK_ITEM,
             PAGE_MYSTERIOUS_ITEM,
             UNIVERSE_DIALER,
+
+            GDO,
 
             BEAMER_CRYSTAL_POWER,
             BEAMER_CRYSTAL_FLUID,
