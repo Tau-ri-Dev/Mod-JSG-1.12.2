@@ -4,8 +4,15 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.item.dialer.UniverseDialerMode;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
+import mrjake.aunis.stargate.network.StargateAddress;
+import mrjake.aunis.stargate.network.StargateNetwork;
+import mrjake.aunis.stargate.network.StargatePos;
+import mrjake.aunis.stargate.network.SymbolTypeEnum;
+import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
+import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.creativetab.CreativeTabs;
@@ -25,6 +32,8 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Map;
 
 public class GDOItem extends Item implements CustomModelItemInterface {
 
@@ -121,6 +130,11 @@ public class GDOItem extends Item implements CustomModelItemInterface {
 									case MILKYWAY:
 									case PEGASUS:
 									case UNIVERSE:
+										StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(targetPos);
+
+										if (!gateTile.isMerged() || !(gateTile instanceof StargateClassicBaseTile))
+											break;
+										found = true;
 										break;
 
 									default:

@@ -377,7 +377,7 @@ item.aunis.gui.oc_port=Port
 item.aunis.gui.oc_params=Parameters
 item.aunis.gui.oc_port_invalid=Invalid port
 
-item.aunis.gdo.name=GDO
+item.aunis.gdo.name=Garage Door Opener
 item.aunis.gdo.not_linked=Not linked
 item.aunis.gdo.milkyway=MilkyWay
 item.aunis.gdo.pegasus=Pegasus
