@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"TT ",
+		" TT",
+		"  T"
+	],
+	
+	"key": {
+		"T": {
+			"item": "aunis:trinium_ingot"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:iris_blade_trinium",
+		"count": 1
+	}
+}

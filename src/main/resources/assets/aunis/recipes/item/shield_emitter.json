@@ -1,0 +1,34 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" D ",
+		"BCA",
+		"FEF"
+	],
+	
+	"key": {
+		"A": {
+			"item": "aunis:circuit_control_crystal"
+		},
+		"B": {
+			"item": "aunis:circuit_control_naquadah"
+		},
+		"C": {
+			"item": "aunis:crystal_red"
+		},
+		"D": {
+			"item": "aunis:crystal_white"
+		},
+		"E": {
+			"item": "aunis:crystal_ender"
+		},
+		"F": {
+			"item": "minecraft:redstone"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:shield_emitter",
+		"count": 1
+	}
+}

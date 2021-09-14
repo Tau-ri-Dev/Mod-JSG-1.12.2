@@ -1,0 +1,25 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"TTT",
+		"TWT",
+		"RRR"
+	],
+	
+	"key": {
+		"T": {
+			"item": "aunis:quad_iris_blade_trinium"
+		},
+		"W": {
+			"item": "aunis:crystal_white"
+		},
+		"R": {
+			"item": "minecraft:redstone"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:upgrade_iris_trinium",
+		"count": 1
+	}
+}

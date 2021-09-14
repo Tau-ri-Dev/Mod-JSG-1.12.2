@@ -31,9 +31,10 @@ public class AunisItems {
      * Iris/Shield upgrade
      */
     public static final Item IRIS_BLADE = ItemHelper.createGenericItem("iris_blade");
-    //	public static final Item UPGRADE_IRIS = ItemHelper.createGenericItem("upgrade_iris");
+    public static final Item QUAD_IRIS_BLADE = ItemHelper.createGenericItem("quad_iris_blade");
     public static final Item UPGRADE_IRIS = new UpgradeIris("upgrade_iris", AunisConfig.irisConfig.titaniumIrisDurability);
     public static final Item IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("iris_blade_trinium");
+    public static final Item QUAD_IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("quad_iris_blade_trinium");
     public static final Item UPGRADE_IRIS_TRINIUM = new UpgradeIris("upgrade_iris_trinium", AunisConfig.irisConfig.triniumIrisDurability);
 
     public static final Item UPGRADE_SHIELD = ItemHelper.createGenericItem("upgrade_shield");
@@ -99,8 +100,10 @@ public class AunisItems {
             CRYSTAL_RAW_PEGASUS_DHD,
 
             IRIS_BLADE,
+            QUAD_IRIS_BLADE,
             UPGRADE_IRIS,
             IRIS_BLADE_TRINIUM,
+            QUAD_IRIS_BLADE_TRINIUM,
             UPGRADE_IRIS_TRINIUM,
             UPGRADE_SHIELD,
             SHIELD_EMITTER,
