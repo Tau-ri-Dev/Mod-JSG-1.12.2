@@ -46,7 +46,7 @@ tile.aunis.stargate_milkyway_base_block.name=Stargate Base (Milky Way)
 tile.aunis.stargate_milkyway_ring_block.name=Stargate Ring (Milky Way)
 tile.aunis.stargate_milkyway_chevron_block.name=Stargate Chevron (Milky Way)
 tile.aunis.dhd_block.name=Dial Home Device (DHD)
-tile.aunis.dhd_pegasus_block.name=Dial Home Device (DHD Pegas)
+tile.aunis.dhd_pegasus_block.name=Pegasus Dial Home Device (Pegasus DHD)
 tile.aunis.capacitor_block.name=Capacitor Bank
 tile.aunis.capacitor_block_empty.name=Capacitor Bank (Empty)
 
