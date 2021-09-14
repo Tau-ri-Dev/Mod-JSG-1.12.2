@@ -3,6 +3,8 @@ package mrjake.aunis.packet;
 import mrjake.aunis.item.dialer.UniverseDialerActionPacketToServer;
 import mrjake.aunis.item.dialer.UniverseDialerActionPacketToServer.UniverseDialerActionPacketServerHandler;
 import mrjake.aunis.item.dialer.UniverseDialerOCProgramToServer.UniverseDialerOCProgramServerHandler;
+import mrjake.aunis.item.gdo.GDOActionPacketToServer.GDOActionPacketServerHandler;
+import mrjake.aunis.item.gdo.GDOActionPacketToServer;
 import mrjake.aunis.item.notebook.NotebookActionPacketToServer;
 import mrjake.aunis.item.notebook.NotebookActionPacketToServer.NotebookActionPacketServerHandler;
 import mrjake.aunis.item.notebook.PageNotebookSetNameToServer.PageNotebookSetNameServerHandler;
@@ -33,7 +35,6 @@ import mrjake.aunis.packet.transportrings.StartPlayerFadeOutToClient;
 import mrjake.aunis.packet.transportrings.StartPlayerFadeOutToClient.StartPlayerFadeOutToClientHandler;
 import mrjake.aunis.packet.transportrings.TRControllerActivatedToServer;
 import mrjake.aunis.packet.transportrings.TRControllerActivatedToServer.TRControllerActivatedServerHandler;
-import mrjake.aunis.stargate.EnumIrisState;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,8 +46,7 @@ public class AunisPacketHandler {
 	
 	public static void registerPackets() {		
 		INSTANCE.registerMessage(DHDButtonClickedServerHandler.class, DHDButtonClickedToServer.class, id, Side.SERVER); id++;
-		INSTANCE.registerMessage(DHDPegasusButtonClickedToServer.DHDPegasusButtonClickedServerHandler.class,
-				DHDPegasusButtonClickedToServer.class, id, Side.SERVER); id++;
+		INSTANCE.registerMessage(DHDPegasusButtonClickedToServer.DHDPegasusButtonClickedServerHandler.class, DHDPegasusButtonClickedToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(MotionServerHandler.class, StargateMotionToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(StateUpdateServerHandler.class, StateUpdateRequestToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(SaveRingsParametersServerHandler.class, SaveRingsParametersToServer.class, id, Side.SERVER); id++;
@@ -54,6 +54,7 @@ public class AunisPacketHandler {
 		INSTANCE.registerMessage(SetOpenTabServerHandler.class, SetOpenTabToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(UniverseDialerActionPacketServerHandler.class, UniverseDialerActionPacketToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(UniverseDialerOCProgramServerHandler.class, UniverseDialerOCProgramToServer.class, id, Side.SERVER); id++;
+		INSTANCE.registerMessage(GDOActionPacketServerHandler.class, GDOActionPacketToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(BeamerChangeRoleServerHandler.class, BeamerChangeRoleToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(ChangeRedstoneModeServerHandler.class, ChangeRedstoneModeToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(BeamerChangedLevelsServerHandler.class, BeamerChangedLevelsToServer.class, id, Side.SERVER); id++;

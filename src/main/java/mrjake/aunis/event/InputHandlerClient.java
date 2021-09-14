@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 
 import javax.annotation.Nullable;
 
+import mrjake.aunis.item.gdo.GDOActionEnum;
+import mrjake.aunis.item.gdo.GDOActionPacketToServer;
 import org.lwjgl.input.Keyboard;
 
 import mrjake.aunis.gui.PageRenameGui;
@@ -134,6 +136,21 @@ public class InputHandlerClient {
 				AunisPacketHandler.INSTANCE.sendToServer(new UniverseDialerActionPacketToServer(action, hand, next));
 			}
 		}
+
+		else if (checkForItem(AunisItems.GDO)) {
+			EnumHand hand = getHand(AunisItems.GDO);
+			GDOActionEnum action = null;
+
+			if (MODE_SCROLL.isKeyDown())
+				action = GDOActionEnum.MODE_CHANGE;
+
+
+			// ---------------------------------------------
+			if (action != null) {
+				event.setCanceled(true);
+				AunisPacketHandler.INSTANCE.sendToServer(new GDOActionPacketToServer(action, hand, next));
+			}
+		}
 		
 		else if (checkForItem(AunisItems.NOTEBOOK_ITEM)) {
 			EnumHand hand = getHand(AunisItems.NOTEBOOK_ITEM);
@@ -187,6 +204,27 @@ public class InputHandlerClient {
 			// ---------------------------------------------
 			if (action != null) {
 				AunisPacketHandler.INSTANCE.sendToServer(new UniverseDialerActionPacketToServer(action, hand, next));
+			}
+		}
+
+		else if (checkForItem(AunisItems.GDO)) {
+			EnumHand hand = getHand(AunisItems.GDO);
+			GDOActionEnum action = null;
+			boolean next = false;
+
+			if (MODE_UP.isPressed()) {
+				action = GDOActionEnum.MODE_CHANGE;
+				next = false;
+			}
+
+			else if (MODE_DOWN.isPressed()) {
+				action = GDOActionEnum.MODE_CHANGE;
+				next = true;
+			}
+
+			// ---------------------------------------------
+			if (action != null) {
+				AunisPacketHandler.INSTANCE.sendToServer(new GDOActionPacketToServer(action, hand, next));
 			}
 		}
 		

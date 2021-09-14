@@ -377,6 +377,12 @@ item.aunis.gui.oc_port=Port
 item.aunis.gui.oc_params=Parameters
 item.aunis.gui.oc_port_invalid=Invalid port
 
+item.aunis.gdo.name=GDO
+item.aunis.gdo.not_linked=Not linked
+item.aunis.gdo.milkyway=MilkyWay
+item.aunis.gdo.pegasus=Pegasus
+item.aunis.gdo.universe=Universe
+
 config.aunis.mode_scroll=Universe dialer mode scroll
 config.aunis.mode_up=Universe dialer mode up
 config.aunis.mode_down=Universe dialer mode down

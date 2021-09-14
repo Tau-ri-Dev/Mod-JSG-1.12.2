@@ -49,14 +49,21 @@ public class GDOActionPacketToServer implements IMessage {
 			world.addScheduledTask(() -> {
 				ItemStack stack = player.getHeldItem(message.hand);
 				
-				if (stack.getItem() == AunisItems.UNIVERSE_DIALER && stack.hasTagCompound()) {
+				if (stack.getItem() == AunisItems.GDO && stack.hasTagCompound()) {
 					NBTTagCompound compound = stack.getTagCompound();
 					GDOMode mode = GDOMode.valueOf(compound.getByte("mode"));
-					byte selected = compound.getByte("selected");
 
 					switch (message.action) {
-					
+
 						case ENTER_CODE:
+							break;
+						case MODE_CHANGE:
+							if (message.next)
+								mode = mode.next();
+							else
+								mode = mode.prev();
+
+							compound.setByte("mode", mode.id);
 							break;
 					}
 				}

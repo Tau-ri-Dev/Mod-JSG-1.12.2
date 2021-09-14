@@ -98,10 +98,9 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
 				GlStateManager.enableBlend();
 				GlStateManager.color(0.91f, 1, 1, 1);
 				drawTexturedRect(0.72f, 0.26f, 0, 0.24f, 0.24f);
-				
+
 			}
-				
-			if (!notLinked || mode == GDOMode.MILKYWAY) {
+			else{
 				int selected = compound.getByte("selected");
 				NBTTagList tagList = compound.getTagList(mode.tagListName, NBT.TAG_COMPOUND);
 				
@@ -114,8 +113,18 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
 						
 						switch (mode) {
 							case MILKYWAY:
+								drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, "MilkyWay", active, false);
+								/**
+								 * On click open input line to enter code
+								 * After submit code, run function that compare entered code with save codes in gate
+								 * If returned true -> Open iris on other side
+								 */
+								break;
 							case PEGASUS:
+								drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, "Pegasus", active, false);
+								break;
 							case UNIVERSE:
+								drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, "Universe", active, false);
 								break;
 						}
 					}
