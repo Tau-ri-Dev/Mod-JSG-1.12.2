@@ -863,6 +863,13 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
           }
 
           getEnergyStorage().extractEnergy(keepAliveEnergyPerTick, false);
+          // Max Open Time
+          if (world.getTotalWorldTime() % 20 == 0 && stargateState == EnumStargateState.ENGAGED && AunisConfig.autoCloseConfig.maxOpenedEnabled && after38Minutes()) {
+            if(AunisConfig.autoCloseConfig.maxOpenedWhat == "closeGate")
+              targetGatePos.getTileEntity().attemptClose(StargateClosedReasonEnum.AUTOCLOSE);
+            else if(AunisConfig.autoCloseConfig.maxOpenedWhat == "drawMorePower")
+              getEnergyStorage().extractEnergy(AunisConfig.autoCloseConfig.maxOpenedPowerDrawAfterLimit , false);
+          }
 
           markDirty();
           //					Aunis.info("Stargate energy: " + energyStorage.getEnergyStored() + " / " + energyStorage.getMaxEnergyStored() + "\t\tAlive for: " + (float)(energyStorage.getEnergyStored())/keepAliveCostPerTick/20);
@@ -885,6 +892,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
    */
   protected boolean shouldAutoclose() {
     return getAutoCloseManager().shouldClose(targetGatePos);
+  }
+
+
+  protected boolean after38Minutes() {
+    return getAutoCloseManager().after38Minutes(targetGatePos);
   }
 
   @Override

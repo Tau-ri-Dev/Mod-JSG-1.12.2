@@ -16,6 +16,7 @@ public class AutoCloseManager implements INBTSerializable<NBTTagCompound> {
 	private StargateAbstractBaseTile gateTile;
 	
 	private int secondsPassed;
+	private int secondsOpened;
 	private int playersPassed;
 	
 	public AutoCloseManager(StargateAbstractBaseTile gateTile) {
@@ -69,6 +70,17 @@ public class AutoCloseManager implements INBTSerializable<NBTTagCompound> {
 			}
 		}
 		
+		return false;
+	}
+
+	public boolean after38Minutes(StargatePos sourceStargatePos){
+		if (gateTile.getWorld().getTotalWorldTime() % 20 == 0) {
+			if (secondsOpened >= AunisConfig.autoCloseConfig.maxOpenedSeconds) {
+				secondsOpened = 0;
+				return true;
+			}
+		}
+		secondsOpened++;
 		return false;
 	}
 

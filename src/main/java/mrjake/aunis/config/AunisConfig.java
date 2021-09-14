@@ -388,7 +388,28 @@ public class AunisConfig {
 		@Name("Seconds to autoclose with no players nearby")
 		@RangeInt(min=1, max=300)
 		public int secondsToAutoclose = 5;
-	}
+
+
+		@Name("Maximum seconds of gate should be open")
+		@Comment({
+				"(in seconds (2280 = 38 minutes))"
+		})
+		@RangeInt(min=5, max=3000)
+		public int maxOpenedSeconds = 2280;
+
+		@Name("What happens after the open time reach this time")
+		@Comment({
+				"U can use: closeGate, drawMorePower"
+		})
+		public String maxOpenedWhat = "closeGate";
+
+		@Name("Enable max open time?")
+		public boolean maxOpenedEnabled = true;
+
+		@Name("Power draw after opened time limit")
+		@RangeInt(min=0, max=50000)
+		public int maxOpenedPowerDrawAfterLimit = 1000;
+    }
 	
 	public static class BeamerConfig {
 		@Name("Fluid buffer capacity")
