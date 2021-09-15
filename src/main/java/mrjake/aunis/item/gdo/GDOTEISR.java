@@ -108,23 +108,18 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
 					int index = selected + offset;
 					if (index >= 0 && index < tagList.tagCount()) {
 						
-						boolean active = offset == 0;					
-						NBTTagCompound entryCompound = (NBTTagCompound) tagList.getCompoundTagAt(index);
-						
+						boolean active = offset == 0;
 						switch (mode) {
-							case MILKYWAY:
-								drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, "MilkyWay", active, false);
+							case CODE_SENDER:
+								drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, "Send Code", active, false);
 								/**
 								 * On click open input line to enter code
 								 * After submit code, run function that compare entered code with save codes in gate
 								 * If returned true -> Open iris on other side
 								 */
 								break;
-							case PEGASUS:
-								drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, "Pegasus", active, false);
-								break;
-							case UNIVERSE:
-								drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, "Universe", active, false);
+							case OC:
+								drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, "OC", active, false);
 								break;
 						}
 					}

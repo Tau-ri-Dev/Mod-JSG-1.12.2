@@ -1,17 +1,20 @@
 {
-	"type": "minecraft:crafting_shaped",
-	"pattern": [
-		"TT ",
-		"TT ",
-		"   "
-	],
-	
-	"key": {
-		"T": {
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "aunis:iris_blade_trinium"
+		},
+		{
+			"item": "aunis:iris_blade_trinium"
+		},
+		{
+			"item": "aunis:iris_blade_trinium"
+		},
+		{
 			"item": "aunis:iris_blade_trinium"
 		}
-	},
-	
+	],
+
 	"result": {
 		"item": "aunis:quad_iris_blade_trinium",
 		"count": 1

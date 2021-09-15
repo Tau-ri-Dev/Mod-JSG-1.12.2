@@ -1,9 +1,9 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"pattern": [
+		"RTW",
 		"TTT",
-		"TWT",
-		"RRR"
+		"WTR"
 	],
 	
 	"key": {
@@ -14,7 +14,7 @@
 			"item": "aunis:crystal_white"
 		},
 		"R": {
-			"item": "minecraft:redstone"
+			"item": "minecraft:redstone_block"
 		}
 	},
 	

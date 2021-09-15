@@ -871,7 +871,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return irisType == EnumIrisType.SHIELD;
     }
 
-    protected boolean toggleIris() {
+    public boolean toggleIris() {
         if (irisType == EnumIrisType.NULL) return false;
         if (isClosed() || isOpened())
             irisAnimation = getWorld().getTotalWorldTime();
