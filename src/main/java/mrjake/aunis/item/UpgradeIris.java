@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * @author Matousss
+ * @author matousss
  */
 public class UpgradeIris extends Item {
     public final int MAX_DAMAGE;

@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 
 /**
- * @author Matousss
+ * @author matousss
  */
 public class AunisButton extends GuiButton {
     public AunisButton(int buttonId, int x, int y, String buttonText) {

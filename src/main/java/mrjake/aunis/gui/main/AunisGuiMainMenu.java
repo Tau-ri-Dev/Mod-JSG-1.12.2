@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * @author Matousss
+ * @author matousss
  */
 
 @SideOnly(Side.CLIENT)

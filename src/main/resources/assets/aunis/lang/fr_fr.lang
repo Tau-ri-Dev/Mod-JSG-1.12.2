@@ -23,8 +23,11 @@ item.aunis.quad_iris_blade_trinium.name=Quad Iris Blade (Trinium)
 item.aunis.upgrade_iris.name=Iris Upgrade (Titanium)
 item.aunis.upgrade_iris_trinium.name=Iris Upgrade (Trinium)
 
-item.aunis.shield_emitter.name=Shield Emitter
-item.aunis.upgrade_shield.name=Shield Upgradeitem.aunis.crystal_upgrade_shield.name
+item.aunis.shield_emitter.name=Émetteur de bouclier
+item.aunis.upgrade_shield.name=Amélioration du bouclier
+
+item.aunis.trinium_ingot.name=Lingot de Trinium
+item.aunis.titanium_ingot.name=Lingot de titane
 
 
 tile.aunis.naquadah_ore.name=Minerai de Naquadah
@@ -34,10 +37,10 @@ item.aunis.naquadah_shard.name=Éclat de Naquadah
 item.aunis.naquadah_alloy.name=Lingot d'alliage de Naquadah raffiné
 item.aunis.naquadah_alloy_raw.name=Lingot d'alliage de Naquadah
 
-tile.aunis.trinium_ore.name=Trinium Ore
-tile.aunis.titanium_ore.name=Titanium Ore
-tile.aunis.trinium_ingot.name=Trinium Ingot
-tile.aunis.titanium_ingot.name=Titanium Ingot
+tile.aunis.trinium_ore.name=Minerai de trinium
+tile.aunis.titanium_ore.name=Minerai de Titane
+tile.aunis.trinium_ingot.name=Lingot de Trinium
+tile.aunis.titanium_ingot.name=Lingot de titane
 
 tile.aunis.invisible_block.name=Tu ne peux pas me voir bloc
 
@@ -87,7 +90,7 @@ item.aunis.page_mysterious.name=Page mystérieuse
 item.aunis.page_mysterious.empty=Vierge
 item.aunis.mysterious_page.tooltip=Qui sait où cela mène
 
-fluid.silicon_molten_black=Molten Silicon
+fluid.silicon_molten_black=Silicone fondue
 fluid.silicon_molten_white=Silicium raffiné
 fluid.silicon_molten_red=Mélange de puissance
 fluid.silicon_molten_blue=Mélange de téléportation
@@ -335,6 +338,7 @@ gui.beamer.no_crystal=Pas de cristal
 
 gui.beamer.transmit=Transmettre
 gui.beamer.receive=Recevoir
+gui.beamer.disabled=Désactivé
 gui.beamer.activation=Activation du Beamer
 gui.beamer.auto=Auto
 gui.beamer.on_high=Avec signal

@@ -22,7 +22,7 @@ public abstract class Tab {
 	// Tab info (location & position)
 	protected int defaultX;
 	protected int defaultY;
-	private int openX;
+	protected int openX;
 	private int hiddenX;
 	protected int width;
 	protected int height;

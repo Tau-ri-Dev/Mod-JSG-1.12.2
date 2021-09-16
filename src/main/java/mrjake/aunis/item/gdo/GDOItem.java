@@ -67,6 +67,7 @@ public class GDOItem extends Item implements CustomModelItemInterface {
         compound.setByte("mode", GDOMode.CODE_SENDER.id);
         compound.setByte("selected", (byte) 0);
         compound.setTag("saved", new NBTTagList());
+        compound.setInteger("irisCode", -1);
 
         stack.setTagCompound(compound);
     }
@@ -183,24 +184,16 @@ public class GDOItem extends Item implements CustomModelItemInterface {
 
             switch (mode) {
                 case CODE_SENDER:
+                    if (!compound.hasKey("irisCode")) {
+                        // todo send message "no code set"
+                        break;
+                    }
+                    int irisCode = compound.getInteger("irisCode");
                     StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(linkedPos);
                     if (gateTile.getStargateState() == EnumStargateState.ENGAGED_INITIATING) {
                         TileEntity te = StargateNetwork.get(world).getStargate(gateTile.getDialedAddress()).getTileEntity();
                         if (!(te instanceof StargateClassicBaseTile)) break;
-                        StargateClassicBaseTile targetGateTile = (StargateClassicBaseTile) te;
-                        switch (targetGateTile.getIrisState()) {
-                            case CLOSED:
-                                targetGateTile.toggleIris();
-                                player.sendStatusMessage(GDOMessages.CODE_ACCEPTED.textComponent, true);
-                                break;
-                            case OPENED:
-                                player.sendStatusMessage(GDOMessages.OPENED.textComponent, true);
-                                break;
-                            case OPENING:
-                            case CLOSING:
-                                player.sendStatusMessage(GDOMessages.BUSY.textComponent, true);
-                                break;
-                        }
+                        ((StargateClassicBaseTile) te).receiveIrisCode(player, irisCode);
                     }
                     break;
                 default:

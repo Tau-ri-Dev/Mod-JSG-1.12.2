@@ -152,33 +152,7 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
 		
 		GlStateManager.popMatrix();
 	}
-	
-	private static void renderSymbol(int row, int col, SymbolInterface symbol, boolean isActive, boolean is9Chevron) {
-		float x = col * 0.09f - 0.05f;
-		float y = -row * 0.32f - 0.16f;
-		float scale = 0.7f;
-		float w = 0.19f * scale;
-		float h = 0.40f * scale;
-		
-		if (!is9Chevron)
-			x += 0.09f;
-				
-		Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource());
-		GlStateManager.enableTexture2D();
-		GlStateManager.enableBlend();
-		
-		if (isActive)
-			GlStateManager.color(0.91f, 1, 1, 1);
-		else
-			GlStateManager.color(0.0f, 0.38f, 0.40f, 1f);
-		
-		drawTexturedRect(x, y, 0, w, h);
-		float shadow = 0.008f;
-		
-		GlStateManager.color(0, 0, 0, 0.15f);
-		drawTexturedRect(x+shadow, y-shadow, -0.01f, w, h);
-	}
-	
+
 	private static void drawTexturedRect(float x, float y, float z, float w, float h) {
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glTexCoord2f(1, 1); GL11.glVertex3f(x,   y,   z);

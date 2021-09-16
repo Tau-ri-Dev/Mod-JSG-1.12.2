@@ -6,7 +6,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import javax.annotation.Nullable;
 
 /**
- * @author Matousss
+ * @author matousss
  */
 public enum GDOMessages {
     OPENED(new TextComponentTranslation("item.aunis.gdo.iris_opened")),

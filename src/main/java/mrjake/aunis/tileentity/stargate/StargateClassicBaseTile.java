@@ -10,6 +10,7 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.container.StargateContainerGuiState;
 import mrjake.aunis.gui.container.StargateContainerGuiUpdate;
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.item.gdo.GDOMessages;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
@@ -33,6 +34,7 @@ import mrjake.aunis.tileentity.BeamerTile;
 import mrjake.aunis.tileentity.util.IUpgradable;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -66,6 +68,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // IRIS/SHIELD VARIABLES/CONSTANTS
     private EnumIrisState irisState = EnumIrisState.OPENED;
     private EnumIrisType irisType = EnumIrisType.NULL;
+    private int irisCode = -1;
     private long irisAnimation = 0;
 
     public int shieldKeepAlive = 0;
@@ -265,10 +268,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             /*
              * Draw power (shield)
              */
-            if(isClosed() && isShieldIris()){
+            if (isClosed() && isShieldIris()) {
                 shieldKeepAlive = AunisConfig.irisConfig.shieldPowerDraw;
                 getEnergyStorage().extractEnergy(shieldKeepAlive, false);
-                if(getEnergyStorage().getEnergyStored() < shieldKeepAlive) {
+                if (getEnergyStorage().getEnergyStored() < shieldKeepAlive) {
                     irisAnimation = getWorld().getTotalWorldTime();
                     irisState = EnumIrisState.OPENING;
                     sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState, irisAnimation);
@@ -347,9 +350,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         for (BlockPos vect : linkedBeamers)
             linkedBeamersTagList.appendTag(new NBTTagLong(vect.toLong()));
         compound.setTag("linkedBeamers", linkedBeamersTagList);
-        if (irisState == null) irisState = EnumIrisState.OPENED;
+        if (irisState == null) {
+            if (codeSender != null) {
+                codeSender.sendStatusMessage(GDOMessages.OPENED.textComponent, true);
+                codeSender = null;
+            }
+            irisState = EnumIrisState.OPENED;
+        }
         compound.setByte("irisState", irisState.id);
-
+        if (irisCode > -1) compound.setInteger("irisCode", irisCode);
         return super.writeToNBT(compound);
     }
 
@@ -374,6 +383,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
 //        irisType = mrjake.aunis.stargate.EnumIrisType.byId(compound.getByte("irisType"));
         irisState = mrjake.aunis.stargate.EnumIrisState.getValue(compound.getByte("irisState"));
+        irisCode = compound.hasKey("irisCode") ? compound.getInteger("irisCode") : -1;
         super.readFromNBT(compound);
     }
 
@@ -822,21 +832,21 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (markDirty) markDirty();
     }
 
-    public void updateIrisDurability(){
+    public void updateIrisDurability() {
         irisDurability = 0;
         irisMaxDurability = 0;
-        if(isPhysicalIris()) {
+        if (isPhysicalIris()) {
             irisMaxDurability = (irisType == EnumIrisType.IRIS_TITANIUM ? AunisConfig.irisConfig.titaniumIrisDurability : AunisConfig.irisConfig.triniumIrisDurability);
             irisDurability = irisMaxDurability - itemStackHandler.getStackInSlot(11).getItem().getDamage(itemStackHandler.getStackInSlot(11));
         }
     }
 
-    public int getIrisDurability(){
+    public int getIrisDurability() {
         updateIrisDurability();
         return irisDurability;
     }
 
-    public int getIrisMaxDurability(){
+    public int getIrisMaxDurability() {
         updateIrisDurability();
         return irisDurability;
     }
@@ -886,7 +896,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
         switch (irisState) {
             case OPENED:
-                if(isShieldIris() && getEnergyStorage().getEnergyStored() < shieldKeepAlive * 3)
+                if (isShieldIris() && getEnergyStorage().getEnergyStored() < shieldKeepAlive * 3)
                     return false;
 
                 irisState = mrjake.aunis.stargate.EnumIrisState.CLOSING;
@@ -908,6 +918,37 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         markDirty();
         return true;
     }
+
+    EntityPlayer codeSender = null;
+
+    public boolean receiveIrisCode(EntityPlayer sender, int code) {
+//        Aunis.logger.debug("received iris code: "+code+", from: "+sender.getName());
+        System.out.println("received iris code: "+code+", from: "+sender.getName());
+        if (code == this.irisCode){
+            switch (irisState) {
+                case OPENED:
+                    sender.sendStatusMessage(GDOMessages.OPENED.textComponent, true);
+                    break;
+                case CLOSED:
+                    sender.sendStatusMessage(GDOMessages.CODE_ACCEPTED.textComponent, true);
+                    codeSender = sender;
+                    toggleIris();
+                    break;
+                case OPENING:
+                case CLOSING:
+                    sender.sendStatusMessage(GDOMessages.BUSY.textComponent, true);
+                    break;
+                default:
+                    return false;
+            }
+        }
+        else {
+            sender.sendStatusMessage(GDOMessages.CODE_REJECTED.textComponent, true);
+        }
+
+        return true;
+    }
+
     // -----------------------------------------------------------
 
     @Override
@@ -1021,7 +1062,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         markDirty();
         if (!result && (isShieldIris() && isOpened() && getEnergyStorage().getEnergyStored() < shieldKeepAlive * 3))
             return new Object[]{false, "stargate_iris_not_power", "Not enough power to close shield"};
-        else if(!result)
+        else if (!result)
             return new Object[]{false, "stargate_iris_busy", "Iris is busy"};
         else if (result)
             return new Object[]{true};

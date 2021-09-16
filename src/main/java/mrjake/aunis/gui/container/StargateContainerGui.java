@@ -7,14 +7,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javafx.scene.input.MouseButton;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.gui.element.Tab;
+import mrjake.aunis.gui.element.*;
 import mrjake.aunis.gui.element.Tab.SlotTab;
-import mrjake.aunis.gui.element.TabAddress;
-import mrjake.aunis.gui.element.TabBiomeOverlay;
-import mrjake.aunis.gui.element.TabSideEnum;
-import mrjake.aunis.gui.element.TabbedContainerInterface;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.SetOpenTabToServer;
 import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
@@ -45,7 +42,8 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 	private TabAddress pegasusAddressTab;
 	private TabAddress universeAddressTab;
 	private TabBiomeOverlay overlayTab;
-	
+	private TabCodeInput irisCodeTab;
+
 	private int energyStored;
 	private int maxEnergyStored;
 		
@@ -130,11 +128,29 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				.setIconRenderPos(107, 7)
 				.setIconSize(20, 18)
 				.setIconTextureLocation(304, 54).build();
-		
+
+		irisCodeTab = (TabCodeInput) TabCodeInput.builder()
+				.setGuiSize(xSize, ySize)
+				.setGuiPosition(guiLeft, guiTop)
+				.setTabPosition(176-107, 2+22)
+				.setOpenX(176)
+				.setHiddenX(54)
+				.setTabSize(128, 51)
+				.setTabTitle(I18n.format("gui.stargate.iris_code"))
+				.setTabSide(TabSideEnum.RIGHT)
+				.setTexture(BACKGROUND_TEXTURE, 512)
+				.setBackgroundTextureLocation(176, 113)
+				.setIconRenderPos(107, 7)
+				.setIconSize(20, 18)
+				.setIconTextureLocation(304, 72).build();
+
+
+
 		tabs.add(milkyWayAddressTab);
 		tabs.add(pegasusAddressTab);
 		tabs.add(universeAddressTab);
 		tabs.add(overlayTab);
+		tabs.add(irisCodeTab);
 		
 		container.inventorySlots.set(7, milkyWayAddressTab.createSlot((SlotItemHandler) container.getSlot(7)));
 		container.inventorySlots.set(8, pegasusAddressTab.createSlot((SlotItemHandler) container.getSlot(8)));
@@ -150,6 +166,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 		boolean hasMilkyWayUpgrade = false;
 		boolean hasAtlantisUpgrade = false;
 		boolean hasUniverseUpgrade = false;
+		boolean hasIrisUpgrade = !container.getSlot(11).getStack().isEmpty();
 		
 		for (int i=0; i<4; i++) {
 			ItemStack itemStack = container.getSlot(i).getStack();
@@ -182,7 +199,8 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 		milkyWayAddressTab.setVisible(hasMilkyWayUpgrade);
 		pegasusAddressTab.setVisible(hasAtlantisUpgrade);
 		universeAddressTab.setVisible(hasUniverseUpgrade);
-		
+		irisCodeTab.setVisible(hasIrisUpgrade);
+
 		Tab.updatePositions(tabs);
 		
 		StargateClassicEnergyStorage energyStorageInternal = (StargateClassicEnergyStorage) container.gateTile.getCapability(CapabilityEnergy.ENERGY, null);
@@ -292,6 +310,11 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				break;
 			}
 		}
+		if (irisCodeTab.isOpen() && irisCodeTab.inputField != null/*&&
+				GuiHelper.isPointInRegion(irisCodeTab.inputField.x, irisCodeTab.inputField.y,
+						irisCodeTab.inputField.width, irisCodeTab.inputField.height, mouseX, mouseY)*/) {
+			irisCodeTab.inputField.mouseClicked(mouseX, mouseY, mouseButton);
+		}
 	}
 	
 	@Override
@@ -299,5 +322,11 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 		return tabs.stream()
 				.map(tab -> tab.getArea())
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException {
+		if (irisCodeTab.isOpen()) irisCodeTab.inputField.textboxKeyTyped(typedChar, keyCode);
+		super.keyTyped(typedChar, keyCode);
 	}
 }
