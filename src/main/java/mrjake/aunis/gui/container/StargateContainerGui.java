@@ -10,10 +10,12 @@ import java.util.stream.Collectors;
 import javafx.scene.input.MouseButton;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.gui.element.*;
 import mrjake.aunis.gui.element.Tab.SlotTab;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.SetOpenTabToServer;
+import mrjake.aunis.packet.stargate.SaveIrisCodeToServer;
 import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
 import mrjake.aunis.stargate.network.SymbolPegasusEnum;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
@@ -21,15 +23,23 @@ import mrjake.aunis.stargate.network.SymbolUniverseEnum;
 import mrjake.aunis.stargate.power.StargateClassicEnergyStorage;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.StargateUpgradeEnum;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.SlotItemHandler;
+
+import static java.lang.Integer.parseInt;
 
 public class StargateContainerGui extends GuiContainer implements TabbedContainerInterface {
 	
@@ -46,13 +56,17 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 
 	private int energyStored;
 	private int maxEnergyStored;
+
+	private BlockPos pos;
 		
-	public StargateContainerGui(StargateContainer container) {
+	public StargateContainerGui(BlockPos pos, StargateContainer container) {
 		super(container);
 		this.container = container;
 		
 		this.xSize = 176;
 		this.ySize = 168;
+
+		this.pos = pos;
 	}
 	
 	@Override
@@ -326,7 +340,27 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (irisCodeTab.isOpen()) irisCodeTab.inputField.textboxKeyTyped(typedChar, keyCode);
+		if (irisCodeTab.isOpen()){
+			irisCodeTab.inputField.textboxKeyTyped(typedChar, keyCode);
+			/*int code = Integer.valueOf(irisCodeTab.inputField.getText());
+			if (code > 0 && code <= 15) {
+				AunisPacketHandler.INSTANCE.sendToServer(new SaveIrisCodeToServer(pos, code));
+			}*/
+		}
 		super.keyTyped(typedChar, keyCode);
 	}
+
+
+	/*private GuiTextField codeField;
+	private AunisGuiButton saveButton;
+	protected void actionPerformed(GuiButton button) throws IOException {
+		if (button == saveButton) {
+			EntityPlayer player = Minecraft.getMinecraft().player;
+			int code = Integer.valueOf(codeField.getText());
+
+			if (code > 0 && code <= 15) {
+				AunisPacketHandler.INSTANCE.sendToServer(new SaveIrisCodeToServer(pos, code));
+			}
+		}
+	}*/
 }

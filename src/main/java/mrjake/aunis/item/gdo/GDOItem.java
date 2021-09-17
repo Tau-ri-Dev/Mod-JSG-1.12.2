@@ -185,7 +185,7 @@ public class GDOItem extends Item implements CustomModelItemInterface {
             switch (mode) {
                 case CODE_SENDER:
                     if (!compound.hasKey("irisCode")) {
-                        // todo send message "no code set"
+                        player.sendStatusMessage(GDOMessages.CODE_NOT_SET.textComponent, true);
                         break;
                     }
                     int irisCode = compound.getInteger("irisCode");

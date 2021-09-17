@@ -74,7 +74,7 @@ public abstract class Tab {
 	}
 	
 	private boolean isVisible = true;
-	
+
 	public void setVisible(boolean isVisible) {
 		this.isVisible = isVisible;
 	}

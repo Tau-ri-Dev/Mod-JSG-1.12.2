@@ -387,6 +387,7 @@ item.aunis.gdo.iris_opened=Iris is opened!
 item.aunis.gdo.iris_busy=Iris is busy!
 item.aunis.gdo.code_accepted=Code accepted! Opening iris...
 item.aunis.gdo.code_rejected=Wrong code!
+item.aunis.gdo.code_not_set=You must enter code!
 
 item.aunis.gdo.mode_oc=OpnCom
 item.aunis.gdo.oc_name=Entry name

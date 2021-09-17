@@ -7,6 +7,7 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.beamer.BeamerLinkingHelper;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.gui.container.StargateContainerGuiState;
 import mrjake.aunis.gui.container.StargateContainerGuiUpdate;
 import mrjake.aunis.item.AunisItems;
@@ -14,6 +15,8 @@ import mrjake.aunis.item.gdo.GDOMessages;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
+import mrjake.aunis.packet.stargate.SaveIrisCodeToServer;
+import mrjake.aunis.packet.transportrings.SaveRingsParametersToServer;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState.StargateClassicRendererStateBuilder;
@@ -34,6 +37,9 @@ import mrjake.aunis.tileentity.BeamerTile;
 import mrjake.aunis.tileentity.util.IUpgradable;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -43,6 +49,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants.NBT;
@@ -51,6 +58,7 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -559,9 +567,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 }
 
                 break;
-//            case IRIS_UPDATE:
-//                if (irisType != EnumIrisType.NULL)
-//                    getRendererStateClient().irisType = irisType;
             default:
                 break;
         }
@@ -921,7 +926,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     EntityPlayer codeSender = null;
 
-    public boolean receiveIrisCode(EntityPlayer sender, int code) {
+    public void receiveIrisCode(EntityPlayer sender, int code) {
 //        Aunis.logger.debug("received iris code: "+code+", from: "+sender.getName());
         System.out.println("received iris code: "+code+", from: "+sender.getName());
         if (code == this.irisCode){
@@ -939,14 +944,17 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     sender.sendStatusMessage(GDOMessages.BUSY.textComponent, true);
                     break;
                 default:
-                    return false;
+                    break;
             }
         }
         else {
             sender.sendStatusMessage(GDOMessages.CODE_REJECTED.textComponent, true);
         }
 
-        return true;
+    }
+
+    public void setIrisCode(int code){
+        this.irisCode = code;
     }
 
     // -----------------------------------------------------------

@@ -31,6 +31,8 @@ import mrjake.aunis.packet.stargate.StargateMotionToClient.RetrieveMotionClientH
 import mrjake.aunis.packet.stargate.StargateMotionToServer.MotionServerHandler;
 import mrjake.aunis.packet.transportrings.SaveRingsParametersToServer;
 import mrjake.aunis.packet.transportrings.SaveRingsParametersToServer.SaveRingsParametersServerHandler;
+import mrjake.aunis.packet.stargate.SaveIrisCodeToServer;
+import mrjake.aunis.packet.stargate.SaveIrisCodeToServer.SaveIrisCodeToServerHandler;
 import mrjake.aunis.packet.transportrings.StartPlayerFadeOutToClient;
 import mrjake.aunis.packet.transportrings.StartPlayerFadeOutToClient.StartPlayerFadeOutToClientHandler;
 import mrjake.aunis.packet.transportrings.TRControllerActivatedToServer;
@@ -63,6 +65,7 @@ public class AunisPacketHandler {
 		INSTANCE.registerMessage(PageNotebookSetNameServerHandler.class, PageNotebookSetNameToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(EntryActionServerHandler.class, EntryActionToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(OCActionServerHandler.class, OCActionToServer.class, id, Side.SERVER); id++;
+		INSTANCE.registerMessage(SaveIrisCodeToServerHandler.class, SaveIrisCodeToServer.class, id, Side.SERVER); id++;
 
 		
 		INSTANCE.registerMessage(RetrieveMotionClientHandler.class, StargateMotionToClient.class, id, Side.CLIENT); id++;

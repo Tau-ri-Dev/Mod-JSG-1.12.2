@@ -2,6 +2,7 @@ package mrjake.aunis.gui;
 
 import mrjake.aunis.gui.container.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
@@ -39,7 +40,7 @@ public class AunisGuiHandler implements IGuiHandler {
 				return new DHDPegasusContainerGui(new DHDPegasusContainer(player.inventory, world, x, y ,z));
 			
 			case GUI_STARGATE:	
-				return new StargateContainerGui(new StargateContainer(player.inventory, world, x, y ,z));
+				return new StargateContainerGui(new BlockPos(x, y, z), new StargateContainer(player.inventory, world, x, y ,z));
 				
 			case GUI_CAPACITOR:	
 				return new CapacitorContainerGui(new CapacitorContainer(player.inventory, world, x, y ,z));

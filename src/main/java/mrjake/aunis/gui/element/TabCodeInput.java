@@ -1,30 +1,25 @@
 package mrjake.aunis.gui.element;
 
-import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.gui.BetterTextField;
-import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
-import mrjake.aunis.util.ItemMetaPair;
+import mrjake.aunis.Aunis;
+import mrjake.aunis.gui.AunisGuiButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraftforge.items.SlotItemHandler;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 
 /**
  * @author matousss
  */
-public class TabCodeInput extends Tab {
+public class TabCodeInput extends Tab{
     private int code;
     public GuiTextField inputField = new NumberOnlyTextField(1,
             Minecraft.getMinecraft().fontRenderer, guiLeft + 6, guiTop + defaultY + 25, 64, 16);
+
+    private AunisGuiButton saveButton = new AunisGuiButton(1,  guiLeft + 6, guiTop + defaultY, 64, 64, "Save");
 
     protected TabCodeInput(TabCodeInputBuilder builder) {
         super(builder);
@@ -35,7 +30,7 @@ public class TabCodeInput extends Tab {
     }
 
     @Override
-    public void render(FontRenderer fontRenderer, int mouseX, int mouseY) {
+    public void render(FontRenderer fontRenderer, int mouseX, int mouseY){
         super.render(fontRenderer, mouseX, mouseY);
 
 //        Minecraft.getMinecraft().getTextureManager().bindTexture(bgTexLocation);
@@ -43,6 +38,7 @@ public class TabCodeInput extends Tab {
        //Gui.drawModalRectWithCustomSizedTexture(guiLeft+currentOffsetX+5, guiTop+defaultY+24, slotTexX, slotTexY, 18, 18, textureSize, textureSize);
         inputField.x = guiLeft + 6 + currentOffsetX;
         inputField.drawTextBox();
+        saveButton.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, Minecraft.getMinecraft().world.getTotalWorldTime());
 
     }
 
