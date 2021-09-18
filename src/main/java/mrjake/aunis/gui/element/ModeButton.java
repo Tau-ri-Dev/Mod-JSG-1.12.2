@@ -15,15 +15,13 @@ public class ModeButton extends GuiButton {
     public final int textureHeight;
     public final int variants;
     private final ResourceLocation texture;
-    private float variantWidth;
 
-    public ModeButton(int buttonId, int x, int y, int size, ResourceLocation texture, int textureHeight, int textureWidth, int variants) {
+    public ModeButton(int buttonId, int x, int y, int size, ResourceLocation texture, int textureWidth, int textureHeight, int variants) {
         super(buttonId, x, y, size, size, "");
         this.textureHeight = textureHeight;
         this.textureWidth = textureWidth;
         this.variants = variants;
         this.texture = texture;
-        variantWidth = textureWidth/variants;
     }
 
 
@@ -33,8 +31,14 @@ public class ModeButton extends GuiButton {
 
             this.mouseDragged(Minecraft.getMinecraft(), mouseX, mouseY);
 
-            
+
             Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+            if (hovered) {
+                drawModalRectWithCustomSizedTexture(x, y, width, height, width, height, textureWidth, textureHeight);
+            }
+            else {
+                drawModalRectWithCustomSizedTexture(x, y, 0, height, width, height, textureWidth, textureHeight);
+            }
             drawModalRectWithCustomSizedTexture(x, y, variant * width, 0, width, height, textureWidth, textureHeight);
         }
     }

@@ -27,7 +27,7 @@ public class TabIris extends TabCodeInput{
         if (!isVisible()) return;
 
         super.render(fontRenderer, mouseX, mouseY);
-        buttonChangeMode.x = guiLeft + currentOffsetX + inputField.width + 5;
+        buttonChangeMode.x = guiLeft + currentOffsetX + 64 + 11;
         buttonChangeMode.drawButton(mouseX, mouseY, irisMode.id);
     }
 
