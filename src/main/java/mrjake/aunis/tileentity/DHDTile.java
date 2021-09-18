@@ -1,9 +1,5 @@
 package mrjake.aunis.tileentity;
 
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
@@ -21,11 +17,7 @@ import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.network.StargateAddressDynamic;
 import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
-import mrjake.aunis.state.DHDActivateButtonState;
-import mrjake.aunis.state.StargateBiomeOverrideState;
-import mrjake.aunis.state.State;
-import mrjake.aunis.state.StateProviderInterface;
-import mrjake.aunis.state.StateTypeEnum;
+import mrjake.aunis.state.*;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
 import mrjake.aunis.tileentity.util.IUpgradable;
@@ -54,6 +46,10 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
 
 public class DHDTile extends TileEntity implements ILinkable, IUpgradable, StateProviderInterface, ITickable {
 

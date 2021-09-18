@@ -1,8 +1,5 @@
 package mrjake.aunis.loader;
 
-import java.io.IOException;
-import java.util.function.Predicate;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.loader.model.ModelLoader;
 import mrjake.aunis.loader.texture.TextureLoader;
@@ -10,6 +7,9 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraftforge.client.resource.IResourceType;
 import net.minecraftforge.client.resource.ISelectiveResourceReloadListener;
 import net.minecraftforge.client.resource.VanillaResourceType;
+
+import java.io.IOException;
+import java.util.function.Predicate;
 
 public class ReloadListener implements ISelectiveResourceReloadListener {
 

@@ -1,25 +1,16 @@
 package mrjake.aunis.gui.element;
 
-import mrjake.aunis.Aunis;
-import mrjake.aunis.gui.AunisGuiButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.resources.I18n;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author matousss
  */
 public class TabCodeInput extends Tab{
-    private int code;
+    protected int code;
     public GuiTextField inputField = new NumberOnlyTextField(1,
             Minecraft.getMinecraft().fontRenderer, guiLeft + 6, guiTop + defaultY + 25, 64, 16);
-
-    private AunisGuiButton saveButton = new AunisGuiButton(1,  guiLeft + 6, guiTop + defaultY, 64, 64, "Save");
 
     protected TabCodeInput(TabCodeInputBuilder builder) {
         super(builder);
@@ -38,25 +29,24 @@ public class TabCodeInput extends Tab{
        //Gui.drawModalRectWithCustomSizedTexture(guiLeft+currentOffsetX+5, guiTop+defaultY+24, slotTexX, slotTexY, 18, 18, textureSize, textureSize);
         inputField.x = guiLeft + 6 + currentOffsetX;
         inputField.drawTextBox();
-        saveButton.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, Minecraft.getMinecraft().world.getTotalWorldTime());
+       // saveButton.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, Minecraft.getMinecraft().world.getTotalWorldTime());
 
     }
 
 
 
-    @Override
-    public void renderFg(GuiScreen screen, FontRenderer fontRenderer, int mouseX, int mouseY) {
-        super.renderFg(screen, fontRenderer, mouseX, mouseY);
-
-        if (isVisible() && isOpen()) {
-            if (GuiHelper.isPointInRegion(guiLeft + currentOffsetX + 6, guiTop + defaultY + 25, 64, 16, mouseX, mouseY)) {
-                List<String> text = new ArrayList<>();
-                text.add(I18n.format("gui.stargate.iris_code.help"));
-
-                screen.drawHoveringText(text, mouseX - guiLeft, mouseY - guiTop);
-            }
-        }
-    }
+//    @Override
+//    public void renderFg(GuiScreen screen, FontRenderer fontRenderer, int mouseX, int mouseY) {
+//        super.renderFg(screen, fontRenderer, mouseX, mouseY);
+//
+//        if (isVisible() && isOpen()) {
+//            if (GuiHelper.isPointInRegion(guiLeft + currentOffsetX + 6, guiTop + defaultY + 25, 64, 16, mouseX, mouseY)) {
+//                List<String> text = new ArrayList<>();
+//                text.add(I18n.format("gui.unknown"));
+//                screen.drawHoveringText(text, mouseX - guiLeft, mouseY - guiTop);
+//            }
+//        }
+//    }
 
     // ------------------------------------------------------------------------------------------------
     // Builder

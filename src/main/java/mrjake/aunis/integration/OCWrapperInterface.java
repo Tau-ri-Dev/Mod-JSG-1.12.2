@@ -1,13 +1,13 @@
 package mrjake.aunis.integration;
 
-import javax.annotation.Nullable;
-
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.Network;
 import li.cil.oc.api.network.Node;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+
+import javax.annotation.Nullable;
 
 public interface OCWrapperInterface {
 	

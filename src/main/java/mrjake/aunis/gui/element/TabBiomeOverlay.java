@@ -1,9 +1,5 @@
 package mrjake.aunis.gui.element;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.util.ItemMetaPair;
@@ -14,6 +10,10 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.items.SlotItemHandler;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 
 public class TabBiomeOverlay extends Tab {
 	

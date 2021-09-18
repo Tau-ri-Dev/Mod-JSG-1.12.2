@@ -5,19 +5,13 @@ import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.PositionedPacket;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.state.StateTypeEnum;
-import mrjake.aunis.tileentity.TransportRingsTile;
-import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
-import mrjake.aunis.transportrings.ParamsSetResult;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-
-import java.nio.charset.StandardCharsets;
 
 public class SaveIrisCodeToServer extends PositionedPacket {
 	public SaveIrisCodeToServer() {}

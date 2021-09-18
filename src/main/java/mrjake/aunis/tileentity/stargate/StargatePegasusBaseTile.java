@@ -9,7 +9,9 @@ import mrjake.aunis.gui.container.StargateContainerGuiUpdate;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
-import mrjake.aunis.renderer.stargate.*;
+import mrjake.aunis.renderer.stargate.ChevronEnum;
+import mrjake.aunis.renderer.stargate.StargateAbstractRendererState;
+import mrjake.aunis.renderer.stargate.StargatePegasusRendererState;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.sound.SoundPositionedEnum;
 import mrjake.aunis.sound.StargateSoundEventEnum;
@@ -37,7 +39,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class StargatePegasusBaseTile extends StargateClassicBaseTile implements ILinkable {
   // ------------------------------------------------------------------------

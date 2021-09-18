@@ -1,7 +1,6 @@
 package mrjake.aunis.state;
 
 import io.netty.buffer.ByteBuf;
-import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
 import mrjake.aunis.stargate.network.SymbolPegasusEnum;
 
 public class DHDActivateButtonPegasusState extends State {

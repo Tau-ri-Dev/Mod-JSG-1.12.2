@@ -1,7 +1,5 @@
 package mrjake.aunis.chunkloader;
 
-import java.util.List;
-
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -11,6 +9,8 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.util.Constants.NBT;
+
+import java.util.List;
 
 public class ChunkLoadingCallback implements LoadingCallback {
 	

@@ -1,7 +1,5 @@
 package mrjake.aunis.block;
 
-import java.util.Random;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.item.AunisItems;
 import net.minecraft.block.Block;
@@ -15,6 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class NaquadahOreBlock extends Block {
 		

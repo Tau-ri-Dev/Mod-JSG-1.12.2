@@ -1,12 +1,5 @@
 package mrjake.aunis.tileentity.stargate;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.annotation.Nullable;
-
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateDimensionConfig;
@@ -23,11 +16,7 @@ import mrjake.aunis.stargate.EnumScheduledTask;
 import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
-import mrjake.aunis.stargate.network.StargateNetwork;
-import mrjake.aunis.stargate.network.StargatePos;
-import mrjake.aunis.stargate.network.SymbolInterface;
-import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
-import mrjake.aunis.stargate.network.SymbolTypeEnum;
+import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.state.StargateRendererActionState;
 import mrjake.aunis.state.StargateRendererActionState.EnumGateAction;
 import mrjake.aunis.state.State;
@@ -46,6 +35,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements ILinkable {
 

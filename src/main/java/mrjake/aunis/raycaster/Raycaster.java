@@ -1,8 +1,5 @@
 package mrjake.aunis.raycaster;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mrjake.aunis.raycaster.util.Box;
 import mrjake.aunis.raycaster.util.DHDVertex;
 import mrjake.aunis.raycaster.util.Ray;
@@ -13,6 +10,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Raycaster {
 	protected abstract List<Vector3f> getVertices();

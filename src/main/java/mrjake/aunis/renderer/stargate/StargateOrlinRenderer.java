@@ -1,10 +1,5 @@
 package mrjake.aunis.renderer.stargate;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.particle.ParticleBlender;
@@ -18,6 +13,11 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class StargateOrlinRenderer extends StargateAbstractRenderer<StargateAbstractRendererState> {
 	

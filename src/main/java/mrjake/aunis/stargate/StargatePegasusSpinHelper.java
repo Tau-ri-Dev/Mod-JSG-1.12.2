@@ -1,9 +1,7 @@
 package mrjake.aunis.stargate;
 
 import io.netty.buffer.ByteBuf;
-import jdk.nashorn.internal.ir.Symbol;
 import mrjake.aunis.Aunis;
-import mrjake.aunis.renderer.stargate.ChevronEnum;
 import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.util.math.*;

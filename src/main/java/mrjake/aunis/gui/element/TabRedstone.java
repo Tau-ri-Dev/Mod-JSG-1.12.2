@@ -1,9 +1,5 @@
 package mrjake.aunis.gui.element;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.beamer.BeamerModeEnum;
 import mrjake.aunis.packet.AunisPacketHandler;
@@ -12,15 +8,15 @@ import mrjake.aunis.packet.BeamerChangedLevelsToServer;
 import mrjake.aunis.packet.ChangeRedstoneModeToServer;
 import mrjake.aunis.tileentity.util.RedstoneModeEnum;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TabRedstone extends Tab {
 

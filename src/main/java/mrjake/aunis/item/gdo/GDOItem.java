@@ -4,19 +4,12 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.item.dialer.UniverseDialerMode;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
 import mrjake.aunis.stargate.EnumStargateState;
-import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.StargateNetwork;
-import mrjake.aunis.stargate.network.StargatePos;
-import mrjake.aunis.stargate.network.SymbolTypeEnum;
-import mrjake.aunis.tileentity.TransportRingsTile;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
-import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
-import mrjake.aunis.transportrings.TransportRings;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.creativetab.CreativeTabs;
@@ -34,12 +27,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import scala.reflect.internal.Trees;
-
-import java.util.Map;
 
 public class GDOItem extends Item implements CustomModelItemInterface {
 

@@ -1,40 +1,35 @@
 package mrjake.aunis.tileentity.stargate;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateSizeEnum;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
-import mrjake.aunis.renderer.stargate.StargateClassicRendererState.StargateClassicRendererStateBuilder;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
+import mrjake.aunis.renderer.stargate.StargateClassicRendererState.StargateClassicRendererStateBuilder;
 import mrjake.aunis.renderer.stargate.StargateUniverseRendererState;
 import mrjake.aunis.renderer.stargate.StargateUniverseRendererState.StargateUniverseRendererStateBuilder;
-import mrjake.aunis.sound.AunisSoundHelper;
-import mrjake.aunis.sound.SoundEventEnum;
-import mrjake.aunis.sound.SoundPositionedEnum;
-import mrjake.aunis.sound.StargateSoundEventEnum;
-import mrjake.aunis.sound.StargateSoundPositionedEnum;
-import mrjake.aunis.stargate.*;
+import mrjake.aunis.sound.*;
+import mrjake.aunis.stargate.EnumScheduledTask;
+import mrjake.aunis.stargate.EnumStargateState;
+import mrjake.aunis.stargate.StargateOpenResult;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargateUniverseMergeHelper;
-import mrjake.aunis.stargate.network.StargateAddress;
-import mrjake.aunis.stargate.network.StargateAddressDynamic;
-import mrjake.aunis.stargate.network.StargatePos;
-import mrjake.aunis.stargate.network.SymbolInterface;
-import mrjake.aunis.stargate.network.SymbolTypeEnum;
-import mrjake.aunis.stargate.network.SymbolUniverseEnum;
+import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.stargate.power.StargateEnergyRequired;
-import mrjake.aunis.state.*;
+import mrjake.aunis.state.StargateRendererActionState;
 import mrjake.aunis.state.StargateRendererActionState.EnumGateAction;
+import mrjake.aunis.state.StargateUniverseSymbolState;
+import mrjake.aunis.state.State;
+import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 

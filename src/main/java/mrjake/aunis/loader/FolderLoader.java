@@ -1,5 +1,7 @@
 package mrjake.aunis.loader;
 
+import mrjake.aunis.Aunis;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,8 +11,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-
-import mrjake.aunis.Aunis;
 
 public class FolderLoader {
 

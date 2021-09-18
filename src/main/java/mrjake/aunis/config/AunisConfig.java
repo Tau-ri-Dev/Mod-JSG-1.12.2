@@ -1,19 +1,15 @@
 package mrjake.aunis.config;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.util.ItemMetaPair;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.Config.Comment;
-import net.minecraftforge.common.config.Config.Name;
-import net.minecraftforge.common.config.Config.RangeDouble;
-import net.minecraftforge.common.config.Config.RangeInt;
-import net.minecraftforge.common.config.Config.RequiresWorldRestart;
+import net.minecraftforge.common.config.Config.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Config(modid="aunis", name="aunis")
 public class AunisConfig {

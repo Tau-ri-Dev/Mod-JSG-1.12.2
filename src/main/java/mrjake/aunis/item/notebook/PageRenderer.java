@@ -1,7 +1,5 @@
 package mrjake.aunis.item.notebook;
 
-import org.lwjgl.opengl.GL11;
-
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.renderer.AunisFontRenderer;
 import mrjake.aunis.item.renderer.ItemRenderHelper;
@@ -14,6 +12,7 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformT
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class PageRenderer {
 	

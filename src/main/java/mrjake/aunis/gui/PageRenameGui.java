@@ -1,9 +1,5 @@
 package mrjake.aunis.gui;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.item.notebook.PageNotebookSetNameToServer;
 import mrjake.aunis.packet.AunisPacketHandler;
@@ -13,6 +9,10 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import org.lwjgl.input.Keyboard;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PageRenameGui extends GuiScreen {
 

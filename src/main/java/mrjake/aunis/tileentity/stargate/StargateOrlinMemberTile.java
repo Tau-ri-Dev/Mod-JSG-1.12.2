@@ -1,14 +1,14 @@
 package mrjake.aunis.tileentity.stargate;
 
-import java.util.List;
-import java.util.Random;
-
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.List;
+import java.util.Random;
 
 public class StargateOrlinMemberTile extends StargateAbstractMemberTile {
 	

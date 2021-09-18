@@ -1,13 +1,13 @@
 package mrjake.aunis.loader.texture;
 
+import mrjake.aunis.Aunis;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureUtil;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.util.Arrays;
 import java.util.List;
-
-import mrjake.aunis.Aunis;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureUtil;
 
 public class Texture {
 	

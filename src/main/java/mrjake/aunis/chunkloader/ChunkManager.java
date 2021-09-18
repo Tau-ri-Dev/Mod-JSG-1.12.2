@@ -1,8 +1,5 @@
 package mrjake.aunis.chunkloader;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import mrjake.aunis.Aunis;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -15,6 +12,9 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @EventBusSubscriber
 public class ChunkManager {

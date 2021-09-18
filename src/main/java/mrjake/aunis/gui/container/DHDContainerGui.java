@@ -1,26 +1,14 @@
 package mrjake.aunis.gui.container;
 
-import java.awt.Rectangle;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.fluid.AunisFluids;
-import mrjake.aunis.gui.element.Diode;
+import mrjake.aunis.gui.element.*;
 import mrjake.aunis.gui.element.Diode.DiodeStatus;
 import mrjake.aunis.gui.element.Tab.SlotTab;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.SetOpenTabToServer;
 import mrjake.aunis.tileentity.DHDTile;
 import mrjake.aunis.tileentity.util.ReactorStateEnum;
-import mrjake.aunis.gui.element.FluidTankElement;
-import mrjake.aunis.gui.element.GuiHelper;
-import mrjake.aunis.gui.element.Tab;
-import mrjake.aunis.gui.element.TabBiomeOverlay;
-import mrjake.aunis.gui.element.TabSideEnum;
-import mrjake.aunis.gui.element.TabbedContainerInterface;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -30,6 +18,12 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.SlotItemHandler;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DHDContainerGui extends GuiContainer implements TabbedContainerInterface {
 

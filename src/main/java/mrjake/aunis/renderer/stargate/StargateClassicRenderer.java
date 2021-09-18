@@ -1,8 +1,5 @@
 package mrjake.aunis.renderer.stargate;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.loader.ElementEnum;
@@ -22,6 +19,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class StargateClassicRenderer<S extends StargateClassicRendererState> extends StargateAbstractRenderer<S> {
 

@@ -1,8 +1,5 @@
 package mrjake.aunis.item.dialer;
 
-import java.util.List;
-import java.util.Map;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
@@ -10,11 +7,7 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
 import mrjake.aunis.stargate.StargateClosedReasonEnum;
-import mrjake.aunis.stargate.network.StargateAddress;
-import mrjake.aunis.stargate.network.StargateNetwork;
-import mrjake.aunis.stargate.network.StargatePos;
-import mrjake.aunis.stargate.network.SymbolTypeEnum;
-import mrjake.aunis.stargate.network.SymbolUniverseEnum;
+import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.tileentity.TransportRingsTile;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
@@ -42,6 +35,9 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
+import java.util.Map;
 
 public class UniverseDialerItem extends Item implements CustomModelItemInterface {
 

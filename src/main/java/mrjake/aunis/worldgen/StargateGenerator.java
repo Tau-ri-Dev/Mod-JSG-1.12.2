@@ -1,8 +1,5 @@
 package mrjake.aunis.worldgen;
 
-import java.util.Map;
-import java.util.Random;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
@@ -33,6 +30,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
+
+import java.util.Map;
+import java.util.Random;
 
 /**
  * TODO Unify this and {@link StargateGeneratorNether} (replace this)

@@ -1,18 +1,13 @@
 package mrjake.aunis.stargate;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.Aunis;
-import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
-import mrjake.aunis.util.math.MathFunction;
-import mrjake.aunis.util.math.MathFunctionLinear;
-import mrjake.aunis.util.math.MathFunctionQuadratic;
-import mrjake.aunis.util.math.MathRange;
-import mrjake.aunis.util.math.MathRangedFunction;
+import mrjake.aunis.util.math.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Client-side class helping with the ring's rotation.

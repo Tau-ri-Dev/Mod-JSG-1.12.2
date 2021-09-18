@@ -1,10 +1,5 @@
 package mrjake.aunis.gui.entry;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import mrjake.aunis.gui.BetterButton;
 import mrjake.aunis.gui.BetterTextField;
 import mrjake.aunis.packet.AunisPacketHandler;
@@ -19,6 +14,10 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.client.config.GuiUtils;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractEntry {
 	

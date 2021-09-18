@@ -1,14 +1,14 @@
 package mrjake.aunis.stargate.network;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.model.ModelLoader;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public enum SymbolPegasusEnum implements SymbolInterface {
   ROEHI(37, "Roehi", "37.obj"),

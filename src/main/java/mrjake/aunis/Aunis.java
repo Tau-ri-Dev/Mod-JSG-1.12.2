@@ -1,9 +1,5 @@
 package mrjake.aunis;
 
-import java.io.IOException;
-
-import org.apache.logging.log4j.Logger;
-
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.chunkloader.ChunkLoadingCallback;
@@ -29,14 +25,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
 
 @Mod( modid = Aunis.ModID, name = Aunis.Name, version = Aunis.Version, acceptedMinecraftVersions = Aunis.MCVersion, dependencies = "after:cofhcore@[4.6.0,);after:opencomputers" )
 public class Aunis {	

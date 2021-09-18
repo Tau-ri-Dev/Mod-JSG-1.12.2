@@ -1,9 +1,5 @@
 package mrjake.aunis.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import mrjake.aunis.block.CapacitorBlock;
 import mrjake.aunis.capability.CapacitorCapabilityProvider;
 import mrjake.aunis.stargate.power.StargateItemEnergyStorage;
@@ -18,6 +14,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class CapacitorItemBlock extends ItemBlock {
 

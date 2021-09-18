@@ -1,8 +1,5 @@
 package mrjake.aunis.gui.element;
 
-import java.awt.Rectangle;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -10,6 +7,9 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.SlotItemHandler;
+
+import java.awt.*;
+import java.util.List;
 
 public abstract class Tab {
 	

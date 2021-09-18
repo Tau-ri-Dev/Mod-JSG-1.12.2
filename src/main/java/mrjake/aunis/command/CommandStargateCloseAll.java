@@ -1,9 +1,5 @@
 package mrjake.aunis.command;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.stargate.StargateClosedReasonEnum;
 import mrjake.aunis.stargate.network.StargateAddress;
@@ -19,6 +15,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class CommandStargateCloseAll extends CommandBase {
 	

@@ -1,11 +1,5 @@
 package mrjake.aunis.gui.entry;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.input.Keyboard;
-
 import mrjake.aunis.gui.BetterButton;
 import mrjake.aunis.packet.gui.entry.EntryActionEnum;
 import net.minecraft.client.gui.GuiButton;
@@ -13,6 +7,11 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import org.lwjgl.input.Keyboard;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class handles universal screen shown when editing Notebook or Universe Dialer

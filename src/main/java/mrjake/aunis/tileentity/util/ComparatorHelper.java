@@ -1,13 +1,13 @@
 package mrjake.aunis.tileentity.util;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+
+import javax.annotation.Nullable;
 
 public class ComparatorHelper {
 	

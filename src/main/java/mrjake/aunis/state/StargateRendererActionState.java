@@ -1,11 +1,11 @@
 package mrjake.aunis.state;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.stargate.EnumIrisState;
 import mrjake.aunis.stargate.EnumIrisType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class StargateRendererActionState extends State {
     public static final StargateRendererActionState STARGATE_HORIZON_WIDEN_ACTION = new StargateRendererActionState(EnumGateAction.STARGATE_HORIZON_WIDEN);

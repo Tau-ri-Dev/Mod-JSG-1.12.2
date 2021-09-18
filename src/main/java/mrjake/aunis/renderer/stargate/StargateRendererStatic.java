@@ -1,23 +1,12 @@
 package mrjake.aunis.renderer.stargate;
 
-import static org.lwjgl.opengl.GL11.GL_QUAD_STRIP;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLE_FAN;
-import static org.lwjgl.opengl.GL11.glBegin;
-import static org.lwjgl.opengl.GL11.glColor4d;
-import static org.lwjgl.opengl.GL11.glColor4f;
-import static org.lwjgl.opengl.GL11.glEnd;
-import static org.lwjgl.opengl.GL11.glTexCoord2f;
-import static org.lwjgl.opengl.GL11.glVertex3f;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import mrjake.aunis.config.AunisConfig;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
+
+import java.util.*;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public class StargateRendererStatic {
 	static final float eventHorizonRadius = 3.790975f;

@@ -1,13 +1,13 @@
 package mrjake.aunis.stargate.network;
 
+import mrjake.aunis.Aunis;
+import mrjake.aunis.loader.model.ModelLoader;
+import net.minecraft.util.ResourceLocation;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import mrjake.aunis.Aunis;
-import mrjake.aunis.loader.model.ModelLoader;
-import net.minecraft.util.ResourceLocation;
 
 public enum SymbolUniverseEnum implements SymbolInterface {
 	TOP_CHEVRON(0, null),

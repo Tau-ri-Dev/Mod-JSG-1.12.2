@@ -1,7 +1,5 @@
 package mrjake.aunis.block.stargate;
 
-import java.util.List;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import net.minecraft.block.Block;
@@ -14,6 +12,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.property.IExtendedBlockState;
+
+import java.util.List;
 
 public class StargateClassicMemberBlockBakedModel implements IBakedModel {
 

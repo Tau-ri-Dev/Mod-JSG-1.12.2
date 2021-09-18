@@ -1,11 +1,11 @@
 package mrjake.aunis.integration.jei;
 
-import java.awt.Rectangle;
-import java.util.List;
-
 import mezz.jei.api.gui.IAdvancedGuiHandler;
 import mrjake.aunis.gui.element.TabbedContainerInterface;
 import net.minecraft.client.gui.inventory.GuiContainer;
+
+import java.awt.*;
+import java.util.List;
 
 public class JEIAdvancedGuiHandler implements IAdvancedGuiHandler<GuiContainer> {
 

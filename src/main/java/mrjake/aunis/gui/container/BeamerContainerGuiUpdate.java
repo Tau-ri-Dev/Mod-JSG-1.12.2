@@ -1,13 +1,13 @@
 package mrjake.aunis.gui.container;
 
-import java.nio.charset.StandardCharsets;
-
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.beamer.BeamerRoleEnum;
 import mrjake.aunis.state.State;
 import mrjake.aunis.tileentity.util.RedstoneModeEnum;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
+import java.nio.charset.StandardCharsets;
 
 public class BeamerContainerGuiUpdate extends State {
 	public BeamerContainerGuiUpdate() {}

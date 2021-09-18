@@ -1,10 +1,10 @@
 package mrjake.aunis.gui.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContainerHelper {
 	

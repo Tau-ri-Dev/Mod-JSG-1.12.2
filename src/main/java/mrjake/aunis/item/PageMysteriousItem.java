@@ -1,7 +1,5 @@
 package mrjake.aunis.item;
 
-import java.util.List;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.notebook.PageNotebookItem;
@@ -17,6 +15,8 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class PageMysteriousItem extends Item {
 	public static final String ITEM_NAME = "page_mysterious";

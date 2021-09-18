@@ -1,20 +1,13 @@
 package mrjake.aunis.event;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import javax.annotation.Nullable;
-
-import mrjake.aunis.item.gdo.GDOActionEnum;
-import mrjake.aunis.item.gdo.GDOActionPacketToServer;
-import org.lwjgl.input.Keyboard;
-
 import mrjake.aunis.gui.PageRenameGui;
 import mrjake.aunis.gui.entry.NotebookEntryChangeGui;
 import mrjake.aunis.gui.entry.UniverseEntryChangeGui;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.dialer.UniverseDialerActionEnum;
 import mrjake.aunis.item.dialer.UniverseDialerActionPacketToServer;
+import mrjake.aunis.item.gdo.GDOActionEnum;
+import mrjake.aunis.item.gdo.GDOActionPacketToServer;
 import mrjake.aunis.item.notebook.NotebookActionEnum;
 import mrjake.aunis.item.notebook.NotebookActionPacketToServer;
 import mrjake.aunis.packet.AunisPacketHandler;
@@ -32,6 +25,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
+import org.lwjgl.input.Keyboard;
+
+import javax.annotation.Nullable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 @EventBusSubscriber(value = Side.CLIENT)
 public class InputHandlerClient {

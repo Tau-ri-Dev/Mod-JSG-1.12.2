@@ -2,7 +2,6 @@ package mrjake.aunis.stargate;
 
 
 import io.netty.buffer.ByteBuf;
-import mrjake.aunis.renderer.stargate.ChevronEnum;
 import mrjake.aunis.stargate.network.SymbolInterface;
 
 public interface ISpinHelper {

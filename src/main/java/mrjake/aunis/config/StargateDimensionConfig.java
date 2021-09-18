@@ -1,22 +1,17 @@
 package mrjake.aunis.config;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.stargate.power.StargateEnergyRequired;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
+
+import java.io.*;
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class StargateDimensionConfig {
 	

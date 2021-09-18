@@ -1,7 +1,5 @@
 package mrjake.aunis.util;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.EnumFacing;
@@ -9,6 +7,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 public class AunisAxisAlignedBB extends AxisAlignedBB {
 	public AunisAxisAlignedBB(double x1, double y1, double z1, double x2, double y2, double z2) {

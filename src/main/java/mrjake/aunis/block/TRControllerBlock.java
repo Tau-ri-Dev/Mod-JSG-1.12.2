@@ -1,13 +1,9 @@
 package mrjake.aunis.block;
 
-import javax.annotation.Nullable;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.raycaster.RaycasterRingsController;
 import mrjake.aunis.tileentity.TRControllerTile;
-import mrjake.aunis.tileentity.TransportRingsTile;
-import mrjake.aunis.util.LinkingHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -24,6 +20,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class TRControllerBlock extends Block {
 

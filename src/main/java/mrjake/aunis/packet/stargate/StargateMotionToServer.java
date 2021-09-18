@@ -1,7 +1,5 @@
 package mrjake.aunis.packet.stargate;
 
-import javax.vecmath.Vector2f;
-
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.packet.PositionedPacket;
@@ -13,6 +11,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import javax.vecmath.Vector2f;
 
 public class StargateMotionToServer extends PositionedPacket {
 	public StargateMotionToServer() {}

@@ -1,12 +1,12 @@
 package mrjake.aunis.integration.jei;
 
-import java.util.Arrays;
-
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
+import java.util.Arrays;
 
 public class JEINotebookCloneRecipe implements IRecipeWrapper {
 

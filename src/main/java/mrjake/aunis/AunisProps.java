@@ -1,7 +1,5 @@
 package mrjake.aunis;
 
-import java.util.Arrays;
-
 import mrjake.aunis.block.BeamerBlock;
 import mrjake.aunis.block.CapacitorBlock;
 import mrjake.aunis.block.DHDBlock;
@@ -16,6 +14,8 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.util.EnumFacing;
+
+import java.util.Arrays;
 
 /**
  * This class holds static references to every {@link IProperty} created by The AUNIS Mod

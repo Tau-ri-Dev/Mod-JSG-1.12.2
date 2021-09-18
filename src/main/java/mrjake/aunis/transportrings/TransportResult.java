@@ -1,9 +1,9 @@
 package mrjake.aunis.transportrings;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentTranslation;
+
+import javax.annotation.Nullable;
 
 public enum TransportResult {
 	OK(null),

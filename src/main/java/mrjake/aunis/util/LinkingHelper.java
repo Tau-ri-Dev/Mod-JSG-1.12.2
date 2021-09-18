@@ -1,7 +1,5 @@
 package mrjake.aunis.util;
 
-import javax.annotation.Nullable;
-
 import li.cil.oc.api.event.RackMountableRenderEvent.TileEntity;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.tileentity.DHDTile;
@@ -9,6 +7,8 @@ import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class LinkingHelper {
   private static int nextLinkId = 0;

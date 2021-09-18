@@ -1,15 +1,15 @@
 package mrjake.aunis.loader.model;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.loader.FolderLoader;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ProgressManager;
 import net.minecraftforge.fml.common.ProgressManager.ProgressBar;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ModelLoader {
 	

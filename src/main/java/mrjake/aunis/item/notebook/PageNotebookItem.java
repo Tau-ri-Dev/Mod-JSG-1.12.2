@@ -1,7 +1,5 @@
 package mrjake.aunis.item.notebook;
 
-import java.util.List;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
@@ -22,6 +20,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class PageNotebookItem extends Item implements CustomModelItemInterface {
 

@@ -1,11 +1,5 @@
 package mrjake.aunis.gui;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import mrjake.aunis.gui.entry.OCUpdatable;
 import mrjake.aunis.item.dialer.UniverseDialerOCMessage;
 import mrjake.aunis.item.dialer.UniverseDialerOCProgramToServer;
@@ -16,6 +10,11 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OCAddMessageGui extends GuiScreen {
 

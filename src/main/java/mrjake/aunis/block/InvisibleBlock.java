@@ -1,7 +1,5 @@
 package mrjake.aunis.block;
 
-import javax.annotation.Nullable;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import net.minecraft.block.Block;
@@ -14,6 +12,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
+import javax.annotation.Nullable;
 
 public class InvisibleBlock extends Block {
 

@@ -1,9 +1,9 @@
 package mrjake.aunis.raycaster.util;
 
+import mrjake.vector.Vector2f;
+
 import java.util.Arrays;
 import java.util.List;
-
-import mrjake.vector.Vector2f;
 
 public class Ray {
 	// Direction and offset of the linear function coming through first and last vertex

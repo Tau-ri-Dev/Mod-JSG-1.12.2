@@ -1,10 +1,5 @@
 package mrjake.aunis.stargate.merging;
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.block.stargate.StargateUniverseMemberBlock;
 import mrjake.aunis.stargate.EnumMemberVariant;
@@ -15,6 +10,10 @@ import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
 
 public class StargateUniverseMergeHelper extends StargateClassicMergeHelper {
 	

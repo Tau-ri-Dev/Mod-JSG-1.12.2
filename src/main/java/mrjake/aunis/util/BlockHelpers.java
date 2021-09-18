@@ -1,12 +1,12 @@
 package mrjake.aunis.util;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
+import java.util.List;
 
 public class BlockHelpers {
 	

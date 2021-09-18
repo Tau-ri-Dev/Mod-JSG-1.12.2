@@ -1,9 +1,5 @@
 package mrjake.aunis.gui;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.transportrings.SaveRingsParametersToServer;
@@ -16,6 +12,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RingsGUI extends GuiBase {
 	

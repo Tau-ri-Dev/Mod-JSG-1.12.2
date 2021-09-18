@@ -1,28 +1,14 @@
 package mrjake.aunis.tileentity.stargate;
 
-import java.util.*;
-
-import javax.annotation.Nullable;
-import javax.vecmath.Vector2f;
-
 import li.cil.oc.api.Network;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.Environment;
-import li.cil.oc.api.network.Message;
-import li.cil.oc.api.network.Node;
-import li.cil.oc.api.network.Packet;
-import li.cil.oc.api.network.WirelessEndpoint;
+import li.cil.oc.api.network.*;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisDamageSources;
 import mrjake.aunis.AunisProps;
-import mrjake.aunis.api.event.StargateChevronEngagedEvent;
-import mrjake.aunis.api.event.StargateClosedEvent;
-import mrjake.aunis.api.event.StargateClosingEvent;
-import mrjake.aunis.api.event.StargateDialFailEvent;
-import mrjake.aunis.api.event.StargateOpenedEvent;
-import mrjake.aunis.api.event.StargateOpeningEvent;
+import mrjake.aunis.api.event.*;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.block.DHDBlock;
 import mrjake.aunis.chunkloader.ChunkManager;
@@ -35,31 +21,15 @@ import mrjake.aunis.particle.ParticleWhiteSmoke;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateAbstractRendererState;
 import mrjake.aunis.renderer.stargate.StargateAbstractRendererState.StargateAbstractRendererStateBuilder;
-import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
-import mrjake.aunis.renderer.stargate.StargatePegasusRendererState;
-import mrjake.aunis.sound.AunisSoundHelper;
-import mrjake.aunis.sound.SoundEventEnum;
-import mrjake.aunis.sound.SoundPositionedEnum;
-import mrjake.aunis.sound.StargateSoundEventEnum;
-import mrjake.aunis.sound.StargateSoundPositionedEnum;
+import mrjake.aunis.sound.*;
 import mrjake.aunis.stargate.*;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
-import mrjake.aunis.stargate.network.StargateAddress;
-import mrjake.aunis.stargate.network.StargateAddressDynamic;
-import mrjake.aunis.stargate.network.StargateNetwork;
-import mrjake.aunis.stargate.network.StargatePos;
-import mrjake.aunis.stargate.network.SymbolInterface;
-import mrjake.aunis.stargate.network.SymbolTypeEnum;
+import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
 import mrjake.aunis.stargate.power.StargateEnergyRequired;
 import mrjake.aunis.stargate.teleportation.EventHorizon;
-import mrjake.aunis.state.StargateFlashState;
-import mrjake.aunis.state.StargateRendererActionState;
+import mrjake.aunis.state.*;
 import mrjake.aunis.state.StargateRendererActionState.EnumGateAction;
-import mrjake.aunis.state.StargateVaporizeBlockParticlesRequest;
-import mrjake.aunis.state.State;
-import mrjake.aunis.state.StateProviderInterface;
-import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.tileentity.util.PreparableInterface;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.tileentity.util.ScheduledTaskExecutorInterface;
@@ -91,6 +61,10 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import javax.vecmath.Vector2f;
+import java.util.*;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
 public abstract class StargateAbstractBaseTile extends TileEntity implements StateProviderInterface, ITickable, ICapabilityProvider, ScheduledTaskExecutorInterface, Environment, WirelessEndpoint, PreparableInterface {
