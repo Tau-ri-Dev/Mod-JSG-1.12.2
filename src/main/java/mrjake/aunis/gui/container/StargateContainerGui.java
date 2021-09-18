@@ -41,7 +41,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 	private TabAddress pegasusAddressTab;
 	private TabAddress universeAddressTab;
 	private TabBiomeOverlay overlayTab;
-	private TabIris irisCodeTab;
+	private TabIris irisTab;
 
 	private int energyStored;
 	private int maxEnergyStored;
@@ -132,7 +132,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				.setIconSize(20, 18)
 				.setIconTextureLocation(304, 54).build();
 
-		irisCodeTab = (TabIris) new TabIris.TabIrisBuilder()
+		irisTab = (TabIris) new TabIris.TabIrisBuilder()
 				.setGuiSize(xSize, ySize)
 				.setGuiPosition(guiLeft, guiTop)
 				.setTabPosition(176-107, 2+22)
@@ -153,7 +153,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 		tabs.add(pegasusAddressTab);
 		tabs.add(universeAddressTab);
 		tabs.add(overlayTab);
-		tabs.add(irisCodeTab);
+		tabs.add(irisTab);
 		
 		container.inventorySlots.set(7, milkyWayAddressTab.createSlot((SlotItemHandler) container.getSlot(7)));
 		container.inventorySlots.set(8, pegasusAddressTab.createSlot((SlotItemHandler) container.getSlot(8)));
@@ -202,7 +202,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 		milkyWayAddressTab.setVisible(hasMilkyWayUpgrade);
 		pegasusAddressTab.setVisible(hasAtlantisUpgrade);
 		universeAddressTab.setVisible(hasUniverseUpgrade);
-		irisCodeTab.setVisible(hasIrisUpgrade);
+		irisTab.setVisible(hasIrisUpgrade);
 
 		Tab.updatePositions(tabs);
 		
@@ -313,10 +313,10 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				break;
 			}
 		}
-		if (irisCodeTab.isOpen() && irisCodeTab.inputField != null/*&&
-				GuiHelper.isPointInRegion(irisCodeTab.inputField.x, irisCodeTab.inputField.y,
-						irisCodeTab.inputField.width, irisCodeTab.inputField.height, mouseX, mouseY)*/) {
-			irisCodeTab.mouseClicked(mouseX, mouseY, mouseButton);
+		if (irisTab.isOpen() && irisTab.inputField != null/*&&
+				GuiHelper.isPointInRegion(irisTab.inputField.x, irisTab.inputField.y,
+						irisTab.inputField.width, irisTab.inputField.height, mouseX, mouseY)*/) {
+			irisTab.mouseClicked(mouseX, mouseY, mouseButton);
 		}
 	}
 	
@@ -329,9 +329,9 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (irisCodeTab.isOpen()){
-			irisCodeTab.inputField.textboxKeyTyped(typedChar, keyCode);
-			/*int code = Integer.valueOf(irisCodeTab.inputField.getText());
+		if (irisTab.isOpen()){
+			irisTab.inputField.textboxKeyTyped(typedChar, keyCode);
+			/*int code = Integer.valueOf(irisTab.inputField.getText());
 			if (code > 0 && code <= 15) {
 				AunisPacketHandler.INSTANCE.sendToServer(new SaveIrisCodeToServer(pos, code));
 			}*/

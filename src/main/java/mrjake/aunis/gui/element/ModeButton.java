@@ -11,17 +11,19 @@ import net.minecraft.util.ResourceLocation;
  * @author matousss
  */
 public class ModeButton extends GuiButton {
-    public final int textureHeight;
     public final int textureWidth;
+    public final int textureHeight;
     public final int variants;
-    private Texture texture;
+    private final ResourceLocation texture;
+    private float variantWidth;
 
-    public ModeButton(int buttonId, int x, int y, int widthIn, ResourceLocation texture, int textureHeight, int textureWidth, int variants) {
-        super(buttonId, x, y, widthIn, widthIn, "");
+    public ModeButton(int buttonId, int x, int y, int size, ResourceLocation texture, int textureHeight, int textureWidth, int variants) {
+        super(buttonId, x, y, size, size, "");
         this.textureHeight = textureHeight;
         this.textureWidth = textureWidth;
         this.variants = variants;
-        this.texture = TextureLoader.getTexture(texture);
+        this.texture = texture;
+        variantWidth = textureWidth/variants;
     }
 
 
@@ -31,18 +33,9 @@ public class ModeButton extends GuiButton {
 
             this.mouseDragged(Minecraft.getMinecraft(), mouseX, mouseY);
 
-            int fgcolor = 0xCCCCCC;
-            int bgcolor = 0xFF1D2026;
-
-           if (!this.hovered) {
-                bgcolor = 0xFF313640;
-            }
-
-            drawRect(x, y, x + width, y + height, GuiBase.FRAME_COLOR);
-            drawRect(x + 1, y + 1, x + width - 1, y + height - 1, bgcolor);
-
-            texture.bindTexture();
-            drawModalRectWithCustomSizedTexture(x, y, 0, variant * (textureWidth / variant), width, height, textureWidth / variant, textureHeight);
+            
+            Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+            drawModalRectWithCustomSizedTexture(x, y, variant * width, 0, width, height, textureWidth, textureHeight);
         }
     }
 
