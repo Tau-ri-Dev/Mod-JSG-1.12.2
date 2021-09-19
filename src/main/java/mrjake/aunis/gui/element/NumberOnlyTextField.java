@@ -20,4 +20,9 @@ public class NumberOnlyTextField extends GuiTextField {
         super.writeText(textToWrite);
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        if (!enabled && isFocused()) setFocused(false);
+        super.setEnabled(enabled);
+    }
 }
