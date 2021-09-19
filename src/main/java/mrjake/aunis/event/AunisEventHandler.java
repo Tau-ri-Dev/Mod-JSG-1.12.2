@@ -3,7 +3,10 @@ package mrjake.aunis.event;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.raycaster.RaycasterDHD;
+import mrjake.aunis.renderer.MainMenu;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -14,6 +17,7 @@ import net.minecraft.world.storage.loot.LootEntryTable;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
@@ -78,6 +82,14 @@ public class AunisEventHandler {
 			LootPool pool = new LootPool(new LootEntry[]{entry}, new LootCondition[]{}, new RandomValueRange(1), new RandomValueRange(0), "univese_dialer_pool");
 
 			event.getTable().addPool(pool);
+		}
+	}
+
+	@SubscribeEvent
+	public void onGuiInit(GuiScreenEvent.InitGuiEvent event){
+		if (Minecraft.getMinecraft() != null && Minecraft.getMinecraft().currentScreen !=null
+				&& Minecraft.getMinecraft().currentScreen.getClass() == GuiMainMenu.class){
+			Minecraft.getMinecraft().currentScreen = new MainMenu();
 		}
 	}
 
