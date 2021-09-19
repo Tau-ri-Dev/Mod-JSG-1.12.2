@@ -1,8 +1,5 @@
 package mrjake.aunis.gui.element;
 
-import mrjake.aunis.gui.GuiBase;
-import mrjake.aunis.loader.texture.Texture;
-import mrjake.aunis.loader.texture.TextureLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
@@ -13,19 +10,20 @@ import net.minecraft.util.ResourceLocation;
 public class ModeButton extends GuiButton {
     public final int textureWidth;
     public final int textureHeight;
-    public final int variants;
+    public final int states;
     private final ResourceLocation texture;
+    private int currentState = 0;
 
-    public ModeButton(int buttonId, int x, int y, int size, ResourceLocation texture, int textureWidth, int textureHeight, int variants) {
+    public ModeButton(int buttonId, int x, int y, int size, ResourceLocation texture, int textureWidth, int textureHeight, int states) {
         super(buttonId, x, y, size, size, "");
         this.textureHeight = textureHeight;
         this.textureWidth = textureWidth;
-        this.variants = variants;
+        this.states = states;
         this.texture = texture;
     }
 
 
-    public void drawButton(int mouseX, int mouseY, int variant) {
+    public void drawButton(int mouseX, int mouseY) {
         if (this.visible) {
             this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
@@ -39,9 +37,25 @@ public class ModeButton extends GuiButton {
             else {
                 drawModalRectWithCustomSizedTexture(x, y, 0, height, width, height, textureWidth, textureHeight);
             }
-            drawModalRectWithCustomSizedTexture(x, y, variant * width, 0, width, height, textureWidth, textureHeight);
+            drawModalRectWithCustomSizedTexture(x, y, currentState * width, 0, width, height, textureWidth, textureHeight);
         }
     }
 
+    public void nextState() {
+        if (currentState < states) currentState++;
+        else currentState = 0;
+    }
 
+    public void previousState() {
+        if (currentState == 0) currentState = states-1;
+        else currentState--;
+    }
+
+    public int getCurrentState() {
+        return currentState;
+    }
+
+    public void setCurrentState(int currentState) {
+        this.currentState = currentState;
+    }
 }

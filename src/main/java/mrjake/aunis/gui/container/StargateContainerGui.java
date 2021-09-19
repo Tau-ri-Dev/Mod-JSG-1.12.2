@@ -132,7 +132,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				.setIconSize(20, 18)
 				.setIconTextureLocation(304, 54).build();
 
-		irisTab = (TabIris) new TabIris.TabIrisBuilder()
+		irisTab = (TabIris) TabIris.builder()
 				.setGuiSize(xSize, ySize)
 				.setGuiPosition(guiLeft, guiTop)
 				.setTabPosition(176-107, 2+22)
