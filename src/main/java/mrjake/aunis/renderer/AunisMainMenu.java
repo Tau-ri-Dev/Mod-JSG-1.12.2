@@ -18,42 +18,48 @@ import java.io.IOException;
 @SideOnly(Side.CLIENT)
 public class AunisMainMenu extends GuiScreen {
 
+    protected float animationStage;
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        GlStateManager.scale(50, 50, 50);
-        GlStateManager.translate(150, 150, 0);
+        animationStage += 0.5f;
+        if(animationStage >= 360) animationStage = 0f;
 
-        // RING
-
+        drawDefaultBackground();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        // GATE
         GlStateManager.pushMatrix();
-        GlStateManager.translate(0, 0, 0);
-        GlStateManager.rotate(180, 0, 1, 0);
+        GlStateManager.translate(250, 250, 0f);
+        GlStateManager.scale(50, 50, 50);
+        GlStateManager.rotate(180, 1, 0, 0);
+        ElementEnum.MILKYWAY_GATE.bindTexture(BiomeOverlayEnum.NORMAL);
+        ElementEnum.MILKYWAY_GATE.render();
+        GlStateManager.popMatrix();
+        // RING
+        GlStateManager.translate(250, 250, 0.1f);
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(50, 50, 50);
+        GlStateManager.rotate(180, 1, 0, 0);
+
+        GlStateManager.rotate(animationStage, 0, 0, 1);
 
         ElementEnum.MILKYWAY_RING.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
-
         GlStateManager.popMatrix();
-
         // CHEVRONS
-
         GlStateManager.pushMatrix();
-
-        GlStateManager.rotate(0, 0, 0, 1);
-
+        GlStateManager.translate(250, 250, 2);
+        GlStateManager.rotate(180, 0, 1, 0);
         GlStateManager.pushMatrix();
-
-        GlStateManager.translate(0, 0, 0);
+        GlStateManager.scale(50, 50, 50);
         ElementEnum.MILKYWAY_CHEVRON_LIGHT.render();
-
-        GlStateManager.translate(0, 0, 0);
         ElementEnum.MILKYWAY_CHEVRON_MOVING.render();
-
         GlStateManager.popMatrix();
         ElementEnum.MILKYWAY_CHEVRON_FRAME.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
         ElementEnum.MILKYWAY_CHEVRON_BACK.render();
         GlStateManager.popMatrix();
-
-        // GATE
-        ElementEnum.MILKYWAY_GATE.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
