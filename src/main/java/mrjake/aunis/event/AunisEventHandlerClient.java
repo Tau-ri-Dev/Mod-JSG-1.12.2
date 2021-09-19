@@ -4,12 +4,15 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.renderer.AunisMainMenu;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreenOptionsSounds;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
 import net.minecraftforge.common.config.Config.Type;
 import net.minecraftforge.common.config.ConfigManager;
@@ -60,13 +63,10 @@ public class AunisEventHandlerClient {
     }
   }
 
-//  @SubscribeEvent
-//  public static void onGuiOpen(GuiOpenEvent event) {
-//    if (event.getGui() instanceof GuiMainMenu) {
-//      event.setGui(new AunisGuiMainMenu());
-//
-//
-//
-//    }
-//  }
+  @SubscribeEvent
+  public static void onGuiOpen(GuiOpenEvent event) {
+    if (event.getGui() instanceof GuiMainMenu) {
+      event.setGui(new AunisMainMenu());
+    }
+  }
 }
