@@ -382,7 +382,7 @@ item.aunis.gui.oc_port_invalid=Invalid port
 item.aunis.gdo.name=Garage Door Opener
 item.aunis.gdo.not_linked=Not linked
 
-item.aunis.gdo.code_sender=Code sender
+item.aunis.gdo.code_sender=Code
 item.aunis.gdo.iris_opened=Iris is opened!
 item.aunis.gdo.iris_busy=Iris is busy!
 item.aunis.gdo.code_accepted=Code accepted! Opening iris...

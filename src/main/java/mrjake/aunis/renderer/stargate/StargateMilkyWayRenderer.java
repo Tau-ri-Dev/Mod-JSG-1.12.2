@@ -39,9 +39,9 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
     if (rendererState.spinHelper.getIsSpinning())
       angularRotation += rendererState.spinHelper.apply(getWorld().getTotalWorldTime() + partialTicks);
 
+    /** THIS SHIT DID NOT WORK, SO I REWORK IT :) - MineDragonCZ_ */
+    /*
     if (rendererState.horizontalRotation == 90 || rendererState.horizontalRotation == 0) angularRotation *= -1;
-
-
     if (rendererState.horizontalRotation == 90 || rendererState.horizontalRotation == 270) {
       GlStateManager.translate(RING_LOC.y, RING_LOC.z, RING_LOC.x);
       GlStateManager.rotate(angularRotation, 1, 0, 0);
@@ -51,8 +51,11 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
       GlStateManager.rotate(angularRotation, 0, 0, 1);
       GlStateManager.translate(-RING_LOC.x, -RING_LOC.z, -RING_LOC.y);
     }
-
-   // GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
+    GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
+    */
+    GlStateManager.translate(RING_LOC.x, RING_LOC.z, RING_LOC.y);
+    GlStateManager.rotate(-angularRotation, 0, 0, 1);
+    GlStateManager.translate(-RING_LOC.x, -RING_LOC.z, -RING_LOC.y);
 
     ElementEnum.MILKYWAY_RING.bindTextureAndRender(rendererState.getBiomeOverlay());
 

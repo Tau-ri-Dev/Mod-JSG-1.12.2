@@ -143,7 +143,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             irisAnimationStage *= 1.7f / PHYSICAL_IRIS_ANIMATION_LENGTH;
             if (irisAnimationStage > 1.7f) irisAnimationStage = 1.7f;
             if (irisAnimationStage < 0) irisAnimationStage = 0;
-            if (irisState == EnumIrisState.OPENING || irisState == EnumIrisState.OPENED)
+            if (irisState == EnumIrisState.OPENING)
                 irisAnimationStage = 1.7f - irisAnimationStage;
             for (float i = 0; i < 20; i++) {
                 float rotateIndex = 18f * i;
