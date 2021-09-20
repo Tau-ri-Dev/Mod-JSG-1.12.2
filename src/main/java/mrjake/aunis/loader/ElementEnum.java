@@ -19,7 +19,12 @@ public enum ElementEnum {
   MILKYWAY_DHD("milkyway/DHD.obj", "milkyway/dhd"),
   MILKYWAY_GATE("milkyway/gate.obj", "milkyway/gatering7"),
   MILKYWAY_RING("milkyway/ring.obj", "milkyway/gatering7"),
+
+  // for main menu screen
   MILKYWAY_RING_MAIN_MENU("milkyway/ring.obj", "milkyway/ring8"),
+  MILKYWAY_CHEVRON_LIGHT_ACTIVE("milkyway/chevronLight.obj", "milkyway/chevron10"),
+  MILKYWAY_CHEVRON_MOVING_ACTIVE("milkyway/chevronMoving.obj", "milkyway/chevron10"),
+  // ------------
 
   MILKYWAY_CHEVRON_LIGHT("milkyway/chevronLight.obj", "milkyway/chevron0"),
   MILKYWAY_CHEVRON_FRAME("milkyway/chevronFrame.obj", "milkyway/gatering7"),
