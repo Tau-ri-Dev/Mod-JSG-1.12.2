@@ -1,5 +1,6 @@
 package mrjake.aunis.renderer;
 
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
@@ -18,43 +19,44 @@ public class AunisMainMenu extends GuiScreen {
     protected boolean playingSound = false;
     protected BiomeOverlayEnum overlay = BiomeOverlayEnum.NORMAL;
 
-    public void getNextBiomeOverlay() {
-        switch (overlay) {
-            case NORMAL:
-                overlay = BiomeOverlayEnum.AGED;
-                break;
-            case AGED:
-                overlay = BiomeOverlayEnum.FROST;
-                break;
-            case FROST:
-                overlay = BiomeOverlayEnum.MOSSY;
-                break;
-            case MOSSY:
-                overlay = BiomeOverlayEnum.SOOTY;
-                break;
-            case SOOTY:
-            default:
-                overlay = BiomeOverlayEnum.NORMAL;
-                break;
+    public void getNextBiomeOverlay(boolean doIt) {
+        if(doIt) {
+            switch (overlay) {
+                case NORMAL:
+                    overlay = BiomeOverlayEnum.AGED;
+                    break;
+                case AGED:
+                    overlay = BiomeOverlayEnum.FROST;
+                    break;
+                case FROST:
+                    overlay = BiomeOverlayEnum.MOSSY;
+                    break;
+                case MOSSY:
+                    overlay = BiomeOverlayEnum.SOOTY;
+                    break;
+                case SOOTY:
+                default:
+                    overlay = BiomeOverlayEnum.NORMAL;
+                    break;
+            }
         }
+        else overlay = BiomeOverlayEnum.NORMAL;
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         // ------------------------------
-        // GET SCREEN SIZE
-
-        // ------------------------------
         // ANIMATIONS AND SOUNDS
 
-        animationStage += 0.3f;
+        if(AunisConfig.mainMenuConfig.gateRotation) animationStage += (float) AunisConfig.mainMenuConfig.gateSpeed;
         if(animationStage >= 360) animationStage = 0f;
         switch((int) animationStage){
             case 359:
             case 270:
             case 180:
             case 90:
-                getNextBiomeOverlay();
+
+                getNextBiomeOverlay(AunisConfig.mainMenuConfig.changingGateOverlay);
         }
         if(!playingSound){
             playingSound = true;
@@ -73,9 +75,6 @@ public class AunisMainMenu extends GuiScreen {
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
         GlStateManager.shadeModel(7425);
-        //GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
-        //GL11.glEnable(2903 /* GL_COLOR_MATERIAL */);
-        //GlStateManager.translate(350, 150, 0f);
         GlStateManager.translate((((float) width)/2f), (((float) height)/2f), 0f);
         GlStateManager.scale(30, 30, 30);
         GlStateManager.rotate(-180f, 0f, 0f, 1f);
@@ -114,27 +113,16 @@ public class AunisMainMenu extends GuiScreen {
             // generates chevron lock animation
             float chevronOffset = 0;
             // ---------
-            if(this.chevronsActive) {
-                if (i == 6 || i == 7) {
-                    ElementEnum.MILKYWAY_CHEVRON_FRAME.bindTextureAndRender(overlay);
-                    GlStateManager.translate(0, chevronOffset, 0);
-                    ElementEnum.MILKYWAY_CHEVRON_LIGHT.bindTextureAndRender(overlay);
-                    GlStateManager.translate(0, -2 * chevronOffset, 0);
-                    ElementEnum.MILKYWAY_CHEVRON_MOVING.bindTextureAndRender(overlay);
-                } else {
-                    ElementEnum.MILKYWAY_CHEVRON_FRAME.bindTextureAndRender(overlay);
-                    GlStateManager.translate(0, chevronOffset, 0);
-                    ElementEnum.MILKYWAY_CHEVRON_LIGHT_ACTIVE.bindTextureAndRender(overlay);
-                    GlStateManager.translate(0, -2 * chevronOffset, 0);
-                    ElementEnum.MILKYWAY_CHEVRON_MOVING_ACTIVE.bindTextureAndRender(overlay);
-                }
-            }
-            else{
-                ElementEnum.MILKYWAY_CHEVRON_FRAME.bindTextureAndRender(overlay);
-                GlStateManager.translate(0, chevronOffset, 0);
+            ElementEnum.MILKYWAY_CHEVRON_FRAME.bindTextureAndRender(overlay);
+            GlStateManager.translate(0, chevronOffset, 0);
+            if ((i == 6 || i == 7) || !this.chevronsActive) {
                 ElementEnum.MILKYWAY_CHEVRON_LIGHT.bindTextureAndRender(overlay);
                 GlStateManager.translate(0, -2 * chevronOffset, 0);
                 ElementEnum.MILKYWAY_CHEVRON_MOVING.bindTextureAndRender(overlay);
+            } else {
+                ElementEnum.MILKYWAY_CHEVRON_LIGHT_ACTIVE.bindTextureAndRender(overlay);
+                GlStateManager.translate(0, -2 * chevronOffset, 0);
+                ElementEnum.MILKYWAY_CHEVRON_MOVING_ACTIVE.bindTextureAndRender(overlay);
             }
             GlStateManager.popMatrix();
             // back side
@@ -147,10 +135,6 @@ public class AunisMainMenu extends GuiScreen {
             GlStateManager.popMatrix();
             */
         }
-
-
-        //GL11.glDisable(32826 /* GL_RESCALE_NORMAL_EXT */);
-        //GL11.glDisable(2903 /* GL_COLOR_MATERIAL */);
         GlStateManager.shadeModel(7424);
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
@@ -162,14 +146,13 @@ public class AunisMainMenu extends GuiScreen {
 
         GlStateManager.pushMatrix();
         GlStateManager.enableTexture2D();
-        GlStateManager.translate(0, (((float) height) - 26f), 0);
-        GlStateManager.scale(1, 1, 1);
+        GlStateManager.translate(6, (((float) height) - 26f), 0);
+        GlStateManager.scale(0.8, 0.8, 0.8);
         GlStateManager.translate(0, 0, 0);
         drawString(fontRenderer, "Music credits: STARGATE SG-1 - Full Original Soundtrack OST", 0, 0, 0xffffff);
         GlStateManager.translate(0, 10, 0);
         drawString(fontRenderer, "Aunis mod by: MrJake, MineDragonCZ_ and Matousss", 0, 0, 0xffffff);
-        GlStateManager.translate(0, 6, 0);
-        GlStateManager.scale(0.5, 0.5, 0.5);
+        GlStateManager.translate(0, 10, 0);
         drawString(fontRenderer, "Note that the gate cannot be rendered perfectly here!", 0, 0, 0xffffff);
         GlStateManager.disableTexture2D();
         GlStateManager.popMatrix();

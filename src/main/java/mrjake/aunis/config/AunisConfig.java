@@ -53,6 +53,9 @@ public class AunisConfig {
 	
 	@Name("WorldGen config")
 	public static WorldGenConfig worldgenConfig = new WorldGenConfig();
+
+	@Name("MainMenu config")
+	public static MainMenuConfig mainMenuConfig = new MainMenuConfig();
 	
 	public static class StargateConfig {
 		@Name("Orlin's gate max open count")
@@ -490,6 +493,18 @@ public class AunisConfig {
 
 		@Name("Titanium max veins in chunk")
 		public int titaniumMaxVeinInChunk = 8;
+	}
+
+	public static class MainMenuConfig {
+		@Name("Enable changing gate overlay")
+		public boolean changingGateOverlay = true;
+
+		@Name("Enable gate rotation")
+		public boolean gateRotation = true;
+
+		@Name("Gate rotation speed")
+		@RangeDouble(min=0, max=1)
+		public double gateSpeed = 0.3;
 	}
 	
 	public static void resetCache() {
