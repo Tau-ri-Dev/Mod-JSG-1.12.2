@@ -501,10 +501,6 @@ public class AunisConfig {
 
 		@Name("Enable gate rotation")
 		public boolean gateRotation = true;
-
-		@Name("Gate rotation speed")
-		@RangeDouble(min=0, max=1)
-		public double gateSpeed = 0.3;
 	}
 	
 	public static void resetCache() {
