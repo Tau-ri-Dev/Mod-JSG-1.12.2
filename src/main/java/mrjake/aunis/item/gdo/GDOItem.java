@@ -4,6 +4,7 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.gui.GuiSendCode;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
 import mrjake.aunis.stargate.EnumStargateState;
@@ -173,17 +174,15 @@ public class GDOItem extends Item implements CustomModelItemInterface {
 
             switch (mode) {
                 case CODE_SENDER:
-                    if (!compound.hasKey("irisCode")) {
-                        player.sendStatusMessage(GDOMessages.CODE_NOT_SET.textComponent, true);
-                        break;
-                    }
-                    int irisCode = compound.getInteger("irisCode");
-                    StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(linkedPos);
-                    if (gateTile.getStargateState() == EnumStargateState.ENGAGED_INITIATING) {
-                        TileEntity te = StargateNetwork.get(world).getStargate(gateTile.getDialedAddress()).getTileEntity();
-                        if (!(te instanceof StargateClassicBaseTile)) break;
-                        ((StargateClassicBaseTile) te).receiveIrisCode(player, irisCode);
-                    }
+//                    int irisCode = compound.getInteger("irisCode");
+//                    StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(linkedPos);
+//                    if (gateTile.getStargateState() == EnumStargateState.ENGAGED_INITIATING) {
+//                        TileEntity te = StargateNetwork.get(world).getStargate(gateTile.getDialedAddress()).getTileEntity();
+//                        if (!(te instanceof StargateClassicBaseTile)) break;
+//                        ((StargateClassicBaseTile) te).receiveIrisCode(player, irisCode);
+//                    }
+
+                    /** moved to {@link mrjake.aunis.event.InputHandlerClient}*/
                     break;
                 default:
                     break;
@@ -191,12 +190,5 @@ public class GDOItem extends Item implements CustomModelItemInterface {
         }
 
         return super.onItemRightClick(world, player, hand);
-    }
-
-    // ------------------------------------------------------------------------------------------------------------
-    // NBT handles
-
-    public static void setMemoryNameForIndex(NBTTagList list, int index, String name) {
-        list.getCompoundTagAt(index).setString("name", name);
     }
 }
