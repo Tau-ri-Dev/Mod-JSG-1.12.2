@@ -501,6 +501,9 @@ public class AunisConfig {
 
 		@Name("Enable gate rotation")
 		public boolean gateRotation = true;
+
+		@Name("Play music in main menu")
+		public boolean playMusic = true;
 	}
 	
 	public static void resetCache() {

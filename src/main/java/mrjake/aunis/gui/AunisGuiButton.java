@@ -8,6 +8,10 @@ public class AunisGuiButton extends GuiButton {
 		super(id, x, y, w, h, string);
 	}
 
+    public AunisGuiButton(int id, int x, int y, String text) {
+        this(id, x, y, 200, 20, text);
+    }
+
     @Override
 	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
 		if (this.visible) {

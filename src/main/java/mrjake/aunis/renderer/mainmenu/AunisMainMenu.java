@@ -1,19 +1,31 @@
 package mrjake.aunis.renderer.mainmenu;
 
+import com.google.common.collect.Lists;
+import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
+import mrjake.aunis.sound.AunisSoundHelperClient;
+import mrjake.aunis.sound.SoundPositionedEnum;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.realms.RealmsBridge;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.WorldServerDemo;
+import net.minecraft.world.storage.ISaveFormat;
+import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class AunisMainMenu extends GuiMainMenu{
+public class AunisMainMenu extends GuiMainMenu {
 
     // define variables
     protected float animationStage = 0;
@@ -25,35 +37,8 @@ public class AunisMainMenu extends GuiMainMenu{
     protected BiomeOverlayEnum overlay = BiomeOverlayEnum.NORMAL;
     protected float screenCenterHeight = (((float) height) / 2f);
     protected float screenCenterWidth = ((float) width) / 2f;
-
-    private static final ResourceLocation MINECRAFT_TITLE_TEXTURES = new ResourceLocation("textures/gui/title/minecraft.png");
-    protected static final ResourceLocation BUTTON_TEXTURES = new ResourceLocation("textures/gui/widgets.png");
-    public int bwidth;
-    public int bheight;
-    public int x;
-    public int y;
-    public String displayString;
-    public int id;
-    public boolean enabled;
-    public boolean visible;
-    protected boolean hovered;
-    public int packedFGColour; //FML
-
-    protected int getHoverState(boolean mouseOver)
-    {
-        int i = 1;
-
-        if (!this.enabled)
-        {
-            i = 0;
-        }
-        else if (mouseOver)
-        {
-            i = 2;
-        }
-
-        return i;
-    }
+    protected List<AunisGuiButton> aunisButtonList = Lists.newArrayList();
+    protected ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");
 
     // animation of top chevron
     public void updateLastChevron() {
@@ -101,7 +86,8 @@ public class AunisMainMenu extends GuiMainMenu{
     // play sound
     public void updateSound() {
         if (!playingSound) {
-            //this.mc.getSoundHandler().playSound((ISound) SoundPositionedEnum.MILKYWAY_RING_ROLL);
+            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1,0,0), SoundPositionedEnum.MAINMENU_MUSIC, AunisConfig.mainMenuConfig.playMusic);
+            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0,0,1), SoundPositionedEnum.MAINMENU_RINGROLL, AunisConfig.mainMenuConfig.gateRotation);
             playingSound = true;
         }
     }
@@ -117,6 +103,7 @@ public class AunisMainMenu extends GuiMainMenu{
                 //case 90:
                 this.chevronShout = true;
                 getNextBiomeOverlay(AunisConfig.mainMenuConfig.changingGateOverlay);
+                break;
         }
     }
 
@@ -135,15 +122,26 @@ public class AunisMainMenu extends GuiMainMenu{
         // ------------------------------
         // DRAWING BACKGROUND
 
-        drawDefaultBackground();
+        GlStateManager.pushMatrix();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
+        this.mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
+        this.drawScaledCustomSizeModalRect(0, 0, 0, 0, width, height, width, height, width, height);
+
+        // background gradient
+        //this.drawGradientRect(0, 0, this.width, this.height, -2130706433, 16777215);
+        //this.drawGradientRect(0, 0, this.width, this.height, 0, Integer.MIN_VALUE);
+
+        GlStateManager.disableAlpha();
+        GlStateManager.disableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.popMatrix();
 
         // ------------------------------
         // DRAWING WHOLE GATE MODEL
 
         GlStateManager.pushMatrix();
-        // background gradient
-        this.drawGradientRect(0, 0, this.width, this.height, -2130706433, 16777215);
-        this.drawGradientRect(0, 0, this.width, this.height, 0, Integer.MIN_VALUE);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.enableTexture2D();
         GlStateManager.enableBlend();
@@ -221,7 +219,7 @@ public class AunisMainMenu extends GuiMainMenu{
 
         GlStateManager.pushMatrix();
         GlStateManager.enableTexture2D();
-        GlStateManager.translate(6, (((float) height) - 26f), 0);
+        GlStateManager.translate(6, (((float) height) - 36f), 0);
         GlStateManager.scale(0.8, 0.8, 0.8);
         GlStateManager.translate(0, 0, 0);
         drawString(fontRenderer, "Music credits: STARGATE SG-1 - Full Original Soundtrack OST", 0, 0, 0xffffff);
@@ -229,6 +227,8 @@ public class AunisMainMenu extends GuiMainMenu{
         drawString(fontRenderer, "Aunis mod by: MrJake, MineDragonCZ_ and Matousss", 0, 0, 0xffffff);
         GlStateManager.translate(0, 10, 0);
         drawString(fontRenderer, "Note that the gate cannot be rendered perfectly here!", 0, 0, 0xffffff);
+        GlStateManager.translate(0, 10, 0);
+        drawString(fontRenderer, "Copyright Mojang AB. Do not distribute!", 0, 0, 0xffffff);
         GlStateManager.disableTexture2D();
         GlStateManager.popMatrix();
 
@@ -237,73 +237,115 @@ public class AunisMainMenu extends GuiMainMenu{
 
         GlStateManager.pushMatrix();
         GlStateManager.enableTexture2D();
-        GlStateManager.translate((((float) width)/2), 10, 0);
-        this.mc.getTextureManager().bindTexture(MINECRAFT_TITLE_TEXTURES);
+        GlStateManager.translate(screenCenterWidth, 48, 0);
+        GlStateManager.scale(4, 4, 4);
+        drawCenteredString(fontRenderer, "Aunis", 0, 0, 0xffffff);
+        GlStateManager.disableTexture2D();
+        GlStateManager.popMatrix();
+
+        GlStateManager.pushMatrix();
+        GlStateManager.enableTexture2D();
+        GlStateManager.translate(screenCenterWidth, 81, 0);
+        GlStateManager.scale(1.5f, 1.5f, 1.5f);
+        drawCenteredString(fontRenderer, "All you need is stargate", 0, 0, 0xa4a4a4);
         GlStateManager.disableTexture2D();
         GlStateManager.popMatrix();
 
         // ------------------------------
         // DRAWING BUTTONS
 
-        for (int l = 0; l < this.buttonList.size(); ++l) {
-
-
-            this.bwidth = buttonList.get(l).width;
-            this.bheight = buttonList.get(l).height;
-            this.enabled = true;
-            this.visible = true;
-            this.id = l;
-            this.x = buttonList.get(l).x;
-            this.y = buttonList.get(l).y;
-            this.displayString = buttonList.get(l).displayString;
-
-
-
-            FontRenderer fontrenderer = mc.fontRenderer;
-            mc.getTextureManager().bindTexture(BUTTON_TEXTURES);
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.bwidth && mouseY < this.y + this.bheight;
-            int i = this.getHoverState(this.hovered);
-            GlStateManager.enableBlend();
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            this.drawTexturedModalRect(this.x, this.y, 0, 46 + i * 20, this.bwidth / 2, this.bheight);
-            this.drawTexturedModalRect(this.x + this.bwidth / 2, this.y, 200 - this.bwidth / 2, 46 + i * 20, this.bwidth / 2, this.bheight);
-            int j = 14737632;
-
-            if (packedFGColour != 0)
-            {
-                j = packedFGColour;
-            }
-            else
-            if (!this.enabled)
-            {
-                j = 10526880;
-            }
-            else if (this.hovered)
-            {
-                j = 16777120;
-            }
-
-            this.drawCenteredString(fontrenderer, this.displayString, this.x + this.bwidth / 2, this.y + (this.bheight - 8) / 2, j);
+        for (int l = 0; l < this.aunisButtonList.size(); ++l) {
+            this.aunisButtonList.get(l).drawButton(this.mc, mouseX, mouseY, partialTicks);
         }
 
         for (int j = 0; j < this.labelList.size(); ++j) {
             (this.labelList.get(j)).drawLabel(this.mc, mouseX, mouseY);
         }
     }
+
     @Override
     public void initGui() {
+        this.aunisButtonList.clear();
+        int j = this.height / 4 + 48;
+
+        // single
+        this.aunisButtonList.add(new AunisGuiButton(1, this.width / 2 - 100, j, I18n.format("menu.singleplayer")));
+        // multi
+        this.aunisButtonList.add(new AunisGuiButton(2, this.width / 2 - 100, j + 24, I18n.format("menu.multiplayer")));
+        // mods list
+        this.aunisButtonList.add(new AunisGuiButton(6, this.width - 6 - 98, 6, 98, 20, I18n.format("fml.menu.mods")));
+        // options
+        this.aunisButtonList.add(new AunisGuiButton(0, 6, 6, 98, 20, I18n.format("menu.options")));
+        // quit
+        this.aunisButtonList.add(new AunisGuiButton(4, this.width - 6 - 98, this.height - 6 - 20, 98, 20, I18n.format("menu.quit")));
+
         super.initGui();
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) throws IOException {
-        super.actionPerformed(button);
+    protected void actionPerformed(GuiButton button) {
+        switch (button.id) {
+            // main menu screens
+            case 0:
+                this.mc.displayGuiScreen(new GuiOptions(this, this.mc.gameSettings));
+                break;
+            case 1:
+                this.mc.displayGuiScreen(new GuiWorldSelection(this));
+                break;
+            case 2:
+                this.mc.displayGuiScreen(new GuiMultiplayer(this));
+                break;
+            case 4:
+                this.mc.shutdown();
+                break;
+            case 5:
+                this.mc.displayGuiScreen(new GuiLanguage(this, this.mc.gameSettings, this.mc.getLanguageManager()));
+                break;
+            case 6:
+                this.mc.displayGuiScreen(new net.minecraftforge.fml.client.GuiModList(this));
+                break;
+            case 14:
+                RealmsBridge realmsbridge = new RealmsBridge();
+                realmsbridge.switchToRealms(this);
+                break;
+            // other screens
+            case 11:
+                this.mc.launchIntegratedServer("Demo_World", "Demo_World", WorldServerDemo.DEMO_WORLD_SETTINGS);
+                break;
+
+            case 12:
+                ISaveFormat isaveformat = this.mc.getSaveLoader();
+                WorldInfo worldinfo = isaveformat.getWorldInfo("Demo_World");
+                if (worldinfo != null) {
+                    this.mc.displayGuiScreen(new GuiYesNo(this, I18n.format("selectWorld.deleteQuestion"), "'" + worldinfo.getWorldName() + "' " + I18n.format("selectWorld.deleteWarning"), I18n.format("selectWorld.deleteButton"), I18n.format("gui.cancel"), 12));
+                }
+                break;
+        }
     }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+        if (mouseButton == 0) {
+            for (int i = 0; i < this.aunisButtonList.size(); ++i) {
+                GuiButton guibutton = this.aunisButtonList.get(i);
+
+                if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
+                    net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre event = new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, (List) this.aunisButtonList);
+                    if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
+                        break;
+                    guibutton = event.getButton();
+                    this.selectedButton = guibutton;
+                    guibutton.playPressSound(this.mc.getSoundHandler());
+                    this.actionPerformed(guibutton);
+                    if (this.equals(this.mc.currentScreen))
+                        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.getButton(), (List) this.aunisButtonList));
+                }
+            }
+        }
+
+        /*if (mouseX > this.widthCopyrightRest && mouseX < this.widthCopyrightRest + this.widthCopyright && mouseY > this.height - 10 && mouseY < this.height)
+        {
+            this.mc.displayGuiScreen(new GuiWinGame(false, Runnables.doNothing()));
+        }*/
     }
 }

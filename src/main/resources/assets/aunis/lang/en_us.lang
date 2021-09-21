@@ -433,4 +433,4 @@ aunis.subtitle.gate_universe_close=Universe gate wormhole closes
 aunis.subtitle.beamer_start=Beamer starts
 aunis.subtitle.beamer_stop=Beamer stops
 aunis.subtitle.beamer_loop=Beamer beams
-aunis.subtitle.page_flip=Page flips
+aunis.subtitle.page_flip=Page flipsgui.quitbutton=Test
