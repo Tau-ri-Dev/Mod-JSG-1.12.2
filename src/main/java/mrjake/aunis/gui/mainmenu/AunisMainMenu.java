@@ -1,4 +1,4 @@
-package mrjake.aunis.renderer.mainmenu;
+package mrjake.aunis.gui.mainmenu;
 
 import com.google.common.collect.Lists;
 import mrjake.aunis.Aunis;
