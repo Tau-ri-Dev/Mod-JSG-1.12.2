@@ -23,6 +23,8 @@ public class AunisMainMenu extends GuiMainMenu{
     protected boolean chevronShout = true;
     protected boolean chevronShoutColapsing = false;
     protected BiomeOverlayEnum overlay = BiomeOverlayEnum.NORMAL;
+    protected float screenCenterHeight = (((float) height) / 2f);
+    protected float screenCenterWidth = ((float) width) / 2f;
 
     private static final ResourceLocation MINECRAFT_TITLE_TEXTURES = new ResourceLocation("textures/gui/title/minecraft.png");
     protected static final ResourceLocation BUTTON_TEXTURES = new ResourceLocation("textures/gui/widgets.png");
@@ -36,6 +38,7 @@ public class AunisMainMenu extends GuiMainMenu{
     public boolean visible;
     protected boolean hovered;
     public int packedFGColour; //FML
+
     protected int getHoverState(boolean mouseOver)
     {
         int i = 1;
@@ -120,6 +123,8 @@ public class AunisMainMenu extends GuiMainMenu{
     // RENDER MAIN MENU
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.screenCenterHeight = (((float) height) / 2f);
+        this.screenCenterWidth = ((float) width) / 2f;
         // ------------------------------
         // ANIMATIONS AND SOUNDS
 
@@ -136,13 +141,15 @@ public class AunisMainMenu extends GuiMainMenu{
         // DRAWING WHOLE GATE MODEL
 
         GlStateManager.pushMatrix();
-        GlStateManager.rotate(animationStage, 0, 1, 0);
+        // background gradient
+        this.drawGradientRect(0, 0, this.width, this.height, -2130706433, 16777215);
+        this.drawGradientRect(0, 0, this.width, this.height, 0, Integer.MIN_VALUE);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.enableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.shadeModel(7425);
-        GlStateManager.translate((((float) width) / 2f), (((float) height) / 2f), 0f);
+        GlStateManager.translate(screenCenterWidth, screenCenterHeight, 0f);
         GlStateManager.scale(30, 30, 30);
         GlStateManager.rotate(-180f, 0f, 0f, 1f);
 
@@ -162,6 +169,7 @@ public class AunisMainMenu extends GuiMainMenu{
         // DRAWING RING
 
         GlStateManager.pushMatrix();
+        GlStateManager.translate(0f, 0f, -3f);
         // ring rotation animation
         GlStateManager.rotate(animationStage, 0, 0, 1);
         // -----
@@ -227,10 +235,12 @@ public class AunisMainMenu extends GuiMainMenu{
         // ------------------------------
         // DRAWING MAIN TITLE
 
-        this.drawGradientRect(0, 0, this.width, this.height, -2130706433, 16777215);
-        this.drawGradientRect(0, 0, this.width, this.height, 0, Integer.MIN_VALUE);
+        GlStateManager.pushMatrix();
+        GlStateManager.enableTexture2D();
+        GlStateManager.translate((((float) width)/2), 10, 0);
         this.mc.getTextureManager().bindTexture(MINECRAFT_TITLE_TEXTURES);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.disableTexture2D();
+        GlStateManager.popMatrix();
 
         // ------------------------------
         // DRAWING BUTTONS
@@ -238,13 +248,13 @@ public class AunisMainMenu extends GuiMainMenu{
         for (int l = 0; l < this.buttonList.size(); ++l) {
 
 
-            this.bwidth = 200;
-            this.bheight = 20;
+            this.bwidth = buttonList.get(l).width;
+            this.bheight = buttonList.get(l).height;
             this.enabled = true;
             this.visible = true;
             this.id = l;
-            this.x = x;
-            this.y = y;
+            this.x = buttonList.get(l).x;
+            this.y = buttonList.get(l).y;
             this.displayString = buttonList.get(l).displayString;
 
 
@@ -279,7 +289,7 @@ public class AunisMainMenu extends GuiMainMenu{
         }
 
         for (int j = 0; j < this.labelList.size(); ++j) {
-            ((GuiLabel) this.labelList.get(j)).drawLabel(this.mc, mouseX, mouseY);
+            (this.labelList.get(j)).drawLabel(this.mc, mouseX, mouseY);
         }
     }
     @Override
