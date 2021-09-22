@@ -186,8 +186,8 @@ public class TeleportHelper {
 		if (motionVec2f != null) {		
 			rotateAround00(motionVec2f, rotation, 0);
 					
-			player.motionX = motionVec2f.x;
-			player.motionZ = motionVec2f.y;
+			if(motionVec2f != null) player.motionX = motionVec2f.x;
+			if(motionVec2f != null) player.motionZ = motionVec2f.y;
 			player.velocityChanged = true;
 		}
 	}
