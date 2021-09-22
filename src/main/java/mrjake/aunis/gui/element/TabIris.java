@@ -1,6 +1,7 @@
 package mrjake.aunis.gui.element;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.stargate.EnumIrisMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -31,7 +32,7 @@ public class TabIris extends Tab {
         super(builder);
         this.irisMode = builder.irisMode;
         code = builder.code;
-        inputField.setMaxStringLength(9);
+        inputField.setMaxStringLength(AunisConfig.irisConfig.irisCodeLength);
         inputField.setText(code > -1 ? Integer.toString(code) : "");
         inputField.setEnabled(buttonChangeMode.getCurrentState() == EnumIrisMode.AUTO.id);
     }

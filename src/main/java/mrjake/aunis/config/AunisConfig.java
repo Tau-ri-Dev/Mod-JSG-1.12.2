@@ -265,6 +265,10 @@ public class AunisConfig {
 				"shield/iris damage by creative gamemode"
 		})
 		public boolean allowCreative = false;
+
+		@Name("Maximum iris code length")
+		@RangeInt(min=0, max=32)
+		public int irisCodeLength = 9;
 	}
 	
 	public static class PowerConfig {

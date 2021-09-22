@@ -1,5 +1,6 @@
 package mrjake.aunis.gui;
 
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.element.NumberOnlyTextField;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -25,6 +26,7 @@ public class GuiSendCode extends GuiBase {
     public void initGui() {
         super.initGui();
         codeField = new NumberOnlyTextField(0, Minecraft.getMinecraft().fontRenderer, width/2-80, height/2-25, 160, 20);
+        codeField.setMaxStringLength(AunisConfig.irisConfig.irisCodeLength);
         sendButton = new AunisGuiButton(1,width/2-70, height/2-25+28, 140, 20, I18n.format("gui.gdo.send_button"));
 
     }
