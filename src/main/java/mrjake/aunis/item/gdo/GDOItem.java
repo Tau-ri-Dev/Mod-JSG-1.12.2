@@ -1,6 +1,7 @@
 package mrjake.aunis.item.gdo;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
 import mrjake.aunis.config.AunisConfig;
@@ -40,12 +41,13 @@ public class GDOItem extends Item implements CustomModelItemInterface {
         setUnlocalizedName(Aunis.ModID + "." + ITEM_NAME);
 
         setCreativeTab(Aunis.aunisCreativeTab);
-        // setMaxStackSize(1);
+        //setMaxStackSize(1);
     }
 
     // TODO replace with capabilities. If item will have NBT like "display:Name" it will not init custom NBT! -- slava110
     // MrJake: Capabilities are meh in 1.12. Hope they've fixed them in 1.16.
     // matousss: lmao
+    // MineDragonCZ was here
     private static void checkNBT(ItemStack stack) {
         if (!stack.hasTagCompound()) {
             initNBT(stack);
@@ -114,14 +116,14 @@ public class GDOItem extends Item implements CustomModelItemInterface {
                     if (compound.hasKey(mode.tagPosName)) {
                         BlockPos tilePos = BlockPos.fromLong(compound.getLong(mode.tagPosName));
 
-                        if (!mode.matcher.apply(world.getBlockState(tilePos)) || tilePos.distanceSq(pos) > reachSquared) {
+                        if (world.getTileEntity(tilePos) == null || !(world.getTileEntity(tilePos) instanceof StargateAbstractBaseTile) || tilePos.distanceSq(pos) > reachSquared) {
                             compound.removeTag(mode.tagPosName);
                         }
                     } else {
                         boolean found = false;
 
                         for (BlockPos targetPos : BlockPos.getAllInBoxMutable(pos.add(-10, -10, -10), pos.add(10, 10, 10))) {
-                            if (mode.matcher.apply(world.getBlockState(targetPos))) {
+                            if (world.getTileEntity(targetPos) instanceof StargateAbstractBaseTile) {
                                 switch (mode) {
                                     case CODE_SENDER:
                                     case OC:

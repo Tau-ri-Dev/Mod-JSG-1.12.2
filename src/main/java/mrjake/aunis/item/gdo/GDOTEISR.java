@@ -53,7 +53,7 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
 				GlStateManager.translate(0.8, 0, -0.5);
 				GlStateManager.rotate(35, 1, 0, 0);
 				GlStateManager.rotate(15, 0, 0, 1);
-						
+
 				GlStateManager.translate(0, 0.3*angle, -0.1*angle);
 				GlStateManager.rotate(25*angle, 1, 0, 0);
 			}
@@ -69,6 +69,7 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
 			}
 			
 			GlStateManager.scale(0.3f, 0.3f, 0.3f);
+			//GlStateManager.scale(0.05f, 0.05f, 0.05f);
 		}
 		
 		ElementEnum.GDO.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
@@ -111,11 +112,6 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
 						switch (mode) {
 							case CODE_SENDER:
 								drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, "Send Code", active, false);
-								/**
-								 * On click open input line to enter code
-								 * After submit code, run function that compare entered code with save codes in gate
-								 * If returned true -> Open iris on other side
-								 */
 								break;
 							case OC:
 								drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, "OC", active, false);

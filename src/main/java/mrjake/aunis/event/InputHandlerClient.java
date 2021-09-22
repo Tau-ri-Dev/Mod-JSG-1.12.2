@@ -126,7 +126,7 @@ public class InputHandlerClient {
 					if (itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey("linkedGate")
 							&& GDOMode.valueOf(itemStack.getTagCompound().getByte("mode")) == GDOMode.CODE_SENDER) {
 						//System.out.println("chacha");
-						Minecraft.getMinecraft().displayGuiScreen(new GuiSendCode());
+						Minecraft.getMinecraft().displayGuiScreen(new GuiSendCode(getHand(AunisItems.GDO)));
 					}
 				}
 

@@ -1,11 +1,19 @@
 package mrjake.aunis.gui;
 
+import ibxm.Player;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.element.NumberOnlyTextField;
+import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 import java.io.IOException;
 
@@ -14,7 +22,7 @@ import java.io.IOException;
  */
 public class GuiSendCode extends GuiBase {
     EnumHand hand;
-    public GuiSendCode() {
+    public GuiSendCode(EnumHand hand) {
         super(250, 100, 4, FRAME_COLOR, BG_COLOR, TEXT_COLOR, 4);
         this.hand = hand;
     }
@@ -37,7 +45,7 @@ public class GuiSendCode extends GuiBase {
         GlStateManager.pushMatrix();
             translateToCenter();
             drawBackground();
-            drawString(I18n.format("gui.gdo.send_code") + ": ", 5, 5, 0x00AA00);
+            drawString(I18n.format("gui.gdo.send_code"), 5, 5, 0x00AA00);
         GlStateManager.popMatrix();
         codeField.drawTextBox();
         sendButton.drawButton(mc, mouseX, mouseY, Minecraft.getMinecraft().getRenderPartialTicks());
@@ -55,8 +63,20 @@ public class GuiSendCode extends GuiBase {
         codeField.mouseClicked(mouseX, mouseY, mouseButton);
         //if (GuiHelper.isPointInRegion(sendButton.x, sendButton.y, sendButton.x + sendButton.width, sendButton.y + sendButton.height, mouseX, mouseY)) {
         if(sendButton.mousePressed(this.mc, mouseX, mouseY)){
-            System.out.println("sending code lol" + codeField.getText());
+            System.out.println(this.mc.player.getName() + " is sending code: " + codeField.getText());
             sendButton.playPressSound(this.mc.getSoundHandler());
+            ItemStack gdo = this.mc.player.getHeldItem(hand);
+            if(gdo.hasTagCompound()) {
+                NBTTagCompound compound = gdo.getTagCompound();
+                World world = this.mc.player.getEntityWorld();
+                assert compound != null;
+                if(compound.hasKey("linkedgate")){
+                    BlockPos pos = BlockPos.fromLong(compound.getLong("linkedGate"));
+                    StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(pos);
+                    assert gateTile != null;
+                    gateTile.receiveIrisCode(this.mc.player, Integer.parseInt(codeField.getText()));
+                }
+            }
         }
     }
 }
