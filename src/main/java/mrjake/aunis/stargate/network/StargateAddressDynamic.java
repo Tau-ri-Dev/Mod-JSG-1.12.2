@@ -1,10 +1,10 @@
 package mrjake.aunis.stargate.network;
 
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.Aunis;
 import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.List;
 
 public class StargateAddressDynamic extends StargateAddress {
 

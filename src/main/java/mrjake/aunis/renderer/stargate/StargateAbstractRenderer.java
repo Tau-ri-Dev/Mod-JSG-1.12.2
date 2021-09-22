@@ -1,15 +1,5 @@
 package mrjake.aunis.renderer.stargate;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import mrjake.aunis.stargate.EnumIrisState;
-import mrjake.aunis.stargate.EnumIrisType;
-import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
-import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.config.AunisConfig;
@@ -29,6 +19,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class StargateAbstractRenderer<S extends StargateAbstractRendererState> extends TileEntitySpecialRenderer<StargateAbstractBaseTile> {
 

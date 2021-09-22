@@ -1,10 +1,5 @@
 package mrjake.aunis.block;
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.gui.GuiIdEnum;
@@ -27,6 +22,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
 
 public class CapacitorBlock extends Block {
 	

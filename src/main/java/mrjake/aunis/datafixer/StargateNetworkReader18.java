@@ -1,14 +1,14 @@
 package mrjake.aunis.datafixer;
 
-import java.util.Random;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.StargateNetwork;
-import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.stargate.network.StargatePos;
+import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Random;
 
 public class StargateNetworkReader18 {
 	

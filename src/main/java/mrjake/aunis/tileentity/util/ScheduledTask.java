@@ -1,7 +1,5 @@
 package mrjake.aunis.tileentity.util;
 
-import java.util.List;
-
 import mrjake.aunis.stargate.EnumScheduledTask;
 import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,6 +7,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
+
+import java.util.List;
 
 /**
  * Holds scheduled task to be performed some time in future on {@link ITickable#update()}.

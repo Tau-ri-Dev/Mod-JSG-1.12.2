@@ -1,12 +1,5 @@
 package mrjake.aunis.stargate.merging;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.block.stargate.StargateOrlinMemberBlock;
@@ -22,6 +15,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class StargateOrlinMergeHelper extends StargateAbstractMergeHelper {
 

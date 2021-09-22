@@ -1,8 +1,5 @@
 package mrjake.aunis.gui.container;
 
-import java.util.Arrays;
-import java.util.List;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
@@ -11,6 +8,9 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.energy.CapabilityEnergy;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class CapacitorContainerGui extends GuiContainer {
 

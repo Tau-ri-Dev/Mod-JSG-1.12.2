@@ -1,10 +1,5 @@
 package mrjake.aunis.tileentity.stargate;
 
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
-
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
@@ -18,11 +13,7 @@ import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateAbstractRendererState;
 import mrjake.aunis.renderer.stargate.StargateOrlinRendererState;
-import mrjake.aunis.sound.AunisSoundHelper;
-import mrjake.aunis.sound.SoundEventEnum;
-import mrjake.aunis.sound.SoundPositionedEnum;
-import mrjake.aunis.sound.StargateSoundEventEnum;
-import mrjake.aunis.sound.StargateSoundPositionedEnum;
+import mrjake.aunis.sound.*;
 import mrjake.aunis.stargate.EnumScheduledTask;
 import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.stargate.StargateClosedReasonEnum;
@@ -50,6 +41,11 @@ import net.minecraft.world.DimensionType;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Random;
 
 public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 		

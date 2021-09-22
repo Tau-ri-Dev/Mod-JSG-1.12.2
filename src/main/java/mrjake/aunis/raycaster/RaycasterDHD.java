@@ -1,8 +1,5 @@
 package mrjake.aunis.raycaster;
 
-import java.util.Arrays;
-import java.util.List;
-
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.stargate.DHDButtonClickedToServer;
@@ -18,6 +15,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class RaycasterDHD extends Raycaster {
 	public static final RaycasterDHD INSTANCE = new RaycasterDHD();

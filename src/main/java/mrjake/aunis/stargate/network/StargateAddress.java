@@ -1,14 +1,13 @@
 package mrjake.aunis.stargate.network;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.Aunis;
 import net.minecraft.nbt.NBTTagCompound;
-
 import net.minecraftforge.common.util.INBTSerializable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class StargateAddress implements INBTSerializable<NBTTagCompound> {
 	

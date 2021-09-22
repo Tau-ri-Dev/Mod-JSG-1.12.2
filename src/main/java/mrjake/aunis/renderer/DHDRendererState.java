@@ -1,10 +1,5 @@
 package mrjake.aunis.renderer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.renderer.activation.Activation;
@@ -17,6 +12,11 @@ import mrjake.aunis.state.State;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DHDRendererState extends State {
 	public DHDRendererState() {}

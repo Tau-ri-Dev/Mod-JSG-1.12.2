@@ -1,12 +1,12 @@
 package mrjake.aunis.util;
 
-import java.util.List;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fluids.FluidStack;
+
+import java.util.List;
 
 public class NBTHelper {
 	public static NBTTagList serializeFluidStackList(List<FluidStack> list) {

@@ -1,7 +1,5 @@
 package mrjake.aunis.tileentity;
 
-import java.util.EnumSet;
-
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.transportrings.TRControllerRenderer;
@@ -14,6 +12,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.EnumSet;
 
 public class TRControllerTile extends TileEntity implements ITickable, ILinkable, RendererProviderInterface {
 

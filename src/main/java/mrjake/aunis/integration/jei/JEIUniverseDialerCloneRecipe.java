@@ -1,7 +1,5 @@
 package mrjake.aunis.integration.jei;
 
-import java.util.Arrays;
-
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -10,6 +8,8 @@ import mrjake.aunis.item.dialer.UniverseDialerMode;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
+import java.util.Arrays;
 
 public class JEIUniverseDialerCloneRecipe implements IRecipeWrapper {
 

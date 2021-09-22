@@ -1,14 +1,5 @@
 package mrjake.aunis.stargate.teleportation;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.vecmath.Vector2f;
-
-import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.Node;
-import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisDamageSources;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.api.event.StargateTeleportEntityEvent;
@@ -16,22 +7,23 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.UpgradeIris;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.stargate.StargateMotionToClient;
-import mrjake.aunis.renderer.stargate.StargateAbstractRendererState;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
-import mrjake.aunis.stargate.EnumIrisState;
 import mrjake.aunis.stargate.network.StargatePos;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.vecmath.Vector2f;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static mrjake.aunis.item.AunisItems.UPGRADE_IRIS;
 

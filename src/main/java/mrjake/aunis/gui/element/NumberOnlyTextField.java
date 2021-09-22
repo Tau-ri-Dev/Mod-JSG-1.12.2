@@ -1,7 +1,6 @@
 package mrjake.aunis.gui.element;
 
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiTextField;
 
 /**
@@ -21,4 +20,9 @@ public class NumberOnlyTextField extends GuiTextField {
         super.writeText(textToWrite);
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        if (!enabled && isFocused()) setFocused(false);
+        super.setEnabled(enabled);
+    }
 }

@@ -1,7 +1,5 @@
 package mrjake.aunis.item.dialer;
 
-import java.nio.charset.StandardCharsets;
-
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.item.AunisItems;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -14,6 +12,8 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import java.nio.charset.StandardCharsets;
 
 public class UniverseDialerOCProgramToServer implements IMessage {
 	public UniverseDialerOCProgramToServer() {}

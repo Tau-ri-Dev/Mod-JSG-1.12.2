@@ -1,14 +1,13 @@
 package mrjake.aunis.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockMetaParser {
 	

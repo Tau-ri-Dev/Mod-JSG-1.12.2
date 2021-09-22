@@ -1,9 +1,5 @@
 package mrjake.aunis.stargate.teleportation;
 
-import java.util.List;
-
-import javax.vecmath.Vector2f;
-
 import mrjake.aunis.stargate.network.StargatePos;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateOrlinBaseTile;
@@ -20,6 +16,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.ITeleporter;
+
+import javax.vecmath.Vector2f;
+import java.util.List;
 
 public class TeleportHelper {
 	
@@ -187,8 +186,8 @@ public class TeleportHelper {
 		if (motionVec2f != null) {		
 			rotateAround00(motionVec2f, rotation, 0);
 					
-			player.motionX = motionVec2f.x;
-			player.motionZ = motionVec2f.y;
+			if(motionVec2f != null) player.motionX = motionVec2f.x;
+			if(motionVec2f != null) player.motionZ = motionVec2f.y;
 			player.velocityChanged = true;
 		}
 	}

@@ -1,9 +1,9 @@
 package mrjake.aunis.raycaster.util;
 
+import mrjake.vector.Vector2f;
+
 import java.util.Arrays;
 import java.util.List;
-
-import mrjake.vector.Vector2f;
 
 public class Box {
 	private List<Ray> rays;

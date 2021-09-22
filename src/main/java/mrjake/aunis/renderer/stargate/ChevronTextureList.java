@@ -1,11 +1,5 @@
 package mrjake.aunis.renderer.stargate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.loader.texture.TextureLoader;
 import mrjake.aunis.renderer.activation.Activation;
@@ -13,6 +7,8 @@ import mrjake.aunis.renderer.activation.StargateActivation;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import java.util.*;
 
 public class ChevronTextureList {
 

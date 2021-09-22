@@ -1,10 +1,10 @@
 package mrjake.aunis.state;
 
-import java.nio.charset.StandardCharsets;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
+import java.nio.charset.StandardCharsets;
 
 public class BeamerFluidUpdate extends State {
 	public BeamerFluidUpdate() {}

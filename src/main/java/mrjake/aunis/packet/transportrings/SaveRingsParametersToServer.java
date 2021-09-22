@@ -1,7 +1,5 @@
 package mrjake.aunis.packet.transportrings;
 
-import java.nio.charset.StandardCharsets;
-
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.PositionedPacket;
@@ -16,6 +14,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import java.nio.charset.StandardCharsets;
 
 public class SaveRingsParametersToServer extends PositionedPacket {
 	public SaveRingsParametersToServer() {}

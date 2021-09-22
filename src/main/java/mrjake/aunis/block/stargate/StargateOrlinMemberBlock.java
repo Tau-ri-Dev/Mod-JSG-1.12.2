@@ -1,7 +1,5 @@
 package mrjake.aunis.block.stargate;
 
-import java.util.List;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.config.AunisConfig;
@@ -24,6 +22,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public final class StargateOrlinMemberBlock extends StargateAbstractMemberBlock {
 	

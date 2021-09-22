@@ -1,7 +1,7 @@
 package mrjake.aunis.tileentity.util;
 
-import mrjake.aunis.util.EnumKeyMap;
 import mrjake.aunis.util.EnumKeyInterface;
+import mrjake.aunis.util.EnumKeyMap;
 
 public enum ReactorStateEnum implements EnumKeyInterface<Integer> {
 	ONLINE(0),

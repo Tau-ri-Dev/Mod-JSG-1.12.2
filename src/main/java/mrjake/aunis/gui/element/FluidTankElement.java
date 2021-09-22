@@ -1,8 +1,5 @@
 package mrjake.aunis.gui.element;
 
-import java.util.Arrays;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,6 +7,9 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidTank;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class FluidTankElement {
 		

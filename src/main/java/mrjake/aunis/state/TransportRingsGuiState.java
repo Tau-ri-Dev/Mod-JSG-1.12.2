@@ -1,12 +1,12 @@
 package mrjake.aunis.state;
 
+import io.netty.buffer.ByteBuf;
+import mrjake.aunis.transportrings.TransportRings;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import io.netty.buffer.ByteBuf;
-import mrjake.aunis.transportrings.TransportRings;
 
 public class TransportRingsGuiState extends State {
 

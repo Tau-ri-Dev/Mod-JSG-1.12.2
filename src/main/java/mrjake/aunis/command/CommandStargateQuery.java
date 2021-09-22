@@ -1,7 +1,5 @@
 package mrjake.aunis.command;
 
-import java.util.Map;
-
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.stargate.network.StargateAddress;
@@ -19,6 +17,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
+
+import java.util.Map;
 
 public class CommandStargateQuery extends CommandBase {
 

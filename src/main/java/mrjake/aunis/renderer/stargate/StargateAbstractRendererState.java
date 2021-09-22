@@ -4,8 +4,6 @@ import io.netty.buffer.ByteBuf;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateAbstractRenderer.EnumVortexState;
 import mrjake.aunis.renderer.stargate.StargateRendererStatic.QuadStrip;
-import mrjake.aunis.stargate.EnumIrisState;
-import mrjake.aunis.stargate.EnumIrisType;
 import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.state.State;
 import net.minecraft.util.EnumFacing;

@@ -1,9 +1,5 @@
 package mrjake.aunis.integration.jei;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -15,6 +11,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class JEINotebookRecipe implements IRecipeWrapper {
 

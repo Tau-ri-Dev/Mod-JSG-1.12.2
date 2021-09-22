@@ -1,12 +1,12 @@
 package mrjake.aunis.gui.container;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.state.State;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class StargateContainerGuiState extends State {
 	public StargateContainerGuiState() {}

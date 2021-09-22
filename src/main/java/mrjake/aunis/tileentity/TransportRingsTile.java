@@ -1,11 +1,5 @@
 package mrjake.aunis.tileentity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
@@ -25,12 +19,7 @@ import mrjake.aunis.renderer.transportrings.TransportRingsRenderer;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.EnumScheduledTask;
-import mrjake.aunis.state.State;
-import mrjake.aunis.state.StateProviderInterface;
-import mrjake.aunis.state.StateTypeEnum;
-import mrjake.aunis.state.TransportRingsGuiState;
-import mrjake.aunis.state.TransportRingsRendererState;
-import mrjake.aunis.state.TransportRingsStartAnimationRequest;
+import mrjake.aunis.state.*;
 import mrjake.aunis.tesr.RendererInterface;
 import mrjake.aunis.tesr.RendererProviderInterface;
 import mrjake.aunis.tileentity.util.ScheduledTask;
@@ -57,6 +46,8 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.*;
 
 @Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers")
 public class TransportRingsTile extends TileEntity implements ITickable, RendererProviderInterface, StateProviderInterface, ScheduledTaskExecutorInterface, ILinkable, Environment {

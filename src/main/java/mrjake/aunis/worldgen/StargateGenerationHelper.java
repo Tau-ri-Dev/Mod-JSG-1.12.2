@@ -1,17 +1,16 @@
 package mrjake.aunis.worldgen;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
+import javax.annotation.Nullable;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class StargateGenerationHelper {
 	

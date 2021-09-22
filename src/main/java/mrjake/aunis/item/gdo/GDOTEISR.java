@@ -6,7 +6,6 @@ import mrjake.aunis.item.renderer.AunisFontRenderer;
 import mrjake.aunis.item.renderer.ItemRenderHelper;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
-import mrjake.aunis.stargate.network.SymbolInterface;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;

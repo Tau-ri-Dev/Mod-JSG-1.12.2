@@ -1,5 +1,13 @@
 package mrjake.aunis.util;
 
+import mrjake.aunis.Aunis;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
+
+import javax.annotation.Nullable;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.io.IOException;
@@ -7,15 +15,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import javax.annotation.Nullable;
-
-import mrjake.aunis.Aunis;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
 
 public class FluidColors {
 	

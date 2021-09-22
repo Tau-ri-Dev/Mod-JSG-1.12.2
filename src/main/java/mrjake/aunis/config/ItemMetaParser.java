@@ -1,15 +1,14 @@
 package mrjake.aunis.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import mrjake.aunis.util.ItemMetaPair;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemMetaParser {
 	

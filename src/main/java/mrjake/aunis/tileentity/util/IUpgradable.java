@@ -1,8 +1,5 @@
 package mrjake.aunis.tileentity.util;
 
-import java.util.Iterator;
-import java.util.stream.IntStream;
-
 import mrjake.aunis.util.EnumKeyInterface;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -12,6 +9,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+
+import java.util.Iterator;
+import java.util.stream.IntStream;
 
 /**
  * Simple interface to allow upgrades insert into TE. `tryInsertStack` should be triggered in block class on interact

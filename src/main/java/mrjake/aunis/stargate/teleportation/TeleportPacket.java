@@ -1,12 +1,12 @@
 package mrjake.aunis.stargate.teleportation;
 
-import javax.vecmath.Vector2f;
-
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.network.StargatePos;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+
+import javax.vecmath.Vector2f;
 
 /**
  * Class used for teleporting entities with saving their motion

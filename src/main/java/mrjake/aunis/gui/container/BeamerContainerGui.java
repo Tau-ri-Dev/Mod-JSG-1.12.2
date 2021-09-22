@@ -1,22 +1,10 @@
 package mrjake.aunis.gui.container;
 
-import java.awt.Rectangle;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.beamer.BeamerModeEnum;
 import mrjake.aunis.beamer.BeamerStatusEnum;
-import mrjake.aunis.gui.element.Diode;
+import mrjake.aunis.gui.element.*;
 import mrjake.aunis.gui.element.Diode.DiodeStatus;
-import mrjake.aunis.gui.element.FluidTankElement;
-import mrjake.aunis.gui.element.Tab;
-import mrjake.aunis.gui.element.TabRedstone;
-import mrjake.aunis.gui.element.TabSideEnum;
-import mrjake.aunis.gui.element.TabbedContainerInterface;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.BeamerChangeRoleToServer;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
@@ -28,6 +16,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.SlotItemHandler;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BeamerContainerGui extends GuiContainer implements TabbedContainerInterface {
 

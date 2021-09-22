@@ -1,7 +1,5 @@
 package mrjake.aunis.block.stargate;
 
-import java.util.List;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.config.AunisConfig;
@@ -31,6 +29,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+
+import java.util.List;
 
 public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 	

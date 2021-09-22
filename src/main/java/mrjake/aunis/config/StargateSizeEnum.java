@@ -1,9 +1,9 @@
 package mrjake.aunis.config;
 
+import mrjake.aunis.util.AunisAxisAlignedBB;
+
 import java.util.Arrays;
 import java.util.List;
-
-import mrjake.aunis.util.AunisAxisAlignedBB;
 
 public enum StargateSizeEnum {
   SMALL(0, "Small", 0.75, -0.95, new AunisAxisAlignedBB(-2.5, 1.5, -0.1, 2.5, 6.6, 0.2), new AunisAxisAlignedBB(-1, 3, 0, 1, 5.5, 5), 5, Arrays.asList(new AunisAxisAlignedBB(-1.5, 2.0, -0.5, 1.5, 7, 0.5), new AunisAxisAlignedBB(-2.5, 2.0, -0.5, -1.5, 6, 0.5), new AunisAxisAlignedBB(2.5, 2.0, -0.5, 1.5, 6, 0.5))),

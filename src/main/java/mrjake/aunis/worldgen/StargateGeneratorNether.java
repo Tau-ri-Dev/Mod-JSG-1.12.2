@@ -1,12 +1,5 @@
 package mrjake.aunis.worldgen;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.annotation.Nullable;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
@@ -41,6 +34,12 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Handles generating the Stargate structure in the Nether.

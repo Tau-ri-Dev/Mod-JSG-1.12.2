@@ -349,6 +349,9 @@ gui.beamer.after_inactivity=inactivity [s]
 gui.beamer.save=Save
 gui.beamer.invalid=Invalid
 
+gui.gdo.send_code=Enter code:
+gui.gdo.send_button=Send code
+
 chat.orlins.energyStored=Energy stored: %s RF (Required: %s RF, %s s)
 
 item.aunis.universe_dialer.name=Universe Dialer
@@ -382,7 +385,7 @@ item.aunis.gui.oc_port_invalid=Invalid port
 item.aunis.gdo.name=Garage Door Opener
 item.aunis.gdo.not_linked=Not linked
 
-item.aunis.gdo.code_sender=Code sender
+item.aunis.gdo.code_sender=Code
 item.aunis.gdo.iris_opened=Iris is opened!
 item.aunis.gdo.iris_busy=Iris is busy!
 item.aunis.gdo.code_accepted=Code accepted! Opening iris...
@@ -433,4 +436,4 @@ aunis.subtitle.gate_universe_close=Universe gate wormhole closes
 aunis.subtitle.beamer_start=Beamer starts
 aunis.subtitle.beamer_stop=Beamer stops
 aunis.subtitle.beamer_loop=Beamer beams
-aunis.subtitle.page_flip=Page flips
+aunis.subtitle.page_flip=Page flipsgui.quitbutton=Test

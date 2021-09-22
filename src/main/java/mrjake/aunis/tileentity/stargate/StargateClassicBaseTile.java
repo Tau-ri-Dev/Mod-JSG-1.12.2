@@ -7,7 +7,6 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.beamer.BeamerLinkingHelper;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.gui.container.StargateContainerGuiState;
 import mrjake.aunis.gui.container.StargateContainerGuiUpdate;
 import mrjake.aunis.item.AunisItems;
@@ -15,8 +14,6 @@ import mrjake.aunis.item.gdo.GDOMessages;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
-import mrjake.aunis.packet.stargate.SaveIrisCodeToServer;
-import mrjake.aunis.packet.transportrings.SaveRingsParametersToServer;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState.StargateClassicRendererStateBuilder;
@@ -37,9 +34,6 @@ import mrjake.aunis.tileentity.BeamerTile;
 import mrjake.aunis.tileentity.util.IUpgradable;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.*;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -49,7 +43,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants.NBT;
@@ -58,7 +51,6 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -899,6 +891,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             openSound = SoundEventEnum.SHIELD_OPENING;
             closeSound = SoundEventEnum.SHIELD_CLOSING;
         }
+        //StargateAbstractBaseTile targetGate = targetGatePos.getTileEntity();
         switch (irisState) {
             case OPENED:
                 if (isShieldIris() && getEnergyStorage().getEnergyStored() < shieldKeepAlive * 3)
@@ -909,6 +902,14 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 sendSignal(null, "stargate_iris_closing", new Object[]{"Iris is closing"});
                 markDirty();
                 playSoundEvent(closeSound);
+                // beamers shit
+                // TODO: beamers deactive when iris is close
+                /*for (BlockPos beamerPos : linkedBeamers) {
+                    ((BeamerTile) world.getTileEntity(beamerPos)).gateClosed();
+                }
+                for (BlockPos beamerPos : ((StargateClassicBaseTile) targetGate).linkedBeamers) {
+                    ((BeamerTile) world.getTileEntity(beamerPos)).gateClosed();
+                }*/
                 break;
             case CLOSED:
                 irisState = mrjake.aunis.stargate.EnumIrisState.OPENING;
@@ -916,6 +917,22 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 sendSignal(null, "stargate_iris_opening", new Object[]{"Iris is opening"});
                 markDirty();
                 playSoundEvent(openSound);
+                // beamers shit
+                // TODO: beamers deactive when iris is close
+                /*if(targetGate instanceof StargateClassicBaseTile
+                        && ((StargateClassicBaseTile) targetGate).irisState == EnumIrisState.CLOSED) {
+                    for (BlockPos beamerPos : linkedBeamers) {
+                        ((BeamerTile) world.getTileEntity(beamerPos)).gateClosed();
+                    }
+                    for (BlockPos beamerPos : ((StargateClassicBaseTile) targetGate).linkedBeamers) {
+                        ((BeamerTile) world.getTileEntity(beamerPos)).gateClosed();
+                    }
+                }
+                else{
+                    for (BlockPos beamerPos : ((StargateClassicBaseTile) targetGate).linkedBeamers) {
+                        ((BeamerTile) world.getTileEntity(beamerPos)).gateEngaged(targetGatePos);
+                    }
+                }*/
                 break;
             default:
                 return false;
@@ -1050,6 +1067,18 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     private void updateBeamers() {
+        // TODO: beamers deactive when iris is close
+        /*if (stargateState.engaged() && (irisState == EnumIrisState.OPENED || irisType == EnumIrisType.NULL)) {
+            for (BlockPos beamerPos : linkedBeamers) {
+                ((BeamerTile) world.getTileEntity(beamerPos)).gateEngaged(targetGatePos);
+            }
+        }
+        else{
+            for (BlockPos beamerPos : linkedBeamers) {
+                ((BeamerTile) world.getTileEntity(beamerPos)).gateClosed();
+            }
+        }*/
+
         if (stargateState.engaged()) {
             for (BlockPos beamerPos : linkedBeamers) {
                 ((BeamerTile) world.getTileEntity(beamerPos)).gateEngaged(targetGatePos);

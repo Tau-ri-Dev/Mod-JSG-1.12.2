@@ -1,11 +1,5 @@
 package mrjake.aunis.stargate.merging;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
@@ -24,6 +18,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class StargateMilkyWayMergeHelper extends StargateClassicMergeHelper {
 	

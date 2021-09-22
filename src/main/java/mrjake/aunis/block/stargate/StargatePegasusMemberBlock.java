@@ -3,7 +3,6 @@ package mrjake.aunis.block.stargate;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.stargate.EnumMemberVariant;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
-import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
 import mrjake.aunis.stargate.merging.StargatePegasusMergeHelper;
 import mrjake.aunis.tileentity.stargate.StargatePegasusMemberTile;
 import net.minecraft.block.state.IBlockState;

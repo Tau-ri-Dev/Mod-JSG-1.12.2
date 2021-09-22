@@ -1,10 +1,5 @@
 package mrjake.aunis.renderer.stargate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.renderer.activation.Activation;
 import mrjake.aunis.renderer.activation.UniverseActivation;
@@ -15,6 +10,11 @@ import mrjake.aunis.stargate.network.SymbolUniverseEnum;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class StargateUniverseRendererState extends StargateClassicRendererState {
 	public StargateUniverseRendererState() {}

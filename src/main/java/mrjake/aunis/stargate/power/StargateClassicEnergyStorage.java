@@ -1,9 +1,9 @@
 package mrjake.aunis.stargate.power;
 
+import net.minecraftforge.energy.IEnergyStorage;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraftforge.energy.IEnergyStorage;
 
 public class StargateClassicEnergyStorage extends StargateAbstractEnergyStorage {
 	

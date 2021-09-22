@@ -1,8 +1,5 @@
 package mrjake.aunis.integration.jei;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
@@ -12,6 +9,9 @@ import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.item.AunisItems;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @JEIPlugin
 public final class JEIIntegration implements IModPlugin {

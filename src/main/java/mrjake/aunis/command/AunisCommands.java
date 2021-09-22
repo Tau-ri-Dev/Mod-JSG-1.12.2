@@ -1,10 +1,10 @@
 package mrjake.aunis.command;
 
-import java.util.Arrays;
-import java.util.List;
-
 import net.minecraft.command.CommandBase;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+
+import java.util.Arrays;
+import java.util.List;
 
 public final class AunisCommands {
 

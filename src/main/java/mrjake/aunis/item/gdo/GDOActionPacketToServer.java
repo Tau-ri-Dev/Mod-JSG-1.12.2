@@ -55,7 +55,7 @@ public class GDOActionPacketToServer implements IMessage {
 
 					switch (message.action) {
 
-						case ENTER_CODE:
+						case SEND_CODE:
 							break;
 						case MODE_CHANGE:
 							if (message.next)

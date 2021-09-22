@@ -1,9 +1,9 @@
 package mrjake.aunis.stargate;
 
+import mrjake.aunis.tileentity.TransportRingsTile;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import mrjake.aunis.tileentity.TransportRingsTile;
 
 public enum EnumScheduledTask {
   STARGATE_OPEN_SOUND(0, 25, false),

@@ -1,7 +1,5 @@
 package mrjake.aunis.capability;
 
-import javax.annotation.Nullable;
-
 import mrjake.aunis.stargate.power.StargateItemEnergyStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,6 +8,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.energy.CapabilityEnergy;
+
+import javax.annotation.Nullable;
 
 public final class CapacitorCapabilityProvider implements ICapabilityProvider {
 

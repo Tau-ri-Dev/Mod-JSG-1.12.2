@@ -1,10 +1,5 @@
 package mrjake.aunis.stargate.network;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.datafixer.StargateNetworkReader18;
 import net.minecraft.nbt.NBTBase;
@@ -14,6 +9,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants.NBT;
+
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StargateNetwork extends WorldSavedData {
 

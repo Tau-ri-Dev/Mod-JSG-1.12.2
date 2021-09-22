@@ -5,7 +5,6 @@ import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.state.StateTypeEnum;
-import mrjake.aunis.tileentity.DHDPegasusTile;
 import mrjake.aunis.tileentity.DHDTile;
 import mrjake.aunis.tileentity.util.ReactorStateEnum;
 import net.minecraft.entity.player.EntityPlayer;

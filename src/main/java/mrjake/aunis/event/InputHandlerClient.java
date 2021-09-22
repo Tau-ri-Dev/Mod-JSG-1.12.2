@@ -1,20 +1,16 @@
 package mrjake.aunis.event;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import javax.annotation.Nullable;
-
-import mrjake.aunis.item.gdo.GDOActionEnum;
-import mrjake.aunis.item.gdo.GDOActionPacketToServer;
-import org.lwjgl.input.Keyboard;
-
+import mrjake.aunis.Aunis;
+import mrjake.aunis.gui.GuiSendCode;
 import mrjake.aunis.gui.PageRenameGui;
 import mrjake.aunis.gui.entry.NotebookEntryChangeGui;
 import mrjake.aunis.gui.entry.UniverseEntryChangeGui;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.dialer.UniverseDialerActionEnum;
 import mrjake.aunis.item.dialer.UniverseDialerActionPacketToServer;
+import mrjake.aunis.item.gdo.GDOActionEnum;
+import mrjake.aunis.item.gdo.GDOActionPacketToServer;
+import mrjake.aunis.item.gdo.GDOMode;
 import mrjake.aunis.item.notebook.NotebookActionEnum;
 import mrjake.aunis.item.notebook.NotebookActionPacketToServer;
 import mrjake.aunis.packet.AunisPacketHandler;
@@ -24,14 +20,22 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
+import javax.annotation.Nullable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 @EventBusSubscriber(value = Side.CLIENT)
 public class InputHandlerClient {
@@ -107,12 +111,30 @@ public class InputHandlerClient {
 	
 	// ------------------------------------------------------------------------------------
 	// Events
-	
 	@SubscribeEvent
 	public static void onMouseEvent(MouseEvent event) {
-		if (event.getDwheel() == 0)
+
+
+
+		if (event.getDwheel() == 0) {
+			if (checkForItem(AunisItems.GDO)) {
+				// opening code input gui
+				//System.out.println("lkol");
+				if (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()) {
+					//System.out.println("chjo");
+					ItemStack itemStack = getItemStack(Minecraft.getMinecraft().player, AunisItems.GDO);
+					if (itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey("linkedGate")
+							&& GDOMode.valueOf(itemStack.getTagCompound().getByte("mode")) == GDOMode.CODE_SENDER) {
+						//System.out.println("chacha");
+						Minecraft.getMinecraft().displayGuiScreen(new GuiSendCode());
+					}
+				}
+
+			}
+
 			return;
-		
+		}
+
 		// NBT print
 //		if (Minecraft.getMinecraft().player != null)
 //			Aunis.info("nbt: " + Minecraft.getMinecraft().player.getHeldItemMainhand().getTagCompound());
@@ -144,7 +166,6 @@ public class InputHandlerClient {
 			if (MODE_SCROLL.isKeyDown())
 				action = GDOActionEnum.MODE_CHANGE;
 
-
 			// ---------------------------------------------
 			if (action != null) {
 				event.setCanceled(true);
@@ -166,6 +187,7 @@ public class InputHandlerClient {
 				AunisPacketHandler.INSTANCE.sendToServer(new NotebookActionPacketToServer(action, hand, next));
 			}
 		}
+
 	}
 	
 	

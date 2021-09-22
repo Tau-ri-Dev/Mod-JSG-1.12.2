@@ -1,14 +1,5 @@
 package mrjake.aunis.loader.texture;
 
-import java.awt.image.BufferedImage;
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.io.IOUtils;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.FolderLoader;
@@ -18,6 +9,14 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ProgressManager;
 import net.minecraftforge.fml.common.ProgressManager.ProgressBar;
+import org.apache.commons.io.IOUtils;
+
+import java.awt.image.BufferedImage;
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TextureLoader {
 

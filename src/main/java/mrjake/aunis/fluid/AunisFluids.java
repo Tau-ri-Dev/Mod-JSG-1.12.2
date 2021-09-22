@@ -1,11 +1,11 @@
 package mrjake.aunis.fluid;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AunisFluids {
 

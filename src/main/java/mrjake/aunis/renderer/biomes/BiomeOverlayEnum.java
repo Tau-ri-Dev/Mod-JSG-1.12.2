@@ -1,7 +1,5 @@
 package mrjake.aunis.renderer.biomes;
 
-import java.util.EnumSet;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.util.BlockHelpers;
@@ -11,6 +9,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+
+import java.util.EnumSet;
 
 public enum BiomeOverlayEnum {
 	NORMAL("", TextFormatting.GRAY),

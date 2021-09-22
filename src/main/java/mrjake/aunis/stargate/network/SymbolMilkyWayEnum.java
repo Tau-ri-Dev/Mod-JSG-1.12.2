@@ -1,16 +1,14 @@
 package mrjake.aunis.stargate.network;
 
+import mrjake.aunis.Aunis;
+import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.loader.model.ModelLoader;
+import net.minecraft.util.ResourceLocation;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import mrjake.aunis.Aunis;
-import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.config.StargateDimensionConfig;
-import mrjake.aunis.loader.model.ModelLoader;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.DimensionManager;
 
 public enum SymbolMilkyWayEnum implements SymbolInterface {
 	SCULPTOR(0, 19, "Sculptor", "0.obj"),

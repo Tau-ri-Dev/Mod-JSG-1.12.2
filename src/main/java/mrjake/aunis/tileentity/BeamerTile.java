@@ -1,16 +1,6 @@
 package mrjake.aunis.tileentity;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Iterators;
-
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
@@ -39,19 +29,9 @@ import mrjake.aunis.stargate.EnumScheduledTask;
 import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.stargate.network.StargatePos;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
-import mrjake.aunis.state.BeamerFluidUpdate;
-import mrjake.aunis.state.BeamerRendererActionState;
-import mrjake.aunis.state.BeamerRendererState;
-import mrjake.aunis.state.BeamerRendererUpdate;
-import mrjake.aunis.state.State;
-import mrjake.aunis.state.StateProviderInterface;
-import mrjake.aunis.state.StateTypeEnum;
+import mrjake.aunis.state.*;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
-import mrjake.aunis.tileentity.util.ComparatorHelper;
-import mrjake.aunis.tileentity.util.IUpgradable;
-import mrjake.aunis.tileentity.util.RedstoneModeEnum;
-import mrjake.aunis.tileentity.util.ScheduledTask;
-import mrjake.aunis.tileentity.util.ScheduledTaskExecutorInterface;
+import mrjake.aunis.tileentity.util.*;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import mrjake.aunis.util.FacingToRotation;
 import mrjake.aunis.util.NBTHelper;
@@ -86,6 +66,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 @Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers")
 public class BeamerTile extends TileEntity implements ITickable, IUpgradable, StateProviderInterface, ScheduledTaskExecutorInterface, Environment {

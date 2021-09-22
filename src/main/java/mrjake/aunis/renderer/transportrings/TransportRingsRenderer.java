@@ -1,8 +1,5 @@
 package mrjake.aunis.renderer.transportrings;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.state.TransportRingsRendererState;
@@ -12,6 +9,9 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransportRingsRenderer implements RendererInterface {
 

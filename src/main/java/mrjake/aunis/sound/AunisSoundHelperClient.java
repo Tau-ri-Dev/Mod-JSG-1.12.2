@@ -1,13 +1,13 @@
 package mrjake.aunis.sound;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound.AttenuationType;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AunisSoundHelperClient {
 

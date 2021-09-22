@@ -1,10 +1,10 @@
 package mrjake.aunis.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FacingToRotation {
 	private static final Map<EnumFacing, Rotation> ROTATION_MAP = new HashMap<EnumFacing, Rotation>();

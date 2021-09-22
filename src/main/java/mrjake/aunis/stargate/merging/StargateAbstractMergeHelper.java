@@ -1,11 +1,5 @@
 package mrjake.aunis.stargate.merging;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import mrjake.aunis.block.stargate.StargateAbstractMemberBlock;
 import mrjake.aunis.block.stargate.StargateMilkyWayBaseBlock;
 import mrjake.aunis.block.stargate.StargateMilkyWayMemberBlock;
@@ -24,6 +18,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.stream.Collectors;
 
 //ToDo Well, idk if getRingBlocks() should be relative... Maybe return absolute positions too. But not sure
 public abstract class StargateAbstractMergeHelper {

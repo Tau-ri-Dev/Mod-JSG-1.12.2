@@ -1,19 +1,12 @@
 package mrjake.aunis.block;
 
-import javax.annotation.Nullable;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.stargate.*;
 import mrjake.aunis.item.CapacitorItemBlock;
 import mrjake.aunis.item.StargateMilkyWayMemberItemBlock;
 import mrjake.aunis.item.StargatePegasusMemberItemBlock;
 import mrjake.aunis.item.StargateUniverseMemberItemBlock;
-import mrjake.aunis.tileentity.BeamerTile;
-import mrjake.aunis.tileentity.CapacitorTile;
-import mrjake.aunis.tileentity.DHDTile;
-import mrjake.aunis.tileentity.DHDPegasusTile;
-import mrjake.aunis.tileentity.TRControllerTile;
-import mrjake.aunis.tileentity.TransportRingsTile;
+import mrjake.aunis.tileentity.*;
 import mrjake.aunis.tileentity.stargate.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -29,6 +22,8 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import javax.annotation.Nullable;
 
 @EventBusSubscriber
 public class AunisBlocks {

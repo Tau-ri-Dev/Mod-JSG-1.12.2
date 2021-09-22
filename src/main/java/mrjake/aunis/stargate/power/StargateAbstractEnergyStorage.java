@@ -3,7 +3,6 @@ package mrjake.aunis.stargate.power;
 import mrjake.aunis.config.AunisConfig;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
-
 import net.minecraftforge.energy.EnergyStorage;
 
 public class StargateAbstractEnergyStorage extends EnergyStorage implements INBTSerializable<NBTTagCompound> {

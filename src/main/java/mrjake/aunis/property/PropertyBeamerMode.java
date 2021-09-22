@@ -1,12 +1,11 @@
 package mrjake.aunis.property;
 
-import java.util.Collection;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
-
 import mrjake.aunis.beamer.BeamerModeEnum;
 import net.minecraft.block.properties.PropertyHelper;
+
+import java.util.Collection;
 
 public class PropertyBeamerMode extends PropertyHelper<BeamerModeEnum> {
 

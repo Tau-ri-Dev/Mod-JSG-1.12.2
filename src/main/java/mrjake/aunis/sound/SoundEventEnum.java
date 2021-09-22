@@ -1,8 +1,8 @@
 package mrjake.aunis.sound;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.util.EnumKeyMap;
 import mrjake.aunis.util.EnumKeyInterface;
+import mrjake.aunis.util.EnumKeyMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 

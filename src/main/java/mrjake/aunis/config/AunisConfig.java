@@ -1,19 +1,15 @@
 package mrjake.aunis.config;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.util.ItemMetaPair;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.Config.Comment;
-import net.minecraftforge.common.config.Config.Name;
-import net.minecraftforge.common.config.Config.RangeDouble;
-import net.minecraftforge.common.config.Config.RangeInt;
-import net.minecraftforge.common.config.Config.RequiresWorldRestart;
+import net.minecraftforge.common.config.Config.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Config(modid="aunis", name="aunis")
 public class AunisConfig {
@@ -57,6 +53,9 @@ public class AunisConfig {
 	
 	@Name("WorldGen config")
 	public static WorldGenConfig worldgenConfig = new WorldGenConfig();
+
+	@Name("MainMenu config")
+	public static MainMenuConfig mainMenuConfig = new MainMenuConfig();
 	
 	public static class StargateConfig {
 		@Name("Orlin's gate max open count")
@@ -266,6 +265,10 @@ public class AunisConfig {
 				"shield/iris damage by creative gamemode"
 		})
 		public boolean allowCreative = false;
+
+		@Name("Maximum iris code length")
+		@RangeInt(min=0, max=32)
+		public int irisCodeLength = 9;
 	}
 	
 	public static class PowerConfig {
@@ -494,6 +497,17 @@ public class AunisConfig {
 
 		@Name("Titanium max veins in chunk")
 		public int titaniumMaxVeinInChunk = 8;
+	}
+
+	public static class MainMenuConfig {
+		@Name("Enable changing gate overlay")
+		public boolean changingGateOverlay = true;
+
+		@Name("Enable gate rotation")
+		public boolean gateRotation = true;
+
+		@Name("Play music in main menu")
+		public boolean playMusic = true;
 	}
 	
 	public static void resetCache() {

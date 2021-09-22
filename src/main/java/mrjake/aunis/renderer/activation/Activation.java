@@ -1,10 +1,10 @@
 package mrjake.aunis.renderer.activation;
 
-import java.util.List;
-
 import mrjake.aunis.renderer.DHDRenderer;
 import mrjake.aunis.renderer.stargate.StargateMilkyWayRenderer;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 /**
  * Holds instance of activation request(fox ex. Stargate's chevron or DHD's button).

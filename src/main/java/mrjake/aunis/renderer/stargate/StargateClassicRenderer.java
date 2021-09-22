@@ -1,8 +1,5 @@
 package mrjake.aunis.renderer.stargate;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.loader.ElementEnum;
@@ -22,6 +19,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class StargateClassicRenderer<S extends StargateClassicRendererState> extends StargateAbstractRenderer<S> {
 
@@ -143,7 +143,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             irisAnimationStage *= 1.7f / PHYSICAL_IRIS_ANIMATION_LENGTH;
             if (irisAnimationStage > 1.7f) irisAnimationStage = 1.7f;
             if (irisAnimationStage < 0) irisAnimationStage = 0;
-            if (irisState == EnumIrisState.OPENING || irisState == EnumIrisState.OPENED)
+            if (irisState == EnumIrisState.OPENING)
                 irisAnimationStage = 1.7f - irisAnimationStage;
             for (float i = 0; i < 20; i++) {
                 float rotateIndex = 18f * i;

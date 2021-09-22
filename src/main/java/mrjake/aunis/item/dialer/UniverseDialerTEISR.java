@@ -1,7 +1,5 @@
 package mrjake.aunis.item.dialer;
 
-import org.lwjgl.opengl.GL11;
-
 import mrjake.aunis.Aunis;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.renderer.AunisFontRenderer;
@@ -23,6 +21,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants.NBT;
+import org.lwjgl.opengl.GL11;
 
 public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 	

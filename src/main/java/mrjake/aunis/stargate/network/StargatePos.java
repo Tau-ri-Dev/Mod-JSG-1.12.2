@@ -1,8 +1,5 @@
 package mrjake.aunis.stargate.network;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mrjake.aunis.stargate.teleportation.TeleportHelper;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import net.minecraft.block.state.IBlockState;
@@ -10,6 +7,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class StargatePos implements INBTSerializable<NBTTagCompound> {
 	
