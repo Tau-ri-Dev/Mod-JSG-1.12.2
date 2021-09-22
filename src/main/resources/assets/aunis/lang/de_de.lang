@@ -18,8 +18,8 @@ item.aunis.crystal_glyph_universe.name=Universe Glyphenkristall
 
 item.aunis.iris_blade.name=Iris Upgrade (Titanium)
 item.aunis.iris_blade_trinium.name=Iris Upgrade (Trinium)
-item.aunis.quad_iris_blade.name=Quad Iris Blade (Titanium)
-item.aunis.quad_iris_blade_trinium.name=Quad Iris Blade (Trinium)
+item.aunis.quad_iris_blade.name=4er Iris Scheibe (Titanium)
+item.aunis.quad_iris_blade_trinium.name=4er Iris Scheibe (Trinium)
 item.aunis.upgrade_iris.name=Iris Upgrade (Titanium)
 item.aunis.upgrade_iris_trinium.name=Iris Upgrade (Trinium)
 
@@ -85,7 +85,7 @@ item.aunis.universe_ring_fragment.name=Universe Ring Fragment
 item.aunis.holder_crystal.name=Kristallhalter
 item.aunis.holder_crystal_pegasus.name=Pegasus Kristallhalter
 
-item.aunis.page_notebook.name=Notebook Seite
+item.aunis.page_notebook.name=Notizbuch Seite
 item.aunis.page_mysterious.name=Geheimnisvolle Seite
 item.aunis.page_mysterious.empty=Leer
 item.aunis.mysterious_page.tooltip=Wer weiß wohin es führt
@@ -120,7 +120,7 @@ item.aunis.transportrings_ring_fragment.name=Transporterring Fragment
 tile.aunis.transportrings_controller_block.name=Transporterring Steuerung
 tile.aunis.transportrings_controller_block.not_linked=Steuerung nicht verbunden
 
-tile.aunis.transportrings_block.name=Transporterring
+tile.aunis.transportrings_block.name=Transportringe
 tile.aunis.transportrings_block.non_existing_address=Adresse existiert nicht
 tile.aunis.transportrings_block.duplicate_address=Doppelte Adresse
 tile.aunis.transportrings_block.wrong_address=Falsche Adresse,wähle 1-6
@@ -278,6 +278,7 @@ glyph.aunis.universe.g33=Glyph 33
 glyph.aunis.universe.g34=Glyph 34
 glyph.aunis.universe.g35=Glyph 35
 glyph.aunis.universe.g36=Glyph 36
+glyph.aunis.universe.g37=Symbol 37
 
 
 gui.upgrades=Upgrades
@@ -297,6 +298,7 @@ gui.dhd.no_fuel=Kein Treibstoff
 gui.stargate.milky_way_address=Milchstraßenadresse
 gui.stargate.pegasus_address=Pegasusadresse
 gui.stargate.universe_address=Universeadresse
+gui.stargate.iris_code=Iris Code
 gui.stargate.biome_overlay=Biome overlay
 gui.stargate.biome_overlay.help=Lege Block zum überschreiben ein
 gui.stargate.biome_overlay.normal=Normal
@@ -337,7 +339,7 @@ gui.beamer.no_crystal=Kein Kristall
 gui.beamer.transmit=Senden
 gui.beamer.receive=Empfangen
 gui.beamer.disabled=Deaktiviert
-gui.beamer.activation=Transporter Aktivierung
+gui.beamer.activation=Beamer Aktivierung
 gui.beamer.auto=Automatisch
 gui.beamer.on_high=Mit Signal
 gui.beamer.on_low=Ohne Signal
@@ -348,6 +350,9 @@ gui.beamer.deactivate=Deaktiviere nach
 gui.beamer.after_inactivity=Untätigkeit [s]
 gui.beamer.save=Sichern
 gui.beamer.invalid=Ungültig
+
+gui.gdo.send_code=Code eingabe:
+gui.gdo.send_button=Code senden
 
 chat.orlins.energyStored=Energie gespeichert: %s RF (Benötigt: %s RF, %s s)
 
@@ -364,7 +369,7 @@ item.aunis.universe_dialer.not_dialing=Nicht wählend
 item.aunis.universe_dialer.oc_name=Eintrag Name
 item.aunis.universe_dialer.oc_address=OpenComputers' Modem Adresse (Lasse leer für Broadcast)
 item.aunis.universe_dialer.oc_port=Modem Port
-item.aunis.universe_dialer.oc_data=OpenComputers Parameter (durch Komma getrenntd)
+item.aunis.universe_dialer.oc_data=OpenComputers Parameter (durch Komma getrennt)
 item.aunis.universe_dialer.oc_save=Speichern
 item.aunis.universe_dialer.oc_port_invalid=Ungültiger Port
 item.aunis.universe_dialer.oc_message_received=Anwort empfangen:
@@ -378,6 +383,25 @@ item.aunis.gui.oc_address=Modem addresse
 item.aunis.gui.oc_port=Port
 item.aunis.gui.oc_params=Parameter
 item.aunis.gui.oc_port_invalid=Ungültiger Port
+
+item.aunis.gdo.name=Garagentor öffner
+item.aunis.gdo.not_linked=Nicht verbunden
+
+item.aunis.gdo.code_sender=Code
+item.aunis.gdo.iris_opened=Iris ist offen!
+item.aunis.gdo.iris_busy=Iris ist beschäftigt!
+item.aunis.gdo.code_accepted=Code akzeptiert! Öffne iris...
+item.aunis.gdo.code_rejected=Falscher code!
+item.aunis.gdo.code_not_set=Du musst einen Code eingeben!
+
+item.aunis.gdo.mode_oc=OpnCom
+item.aunis.gdo.oc_name=Eintrag Name
+item.aunis.gdo.oc_address=OpenComputers' Modem Adresse (Lasse leer für Broadcast)
+item.aunis.gdo.oc_port=Modem Port
+item.aunis.gdo.oc_data=OpenComputers Parameter (durch Komma getrennt)
+item.aunis.gdo.oc_save=Sichern
+item.aunis.gdo.oc_port_invalid=Ungültiger Port
+item.aunis.gdo.oc_message_received=Antwort erhalten: 
 
 config.aunis.mode_scroll=Universe Dialer Mode scroll
 config.aunis.mode_up=Universe Dialer Mode hoch
@@ -414,3 +438,4 @@ aunis.subtitle.beamer_start=Beamer startet
 aunis.subtitle.beamer_stop=Beamer stoppt
 aunis.subtitle.beamer_loop=Beamer transportiert
 aunis.subtitle.page_flip=Seite schlägt um
+gui.quitbutton=Test
