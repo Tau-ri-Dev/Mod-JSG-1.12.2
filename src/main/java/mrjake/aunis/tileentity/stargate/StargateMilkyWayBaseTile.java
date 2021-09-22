@@ -4,6 +4,8 @@ import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateDimensionConfig;
 import mrjake.aunis.config.StargateSizeEnum;
+import mrjake.aunis.packet.AunisPacketHandler;
+import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateAbstractRendererState;
 import mrjake.aunis.renderer.stargate.StargateMilkyWayRendererState;
@@ -19,6 +21,7 @@ import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
 import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.state.StargateRendererActionState;
 import mrjake.aunis.state.StargateRendererActionState.EnumGateAction;
+import mrjake.aunis.state.StargateSpinState;
 import mrjake.aunis.state.State;
 import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.tileentity.DHDTile;
@@ -148,6 +151,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     }
 
     prepareGateToConnect(dialedAddressSize);
+    markDirty();
   }
 
   // incoming animation
@@ -159,10 +163,9 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     }
 
     boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
-
+    final int[] i = {1};
+    Timer timer = new Timer();
     if(allowIncomingAnimation) {
-      final int[] i = {1};
-      Timer timer = new Timer();
       timer.schedule(new TimerTask() {
         public void run() {
           if (i[0] <= dialedAddressSize) {
@@ -170,15 +173,13 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
             playSoundEvent(StargateSoundEventEnum.INCOMING);
             i[0]++;
           } else {
-            sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddressSize, true);
+            //sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddressSize, true);
             timer.cancel();
           }
         }
       }, 0, 400);
     }
     else{
-      final int[] i = {1};
-      Timer timer = new Timer();
       timer.schedule(new TimerTask() {
         public void run() {
           if (i[0] <= 2) {

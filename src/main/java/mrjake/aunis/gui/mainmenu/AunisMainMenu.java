@@ -127,7 +127,7 @@ public class AunisMainMenu extends GuiMainMenu {
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
         this.mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
-        this.drawScaledCustomSizeModalRect(0, 0, 0, 0, width, height, width, height, width, height);
+        drawScaledCustomSizeModalRect(0, 0, 0, 0, width, height, width, height, width, height);
 
         // background gradient
         //this.drawGradientRect(0, 0, this.width, this.height, -2130706433, 16777215);
