@@ -891,7 +891,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             openSound = SoundEventEnum.SHIELD_OPENING;
             closeSound = SoundEventEnum.SHIELD_CLOSING;
         }
-        StargateAbstractBaseTile targetGate = targetGatePos.getTileEntity();
+        //StargateAbstractBaseTile targetGate = targetGatePos.getTileEntity();
         switch (irisState) {
             case OPENED:
                 if (isShieldIris() && getEnergyStorage().getEnergyStored() < shieldKeepAlive * 3)
