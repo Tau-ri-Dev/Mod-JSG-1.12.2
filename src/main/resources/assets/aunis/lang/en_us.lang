@@ -349,6 +349,9 @@ gui.beamer.after_inactivity=inactivity [s]
 gui.beamer.save=Save
 gui.beamer.invalid=Invalid
 
+gui.gdo.send_code=Enter code:
+gui.gdo.send_button=Send code
+
 chat.orlins.energyStored=Energy stored: %s RF (Required: %s RF, %s s)
 
 item.aunis.universe_dialer.name=Universe Dialer

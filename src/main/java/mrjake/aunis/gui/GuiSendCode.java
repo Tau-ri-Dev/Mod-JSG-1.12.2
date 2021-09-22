@@ -1,17 +1,10 @@
 package mrjake.aunis.gui;
 
-import mrjake.aunis.Aunis;
-import mrjake.aunis.gui.element.GuiHelper;
 import mrjake.aunis.gui.element.NumberOnlyTextField;
-import mrjake.aunis.item.gdo.GDOActionEnum;
-import mrjake.aunis.item.gdo.GDOActionPacketToServer;
-import mrjake.aunis.packet.AunisPacketHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumHand;
-import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 
@@ -31,8 +24,8 @@ public class GuiSendCode extends GuiBase {
     @Override
     public void initGui() {
         super.initGui();
-        codeField = new NumberOnlyTextField(0, Minecraft.getMinecraft().fontRenderer, width/2-100, height/2, 200, 20);
-        sendButton = new AunisGuiButton(1,width/2-100, height/2+3+20, 200, 20, I18n.format("aunis.gui.send"));
+        codeField = new NumberOnlyTextField(0, Minecraft.getMinecraft().fontRenderer, width/2-80, height/2-25, 160, 20);
+        sendButton = new AunisGuiButton(1,width/2-70, height/2-25+28, 140, 20, I18n.format("gui.gdo.send_button"));
 
     }
 
@@ -42,7 +35,7 @@ public class GuiSendCode extends GuiBase {
         GlStateManager.pushMatrix();
             translateToCenter();
             drawBackground();
-            drawString(I18n.format("aunis.gdo.enter_code") + ": ", 0, 20, 0x00AA00);
+            drawString(I18n.format("gui.gdo.send_code") + ": ", 5, 5, 0x00AA00);
         GlStateManager.popMatrix();
         codeField.drawTextBox();
         sendButton.drawButton(mc, mouseX, mouseY, Minecraft.getMinecraft().getRenderPartialTicks());
