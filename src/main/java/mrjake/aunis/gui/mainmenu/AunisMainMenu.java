@@ -22,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
@@ -37,7 +38,7 @@ public class AunisMainMenu extends GuiMainMenu {
     protected BiomeOverlayEnum overlay = BiomeOverlayEnum.NORMAL;
     protected float screenCenterHeight = (((float) height) / 2f);
     protected float screenCenterWidth = ((float) width) / 2f;
-    protected List<AunisGuiButton> aunisButtonList = Lists.<AunisGuiButton>newArrayList();
+    protected List<GuiButton> aunisButtonList = new ArrayList<>();
     protected ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");
 
     // animation of top chevron
@@ -254,12 +255,12 @@ public class AunisMainMenu extends GuiMainMenu {
         // ------------------------------
         // DRAWING BUTTONS
 
-        for (int l = 0; l < this.aunisButtonList.size(); ++l) {
-            this.aunisButtonList.get(l).drawButton(this.mc, mouseX, mouseY, partialTicks);
+        for (GuiButton guiButton : this.aunisButtonList) {
+            ((AunisGuiButton) guiButton).drawButton(this.mc, mouseX, mouseY, partialTicks);
         }
 
-        for (int j = 0; j < this.labelList.size(); ++j) {
-            (this.labelList.get(j)).drawLabel(this.mc, mouseX, mouseY);
+        for (GuiLabel guiLabel : this.labelList) {
+            guiLabel.drawLabel(this.mc, mouseX, mouseY);
         }
     }
 
@@ -330,7 +331,7 @@ public class AunisMainMenu extends GuiMainMenu {
                 GuiButton guibutton = this.aunisButtonList.get(i);
 
                 if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
-                    net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre event = new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, (List) this.aunisButtonList);
+                    net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre event = new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, this.aunisButtonList);
                     if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
                         break;
                     guibutton = event.getButton();
@@ -338,7 +339,7 @@ public class AunisMainMenu extends GuiMainMenu {
                     guibutton.playPressSound(this.mc.getSoundHandler());
                     this.actionPerformed(guibutton);
                     if (this.equals(this.mc.currentScreen))
-                        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.getButton(), (List) this.aunisButtonList));
+                        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.getButton(), this.aunisButtonList));
                 }
             }
         }
