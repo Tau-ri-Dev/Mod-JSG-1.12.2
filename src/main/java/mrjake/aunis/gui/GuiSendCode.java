@@ -8,8 +8,10 @@ import mrjake.aunis.item.gdo.GDOActionPacketToServer;
 import mrjake.aunis.packet.AunisPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumHand;
+import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 
@@ -19,7 +21,7 @@ import java.io.IOException;
 public class GuiSendCode extends GuiBase {
     EnumHand hand;
     public GuiSendCode() {
-        super(196, 160, 8, FRAME_COLOR, BG_COLOR, TEXT_COLOR, 4);
+        super(250, 100, 4, FRAME_COLOR, BG_COLOR, TEXT_COLOR, 4);
         this.hand = hand;
     }
 
@@ -29,19 +31,19 @@ public class GuiSendCode extends GuiBase {
     @Override
     public void initGui() {
         super.initGui();
-        codeField = new NumberOnlyTextField(0, Minecraft.getMinecraft().fontRenderer,
-                50, 20, 128, 64);
-
-        sendButton = new AunisGuiButton(1,54, 40, 120, 62, I18n.format("aunis.gui.send"));
+        codeField = new NumberOnlyTextField(0, Minecraft.getMinecraft().fontRenderer, width/2-100, height/2, 200, 20);
+        sendButton = new AunisGuiButton(1,width/2-100, height/2+3+20, 200, 20, I18n.format("aunis.gui.send"));
 
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        super.drawScreen(mouseX, mouseY, partialTicks);
-        translateToCenter();
-        drawBackground();
-        drawString(I18n.format("aunis.gdo.enter_code") + ": ", 0, 20, 0x00AA00);
+        //super.drawScreen(mouseX, mouseY, partialTicks);
+        GlStateManager.pushMatrix();
+            translateToCenter();
+            drawBackground();
+            drawString(I18n.format("aunis.gdo.enter_code") + ": ", 0, 20, 0x00AA00);
+        GlStateManager.popMatrix();
         codeField.drawTextBox();
         sendButton.drawButton(mc, mouseX, mouseY, Minecraft.getMinecraft().getRenderPartialTicks());
     }
@@ -54,11 +56,12 @@ public class GuiSendCode extends GuiBase {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+        //super.mouseClicked(mouseX, mouseY, mouseButton);
         codeField.mouseClicked(mouseX, mouseY, mouseButton);
-
-        if (GuiHelper.isPointInRegion(sendButton.x, sendButton.y, sendButton.x + sendButton.width, sendButton.y + sendButton.height, mouseX, mouseY)) {
-            System.out.println("sending code lol");
+        //if (GuiHelper.isPointInRegion(sendButton.x, sendButton.y, sendButton.x + sendButton.width, sendButton.y + sendButton.height, mouseX, mouseY)) {
+        if(sendButton.mousePressed(this.mc, mouseX, mouseY)){
+            System.out.println("sending code lol" + codeField.getText());
+            sendButton.playPressSound(this.mc.getSoundHandler());
         }
     }
 }

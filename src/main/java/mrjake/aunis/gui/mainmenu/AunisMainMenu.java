@@ -37,7 +37,7 @@ public class AunisMainMenu extends GuiMainMenu {
     protected BiomeOverlayEnum overlay = BiomeOverlayEnum.NORMAL;
     protected float screenCenterHeight = (((float) height) / 2f);
     protected float screenCenterWidth = ((float) width) / 2f;
-    protected List<AunisGuiButton> aunisButtonList = Lists.newArrayList();
+    protected List<AunisGuiButton> aunisButtonList = Lists.<AunisGuiButton>newArrayList();
     protected ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");
 
     // animation of top chevron

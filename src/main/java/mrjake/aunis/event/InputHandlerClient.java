@@ -119,13 +119,13 @@ public class InputHandlerClient {
 		if (event.getDwheel() == 0) {
 			if (checkForItem(AunisItems.GDO)) {
 				// opening code input gui
-				System.out.println("lkol");
+				//System.out.println("lkol");
 				if (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()) {
-					System.out.println("chjo");
+					//System.out.println("chjo");
 					ItemStack itemStack = getItemStack(Minecraft.getMinecraft().player, AunisItems.GDO);
 					if (itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey("linkedGate")
 							&& GDOMode.valueOf(itemStack.getTagCompound().getByte("mode")) == GDOMode.CODE_SENDER) {
-						System.out.println("chacha");
+						//System.out.println("chacha");
 						Minecraft.getMinecraft().displayGuiScreen(new GuiSendCode());
 					}
 				}
