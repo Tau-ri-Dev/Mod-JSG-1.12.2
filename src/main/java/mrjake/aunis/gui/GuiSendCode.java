@@ -3,6 +3,7 @@ package mrjake.aunis.gui;
 import ibxm.Player;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.element.NumberOnlyTextField;
+import mrjake.aunis.item.gdo.GDOMessages;
 import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -76,6 +77,9 @@ public class GuiSendCode extends GuiBase {
                     assert gateTile != null;
                     gateTile.receiveIrisCode(this.mc.player, Integer.parseInt(codeField.getText()));
                 }
+            }
+            if(codeField.getText().length() < 1){
+                this.mc.player.sendStatusMessage(GDOMessages.CODE_NOT_SET.textComponent, true);
             }
         }
     }
