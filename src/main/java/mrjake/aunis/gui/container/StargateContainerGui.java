@@ -6,6 +6,8 @@ import mrjake.aunis.gui.element.*;
 import mrjake.aunis.gui.element.Tab.SlotTab;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.SetOpenTabToServer;
+import mrjake.aunis.packet.stargate.DHDButtonClickedToServer;
+import mrjake.aunis.packet.stargate.SaveIrisCodeToServer;
 import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
 import mrjake.aunis.stargate.network.SymbolPegasusEnum;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
@@ -134,6 +136,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 
 		irisTab = (TabIris) TabIris.builder()
 				.setCode(container.gateTile.getIrisCode())
+				.setIrisMode(container.gateTile.getIrisMode())
 				.setGuiSize(xSize, ySize)
 				.setGuiPosition(guiLeft, guiTop)
 				.setTabPosition(176-107, 2+22)
@@ -314,9 +317,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				break;
 			}
 		}
-		if (irisTab.isOpen() && irisTab.inputField != null/*&&
-				GuiHelper.isPointInRegion(irisTab.inputField.x, irisTab.inputField.y,
-						irisTab.inputField.width, irisTab.inputField.height, mouseX, mouseY)*/) {
+		if (irisTab.isOpen()) {
 			irisTab.mouseClicked(mouseX, mouseY, mouseButton);
 		}
 	}
@@ -332,30 +333,14 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
 		if (irisTab.isOpen()){
 			irisTab.inputField.textboxKeyTyped(typedChar, keyCode);
-			/*int code = Integer.valueOf(irisTab.inputField.getText());
-			if (code > 0 && code <= 15) {
-				AunisPacketHandler.INSTANCE.sendToServer(new SaveIrisCodeToServer(pos, code));
-			}*/
 		}
 		super.keyTyped(typedChar, keyCode);
 	}
 
-
-	/*private GuiTextField codeField;
-	private AunisGuiButton saveButton;
-	protected void actionPerformed(GuiButton button) throws IOException {
-		if (button == saveButton) {
-			EntityPlayer player = Minecraft.getMinecraft().player;
-			int code = Integer.valueOf(codeField.getText());
-
-			if (code > 0 && code <= 15) {
-				AunisPacketHandler.INSTANCE.sendToServer(new SaveIrisCodeToServer(pos, code));
-			}
-		}
-	}*/
-
 	@Override
 	public void onGuiClosed() {
-		container.gateTile.setIrisCode(Integer.parseInt(irisTab.inputField.getText()));
+		AunisPacketHandler.INSTANCE.sendToServer(new SaveIrisCodeToServer(pos, irisTab.getCode(), irisTab.getIrisMode()));
+		container.gateTile.setIrisCode(irisTab.getCode());
+		container.gateTile.setIrisMode(irisTab.getIrisMode());
 	}
 }

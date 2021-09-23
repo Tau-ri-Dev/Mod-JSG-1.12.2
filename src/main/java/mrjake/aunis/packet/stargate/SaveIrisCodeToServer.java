@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.PositionedPacket;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
+import mrjake.aunis.stargate.EnumIrisMode;
+import mrjake.aunis.stargate.EnumIrisState;
 import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,11 +19,13 @@ public class SaveIrisCodeToServer extends PositionedPacket {
 	public SaveIrisCodeToServer() {}
 
 	int code;
+	EnumIrisMode mode;
 
-	public SaveIrisCodeToServer(BlockPos pos, int code) {
+	public SaveIrisCodeToServer(BlockPos pos, int code, EnumIrisMode mode) {
 		super(pos);
 		
 		this.code = code;
+		this.mode = mode;
 	}
 
 	@Override
@@ -29,6 +33,7 @@ public class SaveIrisCodeToServer extends PositionedPacket {
 		super.toBytes(buf);
 		
 		buf.writeInt(code);
+		buf.writeByte(mode.id);
 	}
 	
 	@Override
@@ -36,6 +41,7 @@ public class SaveIrisCodeToServer extends PositionedPacket {
 		super.fromBytes(buf);
 
 		code = buf.readInt();
+		mode = EnumIrisMode.getValue(buf.readByte());
 	}
 	
 	
@@ -51,6 +57,8 @@ public class SaveIrisCodeToServer extends PositionedPacket {
 				if(world.getTileEntity(message.pos) instanceof StargateClassicBaseTile){
 					te = (StargateClassicBaseTile) world.getTileEntity(message.pos);
 					te.setIrisCode(message.code);
+					te.setIrisMode(message.mode);
+					System.out.println("Code was send to server!");
 					AunisPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(message.pos, StateTypeEnum.GUI_STATE, te.getState(StateTypeEnum.GUI_STATE)), player);
 				}
 			});

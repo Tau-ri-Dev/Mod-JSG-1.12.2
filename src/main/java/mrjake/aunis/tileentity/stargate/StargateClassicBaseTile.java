@@ -69,6 +69,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     private EnumIrisState irisState = EnumIrisState.OPENED;
     private EnumIrisType irisType = EnumIrisType.NULL;
     private int irisCode = -1;
+    private EnumIrisMode irisMode = EnumIrisMode.OPENED;
     private long irisAnimation = 0;
 
     public int shieldKeepAlive = 0;
@@ -973,10 +974,19 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void setIrisCode(int code){
         System.out.println("Setting new iris code: " + code);
         this.irisCode = code;
+        markDirty();
+    }
+    public void setIrisMode(EnumIrisMode irisMode){
+        System.out.println("Setting new iris mode: " + irisMode.name());
+        this.irisMode = irisMode;
+        markDirty();
     }
 
     public int getIrisCode(){
         return this.irisCode;
+    }
+    public EnumIrisMode getIrisMode(){
+        return this.irisMode;
     }
 
     // -----------------------------------------------------------

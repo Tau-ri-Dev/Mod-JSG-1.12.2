@@ -22,8 +22,8 @@ public class TabIris extends Tab {
             Minecraft.getMinecraft().fontRenderer, guiLeft + 6, guiTop + defaultY + 25,
             64, 16);
 
-    protected int code;
-    protected EnumIrisMode irisMode;
+    public int code;
+    public EnumIrisMode irisMode;
     protected ModeButton buttonChangeMode = new ModeButton(
             1, inputField.x + inputField.width + 5, guiTop + defaultY + 25, 16, MODES_ICONS,
             64, 32, 4);
@@ -36,6 +36,7 @@ public class TabIris extends Tab {
         inputField.setMaxStringLength(AunisConfig.irisConfig.irisCodeLength);
         inputField.setText(code > -1 ? Integer.toString(code) : "");
         inputField.setEnabled(buttonChangeMode.getCurrentState() == EnumIrisMode.AUTO.id);
+        buttonChangeMode.setCurrentState(irisMode.id);
     }
 
     @Override
@@ -105,6 +106,14 @@ public class TabIris extends Tab {
             buttonChangeMode.playPressSound(Minecraft.getMinecraft().getSoundHandler());
         }
 
+    }
+
+    public EnumIrisMode getIrisMode() {
+        return EnumIrisMode.getValue((byte) buttonChangeMode.getCurrentState());
+    }
+
+    public int getCode() {
+        return inputField.getText().length() > 0 ? Integer.parseInt(inputField.getText()) : -1;
     }
 
 }
