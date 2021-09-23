@@ -1,0 +1,9 @@
+{
+    "type": "smelting",
+    "ingredient": {
+        "item": "aunis:titanium_ore"
+    },
+    "result": "aunis:titanium_ingot",
+    "experience": 5,
+    "cookingtime": 200
+}
