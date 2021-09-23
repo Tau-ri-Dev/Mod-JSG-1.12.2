@@ -2,6 +2,7 @@ package mrjake.aunis.gui.element;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.stargate.EnumIrisMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -64,7 +65,6 @@ public class TabIris extends Tab {
 
         public TabIris.TabIrisBuilder setCode(int code) {
             this.code = code;
-
             return this;
         }
 
@@ -102,6 +102,7 @@ public class TabIris extends Tab {
             }
 
             inputField.setEnabled(buttonChangeMode.getCurrentState() == EnumIrisMode.AUTO.id);
+            buttonChangeMode.playPressSound(Minecraft.getMinecraft().getSoundHandler());
         }
 
     }

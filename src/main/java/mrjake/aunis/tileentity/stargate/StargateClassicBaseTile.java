@@ -971,7 +971,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public void setIrisCode(int code){
+        System.out.println("Setting new iris code: " + code);
         this.irisCode = code;
+    }
+
+    public int getIrisCode(){
+        return this.irisCode;
     }
 
     // -----------------------------------------------------------

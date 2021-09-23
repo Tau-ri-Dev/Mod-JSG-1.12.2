@@ -133,6 +133,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				.setIconTextureLocation(304, 54).build();
 
 		irisTab = (TabIris) TabIris.builder()
+				.setCode(container.gateTile.getIrisCode())
 				.setGuiSize(xSize, ySize)
 				.setGuiPosition(guiLeft, guiTop)
 				.setTabPosition(176-107, 2+22)
@@ -352,4 +353,9 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 			}
 		}
 	}*/
+
+	@Override
+	public void onGuiClosed() {
+		container.gateTile.setIrisCode(Integer.parseInt(irisTab.inputField.getText()));
+	}
 }

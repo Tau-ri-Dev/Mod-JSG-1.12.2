@@ -21,7 +21,7 @@ public enum ElementEnum {
   MILKYWAY_RING("milkyway/ring.obj", "milkyway/gatering7"),
 
   // for main menu screen
-  MILKYWAY_RING_MAIN_MENU("milkyway/ring.obj", "milkyway/ring8"),
+  //MILKYWAY_RING_MAIN_MENU("milkyway/ring.obj", "milkyway/ring8"),
   MILKYWAY_CHEVRON_LIGHT_ACTIVE("milkyway/chevronLight.obj", "milkyway/chevron10"),
   MILKYWAY_CHEVRON_MOVING_ACTIVE("milkyway/chevronMoving.obj", "milkyway/chevron10"),
   // ------------

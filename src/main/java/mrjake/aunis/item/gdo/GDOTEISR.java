@@ -101,7 +101,7 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
 			if (notLinked) {
 				GlStateManager.pushMatrix();
 
-				GlStateManager.translate(1.12f, 0.130f, 0.0f);
+				GlStateManager.translate(1.12f, 0.090f, 0.0f);
 				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(Aunis.ModID, "textures/gui/universe_warning.png"));
 				GlStateManager.enableTexture2D();
 				GlStateManager.enableBlend();
