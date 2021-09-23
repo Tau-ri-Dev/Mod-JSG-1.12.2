@@ -360,6 +360,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
         compound.setByte("irisState", irisState.id);
         if (irisCode > -1) compound.setInteger("irisCode", irisCode);
+        compound.setByte("irisMode", irisMode.id);
         return super.writeToNBT(compound);
     }
 
@@ -385,6 +386,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 //        irisType = mrjake.aunis.stargate.EnumIrisType.byId(compound.getByte("irisType"));
         irisState = mrjake.aunis.stargate.EnumIrisState.getValue(compound.getByte("irisState"));
         irisCode = compound.hasKey("irisCode") ? compound.getInteger("irisCode") : -1;
+        irisMode = EnumIrisMode.getValue(compound.getByte("irisMode"));
         super.readFromNBT(compound);
     }
 
