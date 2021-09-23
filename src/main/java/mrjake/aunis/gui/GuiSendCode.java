@@ -4,6 +4,8 @@ import ibxm.Player;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.element.NumberOnlyTextField;
 import mrjake.aunis.item.gdo.GDOMessages;
+import mrjake.aunis.stargate.network.StargateNetwork;
+import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -15,6 +17,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import scala.reflect.internal.Trees;
 
 import java.io.IOException;
 
@@ -71,11 +74,16 @@ public class GuiSendCode extends GuiBase {
                 NBTTagCompound compound = gdo.getTagCompound();
                 World world = this.mc.player.getEntityWorld();
                 assert compound != null;
-                if(compound.hasKey("linkedgate")){
+                if(compound.hasKey("linkedGate")){
                     BlockPos pos = BlockPos.fromLong(compound.getLong("linkedGate"));
-                    StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(pos);
+                    StargateClassicBaseTile gateTile = (StargateClassicBaseTile) world.getTileEntity(pos);
                     assert gateTile != null;
-                    gateTile.receiveIrisCode(this.mc.player, Integer.parseInt(codeField.getText()));
+                    StargateClassicBaseTile targetGate = null;
+                    if(gateTile.isMerged() && gateTile.getStargateState().initiating() || gateTile.getStargateState().engaged()) {
+                        targetGate = (StargateClassicBaseTile) StargateNetwork.get(world).getStargate(gateTile.getDialedAddress()).getTileEntity();
+                        if (targetGate != null)
+                            targetGate.receiveIrisCode(this.mc.player, Integer.parseInt(codeField.getText()));
+                    }
                 }
             }
             if(codeField.getText().length() < 1){
