@@ -5,6 +5,7 @@ import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.chunkloader.ChunkLoadingCallback;
 import mrjake.aunis.command.AunisCommands;
 import mrjake.aunis.config.StargateDimensionConfig;
+import mrjake.aunis.crafting.AunisRecipeHandler;
 import mrjake.aunis.datafixer.TileNamesFixer;
 import mrjake.aunis.fluid.AunisFluids;
 import mrjake.aunis.gui.AunisGuiHandler;
@@ -73,6 +74,7 @@ public class Aunis {
         
         AunisPacketHandler.registerPackets();
         AunisFluids.registerFluids();
+
         
     	StargateDimensionConfig.load(event.getModConfigurationDirectory());
     	

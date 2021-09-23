@@ -33,10 +33,10 @@ public class TabIris extends Tab {
         super(builder);
         this.irisMode = builder.irisMode;
         code = builder.code;
+        buttonChangeMode.setCurrentState(irisMode.id);
         inputField.setMaxStringLength(AunisConfig.irisConfig.irisCodeLength);
         inputField.setText(code > -1 ? Integer.toString(code) : "");
         inputField.setEnabled(buttonChangeMode.getCurrentState() == EnumIrisMode.AUTO.id);
-        buttonChangeMode.setCurrentState(irisMode.id);
     }
 
     @Override

@@ -338,6 +338,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        System.out.println("saveing fokin nbt");
         compound.setTag("itemHandler", itemStackHandler.serializeNBT());
         compound.setBoolean("isFinalActive", isFinalActive);
 
@@ -361,6 +362,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         compound.setByte("irisState", irisState.id);
         if (irisCode > -1) compound.setInteger("irisCode", irisCode);
         compound.setByte("irisMode", irisMode.id);
+        System.out.println("saved: "+irisMode.name() + " code:" + irisCode);
         return super.writeToNBT(compound);
     }
 
@@ -387,6 +389,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         irisState = mrjake.aunis.stargate.EnumIrisState.getValue(compound.getByte("irisState"));
         irisCode = compound.hasKey("irisCode") ? compound.getInteger("irisCode") : -1;
         irisMode = EnumIrisMode.getValue(compound.getByte("irisMode"));
+        System.out.println("loaded: "+irisMode.name()+" "+irisCode);
         super.readFromNBT(compound);
     }
 
@@ -452,7 +455,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 return new StargateContainerGuiState(gateAddressMap);
 
             case GUI_UPDATE:
-                return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose);
+                return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose, irisMode, irisCode);
 
 //            case IRIS_UPDATE:
 //                return getRendererStateServer().build();
@@ -950,7 +953,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 //        Aunis.logger.debug("received iris code: "+code+", from: "+sender.getName());
         System.out.println("received iris code: "+code+", from: "+sender.getName());
         if (code == this.irisCode){
-            switch (irisState) {
+            switch (this.irisState) {
                 case OPENED:
                     sender.sendStatusMessage(GDOMessages.OPENED.textComponent, true);
                     break;
