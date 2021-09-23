@@ -71,6 +71,7 @@ public class TabIris extends Tab {
 
         public TabIrisBuilder setIrisMode(EnumIrisMode irisMode) {
             this.irisMode = irisMode;
+            System.out.println("nastavila se kundovina: "+irisMode.name());
             return this;
         }
 

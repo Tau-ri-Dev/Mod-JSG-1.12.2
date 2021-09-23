@@ -455,6 +455,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 return new StargateContainerGuiState(gateAddressMap);
 
             case GUI_UPDATE:
+                System.out.println("posírám update: " + irisCode + " " + irisMode.name());
                 return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose, irisMode, irisCode);
 
 //            case IRIS_UPDATE:
@@ -544,7 +545,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 energyStorage.setEnergyStoredInternally(guiUpdate.energyStored);
                 energyTransferedLastTick = guiUpdate.transferedLastTick;
                 energySecondsToClose = guiUpdate.secondsToClose;
-
+                irisMode = guiUpdate.irisMode;
+                irisCode = guiUpdate.irisCode;
+                System.out.println("nastavilo se na clientovi" + irisCode + " " + irisMode.name());
                 break;
 
             case SPIN_STATE:

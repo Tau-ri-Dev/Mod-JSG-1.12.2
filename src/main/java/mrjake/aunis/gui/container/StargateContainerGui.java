@@ -134,6 +134,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				.setIconSize(20, 18)
 				.setIconTextureLocation(304, 54).build();
 
+		System.out.println();
 		irisTab = (TabIris) TabIris.builder()
 				.setCode(container.gateTile.getIrisCode())
 				.setIrisMode(container.gateTile.getIrisMode())
