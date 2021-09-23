@@ -360,7 +360,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             irisState = EnumIrisState.OPENED;
         }
         compound.setByte("irisState", irisState.id);
-        if (irisCode > -1) compound.setInteger("irisCode", irisCode);
+        compound.setInteger("irisCode", irisCode);
         compound.setByte("irisMode", irisMode.id);
         System.out.println("saved: "+irisMode.name() + " code:" + irisCode);
         return super.writeToNBT(compound);
@@ -387,7 +387,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
 //        irisType = mrjake.aunis.stargate.EnumIrisType.byId(compound.getByte("irisType"));
         irisState = mrjake.aunis.stargate.EnumIrisState.getValue(compound.getByte("irisState"));
-        irisCode = compound.hasKey("irisCode") ? compound.getInteger("irisCode") : -1;
+        irisCode = compound.getInteger("irisCode") != 0 ? compound.getInteger("irisCode") : -1;
         irisMode = EnumIrisMode.getValue(compound.getByte("irisMode"));
         System.out.println("loaded: "+irisMode.name()+" "+irisCode);
         super.readFromNBT(compound);
@@ -950,7 +950,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     EntityPlayer codeSender = null;
 
     public void receiveIrisCode(EntityPlayer sender, int code) {
-//        Aunis.logger.debug("received iris code: "+code+", from: "+sender.getName());
         System.out.println("received iris code: "+code+", from: "+sender.getName());
         if (code == this.irisCode){
             switch (this.irisState) {
