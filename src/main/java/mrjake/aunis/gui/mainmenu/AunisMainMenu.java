@@ -1,6 +1,5 @@
 package mrjake.aunis.gui.mainmenu;
 
-import com.google.common.collect.Lists;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.AunisGuiButton;
@@ -24,6 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class AunisMainMenu extends GuiMainMenu {
@@ -35,7 +35,14 @@ public class AunisMainMenu extends GuiMainMenu {
     protected boolean playingSound = false;
     protected boolean chevronShout = true;
     protected boolean chevronShoutColapsing = false;
-    protected BiomeOverlayEnum overlay = BiomeOverlayEnum.NORMAL;
+    protected BiomeOverlayEnum[] overlays = {
+            BiomeOverlayEnum.AGED,
+            BiomeOverlayEnum.FROST,
+            BiomeOverlayEnum.MOSSY,
+            BiomeOverlayEnum.SOOTY,
+            BiomeOverlayEnum.NORMAL
+    };
+    protected BiomeOverlayEnum overlay = getNextBiomeOverlay(AunisConfig.mainMenuConfig.changingGateOverlay);
     protected float screenCenterHeight = (((float) height) / 2f);
     protected float screenCenterWidth = ((float) width) / 2f;
     protected List<GuiButton> aunisButtonList = new ArrayList<>();
@@ -61,9 +68,9 @@ public class AunisMainMenu extends GuiMainMenu {
     }
 
     // next overlay
-    public void getNextBiomeOverlay(boolean doIt) {
+    public BiomeOverlayEnum getNextBiomeOverlay(boolean doIt) {
         if (doIt) {
-            switch (this.overlay) {
+            /*switch (this.overlay) {
                 case NORMAL:
                     this.overlay = BiomeOverlayEnum.AGED;
                     break;
@@ -80,17 +87,17 @@ public class AunisMainMenu extends GuiMainMenu {
                 default:
                     this.overlay = BiomeOverlayEnum.NORMAL;
                     break;
-            }
+            }*/
+            this.overlay = overlays[new Random().nextInt(overlays.length)];
         } else this.overlay = BiomeOverlayEnum.NORMAL;
+
+        return this.overlay;
     }
 
     // play sound
     public void updateSound() {
-        if (!playingSound) {
-            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1,0,0), SoundPositionedEnum.MAINMENU_MUSIC, AunisConfig.mainMenuConfig.playMusic);
-            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0,0,1), SoundPositionedEnum.MAINMENU_RINGROLL, AunisConfig.mainMenuConfig.gateRotation);
-            playingSound = true;
-        }
+        AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1,0,0), SoundPositionedEnum.MAINMENU_MUSIC, AunisConfig.mainMenuConfig.playMusic);
+        AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0,0,1), SoundPositionedEnum.MAINMENU_RINGROLL, AunisConfig.mainMenuConfig.gateRotation);
     }
 
     // update ring rotation and overlay
@@ -151,6 +158,7 @@ public class AunisMainMenu extends GuiMainMenu {
         GlStateManager.translate(screenCenterWidth, screenCenterHeight, 0f);
         GlStateManager.scale(30, 30, 30);
         GlStateManager.rotate(-180f, 0f, 0f, 1f);
+        GlStateManager.rotate(180f, 0f, 1f, 0f);
 
         // make it 3d
         //GlStateManager.rotate(125, 1, 0, 0);
@@ -172,7 +180,6 @@ public class AunisMainMenu extends GuiMainMenu {
         // ring rotation animation
         GlStateManager.rotate(animationStage, 0, 0, 1);
         // -----
-        //ElementEnum.MILKYWAY_RING_MAIN_MENU.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
         ElementEnum.MILKYWAY_RING_MAINMENU.bindTextureAndRender(this.overlay);
         GlStateManager.popMatrix();
 

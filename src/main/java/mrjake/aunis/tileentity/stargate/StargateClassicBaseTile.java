@@ -346,7 +346,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         compound.setLong("spinStartTime", spinStartTime);
         compound.setInteger("currentRingSymbol", currentRingSymbol.getId());
         compound.setInteger("targetRingSymbol", targetRingSymbol.getId());
-        compound.setInteger("spinDirection", spinDirection.id);
+        compound.setInteger("spinDirectiposílon", spinDirection.id);
 
         NBTTagList linkedBeamersTagList = new NBTTagList();
         for (BlockPos vect : linkedBeamers)
@@ -426,6 +426,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 .setBiomeOverride(determineBiomeOverride())
                 .setIrisState(irisState)
                 .setIrisType(irisType)
+                .setIrisMode(irisMode)
+                .setIrisCode(irisCode)
                 .setIrisAnimation(irisAnimation);
     }
 
@@ -456,7 +458,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
             case GUI_UPDATE:
                 System.out.println("posírám update: " + irisCode + " " + irisMode.name());
-                return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose, irisMode, irisCode);
+                return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose, this.irisMode, this.irisCode);
 
 //            case IRIS_UPDATE:
 //                return getRendererStateServer().build();
@@ -545,9 +547,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 energyStorage.setEnergyStoredInternally(guiUpdate.energyStored);
                 energyTransferedLastTick = guiUpdate.transferedLastTick;
                 energySecondsToClose = guiUpdate.secondsToClose;
-                irisMode = guiUpdate.irisMode;
-                irisCode = guiUpdate.irisCode;
-                System.out.println("nastavilo se na clientovi" + irisCode + " " + irisMode.name());
+                this.irisMode = guiUpdate.irisMode;
+                this.irisCode = guiUpdate.irisCode;
+                System.out.println("nastavilo se na clientovi" + this.irisCode + " " + this.irisMode.name());
                 break;
 
             case SPIN_STATE:

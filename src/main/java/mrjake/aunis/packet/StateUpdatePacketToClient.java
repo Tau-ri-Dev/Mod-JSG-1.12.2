@@ -65,8 +65,9 @@ public class StateUpdatePacketToClient extends PositionedPacket {
 					if (state != null) {
 						state.fromBytes(message.stateBuf);
 						
-						if (te != null)
+						if (te != null) {
 							te.setState(message.stateType, state);
+						}
 					}
 					
 					else {
