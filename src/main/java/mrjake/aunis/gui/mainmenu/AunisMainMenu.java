@@ -161,7 +161,7 @@ public class AunisMainMenu extends GuiMainMenu {
         // DRAWING GATE
 
         GlStateManager.pushMatrix();
-        ElementEnum.MILKYWAY_GATE.bindTextureAndRender(this.overlay);
+        ElementEnum.MILKYWAY_GATE_MAINMENU.bindTextureAndRender(this.overlay);
         GlStateManager.popMatrix();
 
         // ------------------------------
@@ -173,7 +173,7 @@ public class AunisMainMenu extends GuiMainMenu {
         GlStateManager.rotate(animationStage, 0, 0, 1);
         // -----
         //ElementEnum.MILKYWAY_RING_MAIN_MENU.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
-        ElementEnum.MILKYWAY_RING.bindTextureAndRender(this.overlay);
+        ElementEnum.MILKYWAY_RING_MAINMENU.bindTextureAndRender(this.overlay);
         GlStateManager.popMatrix();
 
         // ------------------------------
@@ -187,16 +187,16 @@ public class AunisMainMenu extends GuiMainMenu {
             float chevronOffset = 0;
             if (i == 8) chevronOffset = this.chevronLastAnimationStage;
             // ---------
-            ElementEnum.MILKYWAY_CHEVRON_FRAME.bindTextureAndRender(this.overlay);
+            ElementEnum.MILKYWAY_CHEVRON_FRAME_MAINMENU.bindTextureAndRender(this.overlay);
             GlStateManager.translate(0, chevronOffset, 0);
             if ((i == 6 || i == 7) || !this.chevronsActive) {
-                ElementEnum.MILKYWAY_CHEVRON_LIGHT.bindTextureAndRender(this.overlay);
+                ElementEnum.MILKYWAY_CHEVRON_LIGHT_MAINMENU.bindTextureAndRender(this.overlay);
                 GlStateManager.translate(0, -2 * chevronOffset, 0);
-                ElementEnum.MILKYWAY_CHEVRON_MOVING.bindTextureAndRender(this.overlay);
+                ElementEnum.MILKYWAY_CHEVRON_MOVING_MAINMENU.bindTextureAndRender(this.overlay);
             } else {
-                ElementEnum.MILKYWAY_CHEVRON_LIGHT_ACTIVE.bindTextureAndRender(this.overlay);
+                ElementEnum.MILKYWAY_CHEVRON_LIGHT_ACTIVE_MAINMENU.bindTextureAndRender(this.overlay);
                 GlStateManager.translate(0, -2 * chevronOffset, 0);
-                ElementEnum.MILKYWAY_CHEVRON_MOVING_ACTIVE.bindTextureAndRender(this.overlay);
+                ElementEnum.MILKYWAY_CHEVRON_MOVING_ACTIVE_MAINMENU.bindTextureAndRender(this.overlay);
             }
             GlStateManager.popMatrix();
             // back side
