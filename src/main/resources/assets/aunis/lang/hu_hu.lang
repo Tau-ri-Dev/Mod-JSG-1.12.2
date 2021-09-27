@@ -6,8 +6,8 @@ item.aunis.analyzer_ancient.name=Ős Analizátor
 item.aunis.crystal_control_dhd.name=Tárcsázó Irányítókristály
 item.aunis.dialer_fast.name=Gyorstárcsázó (debug)
 
-item.aunis.crystal_control_pegasus_dhd.name=Pegasus DHD Control Crystal
-item.aunis.raw_pegasus_dhd_crystal.name=Pegasus DHD Raw Crystal
+item.aunis.crystal_control_pegasus_dhd.name=Pegazus Tárcsázó Irányítókristály
+item.aunis.raw_pegasus_dhd_crystal.name=Nyers Pegazus Tárcsázó Kristály
 
 item.aunis.crystal_glyph_dhd.name=Tárcsázó Szimbólumkristály
 item.aunis.crystal_glyph_stargate.name=Csillagkapu Szimbólumkristály
@@ -16,15 +16,15 @@ item.aunis.crystal_glyph_pegasus.name=Pegazusi Szimbólumkristály
 item.aunis.crystal_glyph_universe.name=Univerzum Szimbólumkristály
 
 
-item.aunis.iris_blade.name=Iris Upgrade (Titanium)
-item.aunis.iris_blade_trinium.name=Iris Upgrade (Trinium)
-item.aunis.quad_iris_blade.name=Quad Iris Blade (Titanium)
-item.aunis.quad_iris_blade_trinium.name=Quad Iris Blade (Trinium)
-item.aunis.upgrade_iris.name=Iris Upgrade (Titanium)
-item.aunis.upgrade_iris_trinium.name=Iris Upgrade (Trinium)
+item.aunis.iris_blade.name=Írisz Fejlesztés (Titánium)
+item.aunis.iris_blade_trinium.name=Iris Fejlesztés (Trínium)
+item.aunis.quad_iris_blade.name=Négyszeres Írisz Penge (Titánium)
+item.aunis.quad_iris_blade_trinium.name=Négyszeres Írisz Penge (Trínium)
+item.aunis.upgrade_iris.name=Írisz Fejlesztés (Titánium)
+item.aunis.upgrade_iris_trinium.name=Írisz Fejlesztés (Trínium)
 
-item.aunis.shield_emitter.name=Shield Emitter
-item.aunis.crystal_upgrade_shield.name=Shield Upgrade
+item.aunis.shield_emitter.name=Pajzs Kibocsájtó
+item.aunis.crystal_upgrade_shield.name=Pajzs Fejlesztés
 
 
 tile.aunis.naquadah_ore.name=Nakvada Érc
@@ -34,10 +34,10 @@ item.aunis.naquadah_shard.name=Nakvada Töredék
 item.aunis.naquadah_alloy.name=Finomított Nakvada Ötvözetrúd
 item.aunis.naquadah_alloy_raw.name=Nakvada Ötvözetrúd
 
-tile.aunis.trinium_ore.name=Trinium Ore
-tile.aunis.titanium_ore.name=Titanium Ore
-tile.aunis.trinium_ingot.name=Trinium Ingot
-tile.aunis.titanium_ingot.name=Titanium Ingot
+tile.aunis.trinium_ore.name=Trínium Érc
+tile.aunis.titanium_ore.name=Titánium Érc
+tile.aunis.trinium_ingot.name=Trínium Rúd
+tile.aunis.titanium_ingot.name=Titánium Rúd
 
 tile.aunis.invisible_block.name=Nem láthatsz engem blokk
 
@@ -45,7 +45,7 @@ tile.aunis.stargate_milkyway_base_block.name=Csillagkapu Alap (Tejútrendszer)
 tile.aunis.stargate_milkyway_ring_block.name=Csillagkapu Gyűrű (Tejútrendszer)
 tile.aunis.stargate_milkyway_chevron_block.name=Csillagkapu Ékzár (Tejútrendszer)
 tile.aunis.dhd_block.name=Tárcsázókészülék
-tile.aunis.dhd_pegasus_block.name=Dial Home Device (DHD Pegas)
+tile.aunis.dhd_pegasus_block.name=Tárcsázókészülék (Pegazus)
 tile.aunis.capacitor_block.name=Kondenzátor
 tile.aunis.capacitor_block_empty.name=Kondenzátor (Üres)
 
@@ -63,14 +63,14 @@ item.aunis.crystal_red.name=Energiakristály
 item.aunis.crystal_ender.name=Végzetkristály
 item.aunis.crystal_yellow.name=Fény Kristály
 item.aunis.crystal_white.name=Fehér Kristály
-item.aunis.crystal_blue_pegasus.name=Pegasus Crystal
+item.aunis.crystal_blue_pegasus.name=Pegazus Kristály
 
 item.aunis.circuit_control_base.name=Vezérlő Áramkör Alap
 item.aunis.circuit_control_naquadah.name=Nakvada Vezérlő Áramkör
 item.aunis.circuit_control_crystal.name=Kristály Vezérlő Áramkör
 
 item.aunis.dhd_brb.name=Világos Piros Gomb
-item.aunis.dhd_bbb.name=Bright Blue Button (BBB)
+item.aunis.dhd_bbb.name=Világos Kék Gomb
 
 item.aunis.stargate_ring_fragment.name=Csillagkapu Gyűrű Töredék
 item.aunis.universe_ring_fragment.name=Univerzum Gyűrű Töredék
@@ -100,11 +100,11 @@ tile.aunis.dhd_block.no_crystal_warn=A tárcsázóban nem található kristály
 tile.aunis.dhd_block.no_enough_power=Legalább 10,000uI szükséges a tárcsázó működtetéséhez
 tile.aunis.dhd_block.computer_dial=Számítógépes tárcsázás folyamatban
 
-tile.aunis.dhd_pegasus_block.incoming_wormhole_warn=Unable to close the gate on this end
-tile.aunis.dhd_pegasus_block.not_linked_warn=DHD is not linked to the gate
-tile.aunis.dhd_pegasus_block.no_crystal_warn=DHD has no control crystal
-tile.aunis.dhd_pegasus_block.no_enough_power=DHD requires at least 10,000uI to operate properly
-tile.aunis.dhd_pegasus_block.computer_dial=Computer dial is in progress
+tile.aunis.dhd_pegasus_block.incoming_wormhole_warn=Nem lehet bezárni a féregjáratot erről az oldalról
+tile.aunis.dhd_pegasus_block.not_linked_warn=Nincs tárcsázó kötve a kapuhoz
+tile.aunis.dhd_pegasus_block.no_crystal_warn=A tárcsázóban nem található kristály
+tile.aunis.dhd_pegasus_block.no_enough_power=Legalább 10,000uI szükséges a tárcsázó működtetéséhez
+tile.aunis.dhd_pegasus_block.computer_dial=Számítógépes tárcsázás folyamatban
 
 tile.aunis.stargatebase_block.not_enough_power=Nem elég áram
 

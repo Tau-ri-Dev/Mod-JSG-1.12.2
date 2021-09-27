@@ -67,21 +67,27 @@ public class GuiSendCode extends GuiBase {
         codeField.mouseClicked(mouseX, mouseY, mouseButton);
         //if (GuiHelper.isPointInRegion(sendButton.x, sendButton.y, sendButton.x + sendButton.width, sendButton.y + sendButton.height, mouseX, mouseY)) {
         if(sendButton.mousePressed(this.mc, mouseX, mouseY)){
+            System.out.println("GDO: 1");
             sendButton.playPressSound(this.mc.getSoundHandler());
             ItemStack gdo = this.mc.player.getHeldItem(hand);
             if(gdo.hasTagCompound()) {
+                System.out.println("GDO: 2");
                 NBTTagCompound compound = gdo.getTagCompound();
                 World world = this.mc.player.getEntityWorld();
                 assert compound != null;
                 if(compound.hasKey("linkedGate")){
+                    System.out.println("GDO: 3");
                     BlockPos pos = BlockPos.fromLong(compound.getLong("linkedGate"));
                     StargateClassicBaseTile gateTile = (StargateClassicBaseTile) world.getTileEntity(pos);
                     assert gateTile != null;
                     StargateClassicBaseTile targetGate = null;
                     if(gateTile.isMerged() && gateTile.getStargateState().initiating() || gateTile.getStargateState().engaged()) {
+                        System.out.println("GDO: 4");
                         targetGate = (StargateClassicBaseTile) StargateNetwork.get(world).getStargate(gateTile.getDialedAddress()).getTileEntity();
-                        if (targetGate != null)
+                        if (targetGate != null) {
                             targetGate.receiveIrisCode(this.mc.player, Integer.parseInt(codeField.getText()));
+                            System.out.println("GDO: 5 - sending code");
+                        }
                     }
                 }
             }
