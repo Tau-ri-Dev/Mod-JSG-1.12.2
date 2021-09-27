@@ -134,7 +134,6 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				.setIconSize(20, 18)
 				.setIconTextureLocation(304, 54).build();
 
-		System.out.println();
 		irisTab = (TabIris) TabIris.builder()
 				.setCode(container.gateTile.getIrisCode())
 				.setIrisMode(container.gateTile.getIrisMode())
@@ -234,7 +233,11 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {		
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		if (irisTab.isVisible()) {
+			if (irisTab.getIrisMode() != container.gateTile.getIrisMode()) irisTab.updateValue(container.gateTile.getIrisMode());
+			if (irisTab.getCode() != container.gateTile.getIrisCode()) irisTab.updateValue(container.gateTile.getIrisCode());
+		}
 		for (Tab tab : tabs) {
 			tab.render(fontRenderer, mouseX, mouseY);
 		}
@@ -333,7 +336,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
 		if (irisTab.isOpen()){
-			irisTab.inputField.textboxKeyTyped(typedChar, keyCode);
+			irisTab.keyTyped(typedChar, keyCode);
 		}
 		super.keyTyped(typedChar, keyCode);
 	}

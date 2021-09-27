@@ -338,7 +338,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        System.out.println("saveing fokin nbt");
         compound.setTag("itemHandler", itemStackHandler.serializeNBT());
         compound.setBoolean("isFinalActive", isFinalActive);
 
@@ -362,7 +361,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         compound.setByte("irisState", irisState.id);
         compound.setInteger("irisCode", irisCode);
         compound.setByte("irisMode", irisMode.id);
-        System.out.println("saved: "+irisMode.name() + " code:" + irisCode);
         return super.writeToNBT(compound);
     }
 
@@ -389,7 +387,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         irisState = mrjake.aunis.stargate.EnumIrisState.getValue(compound.getByte("irisState"));
         irisCode = compound.getInteger("irisCode") != 0 ? compound.getInteger("irisCode") : -1;
         irisMode = EnumIrisMode.getValue(compound.getByte("irisMode"));
-        System.out.println("loaded: "+irisMode.name()+" "+irisCode);
         super.readFromNBT(compound);
     }
 
@@ -457,7 +454,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 return new StargateContainerGuiState(gateAddressMap);
 
             case GUI_UPDATE:
-                System.out.println("posírám update: " + irisCode + " " + irisMode.name());
                 return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose, this.irisMode, this.irisCode);
 
 //            case IRIS_UPDATE:
@@ -539,7 +535,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             case GUI_STATE:
                 StargateContainerGuiState guiState = (StargateContainerGuiState) state;
                 gateAddressMap = guiState.gateAdddressMap;
-
                 break;
 
             case GUI_UPDATE:
@@ -547,9 +542,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 energyStorage.setEnergyStoredInternally(guiUpdate.energyStored);
                 energyTransferedLastTick = guiUpdate.transferedLastTick;
                 energySecondsToClose = guiUpdate.secondsToClose;
-                this.irisMode = guiUpdate.irisMode;
-                this.irisCode = guiUpdate.irisCode;
-                System.out.println("nastavilo se na clientovi" + this.irisCode + " " + this.irisMode.name());
+                irisMode = guiUpdate.irisMode;
+                irisCode = guiUpdate.irisCode;
                 break;
 
             case SPIN_STATE:
@@ -955,8 +949,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     EntityPlayer codeSender = null;
 
     public void receiveIrisCode(EntityPlayer sender, int code) {
-        System.out.println("received iris code: "+code+", from: "+sender.getName());
-        if (code == this.irisCode){
+        if (code == this.irisCode) {
             switch (this.irisState) {
                 case OPENED:
                     sender.sendStatusMessage(GDOMessages.OPENED.textComponent, true);
@@ -973,28 +966,27 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 default:
                     break;
             }
-        }
-        else {
+        } else {
             sender.sendStatusMessage(GDOMessages.CODE_REJECTED.textComponent, true);
         }
 
     }
 
-    public void setIrisCode(int code){
-        System.out.println("Setting new iris code: " + code);
+    public void setIrisCode(int code) {
         this.irisCode = code;
         markDirty();
     }
-    public void setIrisMode(EnumIrisMode irisMode){
-        System.out.println("Setting new iris mode: " + irisMode.name());
+
+    public void setIrisMode(EnumIrisMode irisMode) {
         this.irisMode = irisMode;
         markDirty();
     }
 
-    public int getIrisCode(){
+    public int getIrisCode() {
         return this.irisCode;
     }
-    public EnumIrisMode getIrisMode(){
+
+    public EnumIrisMode getIrisMode() {
         return this.irisMode;
     }
 

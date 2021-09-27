@@ -18,7 +18,7 @@ public class TabIris extends Tab {
             new ResourceLocation(Aunis.ModID, "textures/gui/iris_mode.png");
 
 
-    public GuiTextField inputField = new NumberOnlyTextField(1,
+    protected NumberOnlyTextField inputField = new NumberOnlyTextField(1,
             Minecraft.getMinecraft().fontRenderer, guiLeft + 6, guiTop + defaultY + 25,
             64, 16);
 
@@ -37,6 +37,15 @@ public class TabIris extends Tab {
         inputField.setMaxStringLength(AunisConfig.irisConfig.irisCodeLength);
         inputField.setText(code > -1 ? Integer.toString(code) : "");
         inputField.setEnabled(buttonChangeMode.getCurrentState() == EnumIrisMode.AUTO.id);
+    }
+
+    public void updateValue(EnumIrisMode irisMode) {
+        buttonChangeMode.setCurrentState(irisMode.id);
+        inputField.setEnabled(buttonChangeMode.getCurrentState() == EnumIrisMode.AUTO.id);
+    }
+
+    public void updateValue(int irisCode) {
+        inputField.setText(irisCode > 0 ? irisCode + "" : "");
     }
 
     @Override
@@ -71,7 +80,6 @@ public class TabIris extends Tab {
 
         public TabIrisBuilder setIrisMode(EnumIrisMode irisMode) {
             this.irisMode = irisMode;
-            System.out.println("nastavila se kundovina: "+irisMode.name());
             return this;
         }
 
@@ -117,4 +125,7 @@ public class TabIris extends Tab {
         return inputField.getText().length() > 0 ? Integer.parseInt(inputField.getText()) : -1;
     }
 
+    public void keyTyped(char typedChar, int keyCode) {
+        inputField.textboxKeyTyped(typedChar, keyCode);
+    }
 }

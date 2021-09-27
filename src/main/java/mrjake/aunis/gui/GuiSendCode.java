@@ -67,7 +67,6 @@ public class GuiSendCode extends GuiBase {
         codeField.mouseClicked(mouseX, mouseY, mouseButton);
         //if (GuiHelper.isPointInRegion(sendButton.x, sendButton.y, sendButton.x + sendButton.width, sendButton.y + sendButton.height, mouseX, mouseY)) {
         if(sendButton.mousePressed(this.mc, mouseX, mouseY)){
-            System.out.println(this.mc.player.getName() + " is sending code: " + codeField.getText());
             sendButton.playPressSound(this.mc.getSoundHandler());
             ItemStack gdo = this.mc.player.getHeldItem(hand);
             if(gdo.hasTagCompound()) {
