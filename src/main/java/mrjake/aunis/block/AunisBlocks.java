@@ -45,6 +45,7 @@ public class AunisBlocks {
   public static final TransportRingsBlock TRANSPORT_RINGS_BLOCK = new TransportRingsBlock();
   public static final TRControllerBlock TR_CONTROLLER_BLOCK = new TRControllerBlock();
   public static final InvisibleBlock INVISIBLE_BLOCK = new InvisibleBlock();
+  public static final IrisBlock IRIS_BLOCK = new IrisBlock();
 
   // -----------------------------------------------------------------------------
   public static final StargateMilkyWayMemberBlock STARGATE_MILKY_WAY_MEMBER_BLOCK = new StargateMilkyWayMemberBlock();
@@ -65,7 +66,7 @@ public class AunisBlocks {
 
     DHD_BLOCK, DHD_PEGASUS_BLOCK,
 
-    TRANSPORT_RINGS_BLOCK, TR_CONTROLLER_BLOCK, INVISIBLE_BLOCK,
+    TRANSPORT_RINGS_BLOCK, TR_CONTROLLER_BLOCK, INVISIBLE_BLOCK, IRIS_BLOCK,
 
     CAPACITOR_BLOCK_EMPTY, BEAMER_BLOCK};
 

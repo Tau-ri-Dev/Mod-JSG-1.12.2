@@ -4,6 +4,7 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import mrjake.aunis.Aunis;
+import mrjake.aunis.AunisProps;
 import mrjake.aunis.beamer.BeamerLinkingHelper;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
@@ -34,6 +35,7 @@ import mrjake.aunis.tileentity.BeamerTile;
 import mrjake.aunis.tileentity.util.IUpgradable;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.*;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,6 +44,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -178,6 +181,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         lastPos = pos;
 
         if (!world.isRemote) {
+            setIrisBlocks(false, false);
             updateBeamers();
             updatePowerTier();
 
@@ -252,11 +256,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 switch (irisState) {
                     case OPENING:
                         irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
+                        setIrisBlocks(false, false);
                         sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
                         sendSignal(null, "stargate_iris_opened", new Object[]{"Iris is opened"});
                         break;
                     case CLOSING:
                         irisState = mrjake.aunis.stargate.EnumIrisState.CLOSED;
+                        setIrisBlocks(true, false);
                         sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
                         sendSignal(null, "stargate_iris_closed", new Object[]{"Iris is closed"});
                         break;
@@ -918,6 +924,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 break;
             case CLOSED:
                 irisState = mrjake.aunis.stargate.EnumIrisState.OPENING;
+                setIrisBlocks(true, true);
                 sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState, irisAnimation);
                 sendSignal(null, "stargate_iris_opening", new Object[]{"Iris is opening"});
                 markDirty();
@@ -988,6 +995,52 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     public EnumIrisMode getIrisMode() {
         return this.irisMode;
+    }
+
+    //todo narvat do EnumGateSize
+    private static final BlockPos[] invisibleBlocksTemplate = new BlockPos[]{
+            new BlockPos(0, 1, 0)
+    };
+
+    private Rotation invBlocksRotation = null;
+
+    private Rotation determineRotation() {
+        Rotation rotation;
+        switch (facing) {
+            case EAST:
+                rotation = Rotation.CLOCKWISE_90;
+                break;
+            case WEST:
+                rotation = Rotation.COUNTERCLOCKWISE_90;
+                break;
+            case SOUTH:
+                rotation = Rotation.CLOCKWISE_180;
+            case NORTH:
+            default:
+                rotation = Rotation.NONE;
+
+        }
+        return rotation;
+    }
+
+    private void setIrisBlocks(boolean set, boolean passable) {
+        IBlockState invBlockState = AunisBlocks.IRIS_BLOCK.getDefaultState();
+
+        if (passable) invBlockState = invBlockState.withProperty(AunisProps.HAS_COLLISIONS, false);
+        if (set) invBlockState.withProperty(AunisProps.FACING_HORIZONTAL, getFacing());
+
+        if (invBlocksRotation == null) invBlocksRotation = determineRotation();
+        BlockPos startPos = this.pos.add(-.5, 0, -.5);
+        for (BlockPos invPos : invisibleBlocksTemplate) {
+            BlockPos newPos = startPos.add(invPos.rotate(invBlocksRotation));
+
+            if (set) world.setBlockState(newPos, invBlockState, 3);
+            else {
+                if (world.getBlockState(newPos).getBlock() == AunisBlocks.IRIS_BLOCK) world.setBlockToAir(newPos);
+            }
+
+        }
+
     }
 
     // -----------------------------------------------------------

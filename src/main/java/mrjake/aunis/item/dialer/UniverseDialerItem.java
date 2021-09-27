@@ -36,6 +36,7 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -125,7 +126,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 		if (!world.isRemote) {
 			checkNBT(stack);
 			NBTTagCompound compound = stack.getTagCompound();
-			
+
 			if (world.getTotalWorldTime() % 20 == 0 && isSelected) {
 				BlockPos pos = entity.getPosition();
 				
@@ -157,7 +158,9 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 										NBTTagList nearbyList = new NBTTagList();
 										int squaredGate = AunisConfig.stargateConfig.universeGateNearbyReach * AunisConfig.stargateConfig.universeGateNearbyReach;
 										if(StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet() != null) {
-											for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet()) {
+											for (Iterator<Map.Entry<StargateAddress, StargatePos>> iterator = StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet().iterator(); iterator.hasNext();) {
+
+												Map.Entry<StargateAddress, StargatePos> entry = iterator.next();
 												StargatePos stargatePos = entry.getValue();
 
 												if (stargatePos.dimensionID != world.provider.getDimension())

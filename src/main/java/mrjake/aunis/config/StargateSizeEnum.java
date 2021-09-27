@@ -1,12 +1,22 @@
 package mrjake.aunis.config;
 
 import mrjake.aunis.util.AunisAxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.Arrays;
 import java.util.List;
 
 public enum StargateSizeEnum {
-  SMALL(0, "Small", 0.75, -0.95, new AunisAxisAlignedBB(-2.5, 1.5, -0.1, 2.5, 6.6, 0.2), new AunisAxisAlignedBB(-1, 3, 0, 1, 5.5, 5), 5, Arrays.asList(new AunisAxisAlignedBB(-1.5, 2.0, -0.5, 1.5, 7, 0.5), new AunisAxisAlignedBB(-2.5, 2.0, -0.5, -1.5, 6, 0.5), new AunisAxisAlignedBB(2.5, 2.0, -0.5, 1.5, 6, 0.5))),
+  SMALL(0, "Small", 0.75, -0.95,
+          new AunisAxisAlignedBB(-2.5, 1.5, -0.1, 2.5, 6.6, 0.2),
+          new AunisAxisAlignedBB(-1, 3, 0, 1, 5.5, 5),
+          5,
+          Arrays.asList(
+                  new AunisAxisAlignedBB(-1.5, 2.0, -0.5, 1.5, 7, 0.5),
+                  new AunisAxisAlignedBB(-2.5, 2.0, -0.5, -1.5, 6, 0.5),
+                  new AunisAxisAlignedBB(2.5, 2.0, -0.5, 1.5, 6, 0.5)
+          )
+          ),
 
   MEDIUM(1, "Medium", 0.83, -0.62, new AunisAxisAlignedBB(-2.5, 1.5, -0.1, 2.5, 7.5, 0.2), new AunisAxisAlignedBB(-1, 3, 0, 1, 5.5, 5), 5, Arrays.asList(new AunisAxisAlignedBB(-1.5, 2.0, -0.5, 1.5, 7, 0.5), new AunisAxisAlignedBB(-2.5, 2.0, -0.5, -1.5, 6, 0.5), new AunisAxisAlignedBB(2.5, 2.0, -0.5, 1.5, 6, 0.5))),
 
@@ -21,6 +31,8 @@ public enum StargateSizeEnum {
   public int horizonSegmentCount;
   public List<AunisAxisAlignedBB> gateVaporizingBoxes;
 
+  public BlockPos[] irisBlocksPattern;
+
   private StargateSizeEnum(int id, String name, double renderScale, double renderTranslationY, AunisAxisAlignedBB teleportBox, AunisAxisAlignedBB killingBox, int horizonSegmentCount, List<AunisAxisAlignedBB> gateVaporizingBoxes) {
     this.id = id;
     this.name = name;
@@ -30,6 +42,7 @@ public enum StargateSizeEnum {
     this.killingBox = killingBox;
     this.horizonSegmentCount = horizonSegmentCount;
     this.gateVaporizingBoxes = gateVaporizingBoxes;
+    this.irisBlocksPattern = irisBlocksPattern;
   }
 
   @Override

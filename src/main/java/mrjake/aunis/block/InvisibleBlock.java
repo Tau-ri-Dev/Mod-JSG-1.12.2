@@ -17,8 +17,12 @@ import javax.annotation.Nullable;
 
 public class InvisibleBlock extends Block {
 
-	private static final String blockName = "invisible_block";
-	
+	public static final String blockName = "invisible_block";
+
+	protected InvisibleBlock(Material materialIn) {
+		super(materialIn);
+	}
+
 	public InvisibleBlock() {
 		super(Material.AIR);
 		
