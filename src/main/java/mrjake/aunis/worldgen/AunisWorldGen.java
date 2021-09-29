@@ -43,7 +43,7 @@ public class AunisWorldGen implements IWorldGenerator {
 				if (AunisConfig.worldgenConfig.titaniumEnable) {
 					runGenerator(AunisBlocks.ORE_TITANIUM_BLOCK.getDefaultState(),
 							AunisConfig.worldgenConfig.titaniumVeinSize,
-							AunisConfig.worldgenConfig.titaniumMaxVeinInChunk, 0, 128,
+							AunisConfig.worldgenConfig.titaniumMaxVeinInChunk, 0, 25,
 							BlockMatcher.forBlock(Blocks.STONE), world, rand, chunkX, chunkZ);
 				}
 

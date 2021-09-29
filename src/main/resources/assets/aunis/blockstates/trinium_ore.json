@@ -1,0 +1,15 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "aunis:trinium_ore",
+		"textures": {
+			"normal": "minecraft:blocks/netherrack",
+			"particle": "minecraft:blocks/netherrack",
+			"overlay": "aunis:blocks/trinium_ore"
+		}
+	},
+	"variants": {
+		"normal": [{}],
+		"inventory": [{}]
+	}
+}

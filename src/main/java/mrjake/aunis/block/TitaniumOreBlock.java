@@ -28,13 +28,9 @@ public class TitaniumOreBlock extends Block {
 		setCreativeTab(Aunis.aunisCreativeTab);
 		
 		setHardness(4.5f);
-		setHarvestLevel("pickaxe", 3);
+		setHarvestLevel("pickaxe", 2);
 	}
-	
-	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		drops.add(new ItemStack(AunisItems.TITANIUM_INGOT, 1));
-	}
+
 	
 	@Override
 	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune) {
