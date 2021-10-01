@@ -2,6 +2,8 @@ package mrjake.aunis.event;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
+import mrjake.aunis.block.InvisibleBlock;
+import mrjake.aunis.block.IrisBlock;
 import mrjake.aunis.raycaster.RaycasterDHD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +21,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickEmpty;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -78,6 +81,12 @@ public class AunisEventHandler {
 			LootPool pool = new LootPool(new LootEntry[]{entry}, new LootCondition[]{}, new RandomValueRange(1), new RandomValueRange(0), "univese_dialer_pool");
 
 			event.getTable().addPool(pool);
+		}
+	}
+
+	public static void onBlockPlace(BlockEvent.PlaceEvent event) {
+		if (event.getWorld().getBlockState(event.getPos()).getBlock() == AunisBlocks.IRIS_BLOCK) {
+			event.setCanceled(true);
 		}
 	}
 }

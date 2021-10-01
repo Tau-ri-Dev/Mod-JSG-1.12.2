@@ -84,10 +84,10 @@ public enum StargateSizeEnum {
     // Small
     // Medium
     List<BlockPos> small = new ArrayList<>();
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 6; i++) {
       for (int j = -2; j < 3; j++) {
-        if ((i == 0 || i == 4) && (j == -2 || j == 2)) continue;
-        small.add(new BlockPos(j, i+2 , 0));
+        if ((i == 0 || i == 5) && (j == -2 || j == 2)) continue;
+        small.add(new BlockPos(j, i+1 , 0));
       }
     }
 

@@ -37,10 +37,13 @@ public class TeleportPacket {
 	public Entity getEntity() {
 		return entity;
 	}
-	
+
 	public void teleport() {
+		teleport(true);
+	}
+	public void teleport(boolean playSound) {
 		TeleportHelper.teleportEntity(entity, sourceGatePos, targetGatePos, rotation, motionVector);
-		
+		if (playSound)
 		AunisSoundHelper.playSoundEvent(targetGatePos.getWorld(), targetGatePos.getTileEntity().getGateCenterPos(), SoundEventEnum.WORMHOLE_GO);
 	}
 

@@ -1,5 +1,6 @@
 package mrjake.aunis.config;
 
+import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.util.ItemMetaPair;
 import net.minecraft.block.state.IBlockState;
@@ -127,6 +128,7 @@ public class AunisConfig {
 		public boolean canKawooshDestroyBlock(IBlockState state) {
 			if (cachedInvincibleBlocks == null) {
 				cachedInvincibleBlocks = BlockMetaParser.parseConfig(kawooshInvincibleBlocks);
+				cachedInvincibleBlocks.add(AunisBlocks.IRIS_BLOCK.getDefaultState());
 			}
 			
 			return !cachedInvincibleBlocks.contains(state);
@@ -269,6 +271,9 @@ public class AunisConfig {
 		@Name("Maximum iris code length")
 		@RangeInt(min=0, max=32)
 		public int irisCodeLength = 9;
+
+		@Name("Can iris destroy blocks")
+		public boolean irisDestroysBlocks = true;
 	}
 	
 	public static class PowerConfig {

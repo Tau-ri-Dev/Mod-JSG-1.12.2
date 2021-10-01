@@ -36,6 +36,7 @@ import mrjake.aunis.tileentity.BeamerTile;
 import mrjake.aunis.tileentity.util.IUpgradable;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.*;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -1034,9 +1035,16 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         BlockPos startPos = this.pos;
         for (BlockPos invPos : Objects.requireNonNull(StargateSizeEnum.getIrisBLocksPatter(getStargateSize()))) {
             BlockPos newPos = startPos.add(invPos.rotate(invBlocksRotation));
-            System.out.println("set irisBlock to " + newPos.getX()+" "+newPos.getY()+" "+newPos.getZ()+" /w: set: " +set);
-            if (set) world.setBlockState(newPos, invBlockState, 3);
-            else {
+
+            if (set) {
+
+                if (world.getBlockState(newPos).getMaterial() != Material.AIR) {
+                    if (!AunisConfig.irisConfig.irisDestroysBlocks) continue;
+                    world.destroyBlock(newPos, true);
+                }
+                world.setBlockState(newPos, invBlockState, 3);
+
+            } else {
                 if (world.getBlockState(newPos).getBlock() == AunisBlocks.IRIS_BLOCK) world.setBlockToAir(newPos);
             }
 

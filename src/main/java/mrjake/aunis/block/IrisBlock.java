@@ -68,6 +68,7 @@ public class IrisBlock extends InvisibleBlock {
 
     }
 
+    // pak odstranit
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
