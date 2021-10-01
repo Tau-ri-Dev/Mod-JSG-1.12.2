@@ -1,6 +1,7 @@
 package mrjake.aunis.loader;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.model.ModelLoader;
 import mrjake.aunis.loader.texture.TextureLoader;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
@@ -83,6 +84,10 @@ public enum ElementEnum {
   public Map<BiomeOverlayEnum, ResourceLocation> biomeTextureResourceMap = new HashMap<>();
 
   private ElementEnum(String model, String texture) {
+    if (model.startsWith("mainmenu/") && AunisConfig.mainMenuConfig.disableAunisMainMenu) {
+      modelResource = null;
+      return;
+    }
     this.modelResource = ModelLoader.getModelResource(model);
 
     for (BiomeOverlayEnum biomeOverlay : BiomeOverlayEnum.values())

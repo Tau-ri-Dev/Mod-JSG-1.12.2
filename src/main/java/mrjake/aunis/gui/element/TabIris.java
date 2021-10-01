@@ -98,6 +98,7 @@ public class TabIris extends Tab {
         inputField.mouseClicked(mouseX, mouseY, mouseButton);
         if (GuiHelper.isPointInRegion(buttonChangeMode.x, buttonChangeMode.y,
                 buttonChangeMode.width, buttonChangeMode.height, mouseX, mouseY)) {
+            System.out.println("posouvám lol");
             switch (mouseButton) {
                 case 0:
                     buttonChangeMode.nextState();
@@ -114,6 +115,7 @@ public class TabIris extends Tab {
             inputField.setEnabled(buttonChangeMode.getCurrentState() == EnumIrisMode.AUTO.id);
             buttonChangeMode.playPressSound(Minecraft.getMinecraft().getSoundHandler());
         }
+        System.out.println("je to " + getIrisMode().name());
 
     }
 

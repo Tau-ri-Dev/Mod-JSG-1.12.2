@@ -158,6 +158,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
 
         linkedBeamers.clear();
+        if (irisType != EnumIrisType.NULL && irisState == EnumIrisState.CLOSED) {
+            setIrisBlocks(false);
+        }
     }
 
     @Override
@@ -181,12 +184,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         lastPos = pos;
 
         if (!world.isRemote) {
-            setIrisBlocks(false, false);
+
             updateBeamers();
             updatePowerTier();
 
             updateIrisType();
-
+            boolean set = irisType != EnumIrisType.NULL;
+            setIrisBlocks(set && irisState == EnumIrisState.CLOSED);
         }
     }
 
@@ -256,13 +260,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 switch (irisState) {
                     case OPENING:
                         irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
-                        setIrisBlocks(false, false);
+
                         sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
                         sendSignal(null, "stargate_iris_opened", new Object[]{"Iris is opened"});
                         break;
                     case CLOSING:
                         irisState = mrjake.aunis.stargate.EnumIrisState.CLOSED;
-                        setIrisBlocks(true, false);
+                        setIrisBlocks(true);
                         sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
                         sendSignal(null, "stargate_iris_closed", new Object[]{"Iris is closed"});
                         break;
@@ -924,7 +928,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 break;
             case CLOSED:
                 irisState = mrjake.aunis.stargate.EnumIrisState.OPENING;
-                setIrisBlocks(true, true);
+                setIrisBlocks(false);
                 sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState, irisAnimation);
                 sendSignal(null, "stargate_iris_opening", new Object[]{"Iris is opening"});
                 markDirty();
@@ -999,7 +1003,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     //todo narvat do EnumGateSize
     private static final BlockPos[] invisibleBlocksTemplate = new BlockPos[]{
-            new BlockPos(0, 1, 0)
+            new BlockPos(0, 1, 0), new BlockPos(0, 2, 0), new BlockPos(0, 3, 0)
     };
 
     private Rotation invBlocksRotation = null;
@@ -1023,17 +1027,16 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return rotation;
     }
 
-    private void setIrisBlocks(boolean set, boolean passable) {
+    private void setIrisBlocks(boolean set) {
         IBlockState invBlockState = AunisBlocks.IRIS_BLOCK.getDefaultState();
-
-        if (passable) invBlockState = invBlockState.withProperty(AunisProps.HAS_COLLISIONS, false);
-        if (set) invBlockState.withProperty(AunisProps.FACING_HORIZONTAL, getFacing());
+        if (set) invBlockState = AunisBlocks.IRIS_BLOCK.getStateFromMeta(getFacing().getHorizontalIndex());
+        System.out.println(getFacing().name());
 
         if (invBlocksRotation == null) invBlocksRotation = determineRotation();
-        BlockPos startPos = this.pos.add(-.5, 0, -.5);
+        BlockPos startPos = this.pos;
         for (BlockPos invPos : invisibleBlocksTemplate) {
             BlockPos newPos = startPos.add(invPos.rotate(invBlocksRotation));
-
+            System.out.println("set irisBlock to " + newPos.getX()+" "+newPos.getY()+" "+newPos.getZ()+" /w: set: " +set);
             if (set) world.setBlockState(newPos, invBlockState, 3);
             else {
                 if (world.getBlockState(newPos).getBlock() == AunisBlocks.IRIS_BLOCK) world.setBlockToAir(newPos);

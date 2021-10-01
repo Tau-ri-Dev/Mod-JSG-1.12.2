@@ -500,6 +500,9 @@ public class AunisConfig {
 	}
 
 	public static class MainMenuConfig {
+		@Name("Disable Aunis main menu - WARNING: Requires reloading")
+		public boolean disableAunisMainMenu = false;
+
 		@Name("Enable changing gate overlay")
 		public boolean changingGateOverlay = true;
 

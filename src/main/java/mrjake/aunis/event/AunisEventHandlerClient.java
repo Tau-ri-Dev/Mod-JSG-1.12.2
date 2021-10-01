@@ -67,7 +67,7 @@ public class AunisEventHandlerClient {
 
   @SubscribeEvent
   public static void onGuiOpen(GuiOpenEvent event) {
-    if (event.getGui() instanceof GuiMainMenu) {
+    if (event.getGui() instanceof GuiMainMenu && !AunisConfig.mainMenuConfig.disableAunisMainMenu) {
       isInMainMenu = true;
       event.setGui(new AunisMainMenu());
     }

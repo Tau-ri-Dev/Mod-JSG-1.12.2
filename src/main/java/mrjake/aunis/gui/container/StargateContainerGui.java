@@ -234,7 +234,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		if (irisTab.isVisible()) {
+		if (irisTab.isVisible() && !irisTab.isOpen()) {
 			if (irisTab.getIrisMode() != container.gateTile.getIrisMode()) irisTab.updateValue(container.gateTile.getIrisMode());
 			if (irisTab.getCode() != container.gateTile.getIrisCode()) irisTab.updateValue(container.gateTile.getIrisCode());
 		}

@@ -12,11 +12,6 @@
       "west": {},
       "north": {},
       "east": {}
-    },
-
-    "collisions": {
-      "false": {},
-      "true": {}
     }
   }
 }
