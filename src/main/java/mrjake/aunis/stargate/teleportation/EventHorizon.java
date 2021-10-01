@@ -16,6 +16,7 @@ import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -65,7 +66,8 @@ public class EventHorizon {
     private Map<Integer, Integer> timeoutMap = new HashMap<>();
 
     public void scheduleTeleportation(StargatePos targetGate) {
-        if (world.getTileEntity(pos) instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) world.getTileEntity(pos)).isClosed()) return;
+        if (world.getTileEntity(pos) instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) world.getTileEntity(pos)).isClosed())
+            return;
         List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, globalBox);
 
 //		Aunis.info(globalBox + ": " + entities + ", map: " + scheduledTeleportMap);
@@ -119,16 +121,19 @@ public class EventHorizon {
             // Not cancelled
             StargatePos targetGatePos = packet.getTargetGatePos();
             if (targetGatePos.getTileEntity() instanceof StargateClassicBaseTile
-                && ((StargateClassicBaseTile) targetGatePos.getTileEntity()).isClosed()) {
+                    && ((StargateClassicBaseTile) targetGatePos.getTileEntity()).isClosed()) {
 
 
+                if (packet.getEntity() instanceof IProjectile) packet.getEntity().setVelocity(0, 0, 0);
+                else {
+                    packet.teleport(false);
+                    packet.getEntity().setDead();
+                }
                 if (AunisConfig.irisConfig.allowCreative)
                     packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS, Float.MAX_VALUE);
                 else {
                     packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS_CREATIVE, Float.MAX_VALUE);
                 }
-                if (!(packet.getEntity() instanceof IProjectile)) packet.teleport();
-                else packet.getEntity().setDead();
 
 
                 if (((StargateClassicBaseTile) targetGatePos.getTileEntity()).isPhysicalIris()) {

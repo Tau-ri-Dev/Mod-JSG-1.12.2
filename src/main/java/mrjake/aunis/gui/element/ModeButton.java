@@ -56,8 +56,6 @@ public class ModeButton extends GuiButton {
     }
 
     public void setCurrentState(int currentState) {
-        System.out.println("tohle jen když prostředníček v predeli máš");
-
         this.currentState = currentState;
     }
 }

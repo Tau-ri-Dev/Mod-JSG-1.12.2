@@ -845,6 +845,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
         updateIrisDurability();
         if (markDirty) markDirty();
+        if (!world.isRemote && isOpened()) {
+            setIrisBlocks(false);
+        }
     }
 
     public void updateIrisDurability() {
@@ -1029,7 +1032,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     private void setIrisBlocks(boolean set) {
         IBlockState invBlockState = AunisBlocks.IRIS_BLOCK.getDefaultState();
         if (set) invBlockState = AunisBlocks.IRIS_BLOCK.getStateFromMeta(getFacing().getHorizontalIndex());
-        System.out.println(getFacing().name());
 
         if (invBlocksRotation == null) invBlocksRotation = determineRotation();
         BlockPos startPos = this.pos;
