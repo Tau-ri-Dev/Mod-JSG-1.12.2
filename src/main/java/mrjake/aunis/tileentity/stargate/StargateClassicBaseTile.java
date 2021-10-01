@@ -8,6 +8,7 @@ import mrjake.aunis.AunisProps;
 import mrjake.aunis.beamer.BeamerLinkingHelper;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.config.StargateSizeEnum;
 import mrjake.aunis.gui.container.StargateContainerGuiState;
 import mrjake.aunis.gui.container.StargateContainerGuiUpdate;
 import mrjake.aunis.item.AunisItems;
@@ -53,6 +54,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.CapabilityItemHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -1001,10 +1003,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return this.irisMode;
     }
 
-    //todo narvat do EnumGateSize
-    private static final BlockPos[] invisibleBlocksTemplate = new BlockPos[]{
-            new BlockPos(0, 1, 0), new BlockPos(0, 2, 0), new BlockPos(0, 3, 0)
-    };
 
     private Rotation invBlocksRotation = null;
 
@@ -1034,7 +1032,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         if (invBlocksRotation == null) invBlocksRotation = determineRotation();
         BlockPos startPos = this.pos;
-        for (BlockPos invPos : invisibleBlocksTemplate) {
+        for (BlockPos invPos : Objects.requireNonNull(StargateSizeEnum.getIrisBLocksPatter(getStargateSize()))) {
             BlockPos newPos = startPos.add(invPos.rotate(invBlocksRotation));
             System.out.println("set irisBlock to " + newPos.getX()+" "+newPos.getY()+" "+newPos.getZ()+" /w: set: " +set);
             if (set) world.setBlockState(newPos, invBlockState, 3);
@@ -1045,6 +1043,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
 
     }
+
+    @Nonnull
+    abstract StargateSizeEnum getStargateSize();
 
     // -----------------------------------------------------------
 

@@ -45,6 +45,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class StargatePegasusBaseTile extends StargateClassicBaseTile implements ILinkable {
+  @Override
+  public StargateSizeEnum getStargateSize() {
+    return stargateSize;
+  }
+
   // ------------------------------------------------------------------------
   // Stargate state
 

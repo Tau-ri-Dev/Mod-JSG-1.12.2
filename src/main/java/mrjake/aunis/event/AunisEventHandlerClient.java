@@ -14,6 +14,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.common.config.Config.Type;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
@@ -72,5 +73,12 @@ public class AunisEventHandlerClient {
       event.setGui(new AunisMainMenu());
     }
     else isInMainMenu = false;
+  }
+
+  @SubscribeEvent
+  public static void onPlaySound(PlaySoundEvent event) {
+    if(event.getSound().getSoundLocation().toString() == "minecraft:music.menu") {
+      event.setCanceled(true);
+    }
   }
 }

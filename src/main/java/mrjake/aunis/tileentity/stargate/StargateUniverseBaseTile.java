@@ -34,6 +34,10 @@ import java.util.TimerTask;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
 public class StargateUniverseBaseTile extends StargateClassicBaseTile {
+  @Override
+  public StargateSizeEnum getStargateSize() {
+    return StargateSizeEnum.SMALL;
+  }
 
   // --------------------------------------------------------------------------------
   // Dialing

@@ -5,6 +5,7 @@ import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.chunkloader.ChunkLoadingCallback;
 import mrjake.aunis.command.AunisCommands;
 import mrjake.aunis.config.StargateDimensionConfig;
+import mrjake.aunis.config.StargateSizeEnum;
 import mrjake.aunis.crafting.AunisRecipeHandler;
 import mrjake.aunis.datafixer.TileNamesFixer;
 import mrjake.aunis.fluid.AunisFluids;
@@ -123,7 +124,8 @@ public class Aunis {
     	
 		ModFixs modFixs = ((CompoundDataFixer) FMLCommonHandler.instance().getDataFixer()).init(ModID, DATA_VERSION);
 		modFixs.registerFix(FixTypes.BLOCK_ENTITY, new TileNamesFixer());
-		
+
+        StargateSizeEnum.init();
     	proxy.init(event);
     }
  

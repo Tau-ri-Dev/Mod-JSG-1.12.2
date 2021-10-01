@@ -29,11 +29,6 @@ import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class AunisMainMenu extends GuiMainMenu {
-    @SubscribeEvent
-    public static void onSounds(PlaySoundEvent event)
-    {
-        event.setResultSound(null);
-    }
 
     // define variables
     protected float animationStage = 0;
