@@ -60,6 +60,7 @@ public class GDOActionPacketToServer implements IMessage {
 		public IMessage onMessage(GDOActionPacketToServer message, MessageContext ctx) {
 			EntityPlayerMP player = ctx.getServerHandler().player;
 			WorldServer world = player.getServerWorld();
+
 			world.addScheduledTask(() -> {
 				ItemStack stack = player.getHeldItem(message.hand);
 				if (stack.getItem() == AunisItems.GDO && stack.hasTagCompound()) {
