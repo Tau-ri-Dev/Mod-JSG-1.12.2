@@ -146,6 +146,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void onGateBroken() {
         super.onGateBroken();
         updateChevronLight(0, false);
+        if (irisType != EnumIrisType.NULL && irisState == EnumIrisState.CLOSED) {
+            setIrisBlocks(false);
+        }
         isSpinning = false;
         irisState = mrjake.aunis.stargate.EnumIrisState.OPENED;
         irisType = EnumIrisType.NULL;
@@ -161,9 +164,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
 
         linkedBeamers.clear();
-        if (irisType != EnumIrisType.NULL && irisState == EnumIrisState.CLOSED) {
-            setIrisBlocks(false);
-        }
+
     }
 
     @Override
@@ -591,6 +592,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Override
     public void executeTask(EnumScheduledTask scheduledTask, NBTTagCompound customData) {
         switch (scheduledTask) {
+            case STARGATE_HORIZON_LIGHT_BLOCK:
+            case STARGATE_CLOSE:
+                if (irisType != EnumIrisType.NULL && !isClosed()) {
+                    super.executeTask(scheduledTask, customData);
+                } else if (scheduledTask == EnumScheduledTask.STARGATE_CLOSE) disconnectGate();
+                break;
+
             case STARGATE_SPIN_FINISHED:
                 isSpinning = false;
                 currentRingSymbol = targetRingSymbol;
@@ -1047,7 +1055,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 world.setBlockState(newPos, invBlockState, 3);
 
             } else {
-                if (world.getBlockState(newPos).getBlock() == AunisBlocks.IRIS_BLOCK) world.setBlockToAir(newPos);
+                if (newPos == getGateCenterPos() && targetGatePos != null)
+                    if (world.getBlockState(newPos).getBlock() == AunisBlocks.IRIS_BLOCK) world.setBlockToAir(newPos);
             }
 
         }

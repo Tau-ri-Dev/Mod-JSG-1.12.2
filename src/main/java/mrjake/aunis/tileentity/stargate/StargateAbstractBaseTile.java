@@ -34,6 +34,7 @@ import mrjake.aunis.tileentity.util.PreparableInterface;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.tileentity.util.ScheduledTaskExecutorInterface;
 import mrjake.aunis.util.AunisAxisAlignedBB;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
@@ -42,6 +43,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -1251,7 +1253,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 break;
 
             case STARGATE_HORIZON_LIGHT_BLOCK:
-                if (world.getBlockState(getGateCenterPos()).getBlock() != AunisBlocks.IRIS_BLOCK)
                 world.setBlockState(getGateCenterPos(), AunisBlocks.INVISIBLE_BLOCK.getDefaultState().withProperty(AunisProps.HAS_COLLISIONS, false));
 
                 break;
