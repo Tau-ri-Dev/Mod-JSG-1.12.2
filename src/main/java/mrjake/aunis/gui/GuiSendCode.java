@@ -12,8 +12,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import java.io.IOException;
 
@@ -41,7 +39,6 @@ public class GuiSendCode extends GuiBase {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        //super.drawScreen(mouseX, mouseY, partialTicks);
         GlStateManager.pushMatrix();
             translateToCenter();
             drawBackground();
@@ -59,34 +56,16 @@ public class GuiSendCode extends GuiBase {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        //super.mouseClicked(mouseX, mouseY, mouseButton);
         codeField.mouseClicked(mouseX, mouseY, mouseButton);
-        //if (GuiHelper.isPointInRegion(sendButton.x, sendButton.y, sendButton.x + sendButton.width, sendButton.y + sendButton.height, mouseX, mouseY)) {
         if(sendButton.mousePressed(this.mc, mouseX, mouseY)){
-            System.out.println("GDO: 1");
             sendButton.playPressSound(this.mc.getSoundHandler());
             ItemStack gdo = this.mc.player.getHeldItem(hand);
             if(gdo.hasTagCompound()) {
-                System.out.println("GDO: 2");
                 NBTTagCompound compound = gdo.getTagCompound();
-                World world = this.mc.player.getEntityWorld();
                 assert compound != null;
                 if(compound.hasKey("linkedGate")){
-                    System.out.println("GDO: 3");
                     int code = Integer.parseInt(codeField.getText());
                     AunisPacketHandler.INSTANCE.sendToServer(new GDOActionPacketToServer(GDOActionEnum.SEND_CODE, hand, code, false));
-
-                    /*StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(pos);
-                    assert gateTile != null;
-                    StargateClassicBaseTile targetGate = null;
-                    if(gateTile.getStargateState().initiating() || gateTile.getStargateState().engaged()) {
-                        System.out.println("GDO: 4");
-                        targetGate = (StargateClassicBaseTile) StargateNetwork.get(world).getStargate(gateTile.getDialedAddress()).getTileEntity();
-                        if (targetGate != null) {
-                            targetGate.receiveIrisCode(this.mc.player, Integer.parseInt(codeField.getText()));
-                            System.out.println("GDO: 5 - sending code");
-                        }
-                    }*/
                 }
             }
             if(codeField.getText().length() < 1){

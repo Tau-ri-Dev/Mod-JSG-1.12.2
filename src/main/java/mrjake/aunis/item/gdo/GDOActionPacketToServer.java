@@ -74,11 +74,9 @@ public class GDOActionPacketToServer implements IMessage {
 								assert gateTile != null;
 								StargateClassicBaseTile targetGate = null;
 								if (gateTile.getStargateState().initiating() || gateTile.getStargateState().engaged()) {
-									System.out.println("GDO: 4");
 									targetGate = (StargateClassicBaseTile) StargateNetwork.get(world).getStargate(gateTile.getDialedAddress()).getTileEntity();
 									if (targetGate != null) {
 										targetGate.receiveIrisCode(player, message.code);
-										System.out.println("GDO: 5 - sending code");
 									}
 								}
 							}
