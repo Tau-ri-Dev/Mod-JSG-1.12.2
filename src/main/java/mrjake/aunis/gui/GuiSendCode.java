@@ -1,23 +1,19 @@
 package mrjake.aunis.gui;
 
-import ibxm.Player;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.element.NumberOnlyTextField;
+import mrjake.aunis.item.gdo.GDOActionEnum;
+import mrjake.aunis.item.gdo.GDOActionPacketToServer;
 import mrjake.aunis.item.gdo.GDOMessages;
-import mrjake.aunis.stargate.network.StargateNetwork;
-import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
-import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
+import mrjake.aunis.packet.AunisPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import scala.reflect.internal.Trees;
 
 import java.io.IOException;
 
@@ -77,18 +73,20 @@ public class GuiSendCode extends GuiBase {
                 assert compound != null;
                 if(compound.hasKey("linkedGate")){
                     System.out.println("GDO: 3");
-                    BlockPos pos = BlockPos.fromLong(compound.getLong("linkedGate"));
-                    StargateClassicBaseTile gateTile = (StargateClassicBaseTile) world.getTileEntity(pos);
+                    int code = Integer.parseInt(codeField.getText());
+                    AunisPacketHandler.INSTANCE.sendToServer(new GDOActionPacketToServer(GDOActionEnum.SEND_CODE, hand, code, false));
+
+                    /*StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(pos);
                     assert gateTile != null;
                     StargateClassicBaseTile targetGate = null;
-                    if(gateTile.isMerged() && gateTile.getStargateState().initiating() || gateTile.getStargateState().engaged()) {
+                    if(gateTile.getStargateState().initiating() || gateTile.getStargateState().engaged()) {
                         System.out.println("GDO: 4");
                         targetGate = (StargateClassicBaseTile) StargateNetwork.get(world).getStargate(gateTile.getDialedAddress()).getTileEntity();
                         if (targetGate != null) {
                             targetGate.receiveIrisCode(this.mc.player, Integer.parseInt(codeField.getText()));
                             System.out.println("GDO: 5 - sending code");
                         }
-                    }
+                    }*/
                 }
             }
             if(codeField.getText().length() < 1){

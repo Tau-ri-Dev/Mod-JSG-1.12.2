@@ -23,12 +23,18 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class AunisMainMenu extends GuiMainMenu {
+    @SubscribeEvent
+    public static void onSounds(PlaySoundEvent event)
+    {
+        event.setResultSound(null);
+    }
 
     // define variables
     protected float animationStage = 0;
@@ -49,6 +55,7 @@ public class AunisMainMenu extends GuiMainMenu {
     protected float screenCenterWidth = ((float) width) / 2f;
     protected List<GuiButton> aunisButtonList = new ArrayList<>();
     static ResourceLocation BACKGROUND_TEXTURE = AunisConfig.mainMenuConfig.disableAunisMainMenu ? null : new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");;
+    public static final String Version = "${version}"; // It works only in final builds.
 
     // animation of top chevron
     public void updateLastChevron() {
@@ -71,27 +78,10 @@ public class AunisMainMenu extends GuiMainMenu {
 
     // next overlay
     public BiomeOverlayEnum getNextBiomeOverlay(boolean doIt) {
-        if (doIt) {
-            /*switch (this.overlay) {
-                case NORMAL:
-                    this.overlay = BiomeOverlayEnum.AGED;
-                    break;
-                case AGED:
-                    this.overlay = BiomeOverlayEnum.FROST;
-                    break;
-                case FROST:
-                    this.overlay = BiomeOverlayEnum.MOSSY;
-                    break;
-                case MOSSY:
-                    this.overlay = BiomeOverlayEnum.SOOTY;
-                    break;
-                case SOOTY:
-                default:
-                    this.overlay = BiomeOverlayEnum.NORMAL;
-                    break;
-            }*/
+        if (doIt)
             this.overlay = overlays[new Random().nextInt(overlays.length)];
-        } else this.overlay = BiomeOverlayEnum.NORMAL;
+        else
+            this.overlay = BiomeOverlayEnum.NORMAL;
 
         return this.overlay;
     }
@@ -162,11 +152,6 @@ public class AunisMainMenu extends GuiMainMenu {
         GlStateManager.rotate(-180f, 0f, 0f, 1f);
         GlStateManager.rotate(180f, 0f, 1f, 0f);
 
-        // make it 3d
-        //GlStateManager.rotate(125, 1, 0, 0);
-        //GlStateManager.rotate(-5, 0, 1, 0);
-        // ---
-
         // ------------------------------
         // DRAWING GATE
 
@@ -208,15 +193,6 @@ public class AunisMainMenu extends GuiMainMenu {
                 ElementEnum.MILKYWAY_CHEVRON_MOVING_ACTIVE_MAINMENU.bindTextureAndRender(this.overlay);
             }
             GlStateManager.popMatrix();
-            // back side
-            /*
-            GlStateManager.pushMatrix();
-            GlStateManager.rotate(180, 0, 0, 1);
-            GlStateManager.rotate(ChevronEnum.valueOf(i).rotation, 0, 0, 1);
-            ElementEnum.MILKYWAY_CHEVRON_FRAME.bindTextureAndRender(overlay);
-            ElementEnum.MILKYWAY_CHEVRON_BACK.bindTextureAndRender(overlay);
-            GlStateManager.popMatrix();
-            */
         }
         GlStateManager.shadeModel(7424);
         GlStateManager.disableBlend();
@@ -229,12 +205,14 @@ public class AunisMainMenu extends GuiMainMenu {
 
         GlStateManager.pushMatrix();
         GlStateManager.enableTexture2D();
-        GlStateManager.translate(6, (((float) height) - 36f), 0);
+        GlStateManager.translate(6, (((float) height) - 46f), 0);
         GlStateManager.scale(0.8, 0.8, 0.8);
         GlStateManager.translate(0, 0, 0);
         drawString(fontRenderer, "Music credits: STARGATE SG-1 - Full Original Soundtrack OST", 0, 0, 0xffffff);
         GlStateManager.translate(0, 10, 0);
         drawString(fontRenderer, "Aunis mod by: MrJake, MineDragonCZ_ and Matousss", 0, 0, 0xffffff);
+        GlStateManager.translate(0, 10, 0);
+        drawString(fontRenderer, "Aunis version: " + Version, 0, 0, 0xffffff);
         GlStateManager.translate(0, 10, 0);
         drawString(fontRenderer, "Note that the gate cannot be rendered perfectly here!", 0, 0, 0xffffff);
         GlStateManager.translate(0, 10, 0);
@@ -282,6 +260,8 @@ public class AunisMainMenu extends GuiMainMenu {
         this.aunisButtonList.add(new AunisGuiButton(1, this.width / 2 - 100, j, I18n.format("menu.singleplayer")));
         // multi
         this.aunisButtonList.add(new AunisGuiButton(2, this.width / 2 - 100, j + 24, I18n.format("menu.multiplayer")));
+        // about mod
+        this.aunisButtonList.add(new AunisGuiButton(20, this.width / 2 - 100, j + 48, I18n.format("menu.about")));
         // mods list
         this.aunisButtonList.add(new AunisGuiButton(6, this.width - 6 - 98, 6, 98, 20, I18n.format("fml.menu.mods")));
         // options
@@ -328,6 +308,17 @@ public class AunisMainMenu extends GuiMainMenu {
                 WorldInfo worldinfo = isaveformat.getWorldInfo("Demo_World");
                 if (worldinfo != null) {
                     this.mc.displayGuiScreen(new GuiYesNo(this, I18n.format("selectWorld.deleteQuestion"), "'" + worldinfo.getWorldName() + "' " + I18n.format("selectWorld.deleteWarning"), I18n.format("selectWorld.deleteButton"), I18n.format("gui.cancel"), 12));
+                }
+                break;
+
+            case 20:
+                try{
+                    Class<?> oclass = Class.forName("java.awt.Desktop");
+                    Object object = oclass.getMethod("getDesktop").invoke((Object)null);
+                    oclass.getMethod("browse", URI.class).invoke(object, new URI("https://github.com/MineDragonCZ/Aunis1/wiki"));
+                }
+                catch (Throwable throwable){
+                    System.out.println("Couldn't open link");
                 }
                 break;
         }
