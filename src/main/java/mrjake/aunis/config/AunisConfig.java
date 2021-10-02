@@ -273,7 +273,7 @@ public class AunisConfig {
 		public int irisCodeLength = 9;
 
 		@Name("Can iris destroy blocks")
-		public boolean irisDestroysBlocks = true;
+		public boolean irisDestroysBlocks = false;
 	}
 	
 	public static class PowerConfig {
