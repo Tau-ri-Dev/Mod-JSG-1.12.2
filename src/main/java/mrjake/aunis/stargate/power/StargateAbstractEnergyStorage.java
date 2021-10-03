@@ -45,15 +45,13 @@ public class StargateAbstractEnergyStorage extends EnergyStorage implements INBT
 	
 	@Override
 	public int extractEnergy(int maxExtract, boolean simulate) {
-		int energyExtracted = Math.min(energy, maxExtract);
 		
-		if (!simulate){ //&& energyExtracted > 0) {
+		if (!simulate) {
 			energy -= maxExtract;
 			if(energy < 0) energy = 0;
 			onEnergyChanged();
 		}
-		
-		return energyExtracted;
+		return maxExtract;
 	}
 	
     public int receiveEnergyInternal(int maxReceive, boolean simulate) {

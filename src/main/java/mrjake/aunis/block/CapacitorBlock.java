@@ -4,6 +4,7 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
+import mrjake.aunis.stargate.power.StargateItemEnergyStorage;
 import mrjake.aunis.tileentity.CapacitorTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -105,8 +106,8 @@ public class CapacitorBlock extends Block {
 		StargateAbstractEnergyStorage capacitorEnergyStorage = (StargateAbstractEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
 
 		ItemStack stack = new ItemStack(this);
-		((StargateAbstractEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null)).setEnergyStored(capacitorEnergyStorage.getEnergyStored());
-				
+		((StargateItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null)).setEnergyStored(capacitorEnergyStorage.getEnergyStored());
+
 		return Arrays.asList(stack);
 	}
 	
