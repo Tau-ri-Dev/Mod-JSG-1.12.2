@@ -60,7 +60,7 @@ public class AunisMainMenu extends GuiMainMenu {
     static ResourceLocation BACKGROUND_TEXTURE = AunisConfig.mainMenuConfig.disableAunisMainMenu ? null : new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");;
 
 
-    public static final String Version = "A4-6";
+    public static final String Version = "A4.6";
     public static final String Latest = getTextFromGithub("https://raw.githubusercontent.com/MineDragonCZ/Aunis1/master/version.txt");
     //string.substring(0, string.length() - 1);
     public static int showVersionAlert = 0;
@@ -222,7 +222,7 @@ public class AunisMainMenu extends GuiMainMenu {
         // DRAWING TEXTS
 
         String versionInfo = "Aunis version: " + Version;
-        if(Version != Latest){
+        if(!Version.equals(Latest)){
             versionInfo += " Latest build: " + Latest;
             if(showVersionAlert != 2) showVersionAlert = 1;
         }
