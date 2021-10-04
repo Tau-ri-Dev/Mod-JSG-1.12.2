@@ -61,8 +61,8 @@ public class AunisMainMenu extends GuiMainMenu {
 
 
     public static final String Version = "A4.6";
-    public static String string = getTextFromGithub("https://raw.githubusercontent.com/MineDragonCZ/Aunis1/master/version.txt");
-    public static final String Latest = string = string.substring(0, string.length() - 1);
+    public static final String Latest = getTextFromGithub("https://raw.githubusercontent.com/MineDragonCZ/Aunis1/master/version.txt");
+    //string.substring(0, string.length() - 1);
     public static int showVersionAlert = 0;
 
     /**
