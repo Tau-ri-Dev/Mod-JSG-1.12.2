@@ -508,6 +508,9 @@ public class AunisConfig {
 		@Name("Disable Aunis main menu - WARNING: Requires reloading")
 		public boolean disableAunisMainMenu = false;
 
+		@Name("Disable custom positions of buttons")
+		public boolean disablePosButtons = false;
+
 		@Name("Enable changing gate overlay")
 		public boolean changingGateOverlay = true;
 

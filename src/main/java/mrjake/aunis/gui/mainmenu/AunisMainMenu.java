@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static mrjake.aunis.gui.mainmenu.GetUpdate.getTextFromGithub;
+
 @SideOnly(Side.CLIENT)
 public class AunisMainMenu extends GuiMainMenu {
     @SubscribeEvent
@@ -54,8 +56,25 @@ public class AunisMainMenu extends GuiMainMenu {
     protected float screenCenterHeight = (((float) height) / 2f);
     protected float screenCenterWidth = ((float) width) / 2f;
     protected List<GuiButton> aunisButtonList = new ArrayList<>();
+    protected List<GuiButton> versionButtons = new ArrayList<>();
     static ResourceLocation BACKGROUND_TEXTURE = AunisConfig.mainMenuConfig.disableAunisMainMenu ? null : new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");;
-    public static final String Version = "${version}"; // It works only in final builds.
+
+
+    public static final String Version = "A4.6";
+    public static String string = getTextFromGithub("https://raw.githubusercontent.com/MineDragonCZ/Aunis1/master/version.txt");
+    public static final String Latest = string = string.substring(0, string.length() - 1);
+    public static int showVersionAlert = 0;
+
+    /**
+     * ------------------------------------------
+     * showVersionAlert indexes:
+     *
+     * 0 -> Version is good
+     * 1 -> Alert is open
+     * 2 -> Alert closed by client
+     *
+     * ------------------------------------------
+     */
 
     // animation of top chevron
     public void updateLastChevron() {
@@ -85,7 +104,6 @@ public class AunisMainMenu extends GuiMainMenu {
 
         return this.overlay;
     }
-
     // play sound
     public void updateSound() {
         AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1,0,0), SoundPositionedEnum.MAINMENU_MUSIC, AunisConfig.mainMenuConfig.playMusic);
@@ -203,6 +221,12 @@ public class AunisMainMenu extends GuiMainMenu {
         // ------------------------------
         // DRAWING TEXTS
 
+        String versionInfo = "Aunis version: " + Version;
+        if(Version != Latest){
+            versionInfo += " Latest build: " + Latest;
+            if(showVersionAlert != 2) showVersionAlert = 1;
+        }
+
         GlStateManager.pushMatrix();
         GlStateManager.enableTexture2D();
         GlStateManager.translate(6, (((float) height) - 46f), 0);
@@ -212,7 +236,7 @@ public class AunisMainMenu extends GuiMainMenu {
         GlStateManager.translate(0, 10, 0);
         drawString(fontRenderer, "Aunis mod by: MrJake, MineDragonCZ_ and Matousss", 0, 0, 0xffffff);
         GlStateManager.translate(0, 10, 0);
-        drawString(fontRenderer, "Aunis version: " + Version, 0, 0, 0xffffff);
+        drawString(fontRenderer, versionInfo, 0, 0, 0xffffff);
         GlStateManager.translate(0, 10, 0);
         drawString(fontRenderer, "Note that the gate cannot be rendered perfectly here!", 0, 0, 0xffffff);
         GlStateManager.translate(0, 10, 0);
@@ -249,26 +273,100 @@ public class AunisMainMenu extends GuiMainMenu {
         for (GuiLabel guiLabel : this.labelList) {
             guiLabel.drawLabel(this.mc, mouseX, mouseY);
         }
+
+        // ------------------------------
+        // DRAWING VERSION ALERT
+
+        if(showVersionAlert == 1){
+            GlStateManager.pushMatrix();
+
+            GlStateManager.pushMatrix();
+            frame(0, 0, width, height, 3, 0xFF181A1F, 0xFF272B33);
+            GlStateManager.popMatrix();
+
+            GlStateManager.pushMatrix();
+
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(screenCenterWidth, screenCenterHeight - 60, 0);
+            GlStateManager.scale(1.5, 1.5, 1.5);
+            drawCenteredString(fontRenderer, "You are using out of date version of Aunis mod.", 0, 0, 0xffffff);
+            GlStateManager.popMatrix();
+
+            GlStateManager.pushMatrix();
+            GlStateManager.scale(1.0, 1.0, 1.0);
+            GlStateManager.translate(screenCenterWidth, screenCenterHeight - 40, 0);
+            drawCenteredString(fontRenderer, "For your comfort, please update", 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawCenteredString(fontRenderer, "it by download it from our", 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawCenteredString(fontRenderer, "unofficial discord server!", 0, 0, 0xffffff);
+            GlStateManager.popMatrix();
+
+            GlStateManager.popMatrix();
+
+            for (GuiButton guiButton : this.versionButtons) {
+                ((AunisGuiButton) guiButton).drawButton(this.mc, mouseX, mouseY, partialTicks);
+            }
+
+            GlStateManager.popMatrix();
+        }
+    }
+
+    protected void frame(int x, int y, int w, int h, int thickness, int borderColor, int background) {
+        // Up
+        drawRect(x, y, x + w, y + thickness, borderColor);
+        // Down
+        drawRect(x, y + h - thickness, x + w, y + h, borderColor);
+        // Left
+        drawRect(x, y + thickness, x + thickness, y + h - thickness, borderColor);
+        // Right
+        drawRect(x + w - thickness, y + thickness, x + w, y + h - thickness, borderColor);
+        // Background
+        drawRect(x + thickness, y + thickness, x + w - thickness, y + h - thickness, background);
     }
 
     @Override
     public void initGui() {
+
+        this.versionButtons.clear();
+        this.versionButtons.add(new AunisGuiButton(21, width / 2 - 100, height - 75, 98, 20, "OK"));
+        this.versionButtons.add(new AunisGuiButton(22, width / 2 + 2, height - 75, 98, 20, "Our Discord"));
+
         this.aunisButtonList.clear();
         int j = this.height / 4 + 48;
 
-        // single
-        this.aunisButtonList.add(new AunisGuiButton(1, this.width / 2 - 100, j, I18n.format("menu.singleplayer")));
-        // multi
-        this.aunisButtonList.add(new AunisGuiButton(2, this.width / 2 - 100, j + 24, I18n.format("menu.multiplayer")));
-        // about mod
-        this.aunisButtonList.add(new AunisGuiButton(20, this.width / 2 - 100, j + 48, I18n.format("menu.about")));
-        // mods list
-        this.aunisButtonList.add(new AunisGuiButton(6, this.width - 6 - 98, 6, 98, 20, I18n.format("fml.menu.mods")));
-        // options
-        this.aunisButtonList.add(new AunisGuiButton(0, 6, 6, 98, 20, I18n.format("menu.options")));
-        // quit
-        this.aunisButtonList.add(new AunisGuiButton(4, this.width - 6 - 98, this.height - 6 - 20, 98, 20, I18n.format("menu.quit")));
-
+        if(!AunisConfig.mainMenuConfig.disablePosButtons) {
+            // single
+            this.aunisButtonList.add(new AunisGuiButton(1, this.width / 2 - 100, j, I18n.format("menu.singleplayer")));
+            // multi
+            this.aunisButtonList.add(new AunisGuiButton(2, this.width / 2 - 100, j + 24, I18n.format("menu.multiplayer")));
+            // about mod
+            this.aunisButtonList.add(new AunisGuiButton(20, this.width / 2 - 100, j + 48, I18n.format("menu.about")));
+            // mods list
+            this.aunisButtonList.add(new AunisGuiButton(6, this.width - 6 - 98, 6, 98, 20, I18n.format("fml.menu.mods")));
+            // aunis config
+            //this.aunisButtonList.add(new AunisGuiButton(7, this.width - 6 - 98, 9 + 20, 98, 20, I18n.format("menu.config")));
+            // options
+            this.aunisButtonList.add(new AunisGuiButton(0, 6, 6, 98, 20, I18n.format("menu.options")));
+            // quit
+            this.aunisButtonList.add(new AunisGuiButton(4, this.width - 6 - 98, this.height - 6 - 20, 98, 20, I18n.format("menu.quit")));
+        }
+        else{
+            // single
+            this.aunisButtonList.add(new AunisGuiButton(1, this.width / 2 - 100, j, I18n.format("menu.singleplayer")));
+            // multi
+            this.aunisButtonList.add(new AunisGuiButton(2, this.width / 2 - 100, j + 24, I18n.format("menu.multiplayer")));
+            // about mod
+            this.aunisButtonList.add(new AunisGuiButton(20, this.width / 2 - 100, j + 48, 98, 20, I18n.format("menu.about")));
+            // mods list
+            this.aunisButtonList.add(new AunisGuiButton(6, this.width / 2 + 2, j + 48, 98, 20, I18n.format("fml.menu.mods")));
+            // aunis config
+            //this.aunisButtonList.add(new AunisGuiButton(7, this.width - 6 - 98, 6, 98, 20, I18n.format("menu.config")));
+            // options
+            this.aunisButtonList.add(new AunisGuiButton(0, this.width / 2 - 100, j + 72, 98, 20, I18n.format("menu.options")));
+            // quit
+            this.aunisButtonList.add(new AunisGuiButton(4, this.width / 2 + 2, j + 72, 98, 20, I18n.format("menu.quit")));
+        }
         super.initGui();
     }
 
@@ -293,16 +391,16 @@ public class AunisMainMenu extends GuiMainMenu {
                 break;
             case 6:
                 this.mc.displayGuiScreen(new net.minecraftforge.fml.client.GuiModList(this));
+                //this.mc.displayGuiScreen(new AunisModListMenu(this));
                 break;
             case 14:
                 RealmsBridge realmsbridge = new RealmsBridge();
                 realmsbridge.switchToRealms(this);
                 break;
-            // other screens
+            // demo world
             case 11:
                 this.mc.launchIntegratedServer("Demo_World", "Demo_World", WorldServerDemo.DEMO_WORLD_SETTINGS);
                 break;
-
             case 12:
                 ISaveFormat isaveformat = this.mc.getSaveLoader();
                 WorldInfo worldinfo = isaveformat.getWorldInfo("Demo_World");
@@ -310,12 +408,27 @@ public class AunisMainMenu extends GuiMainMenu {
                     this.mc.displayGuiScreen(new GuiYesNo(this, I18n.format("selectWorld.deleteQuestion"), "'" + worldinfo.getWorldName() + "' " + I18n.format("selectWorld.deleteWarning"), I18n.format("selectWorld.deleteButton"), I18n.format("gui.cancel"), 12));
                 }
                 break;
-
+            // open wiki
             case 20:
                 try{
                     Class<?> oclass = Class.forName("java.awt.Desktop");
                     Object object = oclass.getMethod("getDesktop").invoke((Object)null);
                     oclass.getMethod("browse", URI.class).invoke(object, new URI("https://github.com/MineDragonCZ/Aunis1/wiki"));
+                }
+                catch (Throwable throwable){
+                    System.out.println("Couldn't open link");
+                }
+                break;
+            // close alert
+            case 21:
+                showVersionAlert = 2;
+                break;
+            // open our discord
+            case 22:
+                try{
+                    Class<?> oclass = Class.forName("java.awt.Desktop");
+                    Object object = oclass.getMethod("getDesktop").invoke((Object)null);
+                    oclass.getMethod("browse", URI.class).invoke(object, new URI("https://discord.gg/qU7fuNDxAs"));
                 }
                 catch (Throwable throwable){
                     System.out.println("Couldn't open link");
@@ -327,11 +440,28 @@ public class AunisMainMenu extends GuiMainMenu {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         if (mouseButton == 0) {
-            for (int i = 0; i < this.aunisButtonList.size(); ++i) {
-                GuiButton guibutton = this.aunisButtonList.get(i);
+            if(showVersionAlert != 1) {
+                for (int i = 0; i < this.aunisButtonList.size(); ++i) {
+                    GuiButton guibutton = this.aunisButtonList.get(i);
+
+                    if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
+                        net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre event = new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, this.aunisButtonList);
+                        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
+                            break;
+                        guibutton = event.getButton();
+                        this.selectedButton = guibutton;
+                        guibutton.playPressSound(this.mc.getSoundHandler());
+                        this.actionPerformed(guibutton);
+                        if (this.equals(this.mc.currentScreen))
+                            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.getButton(), this.aunisButtonList));
+                    }
+                }
+            }
+            for (int i = 0; i < this.versionButtons.size(); ++i) {
+                GuiButton guibutton = this.versionButtons.get(i);
 
                 if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
-                    net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre event = new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, this.aunisButtonList);
+                    net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre event = new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, this.versionButtons);
                     if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
                         break;
                     guibutton = event.getButton();
@@ -339,7 +469,7 @@ public class AunisMainMenu extends GuiMainMenu {
                     guibutton.playPressSound(this.mc.getSoundHandler());
                     this.actionPerformed(guibutton);
                     if (this.equals(this.mc.currentScreen))
-                        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.getButton(), this.aunisButtonList));
+                        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.getButton(), this.versionButtons));
                 }
             }
         }
