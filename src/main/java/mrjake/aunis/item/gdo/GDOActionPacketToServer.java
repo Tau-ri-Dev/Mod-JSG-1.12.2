@@ -71,7 +71,7 @@ public class GDOActionPacketToServer implements IMessage {
 							if (compound.hasKey("linkedGate")) {
 								BlockPos pos = BlockPos.fromLong(compound.getLong("linkedGate"));
 								StargateClassicBaseTile gateTile = (StargateClassicBaseTile) world.getTileEntity(pos);
-								assert gateTile != null;
+								if (gateTile == null) return;
 								StargateClassicBaseTile targetGate = null;
 								if (gateTile.getStargateState().initiating() || gateTile.getStargateState().engaged()) {
 									targetGate = (StargateClassicBaseTile) StargateNetwork.get(world).getStargate(gateTile.getDialedAddress()).getTileEntity();

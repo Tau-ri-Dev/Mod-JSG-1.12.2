@@ -24,7 +24,8 @@ public class GuiSendCode extends GuiBase {
         super(250, 100, 4, FRAME_COLOR, BG_COLOR, TEXT_COLOR, 4);
         this.hand = hand;
     }
-
+    String message = null;
+    int messageColor = 14876672;
     NumberOnlyTextField codeField;
     AunisGuiButton sendButton;
 
@@ -46,6 +47,9 @@ public class GuiSendCode extends GuiBase {
         GlStateManager.popMatrix();
         codeField.drawTextBox();
         sendButton.drawButton(mc, mouseX, mouseY, Minecraft.getMinecraft().getRenderPartialTicks());
+        if (message != null) {
+            drawCenteredString(mc.fontRenderer, message, width/2, sendButton.y + 25, messageColor);
+        }
     }
 
     @Override
@@ -62,14 +66,16 @@ public class GuiSendCode extends GuiBase {
             ItemStack gdo = this.mc.player.getHeldItem(hand);
             if(gdo.hasTagCompound()) {
                 NBTTagCompound compound = gdo.getTagCompound();
-                assert compound != null;
                 if(compound.hasKey("linkedGate")){
+                    if (codeField.getText().isEmpty()) {
+                        message = GDOMessages.CODE_NOT_SET.textComponent.getFormattedText();
+                        messageColor = 14876672;
+                        return;
+                    }
                     int code = Integer.parseInt(codeField.getText());
                     AunisPacketHandler.INSTANCE.sendToServer(new GDOActionPacketToServer(GDOActionEnum.SEND_CODE, hand, code, false));
+                    this.mc.player.closeScreen();
                 }
-            }
-            if(codeField.getText().length() < 1){
-                this.mc.player.sendStatusMessage(GDOMessages.CODE_NOT_SET.textComponent, true);
             }
         }
     }
