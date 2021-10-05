@@ -511,6 +511,9 @@ public class AunisConfig {
 		@Name("Disable custom positions of buttons")
 		public boolean disablePosButtons = false;
 
+		@Name("Enable event horizon in mainmenu")
+		public boolean enableEventHorizon = true;
+
 		@Name("Enable changing gate overlay")
 		public boolean changingGateOverlay = true;
 

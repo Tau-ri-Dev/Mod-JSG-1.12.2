@@ -77,7 +77,7 @@ public class GetUpdate {
             }
             return Writer.toString();
         } else {
-            return "No Contents";
+            return "Error was occurred while updating Aunis!";
         }
     }
 }
