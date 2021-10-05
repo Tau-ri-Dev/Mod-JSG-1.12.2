@@ -4,8 +4,6 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.loader.ElementEnum;
-import mrjake.aunis.loader.texture.Texture;
-import mrjake.aunis.loader.texture.TextureLoader;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
 import mrjake.aunis.renderer.stargate.StargateRendererStatic;
@@ -64,7 +62,7 @@ public class AunisMainMenu extends GuiMainMenu {
     protected static final ResourceLocation EVENT_HORIZON_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/event_horizon.jpg");
 
 
-    protected static final String Version = "A4.6";
+    protected static final String Version = "A4.7";
     protected static final String Latest = getTextFromGithub("https://raw.githubusercontent.com/MineDragonCZ/Aunis1/master/version.txt");
     //string.substring(0, string.length() - 1);
     protected static int showVersionAlert = 0;
@@ -153,30 +151,29 @@ public class AunisMainMenu extends GuiMainMenu {
         else if (kawooshState > 0.5f && kawooshState < 0.81f) {
             // making kawoosh
             kawooshState += step;
+
+            renderEventHorizon(true);
+
             AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.MAINMENU_GATE_OPEN, true);
         }
         else if (kawooshState > 0.8f && kawooshState < 1.61f) {
             // render event horizon
             AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1, 0, 1), SoundPositionedEnum.WORMHOLE_LOOP, true);
 
-            renderEventHorizon();
+            renderEventHorizon(false);
 
             kawooshState += (step + 0.008f);
             gateZoom += 0.10f;
         }
         else if (kawooshState > 1.6f && kawooshState < 2.0f) {
             // going to gate and still render horizon
-            renderEventHorizon();
+            renderEventHorizon(false);
 
             kawooshState += step;
             gateZoom += (gateZoom * 2) / 10;
         }
         else if (kawooshState > 1.99f && kawooshState < 2.2) {
             // turn off everything and render gui
-            kawooshState = 2.2f;
-            renderKawoosh = false;
-            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1, 0, 1), SoundPositionedEnum.WORMHOLE_LOOP, false);
-            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.MAINMENU_GATE_GO, true);
 
             switch(clickedButton) {
                 case 1:
@@ -189,24 +186,45 @@ public class AunisMainMenu extends GuiMainMenu {
                     System.out.println("Wrong button clicked!!! This is a bug!");
                     break;
             }
+
+            kawooshState = 2.2f;
+            renderKawoosh = false;
+            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1, 0, 1), SoundPositionedEnum.WORMHOLE_LOOP, false);
+            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.MAINMENU_GATE_GO, true);
             renderButtonsAndStuff = true;
             clickedButton = 0;
         }
     }
 
-    public void renderEventHorizon(){
-        quadStrips.clear();
-        for (int i=0; i<16; i++) {
-            quadStrips.add( new StargateRendererStatic.QuadStrip(i) );
+    public void renderEventHorizon(boolean doKawoosh){
+        if(!doKawoosh) {
+            quadStrips.clear();
+            for (int i = 0; i < 16; i++) {
+                quadStrips.add(new StargateRendererStatic.QuadStrip(i));
+            }
+            GlStateManager.pushMatrix();
+            this.mc.getTextureManager().bindTexture(EVENT_HORIZON_TEXTURE);
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            innerCircle.render(1.0f, false, 1.0f, 0, (byte) -1);
+            for (StargateRendererStatic.QuadStrip strip : quadStrips) {
+                strip.render(1.0f, false, 1.0f, 0, (byte) -1);
+            }
+            GlStateManager.popMatrix();
         }
-        GlStateManager.pushMatrix();
-        this.mc.getTextureManager().bindTexture(EVENT_HORIZON_TEXTURE);
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        innerCircle.render(1.0f, false, 1.0f, 0, (byte) -1);
-        for (StargateRendererStatic.QuadStrip strip : quadStrips) {
-            strip.render(1.0f, false, 1.0f, 0, (byte) -1);
+        else{
+            quadStrips.clear();
+            for (int i = 0; i < 16; i++) {
+                quadStrips.add(new StargateRendererStatic.QuadStrip(i));
+            }
+            GlStateManager.pushMatrix();
+            this.mc.getTextureManager().bindTexture(EVENT_HORIZON_TEXTURE);
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            innerCircle.render(1.0f, true, 1.0f, 0, (byte) -1);
+            for (StargateRendererStatic.QuadStrip strip : quadStrips) {
+                strip.render(1.0f, true, 1.0f, 0, (byte) -1);
+            }
+            GlStateManager.popMatrix();
         }
-        GlStateManager.popMatrix();
     }
 
     // RENDER MAIN MENU
@@ -381,17 +399,32 @@ public class AunisMainMenu extends GuiMainMenu {
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(screenCenterWidth, screenCenterHeight - 60, 0);
                 GlStateManager.scale(1.5, 1.5, 1.5);
-                drawCenteredString(fontRenderer, "You are using out of date version of Aunis mod.", 0, 0, 0xffffff);
-                GlStateManager.popMatrix();
 
-                GlStateManager.pushMatrix();
-                GlStateManager.scale(1.0, 1.0, 1.0);
-                GlStateManager.translate(screenCenterWidth, screenCenterHeight - 40, 0);
-                drawCenteredString(fontRenderer, "For your comfort, please update", 0, 0, 0xffffff);
-                GlStateManager.translate(0, 10, 0);
-                drawCenteredString(fontRenderer, "it by download it from our", 0, 0, 0xffffff);
-                GlStateManager.translate(0, 10, 0);
-                drawCenteredString(fontRenderer, "unofficial discord server!", 0, 0, 0xffffff);
+                if(Latest.equals("Error was occurred while updating Aunis!")){
+                    drawCenteredString(fontRenderer, "Could not connect to Aunis network! (github)", 0, 0, 0xffffff);
+                    GlStateManager.popMatrix();
+
+                    GlStateManager.pushMatrix();
+                    GlStateManager.scale(1.0, 1.0, 1.0);
+                    GlStateManager.translate(screenCenterWidth, screenCenterHeight - 40, 0);
+                    drawCenteredString(fontRenderer, "We can not check for updates,", 0, 0, 0xffffff);
+                    GlStateManager.translate(0, 10, 0);
+                    drawCenteredString(fontRenderer, "because your connection to network is bad :(", 0, 0, 0xffffff);
+                }
+                else {
+                    drawCenteredString(fontRenderer, "You are using out of date version of Aunis mod.", 0, 0, 0xffffff);
+                    GlStateManager.popMatrix();
+
+                    GlStateManager.pushMatrix();
+                    GlStateManager.scale(1.0, 1.0, 1.0);
+                    GlStateManager.translate(screenCenterWidth, screenCenterHeight - 40, 0);
+                    drawCenteredString(fontRenderer, "For your comfort, please update", 0, 0, 0xffffff);
+                    GlStateManager.translate(0, 10, 0);
+                    drawCenteredString(fontRenderer, "it by download it from our", 0, 0, 0xffffff);
+                    GlStateManager.translate(0, 10, 0);
+                    drawCenteredString(fontRenderer, "unofficial discord server!", 0, 0, 0xffffff);
+                }
+
                 GlStateManager.popMatrix();
 
                 GlStateManager.popMatrix();
