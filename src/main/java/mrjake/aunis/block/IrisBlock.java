@@ -33,8 +33,7 @@ public class IrisBlock extends InvisibleBlock {
         setDefaultState(blockState.getBaseState()
                 .withProperty(AunisProps.FACING_HORIZONTAL, EnumFacing.NORTH));
 
-        setLightLevel(1.0f);
-        setLightOpacity(0);
+
     }
 
 

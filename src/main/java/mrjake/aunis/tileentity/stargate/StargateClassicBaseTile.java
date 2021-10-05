@@ -36,9 +36,11 @@ import mrjake.aunis.tileentity.BeamerTile;
 import mrjake.aunis.tileentity.util.IUpgradable;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.*;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -593,10 +595,19 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void executeTask(EnumScheduledTask scheduledTask, NBTTagCompound customData) {
         switch (scheduledTask) {
             case STARGATE_HORIZON_LIGHT_BLOCK:
-            case STARGATE_CLOSE:
-                if (irisType != EnumIrisType.NULL && !isClosed()) {
+                if (irisType == EnumIrisType.NULL || !isClosed()) {
                     super.executeTask(scheduledTask, customData);
-                } else if (scheduledTask == EnumScheduledTask.STARGATE_CLOSE) disconnectGate();
+                } else if (isClosed()) {
+                    world.getBlockState(getGateCenterPos()).getBlock().setLightLevel(.7f);
+                }
+                break;
+            case STARGATE_CLOSE:
+                if (irisType == EnumIrisType.NULL || !isClosed()) {
+                    super.executeTask(scheduledTask, customData);
+                } else if (isClosed()) {
+                    world.getBlockState(getGateCenterPos()).getBlock().setLightLevel(0);
+                    disconnectGate();
+                }
                 break;
 
             case STARGATE_SPIN_FINISHED:
@@ -931,6 +942,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 sendSignal(null, "stargate_iris_closing", new Object[]{"Iris is closing"});
                 markDirty();
                 playSoundEvent(closeSound);
+                if (targetGatePos != null) executeTask(EnumScheduledTask.STARGATE_HORIZON_LIGHT_BLOCK, null);
                 // beamers shit
                 // TODO: beamers deactive when iris is close
                 /*for (BlockPos beamerPos : linkedBeamers) {
@@ -947,6 +959,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 sendSignal(null, "stargate_iris_opening", new Object[]{"Iris is opening"});
                 markDirty();
                 playSoundEvent(openSound);
+                if (targetGatePos != null) executeTask(EnumScheduledTask.STARGATE_HORIZON_LIGHT_BLOCK, null);
                 // beamers shit
                 // TODO: beamers deactive when iris is close
                 /*if(targetGate instanceof StargateClassicBaseTile
@@ -1053,10 +1066,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     world.destroyBlock(newPos, true);
                 }
                 world.setBlockState(newPos, invBlockState, 3);
+                if (newPos == getGateCenterPos() && targetGatePos != null) {
+                    world.getBlockState(newPos).getBlock().setLightLevel(1f);
+                }
 
             } else {
-                if (newPos == getGateCenterPos() && targetGatePos != null)
-                    if (world.getBlockState(newPos).getBlock() == AunisBlocks.IRIS_BLOCK) world.setBlockToAir(newPos);
+                if (newPos == getGateCenterPos() && targetGatePos != null) executeTask(EnumScheduledTask.STARGATE_HORIZON_LIGHT_BLOCK, null);
+                if (world.getBlockState(newPos).getBlock() == AunisBlocks.IRIS_BLOCK) world.setBlockToAir(newPos);
             }
 
         }
