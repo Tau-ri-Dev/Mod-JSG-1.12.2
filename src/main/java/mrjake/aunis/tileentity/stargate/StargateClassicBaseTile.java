@@ -313,6 +313,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     }
 
+    @Override
+    protected void kawooshDestruction() {
+        if (!isClosed() || irisType == EnumIrisType.NULL) super.kawooshDestruction();
+    }
+
     // Server
     private BiomeOverlayEnum determineBiomeOverride() {
         ItemStack stack = itemStackHandler.getStackInSlot(BIOME_OVERRIDE_SLOT);

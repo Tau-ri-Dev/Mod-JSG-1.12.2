@@ -747,55 +747,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             }
 
             // Event horizon killing
-            if (horizonKilling) {
-                List<EntityLivingBase> entities = new ArrayList<EntityLivingBase>();
-                List<BlockPos> blocks = new ArrayList<BlockPos>();
-
-                // Get all blocks and entities inside the kawoosh
-                for (int i = 0; i < horizonSegments; i++) {
-                    AunisAxisAlignedBB gBox = localKillingBoxes.get(i).offset(pos);
-
-                    entities.addAll(world.getEntitiesWithinAABB(EntityLivingBase.class, gBox));
-
-                    //					Aunis.info(new AxisAlignedBB((int)Math.floor(gBox.minX), (int)Math.floor(gBox.minY+1), (int)Math.floor(gBox.minZ), (int)Math.ceil(gBox.maxX-1), (int)Math.ceil(gBox.maxY-1), (int)Math.ceil(gBox.maxZ-1)).toString());
-                    for (BlockPos bPos : BlockPos.getAllInBox((int) Math.floor(gBox.minX), (int) Math.floor(gBox.minY), (int) Math.floor(gBox.minZ), (int) Math.ceil(gBox.maxX) - 1, (int) Math.ceil(gBox.maxY) - 1, (int) Math.ceil(gBox.maxZ) - 1))
-                        blocks.add(bPos);
-                }
-
-                // Get all entities inside the gate
-                for (AunisAxisAlignedBB lBox : localInnerEntityBoxes)
-                    entities.addAll(world.getEntitiesWithinAABB(EntityLivingBase.class, lBox.offset(pos)));
-
-                // Get all blocks inside the gate
-                for (AunisAxisAlignedBB lBox : localInnerBlockBoxes) {
-                    AunisAxisAlignedBB gBox = lBox.offset(pos);
-
-                    for (BlockPos bPos : BlockPos.getAllInBox((int) gBox.minX, (int) gBox.minY, (int) gBox.minZ, (int) gBox.maxX - 1, (int) gBox.maxY - 1, (int) gBox.maxZ - 1)) {
-                        // If not snow layer
-                        if (!DHDBlock.SNOW_MATCHER.apply(world.getBlockState(bPos))) {
-                            blocks.add(bPos);
-                        }
-                    }
-                }
-
-                // Kill them
-                for (EntityLivingBase entity : entities) {
-                    entity.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_HORIZON, entity.getHealth());
-                    AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.STARGATE_VAPORIZE_BLOCK_PARTICLES, new StargateVaporizeBlockParticlesRequest(entity.getPosition())), targetPoint);
-                }
-
-                // Vaporize them
-                for (BlockPos dPos : blocks) {
-                    if (!dPos.equals(getGateCenterPos())) {
-                        IBlockState state = world.getBlockState(dPos);
-                        if (!world.isAirBlock(dPos) && state.getBlockHardness(world, dPos) >= 0.0f && AunisConfig.stargateConfig.canKawooshDestroyBlock(state)) {
-                            world.setBlockToAir(dPos);
-                            AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.STARGATE_VAPORIZE_BLOCK_PARTICLES, new StargateVaporizeBlockParticlesRequest(dPos)), targetPoint);
-                        }
-                    }
-                }
-            }
-
+            kawooshDestruction();
 
             /*
              * Draw power (engaged)
@@ -853,6 +805,58 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
             energyTransferedLastTick = getEnergyStorage().getEnergyStored() - energyStoredLastTick;
             energyStoredLastTick = getEnergyStorage().getEnergyStored();
+        }
+    }
+
+    protected void kawooshDestruction() {
+        // Event horizon killing
+        if (horizonKilling) {
+            List<EntityLivingBase> entities = new ArrayList<EntityLivingBase>();
+            List<BlockPos> blocks = new ArrayList<BlockPos>();
+
+            // Get all blocks and entities inside the kawoosh
+            for (int i = 0; i < horizonSegments; i++) {
+                AunisAxisAlignedBB gBox = localKillingBoxes.get(i).offset(pos);
+
+                entities.addAll(world.getEntitiesWithinAABB(EntityLivingBase.class, gBox));
+
+                //					Aunis.info(new AxisAlignedBB((int)Math.floor(gBox.minX), (int)Math.floor(gBox.minY+1), (int)Math.floor(gBox.minZ), (int)Math.ceil(gBox.maxX-1), (int)Math.ceil(gBox.maxY-1), (int)Math.ceil(gBox.maxZ-1)).toString());
+                for (BlockPos bPos : BlockPos.getAllInBox((int) Math.floor(gBox.minX), (int) Math.floor(gBox.minY), (int) Math.floor(gBox.minZ), (int) Math.ceil(gBox.maxX) - 1, (int) Math.ceil(gBox.maxY) - 1, (int) Math.ceil(gBox.maxZ) - 1))
+                    blocks.add(bPos);
+            }
+
+            // Get all entities inside the gate
+            for (AunisAxisAlignedBB lBox : localInnerEntityBoxes)
+                entities.addAll(world.getEntitiesWithinAABB(EntityLivingBase.class, lBox.offset(pos)));
+
+            // Get all blocks inside the gate
+            for (AunisAxisAlignedBB lBox : localInnerBlockBoxes) {
+                AunisAxisAlignedBB gBox = lBox.offset(pos);
+
+                for (BlockPos bPos : BlockPos.getAllInBox((int) gBox.minX, (int) gBox.minY, (int) gBox.minZ, (int) gBox.maxX - 1, (int) gBox.maxY - 1, (int) gBox.maxZ - 1)) {
+                    // If not snow layer
+                    if (!DHDBlock.SNOW_MATCHER.apply(world.getBlockState(bPos))) {
+                        blocks.add(bPos);
+                    }
+                }
+            }
+
+            // Kill them
+            for (EntityLivingBase entity : entities) {
+                entity.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_HORIZON, entity.getHealth());
+                AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.STARGATE_VAPORIZE_BLOCK_PARTICLES, new StargateVaporizeBlockParticlesRequest(entity.getPosition())), targetPoint);
+            }
+
+            // Vaporize them
+            for (BlockPos dPos : blocks) {
+                if (!dPos.equals(getGateCenterPos())) {
+                    IBlockState state = world.getBlockState(dPos);
+                    if (!world.isAirBlock(dPos) && state.getBlockHardness(world, dPos) >= 0.0f && AunisConfig.stargateConfig.canKawooshDestroyBlock(state)) {
+                        world.setBlockToAir(dPos);
+                        AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.STARGATE_VAPORIZE_BLOCK_PARTICLES, new StargateVaporizeBlockParticlesRequest(dPos)), targetPoint);
+                    }
+                }
+            }
         }
     }
 
