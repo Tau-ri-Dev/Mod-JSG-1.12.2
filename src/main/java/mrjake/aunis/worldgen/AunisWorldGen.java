@@ -31,13 +31,6 @@ public class AunisWorldGen implements IWorldGenerator {
 							AunisConfig.worldgenConfig.naquadahMaxVeinInChunk, 0, 128,
 							BlockMatcher.forBlock(Blocks.NETHERRACK), world, rand, chunkX, chunkZ);
 				}
-				if (AunisConfig.worldgenConfig.triniumEnabled) {
-					runGenerator(AunisBlocks.ORE_TRINIUM_BLOCK.getDefaultState(),
-							AunisConfig.worldgenConfig.triniumVeinSize,
-							AunisConfig.worldgenConfig.triniumMaxVeinInChunk, 0, 128,
-							BlockMatcher.forBlock(Blocks.NETHERRACK), world, rand, chunkX, chunkZ);
-				}
-				
 				break;
 			case OVERWORLD:
 				if (AunisConfig.worldgenConfig.titaniumEnable) {
@@ -46,9 +39,15 @@ public class AunisWorldGen implements IWorldGenerator {
 							AunisConfig.worldgenConfig.titaniumMaxVeinInChunk, 0, 25,
 							BlockMatcher.forBlock(Blocks.STONE), world, rand, chunkX, chunkZ);
 				}
-
 				break;
-				
+			case THE_END:
+				if (AunisConfig.worldgenConfig.triniumEnabled) {
+					runGenerator(AunisBlocks.ORE_TRINIUM_BLOCK.getDefaultState(),
+							AunisConfig.worldgenConfig.triniumVeinSize,
+							AunisConfig.worldgenConfig.triniumMaxVeinInChunk, 0, 128,
+							BlockMatcher.forBlock(Blocks.NETHERRACK), world, rand, chunkX, chunkZ);
+				}
+				break;
 			default:
 				break;
 		}
