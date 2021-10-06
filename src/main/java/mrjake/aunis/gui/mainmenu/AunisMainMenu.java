@@ -12,12 +12,8 @@ import mrjake.aunis.sound.SoundPositionedEnum;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.realms.RealmsBridge;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServerDemo;
-import net.minecraft.world.storage.ISaveFormat;
-import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,7 +35,8 @@ public class AunisMainMenu extends GuiMainMenu {
         event.setResultSound(null);
     }
 
-    // define variables
+    // ------------------------------------------
+    // DEFINE VARIABLES
     protected float animationStage = 0;
     protected float chevronLastAnimationStage = 0;
     protected boolean chevronsActive = true;
@@ -62,9 +59,8 @@ public class AunisMainMenu extends GuiMainMenu {
     protected static final ResourceLocation EVENT_HORIZON_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/event_horizon.jpg");
 
 
-    protected static final String Version = "A4.7";
+    protected static final String Version = "A4.8";
     protected static final String Latest = getTextFromGithub("https://raw.githubusercontent.com/MineDragonCZ/Aunis1/master/version.txt");
-    //string.substring(0, string.length() - 1);
     protected static int showVersionAlert = 0;
 
     // render kawoosh and event horizon
@@ -86,6 +82,7 @@ public class AunisMainMenu extends GuiMainMenu {
      *
      * ------------------------------------------
      */
+    // ------------------------------------------
 
     // animation of top chevron
     public void updateLastChevron() {
@@ -138,7 +135,7 @@ public class AunisMainMenu extends GuiMainMenu {
         }
     }
 
-    // render event horizon
+    // EVENT HORIZON RENDER
     public void loadGame() {
         float step = 0.008f;
         if (kawooshState == 0) {
@@ -196,6 +193,7 @@ public class AunisMainMenu extends GuiMainMenu {
         }
     }
 
+    // EVENT HORIZON RENDER
     public void renderEventHorizon(boolean doKawoosh){
         if(!doKawoosh) {
             quadStrips.clear();
@@ -275,7 +273,7 @@ public class AunisMainMenu extends GuiMainMenu {
         // ------------------------------
         // DRAWING EVENT HORIZON
 
-        //if(renderKawoosh && ((int) (animationStage+20) % 9 == 0)) loadGame();
+        //if(renderKawoosh && ((int) (animationStage+20) % (int) 8.7 == 0)) loadGame();
         if(renderKawoosh) loadGame();
 
         // ------------------------------
@@ -332,7 +330,7 @@ public class AunisMainMenu extends GuiMainMenu {
         String versionInfo = "Aunis version: " + Version;
 
         if (renderButtonsAndStuff){
-            if (!Version.equals(Latest)) {
+            if (!Version.equals(Latest) && AunisConfig.enableAutoUpdater) {
                 versionInfo += " Latest build: " + Latest;
                 if (showVersionAlert != 2) showVersionAlert = 1;
             }
@@ -529,21 +527,6 @@ public class AunisMainMenu extends GuiMainMenu {
                 this.mc.displayGuiScreen(new net.minecraftforge.fml.client.GuiModList(this));
                 //this.mc.displayGuiScreen(new AunisModListMenu(this));
                 break;
-            case 14:
-                RealmsBridge realmsbridge = new RealmsBridge();
-                realmsbridge.switchToRealms(this);
-                break;
-            // demo world
-            case 11:
-                this.mc.launchIntegratedServer("Demo_World", "Demo_World", WorldServerDemo.DEMO_WORLD_SETTINGS);
-                break;
-            case 12:
-                ISaveFormat isaveformat = this.mc.getSaveLoader();
-                WorldInfo worldinfo = isaveformat.getWorldInfo("Demo_World");
-                if (worldinfo != null) {
-                    this.mc.displayGuiScreen(new GuiYesNo(this, I18n.format("selectWorld.deleteQuestion"), "'" + worldinfo.getWorldName() + "' " + I18n.format("selectWorld.deleteWarning"), I18n.format("selectWorld.deleteButton"), I18n.format("gui.cancel"), 12));
-                }
-                break;
             // open wiki
             case 20:
                 try{
@@ -609,10 +592,5 @@ public class AunisMainMenu extends GuiMainMenu {
                 }
             }
         }
-
-        /*if (mouseX > this.widthCopyrightRest && mouseX < this.widthCopyrightRest + this.widthCopyright && mouseY > this.height - 10 && mouseY < this.height)
-        {
-            this.mc.displayGuiScreen(new GuiWinGame(false, Runnables.doNothing()));
-        }*/
     }
 }

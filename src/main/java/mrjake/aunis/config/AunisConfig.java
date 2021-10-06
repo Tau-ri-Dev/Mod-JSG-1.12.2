@@ -17,7 +17,10 @@ public class AunisConfig {
 	
 	@Name("Stargate size")
 	@RequiresWorldRestart
-	public static StargateSizeEnum stargateSize = StargateSizeEnum.SMALL; 
+	public static StargateSizeEnum stargateSize = StargateSizeEnum.SMALL;
+
+	@Name("Check for updates")
+	public static boolean enableAutoUpdater = true;
 	
 	@Name("Stargate config options")
 	public static StargateConfig stargateConfig = new StargateConfig();
