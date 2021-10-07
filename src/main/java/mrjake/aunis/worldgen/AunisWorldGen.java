@@ -45,7 +45,7 @@ public class AunisWorldGen implements IWorldGenerator {
 					runGenerator(AunisBlocks.ORE_TRINIUM_BLOCK.getDefaultState(),
 							AunisConfig.worldgenConfig.triniumVeinSize,
 							AunisConfig.worldgenConfig.triniumMaxVeinInChunk, 0, 128,
-							BlockMatcher.forBlock(Blocks.NETHERRACK), world, rand, chunkX, chunkZ);
+							BlockMatcher.forBlock(Blocks.END_STONE), world, rand, chunkX, chunkZ);
 				}
 				break;
 			default:
