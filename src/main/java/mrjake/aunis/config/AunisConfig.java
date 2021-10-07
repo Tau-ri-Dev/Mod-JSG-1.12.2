@@ -514,6 +514,9 @@ public class AunisConfig {
 		@Name("Disable custom positions of buttons")
 		public boolean disablePosButtons = false;
 
+		@Name("Enable debug mode")
+		public boolean debugMode = false;
+
 		@Name("Enable event horizon in mainmenu")
 		public boolean enableEventHorizon = true;
 

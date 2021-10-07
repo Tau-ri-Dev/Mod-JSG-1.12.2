@@ -371,6 +371,25 @@ public class AunisMainMenu extends GuiMainMenu {
         // ------------------------------
         // DRAWING TEXTS
 
+        if(AunisConfig.mainMenuConfig.debugMode) {
+            GlStateManager.pushMatrix();
+            GlStateManager.enableTexture2D();
+            GlStateManager.translate(6, screenCenterHeight - 40, 0);
+            GlStateManager.scale(0.6, 0.6, 0.6);
+            GlStateManager.translate(0, 0, 0);
+            drawString(fontRenderer, "Ring rotation: " + animationStage, 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawString(fontRenderer, "Top chevron position: " + chevronLastAnimationStage, 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawString(fontRenderer, "Active overlay: " + overlay.name(), 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawString(fontRenderer, "Chevrons active? " + chevronsActive, 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawString(fontRenderer, "Event horizon state: " + kawooshState, 0, 0, 0xffffff);
+            GlStateManager.disableTexture2D();
+            GlStateManager.popMatrix();
+        }
+
         String versionInfo = "Aunis version: " + Version;
 
         if (renderButtonsAndStuff) {
