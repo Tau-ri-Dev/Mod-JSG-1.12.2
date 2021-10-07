@@ -182,7 +182,6 @@ public class AunisMainMenu extends GuiMainMenu {
         if(ringAnimationSpeed <= 0.05f) {
             renderButtonsAndStuff = false;
             chevronsActive = true;
-            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.MAINMENU_CHEVRONS_LIGHT_UP, true);
             float step = 0.008f;
             if (kawooshState == 0) {
                 // disable spin and start opening
