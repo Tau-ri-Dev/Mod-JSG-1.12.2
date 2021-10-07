@@ -42,15 +42,15 @@ public class AunisMainMenu extends GuiMainMenu {
     protected static float ringAnimationSpeed = 1.0f;
     protected static boolean speedUpGate = true;
 
-    protected static float chevronLastAnimationStage = 0;
-    protected static boolean chevronsActive = false;
-    protected static boolean chevronShout = true;
-    protected static boolean chevronShoutColapsing = false;
-    protected static int chevronShoutTiming = 0;
+    protected float chevronLastAnimationStage = 0;
+    protected boolean chevronsActive = false;
+    protected boolean chevronShout = true;
+    protected boolean chevronShoutColapsing = false;
+    protected int chevronShoutTiming = 0;
     protected static final int chevronShoutTimingSetting = 16;
-    protected static boolean chevronSound1 = false;
-    protected static boolean chevronSound2 = false;
-    protected static boolean chevronSound3 = false;
+    protected boolean chevronSound1 = false;
+    protected boolean chevronSound2 = false;
+    protected boolean chevronSound3 = false;
     protected BiomeOverlayEnum[] overlays = {
             BiomeOverlayEnum.AGED,
             BiomeOverlayEnum.FROST,
