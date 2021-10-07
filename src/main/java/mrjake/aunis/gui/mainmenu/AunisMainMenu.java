@@ -36,6 +36,13 @@ public class AunisMainMenu extends GuiMainMenu {
 
     // ------------------------------------------
     // DEFINE VARIABLES
+
+    // ---------------------------------------------------
+    // VERSION
+    // this must be same as in version.txt !!!
+    protected static final String Version = "A4.8";
+    // ---------------------------------------------------
+
     protected static float animationStage = 0;
     protected static final float ringAnimationStepSetting = 0.3f;
     protected static float ringAnimationStep = 0.0f;
@@ -66,9 +73,9 @@ public class AunisMainMenu extends GuiMainMenu {
     protected static final ResourceLocation BACKGROUND_TEXTURE = AunisConfig.mainMenuConfig.disableAunisMainMenu ? null : new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");
     protected static final ResourceLocation EVENT_HORIZON_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/event_horizon.jpg");
 
-    protected static final String Version = "A4.8";
     protected static final String Latest = getTextFromGithub("https://raw.githubusercontent.com/MineDragonCZ/Aunis1/master/version.txt");
     protected static int showVersionAlert = 0;
+    protected String nextEvent = "------";
 
     // render kawoosh and event horizon
     protected boolean renderKawoosh = false;
@@ -92,9 +99,14 @@ public class AunisMainMenu extends GuiMainMenu {
      */
     // ------------------------------------------
 
+    public void deleteEvent(){
+        nextEvent = "------";
+    }
+
     // animation of top chevron
     public void updateLastChevron() {
         if (chevronShout) {
+            nextEvent = "Animate chevron";
             if (!chevronSound3) {
                 AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 2, 0), SoundPositionedEnum.MAINMENU_CHEVRON_SHUT, true);
                 chevronSound3 = true;
@@ -104,11 +116,13 @@ public class AunisMainMenu extends GuiMainMenu {
                 if (chevronShoutTiming > chevronShoutTimingSetting) {
                     this.chevronShoutColapsing = true;
                     this.chevronLastAnimationStage -= 0.020f;
+                    nextEvent = "Top chevron up";
                 }
                 else if (chevronShoutTiming == chevronShoutTimingSetting/2) {
                     if (!chevronSound1) {
                         AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 2, 0), SoundPositionedEnum.MAINMENU_CHEVRON_OPEN, true);
                         chevronSound1 = true;
+                        nextEvent = "Top chevron waiting";
                     }
                     chevronShoutTiming++;
                 } else chevronShoutTiming++;
@@ -116,6 +130,7 @@ public class AunisMainMenu extends GuiMainMenu {
             else {
                 // chevron is going down
                 this.chevronLastAnimationStage += 0.020f;
+                nextEvent = "Top chevron down";
             }
 
             if (this.chevronLastAnimationStage < 0) {
@@ -123,6 +138,7 @@ public class AunisMainMenu extends GuiMainMenu {
                     AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1, 2, 0), SoundPositionedEnum.MAINMENU_CHEVRON_SHUT, true);
                     chevronSound2 = true;
                 }
+                nextEvent = "Top chevron reset";
                 if(!chevronsActive) getNextBiomeOverlay(AunisConfig.mainMenuConfig.changingGateOverlay);
                 this.chevronShoutTiming = 0;
                 this.chevronLastAnimationStage = 0;
@@ -133,6 +149,7 @@ public class AunisMainMenu extends GuiMainMenu {
                 this.chevronSound3 = false;
                 this.chevronShoutColapsing = false;
                 if(kawooshState == 0) this.speedUpGate = true;
+                deleteEvent();
             }
         }
     }
@@ -154,6 +171,7 @@ public class AunisMainMenu extends GuiMainMenu {
 
     // next overlay
     public BiomeOverlayEnum getNextBiomeOverlay(boolean doIt) {
+        nextEvent = "Changing overlay";
         if (doIt)
             this.overlay = overlays[new Random().nextInt(overlays.length)];
         else
@@ -185,6 +203,7 @@ public class AunisMainMenu extends GuiMainMenu {
             float step = 0.008f;
             if (kawooshState == 0) {
                 // disable spin and start opening
+                nextEvent = "Switching screens...";
                 kawooshState += (step);
                 AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 1), SoundPositionedEnum.MAINMENU_RING_ROLL, false);
             } else if (kawooshState < 0.51f) kawooshState += (step);
@@ -193,6 +212,21 @@ public class AunisMainMenu extends GuiMainMenu {
                 kawooshState += step;
 
                 renderEventHorizon(true);
+
+                switch (clickedButton) {
+                    case 1:
+                        nextEvent = "Switching to singleplayer...";
+                        break;
+                    case 2:
+                        nextEvent = "Switching to multiplayer...";
+                        break;
+                    case 4:
+                        nextEvent = "Shutting down minecraft client...";
+                        break;
+                    default:
+                        nextEvent = "Button not recognized! (" + clickedButton + ")";
+                        break;
+                }
 
                 AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.MAINMENU_GATE_OPEN, true);
             } else if (kawooshState > 0.8f && kawooshState < 1.61f) {
@@ -371,25 +405,6 @@ public class AunisMainMenu extends GuiMainMenu {
         // ------------------------------
         // DRAWING TEXTS
 
-        if(AunisConfig.mainMenuConfig.debugMode) {
-            GlStateManager.pushMatrix();
-            GlStateManager.enableTexture2D();
-            GlStateManager.translate(6, screenCenterHeight - 40, 0);
-            GlStateManager.scale(0.6, 0.6, 0.6);
-            GlStateManager.translate(0, 0, 0);
-            drawString(fontRenderer, "Ring rotation: " + animationStage, 0, 0, 0xffffff);
-            GlStateManager.translate(0, 10, 0);
-            drawString(fontRenderer, "Top chevron position: " + chevronLastAnimationStage, 0, 0, 0xffffff);
-            GlStateManager.translate(0, 10, 0);
-            drawString(fontRenderer, "Active overlay: " + overlay.name(), 0, 0, 0xffffff);
-            GlStateManager.translate(0, 10, 0);
-            drawString(fontRenderer, "Chevrons active? " + chevronsActive, 0, 0, 0xffffff);
-            GlStateManager.translate(0, 10, 0);
-            drawString(fontRenderer, "Event horizon state: " + kawooshState, 0, 0, 0xffffff);
-            GlStateManager.disableTexture2D();
-            GlStateManager.popMatrix();
-        }
-
         String versionInfo = "Aunis version: " + Version;
 
         if (renderButtonsAndStuff) {
@@ -502,6 +517,38 @@ public class AunisMainMenu extends GuiMainMenu {
 
                 GlStateManager.popMatrix();
             }
+        }
+
+        // ------------------------------
+        // DRAWING DEBUG INFO
+
+        if(AunisConfig.mainMenuConfig.debugMode) {
+            GlStateManager.pushMatrix();
+            GlStateManager.enableTexture2D();
+            GlStateManager.translate(6, screenCenterHeight - 30, 0);
+            GlStateManager.scale(0.6, 0.6, 0.6);
+            GlStateManager.translate(0, 0, 0);
+            drawString(fontRenderer, "Ring rotation: " + animationStage, 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawString(fontRenderer, "Ring speed: " + ringAnimationStep + "deg/tick", 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawString(fontRenderer, "Screen resolution: " + width + "px x " + height + "px", 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawString(fontRenderer, "Screen center: " + screenCenterWidth + "px x " + screenCenterHeight + "px", 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawString(fontRenderer, "Version alert state: " + showVersionAlert, 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawString(fontRenderer, "Top chevron position: " + chevronLastAnimationStage, 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawString(fontRenderer, "Active overlay: " + overlay.name(), 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawString(fontRenderer, "Chevrons active? " + chevronsActive, 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawString(fontRenderer, "Event horizon state: " + kawooshState, 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawString(fontRenderer, "Next event: " + nextEvent, 0, 0, 0xffffff);
+            GlStateManager.disableTexture2D();
+            GlStateManager.popMatrix();
         }
     }
 
