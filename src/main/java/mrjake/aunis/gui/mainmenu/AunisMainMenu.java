@@ -30,19 +30,27 @@ import static mrjake.aunis.gui.mainmenu.GetUpdate.getTextFromGithub;
 @SideOnly(Side.CLIENT)
 public class AunisMainMenu extends GuiMainMenu {
     @SubscribeEvent
-    public static void onSounds(PlaySoundEvent event)
-    {
+    public static void onSounds(PlaySoundEvent event) {
         event.setResultSound(null);
     }
 
     // ------------------------------------------
     // DEFINE VARIABLES
-    protected float animationStage = 0;
-    protected float chevronLastAnimationStage = 0;
-    protected boolean chevronsActive = true;
-    protected boolean playingSound = false;
-    protected boolean chevronShout = true;
-    protected boolean chevronShoutColapsing = false;
+    protected static float animationStage = 0;
+    protected static final float ringAnimationStepSetting = 0.3f;
+    protected static float ringAnimationStep = 0.0f;
+    protected static float ringAnimationSpeed = 1.0f;
+    protected static boolean speedUpGate = true;
+
+    protected static float chevronLastAnimationStage = 0;
+    protected static boolean chevronsActive = false;
+    protected static boolean chevronShout = true;
+    protected static boolean chevronShoutColapsing = false;
+    protected static int chevronShoutTiming = 0;
+    protected static final int chevronShoutTimingSetting = 16;
+    protected static boolean chevronSound1 = false;
+    protected static boolean chevronSound2 = false;
+    protected static boolean chevronSound3 = false;
     protected BiomeOverlayEnum[] overlays = {
             BiomeOverlayEnum.AGED,
             BiomeOverlayEnum.FROST,
@@ -58,7 +66,6 @@ public class AunisMainMenu extends GuiMainMenu {
     protected static final ResourceLocation BACKGROUND_TEXTURE = AunisConfig.mainMenuConfig.disableAunisMainMenu ? null : new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");
     protected static final ResourceLocation EVENT_HORIZON_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/event_horizon.jpg");
 
-
     protected static final String Version = "A4.8";
     protected static final String Latest = getTextFromGithub("https://raw.githubusercontent.com/MineDragonCZ/Aunis1/master/version.txt");
     protected static int showVersionAlert = 0;
@@ -66,6 +73,7 @@ public class AunisMainMenu extends GuiMainMenu {
     // render kawoosh and event horizon
     protected boolean renderKawoosh = false;
     protected boolean renderButtonsAndStuff = true;
+    protected float renderButtonsAlpha = 0.0f;
     protected float kawooshState = 0f;
     protected float gateZoom = 1f;
     protected int clickedButton = 0;
@@ -75,11 +83,11 @@ public class AunisMainMenu extends GuiMainMenu {
     /**
      * ------------------------------------------
      * showVersionAlert indexes:
-     *
+     * <p>
      * 0 -> Version is good
      * 1 -> Alert is open
      * 2 -> Alert closed by client
-     *
+     * <p>
      * ------------------------------------------
      */
     // ------------------------------------------
@@ -87,21 +95,61 @@ public class AunisMainMenu extends GuiMainMenu {
     // animation of top chevron
     public void updateLastChevron() {
         if (chevronShout) {
-            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 2, 0), SoundPositionedEnum.MAINMENU_CHEVRON_SHOUT, true);
+            if (!chevronSound3) {
+                AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 2, 0), SoundPositionedEnum.MAINMENU_CHEVRON_SHUT, true);
+                chevronSound3 = true;
+            }
             if (this.chevronLastAnimationStage >= 0.15f || this.chevronShoutColapsing) {
-                this.chevronShoutColapsing = true;
-                this.chevronLastAnimationStage -= 0.035f;
-            } else {
-                if (this.chevronLastAnimationStage >= 0.149f) this.chevronLastAnimationStage += 0.0005f;
-                else this.chevronLastAnimationStage += 0.035f;
+                // chevron is going up (after timings)
+                if (chevronShoutTiming > chevronShoutTimingSetting) {
+                    this.chevronShoutColapsing = true;
+                    this.chevronLastAnimationStage -= 0.020f;
+                }
+                else if (chevronShoutTiming == chevronShoutTimingSetting/2) {
+                    if (!chevronSound1) {
+                        AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 2, 0), SoundPositionedEnum.MAINMENU_CHEVRON_OPEN, true);
+                        chevronSound1 = true;
+                    }
+                    chevronShoutTiming++;
+                } else chevronShoutTiming++;
+            }
+            else {
+                // chevron is going down
+                this.chevronLastAnimationStage += 0.020f;
             }
 
             if (this.chevronLastAnimationStage < 0) {
+                if (!chevronSound2) {
+                    AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1, 2, 0), SoundPositionedEnum.MAINMENU_CHEVRON_SHUT, true);
+                    chevronSound2 = true;
+                }
+                if(!chevronsActive) getNextBiomeOverlay(AunisConfig.mainMenuConfig.changingGateOverlay);
+                this.chevronShoutTiming = 0;
                 this.chevronLastAnimationStage = 0;
+                this.chevronShoutTiming = 0;
                 this.chevronShout = false;
+                this.chevronSound1 = false;
+                this.chevronSound2 = false;
+                this.chevronSound3 = false;
                 this.chevronShoutColapsing = false;
+                if(kawooshState == 0) this.speedUpGate = true;
             }
         }
+    }
+
+    // slow down and speed up gate ring
+    public void updateRingSpeed(){
+        if(!AunisConfig.mainMenuConfig.gateRotation) return;
+        if (!speedUpGate) {
+            if (ringAnimationSpeed > 0.0f) ringAnimationSpeed -= 0.05f;
+            if(ringAnimationSpeed < 0.05f && kawooshState == 0 && !chevronShout){
+                chevronShout = true;
+            }
+        } else {
+            if (ringAnimationSpeed < 1.0f) ringAnimationSpeed += 0.05f;
+        }
+        ringAnimationStep = ringAnimationStepSetting * ringAnimationSpeed;
+        animationStage += ringAnimationStep;
     }
 
     // next overlay
@@ -116,86 +164,83 @@ public class AunisMainMenu extends GuiMainMenu {
 
     // play sound
     public void updateSound() {
-        AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1,0,0), SoundPositionedEnum.MAINMENU_MUSIC, AunisConfig.mainMenuConfig.playMusic);
-        AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0,0,1), SoundPositionedEnum.MAINMENU_RING_ROLL, (AunisConfig.mainMenuConfig.gateRotation && kawooshState == 0));
+        AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1, 0, 0), SoundPositionedEnum.MAINMENU_MUSIC, AunisConfig.mainMenuConfig.playMusic);
+        AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 1), SoundPositionedEnum.MAINMENU_RING_ROLL,
+                (AunisConfig.mainMenuConfig.gateRotation && kawooshState == 0 && ringAnimationSpeed > 0.0f));
     }
 
     // update ring rotation and overlay
     public void updateAnimation() {
-        if (AunisConfig.mainMenuConfig.gateRotation && kawooshState == 0) animationStage += 0.3f;
-        if (animationStage >= 360) animationStage = 0f;
-        switch ((int) animationStage) {
-            case 359:
-                //case 270:
-            case 180:
-                //case 90:
-                this.chevronShout = true;
-                getNextBiomeOverlay(AunisConfig.mainMenuConfig.changingGateOverlay);
-                break;
-        }
+        if (animationStage > 360) animationStage = 0f;
+        if((animationStage > 358 && animationStage < 359) || (animationStage > 178 && animationStage < 179)) speedUpGate = false;
+        updateRingSpeed();
     }
 
     // EVENT HORIZON RENDER
     public void loadGame() {
-        float step = 0.008f;
-        if (kawooshState == 0) {
-            // disable spin and start opening
-            kawooshState += (step);
-            chevronShout = true;
-            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 1), SoundPositionedEnum.MAINMENU_RING_ROLL, false);
-        }
-        else if (kawooshState < 0.51f) kawooshState += (step);
-        else if (kawooshState > 0.5f && kawooshState < 0.81f) {
-            // making kawoosh
-            kawooshState += step;
+        speedUpGate = false;
+        if(ringAnimationSpeed <= 0.05f) {
+            renderButtonsAndStuff = false;
+            chevronsActive = true;
+            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.MAINMENU_CHEVRONS_LIGHT_UP, true);
+            float step = 0.008f;
+            if (kawooshState == 0) {
+                // disable spin and start opening
+                kawooshState += (step);
+                AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 1), SoundPositionedEnum.MAINMENU_RING_ROLL, false);
+            } else if (kawooshState < 0.51f) kawooshState += (step);
+            else if (kawooshState > 0.5f && kawooshState < 0.81f) {
+                // making kawoosh
+                kawooshState += step;
 
-            renderEventHorizon(true);
+                renderEventHorizon(true);
 
-            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.MAINMENU_GATE_OPEN, true);
-        }
-        else if (kawooshState > 0.8f && kawooshState < 1.61f) {
-            // render event horizon
-            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1, 0, 1), SoundPositionedEnum.WORMHOLE_LOOP, true);
+                AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.MAINMENU_GATE_OPEN, true);
+            } else if (kawooshState > 0.8f && kawooshState < 1.61f) {
+                // render event horizon
+                AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1, 0, 1), SoundPositionedEnum.WORMHOLE_LOOP, true);
 
-            renderEventHorizon(false);
+                renderEventHorizon(false);
 
-            kawooshState += (step + 0.008f);
-            gateZoom += 0.10f;
-        }
-        else if (kawooshState > 1.6f && kawooshState < 2.0f) {
-            // going to gate and still render horizon
-            renderEventHorizon(false);
+                kawooshState += (step + 0.008f);
+                gateZoom += 0.10f;
+            } else if (kawooshState > 1.6f && kawooshState < 2.0f) {
+                // going to gate and still render horizon
+                renderEventHorizon(false);
 
-            kawooshState += step;
-            gateZoom += (gateZoom * 2) / 10;
-        }
-        else if (kawooshState > 1.99f && kawooshState < 2.2) {
-            // turn off everything and render gui
+                kawooshState += step;
+                gateZoom += (gateZoom * 2) / 10;
+            } else if (kawooshState > 1.99f && kawooshState < 2.2) {
+                // turn off everything and render gui
 
-            switch(clickedButton) {
-                case 1:
-                    this.mc.displayGuiScreen(new GuiWorldSelection(this));
-                    break;
-                case 2:
-                    this.mc.displayGuiScreen(new GuiMultiplayer(this));
-                    break;
-                default:
-                    System.out.println("Wrong button clicked!!! This is a bug!");
-                    break;
+                switch (clickedButton) {
+                    case 1:
+                        this.mc.displayGuiScreen(new GuiWorldSelection(this));
+                        break;
+                    case 2:
+                        this.mc.displayGuiScreen(new GuiMultiplayer(this));
+                        break;
+                    case 4:
+                        this.mc.shutdown();
+                        break;
+                    default:
+                        System.out.println("Wrong button clicked!!! This is a bug! (" + clickedButton + ")");
+                        break;
+                }
+
+                kawooshState = 2.2f;
+                renderKawoosh = false;
+                AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1, 0, 1), SoundPositionedEnum.WORMHOLE_LOOP, false);
+                AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.MAINMENU_GATE_GO, true);
+                renderButtonsAndStuff = true;
+                clickedButton = 0;
             }
-
-            kawooshState = 2.2f;
-            renderKawoosh = false;
-            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1, 0, 1), SoundPositionedEnum.WORMHOLE_LOOP, false);
-            AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.MAINMENU_GATE_GO, true);
-            renderButtonsAndStuff = true;
-            clickedButton = 0;
         }
     }
 
     // EVENT HORIZON RENDER
-    public void renderEventHorizon(boolean doKawoosh){
-        if(!doKawoosh) {
+    public void renderEventHorizon(boolean doKawoosh) {
+        if (!doKawoosh) {
             quadStrips.clear();
             for (int i = 0; i < 16; i++) {
                 quadStrips.add(new StargateRendererStatic.QuadStrip(i));
@@ -208,8 +253,7 @@ public class AunisMainMenu extends GuiMainMenu {
                 strip.render(1.0f, false, 1.0f, 0, (byte) -1);
             }
             GlStateManager.popMatrix();
-        }
-        else{
+        } else {
             quadStrips.clear();
             for (int i = 0; i < 16; i++) {
                 quadStrips.add(new StargateRendererStatic.QuadStrip(i));
@@ -246,11 +290,6 @@ public class AunisMainMenu extends GuiMainMenu {
         GlStateManager.enableAlpha();
         this.mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
         drawScaledCustomSizeModalRect(0, 0, 0, 0, width, height, width, height, width, height);
-
-        // background gradient
-        //this.drawGradientRect(0, 0, this.width, this.height, -2130706433, 16777215);
-        //this.drawGradientRect(0, 0, this.width, this.height, 0, Integer.MIN_VALUE);
-
         GlStateManager.disableAlpha();
         GlStateManager.disableBlend();
         GlStateManager.disableTexture2D();
@@ -274,7 +313,7 @@ public class AunisMainMenu extends GuiMainMenu {
         // DRAWING EVENT HORIZON
 
         //if(renderKawoosh && ((int) (animationStage+20) % (int) 8.7 == 0)) loadGame();
-        if(renderKawoosh) loadGame();
+        if (renderKawoosh) loadGame();
 
         // ------------------------------
         // DRAWING GATE
@@ -308,9 +347,15 @@ public class AunisMainMenu extends GuiMainMenu {
             ElementEnum.MILKYWAY_CHEVRON_FRAME_MAINMENU.bindTextureAndRender(this.overlay);
             GlStateManager.translate(0, chevronOffset, 0);
             if ((i == 6 || i == 7) || !this.chevronsActive) {
-                ElementEnum.MILKYWAY_CHEVRON_LIGHT_MAINMENU.bindTextureAndRender(this.overlay);
-                GlStateManager.translate(0, -2 * chevronOffset, 0);
-                ElementEnum.MILKYWAY_CHEVRON_MOVING_MAINMENU.bindTextureAndRender(this.overlay);
+                if (i == 8 && ((chevronShoutTiming > (chevronShoutTimingSetting/2)) && chevronShout)) {
+                    ElementEnum.MILKYWAY_CHEVRON_LIGHT_ACTIVE_MAINMENU.bindTextureAndRender(this.overlay);
+                    GlStateManager.translate(0, -2 * chevronOffset, 0);
+                    ElementEnum.MILKYWAY_CHEVRON_MOVING_ACTIVE_MAINMENU.bindTextureAndRender(this.overlay);
+                } else {
+                    ElementEnum.MILKYWAY_CHEVRON_LIGHT_MAINMENU.bindTextureAndRender(this.overlay);
+                    GlStateManager.translate(0, -2 * chevronOffset, 0);
+                    ElementEnum.MILKYWAY_CHEVRON_MOVING_MAINMENU.bindTextureAndRender(this.overlay);
+                }
             } else {
                 ElementEnum.MILKYWAY_CHEVRON_LIGHT_ACTIVE_MAINMENU.bindTextureAndRender(this.overlay);
                 GlStateManager.translate(0, -2 * chevronOffset, 0);
@@ -329,7 +374,9 @@ public class AunisMainMenu extends GuiMainMenu {
 
         String versionInfo = "Aunis version: " + Version;
 
-        if (renderButtonsAndStuff){
+        if (renderButtonsAndStuff) {
+            if(renderButtonsAlpha < 1.0f && showVersionAlert != 1) renderButtonsAlpha += 0.05f;
+
             if (!Version.equals(Latest) && AunisConfig.enableAutoUpdater) {
                 versionInfo += " Latest build: " + Latest;
                 if (showVersionAlert != 2) showVersionAlert = 1;
@@ -354,6 +401,9 @@ public class AunisMainMenu extends GuiMainMenu {
 
             // ------------------------------
             // DRAWING MAIN TITLE
+
+            GlStateManager.pushMatrix();
+            //GlStateManager.scale(renderButtonsAlpha, renderButtonsAlpha, renderButtonsAlpha);
 
             GlStateManager.pushMatrix();
             GlStateManager.enableTexture2D();
@@ -382,6 +432,8 @@ public class AunisMainMenu extends GuiMainMenu {
                 guiLabel.drawLabel(this.mc, mouseX, mouseY);
             }
 
+            GlStateManager.popMatrix();
+
             // ------------------------------
             // DRAWING VERSION ALERT
 
@@ -398,7 +450,7 @@ public class AunisMainMenu extends GuiMainMenu {
                 GlStateManager.translate(screenCenterWidth, screenCenterHeight - 60, 0);
                 GlStateManager.scale(1.5, 1.5, 1.5);
 
-                if(Latest.equals("Error was occurred while updating Aunis!")){
+                if (Latest.equals("Error was occurred while updating Aunis!")) {
                     drawCenteredString(fontRenderer, "Could not connect to Aunis network! (github)", 0, 0, 0xffffff);
                     GlStateManager.popMatrix();
 
@@ -408,8 +460,7 @@ public class AunisMainMenu extends GuiMainMenu {
                     drawCenteredString(fontRenderer, "We can not check for updates,", 0, 0, 0xffffff);
                     GlStateManager.translate(0, 10, 0);
                     drawCenteredString(fontRenderer, "because your connection to network is bad :(", 0, 0, 0xffffff);
-                }
-                else {
+                } else {
                     drawCenteredString(fontRenderer, "You are using out of date version of Aunis mod.", 0, 0, 0xffffff);
                     GlStateManager.popMatrix();
 
@@ -459,7 +510,7 @@ public class AunisMainMenu extends GuiMainMenu {
         this.aunisButtonList.clear();
         int j = this.height / 4 + 48;
 
-        if(!AunisConfig.mainMenuConfig.disablePosButtons) {
+        if (!AunisConfig.mainMenuConfig.disablePosButtons) {
             // single
             this.aunisButtonList.add(new AunisGuiButton(1, this.width / 2 - 100, j, I18n.format("menu.singleplayer")));
             // multi
@@ -474,8 +525,7 @@ public class AunisMainMenu extends GuiMainMenu {
             this.aunisButtonList.add(new AunisGuiButton(0, 6, 6, 98, 20, I18n.format("menu.options")));
             // quit
             this.aunisButtonList.add(new AunisGuiButton(4, this.width - 6 - 98, this.height - 6 - 20, 98, 20, I18n.format("menu.quit")));
-        }
-        else{
+        } else {
             // single
             this.aunisButtonList.add(new AunisGuiButton(1, this.width / 2 - 100, j, I18n.format("menu.singleplayer")));
             // multi
@@ -502,23 +552,22 @@ public class AunisMainMenu extends GuiMainMenu {
                 this.mc.displayGuiScreen(new GuiOptions(this, this.mc.gameSettings));
                 break;
             case 1:
-                if(AunisConfig.mainMenuConfig.enableEventHorizon) {
+                if (AunisConfig.mainMenuConfig.enableEventHorizon) {
                     clickedButton = 1;
-                    renderButtonsAndStuff = false;
                     renderKawoosh = true;
-                }
-                else this.mc.displayGuiScreen(new GuiWorldSelection(this));
+                } else this.mc.displayGuiScreen(new GuiWorldSelection(this));
                 break;
             case 2:
-                if(AunisConfig.mainMenuConfig.enableEventHorizon) {
+                if (AunisConfig.mainMenuConfig.enableEventHorizon) {
                     clickedButton = 2;
-                    renderButtonsAndStuff = false;
                     renderKawoosh = true;
-                }
-                else this.mc.displayGuiScreen(new GuiMultiplayer(this));
+                } else this.mc.displayGuiScreen(new GuiMultiplayer(this));
                 break;
             case 4:
-                this.mc.shutdown();
+                if (AunisConfig.mainMenuConfig.enableEventHorizon) {
+                    clickedButton = 4;
+                    renderKawoosh = true;
+                } else this.mc.shutdown();
                 break;
             case 5:
                 this.mc.displayGuiScreen(new GuiLanguage(this, this.mc.gameSettings, this.mc.getLanguageManager()));
@@ -529,12 +578,11 @@ public class AunisMainMenu extends GuiMainMenu {
                 break;
             // open wiki
             case 20:
-                try{
+                try {
                     Class<?> oclass = Class.forName("java.awt.Desktop");
-                    Object object = oclass.getMethod("getDesktop").invoke((Object)null);
+                    Object object = oclass.getMethod("getDesktop").invoke((Object) null);
                     oclass.getMethod("browse", URI.class).invoke(object, new URI("https://github.com/MineDragonCZ/Aunis1/wiki"));
-                }
-                catch (Throwable throwable){
+                } catch (Throwable throwable) {
                     System.out.println("Couldn't open link");
                 }
                 break;
@@ -544,12 +592,11 @@ public class AunisMainMenu extends GuiMainMenu {
                 break;
             // open our discord
             case 22:
-                try{
+                try {
                     Class<?> oclass = Class.forName("java.awt.Desktop");
-                    Object object = oclass.getMethod("getDesktop").invoke((Object)null);
+                    Object object = oclass.getMethod("getDesktop").invoke((Object) null);
                     oclass.getMethod("browse", URI.class).invoke(object, new URI("https://discord.gg/qU7fuNDxAs"));
-                }
-                catch (Throwable throwable){
+                } catch (Throwable throwable) {
                     System.out.println("Couldn't open link");
                 }
                 break;
@@ -559,7 +606,7 @@ public class AunisMainMenu extends GuiMainMenu {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         if (mouseButton == 0 && renderButtonsAndStuff) {
-            if(showVersionAlert != 1) {
+            if (showVersionAlert != 1) {
                 for (int i = 0; i < this.aunisButtonList.size(); ++i) {
                     GuiButton guibutton = this.aunisButtonList.get(i);
 

@@ -102,6 +102,8 @@ public class Aunis {
 
         OreDictionary.registerOre("oreTrinium", AunisBlocks.ORE_TRINIUM_BLOCK);
         OreDictionary.registerOre("oreTitanium", AunisBlocks.ORE_TITANIUM_BLOCK);
+        OreDictionary.registerOre("ingotTrinium", AunisItems.TRINIUM_INGOT);
+        OreDictionary.registerOre("ingotTitanium", AunisItems.TITANIUM_INGOT);
 
     	// ----------------------------------------------------------------------------------------------------------------
     	// OpenComputers

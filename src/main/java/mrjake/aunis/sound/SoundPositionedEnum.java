@@ -18,7 +18,9 @@ public enum SoundPositionedEnum {
   MAINMENU_MUSIC(6, "mainmenu_music", AunisSoundHelper.AUNIS_SOUND_CATEGORY, true),
   MAINMENU_GATE_OPEN(7, "gate_milkyway_open", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
   MAINMENU_GATE_GO(8, "wormhole_go", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
-  MAINMENU_CHEVRON_SHOUT(9, "gate_milkyway_chevron_open", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false);
+  MAINMENU_CHEVRON_SHUT(9, "gate_milkyway_chevron_shut", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
+  MAINMENU_CHEVRON_OPEN(10, "gate_milkyway_chevron_open", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
+  MAINMENU_CHEVRONS_LIGHT_UP(11, "gate_milkyway_incoming", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false);
 
   public int id;
   public ResourceLocation resourceLocation;
