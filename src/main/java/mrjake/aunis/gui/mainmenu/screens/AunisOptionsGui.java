@@ -55,7 +55,8 @@ public class AunisOptionsGui extends GuiOptions {
 
     // render kawoosh and event horizon
     protected float kawooshState = 0f;
-    protected float gateZoom = 1f;
+    protected float gateZoom = 0.0f;
+    protected float gatePos = 0.0f;
 
     // options vars
     private static final GameSettings.Options[] SCREEN_OPTIONS = new GameSettings.Options[] {GameSettings.Options.FOV};
@@ -64,6 +65,7 @@ public class AunisOptionsGui extends GuiOptions {
     private GuiButton difficultyButton;
     private GuiLockIconButton lockButton;
     protected String title = "Options";
+    protected boolean isUnloading = false;
 
     /**
      * ------------------------------------------
@@ -98,6 +100,26 @@ public class AunisOptionsGui extends GuiOptions {
 
     // update ring rotation and overlay
     public void updateAnimation() {
+        this.screenCenterHeight = (((float) height) / 2f);
+        this.screenCenterWidth = ((float) width) / 2f;
+
+        if(gateZoom == 0.0f) gateZoom = ((((float) height) / 10f) - 3);
+        if(gatePos == 0.0f) gatePos = ((float) width) / 2f;
+
+        float step = 8f;
+        if(!isUnloading) {
+            if (this.gatePos < (this.width - 54f)) this.gatePos += step * 4f;
+            if (this.gateZoom < (this.width / 6f)) this.gateZoom += step;
+
+            if (this.gatePos > (this.width - 57f)) this.gatePos -= step * 4f;
+            if (this.gateZoom > ((this.width / 6f) + 5f)) this.gateZoom -= step;
+        }
+        else{
+            if (this.gatePos > 0.0f) this.gatePos -= step * 4f;
+            if (this.gateZoom > 0.0f) this.gateZoom -= step;
+
+            if (this.gatePos+((step*4) + 25) <= ((float) width) / 2f) this.mc.displayGuiScreen(this.lastScreen);
+        }
         if (animationStage > 360) animationStage = 0f;
         updateRingSpeed();
     }
@@ -105,8 +127,6 @@ public class AunisOptionsGui extends GuiOptions {
     // RENDER MAIN MENU
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        this.screenCenterHeight = (((float) height) / 2f);
-        this.screenCenterWidth = ((float) width) / 2f;
         // ------------------------------
         // ANIMATIONS AND SOUNDS
 
@@ -135,8 +155,8 @@ public class AunisOptionsGui extends GuiOptions {
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.shadeModel(7425);
-        GlStateManager.translate((width - 45f) + screenCenterWidth, screenCenterHeight, 0f);
-        GlStateManager.scale(width / 10f, width / 10f, width / 10f);
+        GlStateManager.translate(this.gatePos, screenCenterHeight, 0f);
+        GlStateManager.scale(this.gateZoom, this.gateZoom, this.gateZoom);
         GlStateManager.rotate(-180f, 0f, 0f, 1f);
         GlStateManager.rotate(180f, 0f, 1f, 0f);
 
@@ -181,19 +201,21 @@ public class AunisOptionsGui extends GuiOptions {
         // ------------------------------
         // DRAWING BUTTONS
 
-        GlStateManager.pushMatrix();
-        for (GuiButton guiButton : this.aunisButtonList) {
-            ((AunisGuiButton) guiButton).drawButton(this.mc, mouseX, mouseY, partialTicks);
-        }
+        if(!isUnloading) {
+            GlStateManager.pushMatrix();
+            for (GuiButton guiButton : this.aunisButtonList) {
+                ((AunisGuiButton) guiButton).drawButton(this.mc, mouseX, mouseY, partialTicks);
+            }
 
-        for (GuiButton guiButton : this.aunisButtonSliders) {
-            ((AunisGuiSlider) guiButton).drawButton(this.mc, mouseX, mouseY, partialTicks);
-        }
+            for (GuiButton guiButton : this.aunisButtonSliders) {
+                ((AunisGuiSlider) guiButton).drawButton(this.mc, mouseX, mouseY, partialTicks);
+            }
 
-        for (GuiLabel guiLabel : this.labelList) {
-            guiLabel.drawLabel(this.mc, mouseX, mouseY);
+            for (GuiLabel guiLabel : this.labelList) {
+                guiLabel.drawLabel(this.mc, mouseX, mouseY);
+            }
+            GlStateManager.popMatrix();
         }
-        GlStateManager.popMatrix();
     }
 
     protected void frame(int x, int y, int w, int h, int thickness, int borderColor, int background) {
@@ -301,7 +323,7 @@ public class AunisOptionsGui extends GuiOptions {
             if (button.id == 200)
             {
                 this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(this.lastScreen);
+                this.isUnloading = true;
             }
 
             if (button.id == 105)
