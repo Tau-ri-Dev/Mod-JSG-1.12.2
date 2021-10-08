@@ -2,6 +2,7 @@ package mrjake.aunis.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.settings.GameSettings;
 
 public class AunisGuiButton extends GuiButton {	
 	public AunisGuiButton(int id, int x, int y, int w, int h, String string) {

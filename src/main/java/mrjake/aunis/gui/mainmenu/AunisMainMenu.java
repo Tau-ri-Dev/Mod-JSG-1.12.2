@@ -3,6 +3,7 @@ package mrjake.aunis.gui.mainmenu;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.AunisGuiButton;
+import mrjake.aunis.gui.mainmenu.screens.AunisOptionsGui;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
@@ -51,7 +52,7 @@ public class AunisMainMenu extends GuiMainMenu {
 
     protected float chevronLastAnimationStage = 0;
     protected boolean chevronsActive = false;
-    protected boolean chevronShout = true;
+    protected boolean chevronShout = false;
     protected boolean chevronShoutColapsing = false;
     protected int chevronShoutTiming = 0;
     protected static final int chevronShoutTimingSetting = 16;
@@ -338,7 +339,8 @@ public class AunisMainMenu extends GuiMainMenu {
         GlStateManager.enableAlpha();
         GlStateManager.shadeModel(7425);
         GlStateManager.translate(screenCenterWidth, screenCenterHeight, 0f);
-        GlStateManager.scale(gateZoom + 30, gateZoom + 30, gateZoom + 30);
+        //GlStateManager.scale(gateZoom + 30, gateZoom + 30, gateZoom + 30);
+        GlStateManager.scale(gateZoom + ((height / 10f) - 3), gateZoom + ((height / 10f) - 3), gateZoom + ((height / 10f) - 3));
         GlStateManager.rotate(-180f, 0f, 0f, 1f);
         GlStateManager.rotate(180f, 0f, 1f, 0f);
 
@@ -614,7 +616,7 @@ public class AunisMainMenu extends GuiMainMenu {
         switch (button.id) {
             // main menu screens
             case 0:
-                this.mc.displayGuiScreen(new GuiOptions(this, this.mc.gameSettings));
+                this.mc.displayGuiScreen(new AunisOptionsGui(this, this.mc.gameSettings, overlay));
                 break;
             case 1:
                 if (AunisConfig.mainMenuConfig.enableEventHorizon) {
@@ -688,19 +690,21 @@ public class AunisMainMenu extends GuiMainMenu {
                     }
                 }
             }
-            for (int i = 0; i < this.versionButtons.size(); ++i) {
-                GuiButton guibutton = this.versionButtons.get(i);
+            if(showVersionAlert == 1) {
+                for (int i = 0; i < this.versionButtons.size(); ++i) {
+                    GuiButton guibutton = this.versionButtons.get(i);
 
-                if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
-                    net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre event = new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, this.versionButtons);
-                    if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
-                        break;
-                    guibutton = event.getButton();
-                    this.selectedButton = guibutton;
-                    guibutton.playPressSound(this.mc.getSoundHandler());
-                    this.actionPerformed(guibutton);
-                    if (this.equals(this.mc.currentScreen))
-                        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.getButton(), this.versionButtons));
+                    if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
+                        net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre event = new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, this.versionButtons);
+                        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
+                            break;
+                        guibutton = event.getButton();
+                        this.selectedButton = guibutton;
+                        guibutton.playPressSound(this.mc.getSoundHandler());
+                        this.actionPerformed(guibutton);
+                        if (this.equals(this.mc.currentScreen))
+                            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.getButton(), this.versionButtons));
+                    }
                 }
             }
         }
