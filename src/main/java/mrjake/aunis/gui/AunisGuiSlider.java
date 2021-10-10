@@ -1,8 +1,10 @@
 package mrjake.aunis.gui;
 
+import mrjake.aunis.gui.mainmenu.screens.options.AunisAudioOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -12,6 +14,8 @@ public class AunisGuiSlider extends AunisGuiButton
 {
     private float sliderValue;
     public boolean dragging;
+    protected int xpos = 0;
+    protected int ypos = 0;
     private final GameSettings.Options options;
     private final float minValue;
     private final float maxValue;
@@ -19,6 +23,8 @@ public class AunisGuiSlider extends AunisGuiButton
     public AunisGuiSlider(int buttonId, int x, int y, GameSettings.Options optionIn)
     {
         this(buttonId, x, y, optionIn, 0.0F, 1.0F);
+        this.xpos = x;
+        this.ypos = y;
     }
 
     public AunisGuiSlider(int buttonId, int x, int y, GameSettings.Options optionIn, float minValueIn, float maxValue)
@@ -51,11 +57,7 @@ public class AunisGuiSlider extends AunisGuiButton
                 this.sliderValue = this.options.normalizeValue(f);
                 this.displayString = mc.gameSettings.getKeyBinding(this.options);
             }
-
-            mc.getTextureManager().bindTexture(BUTTON_TEXTURES);
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            this.drawTexturedModalRect(this.x + (int)(this.sliderValue * (float)(this.width - 8)), this.y, 0, 66, 4, 20);
-            this.drawTexturedModalRect(this.x + (int)(this.sliderValue * (float)(this.width - 8)) + 4, this.y, 196, 66, 4, 20);
+            drawRect(this.xpos + (int)(this.sliderValue * (float)(this.width - 8)), this.ypos, this.xpos + (int)(this.sliderValue * (float)(this.width - 8)) + 8, this.ypos + 20, GuiBase.FRAME_COLOR);
         }
     }
 
@@ -80,4 +82,28 @@ public class AunisGuiSlider extends AunisGuiButton
     {
         this.dragging = false;
     }
+    @Override
+    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+        if (this.visible) {
+            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+
+            int fgcolor = 0xCCCCCC;
+            int bgcolor = 0xFF1D2026;
+
+            if (!this.enabled) {
+                fgcolor = 10526880;
+            }
+
+            else if (this.hovered) {
+                fgcolor = 0xFFFFFF;
+                bgcolor = 0xFF313640;
+            }
+
+            drawRect(x, y, x+width, y+height, GuiBase.FRAME_COLOR);
+            drawRect(x+1, y+1, x+width-1, y+height-1, bgcolor);
+            this.mouseDragged(mc, mouseX, mouseY);
+            this.drawCenteredString(mc.fontRenderer, this.displayString, this.x + this.width / 2, this.y + (this.height - 8) / 2, fgcolor);
+        }
+    }
+
 }

@@ -1,42 +1,42 @@
-package mrjake.aunis.gui.mainmenu.screens;
+package mrjake.aunis.gui.mainmenu.screens.options;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.AunisGuiButton;
-import mrjake.aunis.gui.AunisGuiLockIconButton;
 import mrjake.aunis.gui.AunisGuiSlider;
 import mrjake.aunis.gui.AunisOptionButton;
-import mrjake.aunis.gui.mainmenu.screens.options.AunisAudioOptions;
-import mrjake.aunis.gui.mainmenu.screens.options.AunisLanguageOptions;
-import mrjake.aunis.gui.mainmenu.screens.options.AunisResourcePacksOptions;
+import mrjake.aunis.gui.GuiBase;
+import mrjake.aunis.gui.mainmenu.AunisGuiSliderSounds;
+import mrjake.aunis.gui.mainmenu.screens.resourcepacks.AunisGuiResourcePackSelected;
+import mrjake.aunis.gui.mainmenu.screens.resourcepacks.AunisGuiResourcePacksAvailable;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
 import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundPositionedEnum;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.ResourcePackListEntry;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-public class AunisOptionsGui extends GuiOptions {
+public class AunisAudioOptions extends GuiScreenOptionsSounds {
 
-    public AunisOptionsGui(GuiScreen lastScreen, GameSettings settings, BiomeOverlayEnum overlay) {
-        super(lastScreen, settings);
-        this.lastScreen = lastScreen;
-        this.settings = settings;
-        this.overlay = overlay;
-    }
     @SubscribeEvent
     public static void onSounds(PlaySoundEvent event) {
         event.setResultSound(null);
@@ -51,25 +51,26 @@ public class AunisOptionsGui extends GuiOptions {
     protected float ringAnimationSpeed = 1.0f;
     protected final boolean speedUpGate = true;
 
+    protected AunisLanguageOptions.List list;
+
+    protected final GuiScreen parent;
+    protected java.util.List<ResourcePackListEntry> availableResourcePacks;
+    protected java.util.List<ResourcePackListEntry> selectedResourcePacks;
+    protected AunisGuiResourcePacksAvailable availableResourcePacksList;
+    protected AunisGuiResourcePackSelected selectedResourcePacksList;
+    protected boolean changed;
+
     protected BiomeOverlayEnum overlay;
     protected float screenCenterHeight = (((float) height) / 2f);
     protected float screenCenterWidth = ((float) width) / 2f;
-    protected List<GuiButton> aunisButtonList = new ArrayList<>();
-    protected List<GuiButton> aunisButtonSliders = new ArrayList<>();
+    protected java.util.List<GuiButton> aunisButtonList = new ArrayList<>();
+    protected java.util.List<GuiButton> aunisButtonSliders = new ArrayList<>();
     protected static final ResourceLocation BACKGROUND_TEXTURE = AunisConfig.mainMenuConfig.disableAunisMainMenu ? null : new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");
 
     // render kawoosh and event horizon
     protected float kawooshState = 0f;
     protected float gateZoom = 0.0f;
     protected float gatePos = 0.0f;
-
-    // options vars
-    private static final GameSettings.Options[] SCREEN_OPTIONS = new GameSettings.Options[] {GameSettings.Options.FOV};
-    private final GuiScreen lastScreen;
-    private final GameSettings settings;
-    private GuiButton difficultyButton;
-    private GuiLockIconButton lockButton;
-    protected String title = "Options";
     protected boolean isUnloading = false;
 
     /**
@@ -83,6 +84,69 @@ public class AunisOptionsGui extends GuiOptions {
      * ------------------------------------------
      */
     // ------------------------------------------
+
+    private final GameSettings game_settings_4;
+    protected String title = "Options";
+    private String offDisplayString;
+
+    public AunisAudioOptions(GuiScreen parentIn, GameSettings settingsIn, BiomeOverlayEnum overlay){
+        super(parentIn, settingsIn);
+        this.parent = parentIn;
+        this.game_settings_4 = settingsIn;
+        this.overlay = overlay;
+    }
+
+    public void initGui()
+    {
+        this.title = I18n.format("options.sounds.title");
+        this.offDisplayString = I18n.format("options.off");
+        int i = 0;
+        aunisButtonList.clear();
+        this.aunisButtonList.add(new AunisAudioOptions.Button(SoundCategory.MASTER.ordinal(), this.width / 2 - 155 + i % 2 * 160, this.height / 6 - 12 + 24 * (i >> 1), SoundCategory.MASTER, true));
+        i = i + 2;
+
+        for (SoundCategory soundcategory : SoundCategory.values())
+        {
+            if (soundcategory != SoundCategory.MASTER)
+            {
+                this.aunisButtonList.add(new AunisAudioOptions.Button(soundcategory.ordinal(), this.width / 2 - 155 + i % 2 * 160, this.height / 6 - 12 + 24 * (i >> 1), soundcategory, false));
+                ++i;
+            }
+        }
+
+        int k = this.height / 6 - 12;
+        ++i;
+        this.aunisButtonList.add(new AunisOptionButton(201, this.width / 2 - 100, k + 24 * (i >> 1), GameSettings.Options.SHOW_SUBTITLES, this.game_settings_4.getKeyBinding(GameSettings.Options.SHOW_SUBTITLES)));
+        this.aunisButtonList.add(new AunisGuiButton(200, this.width / 2 - 100, this.height / 6 + 168, I18n.format("gui.done")));
+    }
+
+    protected void keyTyped(char typedChar, int keyCode) throws IOException
+    {
+        if (keyCode == 1)
+        {
+            this.mc.gameSettings.saveOptions();
+        }
+
+        super.keyTyped(typedChar, keyCode);
+    }
+
+    protected void actionPerformed(GuiButton button) throws IOException
+    {
+        if (button.enabled)
+        {
+            if (button.id == 200)
+            {
+                this.mc.gameSettings.saveOptions();
+                this.isUnloading = true;
+            }
+            else if (button.id == 201)
+            {
+                this.mc.gameSettings.setOptionValue(GameSettings.Options.SHOW_SUBTITLES, 1);
+                button.displayString = this.mc.gameSettings.getKeyBinding(GameSettings.Options.SHOW_SUBTITLES);
+                this.mc.gameSettings.saveOptions();
+            }
+        }
+    }
 
     // slow down and speed up gate ring
     public void updateRingSpeed(){
@@ -108,30 +172,27 @@ public class AunisOptionsGui extends GuiOptions {
         this.screenCenterHeight = (((float) height) / 2f);
         this.screenCenterWidth = ((float) width) / 2f;
 
-        if(gateZoom == 0.0f) gateZoom = ((((float) height) / 10f) - 3);
-        if(gatePos == 0.0f) gatePos = ((float) width) / 2f;
+        if(gateZoom == 0.0f) gateZoom = this.width / 6f;
+        if(gatePos == 0.0f) gatePos = (this.width - 54f);
 
         float step = 8f;
         if(!isUnloading) {
-            if (this.gatePos < (this.width - 54f)) this.gatePos += step * 4f;
-            if (this.gateZoom < (this.width / 6f)) this.gateZoom += step;
+            if (this.gatePos < 54f) this.gatePos += step * 4f;
 
-            if (this.gatePos > (this.width - 57f)) this.gatePos -= step * 4f;
-            if (this.gateZoom > ((this.width / 6f) + 5f)) this.gateZoom -= step;
+            if (this.gatePos > 57f) this.gatePos -= step * 4f;
         }
         else{
-            if (this.gatePos > 0.0f) this.gatePos -= step * 4f;
-            if (this.gateZoom > 0.0f) this.gateZoom -= step;
+            if (this.gatePos < (this.width - 54f)) this.gatePos += step * 4f;
 
-            if (this.gatePos+((step*4) + 25) <= ((float) width) / 2f) this.mc.displayGuiScreen(this.lastScreen);
+            if (this.gatePos+((step*4) + 25) >= (this.width - 54f)) this.mc.displayGuiScreen(this.parent);
         }
         if (animationStage > 360) animationStage = 0f;
         updateRingSpeed();
     }
 
-    // RENDER MAIN MENU
+    // RENDER GUI
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void drawScreen(int mouseX, int mouseY, float partialTicks){
         // ------------------------------
         // ANIMATIONS AND SOUNDS
 
@@ -208,6 +269,9 @@ public class AunisOptionsGui extends GuiOptions {
         // DRAWING BUTTONS
 
         if(!isUnloading) {
+            GlStateManager.enableTexture2D();
+            this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 15, 16777215);
+            GlStateManager.disableTexture2D();
             GlStateManager.pushMatrix();
             for (GuiButton guiButton : this.aunisButtonList) {
                 ((AunisGuiButton) guiButton).drawButton(this.mc, mouseX, mouseY, partialTicks);
@@ -238,128 +302,85 @@ public class AunisOptionsGui extends GuiOptions {
         drawRect(x + thickness, y + thickness, x + w - thickness, y + h - thickness, background);
     }
 
-    @Override
-    public void initGui(){
-        aunisButtonList.clear();
-        aunisButtonSliders.clear();
-        this.title = I18n.format("options.title");
-        int i = 1;
-        for (GameSettings.Options gamesettings$options : SCREEN_OPTIONS)
-        {
-            if (gamesettings$options.isFloat()){
-                this.aunisButtonSliders.add(new AunisGuiSlider(gamesettings$options.getOrdinal(), this.width / 2 + 5, this.height / 6 - 24, gamesettings$options));
-            }
-            ++i;
-        }
-        if (this.mc.world != null){
-            EnumDifficulty enumdifficulty = this.mc.world.getDifficulty();
-            this.difficultyButton = new AunisGuiButton(108, this.width / 2 - 155, this.height / 6 - 24, 150, 20, this.getDifficultyText(enumdifficulty));
-            this.aunisButtonList.add(this.difficultyButton);
-
-//            if (this.mc.isSingleplayer() && !this.mc.world.getWorldInfo().isHardcoreModeEnabled()){
-//                this.difficultyButton.setWidth(this.difficultyButton.getButtonWidth() - 20);
-//                this.lockButton = new AunisGuiLockIconButton(109, this.difficultyButton.x + this.difficultyButton.getButtonWidth(), this.difficultyButton.y);
-//                this.aunisButtonList.add(this.lockButton);
-//                this.lockButton.setLocked(this.mc.world.getWorldInfo().isDifficultyLocked());
-//                this.lockButton.enabled = !this.lockButton.isLocked();
-//                this.difficultyButton.enabled = !this.lockButton.isLocked();
-//            }
-
-            this.difficultyButton.enabled = this.mc.isSingleplayer() && !this.mc.world.getWorldInfo().isHardcoreModeEnabled();
-        }
-        else{
-            EnumDifficulty enumdifficulty = EnumDifficulty.NORMAL;
-            this.difficultyButton = new AunisGuiButton(108, this.width / 2 - 155 + i % 2 * 160, this.height / 6 - 24, 150, 20, this.getDifficultyText(enumdifficulty));
-            this.aunisButtonList.add(this.difficultyButton);
-            this.difficultyButton.enabled = false;
-        }
-
-        this.aunisButtonList.add(new AunisGuiButton(110, this.width / 2 - 155, this.height / 6 + 48 - 6, 150, 20, I18n.format("options.skinCustomisation")));
-        this.aunisButtonList.add(new AunisGuiButton(106, this.width / 2 + 5, this.height / 6 + 48 - 6, 150, 20, I18n.format("options.sounds")));
-        this.aunisButtonList.add(new AunisGuiButton(101, this.width / 2 - 155, this.height / 6 + 72 - 6, 150, 20, I18n.format("options.video")));
-        this.aunisButtonList.add(new AunisGuiButton(100, this.width / 2 + 5, this.height / 6 + 72 - 6, 150, 20, I18n.format("options.controls")));
-        this.aunisButtonList.add(new AunisGuiButton(102, this.width / 2 - 155, this.height / 6 + 96 - 6, 150, 20, I18n.format("options.language")));
-        this.aunisButtonList.add(new AunisGuiButton(103, this.width / 2 + 5, this.height / 6 + 96 - 6, 150, 20, I18n.format("options.chat.title")));
-        this.aunisButtonList.add(new AunisGuiButton(105, this.width / 2 - 155, this.height / 6 + 120 - 6, 150, 20, I18n.format("options.resourcepack")));
-        this.aunisButtonList.add(new AunisGuiButton(104, this.width / 2 + 5, this.height / 6 + 120 - 6, 150, 20, I18n.format("options.snooper.view")));
-        this.aunisButtonList.add(new AunisGuiButton(200, this.width / 2 - 100, this.height / 6 + 168, I18n.format("gui.done")));
+    protected String getDisplayString(SoundCategory category)
+    {
+        float f = this.game_settings_4.getSoundLevel(category);
+        return f == 0.0F ? this.offDisplayString : (int)(f * 100.0F) + "%";
     }
 
-    @Override
-    protected void actionPerformed(GuiButton button) throws IOException{
-        if (button.enabled)
+    @SideOnly(Side.CLIENT)
+    class Button extends AunisGuiSliderSounds
+    {
+        private final SoundCategory category;
+        private final String categoryName;
+        public float volume = 1.0F;
+        public boolean pressed;
+
+        public Button(int buttonId, int x, int y, SoundCategory categoryIn, boolean master)
         {
-            if (button.id < 100 && button instanceof GuiOptionButton)
+            super(buttonId, x, y, master ? 310 : 150, 20, "");
+            this.category = categoryIn;
+            this.x = x;
+            this.y = y;
+            this.categoryName = I18n.format("soundCategory." + categoryIn.getName());
+            this.displayString = this.categoryName + ": " + AunisAudioOptions.this.getDisplayString(categoryIn);
+            this.volume = AunisAudioOptions.this.game_settings_4.getSoundLevel(categoryIn);
+        }
+
+        protected int getHoverState(boolean mouseOver)
+        {
+            return 0;
+        }
+
+        protected void mouseDragged(Minecraft mc, int mouseX, int mouseY)
+        {
+            if (this.visible)
             {
-                GameSettings.Options gamesettings$options = ((GuiOptionButton)button).getOption();
-                this.settings.setOptionValue(gamesettings$options, 1);
-                button.displayString = this.settings.getKeyBinding(GameSettings.Options.byOrdinal(button.id));
+                if (this.pressed)
+                {
+                    this.volume = (float)(mouseX - (this.x + 4)) / (float)(this.width - 8);
+                    this.volume = MathHelper.clamp(this.volume, 0.0F, 1.0F);
+                    mc.gameSettings.setSoundLevel(this.category, this.volume);
+                    mc.gameSettings.saveOptions();
+                    this.displayString = this.categoryName + ": " + AunisAudioOptions.this.getDisplayString(this.category);
+                }
+
+                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                //this.drawTexturedModalRect(this.x + (int)(this.volume * (float)(this.width - 8)), this.y, 0, 66, 4, 20);
+                drawRect(this.x + (int)(this.volume * (float)(this.width - 8)), this.y, this.x + (int)(this.volume * (float)(this.width - 8)) + 8, this.y + 20, GuiBase.FRAME_COLOR);
+            }
+        }
+
+        public boolean mousePressed(Minecraft mc, int mouseX, int mouseY)
+        {
+            if (super.mousePressed(mc, mouseX, mouseY))
+            {
+                this.volume = (float)(mouseX - (this.x + 4)) / (float)(this.width - 8);
+                this.volume = MathHelper.clamp(this.volume, 0.0F, 1.0F);
+                mc.gameSettings.setSoundLevel(this.category, this.volume);
+                mc.gameSettings.saveOptions();
+                this.displayString = this.categoryName + ": " + AunisAudioOptions.this.getDisplayString(this.category);
+                this.pressed = true;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void playPressSound(SoundHandler soundHandlerIn)
+        {
+        }
+
+        public void mouseReleased(int mouseX, int mouseY)
+        {
+            if (this.pressed)
+            {
+                AunisAudioOptions.this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             }
 
-            if (button.id == 108)
-            {
-                this.mc.world.getWorldInfo().setDifficulty(EnumDifficulty.getDifficultyEnum(this.mc.world.getDifficulty().getDifficultyId() + 1));
-                this.difficultyButton.displayString = this.getDifficultyText(this.mc.world.getDifficulty());
-            }
-
-            if (button.id == 109)
-            {
-                this.mc.displayGuiScreen(new GuiYesNo(this, (new TextComponentTranslation("difficulty.lock.title", new Object[0])).getFormattedText(), (new TextComponentTranslation("difficulty.lock.question", new Object[] {new TextComponentTranslation(this.mc.world.getWorldInfo().getDifficulty().getDifficultyResourceKey(), new Object[0])})).getFormattedText(), 109));
-            }
-
-            if (button.id == 110)
-            {
-                this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new GuiCustomizeSkin(this));
-            }
-
-            if (button.id == 101)
-            {
-                this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new GuiVideoSettings(this, this.settings));
-            }
-
-            if (button.id == 100)
-            {
-                this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new GuiControls(this, this.settings));
-            }
-
-            if (button.id == 102)
-            {
-                this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new AunisLanguageOptions(this, this.settings, this.mc.getLanguageManager(), overlay));
-            }
-
-            if (button.id == 103)
-            {
-                this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new ScreenChatOptions(this, this.settings));
-            }
-
-            if (button.id == 104)
-            {
-                this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new GuiSnooper(this, this.settings));
-            }
-
-            if (button.id == 200)
-            {
-                this.mc.gameSettings.saveOptions();
-                this.isUnloading = true;
-            }
-
-            if (button.id == 105)
-            {
-                this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new AunisResourcePacksOptions(this, overlay));
-            }
-
-            if (button.id == 106)
-            {
-                this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new AunisAudioOptions(this, this.settings, overlay));
-            }
+            this.pressed = false;
         }
     }
 

@@ -787,11 +787,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
                     getEnergyStorage().extractEnergy(keepAliveEnergyPerTick, false);
                     // Max Open Time
-                    if (world.getTotalWorldTime() % 20 == 0 && stargateState == EnumStargateState.ENGAGED && AunisConfig.autoCloseConfig.maxOpenedEnabled && after38Minutes()) {
-                        if (AunisConfig.autoCloseConfig.maxOpenedWhat.equals("closeGate"))
+                    if (world.getTotalWorldTime() % 20 == 0 && stargateState == EnumStargateState.ENGAGED && AunisConfig.openLimitConfig.maxOpenedEnabled && after38Minutes()) {
+                        if (AunisConfig.openLimitConfig.maxOpenedWhat.equals("closeGate"))
                             targetGatePos.getTileEntity().attemptClose(StargateClosedReasonEnum.AUTOCLOSE);
-                        else if (AunisConfig.autoCloseConfig.maxOpenedWhat.equals("drawMorePower"))
-                            getEnergyStorage().extractEnergy(AunisConfig.autoCloseConfig.maxOpenedPowerDrawAfterLimit, false);
+                        else if (AunisConfig.openLimitConfig.maxOpenedWhat.equals("drawMorePower"))
+                            getEnergyStorage().extractEnergy(AunisConfig.openLimitConfig.maxOpenedPowerDrawAfterLimit, false);
                         else
                             System.out.println("Please setup correct value for \"What happens after the open time reach this time\" in config!");
                     }
