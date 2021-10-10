@@ -3,8 +3,10 @@ package mrjake.aunis.gui.mainmenu.screens;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.AunisGuiButton;
+import mrjake.aunis.gui.AunisGuiLockIconButton;
 import mrjake.aunis.gui.AunisGuiSlider;
 import mrjake.aunis.gui.AunisOptionButton;
+import mrjake.aunis.gui.mainmenu.screens.options.AunisResourcePacksOptions;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AunisOptionsGui extends GuiOptions {
+
     public AunisOptionsGui(GuiScreen lastScreen, GameSettings settings, BiomeOverlayEnum overlay) {
         super(lastScreen, settings);
         this.lastScreen = lastScreen;
@@ -41,10 +44,10 @@ public class AunisOptionsGui extends GuiOptions {
     // DEFINE VARIABLES
 
     protected static float animationStage = 0;
-    protected static final float ringAnimationStepSetting = 0.3f;
-    protected static float ringAnimationStep = 0.0f;
-    protected static float ringAnimationSpeed = 1.0f;
-    protected static final boolean speedUpGate = true;
+    protected final float ringAnimationStepSetting = 0.3f;
+    protected float ringAnimationStep = 0.0f;
+    protected float ringAnimationSpeed = 1.0f;
+    protected final boolean speedUpGate = true;
 
     protected BiomeOverlayEnum overlay;
     protected float screenCenterHeight = (((float) height) / 2f);
@@ -135,6 +138,7 @@ public class AunisOptionsGui extends GuiOptions {
 
         // ------------------------------
         // DRAWING BACKGROUND
+
         GlStateManager.pushMatrix();
         GlStateManager.enableTexture2D();
         GlStateManager.enableBlend();
@@ -214,6 +218,7 @@ public class AunisOptionsGui extends GuiOptions {
             for (GuiLabel guiLabel : this.labelList) {
                 guiLabel.drawLabel(this.mc, mouseX, mouseY);
             }
+
             GlStateManager.popMatrix();
         }
     }
@@ -239,18 +244,34 @@ public class AunisOptionsGui extends GuiOptions {
         int i = 1;
         for (GameSettings.Options gamesettings$options : SCREEN_OPTIONS)
         {
-            if (gamesettings$options.isFloat())
-            {
-                this.aunisButtonSliders.add(new AunisGuiSlider(gamesettings$options.getOrdinal(), this.width / 2 - 155 + i % 2 * 160, this.height / 6 - 12 + 24 * (i >> 1), gamesettings$options));
+            if (gamesettings$options.isFloat()){
+                this.aunisButtonSliders.add(new AunisGuiSlider(gamesettings$options.getOrdinal(), this.width / 2 + 5, this.height / 6 - 24, gamesettings$options));
             }
-            else
-            {
-                AunisGuiButton guioptionbutton = new AunisOptionButton(gamesettings$options.getOrdinal(), this.width / 2 - 155 + i % 2 * 160, this.height / 6 - 12 + 24 * (i >> 1), gamesettings$options, this.settings.getKeyBinding(gamesettings$options));
-                this.aunisButtonList.add(guioptionbutton);
-            }
-
             ++i;
         }
+        if (this.mc.world != null){
+            EnumDifficulty enumdifficulty = this.mc.world.getDifficulty();
+            this.difficultyButton = new AunisGuiButton(108, this.width / 2 - 155, this.height / 6 - 24, 150, 20, this.getDifficultyText(enumdifficulty));
+            this.aunisButtonList.add(this.difficultyButton);
+
+//            if (this.mc.isSingleplayer() && !this.mc.world.getWorldInfo().isHardcoreModeEnabled()){
+//                this.difficultyButton.setWidth(this.difficultyButton.getButtonWidth() - 20);
+//                this.lockButton = new AunisGuiLockIconButton(109, this.difficultyButton.x + this.difficultyButton.getButtonWidth(), this.difficultyButton.y);
+//                this.aunisButtonList.add(this.lockButton);
+//                this.lockButton.setLocked(this.mc.world.getWorldInfo().isDifficultyLocked());
+//                this.lockButton.enabled = !this.lockButton.isLocked();
+//                this.difficultyButton.enabled = !this.lockButton.isLocked();
+//            }
+
+            this.difficultyButton.enabled = this.mc.isSingleplayer() && !this.mc.world.getWorldInfo().isHardcoreModeEnabled();
+        }
+        else{
+            EnumDifficulty enumdifficulty = EnumDifficulty.NORMAL;
+            this.difficultyButton = new AunisGuiButton(108, this.width / 2 - 155 + i % 2 * 160, this.height / 6 - 24, 150, 20, this.getDifficultyText(enumdifficulty));
+            this.aunisButtonList.add(this.difficultyButton);
+            this.difficultyButton.enabled = false;
+        }
+
         this.aunisButtonList.add(new AunisGuiButton(110, this.width / 2 - 155, this.height / 6 + 48 - 6, 150, 20, I18n.format("options.skinCustomisation")));
         this.aunisButtonList.add(new AunisGuiButton(106, this.width / 2 + 5, this.height / 6 + 48 - 6, 150, 20, I18n.format("options.sounds")));
         this.aunisButtonList.add(new AunisGuiButton(101, this.width / 2 - 155, this.height / 6 + 72 - 6, 150, 20, I18n.format("options.video")));
@@ -329,7 +350,7 @@ public class AunisOptionsGui extends GuiOptions {
             if (button.id == 105)
             {
                 this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new GuiScreenResourcePacks(this));
+                this.mc.displayGuiScreen(new AunisResourcePacksOptions(this, overlay));
             }
 
             if (button.id == 106)

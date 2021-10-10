@@ -75,7 +75,7 @@ public class AutoCloseManager implements INBTSerializable<NBTTagCompound> {
 
 	public boolean after38Minutes(StargatePos sourceStargatePos){
 		if (gateTile.getWorld().getTotalWorldTime() % 20 == 0) {
-			if (secondsOpened >= AunisConfig.autoCloseConfig.maxOpenedSeconds) {
+			if (secondsOpened >= AunisConfig.openLimitConfig.maxOpenedSeconds) {
 				secondsOpened = 0;
 				return true;
 			}

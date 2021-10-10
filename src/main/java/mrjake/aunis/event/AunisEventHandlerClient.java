@@ -7,9 +7,7 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.mainmenu.AunisMainMenu;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.client.gui.GuiScreenOptionsSounds;
+import net.minecraft.client.gui.*;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -25,8 +23,6 @@ import net.minecraftforge.fml.relauncher.Side;
 
 @EventBusSubscriber(Side.CLIENT)
 public class AunisEventHandlerClient {
-
-  public static boolean isInMainMenu = false;
 
   @SubscribeEvent
   public static void onConfigChangedEvent(OnConfigChangedEvent event) {
@@ -68,8 +64,10 @@ public class AunisEventHandlerClient {
 
   @SubscribeEvent
   public static void onGuiOpen(GuiOpenEvent event) {
-    if (event.getGui() instanceof GuiMainMenu && !AunisConfig.mainMenuConfig.disableAunisMainMenu) {
-      event.setGui(new AunisMainMenu());
+    if (!AunisConfig.mainMenuConfig.disableAunisMainMenu) {
+      if (event.getGui() instanceof GuiMainMenu) {
+        event.setGui(new AunisMainMenu());
+      }
     }
   }
 
