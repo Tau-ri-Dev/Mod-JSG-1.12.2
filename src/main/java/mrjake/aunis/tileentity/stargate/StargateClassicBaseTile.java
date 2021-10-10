@@ -286,15 +286,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             /*
              * Draw power (shield)
              */
-            if (isClosed() && isShieldIris()) {
+            if (isShieldIris()) {
                 shieldKeepAlive = AunisConfig.irisConfig.shieldPowerDraw;
-                getEnergyStorage().extractEnergy(shieldKeepAlive, false);
+                if (isClosed()) getEnergyStorage().extractEnergy(shieldKeepAlive, false);
                 if (getEnergyStorage().getEnergyStored() < shieldKeepAlive) {
-                    irisAnimation = getWorld().getTotalWorldTime();
-                    irisState = EnumIrisState.OPENING;
-                    sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState, irisAnimation);
+                    toggleIris();
                     sendSignal(null, "stargate_iris_out_of_power", new Object[]{"Shield runs out of power! Opening shield..."});
-                    playSoundEvent(SoundEventEnum.SHIELD_OPENING);
+                }
+                else if (irisMode == EnumIrisMode.CLOSED && isOpened()) {
+                    toggleIris();
                 }
                 markDirty();
             }
@@ -1043,8 +1043,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 case AUTO:
                     if (getStargateState().engaged()) {
                         if (irisState == EnumIrisState.OPENED) toggleIris();
-                    }
-                    else {
+                    } else {
                         if (isClosed()) {
                             toggleIris();
                         }
@@ -1250,7 +1249,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public Object[] toggleIris(Context context, Arguments args) {
         if (irisType == EnumIrisType.NULL)
             return new Object[]{false, "stargate_iris_missing", "Iris is not installed!"};
-        if (irisMode != EnumIrisMode.OC) return new Object[]{false, "stargate_iris_error_mode", "Iris mode must be set to OC"};
+        if (irisMode != EnumIrisMode.OC)
+            return new Object[]{false, "stargate_iris_error_mode", "Iris mode must be set to OC"};
         boolean result = toggleIris();
         markDirty();
         if (!result && (isShieldIris() && isOpened() && getEnergyStorage().getEnergyStored() < shieldKeepAlive * 3))
