@@ -871,6 +871,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (markDirty) markDirty();
         if (!world.isRemote && isOpened()) {
             setIrisBlocks(false);
+
         }
     }
 
@@ -1197,6 +1198,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 ((BeamerTile) world.getTileEntity(beamerPos)).gateEngaged(targetGatePos);
             }
         }
+
     }
 
 
