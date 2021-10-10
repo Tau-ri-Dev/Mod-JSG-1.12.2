@@ -64,6 +64,9 @@ public class AunisConfig {
     @Name("MainMenu config")
     public static MainMenuConfig mainMenuConfig = new MainMenuConfig();
 
+    @Name("Integrations config")
+    public static IntegrationsConfig integrationsConfig = new IntegrationsConfig();
+
     public static class StargateConfig {
         @Name("Orlin's gate max open count")
         @RangeInt(min = 0)
@@ -530,6 +533,11 @@ public class AunisConfig {
 
         @Name("Play music in main menu")
         public boolean playMusic = true;
+    }
+
+    public static class IntegrationsConfig {
+        @Name("Enable Tinkers' Construct integration")
+        public boolean tConstructIntegration = false;
     }
 
     public static void resetCache() {
