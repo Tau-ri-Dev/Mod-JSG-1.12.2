@@ -998,6 +998,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     EntityPlayer codeSender = null;
 
     public void receiveIrisCode(EntityPlayer sender, int code) {
+        sendSignal(null, "received_code", code);
+        if (irisMode != EnumIrisMode.AUTO) {
+            sender.sendStatusMessage(GDOMessages.SEND_TO_COMPUTER.textComponent, true);
+            return;
+        }
         if (code == this.irisCode) {
             switch (this.irisState) {
                 case OPENED:
@@ -1036,8 +1041,14 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     irisModeAction(irisMode);
                     break;
                 case AUTO:
-                    if (getStargateState().engaged()) if (irisState == EnumIrisState.OPENED) toggleIris();
-                    else if (isClosed()) toggleIris();
+                    if (getStargateState().engaged()) {
+                        if (irisState == EnumIrisState.OPENED) toggleIris();
+                    }
+                    else {
+                        if (isClosed()) {
+                            toggleIris();
+                        }
+                    }
                     break;
                 case OC:
                 default:
@@ -1222,18 +1233,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     private void updateBeamers() {
-        // TODO: beamers deactive when iris is close
-        /*if (stargateState.engaged() && (irisState == EnumIrisState.OPENED || irisType == EnumIrisType.NULL)) {
-            for (BlockPos beamerPos : linkedBeamers) {
-                ((BeamerTile) world.getTileEntity(beamerPos)).gateEngaged(targetGatePos);
-            }
-        }
-        else{
-            for (BlockPos beamerPos : linkedBeamers) {
-                ((BeamerTile) world.getTileEntity(beamerPos)).gateClosed();
-            }
-        }*/
-
         if (stargateState.engaged()) {
             for (BlockPos beamerPos : linkedBeamers) {
                 ((BeamerTile) world.getTileEntity(beamerPos)).gateEngaged(targetGatePos);

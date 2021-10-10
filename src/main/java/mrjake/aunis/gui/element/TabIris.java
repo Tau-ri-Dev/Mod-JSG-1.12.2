@@ -3,12 +3,22 @@ package mrjake.aunis.gui.element;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.AunisGuiButton;
+import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.stargate.EnumIrisMode;
+import mrjake.aunis.util.ItemMetaPair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * @author matousss
@@ -62,6 +72,23 @@ public class TabIris extends Tab {
         inputField.drawTextBox();
     }
 
+    @Override
+    public void renderFg(GuiScreen screen, FontRenderer fontRenderer, int mouseX, int mouseY) {
+        super.renderFg(screen, fontRenderer, mouseX, mouseY);
+        if (isVisible() && isOpen()) {
+            if (GuiHelper.isPointInRegion(buttonChangeMode.x, buttonChangeMode.y, buttonChangeMode.getButtonWidth(), buttonChangeMode.getButtonWidth(), mouseX, mouseY)) {
+                List<String> text = new ArrayList<>();
+                text.add(I18n.format("gui.stargate.iris.help_title") +" "+ I18n.format("gui.stargate.iris."+getIrisMode().name().toLowerCase()));
+                text.add(TextFormatting.GRAY + I18n.format("gui.stargate.iris." + getIrisMode().name()
+                        .toLowerCase() + "_help")
+                );
+                if (buttonChangeMode.getCurrentState() == 2) {
+                    text.add(TextFormatting.GRAY + I18n.format("gui.stargate.iris.auto1_help"));
+                }
+                screen.drawHoveringText(text, mouseX - guiLeft, mouseY - guiTop);
+            }
+        }
+    }
 
     public static TabIris.TabIrisBuilder builder() {
         return new TabIris.TabIrisBuilder();
@@ -98,13 +125,18 @@ public class TabIris extends Tab {
         inputField.mouseClicked(mouseX, mouseY, mouseButton);
         if (GuiHelper.isPointInRegion(buttonChangeMode.x, buttonChangeMode.y,
                 buttonChangeMode.width, buttonChangeMode.height, mouseX, mouseY)) {
-            System.out.println("posouvám lol");
             switch (mouseButton) {
                 case 0:
                     buttonChangeMode.nextState();
+                    if (!Aunis.ocWrapper.isModLoaded() && buttonChangeMode.getCurrentState() == 4) {
+                        buttonChangeMode.nextState();
+                    }
                     break;
                 case 1:
                     buttonChangeMode.previousState();
+                    if (!Aunis.ocWrapper.isModLoaded() && buttonChangeMode.getCurrentState() == 4) {
+                        buttonChangeMode.previousState();
+                    }
                     break;
                 case 2:
                     buttonChangeMode.setCurrentState(0);
@@ -115,7 +147,6 @@ public class TabIris extends Tab {
             inputField.setEnabled(buttonChangeMode.getCurrentState() == EnumIrisMode.AUTO.id);
             buttonChangeMode.playPressSound(Minecraft.getMinecraft().getSoundHandler());
         }
-        System.out.println("je to " + getIrisMode().name());
 
     }
 
