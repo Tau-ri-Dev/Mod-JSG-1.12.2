@@ -60,6 +60,9 @@ public class AunisConfig {
 
 	@Name("MainMenu config")
 	public static MainMenuConfig mainMenuConfig = new MainMenuConfig();
+
+	@Name("Integrations config")
+	public static IntegrationsConfig integrationsConfig = new IntegrationsConfig();
 	
 	public static class StargateConfig {
 		@Name("Orlin's gate max open count")
@@ -508,7 +511,8 @@ public class AunisConfig {
 	}
 
 	public static class MainMenuConfig {
-		@Name("Disable Aunis main menu - WARNING: Requires reloading")
+		@Name("Disable Aunis main menu")
+		@Comment("WARNING: Requires reloading")
 		public boolean disableAunisMainMenu = false;
 
 		@Name("Disable custom positions of buttons")
@@ -528,6 +532,11 @@ public class AunisConfig {
 
 		@Name("Play music in main menu")
 		public boolean playMusic = true;
+	}
+
+	public static class IntegrationsConfig {
+		@Name("Enable Tinkers' Construct integration")
+		public boolean tConstructIntegration = true;
 	}
 	
 	public static void resetCache() {
