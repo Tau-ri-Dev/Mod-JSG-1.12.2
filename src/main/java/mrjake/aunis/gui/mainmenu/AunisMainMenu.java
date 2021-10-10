@@ -4,6 +4,7 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.gui.mainmenu.screens.AunisOptionsGui;
+import mrjake.aunis.gui.mainmenu.screens.options.AunisLanguageOptions;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
@@ -143,13 +144,12 @@ public class AunisMainMenu extends GuiMainMenu {
                 if(!chevronsActive) getNextBiomeOverlay(AunisConfig.mainMenuConfig.changingGateOverlay);
                 this.chevronShoutTiming = 0;
                 this.chevronLastAnimationStage = 0;
-                this.chevronShoutTiming = 0;
                 this.chevronShout = false;
                 this.chevronSound1 = false;
                 this.chevronSound2 = false;
                 this.chevronSound3 = false;
                 this.chevronShoutColapsing = false;
-                if(kawooshState == 0) this.speedUpGate = true;
+                if(kawooshState == 0) speedUpGate = true;
                 deleteEvent();
             }
         }
@@ -159,12 +159,13 @@ public class AunisMainMenu extends GuiMainMenu {
     public void updateRingSpeed(){
         if(!AunisConfig.mainMenuConfig.gateRotation) return;
         if (!speedUpGate) {
-            if (ringAnimationSpeed > 0.0f) ringAnimationSpeed -= 0.05f;
+            if (ringAnimationSpeed > 0.00f) ringAnimationSpeed -= 0.02f;
+            if (ringAnimationSpeed < 0.00f) ringAnimationSpeed = 0.0f;
             if(ringAnimationSpeed < 0.05f && kawooshState == 0 && !chevronShout){
                 chevronShout = true;
             }
         } else {
-            if (ringAnimationSpeed < 1.0f) ringAnimationSpeed += 0.05f;
+            if (ringAnimationSpeed < 1.0f) ringAnimationSpeed += 0.02f;
         }
         ringAnimationStep = ringAnimationStepSetting * ringAnimationSpeed;
         animationStage += ringAnimationStep;
@@ -191,7 +192,7 @@ public class AunisMainMenu extends GuiMainMenu {
     // update ring rotation and overlay
     public void updateAnimation() {
         if (animationStage > 360) animationStage = 0f;
-        if((animationStage > 358 && animationStage < 359) || (animationStage > 178 && animationStage < 179)) speedUpGate = false;
+        if((animationStage > 352 && animationStage < 353) || (animationStage > 172 && animationStage < 173)) speedUpGate = false;
         updateRingSpeed();
     }
 
@@ -637,7 +638,7 @@ public class AunisMainMenu extends GuiMainMenu {
                 } else this.mc.shutdown();
                 break;
             case 5:
-                this.mc.displayGuiScreen(new GuiLanguage(this, this.mc.gameSettings, this.mc.getLanguageManager()));
+                this.mc.displayGuiScreen(new AunisLanguageOptions(this, this.mc.gameSettings, this.mc.getLanguageManager(), overlay));
                 break;
             case 6:
                 this.mc.displayGuiScreen(new net.minecraftforge.fml.client.GuiModList(this));

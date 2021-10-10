@@ -6,6 +6,8 @@ import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.gui.AunisGuiLockIconButton;
 import mrjake.aunis.gui.AunisGuiSlider;
 import mrjake.aunis.gui.AunisOptionButton;
+import mrjake.aunis.gui.mainmenu.screens.options.AunisAudioOptions;
+import mrjake.aunis.gui.mainmenu.screens.options.AunisLanguageOptions;
 import mrjake.aunis.gui.mainmenu.screens.options.AunisResourcePacksOptions;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
@@ -326,7 +328,7 @@ public class AunisOptionsGui extends GuiOptions {
             if (button.id == 102)
             {
                 this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new GuiLanguage(this, this.settings, this.mc.getLanguageManager()));
+                this.mc.displayGuiScreen(new AunisLanguageOptions(this, this.settings, this.mc.getLanguageManager(), overlay));
             }
 
             if (button.id == 103)
@@ -356,7 +358,7 @@ public class AunisOptionsGui extends GuiOptions {
             if (button.id == 106)
             {
                 this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new GuiScreenOptionsSounds(this, this.settings));
+                this.mc.displayGuiScreen(new AunisAudioOptions(this, this.settings, overlay));
             }
         }
     }

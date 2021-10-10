@@ -1,8 +1,10 @@
 package mrjake.aunis.gui;
 
+import mrjake.aunis.gui.mainmenu.screens.options.AunisAudioOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

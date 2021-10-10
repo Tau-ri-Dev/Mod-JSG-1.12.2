@@ -6,6 +6,8 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.gui.AunisGuiSlider;
 import mrjake.aunis.gui.AunisOptionButton;
+import mrjake.aunis.gui.mainmenu.screens.resourcepacks.AunisGuiResourcePackSelected;
+import mrjake.aunis.gui.mainmenu.screens.resourcepacks.AunisGuiResourcePacksAvailable;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
@@ -46,10 +48,10 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
     protected final boolean speedUpGate = true;
 
     protected final GuiScreen parentScreen;
-    protected List<ResourcePackListEntry> availableResourcePacks;
-    protected List<ResourcePackListEntry> selectedResourcePacks;
-    protected GuiResourcePackAvailable availableResourcePacksList;
-    protected GuiResourcePackSelected selectedResourcePacksList;
+    protected static List<ResourcePackListEntry> availableResourcePacks;
+    protected static List<ResourcePackListEntry> selectedResourcePacks;
+    protected static AunisGuiResourcePacksAvailable availableResourcePacksList;
+    protected static AunisGuiResourcePackSelected selectedResourcePacksList;
     protected boolean changed;
 
     protected BiomeOverlayEnum overlay;
@@ -118,7 +120,7 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
         if (animationStage > 360) animationStage = 0f;
         updateRingSpeed();
     }
-    // RENDER MAIN MENU
+    // RENDER GUI
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         // ------------------------------
@@ -210,8 +212,8 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
                 guiLabel.drawLabel(this.mc, mouseX, mouseY);
             }
 
-            //availableResourcePacksList.drawScreen(mouseX, mouseY, partialTicks);
-            //selectedResourcePacksList.drawScreen(mouseX, mouseY, partialTicks);
+            availableResourcePacksList.drawScreen(mouseX, mouseY, partialTicks);
+            selectedResourcePacksList.drawScreen(mouseX, mouseY, partialTicks);
             drawCenteredString(this.fontRenderer, I18n.format("resourcePack.title"), this.width / 2, 16, 16777215);
             drawCenteredString(this.fontRenderer, I18n.format("resourcePack.folderInfo"), this.width / 2 - 77, this.height - 26, 8421504);
 
@@ -233,8 +235,9 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
     }
 
     @Override
-    public void initGui() {
-        aunisButtonList.clear();
+    public void initGui()
+    {
+        this.aunisButtonList.clear();
         this.aunisButtonList.add(new AunisOptionButton(2, this.width / 2 - 154, this.height - 48, I18n.format("resourcePack.openFolder")));
         this.aunisButtonList.add(new AunisOptionButton(1, this.width / 2 + 4, this.height - 48, I18n.format("gui.done")));
 
@@ -266,11 +269,11 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
             this.selectedResourcePacks.add(new ResourcePackListEntryDefault(this));
         }
 
-        this.availableResourcePacksList = new GuiResourcePackAvailable(this.mc, 200, this.height, this.availableResourcePacks);
-        this.availableResourcePacksList.setSlotXBoundsFromLeft(this.width / 2 - 4 - 200);
-        this.availableResourcePacksList.registerScrollButtons(7, 8);
-        this.selectedResourcePacksList = new GuiResourcePackSelected(this.mc, 200, this.height, this.selectedResourcePacks);
-        this.selectedResourcePacksList.setSlotXBoundsFromLeft(this.width / 2 + 4);
-        this.selectedResourcePacksList.registerScrollButtons(7, 8);
+        availableResourcePacksList = new AunisGuiResourcePacksAvailable(this.mc, 200, this.height, this.availableResourcePacks);
+        availableResourcePacksList.setSlotXBoundsFromLeft(this.width / 2 - 4 - 200);
+        availableResourcePacksList.registerScrollButtons(7, 8);
+        selectedResourcePacksList = new AunisGuiResourcePackSelected(this.mc, 200, this.height, this.selectedResourcePacks);
+        selectedResourcePacksList.setSlotXBoundsFromLeft(this.width / 2 + 4);
+        selectedResourcePacksList.registerScrollButtons(7, 8);
     }
 }
