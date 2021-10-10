@@ -210,8 +210,8 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
                 guiLabel.drawLabel(this.mc, mouseX, mouseY);
             }
 
-            availableResourcePacksList.drawScreen(mouseX, mouseY, partialTicks);
-            selectedResourcePacksList.drawScreen(mouseX, mouseY, partialTicks);
+            //availableResourcePacksList.drawScreen(mouseX, mouseY, partialTicks);
+            //selectedResourcePacksList.drawScreen(mouseX, mouseY, partialTicks);
             drawCenteredString(this.fontRenderer, I18n.format("resourcePack.title"), this.width / 2, 16, 16777215);
             drawCenteredString(this.fontRenderer, I18n.format("resourcePack.folderInfo"), this.width / 2 - 77, this.height - 26, 8421504);
 
