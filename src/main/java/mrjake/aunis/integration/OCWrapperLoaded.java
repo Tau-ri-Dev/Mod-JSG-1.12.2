@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 public class OCWrapperLoaded implements OCWrapperInterface {
 	
 	public void sendSignalToReachable(Node node, Context invoker, String name, Object... params) {
+		if (node == null) return;
 		for (Node targetNode : node.reachableNodes()) {
 			
 			if (targetNode.host() instanceof Machine) {

@@ -51,6 +51,9 @@ public class StargateAbstractEnergyStorage extends EnergyStorage implements INBT
 			if(energy < 0) energy = 0;
 			onEnergyChanged();
 		}
+		else if (maxExtract > energy) {
+			maxExtract = energy;
+		}
 		return maxExtract;
 	}
 	

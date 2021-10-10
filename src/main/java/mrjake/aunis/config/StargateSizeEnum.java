@@ -96,11 +96,11 @@ public enum StargateSizeEnum {
     int startX = -2;
     for (int i = 0; i < 8; i++) {
 
-      for (int j = startX; j < -startX; j++) {
+      for (int j = startX; j < 1-startX; j++) {
         large.add(new BlockPos(j, i+1, 0));
       }
-      if (i < 4 && i != 1) startX++;
-      if (i > 4 && i != 5) startX--;
+      if (i < 3 && i != 1) startX--;
+      if (i >= 4 && i != 5) startX++;
     }
 
     IRIS_PATTER_SMALL = small.toArray(new BlockPos[0]);
