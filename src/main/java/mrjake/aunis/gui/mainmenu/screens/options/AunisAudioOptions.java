@@ -6,7 +6,7 @@ import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.gui.AunisGuiSlider;
 import mrjake.aunis.gui.AunisOptionButton;
 import mrjake.aunis.gui.GuiBase;
-import mrjake.aunis.gui.mainmenu.AunisGuiSliderSounds;
+import mrjake.aunis.gui.AunisGuiSliderSounds;
 import mrjake.aunis.gui.mainmenu.screens.resourcepacks.AunisGuiResourcePackSelected;
 import mrjake.aunis.gui.mainmenu.screens.resourcepacks.AunisGuiResourcePacksAvailable;
 import mrjake.aunis.loader.ElementEnum;

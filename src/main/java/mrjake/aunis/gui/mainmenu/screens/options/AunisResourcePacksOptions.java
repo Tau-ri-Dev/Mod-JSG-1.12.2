@@ -5,7 +5,6 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.gui.AunisGuiSlider;
-import mrjake.aunis.gui.AunisOptionButton;
 import mrjake.aunis.gui.mainmenu.screens.resourcepacks.AunisGuiResourcePackSelected;
 import mrjake.aunis.gui.mainmenu.screens.resourcepacks.AunisGuiResourcePacksAvailable;
 import mrjake.aunis.loader.ElementEnum;
@@ -13,8 +12,10 @@ import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
 import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundPositionedEnum;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.resources.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -22,12 +23,17 @@ import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Mouse;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
+
     public AunisResourcePacksOptions(GuiScreen parentScreenIn, BiomeOverlayEnum overlay) {
         super(parentScreenIn);
         this.parentScreen = parentScreenIn;
@@ -53,6 +59,9 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
     protected static AunisGuiResourcePacksAvailable availableResourcePacksList;
     protected static AunisGuiResourcePackSelected selectedResourcePacksList;
     protected boolean changed;
+    protected int eventButton;
+    protected int touchValue;
+    protected long lastMouseEvent;
 
     protected BiomeOverlayEnum overlay;
     protected float screenCenterHeight = (((float) height) / 2f);
@@ -104,7 +113,7 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
         this.screenCenterWidth = ((float) width) / 2f;
 
         if(gateZoom == 0.0f) gateZoom = this.width / 6f;
-        if(gatePos == 0.0f) gatePos = ((float) width) / 2f;
+        if(gatePos == 0.0f) gatePos = (this.width - 54f);
 
         float step = 8f;
         if(!isUnloading) {
@@ -199,6 +208,10 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
         // DRAWING BUTTONS
 
         if(!isUnloading) {
+            availableResourcePacksList.drawScreen(mouseX, mouseY, partialTicks);
+            selectedResourcePacksList.drawScreen(mouseX, mouseY, partialTicks);
+            drawCenteredString(this.fontRenderer, I18n.format("resourcePack.title"), this.width / 2, 16, 16777215);
+            drawCenteredString(this.fontRenderer, I18n.format("resourcePack.folderInfo"), this.width / 2 - 102, this.height - 48, 8421504);
             GlStateManager.pushMatrix();
             for (GuiButton guiButton : this.aunisButtonList) {
                 ((AunisGuiButton) guiButton).drawButton(this.mc, mouseX, mouseY, partialTicks);
@@ -211,11 +224,6 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
             for (GuiLabel guiLabel : this.labelList) {
                 guiLabel.drawLabel(this.mc, mouseX, mouseY);
             }
-
-            availableResourcePacksList.drawScreen(mouseX, mouseY, partialTicks);
-            selectedResourcePacksList.drawScreen(mouseX, mouseY, partialTicks);
-            drawCenteredString(this.fontRenderer, I18n.format("resourcePack.title"), this.width / 2, 16, 16777215);
-            drawCenteredString(this.fontRenderer, I18n.format("resourcePack.folderInfo"), this.width / 2 - 77, this.height - 26, 8421504);
 
             GlStateManager.popMatrix();
         }
@@ -237,13 +245,15 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
     @Override
     public void initGui()
     {
-        this.aunisButtonList.clear();
-        this.aunisButtonList.add(new AunisOptionButton(2, this.width / 2 - 154, this.height - 48, I18n.format("resourcePack.openFolder")));
-        this.aunisButtonList.add(new AunisOptionButton(1, this.width / 2 + 4, this.height - 48, I18n.format("gui.done")));
+        aunisButtonList.clear();
 
-        if (!this.changed){
-            this.availableResourcePacks = Lists.<ResourcePackListEntry>newArrayList();
-            this.selectedResourcePacks = Lists.<ResourcePackListEntry>newArrayList();
+        aunisButtonList.add(new AunisGuiButton(2, this.width / 2 - 205, this.height - 38, I18n.format("resourcePack.openFolder")));
+        aunisButtonList.add(new AunisGuiButton(1, this.width / 2 + 5, this.height - 38, I18n.format("gui.done")));
+
+        if (!this.changed)
+        {
+            availableResourcePacks = Lists.<ResourcePackListEntry>newArrayList();
+            selectedResourcePacks = Lists.<ResourcePackListEntry>newArrayList();
             ResourcePackRepository resourcepackrepository = this.mc.getResourcePackRepository();
             resourcepackrepository.updateRepositoryEntriesAll();
             List<ResourcePackRepository.Entry> list = Lists.newArrayList(resourcepackrepository.getRepositoryEntriesAll());
@@ -251,29 +261,157 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
 
             for (ResourcePackRepository.Entry resourcepackrepository$entry : list)
             {
-                this.availableResourcePacks.add(new ResourcePackListEntryFound(this, resourcepackrepository$entry));
+                availableResourcePacks.add(new ResourcePackListEntryFound(this, resourcepackrepository$entry));
             }
 
             ResourcePackRepository.Entry resourcepackrepository$entry2 = resourcepackrepository.getResourcePackEntry();
 
             if (resourcepackrepository$entry2 != null)
             {
-                this.selectedResourcePacks.add(new ResourcePackListEntryServer(this, resourcepackrepository.getServerResourcePack()));
+                selectedResourcePacks.add(new ResourcePackListEntryServer(this, resourcepackrepository.getServerResourcePack()));
             }
 
             for (ResourcePackRepository.Entry resourcepackrepository$entry1 : Lists.reverse(resourcepackrepository.getRepositoryEntries()))
             {
-                this.selectedResourcePacks.add(new ResourcePackListEntryFound(this, resourcepackrepository$entry1));
+                selectedResourcePacks.add(new ResourcePackListEntryFound(this, resourcepackrepository$entry1));
             }
 
-            this.selectedResourcePacks.add(new ResourcePackListEntryDefault(this));
+            selectedResourcePacks.add(new ResourcePackListEntryDefault(this));
         }
 
-        availableResourcePacksList = new AunisGuiResourcePacksAvailable(this.mc, 200, this.height, this.availableResourcePacks);
+        availableResourcePacksList = new AunisGuiResourcePacksAvailable(this.mc, 200, this.height, availableResourcePacks);
         availableResourcePacksList.setSlotXBoundsFromLeft(this.width / 2 - 4 - 200);
         availableResourcePacksList.registerScrollButtons(7, 8);
-        selectedResourcePacksList = new AunisGuiResourcePackSelected(this.mc, 200, this.height, this.selectedResourcePacks);
+        selectedResourcePacksList = new AunisGuiResourcePackSelected(this.mc, 200, this.height, selectedResourcePacks);
         selectedResourcePacksList.setSlotXBoundsFromLeft(this.width / 2 + 4);
         selectedResourcePacksList.registerScrollButtons(7, 8);
+        super.initGui();
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException
+    {
+        int i = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int j = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+        int k = Mouse.getEventButton();
+
+        if (Mouse.getEventButtonState())
+        {
+            if (this.mc.gameSettings.touchscreen && this.touchValue++ > 0)
+            {
+                return;
+            }
+
+            this.eventButton = k;
+            this.lastMouseEvent = Minecraft.getSystemTime();
+            this.mouseClicked(i, j, this.eventButton);
+        }
+        else if (k != -1)
+        {
+            if (this.mc.gameSettings.touchscreen && --this.touchValue > 0)
+            {
+                return;
+            }
+
+            this.eventButton = -1;
+            this.mouseReleased(i, j, k);
+        }
+        else if (this.eventButton != -1 && this.lastMouseEvent > 0L)
+        {
+            long l = Minecraft.getSystemTime() - this.lastMouseEvent;
+            this.mouseClickMove(i, j, this.eventButton, l);
+        }
+        selectedResourcePacksList.handleMouseInput();
+        availableResourcePacksList.handleMouseInput();
+    }
+
+    @Override
+    public boolean hasResourcePackEntry(ResourcePackListEntry resourcePackEntry)
+    {
+        return selectedResourcePacks.contains(resourcePackEntry);
+    }
+
+    @Override
+    public List<ResourcePackListEntry> getListContaining(ResourcePackListEntry resourcePackEntry)
+    {
+        return this.hasResourcePackEntry(resourcePackEntry) ? selectedResourcePacks : availableResourcePacks;
+    }
+
+    @Override
+    public List<ResourcePackListEntry> getAvailableResourcePacks()
+    {
+        return availableResourcePacks;
+    }
+
+    @Override
+    public List<ResourcePackListEntry> getSelectedResourcePacks()
+    {
+        return selectedResourcePacks;
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException{
+        if (button.enabled){
+            if (button.id == 2){
+                File file1 = this.mc.getResourcePackRepository().getDirResourcepacks();
+                OpenGlHelper.openFile(file1);
+            }
+            else if (button.id == 1)
+            {
+                if (this.changed){
+                    List<ResourcePackRepository.Entry> list = Lists.<ResourcePackRepository.Entry>newArrayList();
+
+                    for (ResourcePackListEntry resourcepacklistentry : this.selectedResourcePacks)
+                    {
+                        if (resourcepacklistentry instanceof ResourcePackListEntryFound)
+                        {
+                            list.add(((ResourcePackListEntryFound)resourcepacklistentry).getResourcePackEntry());
+                        }
+                    }
+
+                    Collections.reverse(list);
+                    this.mc.getResourcePackRepository().setRepositories(list);
+                    this.mc.gameSettings.resourcePacks.clear();
+                    this.mc.gameSettings.incompatibleResourcePacks.clear();
+
+                    for (ResourcePackRepository.Entry resourcepackrepository$entry : list)
+                    {
+                        this.mc.gameSettings.resourcePacks.add(resourcepackrepository$entry.getResourcePackName());
+
+                        if (resourcepackrepository$entry.getPackFormat() != 3)
+                        {
+                            this.mc.gameSettings.incompatibleResourcePacks.add(resourcepackrepository$entry.getResourcePackName());
+                        }
+                    }
+
+                    this.mc.gameSettings.saveOptions();
+                    this.mc.refreshResources();
+                }
+
+                isUnloading = true;
+            }
+        }
+    }
+
+    @Override
+    public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if (mouseButton == 0)
+        {
+            for (GuiButton guibutton : this.aunisButtonList) {
+                if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
+                    net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre event = new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, this.aunisButtonList);
+                    if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
+                        break;
+                    guibutton = event.getButton();
+                    this.selectedButton = guibutton;
+                    guibutton.playPressSound(this.mc.getSoundHandler());
+                    actionPerformed(guibutton);
+                    if (this.equals(this.mc.currentScreen))
+                        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.getButton(), this.aunisButtonList));
+                }
+            }
+        }
+        availableResourcePacksList.mouseClicked(mouseX, mouseY, mouseButton);
+        selectedResourcePacksList.mouseClicked(mouseX, mouseY, mouseButton);
     }
 }

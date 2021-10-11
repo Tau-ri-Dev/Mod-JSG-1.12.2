@@ -1,4 +1,4 @@
-package mrjake.aunis.gui.mainmenu;
+package mrjake.aunis.gui;
 
 import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.gui.GuiBase;
