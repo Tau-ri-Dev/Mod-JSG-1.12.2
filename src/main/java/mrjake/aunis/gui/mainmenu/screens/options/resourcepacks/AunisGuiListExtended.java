@@ -1,10 +1,7 @@
-package mrjake.aunis.gui.mainmenu.screens.resourcepacks;
+package mrjake.aunis.gui.mainmenu.screens.options.resourcepacks;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListExtended;
-import net.minecraft.client.resources.ResourcePackListEntry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class AunisGuiListExtended extends AunisGuiSlot {
     public AunisGuiListExtended(Minecraft mcIn, int width, int height, int topIn, int bottomIn, int slotHeightIn) {

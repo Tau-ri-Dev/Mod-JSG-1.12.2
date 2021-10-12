@@ -7,8 +7,8 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.gui.AunisGuiSlider;
 import mrjake.aunis.gui.AunisOptionButton;
-import mrjake.aunis.gui.mainmenu.screens.resourcepacks.AunisGuiResourcePackSelected;
-import mrjake.aunis.gui.mainmenu.screens.resourcepacks.AunisGuiResourcePacksAvailable;
+import mrjake.aunis.gui.mainmenu.screens.options.resourcepacks.AunisGuiResourcePackSelected;
+import mrjake.aunis.gui.mainmenu.screens.options.resourcepacks.AunisGuiResourcePacksAvailable;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
@@ -63,11 +63,6 @@ public class AunisLanguageOptions extends GuiLanguage {
     protected AunisLanguageOptions.List list;
 
     protected final GuiScreen parentScreen;
-    protected java.util.List<ResourcePackListEntry> availableResourcePacks;
-    protected java.util.List<ResourcePackListEntry> selectedResourcePacks;
-    protected AunisGuiResourcePacksAvailable availableResourcePacksList;
-    protected AunisGuiResourcePackSelected selectedResourcePacksList;
-    protected boolean changed;
 
     protected BiomeOverlayEnum overlay;
     protected float screenCenterHeight = (((float) height) / 2f);
@@ -96,10 +91,6 @@ public class AunisLanguageOptions extends GuiLanguage {
 
     protected final GameSettings game_settings_3;
     protected final LanguageManager languageManager;
-    protected AunisOptionButton forceUnicodeFontBtn;
-    protected AunisOptionButton confirmSettingsBtn;
-    protected final java.util.List<String> langCodeList = Lists.<String>newArrayList();
-    protected final Map<String, Language> languageMap = Maps.<String, Language>newHashMap();
 
 
     // slow down and speed up gate ring

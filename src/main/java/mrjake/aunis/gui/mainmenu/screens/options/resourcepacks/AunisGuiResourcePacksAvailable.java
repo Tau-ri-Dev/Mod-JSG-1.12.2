@@ -1,4 +1,4 @@
-package mrjake.aunis.gui.mainmenu.screens.resourcepacks;
+package mrjake.aunis.gui.mainmenu.screens.options.resourcepacks;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.ResourcePackListEntry;

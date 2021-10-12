@@ -7,8 +7,8 @@ import mrjake.aunis.gui.AunisGuiSlider;
 import mrjake.aunis.gui.AunisOptionButton;
 import mrjake.aunis.gui.GuiBase;
 import mrjake.aunis.gui.AunisGuiSliderSounds;
-import mrjake.aunis.gui.mainmenu.screens.resourcepacks.AunisGuiResourcePackSelected;
-import mrjake.aunis.gui.mainmenu.screens.resourcepacks.AunisGuiResourcePacksAvailable;
+import mrjake.aunis.gui.mainmenu.screens.options.resourcepacks.AunisGuiResourcePackSelected;
+import mrjake.aunis.gui.mainmenu.screens.options.resourcepacks.AunisGuiResourcePacksAvailable;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
@@ -20,7 +20,6 @@ import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.resources.ResourcePackListEntry;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
@@ -54,11 +53,6 @@ public class AunisAudioOptions extends GuiScreenOptionsSounds {
     protected AunisLanguageOptions.List list;
 
     protected final GuiScreen parent;
-    protected java.util.List<ResourcePackListEntry> availableResourcePacks;
-    protected java.util.List<ResourcePackListEntry> selectedResourcePacks;
-    protected AunisGuiResourcePacksAvailable availableResourcePacksList;
-    protected AunisGuiResourcePackSelected selectedResourcePacksList;
-    protected boolean changed;
 
     protected BiomeOverlayEnum overlay;
     protected float screenCenterHeight = (((float) height) / 2f);

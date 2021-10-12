@@ -3,6 +3,7 @@ package mrjake.aunis.gui.mainmenu;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.AunisGuiButton;
+import mrjake.aunis.gui.mainmenu.screens.AunisModListGui;
 import mrjake.aunis.gui.mainmenu.screens.AunisOptionsGui;
 import mrjake.aunis.gui.mainmenu.screens.options.AunisLanguageOptions;
 import mrjake.aunis.loader.ElementEnum;
@@ -641,8 +642,7 @@ public class AunisMainMenu extends GuiMainMenu {
                 this.mc.displayGuiScreen(new AunisLanguageOptions(this, this.mc.gameSettings, this.mc.getLanguageManager(), overlay));
                 break;
             case 6:
-                this.mc.displayGuiScreen(new net.minecraftforge.fml.client.GuiModList(this));
-                //this.mc.displayGuiScreen(new AunisModListMenu(this));
+                this.mc.displayGuiScreen(new AunisModListGui(this));
                 break;
             // open wiki
             case 20:
