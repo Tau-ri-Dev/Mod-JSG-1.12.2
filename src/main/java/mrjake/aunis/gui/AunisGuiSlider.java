@@ -23,13 +23,13 @@ public class AunisGuiSlider extends AunisGuiButton
     public AunisGuiSlider(int buttonId, int x, int y, GameSettings.Options optionIn)
     {
         this(buttonId, x, y, optionIn, 0.0F, 1.0F);
-        this.xpos = x;
-        this.ypos = y;
     }
 
     public AunisGuiSlider(int buttonId, int x, int y, GameSettings.Options optionIn, float minValueIn, float maxValue)
     {
-        super(buttonId, x, y, 150, 20, "");
+        super(buttonId, x, y, 200, 20, "");
+        this.xpos = x;
+        this.ypos = y;
         this.sliderValue = 1.0F;
         this.options = optionIn;
         this.minValue = minValueIn;

@@ -3,12 +3,8 @@ package mrjake.aunis.gui.mainmenu.screens;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.AunisGuiButton;
-import mrjake.aunis.gui.AunisGuiLockIconButton;
 import mrjake.aunis.gui.AunisGuiSlider;
-import mrjake.aunis.gui.AunisOptionButton;
-import mrjake.aunis.gui.mainmenu.screens.options.AunisAudioOptions;
-import mrjake.aunis.gui.mainmenu.screens.options.AunisLanguageOptions;
-import mrjake.aunis.gui.mainmenu.screens.options.AunisResourcePacksOptions;
+import mrjake.aunis.gui.mainmenu.screens.options.*;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
@@ -269,19 +265,19 @@ public class AunisOptionsGui extends GuiOptions {
         }
         else{
             EnumDifficulty enumdifficulty = EnumDifficulty.NORMAL;
-            this.difficultyButton = new AunisGuiButton(108, this.width / 2 - 155 + i % 2 * 160, this.height / 6 - 24, 150, 20, this.getDifficultyText(enumdifficulty));
+            this.difficultyButton = new AunisGuiButton(108, this.width / 2 - 205 + i % 2 * 160, this.height / 6 - 24, 200, 20, this.getDifficultyText(enumdifficulty));
             this.aunisButtonList.add(this.difficultyButton);
             this.difficultyButton.enabled = false;
         }
 
-        this.aunisButtonList.add(new AunisGuiButton(110, this.width / 2 - 155, this.height / 6 + 48 - 6, 150, 20, I18n.format("options.skinCustomisation")));
-        this.aunisButtonList.add(new AunisGuiButton(106, this.width / 2 + 5, this.height / 6 + 48 - 6, 150, 20, I18n.format("options.sounds")));
-        this.aunisButtonList.add(new AunisGuiButton(101, this.width / 2 - 155, this.height / 6 + 72 - 6, 150, 20, I18n.format("options.video")));
-        this.aunisButtonList.add(new AunisGuiButton(100, this.width / 2 + 5, this.height / 6 + 72 - 6, 150, 20, I18n.format("options.controls")));
-        this.aunisButtonList.add(new AunisGuiButton(102, this.width / 2 - 155, this.height / 6 + 96 - 6, 150, 20, I18n.format("options.language")));
-        this.aunisButtonList.add(new AunisGuiButton(103, this.width / 2 + 5, this.height / 6 + 96 - 6, 150, 20, I18n.format("options.chat.title")));
-        this.aunisButtonList.add(new AunisGuiButton(105, this.width / 2 - 155, this.height / 6 + 120 - 6, 150, 20, I18n.format("options.resourcepack")));
-        this.aunisButtonList.add(new AunisGuiButton(104, this.width / 2 + 5, this.height / 6 + 120 - 6, 150, 20, I18n.format("options.snooper.view")));
+        //this.aunisButtonList.add(new AunisGuiButton(110, this.width / 2 - 205, this.height / 6 + 48 - 6, 200, 20, I18n.format("options.skinCustomisation")));
+        this.aunisButtonList.add(new AunisGuiButton(101, this.width / 2 - 205, this.height / 6 + 48 - 6, 410, 20, I18n.format("options.video")));
+        this.aunisButtonList.add(new AunisGuiButton(106, this.width / 2 + 5, this.height / 6 + 72 - 6, 200, 20, I18n.format("options.sounds")));
+        this.aunisButtonList.add(new AunisGuiButton(100, this.width / 2 - 205, this.height / 6 + 72 - 6, 200, 20, I18n.format("options.controls")));
+        this.aunisButtonList.add(new AunisGuiButton(102, this.width / 2 + 5, this.height / 6 + 96 - 6, 200, 20, I18n.format("options.language")));
+        this.aunisButtonList.add(new AunisGuiButton(105, this.width / 2 - 205, this.height / 6 + 96 - 6, 200, 20, I18n.format("options.resourcepack")));
+        //this.aunisButtonList.add(new AunisGuiButton(103, this.width / 2 + 5, this.height / 6 + 96 - 6, 200, 20, I18n.format("options.chat.title")));
+        //this.aunisButtonList.add(new AunisGuiButton(104, this.width / 2 + 5, this.height / 6 + 120 - 6, 200, 20, I18n.format("options.snooper.view")));
         this.aunisButtonList.add(new AunisGuiButton(200, this.width / 2 - 100, this.height / 6 + 168, I18n.format("gui.done")));
     }
 
@@ -316,7 +312,7 @@ public class AunisOptionsGui extends GuiOptions {
             if (button.id == 101)
             {
                 this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new GuiVideoSettings(this, this.settings));
+                this.mc.displayGuiScreen(new AunisVideoOptions(this, this.settings, overlay));
             }
 
             if (button.id == 100)

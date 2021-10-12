@@ -13,10 +13,10 @@ public class AunisOptionButton extends AunisGuiButton {
         super(p_i45011_1_, p_i45011_2_, p_i45011_3_, p_i45011_4_);
     }
 
-    public AunisOptionButton(int id, int x, int y, GameSettings.Options font, String options)
+    public AunisOptionButton(int id, int x, int y, GameSettings.Options option, String string)
     {
-        super(id, x, y, options);
-        this.enumOptions = font;
+        super(id, x, y, string);
+        this.enumOptions = option;
     }
 
     public GameSettings.Options getOption()

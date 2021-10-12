@@ -361,7 +361,7 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
                 if (this.changed){
                     List<ResourcePackRepository.Entry> list = Lists.<ResourcePackRepository.Entry>newArrayList();
 
-                    for (ResourcePackListEntry resourcepacklistentry : this.selectedResourcePacks)
+                    for (ResourcePackListEntry resourcepacklistentry : selectedResourcePacks)
                     {
                         if (resourcepacklistentry instanceof ResourcePackListEntryFound)
                         {
@@ -370,9 +370,9 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
                     }
 
                     Collections.reverse(list);
-                    this.mc.getResourcePackRepository().setRepositories(list);
-                    this.mc.gameSettings.resourcePacks.clear();
-                    this.mc.gameSettings.incompatibleResourcePacks.clear();
+                    mc.getResourcePackRepository().setRepositories(list);
+                    mc.gameSettings.resourcePacks.clear();
+                    mc.gameSettings.incompatibleResourcePacks.clear();
 
                     for (ResourcePackRepository.Entry resourcepackrepository$entry : list)
                     {
@@ -384,8 +384,8 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
                         }
                     }
 
-                    this.mc.gameSettings.saveOptions();
-                    this.mc.refreshResources();
+                    mc.gameSettings.saveOptions();
+                    mc.refreshResources();
                 }
 
                 isUnloading = true;
@@ -413,5 +413,10 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
         }
         availableResourcePacksList.mouseClicked(mouseX, mouseY, mouseButton);
         selectedResourcePacksList.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+    public void markChanged(){
+        this.changed = true;
     }
 }
