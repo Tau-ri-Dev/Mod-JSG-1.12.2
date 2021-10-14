@@ -4,6 +4,7 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.gui.mainmenu.screens.AunisModListGui;
+import mrjake.aunis.gui.mainmenu.screens.AunisMultiPlayerGui;
 import mrjake.aunis.gui.mainmenu.screens.AunisOptionsGui;
 import mrjake.aunis.gui.mainmenu.screens.options.AunisLanguageOptions;
 import mrjake.aunis.loader.ElementEnum;
@@ -12,6 +13,7 @@ import mrjake.aunis.renderer.stargate.ChevronEnum;
 import mrjake.aunis.renderer.stargate.StargateRendererStatic;
 import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundPositionedEnum;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -102,8 +104,7 @@ public class AunisMainMenu extends GuiMainMenu {
      * ------------------------------------------
      */
     // ------------------------------------------
-
-    public void deleteEvent(){
+    public void deleteEvent() {
         nextEvent = "------";
     }
 
@@ -121,8 +122,7 @@ public class AunisMainMenu extends GuiMainMenu {
                     this.chevronShoutColapsing = true;
                     this.chevronLastAnimationStage -= 0.020f;
                     nextEvent = "Top chevron up";
-                }
-                else if (chevronShoutTiming == chevronShoutTimingSetting/2) {
+                } else if (chevronShoutTiming == chevronShoutTimingSetting / 2) {
                     if (!chevronSound1) {
                         AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 2, 0), SoundPositionedEnum.MAINMENU_CHEVRON_OPEN, true);
                         chevronSound1 = true;
@@ -130,8 +130,7 @@ public class AunisMainMenu extends GuiMainMenu {
                     }
                     chevronShoutTiming++;
                 } else chevronShoutTiming++;
-            }
-            else {
+            } else {
                 // chevron is going down
                 this.chevronLastAnimationStage += 0.020f;
                 nextEvent = "Top chevron down";
@@ -143,7 +142,7 @@ public class AunisMainMenu extends GuiMainMenu {
                     chevronSound2 = true;
                 }
                 nextEvent = "Top chevron reset";
-                if(!chevronsActive) getNextBiomeOverlay(AunisConfig.mainMenuConfig.changingGateOverlay);
+                if (!chevronsActive) getNextBiomeOverlay(AunisConfig.mainMenuConfig.changingGateOverlay);
                 this.chevronShoutTiming = 0;
                 this.chevronLastAnimationStage = 0;
                 this.chevronShout = false;
@@ -151,19 +150,19 @@ public class AunisMainMenu extends GuiMainMenu {
                 this.chevronSound2 = false;
                 this.chevronSound3 = false;
                 this.chevronShoutColapsing = false;
-                if(kawooshState == 0) speedUpGate = true;
+                if (kawooshState == 0) speedUpGate = true;
                 deleteEvent();
             }
         }
     }
 
     // slow down and speed up gate ring
-    public void updateRingSpeed(){
-        if(!AunisConfig.mainMenuConfig.gateRotation) return;
+    public void updateRingSpeed() {
+        if (!AunisConfig.mainMenuConfig.gateRotation) return;
         if (!speedUpGate) {
             if (ringAnimationSpeed > 0.00f) ringAnimationSpeed -= 0.02f;
             if (ringAnimationSpeed < 0.00f) ringAnimationSpeed = 0.0f;
-            if(ringAnimationSpeed < 0.05f && kawooshState == 0 && !chevronShout){
+            if (ringAnimationSpeed < 0.05f && kawooshState == 0 && !chevronShout) {
                 chevronShout = true;
             }
         } else {
@@ -197,14 +196,15 @@ public class AunisMainMenu extends GuiMainMenu {
     // update ring rotation and overlay
     public void updateAnimation() {
         if (animationStage > 360) animationStage = 0f;
-        if((animationStage > 352 && animationStage < 353) || (animationStage > 172 && animationStage < 173)) speedUpGate = false;
+        if ((animationStage > 352 && animationStage < 353) || (animationStage > 172 && animationStage < 173))
+            speedUpGate = false;
         updateRingSpeed();
     }
 
     // EVENT HORIZON RENDER
     public void loadGame() {
         speedUpGate = false;
-        if(ringAnimationSpeed <= 0.05f) {
+        if (ringAnimationSpeed <= 0.05f) {
             renderButtonsAndStuff = false;
             chevronsActive = true;
             float step = 0.008f;
@@ -258,7 +258,7 @@ public class AunisMainMenu extends GuiMainMenu {
                         this.mc.displayGuiScreen(new GuiWorldSelection(this));
                         break;
                     case 2:
-                        this.mc.displayGuiScreen(new GuiMultiplayer(this));
+                        this.mc.displayGuiScreen(new AunisMultiPlayerGui(this, overlay));
                         break;
                     case 4:
                         this.mc.shutdown();
@@ -388,7 +388,7 @@ public class AunisMainMenu extends GuiMainMenu {
             ElementEnum.MILKYWAY_CHEVRON_FRAME_MAINMENU.bindTextureAndRender(this.overlay);
             GlStateManager.translate(0, chevronOffset, 0);
             if ((i == 6 || i == 7) || !this.chevronsActive) {
-                if (i == 8 && ((chevronShoutTiming > (chevronShoutTimingSetting/2)) && chevronShout)) {
+                if (i == 8 && ((chevronShoutTiming > (chevronShoutTimingSetting / 2)) && chevronShout)) {
                     ElementEnum.MILKYWAY_CHEVRON_LIGHT_ACTIVE_MAINMENU.bindTextureAndRender(this.overlay);
                     GlStateManager.translate(0, -2 * chevronOffset, 0);
                     ElementEnum.MILKYWAY_CHEVRON_MOVING_ACTIVE_MAINMENU.bindTextureAndRender(this.overlay);
@@ -416,7 +416,7 @@ public class AunisMainMenu extends GuiMainMenu {
         String versionInfo = "Aunis version: " + Version;
 
         if (renderButtonsAndStuff) {
-            if(renderButtonsAlpha < 1.0f && showVersionAlert != 1) renderButtonsAlpha += 0.05f;
+            if (renderButtonsAlpha < 1.0f && showVersionAlert != 1) renderButtonsAlpha += 0.05f;
 
             if (!Version.equals(Latest) && AunisConfig.enableAutoUpdater) {
                 versionInfo += " Latest build: " + Latest;
@@ -530,7 +530,7 @@ public class AunisMainMenu extends GuiMainMenu {
         // ------------------------------
         // DRAWING DEBUG INFO
 
-        if(AunisConfig.mainMenuConfig.debugMode) {
+        if (AunisConfig.mainMenuConfig.debugMode) {
             GlStateManager.pushMatrix();
             GlStateManager.enableTexture2D();
             GlStateManager.translate(6, screenCenterHeight - 30, 0);
@@ -695,7 +695,7 @@ public class AunisMainMenu extends GuiMainMenu {
                     }
                 }
             }
-            if(showVersionAlert == 1) {
+            if (showVersionAlert == 1) {
                 for (int i = 0; i < this.versionButtons.size(); ++i) {
                     GuiButton guibutton = this.versionButtons.get(i);
 

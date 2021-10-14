@@ -193,6 +193,8 @@ public abstract class AunisGuiSlot extends GuiSlot {
 
             this.drawSelectionBox(k, l, mouseXIn, mouseYIn, partialTicks);
             GlStateManager.disableDepth();
+            this.overlayBackground(0, this.top + 5, 255, 255);
+            this.overlayBackground(this.bottom - 5, this.height, 255, 255);
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
             GlStateManager.disableBlend();

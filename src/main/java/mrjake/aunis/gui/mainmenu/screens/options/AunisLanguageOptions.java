@@ -443,6 +443,8 @@ public class AunisLanguageOptions extends GuiLanguage {
 
                 this.drawSelectionBox(k, l, mouseX, mouseY, partialTicks);
                 GlStateManager.disableDepth();
+                this.overlayBackground(0, this.top + 5, 255, 255);
+                this.overlayBackground(this.bottom - 5, this.height, 255, 255);
                 GlStateManager.enableBlend();
                 GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
                 GlStateManager.disableAlpha();
@@ -503,10 +505,10 @@ public class AunisLanguageOptions extends GuiLanguage {
         }
 
         @Override
-        protected void overlayBackground(int startY, int endY, int startAlpha, int endAlpha)
-        {
+        protected void overlayBackground(int startY, int endY, int startAlpha, int endAlpha) {
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
+            this.mc.getTextureManager().bindTexture(Gui.OPTIONS_BACKGROUND);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             float f = 32.0F;
             bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);

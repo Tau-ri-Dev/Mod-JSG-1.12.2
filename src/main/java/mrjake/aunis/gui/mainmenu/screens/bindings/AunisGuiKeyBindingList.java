@@ -182,7 +182,6 @@ public class AunisGuiKeyBindingList extends GuiListExtended {
             GlStateManager.disableLighting();
             GlStateManager.disableFog();
             Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder bufferbuilder = tessellator.getBuffer();
             // Forge: background rendering moved into separate method.
             int k = this.left + this.width / 2 - this.getListWidth() / 2 + 2;
             int l = this.top + 4 - (int) this.amountScrolled;
@@ -193,8 +192,11 @@ public class AunisGuiKeyBindingList extends GuiListExtended {
 
             this.drawSelectionBox(k, l, mouseXIn, mouseYIn, partialTicks);
             GlStateManager.disableDepth();
-            this.overlayBackground(0, this.top + 5, 255, 255, 1);
-            this.overlayBackground(this.bottom - 5, this.height, 255, 255, 2);
+
+            // TODO: complete header nad footer of all menus like this (an also redone this)
+            this.overlayBackground(0, this.top + 5, 255, 255);
+            this.overlayBackground(this.bottom - 5, this.height, 255, 255);
+
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
             GlStateManager.disableAlpha();
@@ -248,23 +250,6 @@ public class AunisGuiKeyBindingList extends GuiListExtended {
 
             this.drawSlot(j, insideLeft, k, l, mouseXIn, mouseYIn, partialTicks);
         }
-    }
-
-    protected void overlayBackground(int startY, int endY, int startAlpha, int endAlpha, int img)
-    {
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        if(img == 1) this.mc.getTextureManager().bindTexture(BACKGROUND1);
-        else this.mc.getTextureManager().bindTexture(BACKGROUND2);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        //drawScaledCustomSizeModalRect(0, 0, 0, startY, width, endY, width, height, width, height);
-        float f = 32.0F;
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        bufferbuilder.pos((double)this.left, (double)endY, 0.0D).tex(0.0D, (double)((float)1f)).color(64, 64, 64, endAlpha).endVertex();
-        bufferbuilder.pos((double)(this.left + this.width), (double)endY, 0.0D).tex(0.0D, (double)((float)1)).color(64, 64, 64, endAlpha).endVertex();
-        bufferbuilder.pos((double)(this.left + this.width), (double)startY, 0.0D).tex(0.0D, (double)((float)1)).color(64, 64, 64, startAlpha).endVertex();
-        bufferbuilder.pos((double)this.left, (double)startY, 0.0D).tex(0.0D, (double)((float)1f)).color(64, 64, 64, startAlpha).endVertex();
-        tessellator.draw();
     }
 }
 
