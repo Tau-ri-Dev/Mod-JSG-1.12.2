@@ -1,6 +1,7 @@
 package mrjake.aunis.gui.mainmenu.screens.options.resourcepacks;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.ResourcePackListEntry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -14,7 +15,8 @@ public class AunisGuiResourcePacksAvailable extends AunisGuiResourcePackList {
     }
 
     @Override
-    protected String getListHeader() {
-        return null;
+    protected String getListHeader()
+    {
+        return I18n.format("resourcePack.available.title");
     }
 }

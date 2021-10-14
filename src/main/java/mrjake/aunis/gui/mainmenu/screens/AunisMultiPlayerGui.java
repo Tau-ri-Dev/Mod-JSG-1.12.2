@@ -94,7 +94,6 @@ public class AunisMultiPlayerGui extends GuiMultiplayer {
     // options vars
     private static final GameSettings.Options[] SCREEN_OPTIONS = new GameSettings.Options[] {GameSettings.Options.FOV};
     private final GuiScreen lastScreen;
-    protected String title = "Options";
     protected boolean isUnloading = false;
 
     /**
