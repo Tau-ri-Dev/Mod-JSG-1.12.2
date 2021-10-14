@@ -270,14 +270,11 @@ public class AunisOptionsGui extends GuiOptions {
             this.difficultyButton.enabled = false;
         }
 
-        //this.aunisButtonList.add(new AunisGuiButton(110, this.width / 2 - 205, this.height / 6 + 48 - 6, 200, 20, I18n.format("options.skinCustomisation")));
         this.aunisButtonList.add(new AunisGuiButton(101, this.width / 2 - 205, this.height / 6 + 48 - 6, 410, 20, I18n.format("options.video")));
         this.aunisButtonList.add(new AunisGuiButton(106, this.width / 2 + 5, this.height / 6 + 72 - 6, 200, 20, I18n.format("options.sounds")));
         this.aunisButtonList.add(new AunisGuiButton(100, this.width / 2 - 205, this.height / 6 + 72 - 6, 200, 20, I18n.format("options.controls")));
         this.aunisButtonList.add(new AunisGuiButton(102, this.width / 2 + 5, this.height / 6 + 96 - 6, 200, 20, I18n.format("options.language")));
         this.aunisButtonList.add(new AunisGuiButton(105, this.width / 2 - 205, this.height / 6 + 96 - 6, 200, 20, I18n.format("options.resourcepack")));
-        //this.aunisButtonList.add(new AunisGuiButton(103, this.width / 2 + 5, this.height / 6 + 96 - 6, 200, 20, I18n.format("options.chat.title")));
-        //this.aunisButtonList.add(new AunisGuiButton(104, this.width / 2 + 5, this.height / 6 + 120 - 6, 200, 20, I18n.format("options.snooper.view")));
         this.aunisButtonList.add(new AunisGuiButton(200, this.width / 2 - 100, this.height / 6 + 168, I18n.format("gui.done")));
     }
 
@@ -318,7 +315,7 @@ public class AunisOptionsGui extends GuiOptions {
             if (button.id == 100)
             {
                 this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new GuiControls(this, this.settings));
+                this.mc.displayGuiScreen(new AunisBindingOptions(this, this.settings, overlay));
             }
 
             if (button.id == 102)

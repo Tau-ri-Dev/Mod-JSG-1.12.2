@@ -44,6 +44,7 @@ import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.GuiModList;
 import net.minecraftforge.fml.client.IModGuiFactory;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -160,10 +161,11 @@ public class AunisModListGui extends GuiModList
     protected boolean sorted = false;
     protected SortType sortType = SortType.NORMAL;
 
-    public AunisModListGui(GuiScreen mainMenu){
+    public AunisModListGui(GuiScreen mainMenu, BiomeOverlayEnum overlay){
         super(mainMenu);
         this.mainMenu = mainMenu;
         this.mods = new ArrayList<>();
+        this.overlay = overlay;
         FMLClientHandler.instance().addSpecialModEntries(mods);
         // Add child mods to their parent's list
         for (ModContainer mod : Loader.instance().getModList())
@@ -200,6 +202,7 @@ public class AunisModListGui extends GuiModList
     @Override
     public void initGui()
     {
+        aunisButtonList.clear();
         int slotHeight = 35;
         for (ModContainer mod : mods)
         {
@@ -233,20 +236,41 @@ public class AunisModListGui extends GuiModList
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException{
-        if (button.enabled){
-            SortType type = SortType.getTypeForButton(button);
+        if (button.enabled)
+        {
+            AunisModListGui.SortType type = AunisModListGui.SortType.getTypeForButton(button);
+
             if (type != null)
-                super.actionPerformed(button);
-            else{
-                switch (button.id){
-                    case 6:
+            {
+                for (GuiButton b : aunisButtonList)
+                {
+                    if (AunisModListGui.SortType.getTypeForButton(b) != null)
                     {
-                        this.isUnloading = true;
+                        b.enabled = true;
+                    }
+                }
+                button.enabled = false;
+                sorted = false;
+                sortType = type;
+                this.mods = modList.getMods();
+            }
+            else
+            {
+                switch (button.id)
+                {
+                    case 6:{
+                        isUnloading = true;
                         return;
                     }
-                    case 20:
-                    {
-                        super.actionPerformed(button);
+                    case 20:{
+                        try{
+                            IModGuiFactory guiFactory = FMLClientHandler.instance().getGuiFactoryFor(selectedMod);
+                            GuiScreen newScreen = guiFactory.createConfigGui(this);
+                            this.mc.displayGuiScreen(newScreen);
+                        }
+                        catch (Exception e){
+                            FMLLog.log.error("There was a critical issue trying to build the config GUI for {}", selectedMod.getModId(), e);
+                        }
                     }
                 }
             }
@@ -296,7 +320,7 @@ public class AunisModListGui extends GuiModList
             if (this.gatePosY > 0.0f) this.gatePosY -= step * 4f;
             if (this.gateZoom > 0.0f) this.gateZoom -= step;
 
-            if (this.gatePos+((step*4) + 25) <= ((float) width) / 2f) this.mc.displayGuiScreen(this.mainMenu);
+            if (this.gatePosY+((step*4) + 25) >= ((float) height) / 2f) this.mc.displayGuiScreen(this.mainMenu);
         }
         if (animationStage > 360) animationStage = 0f;
         updateRingSpeed();
@@ -683,13 +707,13 @@ public class AunisModListGui extends GuiModList
     {
         if (button == 0)
         {
-            for (int i = 0; i < this.buttonList.size(); ++i)
+            for (int i = 0; i < this.aunisButtonList.size(); ++i)
             {
-                GuiButton guibutton = this.buttonList.get(i);
+                GuiButton guibutton = this.aunisButtonList.get(i);
 
                 if (guibutton.mousePressed(this.mc, x, y))
                 {
-                    net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre event = new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, this.buttonList);
+                    net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre event = new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, this.aunisButtonList);
                     if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
                         break;
                     guibutton = event.getButton();
@@ -697,7 +721,7 @@ public class AunisModListGui extends GuiModList
                     guibutton.playPressSound(this.mc.getSoundHandler());
                     this.actionPerformed(guibutton);
                     if (this.equals(this.mc.currentScreen))
-                        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.getButton(), this.buttonList));
+                        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.getButton(), this.aunisButtonList));
                 }
             }
         }
@@ -757,6 +781,21 @@ public class AunisModListGui extends GuiModList
         this.selectedMod = (index >= 0 && index <= mods.size()) ? mods.get(selected) : null;
 
         updateCache();
+    }
+
+    @Override
+    protected void keyTyped(char c, int keyCode) throws IOException
+    {
+        if (keyCode == 1)
+        {
+            this.mc.displayGuiScreen((GuiScreen)null);
+
+            if (this.mc.currentScreen == null)
+            {
+                this.mc.setIngameFocus();
+            }
+        }
+        search.textboxKeyTyped(c, keyCode);
     }
 
     @Override

@@ -15,6 +15,7 @@ import mrjake.aunis.sound.SoundPositionedEnum;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
@@ -185,6 +186,9 @@ public class AunisMainMenu extends GuiMainMenu {
 
     // play sound
     public void updateSound() {
+        if (this.mc.gameSettings.getKeyBinding(GameSettings.Options.AUTO_JUMP).equals("Auto-Jump: ON"))
+            this.mc.gameSettings.setOptionValue(GameSettings.Options.AUTO_JUMP, 1);
+
         AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1, 0, 0), SoundPositionedEnum.MAINMENU_MUSIC, AunisConfig.mainMenuConfig.playMusic);
         AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 1), SoundPositionedEnum.MAINMENU_RING_ROLL,
                 (AunisConfig.mainMenuConfig.gateRotation && kawooshState == 0 && ringAnimationSpeed > 0.0f));
@@ -642,7 +646,7 @@ public class AunisMainMenu extends GuiMainMenu {
                 this.mc.displayGuiScreen(new AunisLanguageOptions(this, this.mc.gameSettings, this.mc.getLanguageManager(), overlay));
                 break;
             case 6:
-                this.mc.displayGuiScreen(new AunisModListGui(this));
+                this.mc.displayGuiScreen(new AunisModListGui(this, overlay));
                 break;
             // open wiki
             case 20:

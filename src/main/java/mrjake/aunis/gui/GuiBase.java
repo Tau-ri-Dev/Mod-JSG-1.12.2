@@ -6,7 +6,8 @@ import net.minecraft.client.renderer.GlStateManager;
 
 public class GuiBase extends GuiScreen {
 	
-	public static final int FRAME_COLOR = 0xFF181A1F;
+	//public static final int FRAME_COLOR = 0xFF181A1F;
+	public static final int FRAME_COLOR = 0xFF000000;
 	public static final int BG_COLOR = 0xF2272B33;
 	public static final int TEXT_COLOR = 0x6B768C;	
 	

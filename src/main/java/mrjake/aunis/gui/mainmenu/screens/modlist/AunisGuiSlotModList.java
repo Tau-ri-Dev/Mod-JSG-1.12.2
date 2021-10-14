@@ -1,5 +1,4 @@
 package mrjake.aunis.gui.mainmenu.screens.modlist;
-
 import java.util.ArrayList;
 
 import mrjake.aunis.gui.mainmenu.screens.AunisModListGui;
@@ -21,36 +20,13 @@ import net.minecraftforge.fml.common.ModContainer;
  * @author cpw
  *
  */
-public class AunisGuiSlotModList extends GuiScrollingList
+public class AunisGuiSlotModList extends AunisGuiScrollingList
 {
-    public Minecraft client;
-    public int listWidth;
-    public int listHeight;
-    public int screenWidth;
-    public int screenHeight;
-    public int top;
-    public int bottom;
-    public int right;
-    public int left;
-    public int slotHeight;
-    public int scrollUpActionId;
-    public int scrollDownActionId;
-    public int mouseX;
-    public int mouseY;
-    public float initialMouseClickY = -2.0F;
-    public float scrollFactor;
-    public float scrollDistance;
-    public int selectedIndex = -1;
-    public long lastClickTime = 0L;
-    public boolean highlightSelected = true;
-    public boolean hasHeader;
-    public int headerHeight;
-    public boolean captureMouse = true;
 
-    public static final ResourceLocation VERSION_CHECK_ICONS = new ResourceLocation(ForgeVersion.MOD_ID, "textures/gui/version_check_icons.png");
+    private static final ResourceLocation VERSION_CHECK_ICONS = new ResourceLocation(ForgeVersion.MOD_ID, "textures/gui/version_check_icons.png");
 
-    public AunisModListGui parent;
-    public ArrayList<ModContainer> mods;
+    private final AunisModListGui parent;
+    private final ArrayList<ModContainer> mods;
 
     public AunisGuiSlotModList(AunisModListGui parent, ArrayList<ModContainer> mods, int listWidth, int slotHeight)
     {
@@ -80,6 +56,7 @@ public class AunisGuiSlotModList extends GuiScrollingList
     @Override
     protected void drawBackground()
     {
+        this.parent.drawDefaultBackground();
     }
 
     @Override
@@ -126,4 +103,3 @@ public class AunisGuiSlotModList extends GuiScrollingList
         }
     }
 }
-

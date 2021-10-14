@@ -19,29 +19,28 @@ import java.util.List;
 
 public abstract class AunisGuiScrollingList extends GuiScrollingList
 {
-    private final Minecraft client;
-    protected final int listWidth;
-    protected final int listHeight;
-    protected final int screenWidth;
-    protected final int screenHeight;
-    protected final int top;
-    protected final int bottom;
-    protected final int right;
-    protected final int left;
-    protected final int slotHeight;
-    private int scrollUpActionId;
-    private int scrollDownActionId;
-    protected int mouseX;
-    protected int mouseY;
-    private float initialMouseClickY = -2.0F;
-    private float scrollFactor;
-    private float scrollDistance;
-    protected int selectedIndex = -1;
-    private long lastClickTime = 0L;
-    private boolean highlightSelected = true;
-    private boolean hasHeader;
-    private int headerHeight;
-    protected boolean captureMouse = true;
+    public final Minecraft client;
+    public final int listWidth;
+    public final int listHeight;
+    public final int screenWidth;
+    public final int screenHeight;
+    public final int top;
+    public final int bottom;
+    public final int right;
+    public final int left;
+    public final int slotHeight;
+    public int scrollUpActionId;
+    public int scrollDownActionId;
+    public int mouseX;
+    public int mouseY;
+    public float initialMouseClickY = -2.0F;
+    public float scrollFactor;
+    public float scrollDistance;
+    public int selectedIndex = -1;
+    public long lastClickTime = 0L;
+    public boolean highlightSelected = true;
+    public boolean hasHeader;
+    public int headerHeight;
 
     @Deprecated // We need to know screen size.
     public AunisGuiScrollingList(Minecraft client, int width, int height, int top, int bottom, int left, int entryHeight)
@@ -124,7 +123,7 @@ public abstract class AunisGuiScrollingList extends GuiScrollingList
      * is rendered outside of the view box. Do not mess with SCISSOR unless you support this.
      */
     @Override
-    protected void drawScreen(int mouseX, int mouseY) { func_27257_b(mouseX, mouseY); }
+    public void drawScreen(int mouseX, int mouseY) { func_27257_b(mouseX, mouseY); }
 
     @Deprecated // Unused, Remove in 1.9.3?
     public int func_27256_c(int x, int y)
@@ -199,8 +198,7 @@ public abstract class AunisGuiScrollingList extends GuiScrollingList
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks)
-    {
+    public void drawScreen(int mouseX, int mouseY, float partialTicks){
         this.mouseX = mouseX;
         this.mouseY = mouseY;
 
