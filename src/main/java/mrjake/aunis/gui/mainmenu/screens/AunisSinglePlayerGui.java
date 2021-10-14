@@ -12,6 +12,7 @@ import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
 import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundPositionedEnum;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -19,8 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -34,7 +34,6 @@ public class AunisSinglePlayerGui extends GuiWorldSelection {
         this.overlay = overlay;
     }
 
-    private static final Logger LOGGER = LogManager.getLogger();
     protected GuiScreen prevScreen;
     protected String title = "Select world";
     private String worldVersTooltip;
@@ -43,6 +42,9 @@ public class AunisSinglePlayerGui extends GuiWorldSelection {
     private AunisGuiButton renameButton;
     private AunisGuiButton copyButton;
     private AunisGuiListWorldSelection selectionList;
+    protected int eventButton;
+    protected int touchValue;
+    protected long lastMouseEvent;
 
     public void initGui() {
         this.title = I18n.format("selectWorld.title");
@@ -51,17 +53,46 @@ public class AunisSinglePlayerGui extends GuiWorldSelection {
     }
 
     public void handleMouseInput() throws IOException {
-        super.handleMouseInput();
+        int i = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int j = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+        int k = Mouse.getEventButton();
+
+        if (Mouse.getEventButtonState())
+        {
+            if (this.mc.gameSettings.touchscreen && this.touchValue++ > 0)
+            {
+                return;
+            }
+
+            this.eventButton = k;
+            this.lastMouseEvent = Minecraft.getSystemTime();
+            this.mouseClicked(i, j, this.eventButton);
+        }
+        else if (k != -1)
+        {
+            if (this.mc.gameSettings.touchscreen && --this.touchValue > 0)
+            {
+                return;
+            }
+
+            this.eventButton = -1;
+            this.mouseReleased(i, j, k);
+        }
+        else if (this.eventButton != -1 && this.lastMouseEvent > 0L)
+        {
+            long l = Minecraft.getSystemTime() - this.lastMouseEvent;
+            this.mouseClickMove(i, j, this.eventButton, l);
+        }
         this.selectionList.handleMouseInput();
     }
 
     public void postInit() {
         this.selectButton = this.addButton(new AunisGuiButton(1, this.width / 2 - 154, this.height - 52, 150, 20, I18n.format("selectWorld.select")));
-        this.addButton(new GuiButton(3, this.width / 2 + 4, this.height - 52, 150, 20, I18n.format("selectWorld.create")));
+        aunisButtonList.add(new AunisGuiButton(3, this.width / 2 + 4, this.height - 52, 150, 20, I18n.format("selectWorld.create")));
         this.renameButton = this.addButton(new AunisGuiButton(4, this.width / 2 - 154, this.height - 28, 72, 20, I18n.format("selectWorld.edit")));
         this.deleteButton = this.addButton(new AunisGuiButton(2, this.width / 2 - 76, this.height - 28, 72, 20, I18n.format("selectWorld.delete")));
         this.copyButton = this.addButton(new AunisGuiButton(5, this.width / 2 + 4, this.height - 28, 72, 20, I18n.format("selectWorld.recreate")));
-        this.addButton(new AunisGuiButton(0, this.width / 2 + 82, this.height - 28, 72, 20, I18n.format("gui.cancel")));
+        aunisButtonList.add(new AunisGuiButton(0, this.width / 2 + 82, this.height - 28, 72, 20, I18n.format("gui.cancel")));
         this.selectButton.enabled = false;
         this.deleteButton.enabled = false;
         this.renameButton.enabled = false;
@@ -273,6 +304,7 @@ public class AunisSinglePlayerGui extends GuiWorldSelection {
             for (GuiLabel guiLabel : this.labelList) {
                 guiLabel.drawLabel(this.mc, mouseX, mouseY);
             }
+
             deleteButton.drawButton(this.mc, mouseX, mouseY, partialTicks);
             selectButton.drawButton(this.mc, mouseX, mouseY, partialTicks);
             renameButton.drawButton(this.mc, mouseX, mouseY, partialTicks);

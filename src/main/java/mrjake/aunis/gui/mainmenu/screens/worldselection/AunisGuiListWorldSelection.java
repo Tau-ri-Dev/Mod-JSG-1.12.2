@@ -29,7 +29,7 @@ public class AunisGuiListWorldSelection extends GuiListWorldSelection {
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
             // Forge: background rendering moved into separate method.
-            this.drawContainerBackground(tessellator);
+            //this.drawContainerBackground(tessellator);
             int k = this.left + this.width / 2 - this.getListWidth() / 2 + 2;
             int l = this.top + 4 - (int)this.amountScrolled;
 
@@ -38,6 +38,7 @@ public class AunisGuiListWorldSelection extends GuiListWorldSelection {
                 this.drawListHeader(k, l, tessellator);
             }
 
+            this.drawSelectionBox(k, l, mouseXIn, mouseYIn, partialTicks);
             GlStateManager.disableDepth();
             this.overlayBackground(0, this.top, 255, 255);
             this.overlayBackground(this.bottom, this.height, 255, 255);
@@ -46,19 +47,6 @@ public class AunisGuiListWorldSelection extends GuiListWorldSelection {
             GlStateManager.disableAlpha();
             GlStateManager.shadeModel(7425);
             GlStateManager.disableTexture2D();
-            int i1 = 4;
-            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-            bufferbuilder.pos((double)this.left, (double)(this.top + 4), 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 0).endVertex();
-            bufferbuilder.pos((double)this.right, (double)(this.top + 4), 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 0).endVertex();
-            bufferbuilder.pos((double)this.right, (double)this.top, 0.0D).tex(1.0D, 0.0D).color(0, 0, 0, 255).endVertex();
-            bufferbuilder.pos((double)this.left, (double)this.top, 0.0D).tex(0.0D, 0.0D).color(0, 0, 0, 255).endVertex();
-            tessellator.draw();
-            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-            bufferbuilder.pos((double)this.left, (double)this.bottom, 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            bufferbuilder.pos((double)this.right, (double)this.bottom, 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            bufferbuilder.pos((double)this.right, (double)(this.bottom - 4), 0.0D).tex(1.0D, 0.0D).color(0, 0, 0, 0).endVertex();
-            bufferbuilder.pos((double)this.left, (double)(this.bottom - 4), 0.0D).tex(0.0D, 0.0D).color(0, 0, 0, 0).endVertex();
-            tessellator.draw();
             int j1 = this.getMaxScroll();
 
             if (j1 > 0)
@@ -71,25 +59,6 @@ public class AunisGuiListWorldSelection extends GuiListWorldSelection {
                 {
                     l1 = this.top;
                 }
-
-                bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-                bufferbuilder.pos((double)i, (double)this.bottom, 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-                bufferbuilder.pos((double)j, (double)this.bottom, 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-                bufferbuilder.pos((double)j, (double)this.top, 0.0D).tex(1.0D, 0.0D).color(0, 0, 0, 255).endVertex();
-                bufferbuilder.pos((double)i, (double)this.top, 0.0D).tex(0.0D, 0.0D).color(0, 0, 0, 255).endVertex();
-                tessellator.draw();
-                bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-                bufferbuilder.pos((double)i, (double)(l1 + k1), 0.0D).tex(0.0D, 1.0D).color(128, 128, 128, 255).endVertex();
-                bufferbuilder.pos((double)j, (double)(l1 + k1), 0.0D).tex(1.0D, 1.0D).color(128, 128, 128, 255).endVertex();
-                bufferbuilder.pos((double)j, (double)l1, 0.0D).tex(1.0D, 0.0D).color(128, 128, 128, 255).endVertex();
-                bufferbuilder.pos((double)i, (double)l1, 0.0D).tex(0.0D, 0.0D).color(128, 128, 128, 255).endVertex();
-                tessellator.draw();
-                bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-                bufferbuilder.pos((double)i, (double)(l1 + k1 - 1), 0.0D).tex(0.0D, 1.0D).color(192, 192, 192, 255).endVertex();
-                bufferbuilder.pos((double)(j - 1), (double)(l1 + k1 - 1), 0.0D).tex(1.0D, 1.0D).color(192, 192, 192, 255).endVertex();
-                bufferbuilder.pos((double)(j - 1), (double)l1, 0.0D).tex(1.0D, 0.0D).color(192, 192, 192, 255).endVertex();
-                bufferbuilder.pos((double)i, (double)l1, 0.0D).tex(0.0D, 0.0D).color(192, 192, 192, 255).endVertex();
-                tessellator.draw();
             }
 
             this.renderDecorations(mouseXIn, mouseYIn);
