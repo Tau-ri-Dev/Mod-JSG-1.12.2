@@ -27,10 +27,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AunisSinglePlayer extends GuiWorldSelection {
-    public AunisSinglePlayer(GuiScreen screenIn) {
+public class AunisSinglePlayerGui extends GuiWorldSelection {
+    public AunisSinglePlayerGui(GuiScreen screenIn, BiomeOverlayEnum overlay) {
         super(screenIn);
         this.prevScreen = screenIn;
+        this.overlay = overlay;
     }
 
     private static final Logger LOGGER = LogManager.getLogger();

@@ -6,6 +6,7 @@ import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.gui.mainmenu.screens.AunisModListGui;
 import mrjake.aunis.gui.mainmenu.screens.AunisMultiPlayerGui;
 import mrjake.aunis.gui.mainmenu.screens.AunisOptionsGui;
+import mrjake.aunis.gui.mainmenu.screens.AunisSinglePlayerGui;
 import mrjake.aunis.gui.mainmenu.screens.options.AunisLanguageOptions;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
@@ -13,7 +14,6 @@ import mrjake.aunis.renderer.stargate.ChevronEnum;
 import mrjake.aunis.renderer.stargate.StargateRendererStatic;
 import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundPositionedEnum;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -255,7 +255,7 @@ public class AunisMainMenu extends GuiMainMenu {
 
                 switch (clickedButton) {
                     case 1:
-                        this.mc.displayGuiScreen(new GuiWorldSelection(this));
+                        this.mc.displayGuiScreen(new AunisSinglePlayerGui(this, overlay));
                         break;
                     case 2:
                         this.mc.displayGuiScreen(new AunisMultiPlayerGui(this, overlay));
