@@ -255,10 +255,12 @@ public class AunisMainMenu extends GuiMainMenu {
 
                 switch (clickedButton) {
                     case 1:
-                        this.mc.displayGuiScreen(new AunisSinglePlayerGui(this, overlay));
+                        //this.mc.displayGuiScreen(new AunisSinglePlayerGui(this, overlay));
+                        this.mc.displayGuiScreen(new GuiWorldSelection(this));
                         break;
                     case 2:
-                        this.mc.displayGuiScreen(new AunisMultiPlayerGui(this, overlay));
+                        //this.mc.displayGuiScreen(new AunisMultiPlayerGui(this, overlay));
+                        this.mc.displayGuiScreen(new GuiMultiplayer(this));
                         break;
                     case 4:
                         this.mc.shutdown();

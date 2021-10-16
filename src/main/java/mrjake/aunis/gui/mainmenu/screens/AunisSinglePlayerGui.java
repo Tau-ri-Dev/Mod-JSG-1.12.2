@@ -7,6 +7,7 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.gui.AunisGuiSlider;
 import mrjake.aunis.gui.mainmenu.screens.worldselection.AunisGuiListWorldSelection;
+import mrjake.aunis.gui.mainmenu.screens.worldselection.AunisGuiListWorldSelectionEntry;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
@@ -46,12 +47,14 @@ public class AunisSinglePlayerGui extends GuiWorldSelection {
     protected int touchValue;
     protected long lastMouseEvent;
 
+    @Override
     public void initGui() {
         this.title = I18n.format("selectWorld.title");
         this.selectionList = new AunisGuiListWorldSelection(this, this.mc, this.width, this.height, 32, this.height - 64, 36);
         this.postInit();
     }
 
+    @Override
     public void handleMouseInput() throws IOException {
         int i = Mouse.getEventX() * this.width / this.mc.displayWidth;
         int j = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
@@ -86,22 +89,25 @@ public class AunisSinglePlayerGui extends GuiWorldSelection {
         this.selectionList.handleMouseInput();
     }
 
+    @Override
     public void postInit() {
-        this.selectButton = this.addButton(new AunisGuiButton(1, this.width / 2 - 154, this.height - 52, 150, 20, I18n.format("selectWorld.select")));
+        aunisButtonList.clear();
+        selectButton = new AunisGuiButton(1, this.width / 2 - 154, this.height - 52, 150, 20, I18n.format("selectWorld.select"));
         aunisButtonList.add(new AunisGuiButton(3, this.width / 2 + 4, this.height - 52, 150, 20, I18n.format("selectWorld.create")));
-        this.renameButton = this.addButton(new AunisGuiButton(4, this.width / 2 - 154, this.height - 28, 72, 20, I18n.format("selectWorld.edit")));
-        this.deleteButton = this.addButton(new AunisGuiButton(2, this.width / 2 - 76, this.height - 28, 72, 20, I18n.format("selectWorld.delete")));
-        this.copyButton = this.addButton(new AunisGuiButton(5, this.width / 2 + 4, this.height - 28, 72, 20, I18n.format("selectWorld.recreate")));
+        renameButton = new AunisGuiButton(4, this.width / 2 - 154, this.height - 28, 72, 20, I18n.format("selectWorld.edit"));
+        deleteButton = new AunisGuiButton(2, this.width / 2 - 76, this.height - 28, 72, 20, I18n.format("selectWorld.delete"));
+        copyButton = new AunisGuiButton(5, this.width / 2 + 4, this.height - 28, 72, 20, I18n.format("selectWorld.recreate"));
         aunisButtonList.add(new AunisGuiButton(0, this.width / 2 + 82, this.height - 28, 72, 20, I18n.format("gui.cancel")));
-        this.selectButton.enabled = false;
-        this.deleteButton.enabled = false;
-        this.renameButton.enabled = false;
-        this.copyButton.enabled = false;
+        selectButton.enabled = false;
+        deleteButton.enabled = false;
+        renameButton.enabled = false;
+        copyButton.enabled = false;
     }
 
+    @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         if (button.enabled) {
-            GuiListWorldSelectionEntry guilistworldselectionentry = this.selectionList.getSelectedWorld();
+            AunisGuiListWorldSelectionEntry guilistworldselectionentry = this.selectionList.getSelectedWorld();
 
             if (button.id == 2) {
                 if (guilistworldselectionentry != null) {
@@ -369,7 +375,7 @@ public class AunisSinglePlayerGui extends GuiWorldSelection {
         this.worldVersTooltip = p_184861_1_;
     }
 
-    public void selectWorld(@Nullable GuiListWorldSelectionEntry entry) {
+    public void selectWorld(@Nullable AunisGuiListWorldSelectionEntry entry) {
         boolean flag = entry != null;
         this.selectButton.enabled = flag;
         this.deleteButton.enabled = flag;

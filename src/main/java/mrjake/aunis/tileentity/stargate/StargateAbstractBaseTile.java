@@ -149,8 +149,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     public boolean canAcceptConnectionFrom(StargatePos targetGatePos) {
-        //return isMerged; // && stargateState.idle(); //ahoj
-
         boolean allowConnectToDialing = AunisConfig.stargateConfig.allowConnectToDialing;
 
         if (allowConnectToDialing) {
@@ -158,7 +156,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 return true;
             }
             if (isMerged && stargateState.dialing()) {
-                return true; // ahoj
+                return true;
             }
             if (isMerged && stargateState.dialingComputer()) {
                 return true;

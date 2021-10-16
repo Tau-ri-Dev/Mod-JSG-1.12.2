@@ -40,7 +40,7 @@ import java.util.List;
 public class AunisMultiPlayerGui extends GuiMultiplayer {
     private static final Logger LOGGER = LogManager.getLogger();
     private final ServerPinger oldServerPinger = new ServerPinger();
-    private AunisServerSelectionList serverListSelector;
+    private ServerSelectionList serverListSelector;
     private ServerList savedServerList;
     private GuiButton btnEditServer;
     private GuiButton btnSelectServer;
@@ -301,7 +301,7 @@ public class AunisMultiPlayerGui extends GuiMultiplayer {
                 LOGGER.warn("Unable to start LAN server detection: {}", (Object)exception.getMessage());
             }
 
-            this.serverListSelector = new AunisServerSelectionList(this, this.mc, this.width, this.height, 32, this.height - 64, 36);
+            this.serverListSelector = new ServerSelectionList(this, this.mc, this.width, this.height, 32, this.height - 64, 36);
             this.serverListSelector.updateOnlineServers(this.savedServerList);
         }
 
@@ -344,11 +344,11 @@ public class AunisMultiPlayerGui extends GuiMultiplayer {
     }
 
     @Override
-    public void createButtons()
-    {
-        this.btnEditServer = this.addButton(new AunisGuiButton(7, this.width / 2 - 154, this.height - 28, 70, 20, I18n.format("selectServer.edit")));
-        this.btnDeleteServer = this.addButton(new AunisGuiButton(2, this.width / 2 - 74, this.height - 28, 70, 20, I18n.format("selectServer.delete")));
-        this.btnSelectServer = this.addButton(new AunisGuiButton(1, this.width / 2 - 154, this.height - 52, 100, 20, I18n.format("selectServer.select")));
+    public void createButtons(){
+        aunisButtonList.clear();
+        btnEditServer = new AunisGuiButton(7, this.width / 2 - 154, this.height - 28, 70, 20, I18n.format("selectServer.edit"));
+        btnDeleteServer = new AunisGuiButton(2, this.width / 2 - 74, this.height - 28, 70, 20, I18n.format("selectServer.delete"));
+        btnSelectServer = new AunisGuiButton(1, this.width / 2 - 154, this.height - 52, 100, 20, I18n.format("selectServer.select"));
         aunisButtonList.add(new AunisGuiButton(4, this.width / 2 - 50, this.height - 52, 100, 20, I18n.format("selectServer.direct")));
         aunisButtonList.add(new AunisGuiButton(3, this.width / 2 + 4 + 50, this.height - 52, 100, 20, I18n.format("selectServer.add")));
         aunisButtonList.add(new AunisGuiButton(8, this.width / 2 + 4, this.height - 28, 70, 20, I18n.format("selectServer.refresh")));
@@ -503,121 +503,6 @@ public class AunisMultiPlayerGui extends GuiMultiplayer {
             }
 
             this.mc.displayGuiScreen(this);
-        }
-    }
-
-    protected void keyTyped(char typedChar, int keyCode) throws IOException
-    {
-        int i = this.serverListSelector.getSelected();
-        GuiListExtended.IGuiListEntry guilistextended$iguilistentry = i < 0 ? null : this.serverListSelector.getListEntry(i);
-
-        if (keyCode == 63)
-        {
-            this.refreshServerList();
-        }
-        else
-        {
-            if (i >= 0)
-            {
-                if (keyCode == 200)
-                {
-                    if (isShiftKeyDown())
-                    {
-                        if (i > 0 && guilistextended$iguilistentry instanceof AunisServerListEntryNormal)
-                        {
-                            this.savedServerList.swapServers(i, i - 1);
-                            this.selectServer(this.serverListSelector.getSelected() - 1);
-                            this.serverListSelector.scrollBy(-this.serverListSelector.getSlotHeight());
-                            this.serverListSelector.updateOnlineServers(this.savedServerList);
-                        }
-                    }
-                    else if (i > 0)
-                    {
-                        this.selectServer(this.serverListSelector.getSelected() - 1);
-                        this.serverListSelector.scrollBy(-this.serverListSelector.getSlotHeight());
-
-                        if (this.serverListSelector.getListEntry(this.serverListSelector.getSelected()) instanceof ServerListEntryLanScan)
-                        {
-                            if (this.serverListSelector.getSelected() > 0)
-                            {
-                                this.selectServer(this.serverListSelector.getSize() - 1);
-                                this.serverListSelector.scrollBy(-this.serverListSelector.getSlotHeight());
-                            }
-                            else
-                            {
-                                this.selectServer(-1);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        this.selectServer(-1);
-                    }
-                }
-                else if (keyCode == 208)
-                {
-                    if (isShiftKeyDown())
-                    {
-                        if (i < this.savedServerList.countServers() - 1)
-                        {
-                            this.savedServerList.swapServers(i, i + 1);
-                            this.selectServer(i + 1);
-                            this.serverListSelector.scrollBy(this.serverListSelector.getSlotHeight());
-                            this.serverListSelector.updateOnlineServers(this.savedServerList);
-                        }
-                    }
-                    else if (i < this.serverListSelector.getSize())
-                    {
-                        this.selectServer(this.serverListSelector.getSelected() + 1);
-                        this.serverListSelector.scrollBy(this.serverListSelector.getSlotHeight());
-
-                        if (this.serverListSelector.getListEntry(this.serverListSelector.getSelected()) instanceof ServerListEntryLanScan)
-                        {
-                            if (this.serverListSelector.getSelected() < this.serverListSelector.getSize() - 1)
-                            {
-                                this.selectServer(this.serverListSelector.getSize() + 1);
-                                this.serverListSelector.scrollBy(this.serverListSelector.getSlotHeight());
-                            }
-                            else
-                            {
-                                this.selectServer(-1);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        this.selectServer(-1);
-                    }
-                }
-                else if (keyCode != 28 && keyCode != 156)
-                {
-                    if (keyCode == 1)
-                    {
-                        this.mc.displayGuiScreen((GuiScreen)null);
-
-                        if (this.mc.currentScreen == null)
-                        {
-                            this.mc.setIngameFocus();
-                        }
-                    }
-                }
-                else
-                {
-                    this.actionPerformed(this.aunisButtonList.get(2));
-                }
-            }
-            else
-            {
-                if (keyCode == 1)
-                {
-                    this.mc.displayGuiScreen((GuiScreen)null);
-
-                    if (this.mc.currentScreen == null)
-                    {
-                        this.mc.setIngameFocus();
-                    }
-                }
-            }
         }
     }
 
