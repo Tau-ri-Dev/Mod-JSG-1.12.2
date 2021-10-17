@@ -53,7 +53,7 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
 				GlStateManager.translate(0.8, 0, -0.5);
 				GlStateManager.rotate(35, 1, 0, 0);
 				GlStateManager.rotate(15, 0, 0, 1);
-						
+
 				GlStateManager.translate(0, 0.3*angle, -0.1*angle);
 				GlStateManager.rotate(25*angle, 1, 0, 0);
 			}
@@ -69,12 +69,13 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
 			}
 			
 			GlStateManager.scale(0.3f, 0.3f, 0.3f);
+			//GlStateManager.scale(0.05f, 0.05f, 0.05f);
 		}
 		
 		ElementEnum.GDO.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
 		
 		// Translate rendered text
-		GlStateManager.translate(0, 0.20f, 0.1f);
+		GlStateManager.translate(0, 0.40f, 0.1f);
 		GlStateManager.rotate(-90, 1, 0, 0);
 				
 		// ---------------------------------------------------------------------------------------------
@@ -85,18 +86,29 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
 		if (stack.hasTagCompound()) {		
 			NBTTagCompound compound = stack.getTagCompound();
 			GDOMode mode = GDOMode.valueOf(compound.getByte("mode"));
-			
-			drawStringWithShadow(-0.47f, 0.916f, mode.localize(), true, false);
-			drawStringWithShadow(0.22f, 0.916f, mode.next().localize(), false, false);
+
+			if(mode.next() == GDOMode.CODE_SENDER) {
+				drawStringWithShadow(0.74f, 0.316f, mode.localize(), true, false);
+				drawStringWithShadow(0.74f, 0.616f, mode.next().localize(), false, false);
+			}
+			else{
+				drawStringWithShadow(0.74f, 0.316f, mode.next().localize(), false, false);
+				drawStringWithShadow(0.74f, 0.616f, mode.localize(), true, false);
+			}
 			
 			boolean notLinked = mode.linkable && !compound.hasKey(mode.tagPosName);
 			
 			if (notLinked) {
+				GlStateManager.pushMatrix();
+
+				GlStateManager.translate(1.12f, 0.090f, 0.0f);
 				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(Aunis.ModID, "textures/gui/universe_warning.png"));
 				GlStateManager.enableTexture2D();
 				GlStateManager.enableBlend();
 				GlStateManager.color(0.91f, 1, 1, 1);
 				drawTexturedRect(0.72f, 0.26f, 0, 0.24f, 0.24f);
+
+				GlStateManager.popMatrix();
 
 			}
 			else{
@@ -111,11 +123,6 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
 						switch (mode) {
 							case CODE_SENDER:
 								drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, "Send Code", active, false);
-								/**
-								 * On click open input line to enter code
-								 * After submit code, run function that compare entered code with save codes in gate
-								 * If returned true -> Open iris on other side
-								 */
 								break;
 							case OC:
 								drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, "OC", active, false);
@@ -137,7 +144,7 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
 		GlStateManager.rotate(180, 0,0,1);
 		GlStateManager.scale(0.015f, 0.015f, 0.015f);
 		
-		int color = active ? 0xFFFFFF : 0x006060;
+		int color = active ? 0x000000 : 0x7D7D7D;
 		if (red) {
 			color = 0xA01010;
 		}

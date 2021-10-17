@@ -108,10 +108,12 @@ public abstract class StargateAbstractMemberBlock extends Block {
     public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing facing) {
     	if (state.getValue(AunisProps.RENDER_BLOCK)) {
     		// Rendering some block
-    		StargateClassicMemberTile memberTile = (StargateClassicMemberTile) world.getTileEntity(pos);
-			if (memberTile != null && memberTile.getCamoState() != null) {
-				return memberTile.getCamoState().getBlockFaceShape(world, pos, facing);
-			}
+            if(world.getTileEntity(pos) instanceof StargateClassicMemberTile) {
+                StargateClassicMemberTile memberTile = (StargateClassicMemberTile) world.getTileEntity(pos);
+                if (memberTile != null && memberTile.getCamoState() != null) {
+                    return memberTile.getCamoState().getBlockFaceShape(world, pos, facing);
+                }
+            }
     	}
         
     	return BlockFaceShape.UNDEFINED;

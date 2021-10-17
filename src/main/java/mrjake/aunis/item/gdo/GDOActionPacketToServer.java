@@ -2,10 +2,14 @@ package mrjake.aunis.item.gdo;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.stargate.network.StargateNetwork;
+import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
+import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -17,10 +21,19 @@ public class GDOActionPacketToServer implements IMessage {
 	private GDOActionEnum action;
 	private EnumHand hand;
 	private boolean next;
+	private int code;
 	
+	public GDOActionPacketToServer(GDOActionEnum action, EnumHand hand, int code, boolean next) {
+		this.action = action;
+		this.hand = hand;
+		this.code = code;
+		this.next = next;
+	}
+
 	public GDOActionPacketToServer(GDOActionEnum action, EnumHand hand, boolean next) {
 		this.action = action;
 		this.hand = hand;
+		this.code = -1;
 		this.next = next;
 	}
 	
@@ -28,6 +41,7 @@ public class GDOActionPacketToServer implements IMessage {
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(action.ordinal());
 		buf.writeInt(hand == EnumHand.MAIN_HAND ? 0 : 1);
+		buf.writeInt(code);
 		buf.writeBoolean(next);
 	}
 	
@@ -35,6 +49,7 @@ public class GDOActionPacketToServer implements IMessage {
 	public void fromBytes(ByteBuf buf) {
 		action = GDOActionEnum.values()[buf.readInt()];
 		hand = buf.readInt() == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
+		code = buf.readInt();
 		next = buf.readBoolean();
 	}
 	
@@ -48,14 +63,23 @@ public class GDOActionPacketToServer implements IMessage {
 
 			world.addScheduledTask(() -> {
 				ItemStack stack = player.getHeldItem(message.hand);
-				
 				if (stack.getItem() == AunisItems.GDO && stack.hasTagCompound()) {
 					NBTTagCompound compound = stack.getTagCompound();
 					GDOMode mode = GDOMode.valueOf(compound.getByte("mode"));
-
 					switch (message.action) {
-
 						case SEND_CODE:
+							if (compound.hasKey("linkedGate")) {
+								BlockPos pos = BlockPos.fromLong(compound.getLong("linkedGate"));
+								StargateClassicBaseTile gateTile = (StargateClassicBaseTile) world.getTileEntity(pos);
+								if (gateTile == null) return;
+								StargateClassicBaseTile targetGate = null;
+								if (gateTile.getStargateState().initiating() || gateTile.getStargateState().engaged()) {
+									targetGate = (StargateClassicBaseTile) StargateNetwork.get(world).getStargate(gateTile.getDialedAddress()).getTileEntity();
+									if (targetGate != null) {
+										targetGate.receiveIrisCode(player, message.code);
+									}
+								}
+							}
 							break;
 						case MODE_CHANGE:
 							if (message.next)

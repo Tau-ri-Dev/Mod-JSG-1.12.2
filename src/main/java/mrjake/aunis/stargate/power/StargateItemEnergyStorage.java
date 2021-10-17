@@ -23,7 +23,11 @@ public final class StargateItemEnergyStorage implements IEnergyStorage {
 
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
-        return 0;
+        if (maxExtract > getEnergyStored()) maxExtract = getEnergyStored();
+        if (!simulate) {
+            setEnergyStored(getEnergyStored() - maxExtract);
+        }
+        return maxExtract;
     }
 
     public void setEnergyStored(int energy){
@@ -42,7 +46,7 @@ public final class StargateItemEnergyStorage implements IEnergyStorage {
 
     @Override
     public boolean canExtract() {
-        return false;
+        return true;
     }
 
     @Override

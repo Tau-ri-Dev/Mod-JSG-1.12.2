@@ -10,6 +10,10 @@ public class NumberOnlyTextField extends GuiTextField {
     int rootX;
     int rootY;
 
+    // forge is ...
+    protected boolean isEnabled;
+
+
     public NumberOnlyTextField(int componentId, FontRenderer fontrendererObj, int x, int y, int par5Width, int par6Height) {
         super(componentId, fontrendererObj, x, y, par5Width, par6Height);
     }
@@ -23,6 +27,11 @@ public class NumberOnlyTextField extends GuiTextField {
     @Override
     public void setEnabled(boolean enabled) {
         if (!enabled && isFocused()) setFocused(false);
+        this.isEnabled = enabled;
         super.setEnabled(enabled);
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
     }
 }

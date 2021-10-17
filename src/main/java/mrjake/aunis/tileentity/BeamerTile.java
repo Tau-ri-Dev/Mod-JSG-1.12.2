@@ -716,8 +716,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 		for (BlockPos pos : BlockPos.getAllInBoxMutable(pos.offset(facing), pos.offset(facing, diff))) {
 			IBlockState state = world.getBlockState(pos);
 			Block block = state.getBlock();
-			
-			if (!block.isAir(state, world, pos) && !block.isReplaceable(world, pos) && state.isOpaqueCube()) {
+			if ((!block.isAir(state, world, pos) && !block.isReplaceable(world, pos) && state.isOpaqueCube()) || block == AunisBlocks.IRIS_BLOCK) {
 				isObstructed = true;
 				break;
 			}

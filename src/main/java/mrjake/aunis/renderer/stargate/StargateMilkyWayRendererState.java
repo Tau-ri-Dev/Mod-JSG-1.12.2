@@ -79,6 +79,8 @@ public class StargateMilkyWayRendererState extends StargateClassicRendererState 
 			setBiomeOverride(superBuilder.biomeOverride);
 			setIrisState(superBuilder.irisState);
 			setIrisType(superBuilder.irisType);
+			setIrisCode(superBuilder.irisCode);
+			setIrisMode(superBuilder.irisMode);
 			setIrisAnimation(superBuilder.irisAnimation);
 		}
 		

@@ -97,6 +97,8 @@ fluid.silicon_molten_yellow=Light Blend
 fluid.naquadah_molten_raw=Liquid Naquadah
 fluid.naquadah_molten_refined=Refined Naquadah
 fluid.naquadah_molten_alloy=Liquid Naquadah Alloy
+fluid.trinium_molten=Molten Trinium
+fluid.titanium_molten=Molten Titanium
 
 
 
@@ -297,6 +299,17 @@ gui.stargate.milky_way_address=Milky Way address
 gui.stargate.pegasus_address=Pegasus address
 gui.stargate.universe_address=Universe address
 gui.stargate.iris_code=Iris Code
+gui.stargate.iris.help_title=Current mode:
+gui.stargate.iris.opened=Open
+gui.stargate.iris.closed=Closed
+gui.stargate.iris.auto=Automatic
+gui.stargate.iris.oc=OC
+gui.stargate.iris.opened_help=Iris is permanently open
+gui.stargate.iris.closed_help=Iris is permanently closed
+gui.stargate.iris.auto_help=Iris automatically closes on incoming wormhole,
+gui.stargate.iris.auto1_help=it can be opened with GDO by sending code set in field
+gui.stargate.iris.oc_help=Iris can be controlled by open computers
+
 gui.stargate.biome_overlay=Biome overlay
 gui.stargate.biome_overlay.help=Insert blocks to override
 gui.stargate.biome_overlay.normal=Normal
@@ -391,6 +404,7 @@ item.aunis.gdo.iris_busy=Iris is busy!
 item.aunis.gdo.code_accepted=Code accepted! Opening iris...
 item.aunis.gdo.code_rejected=Wrong code!
 item.aunis.gdo.code_not_set=You must enter code!
+item.aunis.gdo.computer_handled=Waiting on computer...
 
 item.aunis.gdo.mode_oc=OpnCom
 item.aunis.gdo.oc_name=Entry name
@@ -436,4 +450,6 @@ aunis.subtitle.gate_universe_close=Universe gate wormhole closes
 aunis.subtitle.beamer_start=Beamer starts
 aunis.subtitle.beamer_stop=Beamer stops
 aunis.subtitle.beamer_loop=Beamer beams
-aunis.subtitle.page_flip=Page flipsgui.quitbutton=Test
+aunis.subtitle.page_flip=Page flips
+
+menu.about=About Aunis

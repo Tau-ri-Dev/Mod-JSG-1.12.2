@@ -4,12 +4,16 @@ import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.chunkloader.ChunkLoadingCallback;
 import mrjake.aunis.command.AunisCommands;
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateDimensionConfig;
+import mrjake.aunis.config.StargateSizeEnum;
+import mrjake.aunis.crafting.AunisRecipeHandler;
 import mrjake.aunis.datafixer.TileNamesFixer;
 import mrjake.aunis.fluid.AunisFluids;
 import mrjake.aunis.gui.AunisGuiHandler;
 import mrjake.aunis.integration.OCWrapperInterface;
 import mrjake.aunis.integration.ThermalIntegration;
+import mrjake.aunis.integration.tconstruct.TConstructIntegration;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.proxy.IProxy;
@@ -72,7 +76,12 @@ public class Aunis {
         logger = event.getModLog(); // This is the recommended way of getting a logger
         
         AunisPacketHandler.registerPackets();
+        if (Loader.isModLoaded("tconstruct") && AunisConfig.integrationsConfig.tConstructIntegration) {
+            TConstructIntegration.initFluids();
+            AunisFluids.registerFluids(TConstructIntegration.fluids);
+        }
         AunisFluids.registerFluids();
+
         
     	StargateDimensionConfig.load(event.getModConfigurationDirectory());
     	
@@ -99,6 +108,8 @@ public class Aunis {
 
         OreDictionary.registerOre("oreTrinium", AunisBlocks.ORE_TRINIUM_BLOCK);
         OreDictionary.registerOre("oreTitanium", AunisBlocks.ORE_TITANIUM_BLOCK);
+        OreDictionary.registerOre("ingotTrinium", AunisItems.TRINIUM_INGOT);
+        OreDictionary.registerOre("ingotTitanium", AunisItems.TITANIUM_INGOT);
 
     	// ----------------------------------------------------------------------------------------------------------------
     	// OpenComputers
@@ -121,7 +132,8 @@ public class Aunis {
     	
 		ModFixs modFixs = ((CompoundDataFixer) FMLCommonHandler.instance().getDataFixer()).init(ModID, DATA_VERSION);
 		modFixs.registerFix(FixTypes.BLOCK_ENTITY, new TileNamesFixer());
-		
+
+        StargateSizeEnum.init();
     	proxy.init(event);
     }
  

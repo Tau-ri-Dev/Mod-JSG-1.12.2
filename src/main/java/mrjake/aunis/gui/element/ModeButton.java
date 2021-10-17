@@ -42,8 +42,8 @@ public class ModeButton extends GuiButton {
     }
 
     public void nextState() {
-        if (currentState < states) currentState++;
-        else currentState = 0;
+        if (currentState == states - 1) currentState = 0;
+        else currentState++;
     }
 
     public void previousState() {

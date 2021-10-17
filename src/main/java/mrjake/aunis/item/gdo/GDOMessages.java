@@ -12,8 +12,8 @@ public enum GDOMessages {
     CODE_ACCEPTED(new TextComponentTranslation("item.aunis.gdo.code_accepted")),
     CODE_REJECTED(new TextComponentTranslation("item.aunis.gdo.code_rejected")),
 
-    CODE_NOT_SET(new TextComponentTranslation("item.aunis.gdo.code_not_set"));
-
+    CODE_NOT_SET(new TextComponentTranslation("item.aunis.gdo.code_not_set")),
+    SEND_TO_COMPUTER(new TextComponentTranslation("item.aunis.gdo.computer_handled"));
 
     public TextComponentTranslation textComponent;
 

@@ -1,6 +1,7 @@
 package mrjake.aunis.loader;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.model.ModelLoader;
 import mrjake.aunis.loader.texture.TextureLoader;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
@@ -14,17 +15,24 @@ import java.util.Map;
 public enum ElementEnum {
 
   // --------------------------------------------------------------------------------------------
+  // Main Menu
+
+  MILKYWAY_GATE_MAINMENU("mainmenu/gate.obj", "mainmenu/gatering7"),
+  MILKYWAY_RING_MAINMENU("mainmenu/ring.obj", "mainmenu/gatering7"),
+
+  MILKYWAY_CHEVRON_LIGHT_MAINMENU("mainmenu/chevronLight.obj", "mainmenu/chevron0"),
+  MILKYWAY_CHEVRON_FRAME_MAINMENU("mainmenu/chevronFrame.obj", "mainmenu/gatering7"),
+  MILKYWAY_CHEVRON_MOVING_MAINMENU("mainmenu/chevronMoving.obj", "mainmenu/chevron0"),
+
+  MILKYWAY_CHEVRON_LIGHT_ACTIVE_MAINMENU("mainmenu/chevronLight.obj", "mainmenu/chevron10"),
+  MILKYWAY_CHEVRON_MOVING_ACTIVE_MAINMENU("mainmenu/chevronMoving.obj", "mainmenu/chevron10"),
+
+  // --------------------------------------------------------------------------------------------
   // Milky Way
 
   MILKYWAY_DHD("milkyway/DHD.obj", "milkyway/dhd"),
   MILKYWAY_GATE("milkyway/gate.obj", "milkyway/gatering7"),
   MILKYWAY_RING("milkyway/ring.obj", "milkyway/gatering7"),
-
-  // for main menu screen
-  MILKYWAY_RING_MAIN_MENU("milkyway/ring.obj", "milkyway/ring8"),
-  MILKYWAY_CHEVRON_LIGHT_ACTIVE("milkyway/chevronLight.obj", "milkyway/chevron10"),
-  MILKYWAY_CHEVRON_MOVING_ACTIVE("milkyway/chevronMoving.obj", "milkyway/chevron10"),
-  // ------------
 
   MILKYWAY_CHEVRON_LIGHT("milkyway/chevronLight.obj", "milkyway/chevron0"),
   MILKYWAY_CHEVRON_FRAME("milkyway/chevronFrame.obj", "milkyway/gatering7"),
@@ -76,6 +84,10 @@ public enum ElementEnum {
   public Map<BiomeOverlayEnum, ResourceLocation> biomeTextureResourceMap = new HashMap<>();
 
   private ElementEnum(String model, String texture) {
+    if (model.startsWith("mainmenu/") && AunisConfig.mainMenuConfig.disableAunisMainMenu) {
+      modelResource = null;
+      return;
+    }
     this.modelResource = ModelLoader.getModelResource(model);
 
     for (BiomeOverlayEnum biomeOverlay : BiomeOverlayEnum.values())

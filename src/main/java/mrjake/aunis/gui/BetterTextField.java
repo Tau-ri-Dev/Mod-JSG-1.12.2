@@ -22,7 +22,13 @@ public class BetterTextField extends GuiTextField {
 		setText(originalContent);
 	}
 
-	public BetterTextField setTextBetter(String textIn) {
+    public BetterTextField(int componentId, FontRenderer fontrendererObj, int x, int y, int width, int height) {
+		super(componentId, fontrendererObj, x, y, width, height);
+		this.originalContent = "";
+		setText(originalContent);
+    }
+
+    public BetterTextField setTextBetter(String textIn) {
 		super.setText(textIn);
 		return this;
 	}

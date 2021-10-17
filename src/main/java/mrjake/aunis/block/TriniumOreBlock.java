@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.NonNullList;
@@ -30,11 +31,7 @@ public class TriniumOreBlock extends Block {
 		setHardness(4.5f);
 		setHarvestLevel("pickaxe", 3);
 	}
-	
-	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		drops.add(new ItemStack(AunisItems.TRINIUM_INGOT, 1));
-	}
+
 	
 	@Override
 	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune) {

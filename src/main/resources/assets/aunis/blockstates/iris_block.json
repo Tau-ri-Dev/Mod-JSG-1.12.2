@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+
+  "defaults": {},
+
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+
+    "facing": {
+      "south": {},
+      "west": {},
+      "north": {},
+      "east": {}
+    }
+  }
+}

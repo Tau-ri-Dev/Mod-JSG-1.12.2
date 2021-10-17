@@ -12,7 +12,7 @@ public enum EnumIrisMode {
         this.id = id;
     }
 
-    EnumIrisMode getValue(byte id) {
+    public static EnumIrisMode getValue(byte id) {
         if (id > values().length || id < 0) throw new IllegalArgumentException("ID not set");
         return EnumIrisMode.values()[id];
     }

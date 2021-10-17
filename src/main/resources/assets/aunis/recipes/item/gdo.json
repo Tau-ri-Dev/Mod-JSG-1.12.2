@@ -1,0 +1,35 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"SGS",
+		"NIN",
+		"NYN"
+	],
+
+	"key": {
+		"S": {
+			"item": "minecraft:stone_button"
+		},
+
+		"G": {
+			"item": "minecraft:glass_pane"
+		},
+
+		"N": {
+			"item": "minecraft:iron_ingot"
+		},
+
+		"I": {
+			"item": "minecraft:redstone"
+		},
+
+		"Y": {
+			"item": "aunis:crystal_red"
+		}
+	},
+
+	"result": {
+		"item": "aunis:gdo",
+		"count": 1
+	}
+}

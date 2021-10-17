@@ -13,8 +13,13 @@ public enum SoundPositionedEnum {
   UNIVERSE_RING_ROLL(2, "gate_universe_roll", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
   BEAMER_LOOP(3, "beamer_loop", AunisSoundHelper.AUNIS_SOUND_CATEGORY, true),
   PEGASUS_RING_ROLL(4, "gate_pegasus_ring_roll", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
-  MAINMENU_RINGROLL(5, "mainmenu_ring_roll", AunisSoundHelper.AUNIS_SOUND_CATEGORY, true),
-  MAINMENU_MUSIC(6, "mainmenu_music", AunisSoundHelper.AUNIS_SOUND_CATEGORY, true);
+
+  MAINMENU_RING_ROLL(5, "mainmenu_ring_roll", AunisSoundHelper.AUNIS_SOUND_CATEGORY, true),
+  MAINMENU_MUSIC(6, "mainmenu_music", AunisSoundHelper.AUNIS_SOUND_CATEGORY, true),
+  MAINMENU_GATE_OPEN(7, "gate_milkyway_open", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
+  MAINMENU_GATE_GO(8, "wormhole_go", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
+  MAINMENU_CHEVRON_SHUT(9, "gate_milkyway_chevron_shut", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
+  MAINMENU_CHEVRON_OPEN(10, "gate_milkyway_chevron_open", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false);
 
   public int id;
   public ResourceLocation resourceLocation;
