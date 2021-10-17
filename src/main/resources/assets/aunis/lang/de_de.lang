@@ -7,24 +7,26 @@ item.aunis.crystal_control_dhd.name=DHD Kontrollkristall
 item.aunis.dialer_fast.name=Fast dialer (debug)
 
 item.aunis.crystal_control_pegasus_dhd.name=Pegasus DHD Kontrollkristall
-item.aunis.raw_pegasus_dhd_crystal.name=Roher Pegasus DHD Kristall
-
+item.aunis.raw_pegasus_dhd_crystal.name=Roher Pegasus Kontrollkristall
 item.aunis.crystal_glyph_dhd.name=DHD Glyphenkristall
 item.aunis.crystal_glyph_stargate.name=Stargate Glyphenkristall
-item.aunis.crystal_glyph_milkyway.name=Milchstraße Glyphenkristall
+item.aunis.crystal_glyph_milkyway.name=Milchstraßen Glyphenkristall
 item.aunis.crystal_glyph_pegasus.name=Pegasus Glyphenkristall
 item.aunis.crystal_glyph_universe.name=Universe Glyphenkristall
 
 
-item.aunis.iris_blade.name=Iris Upgrade (Titanium)
-item.aunis.iris_blade_trinium.name=Iris Upgrade (Trinium)
-item.aunis.quad_iris_blade.name=4er Iris Scheibe (Titanium)
-item.aunis.quad_iris_blade_trinium.name=4er Iris Scheibe (Trinium)
+item.aunis.iris_blade.name=Irisscheibe (Titanium)
+item.aunis.iris_blade_trinium.name=Irisscheibe (Trinium)
+item.aunis.quad_iris_blade.name=4er Irisscheibe (Titanium)
+item.aunis.quad_iris_blade_trinium.name=4er Irisscheibe (Trinium)
 item.aunis.upgrade_iris.name=Iris Upgrade (Titanium)
 item.aunis.upgrade_iris_trinium.name=Iris Upgrade (Trinium)
 
 item.aunis.shield_emitter.name=Schild Emitter
 item.aunis.upgrade_shield.name=Schild Upgrade
+
+item.aunis.trinium_ingot.name=Triniumbarren
+item.aunis.titanium_ingot.name=Titaniumbarren
 
 
 tile.aunis.naquadah_ore.name=Naquadah Erz
@@ -36,8 +38,6 @@ item.aunis.naquadah_alloy_raw.name=Naquadahlegierungsbarren
 
 tile.aunis.trinium_ore.name=Trinium Erz
 tile.aunis.titanium_ore.name=Titanium Erz
-tile.aunis.trinium_ingot.name=Trinium Barren
-tile.aunis.titanium_ingot.name=Titanium Barren
 
 tile.aunis.invisible_block.name=Du siehst mich nicht Block
 
@@ -49,17 +49,14 @@ tile.aunis.dhd_pegasus_block.name=Pegasus Dial Home Device (DHD)
 tile.aunis.capacitor_block.name=Kondensator
 tile.aunis.capacitor_block_empty.name=Kondensator (Leer)
 
-tile.aunis.stargate_orlin_base_block.name=Stargate Basis (Orlin)
+tile.aunis.stargate_orlin_base_block.open_count=Öffnungen: %s / %s
+tile.aunis.stargate_orlin_base_block.name=Stargate Base (Orlin)
 tile.aunis.stargate_orlin_member_block.name=Stargate Ring (Orlin)
 
-tile.aunis.stargate_universe_base_block.name=Stargate Basis (Universe)
+tile.aunis.stargate_universe_base_block.name=Stargate Base (Universe)
 tile.aunis.stargate_universe_chevron_block.name=Stargate Chevron (Universe)
 tile.aunis.stargate_universe_ring_block.name=Stargate Ring (Universe)
 
-# config.aunis.address_remove=Universe Dialer entferne Adresse
-# config.aunis.abort=Universe Dialer Anwahl abbrechen
-# config.aunis.oc_program=Universe Dialer Programn OC Nachricht
-tile.aunis.stargate_orlin_base_block.open_count=Öffnungen: %s / %s
 tile.aunis.stargate_pegasus_base_block.name=Stargate Base (Pegasus)
 tile.aunis.stargate_pegasus_ring_block.name=Stargate Ring (Pegasus)
 tile.aunis.stargate_pegasus_chevron_block.name=Stargate Chevron (Pegasus)
@@ -99,6 +96,8 @@ fluid.silicon_molten_yellow=Lichtmischung
 fluid.naquadah_molten_raw=Flüssiges Naquadah
 fluid.naquadah_molten_refined=Raffiniertes Naquadah
 fluid.naquadah_molten_alloy=Flüssige Naquadahlegierung
+fluid.trinium_molten=Flüssiges Trinium
+fluid.titanium_molten=Flüssiges Titanium
 
 
 
@@ -279,7 +278,7 @@ glyph.aunis.universe.g34=Glyph 34
 glyph.aunis.universe.g35=Glyph 35
 glyph.aunis.universe.g36=Glyph 36
 glyph.aunis.universe.g37=Symbol 37
-
+# trololo
 
 gui.upgrades=Upgrades
 
@@ -299,6 +298,17 @@ gui.stargate.milky_way_address=Milchstraßenadresse
 gui.stargate.pegasus_address=Pegasusadresse
 gui.stargate.universe_address=Universeadresse
 gui.stargate.iris_code=Iris Code
+gui.stargate.iris.help_title=Derzeitiger Modus:
+gui.stargate.iris.opened=Offen
+gui.stargate.iris.closed=Geschlossen
+gui.stargate.iris.auto=Automatisch
+gui.stargate.iris.oc=OC
+gui.stargate.iris.opened_help=Iris ist dauerhaft offen
+gui.stargate.iris.closed_help=Iris ist dauerhaft geschlossen
+gui.stargate.iris.auto_help=Iris schließst bei eingehendem Wurmloch automatisch,
+gui.stargate.iris.auto1_help=it can be opened with GDO by sending code set in field es kann mit einem Code von einem GDO geöffnet werden
+gui.stargate.iris.oc_help=Iris wird von OpenComputers kontrolliert
+
 gui.stargate.biome_overlay=Biome overlay
 gui.stargate.biome_overlay.help=Lege Block zum überschreiben ein
 gui.stargate.biome_overlay.normal=Normal
@@ -393,6 +403,7 @@ item.aunis.gdo.iris_busy=Iris ist beschäftigt!
 item.aunis.gdo.code_accepted=Code akzeptiert! Öffne iris...
 item.aunis.gdo.code_rejected=Falscher code!
 item.aunis.gdo.code_not_set=Du musst einen Code eingeben!
+item.aunis.gdo.computer_handled=Warte auf Computer...
 
 item.aunis.gdo.mode_oc=OpnCom
 item.aunis.gdo.oc_name=Eintrag Name
@@ -411,7 +422,8 @@ config.aunis.address_up=Universe Dialer Adresse hoch
 config.aunis.address_down=Universe Dialer Adresse runter
 config.aunis.address_edit=Öffne Adressbearbeitung
 
-aunis.subtitle.dhd_milkyway_press=DHD Symbol gedrückt
+
+unis.subtitle.dhd_milkyway_press=DHD Symbol gedrückt
 aunis.subtitle.dhd_milkyway_press_brb=DHD heller roter Knopf gedrückt
 aunis.subtitle.gate_milkyway_open=Stargate Wurmloch öffnet
 aunis.subtitle.gate_milkyway_close=Stargate Wurmloch schließt
@@ -438,4 +450,5 @@ aunis.subtitle.beamer_start=Beamer startet
 aunis.subtitle.beamer_stop=Beamer stoppt
 aunis.subtitle.beamer_loop=Beamer transportiert
 aunis.subtitle.page_flip=Seite schlägt um
-gui.quitbutton=Test
+
+menu.about=Über Aunis
