@@ -157,31 +157,29 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 										
 										NBTTagList nearbyList = new NBTTagList();
 										int squaredGate = AunisConfig.stargateConfig.universeGateNearbyReach * AunisConfig.stargateConfig.universeGateNearbyReach;
-										if(StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet() != null) {
-											for (Iterator<Map.Entry<StargateAddress, StargatePos>> iterator = StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet().iterator(); iterator.hasNext();) {
+										for (Iterator<Map.Entry<StargateAddress, StargatePos>> iterator = StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet().iterator(); iterator.hasNext();) {
 
-												Map.Entry<StargateAddress, StargatePos> entry = iterator.next();
-												StargatePos stargatePos = entry.getValue();
+											Map.Entry<StargateAddress, StargatePos> entry = iterator.next();
+											StargatePos stargatePos = entry.getValue();
 
-												if (stargatePos.dimensionID != world.provider.getDimension())
-													continue;
+											if (stargatePos.dimensionID != world.provider.getDimension())
+												continue;
 
-												if (stargatePos.gatePos.distanceSq(targetPos) > squaredGate)
-													continue;
+											if (stargatePos.gatePos.distanceSq(targetPos) > squaredGate)
+												continue;
 
-												if (stargatePos.gatePos.equals(targetPos))
-													continue;
+											if (stargatePos.gatePos.equals(targetPos))
+												continue;
 
-												StargateAbstractBaseTile targetGateTile = stargatePos.getTileEntity();
+											StargateAbstractBaseTile targetGateTile = stargatePos.getTileEntity();
 
-												if (!(targetGateTile instanceof StargateClassicBaseTile))
-													continue;
+											if (!(targetGateTile instanceof StargateClassicBaseTile))
+												continue;
 
-												if (!targetGateTile.isMerged())
-													continue;
+											if (!targetGateTile.isMerged())
+												continue;
 
-												nearbyList.appendTag(entry.getKey().serializeNBT());
-											}
+											nearbyList.appendTag(entry.getKey().serializeNBT());
 										}
 
 										compound.setTag(UniverseDialerMode.NEARBY.tagListName, nearbyList);

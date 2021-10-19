@@ -46,7 +46,7 @@ public class AunisMainMenu extends GuiMainMenu {
     // ---------------------------------------------------
     // VERSION
     // this must be same as in version.txt !!!
-    protected static final String Version = "A4.8";
+    protected static final String Version = "A4.9";
     // ---------------------------------------------------
 
     protected static float animationStage = 0;
