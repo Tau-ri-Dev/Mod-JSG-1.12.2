@@ -9,6 +9,7 @@ import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundPositionedEnum;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -68,8 +69,8 @@ public class AunisEventHandlerClient {
   @SubscribeEvent
   public static void onGuiOpen(GuiOpenEvent event) {
     if (!AunisConfig.mainMenuConfig.disableAunisMainMenu) {
-      if (event.getGui() instanceof GuiMainMenu) {
-        event.setGui(new AunisMainMenu());
+      if (event.getGui() instanceof GuiMainMenu && !(event.getGui() instanceof AunisMainMenu)) {
+        Minecraft.getMinecraft().displayGuiScreen(new AunisMainMenu());
       }
     }
   }

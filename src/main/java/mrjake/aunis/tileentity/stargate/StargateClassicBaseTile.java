@@ -22,10 +22,7 @@ import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.sound.StargateSoundEventEnum;
 import mrjake.aunis.sound.StargateSoundPositionedEnum;
 import mrjake.aunis.stargate.*;
-import mrjake.aunis.stargate.network.StargateAddressDynamic;
-import mrjake.aunis.stargate.network.StargatePos;
-import mrjake.aunis.stargate.network.SymbolInterface;
-import mrjake.aunis.stargate.network.SymbolTypeEnum;
+import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
 import mrjake.aunis.stargate.power.StargateClassicEnergyStorage;
 import mrjake.aunis.stargate.power.StargateEnergyRequired;
@@ -61,6 +58,7 @@ import java.util.stream.IntStream;
 
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.PHYSICAL_IRIS_ANIMATION_LENGTH;
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.SHIELD_IRIS_ANIMATION_LENGTH;
+import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
 /**
  * This class wraps common behavior for the fully-functional Stargates i.e.
@@ -81,6 +79,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     private int irisDurability = 0;
     private int irisMaxDurability = 0;
+
+    protected boolean dialingAborted = false;
 
 
     // ------------------------------------------------------------------------
@@ -130,6 +130,26 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         this.isFinalActive = true;
     }
+
+    /**
+     *
+     * TODO: this shit
+    public void abortDialingSequence(int type) {
+        if(stargateState.dialingComputer() || stargateState.idle()) {
+            spinStartTime = world.getTotalWorldTime() + 3000;
+            isSpinning = false;
+            dialingAborted = true;
+            AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, true)), targetPoint);
+            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, 0));
+            playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
+            super.failGate();
+            if(type == 2 && this instanceof StargateUniverseBaseTile)
+                addSymbolToAddressManual(TOP_CHEVRON, null);
+            markDirty();
+            if(type == 1) abortDialingSequence(2);
+        }
+    }
+     */
 
     @Override
     public void incomingWormhole(int dialedAddressSize) {
@@ -621,7 +641,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 currentRingSymbol = targetRingSymbol;
 
                 playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
-                playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
+                if(!dialingAborted) playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
+                else dialingAborted = false;
 
                 markDirty();
                 break;
@@ -1301,6 +1322,19 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         markDirty();
 
         return new Object[]{"stargate_spin"};
+    }
+
+    @Optional.Method(modid = "opencomputers")
+    @Callback(doc = "function(symbolName:string) -- Spins the ring to the given symbol and engages/locks it")
+    public Object[] abortDialing(Context context, Arguments args) {
+        if (!isMerged()) return new Object[]{null, "stargate_failure_not_merged", "Stargate is not merged"};
+
+//        if (stargateState.dialingComputer() ||stargateState.idle()) {
+//            abortDialingSequence(1);
+//            markDirty();
+//            return new Object[]{null, "stargate_aborting", "Aborting dialing"};
+//        }
+        return new Object[]{null, "stargate_aborting_failed", "Aborting dialing failed"};
     }
 
     @Optional.Method(modid = "opencomputers")

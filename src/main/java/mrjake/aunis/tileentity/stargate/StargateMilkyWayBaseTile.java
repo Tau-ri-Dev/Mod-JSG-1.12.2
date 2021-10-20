@@ -506,7 +506,8 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         break;
 
       case STARGATE_SPIN_FINISHED:
-        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 7));
+        if(!super.dialingAborted) addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 7));
+        else super.dialingAborted = false;
 
         break;
 

@@ -649,7 +649,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         break;
 
       case STARGATE_SPIN_FINISHED:
-        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 0));
+        if(!super.dialingAborted) addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 0));
+        else super.dialingAborted = false;
 
         break;
 
