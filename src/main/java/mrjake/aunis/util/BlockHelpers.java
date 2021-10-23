@@ -1,6 +1,8 @@
 package mrjake.aunis.util;
 
+import mrjake.aunis.Aunis;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -42,5 +44,13 @@ public class BlockHelpers {
 		}
 		
 		return top;
+	}
+
+	public static Block createSimpleBlock(String id, Material material) {
+		Block block = new Block(material);
+		block.setRegistryName(Aunis.ModID, id);
+		block.setUnlocalizedName(Aunis.ModID + "." + id);
+		block.setCreativeTab(Aunis.aunisCreativeTab);
+		return block;
 	}
 }

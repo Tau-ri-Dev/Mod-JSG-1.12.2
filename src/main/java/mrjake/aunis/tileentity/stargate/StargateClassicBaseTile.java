@@ -22,7 +22,10 @@ import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.sound.StargateSoundEventEnum;
 import mrjake.aunis.sound.StargateSoundPositionedEnum;
 import mrjake.aunis.stargate.*;
-import mrjake.aunis.stargate.network.*;
+import mrjake.aunis.stargate.network.StargateAddressDynamic;
+import mrjake.aunis.stargate.network.StargatePos;
+import mrjake.aunis.stargate.network.SymbolInterface;
+import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
 import mrjake.aunis.stargate.power.StargateClassicEnergyStorage;
 import mrjake.aunis.stargate.power.StargateEnergyRequired;
@@ -44,6 +47,7 @@ import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants.NBT;
@@ -58,7 +62,6 @@ import java.util.stream.IntStream;
 
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.PHYSICAL_IRIS_ANIMATION_LENGTH;
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.SHIELD_IRIS_ANIMATION_LENGTH;
-import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
 /**
  * This class wraps common behavior for the fully-functional Stargates i.e.
@@ -109,7 +112,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         super.disconnectGate();
         if (irisMode == EnumIrisMode.AUTO && isClosed()) toggleIris();
         isFinalActive = false;
-
+        if (codeSender != null) codeSender = null;
         updateChevronLight(0, false);
         sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, dialedAddress.size(), isFinalActive);
     }
@@ -1022,6 +1025,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         sendSignal(null, "received_code", code);
         if (irisMode != EnumIrisMode.AUTO) {
             sender.sendStatusMessage(GDOMessages.SEND_TO_COMPUTER.textComponent, true);
+            codeSender = sender;
             return;
         }
         if (code == this.irisCode) {
@@ -1303,6 +1307,25 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return new Object[]{irisDurability + "/" + irisMaxDurability, irisDurability, irisMaxDurability};
     }
 
+    @Optional.Method(modid = "opencomputers")
+    @Callback(doc = "function(message:string) -- Sends message to last person, who sent code for iris")
+    public Object[] sendMessageToIncoming(Context context, Arguments args) {
+        if (!args.isString(0)) return new Object[] {false, "wrong_argument_type"};
+        sendMessage: {
+            if (codeSender == null) break sendMessage;
+            ItemStack gdo = codeSender.getHeldItemMainhand();
+            if (gdo.isEmpty() || gdo.getItem() != AunisItems.GDO) {
+                gdo = codeSender.getHeldItemOffhand();
+                if (gdo.isEmpty() || gdo.getItem() != AunisItems.GDO) break sendMessage;
+            }
+            if (gdo.getTagCompound().hasKey("linkedGate")) {
+                codeSender.sendStatusMessage(new TextComponentString(args.checkString(0)), true);
+                return new Object[]{true, "success"};
+            }
+        }
+
+        return new Object[] {false, "no_player_available"};
+    }
 
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(symbolName:string) -- Spins the ring to the given symbol and engages/locks it")

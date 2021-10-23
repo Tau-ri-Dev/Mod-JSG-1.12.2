@@ -33,12 +33,15 @@ item.aunis.titanium_ingot.name=Titanium Ingot
 tile.aunis.naquadah_ore.name=Naquadah Ore
 tile.aunis.naquadah_ore_stone.name=Naquadah Ore (Stone)
 tile.aunis.naquadah_block.name=Naquadah Block
+tile.aunis.naquadah_block_raw.name=Raw Naquadah Block
 item.aunis.naquadah_shard.name=Naquadah Shard
 item.aunis.naquadah_alloy.name=Refined Naquadah Alloy Ingot
 item.aunis.naquadah_alloy_raw.name=Naquadah Alloy Ingot
 
 tile.aunis.trinium_ore.name=Trinium Ore
 tile.aunis.titanium_ore.name=Titanium Ore
+tile.aunis.trinium_block.name=Trinium Block
+tile.aunis.titanium_block.name=Titanium Block
 
 tile.aunis.invisible_block.name=You can't see me block
 
@@ -395,7 +398,7 @@ item.aunis.gui.oc_port=Port
 item.aunis.gui.oc_params=Parameters
 item.aunis.gui.oc_port_invalid=Invalid port
 
-item.aunis.gdo.name=Garage Door Opener
+item.aunis.gdo.name=Garage Door Opener (GDO)
 item.aunis.gdo.not_linked=Not linked
 
 item.aunis.gdo.code_sender=Code

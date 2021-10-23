@@ -59,7 +59,6 @@ public class GDOItem extends Item implements CustomModelItemInterface {
         compound.setByte("mode", GDOMode.CODE_SENDER.id);
         compound.setByte("selected", (byte) 0);
         compound.setTag("saved", new NBTTagList());
-        compound.setInteger("irisCode", -1);
 
         stack.setTagCompound(compound);
     }

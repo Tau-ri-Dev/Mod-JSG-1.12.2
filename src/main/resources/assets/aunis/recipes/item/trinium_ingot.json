@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "aunis:trinium_block"
+		}
+	],
+	"result": {
+		"item": "aunis:trinium_ingot",
+		"count": 9
+	}
+}
+

@@ -102,14 +102,18 @@ public class Aunis {
 
         OreDictionary.registerOre("oreNaquadah", AunisBlocks.ORE_NAQUADAH_BLOCK);
         OreDictionary.registerOre("oreNaquadah", AunisBlocks.ORE_NAQUADAH_BLOCK_STONE);
+        OreDictionary.registerOre("gemNaquadah", AunisItems.NAQUADAH_SHARD);
         OreDictionary.registerOre("ingotNaquadah", AunisItems.NAQUADAH_ALLOY_RAW);
-        OreDictionary.registerOre("ingotRefinedNaquadah", AunisItems.NAQUADAH_ALLOY);
-        OreDictionary.registerOre("blockRefinedNaquadah", AunisBlocks.NAQUADAH_BLOCK);
+        OreDictionary.registerOre("ingotNaquadahRefined", AunisItems.NAQUADAH_ALLOY);
+        OreDictionary.registerOre("blockNaquadahRefined", AunisBlocks.NAQUADAH_BLOCK);
+        OreDictionary.registerOre("blockNaquadahRaw", AunisBlocks.NAQUADAH_BLOCK_RAW);
 
         OreDictionary.registerOre("oreTrinium", AunisBlocks.ORE_TRINIUM_BLOCK);
         OreDictionary.registerOre("oreTitanium", AunisBlocks.ORE_TITANIUM_BLOCK);
         OreDictionary.registerOre("ingotTrinium", AunisItems.TRINIUM_INGOT);
         OreDictionary.registerOre("ingotTitanium", AunisItems.TITANIUM_INGOT);
+        OreDictionary.registerOre("blockTrinium", AunisBlocks.TRINIUM_BLOCK);
+        OreDictionary.registerOre("blockTitanium", AunisBlocks.TITANIUM_BLOCK);
 
     	// ----------------------------------------------------------------------------------------------------------------
     	// OpenComputers
