@@ -22,10 +22,7 @@ import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.sound.StargateSoundEventEnum;
 import mrjake.aunis.sound.StargateSoundPositionedEnum;
 import mrjake.aunis.stargate.*;
-import mrjake.aunis.stargate.network.StargateAddressDynamic;
-import mrjake.aunis.stargate.network.StargatePos;
-import mrjake.aunis.stargate.network.SymbolInterface;
-import mrjake.aunis.stargate.network.SymbolTypeEnum;
+import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
 import mrjake.aunis.stargate.power.StargateClassicEnergyStorage;
 import mrjake.aunis.stargate.power.StargateEnergyRequired;
@@ -166,6 +163,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public void onGateBroken() {
+//        if (StargateNetwork.get(world).getNetherGate().equals(this.getStargateAddress(SymbolTypeEnum.MILKYWAY))) {
+//            StargateNetwork.get(world).setNetherGate(null);
+//        }
         super.onGateBroken();
         updateChevronLight(0, false);
         if (irisType != EnumIrisType.NULL && irisState == EnumIrisState.CLOSED) {
