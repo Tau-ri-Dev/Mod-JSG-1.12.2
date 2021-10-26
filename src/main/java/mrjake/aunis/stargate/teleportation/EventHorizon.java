@@ -124,10 +124,16 @@ public class EventHorizon {
                     && ((StargateClassicBaseTile) targetGatePos.getTileEntity()).isClosed()) {
 
 
-                if (packet.getEntity() instanceof IProjectile) packet.getEntity().setVelocity(0, 0, 0);
+                if (packet.getEntity() instanceof IProjectile) {
+                    Entity projectile = packet.getEntity();
+                    projectile.setVelocity(0, 0, 0);
+                    projectile.setDead();
+
+
+                }
                 else {
                     packet.teleport(false);
-                    packet.getEntity().setDead();
+                    //packet.getEntity().setDead();
                 }
                 if (AunisConfig.irisConfig.allowCreative)
                     packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS, Float.MAX_VALUE);
@@ -152,7 +158,7 @@ public class EventHorizon {
                         ((StargateClassicBaseTile) targetGatePos.getTileEntity()).updateIrisType();
                     }
                 }
-                targetGatePos.getTileEntity().sendSignal(null, "stargate_iris_hit_event", new Object[]{"Something just hit the IRIS!"});
+                targetGatePos.getTileEntity().sendSignal(null, "stargate_event_iris_hit", new Object[]{"Something just hit the IRIS!"});
 
             } else {
                 AunisSoundHelper.playSoundEvent(world, gateCenter, SoundEventEnum.WORMHOLE_GO);
