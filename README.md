@@ -4,6 +4,11 @@
 
 Check out our youtube channel: https://www.youtube.com/channel/UChxSgOztJWUVqmw7TcZ-uMg
 
+
+[![Aunis Curse statistics](http://cf.way2muchnoise.eu/537047.svg)](http://minecraft.curseforge.com/projects/aunis-unofficial) 
+[![Discord invite](https://img.shields.io/discord/881802052488011837?color=%232D2D2D&label=%20&logo=discord&style=flat-square)](https://discord.gg/YPXqVRUSgK)
+[![YouTube](https://img.shields.io/youtube/channel/subscribers/UChxSgOztJWUVqmw7TcZ-uMg?color=%232D2D2D&label=%20&logo=youtube&logoColor=%23ff2129&style=flat-square)](https://www.youtube.com/channel/UChxSgOztJWUVqmw7TcZ-uMg)
+
 > Created and coded by **MrJake222**, MineDragonCZ_ and matousss<br>
 > Models by MarcelMPL and Harald de Luca
 
