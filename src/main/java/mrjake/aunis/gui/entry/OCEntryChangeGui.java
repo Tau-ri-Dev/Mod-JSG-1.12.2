@@ -2,6 +2,7 @@ package mrjake.aunis.gui.entry;
 
 import mrjake.aunis.gui.BetterButton;
 import mrjake.aunis.gui.OCAddMessageGui;
+import mrjake.aunis.gui.util.ArrowButton;
 import mrjake.aunis.item.dialer.UniverseDialerMode;
 import mrjake.aunis.item.dialer.UniverseDialerOCMessage;
 import net.minecraft.client.Minecraft;
@@ -29,11 +30,11 @@ public class OCEntryChangeGui extends AbstractEntryChangeGui implements OCUpdata
 	public void initGui() {
 		super.initGui();
 		
-		backButton = new BetterButton(100, 0, 0, 20, 20, "<")
+		backButton = new ArrowButton(100, 0, 0, ArrowButton.ArrowType.LEFT)
 				.setFgColor(GuiUtils.getColorCode('c', true))
 				.setActionCallback(() -> Minecraft.getMinecraft().displayGuiScreen(parentScreen));
 		
-		addButton = new BetterButton(100, 0, 0, 20, 20, "+")
+		addButton = new ArrowButton(100, 0, 0, ArrowButton.ArrowType.PLUS)
 				.setFgColor(GuiUtils.getColorCode('a', true))
 				.setActionCallback(() -> Minecraft.getMinecraft().displayGuiScreen(new OCAddMessageGui(hand, this)));
 		

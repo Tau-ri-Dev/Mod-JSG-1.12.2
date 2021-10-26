@@ -2,6 +2,7 @@ package mrjake.aunis.gui.entry;
 
 import mrjake.aunis.gui.BetterButton;
 import mrjake.aunis.gui.BetterTextField;
+import mrjake.aunis.gui.util.ArrowButton;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.gui.entry.EntryActionEnum;
 import mrjake.aunis.packet.gui.entry.EntryActionToServer;
@@ -61,15 +62,15 @@ public abstract class AbstractEntry {
 		// Buttons
 		
 		int bId = 0;
-		upButton = new BetterButton(bId++, 0, 0, 20, 20, "▲")
+		upButton = new ArrowButton(bId++, 0, 0, ArrowButton.ArrowType.UP)
 				.setFgColor(GuiUtils.getColorCode('a', true))
 				.setActionCallback(() -> action(EntryActionEnum.MOVE_UP));
 		
-		downButton = new BetterButton(bId++, 0, 0, 20, 20, "▼")
+		downButton = new ArrowButton(bId++, 0, 0, ArrowButton.ArrowType.DOWN)
 				.setFgColor(GuiUtils.getColorCode('c', true))
 				.setActionCallback(() -> action(EntryActionEnum.MOVE_DOWN));
 		
-		removeButton = new BetterButton(bId++, 0, 0, 20, 20, "x")
+		removeButton = new ArrowButton(bId++, 0, 0, ArrowButton.ArrowType.CROSS)
 				.setFgColor(GuiUtils.getColorCode('c', true))
 				.setActionCallback(() -> action(EntryActionEnum.REMOVE));
 		

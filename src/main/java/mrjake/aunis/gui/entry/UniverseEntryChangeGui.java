@@ -1,7 +1,7 @@
 package mrjake.aunis.gui.entry;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.gui.BetterButton;
+import mrjake.aunis.gui.util.ArrowButton;
 import mrjake.aunis.item.dialer.UniverseDialerActionEnum;
 import mrjake.aunis.item.dialer.UniverseDialerActionPacketToServer;
 import mrjake.aunis.item.dialer.UniverseDialerMode;
@@ -37,14 +37,14 @@ public class UniverseEntryChangeGui extends AbstractEntryChangeGui {
 		super.initGui();
 		
 		if (Aunis.ocWrapper.isModLoaded()) {
-			ocButton = new BetterButton(100, 0, 0, 20, 20, ">")
+			ocButton = new ArrowButton(100, 0, 0, ArrowButton.ArrowType.RIGHT)
 					.setFgColor(GuiUtils.getColorCode('a', true))
 					.setActionCallback(() -> Minecraft.getMinecraft().displayGuiScreen(new OCEntryChangeGui(hand, mainCompound, this)));
 						
 			buttonList.add(ocButton);
 		}
 		
-		abortButton = new BetterButton(100, 0, 0, 50, 20, "Abort")
+		abortButton = new ArrowButton(100, 0, 0, ArrowButton.ArrowType.LEFT)
 				.setFgColor(GuiUtils.getColorCode('c', true))
 				.setActionCallback(() -> AunisPacketHandler.INSTANCE.sendToServer(new UniverseDialerActionPacketToServer(UniverseDialerActionEnum.ABORT, hand, false)));
 		
