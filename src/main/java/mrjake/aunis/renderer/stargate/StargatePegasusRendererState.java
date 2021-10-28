@@ -17,7 +17,6 @@ public class StargatePegasusRendererState extends StargateClassicRendererState {
 
   private StargatePegasusRendererState(StargatePegasusRendererStateBuilder builder) {
     super(builder);
-
     this.stargateSize = builder.stargateSize;
     this.spinHelper = new StargatePegasusSpinHelper(builder.symbolType, builder.currentRingSymbol, builder.spinDirection, builder.isSpinning, builder.targetRingSymbol, builder.spinStartTime);
   }
@@ -86,17 +85,19 @@ public class StargatePegasusRendererState extends StargateClassicRendererState {
   public void fromBytes(ByteBuf buf) {
     stargateSize = StargateSizeEnum.fromId(buf.readInt());
 
-    chevronTextureList = new ChevronTextureList(getChevronTextureBase());
-    chevronTextureList.fromBytes(buf);
-
-    spinHelper = new StargatePegasusSpinHelper();
-    spinHelper.fromBytes(buf);
-
-    if (buf.readBoolean()) {
-      biomeOverride = BiomeOverlayEnum.values()[buf.readInt()];
-    }
-    irisState = EnumIrisState.getValue(buf.readByte());
-    irisType = EnumIrisType.byId(buf.readByte());
+//
+//    chevronTextureList = new ChevronTextureList(getChevronTextureBase());
+//    chevronTextureList.fromBytes(buf);
+//
+//    spinHelper = new StargatePegasusSpinHelper();
+//    spinHelper.fromBytes(buf);
+//
+//    if (buf.readBoolean()) {
+//      biomeOverride = BiomeOverlayEnum.values()[buf.readInt()];
+//    }
+//    irisState = EnumIrisState.getValue(buf.readByte());
+//    irisType = EnumIrisType.byId(buf.readByte());
+    super.fromBytes(buf, StargatePegasusSpinHelper.class);
   }
 
 

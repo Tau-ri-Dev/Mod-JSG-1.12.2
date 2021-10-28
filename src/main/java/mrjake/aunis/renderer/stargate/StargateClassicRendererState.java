@@ -89,10 +89,19 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
 
   @Override
   public void fromBytes(ByteBuf buf) {
+    fromBytes(buf, StargateClassicSpinHelper.class);
+    //super.fromBytes(buf);
+  }
+
+  protected void fromBytes(ByteBuf buf, Class<? extends ISpinHelper> type) {
     chevronTextureList = new ChevronTextureList(getChevronTextureBase());
     chevronTextureList.fromBytes(buf);
 
-    spinHelper = new StargateClassicSpinHelper();
+    try {
+      spinHelper = type.newInstance();
+    } catch (InstantiationException | IllegalAccessException e) {
+      e.printStackTrace();
+    }
     spinHelper.fromBytes(buf);
 
     if (buf.readBoolean()) {
@@ -103,6 +112,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     irisAnimation = buf.readLong();
     super.fromBytes(buf);
   }
+
 
 
   // ------------------------------------------------------------------------

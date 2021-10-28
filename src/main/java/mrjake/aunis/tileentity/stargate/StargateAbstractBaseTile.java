@@ -1487,7 +1487,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         stargateState = EnumStargateState.valueOf(compound.getInteger("stargateState"));
         if (stargateState == null) stargateState = EnumStargateState.IDLE;
-
         if (node != null && compound.hasKey("node")) node.load(compound.getCompoundTag("node"));
 
         horizonKilling = compound.getBoolean("horizonKilling");

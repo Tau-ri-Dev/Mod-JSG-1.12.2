@@ -483,7 +483,6 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     switch (stateType) {
       case RENDERER_UPDATE:
         StargateRendererActionState gateActionState = (StargateRendererActionState) state;
-
         switch (gateActionState.action) {
           case CHEVRON_OPEN:
             getRendererStateClient().openChevron(world.getTotalWorldTime());
