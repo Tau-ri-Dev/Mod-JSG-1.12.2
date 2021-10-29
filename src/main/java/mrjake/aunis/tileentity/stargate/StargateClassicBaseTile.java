@@ -22,6 +22,9 @@ import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.sound.StargateSoundEventEnum;
 import mrjake.aunis.sound.StargateSoundPositionedEnum;
 import mrjake.aunis.stargate.*;
+import mrjake.aunis.stargate.codesender.CodeSender;
+import mrjake.aunis.stargate.codesender.CodeSenderType;
+import mrjake.aunis.stargate.codesender.ComputerCodeSender;
 import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
 import mrjake.aunis.stargate.power.StargateClassicEnergyStorage;
@@ -34,7 +37,6 @@ import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -132,23 +134,22 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     /**
-     *
      * TODO: this shit
-    public void abortDialingSequence(int type) {
-        if(stargateState.dialingComputer() || stargateState.idle()) {
-            spinStartTime = world.getTotalWorldTime() + 3000;
-            isSpinning = false;
-            dialingAborted = true;
-            AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, true)), targetPoint);
-            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, 0));
-            playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
-            super.failGate();
-            if(type == 2 && this instanceof StargateUniverseBaseTile)
-                addSymbolToAddressManual(TOP_CHEVRON, null);
-            markDirty();
-            if(type == 1) abortDialingSequence(2);
-        }
-    }
+     * public void abortDialingSequence(int type) {
+     * if(stargateState.dialingComputer() || stargateState.idle()) {
+     * spinStartTime = world.getTotalWorldTime() + 3000;
+     * isSpinning = false;
+     * dialingAborted = true;
+     * AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, true)), targetPoint);
+     * addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, 0));
+     * playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
+     * super.failGate();
+     * if(type == 2 && this instanceof StargateUniverseBaseTile)
+     * addSymbolToAddressManual(TOP_CHEVRON, null);
+     * markDirty();
+     * if(type == 1) abortDialingSequence(2);
+     * }
+     * }
      */
 
     @Override
@@ -315,8 +316,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 if (getEnergyStorage().getEnergyStored() < shieldKeepAlive) {
                     toggleIris();
                     sendSignal(null, "stargate_iris_out_of_power", new Object[]{"Shield runs out of power! Opening shield..."});
-                }
-                else if (irisMode == EnumIrisMode.CLOSED && isOpened()) {
+                } else if (irisMode == EnumIrisMode.CLOSED && isOpened()) {
                     toggleIris();
                 }
                 markDirty();
@@ -398,7 +398,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         compound.setTag("linkedBeamers", linkedBeamersTagList);
         if (irisState == null) {
             if (codeSender != null) {
-                codeSender.sendStatusMessage(GDOMessages.OPENED.textComponent, true);
+                codeSender.sendMessage(GDOMessages.OPENED.textComponent);
                 codeSender = null;
             }
             irisState = EnumIrisState.OPENED;
@@ -406,6 +406,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         compound.setByte("irisState", irisState.id);
         compound.setInteger("irisCode", irisCode);
         compound.setByte("irisMode", irisMode.id);
+        if (codeSender != null && !world.isRemote) {
+            compound.setTag("codeSender", codeSender.serializeNBT());
+        }
         return super.writeToNBT(compound);
     }
 
@@ -428,11 +431,30 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         for (NBTBase tag : compound.getTagList("linkedBeamers", NBT.TAG_LONG))
             linkedBeamers.add(BlockPos.fromLong(((NBTTagLong) tag).getLong()));
 
-//        irisType = mrjake.aunis.stargate.EnumIrisType.byId(compound.getByte("irisType"));
+
         irisState = mrjake.aunis.stargate.EnumIrisState.getValue(compound.getByte("irisState"));
         irisCode = compound.getInteger("irisCode") != 0 ? compound.getInteger("irisCode") : -1;
         irisMode = EnumIrisMode.getValue(compound.getByte("irisMode"));
+        if (compound.hasKey("codeSender") && !world.isRemote) {
+            NBTTagCompound nbt = compound.getCompoundTag("codeSender");
+            codeSender = codeSenderFromNBT(nbt);
+        }
         super.readFromNBT(compound);
+    }
+
+    private CodeSender codeSenderFromNBT(NBTTagCompound compound) {
+        codeSender = CodeSenderType.fromId(compound.getInteger("type")).constructor.get();
+        switch (codeSender.getType()) {
+            case PLAYER:
+                codeSender.prepareToLoad(new Object[]{world});
+                break;
+            case COMPUTER:
+                codeSender.prepareToLoad(null);
+                break;
+
+        }
+        codeSender.deserializeNBT(compound);
+        return codeSender;
     }
 
 
@@ -644,7 +666,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 currentRingSymbol = targetRingSymbol;
 
                 playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
-                if(!dialingAborted) playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
+                if (!dialingAborted) playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
                 else dialingAborted = false;
 
                 markDirty();
@@ -995,22 +1017,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 markDirty();
                 playSoundEvent(openSound);
                 if (targetGatePos != null) executeTask(EnumScheduledTask.STARGATE_HORIZON_LIGHT_BLOCK, null);
-                // beamers shit
-                // TODO: beamers deactive when iris is close
-                /*if(targetGate instanceof StargateClassicBaseTile
-                        && ((StargateClassicBaseTile) targetGate).irisState == EnumIrisState.CLOSED) {
-                    for (BlockPos beamerPos : linkedBeamers) {
-                        ((BeamerTile) world.getTileEntity(beamerPos)).gateClosed();
-                    }
-                    for (BlockPos beamerPos : ((StargateClassicBaseTile) targetGate).linkedBeamers) {
-                        ((BeamerTile) world.getTileEntity(beamerPos)).gateClosed();
-                    }
-                }
-                else{
-                    for (BlockPos beamerPos : ((StargateClassicBaseTile) targetGate).linkedBeamers) {
-                        ((BeamerTile) world.getTileEntity(beamerPos)).gateEngaged(targetGatePos);
-                    }
-                }*/
                 break;
             default:
                 return false;
@@ -1019,35 +1025,36 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return true;
     }
 
-    EntityPlayer codeSender = null;
+    protected CodeSender codeSender;
 
-    public void receiveIrisCode(EntityPlayer sender, int code) {
+    public void receiveIrisCode(CodeSender sender, int code) {
         sendSignal(null, "received_code", code);
         if (irisMode != EnumIrisMode.AUTO) {
-            sender.sendStatusMessage(GDOMessages.SEND_TO_COMPUTER.textComponent, true);
+            sender.sendMessage(GDOMessages.SEND_TO_COMPUTER.textComponent);
             codeSender = sender;
             return;
         }
         if (code == this.irisCode) {
             switch (this.irisState) {
                 case OPENED:
-                    sender.sendStatusMessage(GDOMessages.OPENED.textComponent, true);
+                    sender.sendMessage(GDOMessages.OPENED.textComponent);
                     break;
                 case CLOSED:
-                    sender.sendStatusMessage(GDOMessages.CODE_ACCEPTED.textComponent, true);
+                    sender.sendMessage(GDOMessages.CODE_ACCEPTED.textComponent);
                     codeSender = sender;
                     toggleIris();
                     break;
                 case OPENING:
                 case CLOSING:
-                    sender.sendStatusMessage(GDOMessages.BUSY.textComponent, true);
+                    sender.sendMessage(GDOMessages.BUSY.textComponent);
                     break;
                 default:
                     break;
             }
         } else {
-            sender.sendStatusMessage(GDOMessages.CODE_REJECTED.textComponent, true);
+            sender.sendMessage(GDOMessages.CODE_REJECTED.textComponent);
         }
+        markDirty();
 
     }
 
@@ -1310,21 +1317,37 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(message:string) -- Sends message to last person, who sent code for iris")
     public Object[] sendMessageToIncoming(Context context, Arguments args) {
-        if (!args.isString(0)) return new Object[] {false, "wrong_argument_type"};
-        sendMessage: {
-            if (codeSender == null) break sendMessage;
-            ItemStack gdo = codeSender.getHeldItemMainhand();
-            if (gdo.isEmpty() || gdo.getItem() != AunisItems.GDO) {
-                gdo = codeSender.getHeldItemOffhand();
-                if (gdo.isEmpty() || gdo.getItem() != AunisItems.GDO) break sendMessage;
-            }
-            if (gdo.getTagCompound().hasKey("linkedGate")) {
-                codeSender.sendStatusMessage(new TextComponentString(args.checkString(0)), true);
-                return new Object[]{true, "success"};
-            }
+        if (!args.isString(0)) return new Object[]{false, "wrong_argument_type"};
+
+        if (codeSender != null && codeSender.canReceiveMessage()) {
+            codeSender.sendMessage(new TextComponentString(args.checkString(0)));
+            return new Object[]{true, "success"};
         }
 
-        return new Object[] {false, "no_player_available"};
+        return new Object[]{false, "no_listener_available"};
+    }
+
+    @Optional.Method(modid = "opencomputers")
+    @Callback(doc = "function(code:integer) -- send code like GDO")
+    public Object[] sendIrisCode(Context context, Arguments args) {
+
+        StargatePos destinationPos = StargateNetwork.get(world).getStargate(dialedAddress);
+        if (!args.isInteger(0)) {
+            return new Object[]{true, "invalid_argument_type"};
+        }
+        if (destinationPos == null) return new Object[]{false, "stargate_not_engaged"};
+        StargateAbstractBaseTile te = destinationPos.getTileEntity();
+        if (te instanceof StargateClassicBaseTile) {
+            ((StargateClassicBaseTile) te).receiveIrisCode(new ComputerCodeSender(
+                            StargateNetwork.get(world).getStargate(
+                                    this.getStargateAddress(SymbolTypeEnum.MILKYWAY)
+                            )
+                    ), args.checkInteger(0)
+            );
+        } else {
+            return new Object[]{false, "invalid_target_gate"};
+        }
+        return new Object[]{true, "success"};
     }
 
     @Optional.Method(modid = "opencomputers")

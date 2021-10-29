@@ -6,7 +6,6 @@ import mrjake.aunis.gui.element.*;
 import mrjake.aunis.gui.element.Tab.SlotTab;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.SetOpenTabToServer;
-import mrjake.aunis.packet.stargate.DHDButtonClickedToServer;
 import mrjake.aunis.packet.stargate.SaveIrisCodeToServer;
 import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
 import mrjake.aunis.stargate.network.SymbolPegasusEnum;
@@ -151,7 +150,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				.setIconSize(20, 18)
 				.setIconTextureLocation(304, 72).build();
 
-
+		irisTab.setOnTabClose(this::saveIrisCode);
 
 		tabs.add(milkyWayAddressTab);
 		tabs.add(pegasusAddressTab);
@@ -311,8 +310,9 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 			Tab tab = tabs.get(i);
 			
 			if (tab.isCursorOnTab(mouseX, mouseY)) {
-				if (Tab.tabsInteract(tabs, i))
+				if (Tab.tabsInteract(tabs, i)) {
 					container.setOpenTabId(i);
+				}
 				else
 					container.setOpenTabId(-1);
 				
@@ -343,6 +343,10 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 
 	@Override
 	public void onGuiClosed() {
+		saveIrisCode();
+	}
+
+	private void saveIrisCode() {
 		AunisPacketHandler.INSTANCE.sendToServer(new SaveIrisCodeToServer(pos, irisTab.getCode(), irisTab.getIrisMode()));
 		container.gateTile.setIrisCode(irisTab.getCode());
 		container.gateTile.setIrisMode(irisTab.getIrisMode());

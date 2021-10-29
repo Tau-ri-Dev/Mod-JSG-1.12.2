@@ -471,7 +471,6 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                         getRendererStateClient().closeChevron(world.getTotalWorldTime());
                         break;
                     case OPEN_GATE:
-                        System.out.println("Milkyway open");
                     default:
                         break;
                 }

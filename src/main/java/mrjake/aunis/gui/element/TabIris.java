@@ -161,4 +161,18 @@ public class TabIris extends Tab {
     public void keyTyped(char typedChar, int keyCode) {
         inputField.textboxKeyTyped(typedChar, keyCode);
     }
+
+    private Runnable onTabClose = null;
+
+    public void setOnTabClose(Runnable onTabClose) {
+        this.onTabClose = onTabClose;
+    }
+
+    @Override
+    public void closeTab() {
+        if (onTabClose != null) onTabClose.run();
+
+        super.closeTab();
+
+    }
 }

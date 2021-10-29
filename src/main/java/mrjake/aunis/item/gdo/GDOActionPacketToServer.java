@@ -1,8 +1,11 @@
 package mrjake.aunis.item.gdo;
 
 import io.netty.buffer.ByteBuf;
+import mrjake.aunis.Aunis;
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.stargate.codesender.PlayerCodeSender;
 import mrjake.aunis.stargate.network.StargateNetwork;
+import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -14,6 +17,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GDOActionPacketToServer implements IMessage {
 	public GDOActionPacketToServer() {}
@@ -52,8 +57,7 @@ public class GDOActionPacketToServer implements IMessage {
 		code = buf.readInt();
 		next = buf.readBoolean();
 	}
-	
-	
+
 	public static class GDOActionPacketServerHandler implements IMessageHandler<GDOActionPacketToServer, IMessage> {
 
 		@Override
@@ -69,15 +73,22 @@ public class GDOActionPacketToServer implements IMessage {
 					switch (message.action) {
 						case SEND_CODE:
 							if (compound.hasKey("linkedGate")) {
-								BlockPos pos = BlockPos.fromLong(compound.getLong("linkedGate"));
-								StargateClassicBaseTile gateTile = (StargateClassicBaseTile) world.getTileEntity(pos);
-								if (gateTile == null) return;
-								StargateClassicBaseTile targetGate = null;
-								if (gateTile.getStargateState().initiating() || gateTile.getStargateState().engaged()) {
-									targetGate = (StargateClassicBaseTile) StargateNetwork.get(world).getStargate(gateTile.getDialedAddress()).getTileEntity();
-									if (targetGate != null) {
-										targetGate.receiveIrisCode(player, message.code);
+								try {
+									BlockPos pos = BlockPos.fromLong(compound.getLong("linkedGate"));
+									StargateClassicBaseTile gateTile = (StargateClassicBaseTile) world.getTileEntity(pos);
+									if (gateTile == null || gateTile.getDialedAddress() == null) return;
+									// todo both direction code sending
+									StargateAbstractBaseTile targetGate = null;
+									if (gateTile.getStargateState().initiating() || gateTile.getStargateState().engaged()) {
+										targetGate = StargateNetwork.get(world).getStargate(gateTile.getDialedAddress()).getTileEntity();
+										if (targetGate != null && targetGate instanceof StargateClassicBaseTile) {
+											((StargateClassicBaseTile) targetGate).receiveIrisCode(new PlayerCodeSender(player), message.code);
+										}
 									}
+								}
+								catch (NullPointerException e) {
+									Aunis.logger.error("Exception in GDO Action packet");
+									Aunis.logger.error(e.getStackTrace());
 								}
 							}
 							break;
