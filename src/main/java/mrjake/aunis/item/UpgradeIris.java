@@ -1,9 +1,13 @@
 package mrjake.aunis.item;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.config.AunisConfig;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -109,4 +113,16 @@ public class UpgradeIris extends Item {
         setDamage(itemStack, 0);
         return itemStack;
     }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        if (AunisConfig.irisConfig.unbreakingChance == 0) return false;
+        return (enchantment.getName().equals("enchantment.unbreaking"));
+    }
+
+    @Override
+    public int getItemEnchantability() {
+        return 10;
+    }
+
 }

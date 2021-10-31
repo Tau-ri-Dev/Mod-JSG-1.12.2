@@ -13,10 +13,14 @@ import mrjake.aunis.stargate.network.StargatePos;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.util.AunisAxisAlignedBB;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -26,6 +30,7 @@ import javax.vecmath.Vector2f;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static mrjake.aunis.item.AunisItems.UPGRADE_IRIS;
 
@@ -36,6 +41,7 @@ public class EventHorizon {
 
     private AunisAxisAlignedBB localBox;
     private AunisAxisAlignedBB globalBox;
+    public static Random randomGenerator = new Random();
 
     public EventHorizon(World world, BlockPos pos, BlockPos gateCenter, EnumFacing facing, AunisAxisAlignedBB localBox) {
         this.world = world;
@@ -123,23 +129,28 @@ public class EventHorizon {
             if (targetGatePos.getTileEntity() instanceof StargateClassicBaseTile
                     && ((StargateClassicBaseTile) targetGatePos.getTileEntity()).isClosed()) {
 
-
                 if (packet.getEntity() instanceof IProjectile) {
                     Entity projectile = packet.getEntity();
                     projectile.setVelocity(0, 0, 0);
                     projectile.setDead();
 
 
-                }
-                else {
-                    packet.teleport(false);
+                } else {
+                    if (AunisConfig.irisConfig.killAtDestination) {packet.teleport(false);}
                     //packet.getEntity().setDead();
+                    if (AunisConfig.irisConfig.allowCreative
+                            && !AunisConfig.irisConfig.killAtDestination
+                            && packet.getEntity() instanceof EntityPlayer
+                            && ((EntityPlayer) packet.getEntity()).capabilities.isCreativeMode) {
+                        packet.teleport();
+                    }
+                    else {
+                        packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS_CREATIVE, Float.MAX_VALUE);
+                    }
+
                 }
-                if (AunisConfig.irisConfig.allowCreative)
-                    packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS, Float.MAX_VALUE);
-                else {
-                    packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS_CREATIVE, Float.MAX_VALUE);
-                }
+
+
 
 
                 if (((StargateClassicBaseTile) targetGatePos.getTileEntity()).isPhysicalIris()) {
@@ -153,7 +164,14 @@ public class EventHorizon {
                 }
                 ItemStack irisItem = ((StargateClassicBaseTile) targetGatePos.getTileEntity()).getItemHandler().getStackInSlot(11);
                 if (irisItem.getItem() instanceof UpgradeIris) {
-                    UPGRADE_IRIS.setDamage(irisItem, UPGRADE_IRIS.getDamage(irisItem) + 1);
+                    // different damages per source
+                    int chance = (AunisConfig.irisConfig.unbreakingChance * EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, irisItem));
+                    int random = randomGenerator.nextInt(100);
+
+                    if (EnchantmentHelper.getEnchantments(irisItem).containsKey(Enchantments.UNBREAKING) &&
+                                    random > chance) {
+                        UPGRADE_IRIS.setDamage(irisItem, UPGRADE_IRIS.getDamage(irisItem) + 1);
+                    }
                     if (irisItem.getCount() == 0) {
                         ((StargateClassicBaseTile) targetGatePos.getTileEntity()).updateIrisType();
                     }

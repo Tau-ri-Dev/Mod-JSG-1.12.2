@@ -248,6 +248,10 @@ public class AunisConfig {
     }
 
     public static class IrisConfig {
+        @Name("Iris kills at destination")
+        @Comment("If set to 'false' player get killed by iris on entering event horizon")
+        public boolean killAtDestination = true;
+
         @Name("Titanium iris durability")
         @Comment({
                 "Durability of Titanium iris",
@@ -284,6 +288,11 @@ public class AunisConfig {
 
         @Name("Can iris destroy blocks")
         public boolean irisDestroysBlocks = false;
+
+        @Name("Unbreaking chance per level")
+        @Comment({"0 - disables unbreaking on iris", "100 - unbreaking makes iris unbreakable"})
+        @RangeInt(min = 0, max = 100)
+        public int unbreakingChance = 10;
     }
 
     public static class PowerConfig {
