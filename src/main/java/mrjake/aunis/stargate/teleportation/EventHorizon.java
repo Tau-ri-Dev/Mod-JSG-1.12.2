@@ -136,21 +136,21 @@ public class EventHorizon {
 
 
                 } else {
-                    if (AunisConfig.irisConfig.killAtDestination) {packet.teleport(false);}
+                    if (AunisConfig.irisConfig.killAtDestination) {
+                        packet.teleport(false);
+                    }
                     //packet.getEntity().setDead();
                     if (AunisConfig.irisConfig.allowCreative
-                            && !AunisConfig.irisConfig.killAtDestination
                             && packet.getEntity() instanceof EntityPlayer
                             && ((EntityPlayer) packet.getEntity()).capabilities.isCreativeMode) {
-                        packet.teleport();
-                    }
-                    else {
+                        if (!AunisConfig.irisConfig.killAtDestination) {
+                            packet.teleport();
+                        }
+                    } else {
                         packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS_CREATIVE, Float.MAX_VALUE);
                     }
 
                 }
-
-
 
 
                 if (((StargateClassicBaseTile) targetGatePos.getTileEntity()).isPhysicalIris()) {
@@ -169,7 +169,7 @@ public class EventHorizon {
                     int random = randomGenerator.nextInt(100);
 
                     if (EnchantmentHelper.getEnchantments(irisItem).containsKey(Enchantments.UNBREAKING) &&
-                                    random > chance) {
+                            random > chance) {
                         UPGRADE_IRIS.setDamage(irisItem, UPGRADE_IRIS.getDamage(irisItem) + 1);
                     }
                     if (irisItem.getCount() == 0) {
