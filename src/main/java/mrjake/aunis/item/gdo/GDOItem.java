@@ -6,6 +6,7 @@ import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.GuiSendCode;
+import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
 import mrjake.aunis.stargate.EnumStargateState;
@@ -191,5 +192,14 @@ public class GDOItem extends Item implements CustomModelItemInterface {
         }
 
         return super.onItemRightClick(world, player, hand);
+    }
+
+    public static boolean isLinked(ItemStack itemStack) {
+        if (itemStack.getItem() == AunisItems.GDO) {
+            if (itemStack.hasTagCompound()) {
+                return itemStack.getTagCompound().hasKey("linkedGate");
+            }
+        }
+        return false;
     }
 }
