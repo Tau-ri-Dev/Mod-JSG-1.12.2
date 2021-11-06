@@ -16,6 +16,7 @@ import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.StargateUpgradeE
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -178,19 +179,21 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 			ItemStack itemStack = container.getSlot(i).getStack();
 			
 			if (!itemStack.isEmpty()) {
-				switch (StargateUpgradeEnum.valueOf(itemStack.getItem())) {
+				StargateUpgradeEnum upgrade = StargateUpgradeEnum.valueOf(itemStack.getItem());
+				if (upgrade == null) continue;
+				switch (upgrade) {
 					case CHEVRON_UPGRADE:
 						hasAddressUpgrade = true;
 						break;
-						
+
 					case MILKYWAY_GLYPHS:
 						hasMilkyWayUpgrade = true;
 						break;
-						
+
 					case PEGASUS_GLYPHS:
 						hasAtlantisUpgrade = true;
 						break;
-						
+
 					case UNIVERSE_GLYPHS:
 						hasUniverseUpgrade = true;
 						break;

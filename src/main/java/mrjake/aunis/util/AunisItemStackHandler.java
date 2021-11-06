@@ -6,6 +6,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
+
 /**
  * Modified version of {@link ItemStackHandler}.
  * Respects resizing of the item handlers.
@@ -32,4 +34,5 @@ public class AunisItemStackHandler extends ItemStackHandler {
         }
         onLoad();
     }
+
 }

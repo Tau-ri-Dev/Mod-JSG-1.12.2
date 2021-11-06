@@ -777,7 +777,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         public boolean isItemValid(int slot, ItemStack stack) {
             Item item = stack.getItem();
             boolean isItemCapacitor = (item == Item.getItemFromBlock(AunisBlocks.CAPACITOR_BLOCK));
-
+            System.out.println("testing slot: " + slot);
             switch (slot) {
                 case 0:
                 case 1:
@@ -805,6 +805,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
                     return getSupportedOverlays().contains(override);
                 case 11:
+                    System.out.println("to v ruce je: " + item.getUnlocalizedName());
+                    System.out.println("ta blbost ho obsahuje: " + StargateIrisUpgradeEnum.contains(item));
                     return StargateIrisUpgradeEnum.contains(item);
                 default:
                     return true;
@@ -1173,9 +1175,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     // -----------------------------------------------------------
 
+    private static final List<Integer> UPGRADE_SLOTS_IDS = new ArrayList<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 11));
+
     @Override
     public Iterator<Integer> getUpgradeSlotsIterator() {
-        return IntStream.range(0, 7).iterator();
+//        return IntStream.range(0, 7).iterator();
+        return UPGRADE_SLOTS_IDS.iterator();
     }
 
     // -----------------------------------------------------------------------------
@@ -1232,12 +1237,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+        return (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing == null) || super.hasCapability(capability, facing);
     }
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing == null)
             return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemStackHandler);
 
         return super.getCapability(capability, facing);
