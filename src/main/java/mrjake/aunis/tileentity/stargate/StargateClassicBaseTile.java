@@ -777,7 +777,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         public boolean isItemValid(int slot, ItemStack stack) {
             Item item = stack.getItem();
             boolean isItemCapacitor = (item == Item.getItemFromBlock(AunisBlocks.CAPACITOR_BLOCK));
-            System.out.println("testing slot: " + slot);
             switch (slot) {
                 case 0:
                 case 1:
@@ -805,8 +804,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
                     return getSupportedOverlays().contains(override);
                 case 11:
-                    System.out.println("to v ruce je: " + item.getUnlocalizedName());
-                    System.out.println("ta blbost ho obsahuje: " + StargateIrisUpgradeEnum.contains(item));
                     return StargateIrisUpgradeEnum.contains(item);
                 default:
                     return true;

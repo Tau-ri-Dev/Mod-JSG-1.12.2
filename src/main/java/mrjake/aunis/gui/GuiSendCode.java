@@ -111,7 +111,7 @@ public class GuiSendCode extends GuiBase {
     private void refreshButtonEnable() {
         sendButton.enabled = !codeField.getText().isEmpty();
         backButton.enabled = sendButton.enabled;
-        System.out.println("keypad enabled: " + (codeField.getText().length() < AunisConfig.irisConfig.irisCodeLength));
+
         for (AunisGuiButton button : keyPadButtons) {
             button.enabled = codeField.getText().length() < AunisConfig.irisConfig.irisCodeLength;
         }

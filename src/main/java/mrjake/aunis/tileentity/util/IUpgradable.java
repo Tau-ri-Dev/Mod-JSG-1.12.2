@@ -58,7 +58,7 @@ public interface IUpgradable {
      */
     public default boolean tryInsertUpgrade(EntityPlayer player, EnumHand hand){
         ItemStack stack = player.getHeldItem(hand);
-        System.out.println("item in hand: " + stack.getItem().getUnlocalizedName());
+
         if(stack.isEmpty())
             return false;
 
@@ -67,7 +67,7 @@ public interface IUpgradable {
         Iterator<Integer> iter = getUpgradeSlotsIterator();
         while (iter.hasNext()) {
             int slot = iter.next();
-            System.out.println("before testin slot: " + slot);
+
             if(itemHandler.getStackInSlot(slot).isEmpty() && itemHandler.isItemValid(slot, stack)) {
                 // Maybe should not take item in creative mode
                 player.setHeldItem(hand, itemHandler.insertItem(slot, stack, false));
