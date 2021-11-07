@@ -25,6 +25,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.vecmath.Vector2f;
 import java.util.HashMap;
@@ -165,15 +168,20 @@ public class EventHorizon {
                 ItemStack irisItem = ((StargateClassicBaseTile) targetGatePos.getTileEntity()).getItemHandler().getStackInSlot(11);
                 if (irisItem.getItem() instanceof UpgradeIris) {
                     // different damages per source
-                    int chance = (AunisConfig.irisConfig.unbreakingChance * EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, irisItem));
+                    int chance = EnchantmentHelper.getEnchantments(irisItem).containsKey(Enchantments.UNBREAKING) ? (AunisConfig.irisConfig.unbreakingChance * EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, irisItem)) : 0;
                     int random = randomGenerator.nextInt(100);
 
-                    if (EnchantmentHelper.getEnchantments(irisItem).containsKey(Enchantments.UNBREAKING) &&
-                            random > chance) {
+                    if (random > chance) {
                         UPGRADE_IRIS.setDamage(irisItem, UPGRADE_IRIS.getDamage(irisItem) + 1);
                     }
                     if (irisItem.getCount() == 0) {
                         ((StargateClassicBaseTile) targetGatePos.getTileEntity()).updateIrisType();
+                    }
+                }
+                else {
+                    IEnergyStorage energyStorage = targetGatePos.getTileEntity().getCapability(CapabilityEnergy.ENERGY, null);
+                    if (energyStorage != null) {
+                        energyStorage.extractEnergy(500, false);
                     }
                 }
                 targetGatePos.getTileEntity().sendSignal(null, "stargate_event_iris_hit", new Object[]{"Something just hit the IRIS!"});

@@ -87,7 +87,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     public static final int SHIELD_IRIS_ANIMATION_LENGTH = 10;
 
     @Override
-    public void renderIris(double partialTicks, Float alpha, World world, S rendererState) {
+    public void renderIris(double partialTicks, World world, S rendererState) {
         float irisAnimationStage = (world.getTotalWorldTime() - rendererState.irisAnimation);
         /**
          *
@@ -96,8 +96,8 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
          * MIN: 0.0
          *
          * IRIS:
-         * MAX: 1.7 - zavřený
-         * MIN: 0.0 - otevřený
+         * MAX: 1.7 - closed
+         * MIN: 0.0 - open
          *
          */
         EnumIrisState irisState = rendererState.irisState;
@@ -120,7 +120,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
 
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             GlStateManager.enableBlend();
-            GlStateManager.disableLighting();
+            //GlStateManager.disableLighting();
             GlStateManager.translate(0, 0, 0.13);
             //GlStateManager.translate(0, 0, 0.13);
             for (int k = 0; k < 2; k++) {
@@ -135,7 +135,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
                     strip.render(tick, false, irisAnimationStage, 0, (byte) -1);
                 }
             }
-            GlStateManager.enableLighting();
+            //GlStateManager.enableLighting();
             GlStateManager.disableBlend();
             GlStateManager.popMatrix();
         }

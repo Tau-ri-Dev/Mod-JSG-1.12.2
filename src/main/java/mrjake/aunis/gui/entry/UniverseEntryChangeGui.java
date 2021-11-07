@@ -1,6 +1,7 @@
 package mrjake.aunis.gui.entry;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.gui.BetterButton;
 import mrjake.aunis.gui.util.ArrowButton;
 import mrjake.aunis.item.dialer.UniverseDialerActionEnum;
 import mrjake.aunis.item.dialer.UniverseDialerActionPacketToServer;
@@ -14,6 +15,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.client.config.GuiUtils;
 
@@ -44,7 +46,7 @@ public class UniverseEntryChangeGui extends AbstractEntryChangeGui {
 			buttonList.add(ocButton);
 		}
 		
-		abortButton = new ArrowButton(100, 0, 0, ArrowButton.ArrowType.LEFT)
+		abortButton = new BetterButton(100, 0, 0, 50, 20, new TextComponentTranslation("item.aunis.universe_dialer.abort").getFormattedText())
 				.setFgColor(GuiUtils.getColorCode('c', true))
 				.setActionCallback(() -> AunisPacketHandler.INSTANCE.sendToServer(new UniverseDialerActionPacketToServer(UniverseDialerActionEnum.ABORT, hand, false)));
 		

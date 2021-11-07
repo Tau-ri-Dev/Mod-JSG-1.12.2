@@ -70,7 +70,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                     GlStateManager.popMatrix();
                 }
 
-                renderIris(partialTicks, alpha, getWorld(), rendererState);
+                renderIris(partialTicks, getWorld(), rendererState);
 
             } else {
                 GlStateManager.enableBlend();
@@ -401,6 +401,6 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         return true;
     }
 
-    protected void renderIris(double partialTicks, Float alpha, World world, S rendererState) {
+    protected void renderIris(double partialTicks, World world, S rendererState) {
     }
 }

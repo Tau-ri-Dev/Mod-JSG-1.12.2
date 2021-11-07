@@ -4,9 +4,11 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.loader.model.ModelLoader;
 import mrjake.aunis.loader.texture.TextureLoader;
+import mrjake.aunis.stargate.EnumIrisType;
 import mrjake.aunis.stargate.network.SymbolUniverseEnum;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUniverseRendererState> {
 
@@ -68,7 +70,18 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
     super.renderKawoosh(rendererState, partialTicks);
 
   }
-
+  private static final float darkness = .6f;
+  @Override
+  public void renderIris(double partialTicks, World world, StargateUniverseRendererState rendererState) {
+    GlStateManager.pushMatrix();
+    GlStateManager.translate(0, 0.04, 0);
+    GlStateManager.rotate(90, 1, 0, 0);
+    GlStateManager.scale(0.9, 0.9, 0.9);
+    if (rendererState.irisType == EnumIrisType.SHIELD) GlStateManager.color(1,1 ,1);
+    else GlStateManager.color(darkness, darkness, darkness);
+    super.renderIris(partialTicks, world, rendererState);
+    GlStateManager.popMatrix();
+  }
 
   // ----------------------------------------------------------------------------------------
   // Chevrons
