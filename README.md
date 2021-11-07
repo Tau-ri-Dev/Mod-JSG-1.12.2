@@ -1,4 +1,4 @@
-# AUNIS
+# AUNIS: Resurrection
 ***
 **All You Need is Stargate** is a Stargate-based Minecraft mod. It aims to closely resemble the franchise and be the most immersive Stargate mod out there.
 
