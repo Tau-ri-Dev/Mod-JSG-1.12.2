@@ -2,6 +2,7 @@ package mrjake.aunis.block;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.config.AunisConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
@@ -57,7 +58,7 @@ public class InvisibleBlock extends Block {
 	// ------------------------------------------------------------------------
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.INVISIBLE;
+		return AunisConfig.debugConfig.renderInvisibleBlocks ? EnumBlockRenderType.MODEL : EnumBlockRenderType.INVISIBLE;
 	}
 	
 	@Override

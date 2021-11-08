@@ -388,6 +388,9 @@ public class AunisConfig {
 
         @Name("Render whole kawoosh bounding box")
         public boolean renderWholeKawooshBoundingBox = false;
+
+        @Name("Render invisible blocks")
+        public boolean renderInvisibleBlocks = false;
     }
 
     public static class MysteriousConfig {
