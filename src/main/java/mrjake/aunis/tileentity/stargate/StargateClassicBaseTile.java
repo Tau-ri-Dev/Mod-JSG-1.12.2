@@ -4,6 +4,7 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import mrjake.aunis.Aunis;
+import mrjake.aunis.AunisProps;
 import mrjake.aunis.beamer.BeamerLinkingHelper;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
@@ -217,7 +218,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
             updateIrisType();
             boolean set = irisType != EnumIrisType.NULL;
-            setIrisBlocks(set && irisState == EnumIrisState.CLOSED);
+            if (isMerged()) {
+                setIrisBlocks(set && irisState == EnumIrisState.CLOSED);
+            }
         }
     }
 
@@ -225,12 +228,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     protected abstract boolean onGateMergeRequested();
 
     private BlockPos lastPos = BlockPos.ORIGIN;
+    boolean isFacingFixed = false;
 
     @Override
     public void update() {
         super.update();
 
         if (!world.isRemote) {
+
+
             if (!lastPos.equals(pos)) {
                 lastPos = pos;
                 generateAddresses(!hasUpgrade(StargateClassicBaseTile.StargateUpgradeEnum.CHEVRON_UPGRADE));
@@ -1116,32 +1122,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
 
-    private Rotation invBlocksRotation = null;
 
-    private Rotation determineRotation() {
-        Rotation rotation;
-        switch (facing) {
-            case EAST:
-                rotation = Rotation.CLOCKWISE_90;
-                break;
-            case WEST:
-                rotation = Rotation.COUNTERCLOCKWISE_90;
-                break;
-            case SOUTH:
-                rotation = Rotation.CLOCKWISE_180;
-            case NORTH:
-            default:
-                rotation = Rotation.NONE;
-
-        }
-        return rotation;
-    }
 
     private void setIrisBlocks(boolean set) {
         IBlockState invBlockState = AunisBlocks.IRIS_BLOCK.getDefaultState();
         if (set) invBlockState = AunisBlocks.IRIS_BLOCK.getStateFromMeta(getFacing().getHorizontalIndex());
-
-        if (invBlocksRotation == null) invBlocksRotation = determineRotation();
+        Rotation invBlocksRotation = FacingToRotation.get(facing);
         BlockPos startPos = this.pos;
         for (BlockPos invPos : Objects.requireNonNull(StargateSizeEnum.getIrisBLocksPatter(getStargateSize()))) {
             BlockPos newPos = startPos.add(invPos.rotate(invBlocksRotation));

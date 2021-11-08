@@ -118,7 +118,8 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         DECREASING(2),
         STILL(3),
         CLOSING(4),
-        SHRINKING(5);
+        SHRINKING(5),
+        FORMING_UNDER_IRIS(6);
 
         public int index;
         private static Map<Integer, EnumVortexState> map = new HashMap<Integer, EnumVortexState>();
@@ -156,10 +157,10 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
     }
 
     protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
-        renderKawoosh(rendererState, partialTicks, false, true);
+        renderKawoosh(rendererState, partialTicks, false);
     }
 
-    protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks, boolean backOnly, boolean doKawoosh) {
+    protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks, boolean backOnly) {
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 15 * 16, 15 * 16);
 
         float gateWait = getWorld().getTotalWorldTime() - rendererState.gateWaitStart;
@@ -196,7 +197,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         }
 
         // Going center
-        if (inner >= StargateRendererStatic.kawooshRadius) {
+        if (inner >= StargateRendererStatic.kawooshRadius && rendererState.vortexState != EnumVortexState.FORMING_UNDER_IRIS) {
             rendererState.backStrip = new QuadStrip(8, inner - 0.2f, StargateRendererStatic.eventHorizonRadius, tick);
         } else {
             if (rendererState.backStripClamp) {
@@ -223,7 +224,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
                 if (!(rendererState.vortexState == EnumVortexState.CLOSING)) {
                     if (!(rendererState.vortexState == EnumVortexState.SHRINKING)) {
-                        if (rendererState.vortexState == EnumVortexState.FORMING && arg >= 1.342f) {
+                        if (rendererState.vortexState == EnumVortexState.FORMING || rendererState.vortexState == EnumVortexState.FORMING_UNDER_IRIS && arg >= 1.342f) {
                             rendererState.vortexState = EnumVortexState.FULL;
                         }
 
@@ -244,15 +245,14 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                             else if (arg > 3 + end) mul = (arg - 2.5f - end) * (arg - 3.5f - end) / -10f + 0.91f;
                             else mul = 0.935f;
                         } else {
-                            if (rendererState.vortexState == (EnumVortexState.FORMING))
+                            if (rendererState.vortexState == EnumVortexState.FORMING || rendererState.vortexState == EnumVortexState.FORMING_UNDER_IRIS)
                                 mul = (arg * (arg - 4)) / -4.0f;
 
                             else mul = ((arg - 1 - end) * (arg - 5 - end)) / -5.968f + 0.29333f;
                         }
 
                         // Rendering the vortex
-                        // todo shield stuff
-//                        if (doKawoosh) {
+                        if (rendererState.vortexState == EnumVortexState.FORMING) {
                             for (Map.Entry<Float, Float> e : StargateRendererStatic.Z_RadiusMap.entrySet()) {
                                 if (first) {
                                     first = false;
@@ -269,9 +269,11 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                                     prevZ = zOffset;
                                     prevRad = rad;
                                 }
-
-                                // for end
                             }
+                                // for end
+                            } else if (rendererState.vortexState == EnumVortexState.FORMING_UNDER_IRIS) {
+
+                        }
 //                        } else {
 //                            long stateChange = rendererState.gateWaitStart + 35;
 //                            float arg2 = (float) ((getWorld().getTotalWorldTime() - stateChange + partialTicks) / 3f) - 1.0f;
