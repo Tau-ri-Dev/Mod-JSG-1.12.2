@@ -12,6 +12,7 @@ import net.minecraftforge.common.util.Constants.NBT;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class StargateNetwork extends WorldSavedData {
@@ -143,9 +144,11 @@ public class StargateNetwork extends WorldSavedData {
   public NBTTagCompound writeToNBT(NBTTagCompound compound) {
     NBTTagList stargateTagList = new NBTTagList();
 
-    for (Map<StargateAddress, StargatePos> stargateMap : stargateNetworkMap.values()) {
+    for (Iterator<Map<StargateAddress, StargatePos>> systemsIterator = stargateNetworkMap.values().iterator(); systemsIterator.hasNext(); ) {
+      Map<StargateAddress, StargatePos> stargateMap = systemsIterator.next();
 
-      for (Map.Entry<StargateAddress, StargatePos> stargateEntry : stargateMap.entrySet()) {
+      for (Iterator<Map.Entry<StargateAddress, StargatePos>> perSystemsIterator = stargateMap.entrySet().iterator(); perSystemsIterator.hasNext(); ) {
+        Map.Entry<StargateAddress, StargatePos> stargateEntry = perSystemsIterator.next();
 
         NBTTagCompound stargateCompound = new NBTTagCompound();
         stargateCompound.setTag("address", stargateEntry.getKey().serializeNBT());
