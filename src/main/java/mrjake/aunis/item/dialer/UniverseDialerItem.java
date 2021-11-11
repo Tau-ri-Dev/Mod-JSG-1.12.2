@@ -157,7 +157,9 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 										
 										NBTTagList nearbyList = new NBTTagList();
 										int squaredGate = AunisConfig.stargateConfig.universeGateNearbyReach * AunisConfig.stargateConfig.universeGateNearbyReach;
-										for (Iterator<Map.Entry<StargateAddress, StargatePos>> iterator = StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet().iterator(); iterator.hasNext();) {
+										// todo something here crash mc
+										Iterator<Map.Entry<StargateAddress, StargatePos>> iterator = StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet().iterator();
+										while (iterator.hasNext()) {
 
 											Map.Entry<StargateAddress, StargatePos> entry = iterator.next();
 											StargatePos stargatePos = entry.getValue();
