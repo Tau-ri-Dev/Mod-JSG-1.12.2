@@ -1357,9 +1357,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         return new Object[]{"stargate_spin"};
     }
-
+    // todo make it work again
     @Optional.Method(modid = "opencomputers")
-    @Callback(doc = "function(symbolName:string) -- Spins the ring to the given symbol and engages/locks it")
+    @Callback(doc = "function(symbolName:string) -- WIP")
     public Object[] abortDialing(Context context, Arguments args) {
         if (!isMerged()) return new Object[]{null, "stargate_failure_not_merged", "Stargate is not merged"};
 
