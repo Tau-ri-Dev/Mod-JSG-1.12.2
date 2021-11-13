@@ -85,15 +85,15 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
             GDOMode mode = GDOMode.valueOf(compound.getByte("mode"));
 
             if (mode.next() == GDOMode.CODE_SENDER) {
-                drawStringWithShadow(0.64f, 0.316f, mode.localize(), true, false);
+                drawStringWithShadow(0.68f, 0.316f, mode.localize(), true, false);
                 if (mode.next() != mode) {
-                    drawStringWithShadow(0.64f, 0.616f, mode.next().localize(), false, false);
+                    drawStringWithShadow(0.68f, 0.616f, mode.next().localize(), false, false);
                 }
             } else {
                 if (mode.next() != mode) {
-                    drawStringWithShadow(0.64f, 0.316f, mode.next().localize(), false, false);
+                    drawStringWithShadow(0.68f, 0.316f, mode.next().localize(), false, false);
                 }
-                drawStringWithShadow(0.64f, 0.616f, mode.localize(), true, false);
+                drawStringWithShadow(0.68f, 0.616f, mode.localize(), true, false);
             }
 
             boolean notLinked = mode.linkable && !compound.hasKey(mode.tagPosName);
@@ -126,12 +126,12 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
                                 break;
                             case OC:
                                 ItemOCMessage message = new ItemOCMessage(entryCompound);
-                                drawStringWithShadow(1.25f, 0.474f - 0.2f*offset, message.name, active, false);
+                                drawStringWithShadow(1.27f, 0.474f - 0.2f*offset, message.name, active, false);
                                 break;
                         }
                     }
                 }
-                if (mode == GDOMode.OC) drawStringWithShadow(1.15f, 0.474f, ">", true, false);
+                if (mode == GDOMode.OC) drawStringWithShadow(1.17f, 0.474f, ">", true, false);
             }
         }
 
