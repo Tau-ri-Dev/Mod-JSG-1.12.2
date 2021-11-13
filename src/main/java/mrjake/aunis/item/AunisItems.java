@@ -6,8 +6,11 @@ import mrjake.aunis.item.gdo.GDOItem;
 import mrjake.aunis.item.notebook.NotebookItem;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent.Register;
@@ -178,5 +181,7 @@ public class AunisItems {
             else
                 ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
         }
+
+
     }
 }

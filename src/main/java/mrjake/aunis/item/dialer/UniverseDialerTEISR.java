@@ -6,6 +6,7 @@ import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.item.renderer.AunisFontRenderer;
 import mrjake.aunis.item.renderer.ItemRenderHelper;
 import mrjake.aunis.loader.ElementEnum;
+import mrjake.aunis.loader.texture.TextureLoader;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.SymbolInterface;
@@ -25,12 +26,14 @@ import net.minecraftforge.common.util.Constants.NBT;
 import org.lwjgl.opengl.GL11;
 
 public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
-	
+
 	@Override
 	public void renderByItem(ItemStack stack) {
 		float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
 		TransformType transformType = AunisItems.UNIVERSE_DIALER.getLastTransform();
-		
+
+		boolean isBroken = stack.getItemDamage() == UniverseDialerItem.UniverseDialerVariants.BROKEN.meta;
+
 		GlStateManager.pushMatrix();
 		
 		// Item frame
@@ -75,9 +78,14 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 			
 			GlStateManager.scale(0.3f, 0.3f, 0.3f);
 		}
-		
-		ElementEnum.UNIVERSE_DIALER.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
-		
+
+		if (!isBroken) {
+			ElementEnum.UNIVERSE_DIALER.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
+		}
+		else {
+			ElementEnum.UNIVERSE_DIALER_BROKEN.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
+		}
+
 		// Translate rendered text
 		GlStateManager.translate(0, 0.20f, 0.1f);
 		GlStateManager.rotate(-90, 1, 0, 0);
@@ -87,7 +95,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 		
 		GlStateManager.enableBlend();
 		
-		if (stack.hasTagCompound()) {		
+		if (stack.hasTagCompound() && !isBroken) {
 			NBTTagCompound compound = stack.getTagCompound();
 			UniverseDialerMode mode = UniverseDialerMode.valueOf(compound.getByte("mode"));
 			

@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -99,6 +100,17 @@ public class GDOActionPacketToServer implements IMessage {
 								mode = mode.prev();
 
 							compound.setByte("mode", mode.id);
+							break;
+
+						case ADDRESS_CHANGE:
+							byte selected = compound.getByte("selected");
+							int addressCount = compound.getTagList(mode.tagListName, Constants.NBT.TAG_COMPOUND).tagCount();
+
+							if (message.next && selected < addressCount-1)
+								compound.setByte("selected", (byte) (selected+1));
+
+							if (!message.next && selected > 0)
+								compound.setByte("selected", (byte) (selected-1));
 							break;
 					}
 				}

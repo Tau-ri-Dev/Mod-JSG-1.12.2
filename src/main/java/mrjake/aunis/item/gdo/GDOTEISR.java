@@ -2,6 +2,7 @@ package mrjake.aunis.item.gdo;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.item.renderer.AunisFontRenderer;
 import mrjake.aunis.item.renderer.ItemRenderHelper;
 import mrjake.aunis.loader.ElementEnum;
@@ -84,15 +85,15 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
             GDOMode mode = GDOMode.valueOf(compound.getByte("mode"));
 
             if (mode.next() == GDOMode.CODE_SENDER) {
-                drawStringWithShadow(0.74f, 0.316f, mode.localize(), true, false);
+                drawStringWithShadow(0.64f, 0.316f, mode.localize(), true, false);
                 if (mode.next() != mode) {
-                    drawStringWithShadow(0.74f, 0.616f, mode.next().localize(), false, false);
+                    drawStringWithShadow(0.64f, 0.616f, mode.next().localize(), false, false);
                 }
             } else {
                 if (mode.next() != mode) {
-                    drawStringWithShadow(0.74f, 0.316f, mode.next().localize(), false, false);
+                    drawStringWithShadow(0.64f, 0.316f, mode.next().localize(), false, false);
                 }
-                drawStringWithShadow(0.74f, 0.616f, mode.localize(), true, false);
+                drawStringWithShadow(0.64f, 0.616f, mode.localize(), true, false);
             }
 
             boolean notLinked = mode.linkable && !compound.hasKey(mode.tagPosName);
@@ -100,7 +101,7 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
             if (notLinked) {
                 GlStateManager.pushMatrix();
 
-                GlStateManager.translate(1.12f, 0.090f, 0.0f);
+                GlStateManager.translate(0.92f, 0.05f, -.2f);
                 Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(Aunis.ModID, "textures/gui/universe_warning.png"));
                 GlStateManager.enableTexture2D();
                 GlStateManager.enableBlend();
@@ -118,16 +119,19 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
                     if (index >= 0 && index < tagList.tagCount()) {
 
                         boolean active = offset == 0;
+                        NBTTagCompound entryCompound = (NBTTagCompound) tagList.getCompoundTagAt(index);
+
                         switch (mode) {
                             case CODE_SENDER:
-                                drawStringWithShadow(-0.32f, 0.32f - 0.32f * offset, "Send Code", active, false);
                                 break;
                             case OC:
-                                drawStringWithShadow(-0.32f, 0.32f - 0.32f * offset, "OC", active, false);
+                                ItemOCMessage message = new ItemOCMessage(entryCompound);
+                                drawStringWithShadow(1.25f, 0.474f - 0.2f*offset, message.name, active, false);
                                 break;
                         }
                     }
                 }
+                if (mode == GDOMode.OC) drawStringWithShadow(1.15f, 0.474f, ">", true, false);
             }
         }
 
@@ -138,7 +142,7 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
 
     private static void drawStringWithShadow(float x, float y, String text, boolean active, boolean red) {
         GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y, 0);
+        GlStateManager.translate(x, y, -.1f);
         GlStateManager.rotate(180, 0, 0, 1);
         GlStateManager.scale(0.015f, 0.015f, 0.015f);
 
@@ -150,7 +154,7 @@ public class GDOTEISR extends TileEntityItemStackRenderer {
         AunisFontRenderer.getFontRenderer().drawString(text, -6, 19, color, false);
 
         if (active) {
-            GlStateManager.translate(-0.4, 0.6, -0.1);
+            GlStateManager.translate(-0.4, 0.6, -0.3);
             AunisFontRenderer.getFontRenderer().drawString(text, -6, 19, 0x606060, false);
         }
 

@@ -35,8 +35,8 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// It would be better to make gdo and uni dialer share code... -- matousss
 public class GDOItem extends Item implements CustomModelItemInterface {
-
     public static final String ITEM_NAME = "gdo";
 
     public GDOItem() {
@@ -44,7 +44,6 @@ public class GDOItem extends Item implements CustomModelItemInterface {
         setUnlocalizedName(Aunis.ModID + "." + ITEM_NAME);
 
         setCreativeTab(Aunis.aunisCreativeTab);
-        //setMaxStackSize(1);
     }
 
     // TODO replace with capabilities. If item will have NBT like "display:Name" it will not init custom NBT! -- slava110

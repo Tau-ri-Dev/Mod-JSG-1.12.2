@@ -48,6 +48,7 @@ public enum ElementEnum {
   UNIVERSE_GATE("universe/universe_gate.obj", "universe/universe_gate"),
   UNIVERSE_CHEVRON("universe/universe_chevron.obj", "universe/universe_chevron10"),
   UNIVERSE_DIALER("universe/universe_dialer.obj", "universe/universe_dialer"),
+  UNIVERSE_DIALER_BROKEN("universe/universe_dialer.obj", "universe/universe_dialer_broken"),
 
   // --------------------------------------------------------------------------------------------
   // Pegasus
@@ -76,7 +77,7 @@ public enum ElementEnum {
   SHIELD("iris/shield.obj", "iris/shield"),
   IRIS("iris/iris_blade.obj", "iris/iris_blade"),
 
-  GDO("iris/gdo.obj", "iris/gdo");
+  GDO("iris/gdo.obj", "iris/gdo.png");
 
   // --------------------------------------------------------------------------------------------
 

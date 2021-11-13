@@ -1,6 +1,7 @@
 package mrjake.aunis.crafting;
 
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.item.dialer.UniverseDialerItem;
 import mrjake.aunis.item.dialer.UniverseDialerMode;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -27,7 +28,7 @@ public class UniverseDialerCloneRecipe extends Impl<IRecipe> implements IRecipe 
 			ItemStack stack = inv.getStackInSlot(i);
 			Item item = stack.getItem();
 			
-			if (item == AunisItems.UNIVERSE_DIALER)
+			if (item == AunisItems.UNIVERSE_DIALER && stack.getMetadata() == UniverseDialerItem.UniverseDialerVariants.NORMAL.meta)
 				matchCount++;
 			else if (!stack.isEmpty())
 				return false;

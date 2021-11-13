@@ -9,6 +9,7 @@ import mrjake.aunis.gui.entry.UniverseEntryChangeGui;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.dialer.UniverseDialerActionEnum;
 import mrjake.aunis.item.dialer.UniverseDialerActionPacketToServer;
+import mrjake.aunis.item.dialer.UniverseDialerItem;
 import mrjake.aunis.item.gdo.GDOActionEnum;
 import mrjake.aunis.item.gdo.GDOActionPacketToServer;
 import mrjake.aunis.item.gdo.GDOMode;
@@ -142,18 +143,21 @@ public class InputHandlerClient {
 		if (checkForItem(AunisItems.UNIVERSE_DIALER)) {
 			EnumHand hand = getHand(AunisItems.UNIVERSE_DIALER);
 			UniverseDialerActionEnum action = null;
-			
-			if (MODE_SCROLL.isKeyDown())
-				action = UniverseDialerActionEnum.MODE_CHANGE;
-			
-			else if (ADDRESS_SCROLL.isKeyDown())
-				action = UniverseDialerActionEnum.ADDRESS_CHANGE;
-			
-			
-			// ---------------------------------------------
-			if (action != null) {
-				event.setCanceled(true);
-				AunisPacketHandler.INSTANCE.sendToServer(new UniverseDialerActionPacketToServer(action, hand, next));
+
+
+			if (Minecraft.getMinecraft().player.getHeldItem(hand).getItemDamage() != UniverseDialerItem.UniverseDialerVariants.BROKEN.meta){
+				if (MODE_SCROLL.isKeyDown())
+					action = UniverseDialerActionEnum.MODE_CHANGE;
+
+				else if (ADDRESS_SCROLL.isKeyDown())
+					action = UniverseDialerActionEnum.ADDRESS_CHANGE;
+
+
+				// ---------------------------------------------
+				if (action != null) {
+					event.setCanceled(true);
+					AunisPacketHandler.INSTANCE.sendToServer(new UniverseDialerActionPacketToServer(action, hand, next));
+				}
 			}
 		}
 
@@ -163,6 +167,8 @@ public class InputHandlerClient {
 
 			if (MODE_SCROLL.isKeyDown())
 				action = GDOActionEnum.MODE_CHANGE;
+			else if (ADDRESS_SCROLL.isKeyDown())
+				action = GDOActionEnum.ADDRESS_CHANGE;
 
 			// ---------------------------------------------
 			if (action != null) {
@@ -239,6 +245,16 @@ public class InputHandlerClient {
 
 			else if (MODE_DOWN.isPressed()) {
 				action = GDOActionEnum.MODE_CHANGE;
+				next = true;
+			}
+
+			else if (ADDRESS_UP.isPressed()) {
+				action = GDOActionEnum.ADDRESS_CHANGE;
+				next = false;
+			}
+
+			else if (ADDRESS_DOWN.isPressed()) {
+				action = GDOActionEnum.ADDRESS_CHANGE;
 				next = true;
 			}
 

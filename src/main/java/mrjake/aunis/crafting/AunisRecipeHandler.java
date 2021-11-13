@@ -19,5 +19,6 @@ public class AunisRecipeHandler {
 		event.getRegistry().register(new UniverseDialerCloneRecipe());
 		FurnaceRecipes.instance().addSmeltingRecipeForBlock(AunisBlocks.ORE_TITANIUM_BLOCK, new ItemStack(AunisItems.TITANIUM_INGOT), 2f);
 		FurnaceRecipes.instance().addSmeltingRecipeForBlock(AunisBlocks.ORE_TRINIUM_BLOCK, new ItemStack(AunisItems.TRINIUM_INGOT), 4f);
+		event.getRegistry().register(new UniverseDialerRepairRecipe());
 	}
 }

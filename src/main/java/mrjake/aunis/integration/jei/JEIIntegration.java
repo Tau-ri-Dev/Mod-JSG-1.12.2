@@ -32,6 +32,7 @@ public final class JEIIntegration implements IModPlugin {
       recipes.addAll(JEINotebookRecipe.genAll());
       recipes.add(new JEIUniverseDialerCloneRecipe());
       recipes.add(new JEINotebookCloneRecipe());
+      recipes.add(new JEIUniverseDialerRepairRecipe());
       registry.addRecipes(recipes, VanillaRecipeCategoryUid.CRAFTING);
     }
 
