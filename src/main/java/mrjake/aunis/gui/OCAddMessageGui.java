@@ -1,15 +1,23 @@
 package mrjake.aunis.gui;
 
+import mrjake.aunis.gui.entry.AbstractEntryChangeGui;
+import mrjake.aunis.gui.entry.OCEntryChangeGui;
 import mrjake.aunis.gui.entry.OCUpdatable;
-import mrjake.aunis.item.dialer.UniverseDialerOCMessage;
-import mrjake.aunis.item.dialer.UniverseDialerOCProgramToServer;
+import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.item.dialer.UniverseDialerMode;
+import mrjake.aunis.item.oc.ItemOCMessage;
+import mrjake.aunis.item.oc.ItemOCProgramToServer;
 import mrjake.aunis.packet.AunisPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -126,13 +134,15 @@ public class OCAddMessageGui extends GuiScreen {
 		
 		isPortInvalid = false;
 		
-		UniverseDialerOCMessage message = new UniverseDialerOCMessage(name, address, (short) port, data);
+		ItemOCMessage message = new ItemOCMessage(name, address, (short) port, data);
 		
 		if (parentScreen instanceof OCUpdatable) {
 			((OCUpdatable) parentScreen).entryAdded(message);
 		}
-		
-		AunisPacketHandler.INSTANCE.sendToServer(new UniverseDialerOCProgramToServer(hand, message));
+		AunisPacketHandler.INSTANCE.sendToServer(new ItemOCProgramToServer(hand, message));
+//		if (parentScreen != null && parentScreen instanceof AbstractEntryChangeGui) {
+//			((AbstractEntryChangeGui) parentScreen).updateCompound();
+//		}
 		keyTyped(' ', 1); // close GUI
 	}
 }

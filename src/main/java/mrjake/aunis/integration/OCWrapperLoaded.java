@@ -6,7 +6,7 @@ import li.cil.oc.api.machine.Machine;
 import li.cil.oc.api.network.*;
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
-import mrjake.aunis.item.dialer.UniverseDialerWirelessEndpoint;
+import mrjake.aunis.item.oc.ItemWirelessEndpoint;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -59,7 +59,7 @@ public class OCWrapperLoaded implements OCWrapperInterface {
 		}
 		
 		else {
-			UniverseDialerWirelessEndpoint endpoint = new UniverseDialerWirelessEndpoint(player);
+			ItemWirelessEndpoint endpoint = new ItemWirelessEndpoint(player);
 			Network.joinWirelessNetwork(endpoint);
 			
 			endpointStack.setEndpoint(endpoint, player.getEntityWorld().getTotalWorldTime());

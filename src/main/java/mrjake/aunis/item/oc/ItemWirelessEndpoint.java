@@ -1,4 +1,4 @@
-package mrjake.aunis.item.gdo;
+package mrjake.aunis.item.oc;
 
 import li.cil.oc.api.network.Packet;
 import li.cil.oc.api.network.WirelessEndpoint;
@@ -7,11 +7,11 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
-public class GDOWirelessEndpoint implements WirelessEndpoint {
+public class ItemWirelessEndpoint implements WirelessEndpoint {
 
 	private EntityPlayer player;
 	
-	public GDOWirelessEndpoint(EntityPlayer player) {
+	public ItemWirelessEndpoint(EntityPlayer player) {
 		this.player = player;
 	}
 	

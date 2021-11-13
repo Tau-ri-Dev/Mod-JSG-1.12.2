@@ -4,6 +4,7 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.gui.GuiSendCode;
 import mrjake.aunis.gui.PageRenameGui;
 import mrjake.aunis.gui.entry.NotebookEntryChangeGui;
+import mrjake.aunis.gui.entry.OCEntryChangeGui;
 import mrjake.aunis.gui.entry.UniverseEntryChangeGui;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.dialer.UniverseDialerActionEnum;
@@ -303,6 +304,12 @@ public class InputHandlerClient {
 		hand = getHand(AunisItems.UNIVERSE_DIALER);
 		if (hand != null) {
 			Minecraft.getMinecraft().displayGuiScreen(new UniverseEntryChangeGui(hand, player.getHeldItem(hand).getTagCompound()));
+			return;
+		}
+
+		hand = getHand(AunisItems.GDO);
+		if (hand != null && Aunis.ocWrapper.isModLoaded()) {
+			Minecraft.getMinecraft().displayGuiScreen(new OCEntryChangeGui(hand, player.getHeldItem(hand).getTagCompound(), null));
 			return;
 		}
 	}

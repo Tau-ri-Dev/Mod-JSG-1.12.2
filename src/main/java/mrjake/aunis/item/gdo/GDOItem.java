@@ -7,6 +7,7 @@ import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.GuiSendCode;
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
 import mrjake.aunis.stargate.EnumStargateState;
@@ -30,6 +31,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -185,6 +187,13 @@ public class GDOItem extends Item implements CustomModelItemInterface {
 //                    }
 
                     /** moved to {@link mrjake.aunis.event.InputHandlerClient}*/
+                    break;
+                case OC:
+                    NBTTagList tagList = compound.getTagList(mode.tagListName, Constants.NBT.TAG_COMPOUND);
+                    NBTTagCompound selectedCompound = tagList.getCompoundTagAt(selected);
+                    ItemOCMessage message = new ItemOCMessage(selectedCompound);
+                    Aunis.logger.debug("Sending OC message: " + message.toString());
+                    Aunis.ocWrapper.sendWirelessPacketPlayer(player, player.getHeldItem(hand), message.address, message.port, message.getData());
                     break;
                 default:
                     break;

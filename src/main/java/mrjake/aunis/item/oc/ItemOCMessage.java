@@ -1,23 +1,23 @@
-package mrjake.aunis.item.dialer;
+package mrjake.aunis.item.oc;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public class UniverseDialerOCMessage implements INBTSerializable<NBTTagCompound> {
+public class ItemOCMessage implements INBTSerializable<NBTTagCompound> {
 
 	public String name;
 	public String address;
 	public short port;
 	public String dataStr;
 	
-	public UniverseDialerOCMessage(String name, String address, short port,	String dataStr) {
+	public ItemOCMessage(String name, String address, short port, String dataStr) {
 		this.name = name;
 		this.address = address;
 		this.port = port;
 		this.dataStr = dataStr;
 	}
 	
-	public UniverseDialerOCMessage(NBTTagCompound compound) {
+	public ItemOCMessage(NBTTagCompound compound) {
 		deserializeNBT(compound);
 	}
 	

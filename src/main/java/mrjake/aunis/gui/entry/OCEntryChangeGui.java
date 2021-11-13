@@ -1,16 +1,18 @@
 package mrjake.aunis.gui.entry;
 
-import mrjake.aunis.gui.BetterButton;
 import mrjake.aunis.gui.OCAddMessageGui;
 import mrjake.aunis.gui.util.ArrowButton;
+import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.dialer.UniverseDialerMode;
-import mrjake.aunis.item.dialer.UniverseDialerOCMessage;
+import mrjake.aunis.item.oc.ItemOCMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHand;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.client.config.GuiUtils;
 
@@ -25,7 +27,6 @@ public class OCEntryChangeGui extends AbstractEntryChangeGui implements OCUpdata
 		
 		this.parentScreen =parentScreen;
 	}
-	
 	@Override
 	public void initGui() {
 		super.initGui();
@@ -60,7 +61,7 @@ public class OCEntryChangeGui extends AbstractEntryChangeGui implements OCUpdata
 		for (int i=0; i<list.tagCount(); i++) {
 			NBTTagCompound compound = list.getCompoundTagAt(i);
 			
-			UniverseDialerOCMessage message = new UniverseDialerOCMessage(compound);
+			ItemOCMessage message = new ItemOCMessage(compound);
 			
 			OCEntry entry = new OCEntry(mc, i, list.tagCount(), hand, message, (action, index) -> performAction(action, index));
 			entries.add(entry);
@@ -77,9 +78,19 @@ public class OCEntryChangeGui extends AbstractEntryChangeGui implements OCUpdata
 	}
 	
 	@Override
-	public void entryAdded(UniverseDialerOCMessage message) {
+	public void entryAdded(ItemOCMessage message) {
 		entries.add(new OCEntry(mc, entries.size(), entries.size()+1, hand, message, (action, index) -> performAction(action, index)));
 		calculateGuiHeight();
+
+		ItemStack stack = Minecraft.getMinecraft().player.getHeldItem(hand);
+
+		if ((stack.getItem() == AunisItems.UNIVERSE_DIALER || stack.getItem() == AunisItems.GDO) && stack.hasTagCompound()) {
+			NBTTagCompound compound = mainCompound;
+			NBTTagList ocList = compound.getTagList(UniverseDialerMode.OC.tagListName, Constants.NBT.TAG_COMPOUND);
+			ocList.appendTag(message.serializeNBT());
+			compound.setTag(UniverseDialerMode.OC.tagListName, ocList);
+		}
+
 	}
 	
 	@Override

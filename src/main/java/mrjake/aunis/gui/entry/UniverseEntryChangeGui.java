@@ -33,7 +33,6 @@ public class UniverseEntryChangeGui extends AbstractEntryChangeGui {
 	
 	protected GuiButton ocButton;
 	protected GuiButton abortButton;
-	
 	@Override
 	public void initGui() {
 		super.initGui();

@@ -2,6 +2,7 @@ package mrjake.aunis.gui.entry;
 
 import mrjake.aunis.gui.BetterButton;
 import mrjake.aunis.packet.gui.entry.EntryActionEnum;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;

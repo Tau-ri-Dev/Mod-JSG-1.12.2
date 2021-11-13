@@ -2,8 +2,8 @@ package mrjake.aunis.packet;
 
 import mrjake.aunis.item.dialer.UniverseDialerActionPacketToServer;
 import mrjake.aunis.item.dialer.UniverseDialerActionPacketToServer.UniverseDialerActionPacketServerHandler;
-import mrjake.aunis.item.dialer.UniverseDialerOCProgramToServer;
-import mrjake.aunis.item.dialer.UniverseDialerOCProgramToServer.UniverseDialerOCProgramServerHandler;
+import mrjake.aunis.item.oc.ItemOCProgramToServer;
+import mrjake.aunis.item.oc.ItemOCProgramToServer.ItemOCProgramServerHandler;
 import mrjake.aunis.item.gdo.GDOActionPacketToServer;
 import mrjake.aunis.item.gdo.GDOActionPacketToServer.GDOActionPacketServerHandler;
 import mrjake.aunis.item.notebook.NotebookActionPacketToServer;
@@ -51,7 +51,7 @@ public class AunisPacketHandler {
 		INSTANCE.registerMessage(TRControllerActivatedServerHandler.class, TRControllerActivatedToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(SetOpenTabServerHandler.class, SetOpenTabToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(UniverseDialerActionPacketServerHandler.class, UniverseDialerActionPacketToServer.class, id, Side.SERVER); id++;
-		INSTANCE.registerMessage(UniverseDialerOCProgramServerHandler.class, UniverseDialerOCProgramToServer.class, id, Side.SERVER); id++;
+		INSTANCE.registerMessage(ItemOCProgramServerHandler.class, ItemOCProgramToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(GDOActionPacketServerHandler.class, GDOActionPacketToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(BeamerChangeRoleServerHandler.class, BeamerChangeRoleToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(ChangeRedstoneModeServerHandler.class, ChangeRedstoneModeToServer.class, id, Side.SERVER); id++;

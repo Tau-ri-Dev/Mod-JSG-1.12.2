@@ -2,7 +2,7 @@ package mrjake.aunis.gui.entry;
 
 import mrjake.aunis.gui.BetterButton;
 import mrjake.aunis.gui.BetterTextField;
-import mrjake.aunis.item.dialer.UniverseDialerOCMessage;
+import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.gui.entry.EntryDataTypeEnum;
 import mrjake.aunis.packet.gui.entry.OCActionEnum;
@@ -19,14 +19,14 @@ public class OCEntry extends AbstractEntry {
 	public static final int PARAM_WIDTH = 100;
 	public static final int BUTTON_COUNT = 3;
 
-	protected UniverseDialerOCMessage message;
+	protected ItemOCMessage message;
 	
 	protected GuiTextField addressField;
 	protected GuiTextField portField;
 	protected GuiTextField paramField;
 	protected BetterButton addButton;
 	
-	public OCEntry(Minecraft mc, int index, int maxIndex, EnumHand hand, UniverseDialerOCMessage message, ActionListener actionListener) {
+	public OCEntry(Minecraft mc, int index, int maxIndex, EnumHand hand, ItemOCMessage message, ActionListener actionListener) {
 		super(mc, index, maxIndex, hand, message.name, actionListener);
 		this.message = message;
 		

@@ -2,6 +2,7 @@ package mrjake.aunis.item.dialer;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.item.renderer.AunisFontRenderer;
 import mrjake.aunis.item.renderer.ItemRenderHelper;
 import mrjake.aunis.loader.ElementEnum;
@@ -143,7 +144,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 								break;
 								
 							case OC:
-								UniverseDialerOCMessage message = new UniverseDialerOCMessage(entryCompound);
+								ItemOCMessage message = new ItemOCMessage(entryCompound);
 								drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, (index+1) + ".", active, false);
 								drawStringWithShadow(-0.10f, 0.32f - 0.32f*offset, message.name, active, false);
 								break;

@@ -1,7 +1,7 @@
 package mrjake.aunis.gui.entry;
 
-import mrjake.aunis.item.dialer.UniverseDialerOCMessage;
+import mrjake.aunis.item.oc.ItemOCMessage;
 
 public interface OCUpdatable {
-	public void entryAdded(UniverseDialerOCMessage message);
+	public void entryAdded(ItemOCMessage message);
 }

@@ -1,12 +1,17 @@
-package mrjake.aunis.item.dialer;
+package mrjake.aunis.item.oc;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.item.dialer.UniverseDialerMode;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.play.server.SPacketHeldItemChange;
+import net.minecraft.network.play.server.SPacketWindowItems;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -14,14 +19,16 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 
-public class UniverseDialerOCProgramToServer implements IMessage {
-	public UniverseDialerOCProgramToServer() {}
+public class ItemOCProgramToServer implements IMessage {
+	public ItemOCProgramToServer() {}
 	
 	private EnumHand hand;
-	private UniverseDialerOCMessage message;
+	private ItemOCMessage message;
 		
-	public UniverseDialerOCProgramToServer(EnumHand hand, UniverseDialerOCMessage message) {
+	public ItemOCProgramToServer(EnumHand hand, ItemOCMessage message) {
 		this.hand = hand;
 		this.message = message;
 	}
@@ -44,7 +51,7 @@ public class UniverseDialerOCProgramToServer implements IMessage {
 		String name = readString(buf);
 		String address = readString(buf);
 		String data = readString(buf);
-		message = new UniverseDialerOCMessage(name, address, port, data);
+		message = new ItemOCMessage(name, address, port, data);
 	}
 	
 	private static void writeString(ByteBuf buf, String string) {
@@ -58,21 +65,22 @@ public class UniverseDialerOCProgramToServer implements IMessage {
 	}
 	
 	
-	public static class UniverseDialerOCProgramServerHandler implements IMessageHandler<UniverseDialerOCProgramToServer, IMessage> {
+	public static class ItemOCProgramServerHandler implements IMessageHandler<ItemOCProgramToServer, IMessage> {
 		
-		public IMessage onMessage(UniverseDialerOCProgramToServer message, MessageContext ctx) {
+		public IMessage onMessage(ItemOCProgramToServer message, MessageContext ctx) {
 			EntityPlayerMP player = ctx.getServerHandler().player;
 			WorldServer world = player.getServerWorld();
-
 			world.addScheduledTask(() -> {
 				ItemStack stack = player.getHeldItem(message.hand);
-				
-				if (stack.getItem() == AunisItems.UNIVERSE_DIALER && stack.hasTagCompound()) {
+				if ((stack.getItem() == AunisItems.UNIVERSE_DIALER || stack.getItem() == AunisItems.GDO) && stack.hasTagCompound()) {
 					NBTTagCompound compound = stack.getTagCompound();
-					
 					NBTTagList ocList = compound.getTagList(UniverseDialerMode.OC.tagListName, NBT.TAG_COMPOUND);
 					ocList.appendTag(message.message.serializeNBT());
+					compound.setTag(UniverseDialerMode.OC.tagListName, ocList);
+
+					player.connection.sendPacket(new SPacketWindowItems(player.inventory.getSlotFor(stack), NonNullList.from(stack)));
 				}
+
 			});
 			
 			return null;

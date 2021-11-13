@@ -1,9 +1,12 @@
 package mrjake.aunis.item.dialer;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.beamer.BeamerModeEnum;
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
 import mrjake.aunis.stargate.StargateClosedReasonEnum;
@@ -13,6 +16,8 @@ import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import mrjake.aunis.transportrings.TransportRings;
+import mrjake.aunis.util.EnumKeyInterface;
+import mrjake.aunis.util.EnumKeyMap;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.util.ITooltipFlag;
@@ -44,10 +49,34 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
 	public static final String ITEM_NAME = "universe_dialer";
 
+	enum UniverseDialerVariants implements EnumKeyInterface<Integer> {
+		NORMAL(0, ITEM_NAME), BROKEN(1, ITEM_NAME+"_broken");
+
+		public final int damage;
+		public final String name;
+
+		UniverseDialerVariants(int damage, String name) {
+			this.damage = damage;
+			this.name = name;
+		}
+
+		@Override
+		public Integer getKey() {
+			return damage;
+		}
+
+		private static final EnumKeyMap<Integer, UniverseDialerVariants> KEY_MAP = new EnumKeyMap<>(values());
+
+		public static UniverseDialerVariants valueOf(int id) {
+			return KEY_MAP.valueOf(id);
+		}
+	}
+
 	public UniverseDialerItem() {
 		setRegistryName(new ResourceLocation(Aunis.ModID, ITEM_NAME));
 		setUnlocalizedName(Aunis.ModID + "." + ITEM_NAME);
-		
+		setHasSubtypes(true);
+		setMaxDamage(0);
 		setCreativeTab(Aunis.aunisCreativeTab);
 		// setMaxStackSize(1);
 	}
@@ -97,6 +126,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 	
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		if (stack.getItemDamage() == UniverseDialerVariants.BROKEN.damage) return null;
 		return new UniverseDialerCapabilityProvider();
 	}
 	
@@ -107,7 +137,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 	
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {
-		if (stack.hasTagCompound()) {
+		if (stack.hasTagCompound() && stack.getItemDamage() == UniverseDialerVariants.NORMAL.damage) {
 			NBTTagList list = stack.getTagCompound().getTagList("saved", NBT.TAG_COMPOUND);
 			tooltip.add(TextFormatting.GRAY + Aunis.proxy.localize("item.aunis.universe_dialer.saved_gates", list.tagCount()));
 
@@ -123,7 +153,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 	
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-		if (!world.isRemote) {
+		if (!world.isRemote && stack.getItemDamage() == UniverseDialerVariants.NORMAL.damage) {
 			checkNBT(stack);
 			NBTTagCompound compound = stack.getTagCompound();
 
@@ -229,7 +259,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		if (!world.isRemote) {
+		if (!world.isRemote && player.getHeldItem(hand).getItemDamage() == UniverseDialerVariants.NORMAL.damage) {
 			checkNBT(player.getHeldItem(hand));
 			NBTTagCompound compound = player.getHeldItem(hand).getTagCompound();
 			UniverseDialerMode mode = UniverseDialerMode.valueOf(compound.getByte("mode"));
@@ -279,7 +309,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 					break;
 					
 				case OC:
-					UniverseDialerOCMessage message = new UniverseDialerOCMessage(selectedCompound);					
+					ItemOCMessage message = new ItemOCMessage(selectedCompound);
 					Aunis.logger.debug("Sending OC message: " + message.toString());
 					Aunis.ocWrapper.sendWirelessPacketPlayer(player, player.getHeldItem(hand), message.address, message.port, message.getData());
 					break;
@@ -288,7 +318,13 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 		
 		return super.onItemRightClick(world, player, hand);
 	}
-	
+
+	public static void broke(ItemStack stack) {
+		if (stack.getItem() == AunisItems.UNIVERSE_DIALER) {
+			stack.setItemDamage(UniverseDialerVariants.BROKEN.damage);
+		}
+	}
+
 	// ------------------------------------------------------------------------------------------------------------
 	// NBT handles
 	
@@ -297,12 +333,12 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 	}
 	
 	public static void changeOCMessageAtIndex(NBTTagList list, int index, ChangeMessage changeMessage) {
-		UniverseDialerOCMessage message = new UniverseDialerOCMessage(list.getCompoundTagAt(index));
+		ItemOCMessage message = new ItemOCMessage(list.getCompoundTagAt(index));
 		changeMessage.change(message);
 		list.set(index, message.serializeNBT());
 	}
 	
 	public static interface ChangeMessage {
-		public void change(UniverseDialerOCMessage message);
+		public void change(ItemOCMessage message);
 	}
 }

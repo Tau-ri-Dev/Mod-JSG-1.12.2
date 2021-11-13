@@ -9,8 +9,8 @@ public class ArrowButton extends BetterButton {
     public static ResourceLocation TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/arrow_button.png");
     public static int SIZE = 20;
     public enum ArrowType {
-        UP(0, 0),
-        DOWN(20, 0),
+        UP(20, 0),
+        DOWN(0, 0),
         RIGHT(40, 0),
         LEFT(60, 0),
         CROSS(80, 0),
