@@ -162,21 +162,18 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     @Override
     protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
         boolean backOnly = false;
+        boolean doKawoosh = true;
+        if (rendererState instanceof StargateClassicRendererState
+                && (((StargateClassicRendererState) rendererState).irisState == EnumIrisState.CLOSED)
+                && (rendererState.vortexState == EnumVortexState.FORMING)) {
 
-        if (rendererState instanceof StargateClassicRendererState) {
-            EnumIrisState irisState = ((StargateClassicRendererState) rendererState).irisState;
-            if ((irisState == EnumIrisState.CLOSED || irisState == EnumIrisState.CLOSING)
-                    && (rendererState.vortexState == EnumVortexState.FORMING)) {
+            rendererState.vortexState = EnumVortexState.STILL;
+            doKawoosh = false;
 
-                //rendererState.vortexState = EnumVortexState.STILL;
-
-                rendererState.vortexState = EnumVortexState.FORMING_UNDER_IRIS;
-                if ((((StargateClassicRendererState) rendererState).irisType != EnumIrisType.SHIELD)
-                        && (((StargateClassicRendererState) rendererState).irisType != EnumIrisType.NULL))
-                    backOnly = true;
-            }
+            if ((((StargateClassicRendererState) rendererState).irisType != EnumIrisType.SHIELD)
+                    && (((StargateClassicRendererState) rendererState).irisType != EnumIrisType.NULL)) backOnly = true;
         }
 
-        super.renderKawoosh(rendererState, partialTicks, backOnly);
+        renderKawoosh(rendererState, partialTicks, backOnly, doKawoosh);
     }
 }
