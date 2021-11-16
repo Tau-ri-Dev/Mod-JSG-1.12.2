@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class StargateNetwork extends WorldSavedData {
 
@@ -42,7 +43,7 @@ public class StargateNetwork extends WorldSavedData {
   // ---------------------------------------------------------------------------------------------------------
   // Stargate Network
 
-  private Map<SymbolTypeEnum, Map<StargateAddress, StargatePos>> stargateNetworkMap = new HashMap<>();
+  private Map<SymbolTypeEnum, Map<StargateAddress, StargatePos>> stargateNetworkMap = new ConcurrentHashMap<>();
 
   public Map<SymbolTypeEnum, Map<StargateAddress, StargatePos>> getMap() {
     return stargateNetworkMap;
