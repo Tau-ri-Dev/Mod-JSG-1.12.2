@@ -341,11 +341,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         if (targetGatePos.equals(gatePosMap.get(getSymbolType()))) return false;
 
-        boolean localDial = world.provider.getDimension() == targetGatePos.dimensionID || StargateDimensionConfig.isGroupEqual(world.provider.getDimensionType(), DimensionManager.getProviderType(targetGatePos.dimensionID));
-
-        // TODO Optimize this, prevent dimension from loading only to check the SymbolType...
-        if (address.size() < getSymbolType().getMinimalSymbolCountTo(targetGatePos.getTileEntity().getSymbolType(), localDial))
-            return false;
+        if (checkAddressLength(address, targetGatePos)) return false;
 
         int additional = address.size() - 7;
 
@@ -355,6 +351,13 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         }
 
         return true;
+    }
+
+    protected boolean checkAddressLength(StargateAddressDynamic address, StargatePos targetGatePosition) {
+        boolean localDial = world.provider.getDimension() == targetGatePosition.dimensionID || StargateDimensionConfig.isGroupEqual(world.provider.getDimensionType(), DimensionManager.getProviderType(targetGatePosition.dimensionID));
+
+        // TODO Optimize this, prevent dimension from loading only to check the SymbolType...
+        return address.size() < getSymbolType().getMinimalSymbolCountTo(targetGatePosition.getTileEntity().getSymbolType(), localDial);
     }
 
     public void attemptClose(StargateClosedReasonEnum reason) {

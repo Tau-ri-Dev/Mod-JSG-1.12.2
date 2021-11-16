@@ -46,12 +46,14 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
   private int addressPosition;
   private int maxSymbols;
   private boolean abortDialing;
+  private boolean dialingNearby = false;
 
-  public void dial(StargateAddress stargateAddress, int glyphsToDial) {
+  public void dial(StargateAddress stargateAddress, int glyphsToDial, boolean nearby) {
     addressToDial = stargateAddress;
     addressPosition = 0;
     maxSymbols = glyphsToDial;
     abortDialing = false;
+    dialingNearby = nearby;
 
     stargateState = EnumStargateState.DIALING;
 
@@ -299,6 +301,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
     compound.setInteger("maxSymbols", maxSymbols);
     compound.setBoolean("abortDialing", abortDialing);
+    compound.setBoolean("dialingNearby", dialingNearby);
 
     return super.writeToNBT(compound);
   }
@@ -311,6 +314,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     addressToDial = new StargateAddress(compound.getCompoundTag("addressToDial"));
     maxSymbols = compound.getInteger("maxSymbols");
     abortDialing = compound.getBoolean("abortDialing");
+    dialingNearby = compound.getBoolean("dialingNearby");
   }
 
 
@@ -327,6 +331,13 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     return super.getEnergyRequiredToDial(targetGatePos).mul(AunisConfig.powerConfig.stargateUniverseEnergyMul);
   }
 
+  @Override
+  protected boolean checkAddressLength(StargateAddressDynamic address, StargatePos targetGatePosition) {
+    System.out.println("je to uni");
+    System.out.println("nearby: " + dialingNearby);
+    if (dialingNearby) return address.size() < 7;
+    return super.checkAddressLength(address, targetGatePosition);
+  }
 
   // --------------------------------------------------------------------------------
   // Teleportation

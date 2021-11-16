@@ -215,10 +215,8 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                         int squaredGate = AunisConfig.stargateConfig.universeGateNearbyReach * AunisConfig.stargateConfig.universeGateNearbyReach;
                                         // todo something here crash mc
                                     try {
-                                        Iterator<Map.Entry<StargateAddress, StargatePos>> iterator = StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet().iterator();
-                                        while (iterator.hasNext()) {
+                                        for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet()) {
 
-                                            Map.Entry<StargateAddress, StargatePos> entry = iterator.next();
                                             StargatePos stargatePos = entry.getValue();
 
                                             if (stargatePos.dimensionID != world.provider.getDimension())
@@ -238,7 +236,11 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                             if (!targetGateTile.isMerged())
                                                 continue;
 
-                                            nearbyList.appendTag(entry.getKey().serializeNBT());
+                                            NBTTagCompound entryCompound = entry.getKey().serializeNBT();
+
+                                            entryCompound.setBoolean("requireOnlySeven", true);
+
+                                            nearbyList.appendTag(entryCompound);
                                         }
 
                                         compound.setTag(UniverseDialerMode.NEARBY.tagListName, nearbyList);
@@ -246,8 +248,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                         found = true;
                                     }
                                     catch (ConcurrentModificationException e) {
-                                        Aunis.logger.error("Error while iterating nearby stargates occurred ");
-                                        Aunis.logger.error(e.getStackTrace().toString());
+                                        Aunis.logger.error("Error while iterating nearby stargates occurred", e);
 
                                         if (entity instanceof EntityPlayer) {
                                             ((EntityPlayer) entity).sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.dialer_broke"), true);
@@ -323,7 +324,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                     switch (gateTile.getStargateState()) {
                         case IDLE:
                             int maxSymbols = SymbolUniverseEnum.getMaxSymbolsDisplay(selectedCompound.getBoolean("hasUpgrade"));
-                            gateTile.dial(new StargateAddress(selectedCompound), maxSymbols);
+                            gateTile.dial(new StargateAddress(selectedCompound), maxSymbols, mode == UniverseDialerMode.NEARBY);
                             break;
 
                         case ENGAGED_INITIATING:
