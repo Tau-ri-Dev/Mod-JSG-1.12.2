@@ -363,6 +363,15 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
    * Contains neighborhooding rings(clones of {@link TransportRingsTile#rings}) with distance set to this tile
    */
   public Map<Integer, TransportRings> ringsMap = new HashMap<>();
+  
+  /**
+   * Tests whether an address already is known to this transport ring.
+   */
+  private boolean alreadyKnows(int addr) {
+	  if(addr < 0) { return false; }
+	  return this.getRings().getAddress() == addr ||
+			  this.ringsMap.containsKey(addr);
+  }
 
   /**
    * Adds rings to {@link TransportRingsTile#ringsMap}, by cloning caller's {@link TransportRingsTile#rings} and
@@ -402,6 +411,8 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
   }
 
   public ParamsSetResult setRingsParams(int address, String name) {
+	boolean changingAddr = this.getRings().getAddress() != address;
+	
     int x = pos.getX();
     int z = pos.getZ();
 
@@ -418,8 +429,7 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
         TransportRingsTile newRingsTile = (TransportRingsTile) world.getTileEntity(newRingsPos);
         ringsTilesInRange.add(newRingsTile);
 
-        int newRingsAddress = newRingsTile.getClonedRings(pos).getAddress();
-        if (newRingsAddress == address && newRingsAddress != -1) {
+        if(changingAddr && newRingsTile.alreadyKnows(address)) {
           return ParamsSetResult.DUPLICATE_ADDRESS;
         }
       }
