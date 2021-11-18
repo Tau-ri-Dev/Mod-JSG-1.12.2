@@ -166,6 +166,7 @@ death.attack.eventHorizon=%s was given a kawoosh cremation
 death.attack.irisDeath=%s was given a iris cremation
 
 
+# Milkyway Glyphs
 glyph.aunis.milkyway.sculptor=Sculptor
 glyph.aunis.milkyway.scorpius=Scorpius
 glyph.aunis.milkyway.centaurus=Centaurus
@@ -206,6 +207,7 @@ glyph.aunis.milkyway.orion=Orion
 glyph.aunis.milkyway.piscis_austrinus=Piscis Austrinus
 glyph.aunis.milkyway.bright_red_button=Bright Red Button
 
+# Pegasus Glyphs
 glyph.aunis.pegasus.acjesis=Acjesis
 glyph.aunis.pegasus.lenchan=Lenchan
 glyph.aunis.pegasus.alura=Alura
@@ -245,6 +247,7 @@ glyph.aunis.pegasus.hacemill=Hacemill
 glyph.aunis.pegasus.unknow1=Unknow 1
 glyph.aunis.pegasus.unknow2=Unknow 2
 
+# Universe Glyphs
 glyph.aunis.universe.g1=Glyph 1
 glyph.aunis.universe.g2=Glyph 2
 glyph.aunis.universe.g3=Glyph 3
