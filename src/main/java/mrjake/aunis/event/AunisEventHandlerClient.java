@@ -69,7 +69,8 @@ public class AunisEventHandlerClient {
   @SubscribeEvent
   public static void onGuiOpen(GuiOpenEvent event) {
     if (!AunisConfig.mainMenuConfig.disableAunisMainMenu) {
-      if (event.getGui() instanceof GuiMainMenu && !(event.getGui() instanceof AunisMainMenu)) {
+      if (!event.isCanceled() && event.getGui() instanceof GuiMainMenu && !(event.getGui() instanceof AunisMainMenu)) {
+        event.setCanceled(true);
         Minecraft.getMinecraft().displayGuiScreen(new AunisMainMenu());
       }
     }
