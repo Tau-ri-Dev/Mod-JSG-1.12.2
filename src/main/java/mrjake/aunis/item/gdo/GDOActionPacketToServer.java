@@ -88,8 +88,7 @@ public class GDOActionPacketToServer implements IMessage {
 									}
 								}
 								catch (NullPointerException e) {
-									Aunis.logger.error("Exception in GDO Action packet");
-									Aunis.logger.error(e.getStackTrace());
+									Aunis.logger.error("Exception in GDO Action packet", e);
 								}
 							}
 							break;
