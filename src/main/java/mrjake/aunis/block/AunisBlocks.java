@@ -37,7 +37,7 @@ public class AunisBlocks {
 
   // -----------------------------------------------------------------------------
 
-  public static final Block NAQUADAH_BLOCK_RAW = BlockHelpers.createSimpleBlock("naquadah_block_raw", Material.IRON);
+  public static final Block NAQUADAH_BLOCK_RAW = BlockHelpers.createSimpleBlock("naquadah_block_raw", Material.IRON).setHardness(3);
   public static final Block TRINIUM_BLOCK = BlockHelpers.createSimpleBlock("trinium_block", Material.IRON);
   public static final Block TITANIUM_BLOCK = BlockHelpers.createSimpleBlock("titanium_block", Material.IRON);
 
