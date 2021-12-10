@@ -1,27 +1,32 @@
 package mrjake.aunis.renderer;
 
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.loader.model.ModelLoader;
 import mrjake.aunis.stargate.network.SymbolPegasusEnum;
 import mrjake.aunis.tileentity.DHDPegasusTile;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 
 public class DHDPegasusRenderer extends TileEntitySpecialRenderer<DHDPegasusTile> {
-
+  //todo maybe merge with mw dhd renderer?
   private static final BlockPos ZERO_BLOCKPOS = new BlockPos(0, 0, 0);
 
+  @Override
   public void render(DHDPegasusTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
     DHDPegasusRendererState rendererState = te.getRendererStateClient();
 
     if (rendererState != null) {
+      IBlockState state = te.getWorld().getBlockState(te.getPos()).getActualState(te.getWorld(), te.getPos());
+      if (state.getBlock() != AunisBlocks.DHD_PEGASUS_BLOCK) return;
       GlStateManager.pushMatrix();
       GlStateManager.translate(x, y, z);
 
-      if (te.getWorld().getBlockState(te.getPos()).getActualState(te.getWorld(), te.getPos()).getValue(AunisProps.SNOWY)) {
+      if (state.getValue(AunisProps.SNOWY)) {
         BlockRenderer.render(getWorld(), ZERO_BLOCKPOS, Blocks.SNOW_LAYER.getDefaultState(), te.getPos());
       }
 

@@ -1,10 +1,12 @@
 package mrjake.aunis.renderer;
 
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.loader.model.ModelLoader;
 import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
 import mrjake.aunis.tileentity.DHDTile;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.init.Blocks;
@@ -19,10 +21,12 @@ public class DHDRenderer extends TileEntitySpecialRenderer<DHDTile> {
     DHDRendererState rendererState = te.getRendererStateClient();
 
     if (rendererState != null) {
+      IBlockState state = te.getWorld().getBlockState(te.getPos()).getActualState(te.getWorld(), te.getPos());
+      if (state.getBlock() != AunisBlocks.DHD_BLOCK) return;
       GlStateManager.pushMatrix();
       GlStateManager.translate(x, y, z);
 
-      if (te.getWorld().getBlockState(te.getPos()).getActualState(te.getWorld(), te.getPos()).getValue(AunisProps.SNOWY)) {
+      if (state.getValue(AunisProps.SNOWY)) {
         BlockRenderer.render(getWorld(), ZERO_BLOCKPOS, Blocks.SNOW_LAYER.getDefaultState(), te.getPos());
       }
 
