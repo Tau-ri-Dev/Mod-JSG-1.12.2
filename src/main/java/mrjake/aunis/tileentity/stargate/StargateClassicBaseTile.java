@@ -1323,7 +1323,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         StargatePos destinationPos = StargateNetwork.get(world).getStargate(dialedAddress);
         if (!args.isInteger(0)) {
-            return new Object[]{true, "invalid_argument_type"};
+            throw new IllegalArgumentException("code must be integer!");
         }
         if (destinationPos == null) return new Object[]{false, "stargate_not_engaged"};
         StargateAbstractBaseTile te = destinationPos.getTileEntity();
