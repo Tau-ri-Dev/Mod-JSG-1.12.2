@@ -124,6 +124,10 @@ public class EventHorizon {
         }
     }
 
+    private void irisKill(Entity e) {
+        e.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS_CREATIVE, Float.MAX_VALUE);
+    }
+
     public void teleportEntity(int entityId) {
         TeleportPacket packet = scheduledTeleportMap.get(entityId);
         if (!new StargateTeleportEntityEvent((StargateAbstractBaseTile) world.getTileEntity(pos), packet.getTargetGatePos().getTileEntity(), packet.getEntity()).post()) {
@@ -150,7 +154,10 @@ public class EventHorizon {
                             packet.teleport();
                         }
                     } else {
-                        packet.getEntity().attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS_CREATIVE, Float.MAX_VALUE);
+                        if (!packet.getEntity().getPassengers().isEmpty()) {
+                            for (Entity passenger : packet.getEntity().getPassengers()) irisKill(passenger);
+                        }
+                        irisKill(packet.getEntity());
                     }
 
                 }
