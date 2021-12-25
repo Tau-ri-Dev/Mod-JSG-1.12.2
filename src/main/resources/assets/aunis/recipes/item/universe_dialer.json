@@ -30,6 +30,7 @@
 	
 	"result": {
 		"item": "aunis:universe_dialer",
-		"count": 1
+		"count": 1,
+		"data": 0
 	}
 }
