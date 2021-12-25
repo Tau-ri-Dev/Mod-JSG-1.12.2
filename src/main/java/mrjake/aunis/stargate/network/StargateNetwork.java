@@ -32,7 +32,7 @@ public class StargateNetwork extends WorldSavedData {
 
   private void init() {
     for (SymbolTypeEnum symbolType : SymbolTypeEnum.values())
-      stargateNetworkMap.put(symbolType, new HashMap<>());
+      stargateNetworkMap.put(symbolType, new ConcurrentHashMap<>());
   }
 
   private Map<StargateAddress, StargatePos> getMapFromAddress(StargateAddress address) {
@@ -43,7 +43,7 @@ public class StargateNetwork extends WorldSavedData {
   // ---------------------------------------------------------------------------------------------------------
   // Stargate Network
 
-  private Map<SymbolTypeEnum, Map<StargateAddress, StargatePos>> stargateNetworkMap = new ConcurrentHashMap<>();
+  private Map<SymbolTypeEnum, Map<StargateAddress, StargatePos>> stargateNetworkMap = new HashMap<>();
 
   public Map<SymbolTypeEnum, Map<StargateAddress, StargatePos>> getMap() {
     return stargateNetworkMap;
