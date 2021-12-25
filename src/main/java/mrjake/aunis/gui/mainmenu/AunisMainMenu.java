@@ -266,7 +266,7 @@ public class AunisMainMenu extends GuiMainMenu {
                         this.mc.shutdown();
                         break;
                     default:
-                        System.out.println("Wrong button clicked!!! This is a bug! (" + clickedButton + ")");
+                        Aunis.logger.error("Wrong button clicked!!! This is a bug! (" + clickedButton + ")");
                         break;
                 }
 
@@ -656,8 +656,8 @@ public class AunisMainMenu extends GuiMainMenu {
                     Class<?> oclass = Class.forName("java.awt.Desktop");
                     Object object = oclass.getMethod("getDesktop").invoke((Object) null);
                     oclass.getMethod("browse", URI.class).invoke(object, new URI("https://github.com/MineDragonCZ/Aunis1/wiki"));
-                } catch (Throwable throwable) {
-                    System.out.println("Couldn't open link");
+                } catch (Exception e) {
+                    Aunis.logger.debug("Couldn't open link", e);
                 }
                 break;
             // close alert
@@ -670,8 +670,8 @@ public class AunisMainMenu extends GuiMainMenu {
                     Class<?> oclass = Class.forName("java.awt.Desktop");
                     Object object = oclass.getMethod("getDesktop").invoke((Object) null);
                     oclass.getMethod("browse", URI.class).invoke(object, new URI("https://discord.gg/qU7fuNDxAs"));
-                } catch (Throwable throwable) {
-                    System.out.println("Couldn't open link");
+                } catch (Exception e) {
+                    Aunis.logger.debug("Couldn't open link", e);
                 }
                 break;
         }

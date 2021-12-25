@@ -115,7 +115,6 @@ public class EventHorizon {
                     }
 					/*else {
 						//entity.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_HORIZON, 20);
-						//System.out.println("Test!!!");
 						// TODO Back side killing
 						// Make custom message appear
 					}*/

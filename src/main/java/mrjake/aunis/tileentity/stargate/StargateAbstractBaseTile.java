@@ -794,7 +794,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                         else if (AunisConfig.openLimitConfig.maxOpenedWhat.equals("drawMorePower"))
                             getEnergyStorage().extractEnergy(AunisConfig.openLimitConfig.maxOpenedPowerDrawAfterLimit, false);
                         else
-                            System.out.println("Please setup correct value for \"What happens after the open time reach this time\" in config!");
+                            Aunis.logger.info("Please setup correct value for \"What happens after the open time reach this time\" in config!");
                     }
 
                     markDirty();
