@@ -1,15 +1,26 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.minecraftforge.net/' }
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
     }
+
+    repositories.each {
+        if (it instanceof MavenArtifactRepository && it.url.toString() == "https://files.minecraftforge.net/maven") {
+            it.url = "https://maven.minecraftforge.net"
+        }
+    }
 }
 apply plugin: 'net.minecraftforge.gradle'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'idea'
+
+
 
 version = "${mc_version}-${mod_version}"
 group = "mrjake.aunis"
@@ -18,7 +29,10 @@ archivesBaseName = "aunis"
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 sourceSets {
-    main { output.resourcesDir = output.classesDir }
+    main {
+        output.resourcesDir = file('build/combined')
+        java.outputDir = file('build/combined')
+    }
 }
 
 minecraft {
@@ -76,7 +90,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
 
     implementation fg.deobf("cofh:RedstoneFlux:${rf_mc_version}-${rf_version}:universal")
     implementation fg.deobf("cofh:CoFHCore:${mc_version}-${cofh_core_version}:universal")
@@ -121,6 +135,19 @@ jar {
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
+}
+
+task replaceTokens(type: Sync) {
+    println 'replaceTokens'
+    from sourceSets.main.java
+    inputs.property 'version', project.mc_version.toString()
+    filter(ReplaceTokens, tokens: [VERSION: version.toString()])
+    filter(ReplaceTokens, tokens: [MCVERSION: "${project.mc_version}".toString()])
+    into "$buildDir/src"
+}
+
+compileJava {
+    source = replaceTokens.outputs
 }
 
 // Example configuration to allow publishing using the maven-publish task

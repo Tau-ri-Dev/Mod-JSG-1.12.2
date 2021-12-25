@@ -41,10 +41,13 @@ import java.io.IOException;
 public class Aunis {	
     public static final String ModID = "aunis";
     public static final String Name = "Aunis";
-    public static final String Version = "${version}"; // It works only in final builds.
+    // I didn't maged to make it work
+    //public static final String Version = "${version}"; // It works only in final builds.
+    public static final String Version = "@VERSION@";
     public static final int DATA_VERSION = 7;
 
-    public static final String MCVersion = "${mcversion}";
+    //public static final String MCVersion = "${mcversion}";
+    public static final String MCVersion = "@MCVERSION@";
 
     public static final String CLIENT = "mrjake.aunis.proxy.ProxyClient";
     public static final String SERVER = "mrjake.aunis.proxy.ProxyServer";
