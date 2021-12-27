@@ -2,6 +2,7 @@ package mrjake.aunis.renderer.stargate;
 
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.loader.texture.TextureLoader;
+import mrjake.aunis.stargate.network.SymbolPegasusEnum;
 import mrjake.aunis.util.math.NumberUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -38,7 +39,8 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         }
 
 
-        for (int i = 0; i < GLYPHS_COUNT; i++) {
+        for (int i = 0; i < (GLYPHS_COUNT + 2); i++) {
+            if (i == SymbolPegasusEnum.UNKNOW1.id || i == SymbolPegasusEnum.UNKNOW2.id) continue;
             if (!rendererState.slotToGlyphMap.containsKey(i)) {
                 // Don't show the faded out glyphs when the gate is dialing.
                 if (!rendererState.spinHelper.getIsSpinning() && rendererState.slotToGlyphMap.size() == 0) {
@@ -143,7 +145,8 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
         // The glyphs in the assets are arranged in a circle, so we extract those glyphs at certain positions.
         double radius = 0.94;
-        double[] uv = getPositionInRingAtIndex(radius, -glyphId);
+        // double[] uv = getPositionInRingAtIndex(radius, -glyphId);
+        double[] uv = getPositionInRingAtIndex(radius, - (SymbolPegasusEnum.valueOf(glyphId).textureSlot));
         double x = (uv[0] + radius) / 2;
         double y = (uv[1] + radius) / 2;
 

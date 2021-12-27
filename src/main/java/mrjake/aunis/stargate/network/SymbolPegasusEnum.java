@@ -11,56 +11,57 @@ import java.util.Map;
 import java.util.Random;
 
 public enum SymbolPegasusEnum implements SymbolInterface {
-  ROEHI(37, "Roehi", "37.obj"),
-  ONCEEL(36, "Once El", "36.obj"),
-  BASELAI(35, "Baselai", "35.obj"),
-  SANDOVI(34, "Sandovi", "34.obj"),
-  ILLUME(33, "Illume", "33.obj"),
-  AMIWILL(32, "Amiwill", "32.obj"),
-  SIBBRON(31, "Sibbron", "31.obj"),
-  GILLTIN(30, "Gilltin", "30.obj"),
-  UNKNOW2(29, "Unknow2", "29.obj"),
-  RAMNON(28, "Ramnon", "28.obj"),
-  OLAVII(27, "Olavii", "27.obj"),
-  HACEMILL(26, "Hacemill", "26.obj"),
-  POCORE(25, "Poco Re", "25.obj"),
-  ABRIN(24, "Abrin", "24.obj"),
-  SALMA(23, "Salma", "23.obj"),
-  HAMLINTO(22, "Hamlinto", "22.obj"),
-  ELENAMI(21, "Elenami", "21.obj"),
-  TAHNAN(20, "Tahnan", "20.obj"),
-  ZEO(19, "Zeo", "19.obj"),
-  UNKNOW1(18, "Unknow1", "18.obj"),
-  ROBANDUS(17, "Robandus", "17.obj"),
-  RECKTIC(16, "Recktic", "16.obj"),
-  ZAMILLOZ(15, "Zamilloz", "15.obj"),
-  SUBIDO(14, "Subido", "14.obj"), // origin
-  DAWNRE(13, "Dawnre", "13.obj"),
-  ACJESIS(12, "Acjesis", "12.obj"),
-  LENCHAN(11, "Lenchan", "11.obj"),
-  ALURA(10, "Alura", "10.obj"),
-  CAPO(9, "Ca Po", "9.obj"),
-  LAYLOX(8, "Laylox", "8.obj"),
-  ECRUMIG(7, "Ecrumig", "7.obj"),
-  AVONIV(6, "Avoniv", "6.obj"),
-  BYDO(5, "Bydo", "5.obj"),
-  AAXEL(4, "Aaxel", "4.obj"),
-  ALDENI(3, "Aldeni", "3.obj"),
-  SETAS(2, "Setas", "2.obj"),
-  ARAMI(1, "Arami", "1.obj"),
-  DANAMI(0, "Danami", "0.obj"),
+  ROEHI(37, "Roehi", "37.obj", 11),
+  ONCEEL(36, "Once El", "36.obj", 35),
+  BASELAI(35, "Baselai", "35.obj", 33),
+  SANDOVI(34, "Sandovi", "34.obj", 10),
+  ILLUME(33, "Illume", "33.obj", 25),
+  AMIWILL(32, "Amiwill", "32.obj", 30),
+  SIBBRON(31, "Sibbron", "31.obj", 0), //36
+  GILLTIN(30, "Gilltin", "30.obj", 9),
+  UNKNOW2(29, "Unknow2", "29.obj", 37), // no texture exist
+  RAMNON(28, "Ramnon", "28.obj", 24),
+  OLAVII(27, "Olavii", "27.obj", 14),
+  HACEMILL(26, "Hacemill", "26.obj", 16),
+  POCORE(25, "Poco Re", "25.obj", 13),
+  ABRIN(24, "Abrin", "24.obj", 12),
+  SALMA(23, "Salma", "23.obj", 17),
+  HAMLINTO(22, "Hamlinto", "22.obj", 15),
+  ELENAMI(21, "Elenami", "21.obj", 7),
+  TAHNAN(20, "Tahnan", "20.obj", 32),
+  ZEO(19, "Zeo", "19.obj", 4),
+  UNKNOW1(18, "Unknow1", "18.obj", 36), // no texture exist
+  ROBANDUS(17, "Robandus", "17.obj", 1),
+  RECKTIC(16, "Recktic", "16.obj", 6),
+  ZAMILLOZ(15, "Zamilloz", "15.obj", 19),
+  SUBIDO(14, "Subido", "14.obj", 3), // origin
+  DAWNRE(13, "Dawnre", "13.obj", 8),
+  ACJESIS(12, "Acjesis", "12.obj", 29),
+  LENCHAN(11, "Lenchan", "11.obj", 22),
+  ALURA(10, "Alura", "10.obj", 21),
+  CAPO(9, "Ca Po", "9.obj", 28),
+  LAYLOX(8, "Laylox", "8.obj", 34),
+  ECRUMIG(7, "Ecrumig", "7.obj", 20),
+  AVONIV(6, "Avoniv", "6.obj", 23),
+  BYDO(5, "Bydo", "5.obj", 2),
+  AAXEL(4, "Aaxel", "4.obj", 26),
+  ALDENI(3, "Aldeni", "3.obj", 5),
+  SETAS(2, "Setas", "2.obj", 31),
+  ARAMI(1, "Arami", "1.obj", 27),
+  DANAMI(0, "Danami", "0.obj", 18),
 
-  BRB(38, "Bright Red Button", "BRB.obj");
+  BRB(38, "Bright Red Button", "BRB.obj", -39);
 
   public int id;
+  public int textureSlot;
   public String englishName;
   public String translationKey;
   public ResourceLocation iconResource;
   public ResourceLocation modelResource;
 
-  private SymbolPegasusEnum(int id, String englishName, String model) {
+  private SymbolPegasusEnum(int id, String englishName, String model, int textureSlot) {
     this.id = id;
-
+    this.textureSlot = textureSlot;
     this.englishName = englishName;
     this.translationKey = "glyph.aunis.pegasus." + englishName.toLowerCase().replace(" ", "_");
     this.iconResource = new ResourceLocation(Aunis.ModID, "textures/gui/symbol/pegasus/" + englishName.toLowerCase() + ".png");
