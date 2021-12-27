@@ -167,7 +167,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         float gateWait = getWorld().getTotalWorldTime() - rendererState.gateWaitStart;
 
         // Waiting for sound sync
-        if (gateWait < 44) {
+        if (gateWait < (44 - 24)) {
             return;
         }
 
@@ -180,7 +180,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         Texture ehTexture = TextureLoader.getTexture(getEventHorizonTextureResource(rendererState));
         if (ehTexture != null) ehTexture.bindTexture();
 
-        long kawooshStart = rendererState.gateWaitStart + 44;
+        long kawooshStart = rendererState.gateWaitStart + 44 - 24;
         float tick = (float) (getWorld().getTotalWorldTime() - kawooshStart + partialTicks);
         float mul = 1;
 

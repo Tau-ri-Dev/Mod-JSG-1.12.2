@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum EnumScheduledTask {
-  STARGATE_OPEN_SOUND(0, 25, false),
+  STARGATE_OPEN_SOUND(0, 1, false),
   STARGATE_ENGAGE(1, 40),
   STARGATE_CLOSE(2, -1),
   STARGATE_SPIN_FINISHED(3, -1),
