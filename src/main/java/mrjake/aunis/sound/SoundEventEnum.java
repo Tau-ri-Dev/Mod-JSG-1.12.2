@@ -55,7 +55,8 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
 
   // ----------------------------------------------------------
   // Misc
-  PAGE_FLIP(120, "page_flip", 1.0f);
+  PAGE_FLIP(120, "page_flip", 1.0f),
+  GUI_SEND_CODE_BUTTON_PRESS(121, "gui_send_code_button_press", .5f);
   // ----------------------------------------------------------
     public int id;
   public SoundEvent soundEvent;

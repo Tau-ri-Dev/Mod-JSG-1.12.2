@@ -318,6 +318,13 @@
     "sounds": [
       "aunis:gui/mainmenu/music"
     ]
+  },
+  "gui_send_code_button_press": {
+    "category": "ambient",
+    "subtitle": "aunis.subtitle.gdo_button_beep",
+    "sounds": [
+      "aunis:misc/button_press"
+    ]
   }
 }
 

@@ -7,11 +7,18 @@ import mrjake.aunis.item.gdo.GDOActionPacketToServer;
 import mrjake.aunis.item.gdo.GDOItem;
 import mrjake.aunis.item.gdo.GDOMessages;
 import mrjake.aunis.packet.AunisPacketHandler;
+import mrjake.aunis.sound.AunisSoundHelper;
+import mrjake.aunis.sound.AunisSoundHelperClient;
+import mrjake.aunis.sound.SoundEventEnum;
+import mrjake.aunis.sound.SoundPositionedEnum;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,7 +55,12 @@ public class GuiSendCode extends GuiBase {
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 3; x++) {
                 if (y != 3) {
-                    keyPadButtons.add(new AunisGuiButton(i + 3, (width / 2 - 48) + (33 * x), (height / 2 - 35) + (33 * y), 30, 30, "" + (i + 1)));
+                    keyPadButtons.add(new AunisGuiButton(i + 3,
+                            (width / 2 - 48) + (33 * x),
+                            (height / 2 - 35) + (33 * y),
+                            30,
+                            30,
+                            "" + (i + 1)));
                     i++;
                 } else {
                     if (x == 0)
@@ -104,6 +116,7 @@ public class GuiSendCode extends GuiBase {
         refreshButtonEnable();
         codeField.textboxKeyTyped(typedChar, keyCode);
         if (keyCode == 28) sendCode();
+        playButtonPressSound();
 
     }
 
@@ -117,21 +130,28 @@ public class GuiSendCode extends GuiBase {
         }
     }
 
+    private void playButtonPressSound() {
+        AunisSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getPosition(), SoundEventEnum.GUI_SEND_CODE_BUTTON_PRESS);
+    }
+
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         codeField.mouseClicked(mouseX, mouseY, mouseButton);
         if (sendButton.mousePressed(this.mc, mouseX, mouseY)) {
-            sendButton.playPressSound(this.mc.getSoundHandler());
+            //sendButton.playPressSound(this.mc.getSoundHandler());
+            playButtonPressSound();
             sendCode();
         }
         if (backButton.mousePressed(this.mc, mouseX, mouseY) && codeField.getText().length() > 0) {
             codeField.setText(codeField.getText().substring(0, codeField.getText().length() - 1));
+            playButtonPressSound();
         }
 
         // click on num pad
         for (GuiButton guibutton : this.keyPadButtons) {
             if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
-                guibutton.playPressSound(this.mc.getSoundHandler());
+                //guibutton.playPressSound(this.mc.getSoundHandler());
+                playButtonPressSound();
                 codeField.setText(codeField.getText() + guibutton.displayString);
             }
         }
