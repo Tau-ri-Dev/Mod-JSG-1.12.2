@@ -145,14 +145,15 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         // The glyphs in the assets are arranged in a circle, so we extract those glyphs at certain positions.
         double radius = 0.94;
         // double[] uv = getPositionInRingAtIndex(radius, -glyphId);
-        double[] uv = getPositionInRingAtIndex(radius, - (SymbolPegasusEnum.valueOf(glyphId).textureSlot));
+        int textureSlot = SymbolPegasusEnum.valueOf(glyphId).textureSlot;
+        double[] uv = getPositionInRingAtIndex(radius, - (textureSlot));
         double x = (uv[0] + radius) / 2;
         double y = (uv[1] + radius) / 2;
 
         double tileSize = 0.27;
         double uvSize = 0.0625;
 
-        GlStateManager.rotate((360.0f / GLYPHS_COUNT) * (slot - glyphId), 0, 1, 0);
+        GlStateManager.rotate((360.0f / GLYPHS_COUNT) * (slot - textureSlot), 0, 1, 0);
 
         buffer.pos(-tileSize, 0, -tileSize).tex(x, y).endVertex();
         buffer.pos(-tileSize, 0, tileSize).tex(x, y + uvSize).endVertex();
