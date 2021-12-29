@@ -40,7 +40,6 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
 
         for (int i = 0; i < (GLYPHS_COUNT + 2); i++) {
-            if (i == SymbolPegasusEnum.UNKNOW1.id || i == SymbolPegasusEnum.UNKNOW2.id) continue;
             if (!rendererState.slotToGlyphMap.containsKey(i)) {
                 // Don't show the faded out glyphs when the gate is dialing.
                 if (!rendererState.spinHelper.getIsSpinning() && rendererState.slotToGlyphMap.size() == 0) {

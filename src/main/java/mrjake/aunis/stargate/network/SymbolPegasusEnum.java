@@ -19,7 +19,8 @@ public enum SymbolPegasusEnum implements SymbolInterface {
   AMIWILL(32, "Amiwill", "32.obj", 30),
   SIBBRON(31, "Sibbron", "31.obj", 0), //36
   GILLTIN(30, "Gilltin", "30.obj", 9),
-  UNKNOW2(29, "Unknow2", "29.obj", 37), // no texture exist
+  // no texture exist, but it is showing ROEHI because while rendering pegasus gate idle cycle is going through 0 - 35
+  UNKNOW2(29, "Unknow2", "29.obj", 11),
   RAMNON(28, "Ramnon", "28.obj", 24),
   OLAVII(27, "Olavii", "27.obj", 14),
   HACEMILL(26, "Hacemill", "26.obj", 16),
@@ -30,7 +31,8 @@ public enum SymbolPegasusEnum implements SymbolInterface {
   ELENAMI(21, "Elenami", "21.obj", 7),
   TAHNAN(20, "Tahnan", "20.obj", 32),
   ZEO(19, "Zeo", "19.obj", 4),
-  UNKNOW1(18, "Unknow1", "18.obj", 36), // no texture exist
+  // same as UNKNOW2
+  UNKNOW1(18, "Unknow1", "18.obj", 35),
   ROBANDUS(17, "Robandus", "17.obj", 1),
   RECKTIC(16, "Recktic", "16.obj", 6),
   ZAMILLOZ(15, "Zamilloz", "15.obj", 19),
