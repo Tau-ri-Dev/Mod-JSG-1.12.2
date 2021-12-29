@@ -116,6 +116,7 @@ tile.aunis.dhd_pegasus_block.not_linked_warn=El DHD no esta vinculado a este por
 tile.aunis.dhd_pegasus_block.no_crystal_warn=El DHD no tiene cristal de control
 tile.aunis.dhd_pegasus_block.no_enough_power=El DHD requiere al menos 10,000uI para operar correctamente
 tile.aunis.dhd_pegasus_block.computer_dial=La marcación por computadora está en progreso
+tile.aunis.dhd_pegasus_block.unknown_buttons=This button isn't working
 
 tile.aunis.stargatebase_block.not_enough_power=Enegía insuficiente
 

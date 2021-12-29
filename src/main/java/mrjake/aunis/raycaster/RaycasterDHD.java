@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import java.util.Arrays;
@@ -140,7 +141,12 @@ public class RaycasterDHD extends Raycaster {
 
 			if (player.getEntityWorld().isRemote) {
 				AunisPacketHandler.INSTANCE.sendToServer(new DHDButtonClickedToServer(pos, SymbolMilkyWayEnum.valueOf(button)));
-				AunisPacketHandler.INSTANCE.sendToServer(new DHDPegasusButtonClickedToServer(pos, SymbolPegasusEnum.valueOf(button)));
+				SymbolPegasusEnum symbol = SymbolPegasusEnum.valueOf(button);
+				if (symbol == SymbolPegasusEnum.UNKNOW1 || symbol == SymbolPegasusEnum.UNKNOW2)
+					player.sendStatusMessage(
+							new TextComponentTranslation("tile.aunis.dhd_pegasus_block.unknown_buttons"),
+							true);
+				else AunisPacketHandler.INSTANCE.sendToServer(new DHDPegasusButtonClickedToServer(pos, symbol));
 			}
 			return true;
 		}

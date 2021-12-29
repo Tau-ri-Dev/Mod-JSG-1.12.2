@@ -116,6 +116,7 @@ tile.aunis.dhd_pegasus_block.not_linked_warn=Наборное устройств
 tile.aunis.dhd_pegasus_block.no_crystal_warn=Наборное устройство не имеет контрольного кристалла
 tile.aunis.dhd_pegasus_block.no_enough_power=Наборному устройству необходимо минимум 10,000uI для корректной работы
 tile.aunis.dhd_pegasus_block.computer_dial=Запущен набор с компьютера
+tile.aunis.dhd_pegasus_block.unknown_buttons=This button isn't working
 
 tile.aunis.stargatebase_block.not_enough_power=Недостаточно энергии
 

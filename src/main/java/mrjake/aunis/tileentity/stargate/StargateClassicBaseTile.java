@@ -1354,6 +1354,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
 
         SymbolInterface targetSymbol = getSymbolFromNameIndex(args.checkAny(0));
+
+        // disables engaging unknown symbols (gate has only 36, but dhd 38)
+        if (targetSymbol == SymbolPegasusEnum.UNKNOW1 || targetSymbol == SymbolPegasusEnum.UNKNOW2)
+            throw new IllegalArgumentException("bad argument (symbol name/index invalid)");
         addSymbolToAddressManual(targetSymbol, context);
         markDirty();
 

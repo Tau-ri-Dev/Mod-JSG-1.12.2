@@ -116,6 +116,7 @@ tile.aunis.dhd_pegasus_block.not_linked_warn=DHD ist mit keinem Stargate verbund
 tile.aunis.dhd_pegasus_block.no_crystal_warn=DHD hat keinen Kontrollkristall
 tile.aunis.dhd_pegasus_block.no_enough_power=DHD benötigt mindestens 10,000uI zur ordnungsgemäßen Funktion
 tile.aunis.dhd_pegasus_block.computer_dial=Computeranwahl findet gerade statt
+tile.aunis.dhd_pegasus_block.unknown_buttons=This button isn't working
 
 tile.aunis.stargatebase_block.not_enough_power=Unzureichende Energie
 

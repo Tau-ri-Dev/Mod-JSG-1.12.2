@@ -116,6 +116,7 @@ tile.aunis.dhd_pegasus_block.not_linked_warn=Nincs tárcsázó kötve a kapuhoz
 tile.aunis.dhd_pegasus_block.no_crystal_warn=A tárcsázóban nem található kristály
 tile.aunis.dhd_pegasus_block.no_enough_power=Legalább 10,000uI szükséges a tárcsázó működtetéséhez
 tile.aunis.dhd_pegasus_block.computer_dial=Számítógépes tárcsázás folyamatban
+tile.aunis.dhd_pegasus_block.unknown_buttons=This button isn't working
 
 tile.aunis.stargatebase_block.not_enough_power=Nem elég áram
 
