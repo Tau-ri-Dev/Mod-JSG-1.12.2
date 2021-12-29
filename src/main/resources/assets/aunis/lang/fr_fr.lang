@@ -470,10 +470,17 @@ aunis.subtitle.wormhole_flicker=Le vortex de la porte des étoiles vacille
 aunis.subtitle.rings_transport=Les anneaux de transport s'activent
 aunis.subtitle.rings_controller_button=Bouton du contrôleur des anneaux de transport enfoncé
 
+aunis.subtitle.iris_hit=Something hit the iris
+aunis.subtitle.iris_opening=Iris opening
+aunis.subtitle.iris_closing=Iris closing
+aunis.subtitle.shield_hit=Something hit the shield
+aunis.subtitle.shield_opening=Shield opening
+aunis.subtitle.shield_closing=Shield closing
 
 aunis.subtitle.beamer_start=Démarrage du Beamer
 aunis.subtitle.beamer_stop=Arrêt du Beamer
 aunis.subtitle.beamer_loop=Faisceaux du Beamer
 aunis.subtitle.page_flip=Feuillets de pageitem.aunis.upgrade_shield.name
+aunis.subtitle.gdo_button_beep=Pressed GDO button
 
 menu.about=About Aunis

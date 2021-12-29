@@ -470,10 +470,17 @@ aunis.subtitle.wormhole_flicker=Червоточина Звёздных врат
 aunis.subtitle.rings_transport=Кольца активированы
 aunis.subtitle.rings_controller_button=Нажата кнопка контроллера Колец
 
+aunis.subtitle.iris_hit=Something hit the iris
+aunis.subtitle.iris_opening=Iris opening
+aunis.subtitle.iris_closing=Iris closing
+aunis.subtitle.shield_hit=Something hit the shield
+aunis.subtitle.shield_opening=Shield opening
+aunis.subtitle.shield_closing=Shield closing
 
 aunis.subtitle.beamer_start=Лучевой передатчик активируется
 aunis.subtitle.beamer_stop=Лучевой передатчик отключается
 aunis.subtitle.beamer_loop=Лучевой передатчик передаёт
 aunis.subtitle.page_flip=Перелистывание страницы
+aunis.subtitle.gdo_button_beep=Pressed GDO button
 
 menu.about=About Aunis
