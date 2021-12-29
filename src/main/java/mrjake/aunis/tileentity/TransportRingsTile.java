@@ -417,9 +417,9 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
 
         TransportRingsTile newRingsTile = (TransportRingsTile) world.getTileEntity(newRingsPos);
         ringsTilesInRange.add(newRingsTile);
-
         int newRingsAddress = newRingsTile.getClonedRings(pos).getAddress();
-        if (newRingsAddress == address && newRingsAddress != -1) {
+        // if nearby rings has same address or has in range rings with that address
+        if (newRingsAddress != -1 && (newRingsAddress == address || newRingsTile.ringsMap.containsKey(address))) {
           return ParamsSetResult.DUPLICATE_ADDRESS;
         }
       }
