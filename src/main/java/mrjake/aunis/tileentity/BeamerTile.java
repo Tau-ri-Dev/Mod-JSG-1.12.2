@@ -609,7 +609,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 	public void clearTargetBeamerPos() {
 		if (targetBeamerPos != null) {
 			BeamerTile targetBeamerTile = (BeamerTile) targetBeamerWorld.getTileEntity(targetBeamerPos);
-			targetBeamerTile.targetBeamerPos = null;
+			if (targetBeamerTile != null) targetBeamerTile.targetBeamerPos = null;
 		}
 	}
 	
