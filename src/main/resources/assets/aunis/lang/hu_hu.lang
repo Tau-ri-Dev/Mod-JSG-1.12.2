@@ -439,14 +439,22 @@ aunis.subtitle.gate_milkyway_ring_roll=Stargate ring rolls
 aunis.subtitle.gate_milkyway_dial_fail=Stargate fails to connect
 aunis.subtitle.gate_milkyway_dial_fail_computer=Stargate computer dialing fails
 aunis.subtitle.gate_milkyway_incoming=Stargate chevrons lock
-aunis.subtitle.wormhole_loop=Stargate wormhole ripples
-aunis.subtitle.wormhole_go=Stargate wormhole receives traveller
-aunis.subtitle.wormhole_flicker=Stargate wormhole flickers
-aunis.subtitle.rings_transport=Transport rings activate
-aunis.subtitle.rings_controller_button=Transport rings controller button pressed
 aunis.subtitle.gate_milkyway_chevron_shut=Stargate chevron shuts
 aunis.subtitle.gate_milkyway_chevron_open=Stargate chevron opens
+
+aunis.subtitle.dhd_pegasus_press=DHD symbol pressed
+aunis.subtitle.dhd_pegasus_press_brb=DHD bright red button pressed
+aunis.subtitle.gate_pegasus_open=Stargate wormhole opens
+aunis.subtitle.gate_pegasus_close=Stargate wormhole closes
+aunis.subtitle.gate_pegasus_ring_roll=Stargate ring rolls
+aunis.subtitle.gate_pegasus_dial_fail=Stargate fails to connect
+aunis.subtitle.gate_pegasus_dial_fail_computer=Stargate computer dialing fails
+aunis.subtitle.gate_pegasus_incoming=Stargate chevrons lock
+aunis.subtitle.gate_pegasus_chevron_shut=Stargate chevron shuts
+aunis.subtitle.gate_pegasus_chevron_open=Stargate chevron opens
+
 aunis.subtitle.gate_orlin_dial=Orlin gate dials
+
 aunis.subtitle.gate_universe_dial_start=Universe gate starts to dial
 aunis.subtitle.gate_universe_roll=Universe gate rolls
 aunis.subtitle.gate_universe_chevron_lock=Universe gate chevron locks
@@ -454,6 +462,14 @@ aunis.subtitle.gate_universe_fail=Universe gate fails to connect
 aunis.subtitle.gate_universe_chevron_top_lock=Universe gate top chevron locks
 aunis.subtitle.gate_universe_open=Universe gate wormhole opens
 aunis.subtitle.gate_universe_close=Universe gate wormhole closes
+
+aunis.subtitle.wormhole_loop=Stargate wormhole ripples
+aunis.subtitle.wormhole_go=Stargate wormhole receives traveller
+aunis.subtitle.wormhole_flicker=Stargate wormhole flickers
+aunis.subtitle.rings_transport=Transport rings activate
+aunis.subtitle.rings_controller_button=Transport rings controller button pressed
+
+
 aunis.subtitle.beamer_start=Beamer starts
 aunis.subtitle.beamer_stop=Beamer stops
 aunis.subtitle.beamer_loop=Beamer beams

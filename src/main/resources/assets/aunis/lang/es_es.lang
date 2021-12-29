@@ -441,25 +441,9 @@ aunis.subtitle.gate_milkyway_ring_roll=Anillo de Stargate girando
 aunis.subtitle.gate_milkyway_dial_fail=No se puede conectar la Stargate
 aunis.subtitle.gate_milkyway_dial_fail_computer=Stargate computer dialing fails
 aunis.subtitle.gate_milkyway_incoming=Chevrón bloqueado
-aunis.subtitle.wormhole_loop=Ondulaciones de astrovía
-aunis.subtitle.wormhole_go=La astrovía recive viajero
-aunis.subtitle.wormhole_flicker=La astrovía parpadea
-aunis.subtitle.rings_transport=Anillos de transporte activados
-aunis.subtitle.rings_controller_button=Botón del controlador de anillos de transporte pulsado
 aunis.subtitle.gate_milkyway_chevron_shut=El chevron de Stargate se cierra
 aunis.subtitle.gate_milkyway_chevron_open=El chevron de Stargate se abre
-aunis.subtitle.gate_orlin_dial=Portal de Orlin empieza a marcar
-aunis.subtitle.gate_universe_dial_start=Portal Universal empieza a marcar
-aunis.subtitle.gate_universe_roll=Portal Universal gira
-aunis.subtitle.gate_universe_chevron_lock=Chevrón Universal se fija
-aunis.subtitle.gate_universe_fail=Portal Universal falla al marcar
-aunis.subtitle.gate_universe_chevron_top_lock=Universe gate top chevron locks
-aunis.subtitle.gate_universe_open=La astrovía Universal se conecta
-aunis.subtitle.gate_universe_close=La astrovía Universal se cierra
-aunis.subtitle.beamer_start=Láser dispara
-aunis.subtitle.beamer_stop=Láser se detiene
-aunis.subtitle.beamer_loop=Sonido de láser
-aunis.subtitle.page_flip=Cambio de página
+
 aunis.subtitle.gate_pegasus_chevron_open=El chevron de Stargate se abre
 aunis.subtitle.gate_pegasus_chevron_shut=El chevron de Stargate se cierra
 aunis.subtitle.gate_pegasus_dial_fail=Imposible establecer una astrovía
@@ -468,5 +452,27 @@ aunis.subtitle.gate_pegasus_open=La astrovía se conecta
 aunis.subtitle.dhd_pegasus_press=DHD símbolo presionado
 aunis.subtitle.dhd_pegasus_press_brb=DHD botón brillante azul presionado
 aunis.subtitle.gate_pegasus_ring_roll=Anillo de Stargate girando
+
+aunis.subtitle.gate_orlin_dial=Portal de Orlin empieza a marcar
+
+aunis.subtitle.gate_universe_dial_start=Portal Universal empieza a marcar
+aunis.subtitle.gate_universe_roll=Portal Universal gira
+aunis.subtitle.gate_universe_chevron_lock=Chevrón Universal se fija
+aunis.subtitle.gate_universe_fail=Portal Universal falla al marcar
+aunis.subtitle.gate_universe_chevron_top_lock=Universe gate top chevron locks
+aunis.subtitle.gate_universe_open=La astrovía Universal se conecta
+aunis.subtitle.gate_universe_close=La astrovía Universal se cierra
+
+aunis.subtitle.wormhole_loop=Ondulaciones de astrovía
+aunis.subtitle.wormhole_go=La astrovía recive viajero
+aunis.subtitle.wormhole_flicker=La astrovía parpadea
+aunis.subtitle.rings_transport=Anillos de transporte activados
+aunis.subtitle.rings_controller_button=Botón del controlador de anillos de transporte pulsado
+
+
+aunis.subtitle.beamer_start=Láser dispara
+aunis.subtitle.beamer_stop=Láser se detiene
+aunis.subtitle.beamer_loop=Sonido de láser
+aunis.subtitle.page_flip=Cambio de página
 
 menu.about=Acerca de Aunis

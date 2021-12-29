@@ -439,14 +439,22 @@ aunis.subtitle.gate_milkyway_ring_roll=Кольцо врат Млечного п
 aunis.subtitle.gate_milkyway_dial_fail=Вратам Млечного пути не удаётся подключится
 aunis.subtitle.gate_milkyway_dial_fail_computer=Вратам Млечного пути не удаётся подключится (ОС)
 aunis.subtitle.gate_milkyway_incoming=Кодировка шеврона Млечного пути
-aunis.subtitle.wormhole_loop=Волны горизонта событий Звёздных Врат
-aunis.subtitle.wormhole_go=Проход через Звёздные врата
-aunis.subtitle.wormhole_flicker=Червоточина Звёздных врат дестабилизируется
-aunis.subtitle.rings_transport=Кольца активированы
-aunis.subtitle.rings_controller_button=Нажата кнопка контроллера Колец
 aunis.subtitle.gate_milkyway_chevron_shut=Шеврон выдвигается
 aunis.subtitle.gate_milkyway_chevron_open=Шеврон задвигается
+
+aunis.subtitle.dhd_pegasus_press=Нажата кнопка Наборного устройства
+aunis.subtitle.dhd_pegasus_press_brb=Нажата BRB Наборного устройтсва
+aunis.subtitle.gate_pegasus_open=Врата Млечного пути открываются
+aunis.subtitle.gate_pegasus_close=Врата Млечного пути закрываются
+aunis.subtitle.gate_pegasus_ring_roll=Кольцо врат Млечного пути вращается
+aunis.subtitle.gate_pegasus_dial_fail=Вратам Млечного пути не удаётся подключится
+aunis.subtitle.gate_pegasus_dial_fail_computer=Вратам Млечного пути не удаётся подключится (ОС)
+aunis.subtitle.gate_pegasus_incoming=Кодировка шеврона Млечного пути
+aunis.subtitle.gate_pegasus_chevron_shut=Шеврон выдвигается
+aunis.subtitle.gate_pegasus_chevron_open=Шеврон задвигается
+
 aunis.subtitle.gate_orlin_dial=Врата Орлина набираются
+
 aunis.subtitle.gate_universe_dial_start=Врата Вселенной начинают набор
 aunis.subtitle.gate_universe_roll=Врата Вселенной вращаются
 aunis.subtitle.gate_universe_chevron_lock=Шеврон врат Вселенной раскодирован
@@ -454,6 +462,14 @@ aunis.subtitle.gate_universe_fail=Вратам Вселенной не удаё�
 aunis.subtitle.gate_universe_chevron_top_lock=Врата Вселенной вернулись в начальную позицию
 aunis.subtitle.gate_universe_open=Врата Вселенной открываются
 aunis.subtitle.gate_universe_close=Врата Вселенной закрываются
+
+aunis.subtitle.wormhole_loop=Волны горизонта событий Звёздных Врат
+aunis.subtitle.wormhole_go=Проход через Звёздные врата
+aunis.subtitle.wormhole_flicker=Червоточина Звёздных врат дестабилизируется
+aunis.subtitle.rings_transport=Кольца активированы
+aunis.subtitle.rings_controller_button=Нажата кнопка контроллера Колец
+
+
 aunis.subtitle.beamer_start=Лучевой передатчик активируется
 aunis.subtitle.beamer_stop=Лучевой передатчик отключается
 aunis.subtitle.beamer_loop=Лучевой передатчик передаёт

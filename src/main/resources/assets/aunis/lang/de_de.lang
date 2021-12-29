@@ -439,14 +439,22 @@ aunis.subtitle.gate_milkyway_ring_roll=Stargate Ring bewegt sich
 aunis.subtitle.gate_milkyway_dial_fail=Stargate Anwahl schlägt fehl
 aunis.subtitle.gate_milkyway_dial_fail_computer=Stargate computer Anwahl schlägt fehl
 aunis.subtitle.gate_milkyway_incoming=Stargate Chevron sichern
-aunis.subtitle.wormhole_loop=Stargate Wurmloch
-aunis.subtitle.wormhole_go=Stargate Wurmloch empfängt Reisenden
-aunis.subtitle.wormhole_flicker=Stargate Wurmloch flackert
-aunis.subtitle.rings_transport=Transportringe aktivieren sich
-aunis.subtitle.rings_controller_button=Transportring Kontrollknopf gedrückt
 aunis.subtitle.gate_milkyway_chevron_shut=Stargate Chevron schließt
 aunis.subtitle.gate_milkyway_chevron_open=Stargate Chevron öffnet
+
+aunis.subtitle.dhd_pegasus_press=DHD Symbol gedrückt
+aunis.subtitle.dhd_pegasus_press_brb=DHD heller roter Knopf gedrückt
+aunis.subtitle.gate_pegasus_open=Stargate Wurmloch öffnet
+aunis.subtitle.gate_pegasus_close=Stargate Wurmloch schließt
+aunis.subtitle.gate_pegasus_ring_roll=Stargate Ring bewegt sich
+aunis.subtitle.gate_pegasus_dial_fail=Stargate Anwahl schlägt fehl
+aunis.subtitle.gate_pegasus_dial_fail_computer=Stargate computer Anwahl schlägt fehl
+aunis.subtitle.gate_pegasus_incoming=Stargate Chevron sichern
+aunis.subtitle.gate_pegasus_chevron_shut=Stargate Chevron schließt
+aunis.subtitle.gate_pegasus_chevron_open=Stargate Chevron öffnet
+
 aunis.subtitle.gate_orlin_dial=Orlin-Tor wählt
+
 aunis.subtitle.gate_universe_dial_start=Universe Tor startet Anwahl
 aunis.subtitle.gate_universe_roll=Universe Tor rollt
 aunis.subtitle.gate_universe_chevron_lock=Universe Tor Chevron sichert
@@ -454,6 +462,14 @@ aunis.subtitle.gate_universe_fail=Universe Tor Verbindung scheitert
 aunis.subtitle.gate_universe_chevron_top_lock=Universe Tor oberstes Chevron sichert
 aunis.subtitle.gate_universe_open=Universe Tor Wurmloch öffnet
 aunis.subtitle.gate_universe_close=Universe Tor Wurmloch schließt
+
+aunis.subtitle.wormhole_loop=Stargate Wurmloch
+aunis.subtitle.wormhole_go=Stargate Wurmloch empfängt Reisenden
+aunis.subtitle.wormhole_flicker=Stargate Wurmloch flackert
+aunis.subtitle.rings_transport=Transportringe aktivieren sich
+aunis.subtitle.rings_controller_button=Transportring Kontrollknopf gedrückt
+
+
 aunis.subtitle.beamer_start=Transporter startet
 aunis.subtitle.beamer_stop=Transporter stoppt
 aunis.subtitle.beamer_loop=Transporter transportiert

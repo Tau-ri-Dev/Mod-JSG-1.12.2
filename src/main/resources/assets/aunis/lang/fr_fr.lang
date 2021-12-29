@@ -439,14 +439,22 @@ aunis.subtitle.gate_milkyway_ring_roll=Roulement de l'anneau de la Porte des ét
 aunis.subtitle.gate_milkyway_dial_fail=La Porte des étoiles n'arrive pas à se connecter
 aunis.subtitle.gate_milkyway_dial_fail_computer=Échec de la numérotation informatique de la Porte des étoiles
 aunis.subtitle.gate_milkyway_incoming=Verrouillage des chevrons de la porte des étoiles
-aunis.subtitle.wormhole_loop=Ondulations du vortex de la Porte des étoiles
-aunis.subtitle.wormhole_go=Le vortex de la Porte des étoiles accueille un voyageur
-aunis.subtitle.wormhole_flicker=Le vortex de la porte des étoiles vacille
-aunis.subtitle.rings_transport=Les anneaux de transport s'activent
-aunis.subtitle.rings_controller_button=Bouton du contrôleur des anneaux de transport enfoncé
 aunis.subtitle.gate_milkyway_chevron_shut=Le chevron de la porte des étoiles se ferme
 aunis.subtitle.gate_milkyway_chevron_open=Ouverture du chevron de la porte des étoiles
+
+aunis.subtitle.dhd_pegasus_press=Symbole du DHD enfoncé
+aunis.subtitle.dhd_pegasus_press_brb=Bouton rouge vif du DHD enfoncé
+aunis.subtitle.gate_pegasus_open=Le vortex de la Porte des étoiles s'ouvre
+aunis.subtitle.gate_pegasus_close=Fermeture du vortex de la Porte des étoiles
+aunis.subtitle.gate_pegasus_ring_roll=Roulement de l'anneau de la Porte des étoiles
+aunis.subtitle.gate_pegasus_dial_fail=La Porte des étoiles n'arrive pas à se connecter
+aunis.subtitle.gate_pegasus_dial_fail_computer=Échec de la numérotation informatique de la Porte des étoiles
+aunis.subtitle.gate_pegasus_incoming=Verrouillage des chevrons de la porte des étoiles
+aunis.subtitle.gate_pegasus_chevron_shut=Le chevron de la porte des étoiles se ferme
+aunis.subtitle.gate_pegasus_chevron_open=Ouverture du chevron de la porte des étoiles
+
 aunis.subtitle.gate_orlin_dial=Cadrans de porte d'Orlin
+
 aunis.subtitle.gate_universe_dial_start=La porte de l'univers commence à composer
 aunis.subtitle.gate_universe_roll=Roulement de la portes de l'univers
 aunis.subtitle.gate_universe_chevron_lock=le chevron de la porte de l'univers est verrouillé.
@@ -454,6 +462,14 @@ aunis.subtitle.gate_universe_fail=La porte de l'univers ne se connecte pas
 aunis.subtitle.gate_universe_chevron_top_lock=Verrouillage du chevron en haut de la porte de l'Univers
 aunis.subtitle.gate_universe_open=Le vortex de la porte de l'univers s'ouvre
 aunis.subtitle.gate_universe_close=Fermeture du vortex de la porte de l'univers
+
+aunis.subtitle.wormhole_loop=Ondulations du vortex de la Porte des étoiles
+aunis.subtitle.wormhole_go=Le vortex de la Porte des étoiles accueille un voyageur
+aunis.subtitle.wormhole_flicker=Le vortex de la porte des étoiles vacille
+aunis.subtitle.rings_transport=Les anneaux de transport s'activent
+aunis.subtitle.rings_controller_button=Bouton du contrôleur des anneaux de transport enfoncé
+
+
 aunis.subtitle.beamer_start=Démarrage du Beamer
 aunis.subtitle.beamer_stop=Arrêt du Beamer
 aunis.subtitle.beamer_loop=Faisceaux du Beamer
