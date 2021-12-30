@@ -470,17 +470,17 @@ aunis.subtitle.wormhole_flicker=Stargate Wurmloch flackert
 aunis.subtitle.rings_transport=Transportringe aktivieren sich
 aunis.subtitle.rings_controller_button=Transportring Kontrollknopf gedrückt
 
-aunis.subtitle.iris_hit=Something hit the iris
-aunis.subtitle.iris_opening=Iris opening
-aunis.subtitle.iris_closing=Iris closing
-aunis.subtitle.shield_hit=Something hit the shield
-aunis.subtitle.shield_opening=Shield opening
-aunis.subtitle.shield_closing=Shield closing
+aunis.subtitle.iris_hit=Etwas traf die Iris
+aunis.subtitle.iris_opening=Iris öffnet
+aunis.subtitle.iris_closing=Iris schließt
+aunis.subtitle.shield_hit=Etwas traf den Schild
+aunis.subtitle.shield_opening=Schild wird deaktiviert
+aunis.subtitle.shield_closing=Schild wird aktiviert
 
 aunis.subtitle.beamer_start=Transporter startet
 aunis.subtitle.beamer_stop=Transporter stoppt
 aunis.subtitle.beamer_loop=Transporter transportiert
 aunis.subtitle.page_flip=Seite schlägt um
-aunis.subtitle.gdo_button_beep=Pressed GDO button
+aunis.subtitle.gdo_button_beep=GDO-Knopf gedrückt
 
 menu.about=Über AUNIS
