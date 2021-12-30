@@ -12,6 +12,7 @@ import java.util.List;
 public class Texture {
 	
 	private int textureId;
+	
 	public Texture(BufferedImage bufferedImage, boolean desaturate) {
 		this.textureId = TextureUtil.glGenTextures();
 		
