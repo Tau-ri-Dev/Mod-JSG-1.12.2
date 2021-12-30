@@ -4,9 +4,7 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.AunisGuiButton;
 import mrjake.aunis.gui.mainmenu.screens.AunisModListGui;
-import mrjake.aunis.gui.mainmenu.screens.AunisMultiPlayerGui;
 import mrjake.aunis.gui.mainmenu.screens.AunisOptionsGui;
-import mrjake.aunis.gui.mainmenu.screens.AunisSinglePlayerGui;
 import mrjake.aunis.gui.mainmenu.screens.options.AunisLanguageOptions;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
@@ -348,7 +346,6 @@ public class AunisMainMenu extends GuiMainMenu {
         GlStateManager.enableAlpha();
         GlStateManager.shadeModel(7425);
         GlStateManager.translate(screenCenterWidth, screenCenterHeight, 0f);
-        //GlStateManager.scale(gateZoom + 30, gateZoom + 30, gateZoom + 30);
         GlStateManager.scale(gateZoom + ((height / 10f) - 3), gateZoom + ((height / 10f) - 3), gateZoom + ((height / 10f) - 3));
         GlStateManager.rotate(-180f, 0f, 0f, 1f);
         GlStateManager.rotate(180f, 0f, 1f, 0f);
@@ -425,7 +422,7 @@ public class AunisMainMenu extends GuiMainMenu {
             if (renderButtonsAlpha < 1.0f && showVersionAlert != 1) renderButtonsAlpha += 0.05f;
 
             if (!Version.equals(Latest) && AunisConfig.enableAutoUpdater) {
-                versionInfo += " Latest build: " + Latest;
+                versionInfo += " || Latest build: " + Latest;
                 if (showVersionAlert != 2) showVersionAlert = 1;
             }
 
@@ -450,7 +447,6 @@ public class AunisMainMenu extends GuiMainMenu {
             // DRAWING MAIN TITLE
 
             GlStateManager.pushMatrix();
-            //GlStateManager.scale(renderButtonsAlpha, renderButtonsAlpha, renderButtonsAlpha);
 
             GlStateManager.pushMatrix();
             GlStateManager.enableTexture2D();
@@ -582,7 +578,7 @@ public class AunisMainMenu extends GuiMainMenu {
 
         this.versionButtons.clear();
         this.versionButtons.add(new AunisGuiButton(21, width / 2 - 100, height - 75, 98, 20, "OK"));
-        this.versionButtons.add(new AunisGuiButton(22, width / 2 + 2, height - 75, 98, 20, "Our Discord"));
+        this.versionButtons.add(new AunisGuiButton(22, width / 2 + 2, height - 75, 98, 20, "Download"));
 
         this.aunisButtonList.clear();
         int j = this.height / 4 + 48;
@@ -666,12 +662,12 @@ public class AunisMainMenu extends GuiMainMenu {
             case 21:
                 showVersionAlert = 2;
                 break;
-            // open our discord
+            // open download link
             case 22:
                 try {
                     Class<?> oclass = Class.forName("java.awt.Desktop");
                     Object object = oclass.getMethod("getDesktop").invoke((Object) null);
-                    oclass.getMethod("browse", URI.class).invoke(object, new URI("https://discord.gg/qU7fuNDxAs"));
+                    oclass.getMethod("browse", URI.class).invoke(object, new URI("https://www.curseforge.com/minecraft/mc-mods/aunis-resurrection"));
                 } catch (Exception e) {
                     Aunis.logger.debug("Couldn't open link", e);
                 }
