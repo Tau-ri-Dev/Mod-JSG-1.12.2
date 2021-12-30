@@ -46,7 +46,7 @@ public class AunisMainMenu extends GuiMainMenu {
     // ---------------------------------------------------
     // VERSION
     // this must be same as in version.txt !!!
-    protected static final String Version = "A4.9";
+    protected static final String Version = "4.9.1.2-dev4";
     // ---------------------------------------------------
 
     protected static float animationStage = 0;
@@ -277,6 +277,7 @@ public class AunisMainMenu extends GuiMainMenu {
                 renderButtonsAndStuff = true;
                 clickedButton = 0;
             }
+            else if(kawooshState == 2.2f) kawooshState = 0;
         }
     }
 
@@ -355,8 +356,11 @@ public class AunisMainMenu extends GuiMainMenu {
         // ------------------------------
         // DRAWING EVENT HORIZON
 
-        //if(renderKawoosh && ((int) (animationStage+20) % (int) 8.7 == 0)) loadGame();
         if (renderKawoosh) loadGame();
+        else{
+            kawooshState = 0;
+            gateZoom = 1f;
+        }
 
         // ------------------------------
         // DRAWING GATE
@@ -512,9 +516,7 @@ public class AunisMainMenu extends GuiMainMenu {
                     GlStateManager.translate(screenCenterWidth, screenCenterHeight - 40, 0);
                     drawCenteredString(fontRenderer, "For your comfort, please update", 0, 0, 0xffffff);
                     GlStateManager.translate(0, 10, 0);
-                    drawCenteredString(fontRenderer, "it by download it from our", 0, 0, 0xffffff);
-                    GlStateManager.translate(0, 10, 0);
-                    drawCenteredString(fontRenderer, "unofficial discord server!", 0, 0, 0xffffff);
+                    drawCenteredString(fontRenderer, "your mod in your mods folder.", 0, 0, 0xffffff);
                 }
 
                 GlStateManager.popMatrix();
