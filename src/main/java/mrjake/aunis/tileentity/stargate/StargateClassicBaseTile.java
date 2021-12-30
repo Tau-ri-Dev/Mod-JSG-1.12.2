@@ -134,7 +134,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         this.isFinalActive = true;
     }
 
-    /**
+    /*
      * TODO: this shit
      * public void abortDialingSequence(int type) {
      * if(stargateState.dialingComputer() || stargateState.idle()) {
