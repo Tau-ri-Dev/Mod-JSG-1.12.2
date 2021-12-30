@@ -51,8 +51,7 @@ public class AunisWorldGen implements IWorldGenerator {
 				break;
 		}
 	}
-	
-	
+
 	private void runGenerator(IBlockState blockToGen, int blockAmount, int chancesToSpawn, int minHeight, int maxHeight, Predicate<IBlockState> blockToReplace, World world, Random rand, int chunkX, int chunkZ) {	
 		
 		if (minHeight < 0 || maxHeight > 256 || minHeight > maxHeight)

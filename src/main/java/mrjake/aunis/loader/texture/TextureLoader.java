@@ -60,7 +60,7 @@ public class TextureLoader {
 				BufferedImage bufferedImage = TextureUtil.readBufferedImage(resource.getInputStream());
 				LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage, false));
 				
-				/*if (texturePath.equals("textures/tesr/event_horizon_animated.jpg")) {
+				/*if (texturePath.equals("textures/tesr/event_horizon_animated.jpg")){
 					LOADED_TEXTURES.put(new ResourceLocation(Aunis.ModID, texturePath+"_desaturated"), new Texture(bufferedImage, true));
 				}*/
 			}

@@ -60,7 +60,6 @@ public class StargateGenerator {
 
 		if (tries == 100) {
 			Aunis.logger.debug("StargateGenerator: Failed to find place");
-
 			return null;
 		}
 
