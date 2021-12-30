@@ -145,7 +145,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
     }
 
     protected static final ResourceLocation EV_HORIZON_NORMAL_TEXTURE_ANIMATED = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_animated.jpg");
-    protected static final ResourceLocation EV_HORIZON_DESATURATED_TEXTURE_ANIMATED = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_animated.jpg_desaturated");
+    protected static final ResourceLocation EV_HORIZON_DESATURATED_TEXTURE_ANIMATED = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_animated_unstable.jpg");
 
     protected static final ResourceLocation EV_HORIZON_NORMAL_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon.jpg");
     protected static final ResourceLocation EV_HORIZON_DESATURATED_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_unstable.jpg");

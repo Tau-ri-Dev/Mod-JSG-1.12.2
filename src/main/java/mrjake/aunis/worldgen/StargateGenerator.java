@@ -84,7 +84,7 @@ public class StargateGenerator {
 	private static final int SG_SIZE_X_PLAINS = 11;
 	private static final int SG_SIZE_Z_PLAINS = 11;
 
-	public static BlockPos checkForPlace(World world, int chunkX, int chunkZ) {
+	private static BlockPos checkForPlace(World world, int chunkX, int chunkZ) {
 		if (world.isChunkGeneratedAt(chunkX, chunkZ))
 			return null;
 
@@ -101,6 +101,7 @@ public class StargateGenerator {
 		boolean desert = biomeName.contains("desert");
 
 		if (!biomeName.contains("ocean") && !biomeName.contains("river") && !biomeName.contains("beach")) {
+//		if (biomeName.contains("Ocean")) {
 			int x = desert ? SG_SIZE_X : SG_SIZE_X_PLAINS;
 			int z = desert ? SG_SIZE_Z : SG_SIZE_Z_PLAINS;
 
@@ -114,10 +115,12 @@ public class StargateGenerator {
 			if (Math.abs(y1 - y2) <= 1 && Math.abs(y3 - y4) <= 1) {
 				return pos.subtract(new BlockPos(0, 1, 0));
 			}
+
 			else {
 				Aunis.logger.debug("StargateGenerator: too steep");
 			}
 		}
+
 		else {
 			Aunis.logger.debug("StargateGenerator: failed, " + biomeName);
 		}
@@ -127,7 +130,7 @@ public class StargateGenerator {
 
 	private static final int MAX_CHECK = 100;
 
-	public static EnumFacing findOptimalRotation(World world, BlockPos pos) {
+	private static EnumFacing findOptimalRotation(World world, BlockPos pos) {
 		BlockPos start = pos.add(0, 5, 5);
 		int max = -1;
 		EnumFacing maxFacing = EnumFacing.EAST;
@@ -157,26 +160,7 @@ public class StargateGenerator {
 		return maxFacing;
 	}
 
-	public static boolean generateStargateFromXY(World world, int x, int z){
-		int random = new Random().nextInt(100);
-		if(random < 25){
-			Chunk chunk = world.getChunkFromChunkCoords(x, z);
-			BlockPos position = new BlockPos(x, chunk.getHeightValue(8, 8), z);
-			EnumFacing facing = findOptimalRotation(world, position);
-			Rotation rotation;
-			switch (facing) {
-				case SOUTH: rotation = Rotation.CLOCKWISE_90; break;
-				case WEST:  rotation = Rotation.CLOCKWISE_180; break;
-				case NORTH: rotation = Rotation.COUNTERCLOCKWISE_90; break;
-				default:    rotation = Rotation.NONE; break;
-			}
-			generateStargateDesert(world, position, facing, rotation);
-			return true;
-		}
-		return false;
-	}
-
-	public static GeneratedStargate generateStargateDesert(World world, BlockPos pos, EnumFacing facing, Rotation rotation) {
+	private static GeneratedStargate generateStargateDesert(World world, BlockPos pos, EnumFacing facing, Rotation rotation) {
 		WorldServer worldServer = (WorldServer) world;
 		MinecraftServer server = world.getMinecraftServer();
 
