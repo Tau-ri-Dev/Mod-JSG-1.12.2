@@ -70,6 +70,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
 
         rendererState.chevronTextureList.iterate(getWorld(), partialTicks);
     }
+
     // ----------------------------------------------------------------------------------------
     // Iris rendering
 

@@ -156,7 +156,6 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         return rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE_ANIMATED : EV_HORIZON_NORMAL_TEXTURE_ANIMATED;
     }
 
-
     protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
         renderKawoosh(rendererState, partialTicks, false);
     }
