@@ -3,7 +3,6 @@ package mrjake.aunis.state;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.INBTSerializable;
 
 /**
@@ -12,8 +11,8 @@ import net.minecraftforge.common.util.INBTSerializable;
  * Defines methods to write NBT tags from abstract byte methods(used by TileUpdatePacketToClient)
  *
  */
-public abstract class State implements INBTSerializable<NBTTagCompound> {
-    /**
+public abstract class State implements INBTSerializable<NBTTagCompound> {	
+	/**
 	 * Should write all parameters that matter to client-side renderer(ex. vortexState in StargateRenderer)
 	 * to a ByteBuf.
 	 * 

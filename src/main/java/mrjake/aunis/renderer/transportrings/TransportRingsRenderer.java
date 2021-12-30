@@ -4,8 +4,6 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.state.TransportRingsRendererState;
 import mrjake.aunis.tesr.RendererInterface;
-import mrjake.aunis.tileentity.TransportRingsTile;
-import mrjake.aunis.transportrings.TransportRings;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -30,7 +28,7 @@ public class TransportRingsRenderer implements RendererInterface {
 	public TransportRingsRenderer(World world, BlockPos pos, AunisAxisAlignedBB localTeleportBox) {
 		this.world = world;
 		this.localTeleportBox = localTeleportBox;
-
+		
 		rings = new ArrayList<>();
 		for (int i=0; i<RING_COUNT; i++) {
 			rings.add(new Ring(world, i));
@@ -55,10 +53,8 @@ public class TransportRingsRenderer implements RendererInterface {
 		GlStateManager.translate(0.50, 0.63271/2 + 1.35, 0.50);
 		GlStateManager.scale(0.5, 0.5, 0.5);
 		
-		for (Ring ring : rings) {
-			ring.setHeight(state.ringsHeight);
+		for (Ring ring : rings)
 			ring.render(partialTicks, BiomeOverlayEnum.NORMAL); // Rings appear from underground, no frost/moss here.
-		}
 		
 		GlStateManager.popMatrix();
 		
@@ -145,14 +141,8 @@ public class TransportRingsRenderer implements RendererInterface {
 			}
 		}
 	}
-
-	TransportRingsRendererState state = new TransportRingsRendererState();
-
-	public void animationStart(long animationStart, int height) {
-
-		state.ringsHeight = height;
-		System.out.println("Started with: " + height);
-
+	
+	public void animationStart(long animationStart) {	
 		lastTick = -1;
 		currentRing = 0;
 		lastRingAnimated = -1;
@@ -161,6 +151,8 @@ public class TransportRingsRenderer implements RendererInterface {
 		state.ringsUprising = true;
 		state.isAnimationActive = true;
 	}
+
+	TransportRingsRendererState state = new TransportRingsRendererState();
 	
 	public void setState(TransportRingsRendererState rendererState) {
 		lastTick = -1;

@@ -33,8 +33,7 @@ public class RingsGUI extends GuiBase {
 	
 	private GuiTextField addressTextField;
 	private GuiTextField nameTextField;
-	private GuiTextField ringsHeightField;
-
+	
 	private AunisGuiButton saveButton;
 	
 	@Override
@@ -43,11 +42,8 @@ public class RingsGUI extends GuiBase {
 		
 		addressTextField = createTextField(50, 20, 1, state.isInGrid() ? "" + state.getAddress() : "");
 		textFields.add(addressTextField);
-
-		ringsHeightField = createTextField(50, 35, 3, state.isInGrid() ? "" + state.getRingsHeight() : "");
-		textFields.add(ringsHeightField);
 		
-		nameTextField = createTextField(50, 50, 16, state.getName());
+		nameTextField = createTextField(50, 35, 16, state.getName());
 		textFields.add(nameTextField);
 		
 		saveButton = new AunisGuiButton(id++, getBottomRightInside(false)-90, getBottomRightInside(true)-20, 90, 20, Aunis.proxy.localize("tile.aunis.transportrings_block.rings_save"));
@@ -75,14 +71,13 @@ public class RingsGUI extends GuiBase {
 		}	
 		
 		drawString(Aunis.proxy.localize("tile.aunis.transportrings_block.rings_address") + ": ", 0, 20, 0x00AA00);
-		drawString(Aunis.proxy.localize("tile.aunis.transportrings_block.rings_height") + ": ", 0, 35, 0x00AAAA);
-		drawString(Aunis.proxy.localize("tile.aunis.transportrings_block.rings_name") + ": ", 0, 50, 0xAA00AA);
+		drawString(Aunis.proxy.localize("tile.aunis.transportrings_block.rings_name") + ": ", 0, 35, 0x00AAAA);
 //		this.addressTextField.drawTextBox();
 		
 		for (GuiTextField tf : textFields)
 			drawTextBox(tf);
 		
-		int y = 65;
+		int y = 50;
 		for (TransportRings rings : state.getRings()) {			
 			drawString(""+rings.getAddress(), 60, y, 0x00AA00);
 			drawString(rings.getName(), 70, y, 0x00AAAA);
@@ -112,16 +107,10 @@ public class RingsGUI extends GuiBase {
 			
 			try {
 				int address = Integer.valueOf(addressTextField.getText());
-				int height = Integer.valueOf(ringsHeightField.getText());
 				String name = nameTextField.getText();
 				
 				if (address > 0 && address <= 6) {
-					if (height >= -20 && height <= 20) {
-						AunisPacketHandler.INSTANCE.sendToServer(new SaveRingsParametersToServer(pos, address, height, name));
-					}
-					else{
-						player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_block.wrong_height"), true);
-					}
+					AunisPacketHandler.INSTANCE.sendToServer(new SaveRingsParametersToServer(pos, address, name));
 				}
 				
 				else {
@@ -130,7 +119,7 @@ public class RingsGUI extends GuiBase {
 			}
 			
 			catch (NumberFormatException e) {
-				player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_block.wrong_address_or_height"), true);
+				player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_block.wrong_address"), true);
 			}
 		}
 	}

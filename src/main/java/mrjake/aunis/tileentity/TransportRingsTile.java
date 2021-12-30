@@ -61,7 +61,7 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
   public static final int TIMEOUT_FADE_OUT = (int) (30 + TransportRingsRenderer.INTERVAL_UPRISING * TransportRingsRenderer.RING_COUNT + TransportRingsRenderer.ANIMATION_SPEED_DIVISOR * Math.PI);
   public static final int RINGS_CLEAR_OUT = (int) (15 + TransportRingsRenderer.INTERVAL_FALLING * TransportRingsRenderer.RING_COUNT + TransportRingsRenderer.ANIMATION_SPEED_DIVISOR * Math.PI);
 
-  private static AunisAxisAlignedBB LOCAL_TELEPORT_BOX = new AunisAxisAlignedBB(-1, 2, -1, 2, 4.5, 2);
+  private static final AunisAxisAlignedBB LOCAL_TELEPORT_BOX = new AunisAxisAlignedBB(-1, 2, -1, 2, 4.5, 2);
   private AunisAxisAlignedBB globalTeleportBox;
 
   private List<Entity> teleportList = new ArrayList<>();
@@ -77,7 +77,7 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
         lastPos = pos;
 
         getRings().setPos(pos);
-        setRingsParams(getRings().getAddress(), getRings().getName(), getRings().getRingsHeight());
+        setRingsParams(getRings().getAddress(), getRings().getName());
         updateLinkStatus();
 
         markDirty();
@@ -87,6 +87,7 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
 
   @Override
   public void onLoad() {
+
     if (!world.isRemote) {
       setBarrierBlocks(false, false);
 
@@ -117,7 +118,7 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
   public void executeTask(EnumScheduledTask scheduledTask, NBTTagCompound customData) {
     switch (scheduledTask) {
       case RINGS_START_ANIMATION:
-        animationStart(rendererState.ringsHeight);
+        animationStart();
         setBarrierBlocks(true, true);
 
         addTask(new ScheduledTask(EnumScheduledTask.RINGS_FADE_OUT));
@@ -205,15 +206,13 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
     return world.getEntitiesWithinAABB(Entity.class, globalTeleportBox);
   }
 
-  public void animationStart(int height) {
+  public void animationStart() {
     rendererState.animationStart = world.getTotalWorldTime();
     rendererState.ringsUprising = true;
     rendererState.isAnimationActive = true;
-    System.out.println("TRtest " + rendererState.ringsHeight + " and " + height);
 
     TargetPoint point = new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
-    AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RINGS_START_ANIMATION,
-            new TransportRingsStartAnimationRequest(rendererState.animationStart, height)), point);
+    AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RINGS_START_ANIMATION, new TransportRingsStartAnimationRequest(rendererState.animationStart)), point);
   }
 
   /**
@@ -342,7 +341,7 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
   // Rings network
   private TransportRings rings;
 
-  public TransportRings getRings() {
+  private TransportRings getRings() {
     if (rings == null) rings = new TransportRings(pos);
 
     return rings;
@@ -402,7 +401,7 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
     }
   }
 
-  public ParamsSetResult setRingsParams(int address, String name, int height) {
+  public ParamsSetResult setRingsParams(int address, String name) {
     int x = pos.getX();
     int z = pos.getZ();
 
@@ -430,7 +429,6 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
 
     getRings().setAddress(address);
     getRings().setName(name);
-    getRings().setRingsHeight(height);
 
     for (TransportRingsTile newRingsTile : ringsTilesInRange) {
       this.addRings(newRingsTile);
@@ -594,7 +592,7 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
 
       case RINGS_START_ANIMATION:
         AunisSoundHelper.playSoundEventClientSide(world, pos.up(3), SoundEventEnum.RINGS_TRANSPORT);
-        renderer.animationStart(((TransportRingsStartAnimationRequest) state).animationStart, ((TransportRingsStartAnimationRequest) state).ringsHeight);
+        renderer.animationStart(((TransportRingsStartAnimationRequest) state).animationStart);
         break;
 
       case GUI_STATE:
@@ -720,7 +718,7 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
     if (address < 1 || address > 6)
       throw new IllegalArgumentException("bad argument #1 (address out of range, allowed <1..6>)");
 
-    return new Object[]{setRingsParams(address, rings.getName(), rings.getRingsHeight())};
+    return new Object[]{setRingsParams(address, rings.getName())};
   }
 
   @Optional.Method(modid = "opencomputers")
@@ -729,7 +727,7 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
     if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
 
     String name = args.checkString(0);
-    setRingsParams(rings.getAddress(), name, rings.getRingsHeight());
+    setRingsParams(rings.getAddress(), name);
 
     return new Object[]{};
   }
@@ -743,7 +741,7 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
     if (address < 1 || address > 6)
       throw new IllegalArgumentException("bad argument #1 (address out of range, allowed <1..6>)");
 
-    return new Object[]{setRingsParams(address, name, rings.getRingsHeight())};
+    return new Object[]{setRingsParams(address, name)};
   }
 
   @Optional.Method(modid = "opencomputers")
