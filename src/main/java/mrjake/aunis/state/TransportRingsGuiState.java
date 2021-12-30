@@ -15,6 +15,9 @@ public class TransportRingsGuiState extends State {
 	
 	private int address;
 	public int getAddress() { return address; }
+
+	private int ringsHeight;
+	public int getRingsHeight() { return ringsHeight; }
 	
 	private String name;
 	public String getName() { return name != null ? name : ""; }
@@ -30,6 +33,7 @@ public class TransportRingsGuiState extends State {
 		if (inGrid) {
 			this.address = rings.getAddress();
 			this.name = rings.getName();
+			this.ringsHeight = rings.getRingsHeight();
 			
 //			this.ringsList.add(rings);
 			this.ringsList.addAll(ringsList);
@@ -42,6 +46,7 @@ public class TransportRingsGuiState extends State {
 		
 		if (inGrid) {
 			buf.writeInt(address);
+			buf.writeInt(ringsHeight);
 			buf.writeInt(name.length());
 			buf.writeCharSequence(name, StandardCharsets.UTF_8);
 			
@@ -61,6 +66,7 @@ public class TransportRingsGuiState extends State {
 		
 		if (inGrid) {
 			address = buf.readInt();
+			ringsHeight = buf.readInt();
 			int length = buf.readInt();
 			name = buf.readCharSequence(length, StandardCharsets.UTF_8).toString();
 			

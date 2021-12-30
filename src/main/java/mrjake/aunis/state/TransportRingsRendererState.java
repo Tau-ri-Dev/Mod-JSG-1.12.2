@@ -19,6 +19,9 @@ public class TransportRingsRendererState extends State {
 	 * It should be useful when the player comes around in ring's mid-transfer state
 	 */
 	public long animationStart;
+
+
+	public int ringsHeight;
 	
 	/**
 	 * True: Rings going up
@@ -31,6 +34,7 @@ public class TransportRingsRendererState extends State {
 		this.isAnimationActive = false;
 		
 		this.animationStart = 0;
+		this.ringsHeight = 0;
 		this.ringsUprising = true;
 	}
 	
@@ -39,6 +43,7 @@ public class TransportRingsRendererState extends State {
 	public void toBytes(ByteBuf buf) {
 		buf.writeBoolean(isAnimationActive);
 		buf.writeLong(animationStart);
+		buf.writeInt(ringsHeight);
 		buf.writeBoolean(ringsUprising);
 	}
 
@@ -46,6 +51,7 @@ public class TransportRingsRendererState extends State {
 	public void fromBytes(ByteBuf buf) {
 		isAnimationActive = buf.readBoolean();
 		animationStart = buf.readLong();
+		ringsHeight = buf.readInt();
 		ringsUprising = buf.readBoolean();
 	}
 }
