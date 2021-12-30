@@ -41,16 +41,20 @@ public class TextureLoader {
 			texture.deleteTexture();
 		
 		List<String> texturePaths = FolderLoader.getAllFiles(TEXTURES_PATH, ".png", ".jpg");
-		ProgressBar progressBar = ProgressManager.push("Aunis - Loading textures", texturePaths.size());
+		ProgressBar progressBar = ProgressManager.push("Aunis:Resurrection - Loading textures", texturePaths.size());
 		
 		long start = System.currentTimeMillis();
-		
+
+		Aunis.logger.info("Started loading textures...");
+
 		for (String texturePath : texturePaths) {
 			texturePath = texturePath.replaceFirst("assets/aunis/", "");
-			progressBar.step(texturePath);
+			progressBar.step(texturePath.replaceFirst("textures/", ""));
 			
-			if (AunisConfig.stargateConfig.disableAnimatedEventHorizon && texturePath.equals("textures/tesr/event_horizon_animated.jpg"))
-				continue;
+			if (AunisConfig.stargateConfig.disableAnimatedEventHorizon &&
+				(texturePath.equals("textures/tesr/event_horizon_animated.jpg")
+				|| texturePath.equals("textures/tesr/event_horizon_animated_unstable.jpg")))
+					continue;
 						
 			ResourceLocation resourceLocation = new ResourceLocation(Aunis.ModID, texturePath);
 			IResource resource = null;
@@ -60,7 +64,10 @@ public class TextureLoader {
 				BufferedImage bufferedImage = TextureUtil.readBufferedImage(resource.getInputStream());
 				LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage, false));
 				
-				/*if (texturePath.equals("textures/tesr/event_horizon_animated.jpg")){
+				/*
+				Shit that lags PCs
+
+				if (texturePath.equals("textures/tesr/event_horizon_animated.jpg")){
 					LOADED_TEXTURES.put(new ResourceLocation(Aunis.ModID, texturePath+"_desaturated"), new Texture(bufferedImage, true));
 				}*/
 			}
@@ -75,7 +82,7 @@ public class TextureLoader {
 			}
 		}
 		
-		Aunis.logger.debug("Loaded "+texturePaths.size()+" textures in "+(System.currentTimeMillis()-start)+" ms");
+		Aunis.logger.info("Loaded "+texturePaths.size()+" textures in "+(System.currentTimeMillis()-start)+" ms");
 		
 		ProgressManager.pop(progressBar);
 	}

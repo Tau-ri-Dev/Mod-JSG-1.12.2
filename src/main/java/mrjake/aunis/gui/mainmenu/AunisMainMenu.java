@@ -69,7 +69,7 @@ public class AunisMainMenu extends GuiMainMenu {
             BiomeOverlayEnum.SOOTY,
             BiomeOverlayEnum.NORMAL
     };
-    protected BiomeOverlayEnum overlay = getNextBiomeOverlay(AunisConfig.mainMenuConfig.changingGateOverlay);
+    protected BiomeOverlayEnum overlay = getNextBiomeOverlay(AunisConfig.mainMenuConfig.changingGateOverlay, false);
     protected float screenCenterHeight = (((float) height) / 2f);
     protected float screenCenterWidth = ((float) width) / 2f;
     protected List<GuiButton> aunisButtonList = new ArrayList<>();
@@ -140,7 +140,7 @@ public class AunisMainMenu extends GuiMainMenu {
                     chevronSound2 = true;
                 }
                 nextEvent = "Top chevron reset";
-                if (!chevronsActive) getNextBiomeOverlay(AunisConfig.mainMenuConfig.changingGateOverlay);
+                if (!chevronsActive) getNextBiomeOverlay(AunisConfig.mainMenuConfig.changingGateOverlay, true);
                 this.chevronShoutTiming = 0;
                 this.chevronLastAnimationStage = 0;
                 this.chevronShout = false;
@@ -171,13 +171,18 @@ public class AunisMainMenu extends GuiMainMenu {
     }
 
     // next overlay
-    public BiomeOverlayEnum getNextBiomeOverlay(boolean doIt) {
+    public BiomeOverlayEnum getNextBiomeOverlay(boolean doIt, boolean updateGui) {
         nextEvent = "Changing overlay";
-        if (doIt)
-            this.overlay = overlays[new Random().nextInt(overlays.length)];
-        else
+        BiomeOverlayEnum over = this.overlay;
+        if (doIt) {
+            while(over == overlay)
+                over = overlays[new Random().nextInt(overlays.length)];
+            this.overlay = over;
+        }
+        else if(this.overlay == null)
             this.overlay = BiomeOverlayEnum.NORMAL;
 
+        if(updateGui) initGui();
         return this.overlay;
     }
 
@@ -357,6 +362,7 @@ public class AunisMainMenu extends GuiMainMenu {
         else{
             kawooshState = 0;
             gateZoom = 1f;
+            chevronsActive = false;
         }
 
         // ------------------------------
@@ -598,6 +604,10 @@ public class AunisMainMenu extends GuiMainMenu {
             this.aunisButtonList.add(new AunisGuiButton(0, 6, 6, 98, 20, I18n.format("menu.options")));
             // quit
             this.aunisButtonList.add(new AunisGuiButton(4, this.width - 6 - 98, this.height - 6 - 20, 98, 20, I18n.format("menu.quit")));
+            // change style of gate
+            this.aunisButtonList.add(new AunisGuiButton(61, this.width - 6 - 98, this.height - 6 - 45, 98, 20, I18n.format("menu.gate_overlay") + ": " + overlay.name()));
+            // toggle main menu music
+            this.aunisButtonList.add(new AunisGuiButton(62, this.width - 6 - 98, this.height - 6 - 70, 98, 20, I18n.format("menu.music_toggle") + ": " + AunisConfig.mainMenuConfig.playMusic));
         } else {
             // single
             this.aunisButtonList.add(new AunisGuiButton(1, this.width / 2 - 100, j, I18n.format("menu.singleplayer")));
@@ -613,6 +623,10 @@ public class AunisMainMenu extends GuiMainMenu {
             this.aunisButtonList.add(new AunisGuiButton(0, this.width / 2 - 100, j + 72, 98, 20, I18n.format("menu.options")));
             // quit
             this.aunisButtonList.add(new AunisGuiButton(4, this.width / 2 + 2, j + 72, 98, 20, I18n.format("menu.quit")));
+            // change style of gate
+            this.aunisButtonList.add(new AunisGuiButton(61, this.width - 6 - 98, this.height - 6 - 20, 98, 20, I18n.format("menu.gate_overlay") + ": " + overlay.name()));
+            // toggle main menu music
+            this.aunisButtonList.add(new AunisGuiButton(62, this.width - 6 - 98, this.height - 6 - 45, 98, 20, I18n.format("menu.music_toggle") + ": " + AunisConfig.mainMenuConfig.playMusic));
         }
         super.initGui();
     }
@@ -671,6 +685,16 @@ public class AunisMainMenu extends GuiMainMenu {
                 } catch (Exception e) {
                     Aunis.logger.debug("Couldn't open link", e);
                 }
+                break;
+            // change overlay
+            case 61:
+                overlay = getNextBiomeOverlay(true, true);
+                initGui();
+                break;
+            // toggle music
+            case 62:
+                AunisConfig.mainMenuConfig.playMusic = !AunisConfig.mainMenuConfig.playMusic;
+                initGui();
                 break;
         }
     }

@@ -144,16 +144,22 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
     }
 
     protected static final ResourceLocation EV_HORIZON_NORMAL_TEXTURE_ANIMATED = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_animated.jpg");
+    protected static final ResourceLocation EV_HORIZON_KAWOOSH_TEXTURE_ANIMATED = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_animated_kawoosh.jpg");
     protected static final ResourceLocation EV_HORIZON_DESATURATED_TEXTURE_ANIMATED = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_animated_unstable.jpg");
 
     protected static final ResourceLocation EV_HORIZON_NORMAL_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon.jpg");
+    protected static final ResourceLocation EV_HORIZON_KAWOOSH_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_kawoosh.jpg");
     protected static final ResourceLocation EV_HORIZON_DESATURATED_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_unstable.jpg");
 
     protected ResourceLocation getEventHorizonTextureResource(StargateAbstractRendererState rendererState) {
-        if (AunisConfig.stargateConfig.disableAnimatedEventHorizon)
-            return rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE : EV_HORIZON_NORMAL_TEXTURE;
+        return getEventHorizonTextureResource(rendererState, false);
+    }
 
-        return rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE_ANIMATED : EV_HORIZON_NORMAL_TEXTURE_ANIMATED;
+    protected ResourceLocation getEventHorizonTextureResource(StargateAbstractRendererState rendererState, boolean kawoosh) {
+        if (AunisConfig.stargateConfig.disableAnimatedEventHorizon)
+            return (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE : (kawoosh ? EV_HORIZON_KAWOOSH_TEXTURE : EV_HORIZON_NORMAL_TEXTURE));
+
+        return (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE_ANIMATED : (kawoosh ? EV_HORIZON_KAWOOSH_TEXTURE_ANIMATED : EV_HORIZON_NORMAL_TEXTURE_ANIMATED));
     }
 
     protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
@@ -176,7 +182,16 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, 00.01);
 
+        // set default texture
         Texture ehTexture = TextureLoader.getTexture(getEventHorizonTextureResource(rendererState));
+
+        // SET THE TEXTURE TO KAWOOSH TEXTURE
+        if(rendererState.vortexState == EnumVortexState.FORMING
+                || rendererState.vortexState == EnumVortexState.DECREASING
+                || rendererState.vortexState == EnumVortexState.FULL)
+            ehTexture = TextureLoader.getTexture(getEventHorizonTextureResource(rendererState, true));
+
+        // bind texture
         if (ehTexture != null) ehTexture.bindTexture();
 
         long kawooshStart = rendererState.gateWaitStart + 44 - 24;

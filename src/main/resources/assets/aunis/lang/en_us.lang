@@ -486,3 +486,5 @@ aunis.subtitle.page_flip=Page flips
 aunis.subtitle.gdo_button_beep=Pressed GDO button
 
 menu.about=About Aunis
+menu.gate_overlay=Gate
+menu.music_toggle=Music
