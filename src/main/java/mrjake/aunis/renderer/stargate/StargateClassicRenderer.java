@@ -79,17 +79,13 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     protected static final ResourceLocation IRIS_TEXTURE =
             new ResourceLocation(Aunis.ModID, "textures/tesr/iris/iris_blade.jpg");
 
-    protected ResourceLocation getIrisTexture(boolean physicsOrShield) {
-        return physicsOrShield ? IRIS_TEXTURE : SHIELD_TEXTURE;
-    }
-
     public static final int PHYSICAL_IRIS_ANIMATION_LENGTH = 60;
     public static final int SHIELD_IRIS_ANIMATION_LENGTH = 10;
 
     @Override
     public void renderIris(double partialTicks, World world, S rendererState) {
         float irisAnimationStage = (world.getTotalWorldTime() - rendererState.irisAnimation);
-        /**
+        /*
          *
          * SHIELD:
          * MAX: 0.7
@@ -114,7 +110,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             if (irisState == EnumIrisState.OPENING) irisAnimationStage = .7f - irisAnimationStage;
             GlStateManager.pushMatrix();
 
-            Texture irisTexture = TextureLoader.getTexture(getIrisTexture(false));
+            Texture irisTexture = TextureLoader.getTexture(SHIELD_TEXTURE);
             if (irisTexture != null) irisTexture.bindTexture();
             float tick = (float) (getWorld().getTotalWorldTime() + partialTicks);
 
@@ -157,26 +153,5 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
                 GlStateManager.popMatrix();
             }
         }
-    }
-
-    @Override
-    protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
-        boolean backOnly = false;
-
-        if (rendererState instanceof StargateClassicRendererState) {
-            EnumIrisState irisState = ((StargateClassicRendererState) rendererState).irisState;
-            if ((irisState == EnumIrisState.CLOSED || irisState == EnumIrisState.CLOSING)
-                    && (rendererState.vortexState == EnumVortexState.FORMING)) {
-
-                //rendererState.vortexState = EnumVortexState.STILL;
-
-                rendererState.vortexState = EnumVortexState.FORMING_UNDER_IRIS;
-                if ((((StargateClassicRendererState) rendererState).irisType != EnumIrisType.SHIELD)
-                        && (((StargateClassicRendererState) rendererState).irisType != EnumIrisType.NULL))
-                    backOnly = true;
-            }
-        }
-
-        super.renderKawoosh(rendererState, partialTicks, backOnly);
     }
 }
