@@ -138,6 +138,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                 map.put(packet.index, packet);
             }
         }
+
         public static EnumVortexState valueOf(int index) {
             return map.get(index);
         }
