@@ -27,6 +27,20 @@ public class TransportRings {
   }
 
   /**
+   * Rings height
+   */
+
+  private int ringsHeight = 0;
+
+  public int getRingsHeight() {
+    return ringsHeight;
+  }
+
+  public void setRingsHeight(int height) {
+    this.ringsHeight = height;
+  }
+
+  /**
    * Rings display name
    */
   private String name;
@@ -150,6 +164,8 @@ public class TransportRings {
 
     if (address != -1) compound.setInteger("address", address);
 
+    if (ringsHeight != -1) compound.setInteger("height", ringsHeight);
+
     if (name != null) compound.setString("name", name);
 
     compound.setLong("pos", pos.toLong());
@@ -162,6 +178,9 @@ public class TransportRings {
   public TransportRings deserializeNBT(NBTTagCompound compound) {
     if (compound.hasKey("address")) address = compound.getInteger("address");
     else address = -1;
+
+    if (compound.hasKey("height")) ringsHeight = compound.getInteger("height");
+    else ringsHeight = -1;
 
     if (compound.hasKey("name")) name = compound.getString("name");
 
@@ -178,6 +197,6 @@ public class TransportRings {
 
   @Override
   public String toString() {
-    return "[pos=" + pos.toString() + ", address=" + address + ", name=" + name + "]";
+    return "[pos=" + pos.toString() + ", address=" + address + ", name=" + name + ", height=" + ringsHeight + "]";
   }
 }

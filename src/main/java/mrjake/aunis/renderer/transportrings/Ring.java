@@ -1,5 +1,6 @@
 package mrjake.aunis.renderer.transportrings;
 
+import mrjake.aunis.Aunis;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,6 +20,8 @@ public class Ring {
 	private boolean shouldAnimate;
 	private boolean ringsUprising;
 	private long animationStart;
+
+	private int ringsHeight;
 		
 	private double y;
 	private double yMax;
@@ -31,6 +34,10 @@ public class Ring {
 		
 		this.y = 0;
 		this.yMax = 4-index + 1.5;
+	}
+
+	public void setHeight(int height){
+		ringsHeight = height;
 	}
 
 	public void render(double partialTicks, BiomeOverlayEnum biomeOverlay) {		
@@ -59,13 +66,18 @@ public class Ring {
 			
 			if (ringsUprising)
 				cos *= -1;
+
+			if(ringsHeight < 0)
+				cos *= -1;
 			
 			y = ((cos + 1) / 2) * yMax;
+
+			y += ringsHeight;
 			
 			if (!ringsUprising && effTick == Math.PI)
 				shouldRender = false;
 			
-//			Aunis.info("y = " + y);
+			Aunis.info("y = " + y + " rh = " + ringsHeight);
 		}
 	}
 	
@@ -78,7 +90,7 @@ public class Ring {
 	}
 
 	public void setTop() {
-		y = yMax;
+		y = yMax + ringsHeight;
 		
 		shouldAnimate = false;
 		shouldRender = true;
