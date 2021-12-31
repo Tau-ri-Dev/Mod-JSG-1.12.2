@@ -138,7 +138,6 @@ jar {
 }
 
 task replaceTokens(type: Sync) {
-    println 'replaceTokens'
     from sourceSets.main.java
     inputs.property 'version', project.mc_version.toString()
     filter(ReplaceTokens, tokens: [VERSION: version.toString()])
