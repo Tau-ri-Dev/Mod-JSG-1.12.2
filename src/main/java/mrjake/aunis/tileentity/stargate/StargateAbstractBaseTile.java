@@ -14,6 +14,7 @@ import mrjake.aunis.block.DHDBlock;
 import mrjake.aunis.chunkloader.ChunkManager;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateDimensionConfig;
+import mrjake.aunis.gui.element.TabBiomeOverlay;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.packet.StateUpdateRequestToServer;
@@ -108,11 +109,14 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         ChunkManager.unforceChunk(world, new ChunkPos(pos));
         sendSignal(null, "stargate_wormhole_closed_fully", new Object[]{isInitiating});
 
+        connectedToGate = false;
+
         markDirty();
     }
 
     protected void failGate() {
         stargateState = EnumStargateState.IDLE;
+        connectedToGate = false;
 
         if (!(this instanceof StargateOrlinBaseTile)) dialedAddress.clear();
 
@@ -134,6 +138,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         }
 
         dialedAddress.clear();
+        connectedToGate = false;
         targetGatePos = null;
         scheduledTasks.clear();
         stargateState = EnumStargateState.IDLE;
@@ -244,6 +249,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         if (!resultTarget.result.ok()) {
             dialingFailed(resultTarget.result);
+            if(connectedToGate) network.getStargate(dialedAddress).getTileEntity().disconnectGate();
 
             /* TODO Find a test case for resultTarget.targetVaild
 
@@ -391,6 +397,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected Map<SymbolTypeEnum, StargatePos> gatePosMap = new HashMap<>(3);
     protected StargateAddressDynamic dialedAddress = new StargateAddressDynamic(getSymbolType());
     protected StargatePos targetGatePos;
+    protected boolean connectedToGate = false;
 
     @Nullable
     public StargateAddress getStargateAddress(SymbolTypeEnum symbolType) {
@@ -468,29 +475,49 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      */
     protected void addSymbolToAddress(SymbolInterface symbol) {
         if (!canAddSymbol(symbol)) throw new IllegalStateException("Cannot add that symbol");
-
         dialedAddress.addSymbol(symbol);
+        StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
+        dialAddr_backup.clear();
+        dialAddr_backup.addAll(dialedAddress);
+        if(symbol != getSymbolType().getOrigin()) {
+            System.out.println("Added 1");
+            if(dialedAddress.size() >= 6) {
+                System.out.println("Added 2 " + dialedAddress.size());
+                dialedAddress.addOrigin();
 
-        if (stargateWillLock(symbol) && checkAddressAndEnergy(dialedAddress).ok()) {
-            int size = dialedAddress.size();
-            if (size == 6) size++;
+                if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate) {
+                    System.out.println("Added 3 - incoming");
+                    int size = dialedAddress.size();
 
+                    connectedToGate = true;
 
-            network.getStargate(dialedAddress).getTileEntity().incomingWormhole(size);
+                    network.getStargate(dialedAddress).getTileEntity().incomingWormhole(size);
+                    network.getStargate(dialedAddress).getTileEntity().sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
+                    network.getStargate(dialedAddress).getTileEntity().failGate();
+                }
+                else if (!checkAddressAndEnergy(dialedAddress).ok()) {
+                    System.out.println("Added 4 - wrong");
+                    network.getStargate(dialedAddress).getTileEntity().disconnectGate();
+                }
 
-            network.getStargate(dialedAddress).getTileEntity().sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
-            network.getStargate(dialedAddress).getTileEntity().failGate();
+                dialedAddress.clear();
+                dialedAddress.addAll(dialAddr_backup);
+                System.out.println("" + dialedAddress.size());
+            }
+        }
+        else {
+            System.out.println("Added origin");
         }
     }
 
     /**
      * Called on receiving gate. Sets renderer's state
      *
-     * @param incomingAddress   - Initializing gate's address
      * @param dialedAddressSize - How many symbols are there pressed on the DHD
      */
     public void incomingWormhole(int dialedAddressSize) {
         dialedAddress.clear();
+        stargateState = EnumStargateState.ENGAGED_INITIATING;
 
         sendSignal(null, "stargate_incoming_wormhole", new Object[]{dialedAddressSize});
 
@@ -527,41 +554,22 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         ChunkManager.forceChunk(world, new ChunkPos(pos));
 
-        boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
+        sendRenderingUpdate(EnumGateAction.OPEN_GATE, 0, false);
 
-        long waitTime = 2800;
+        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_OPEN_SOUND, getOpenSoundDelay()));
+        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_HORIZON_LIGHT_BLOCK, EnumScheduledTask.STARGATE_OPEN_SOUND.waitTicks + 19 + getTicksPerHorizonSegment(true)));
+        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_HORIZON_WIDEN, EnumScheduledTask.STARGATE_OPEN_SOUND.waitTicks + 23 + getTicksPerHorizonSegment(true))); // 1.3s of the sound to the kill
+        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ENGAGE));
 
-        if (!allowIncomingAnimation) {
-            waitTime = 300;
+        if (isInitiating) {
+            StargateEnergyRequired energyRequired = getEnergyRequiredToDial(targetGatePos);
+            getEnergyStorage().extractEnergy(energyRequired.energyToOpen, false);
+            keepAliveEnergyPerTick = energyRequired.keepAlive;
         }
-        final int[] i = {1};
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            public void run() {
-                if (i[0] < 2) {
 
-                    sendRenderingUpdate(EnumGateAction.OPEN_GATE, 0, false);
+        sendSignal(null, "stargate_open", new Object[]{isInitiating});
 
-                    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_OPEN_SOUND, getOpenSoundDelay()));
-                    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_HORIZON_LIGHT_BLOCK, EnumScheduledTask.STARGATE_OPEN_SOUND.waitTicks + 19 + getTicksPerHorizonSegment(true)));
-                    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_HORIZON_WIDEN, EnumScheduledTask.STARGATE_OPEN_SOUND.waitTicks + 23 + getTicksPerHorizonSegment(true))); // 1.3s of the sound to the kill
-                    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ENGAGE));
-
-                    if (isInitiating) {
-                        StargateEnergyRequired energyRequired = getEnergyRequiredToDial(targetGatePos);
-                        getEnergyStorage().extractEnergy(energyRequired.energyToOpen, false);
-                        keepAliveEnergyPerTick = energyRequired.keepAlive;
-                    }
-
-                    sendSignal(null, "stargate_open", new Object[]{isInitiating});
-
-                    markDirty();
-                    i[0]++;
-                } else {
-                    timer.cancel();
-                }
-            }
-        }, waitTime, 100);
+        markDirty();
     }
 
     /**
@@ -585,6 +593,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         }
 
         targetGatePos = null;
+        connectedToGate = false;
 
         markDirty();
     }
@@ -1396,9 +1405,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     /**
      * Checks is gate has sufficient power to dial across specified distance and dimension
      * It also sets energy draw for (possibly) outgoing wormhole
-     *
-     * @param distance    - distance in blocks to target gate
-     * @param targetWorld - target world, used for multiplier
      */
     public boolean hasEnergyToDial(StargatePos targetGatePos) {
         StargateEnergyRequired energyRequired = getEnergyRequiredToDial(targetGatePos);
