@@ -480,13 +480,13 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         dialAddr_backup.clear();
         dialAddr_backup.addAll(dialedAddress);
         if(symbol != getSymbolType().getOrigin()) {
-            System.out.println("Added 1");
+            //System.out.println("Added 1");
             if(dialedAddress.size() >= 6) {
-                System.out.println("Added 2 " + dialedAddress.size());
+                //System.out.println("Added 2 " + dialedAddress.size());
                 dialedAddress.addOrigin();
 
                 if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate) {
-                    System.out.println("Added 3 - incoming");
+                    //System.out.println("Added 3 - incoming");
                     int size = dialedAddress.size();
 
                     connectedToGate = true;
@@ -495,19 +495,19 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                     network.getStargate(dialedAddress).getTileEntity().sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
                     network.getStargate(dialedAddress).getTileEntity().failGate();
                 }
-                else if (!checkAddressAndEnergy(dialedAddress).ok()) {
-                    System.out.println("Added 4 - wrong");
+                else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
+                    //System.out.println("Added 4 - wrong");
                     network.getStargate(dialedAddress).getTileEntity().disconnectGate();
                 }
 
                 dialedAddress.clear();
                 dialedAddress.addAll(dialAddr_backup);
-                System.out.println("" + dialedAddress.size());
+                //System.out.println("" + dialedAddress.size());
             }
         }
-        else {
-            System.out.println("Added origin");
-        }
+        /*else {
+            //System.out.println("Added origin");
+        }*/
     }
 
     /**

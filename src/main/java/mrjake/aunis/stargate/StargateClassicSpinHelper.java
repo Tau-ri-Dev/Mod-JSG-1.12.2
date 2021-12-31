@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
+import mrjake.aunis.stargate.network.SymbolUniverseEnum;
 import mrjake.aunis.util.math.*;
 
 import java.util.HashMap;
@@ -124,6 +125,11 @@ public class StargateClassicSpinHelper implements ISpinHelper {
 
   public void initRotation(long totalWorldTime, SymbolInterface targetSymbol, EnumSpinDirection direction, float startOffset) {
     float distance = direction.getDistance(currentSymbol, targetSymbol);
+    if(targetSymbol == SymbolUniverseEnum.G37) distance = 360;
+    else if(targetSymbol == SymbolUniverseEnum.TOP_CHEVRON) distance += 360;
+
+    if(distance == 0 && !(targetSymbol instanceof SymbolUniverseEnum))
+      distance += 360;
 
     float x0 = getx0(distance);
     this.targetRotationOffset = getTargetRotation(x0);

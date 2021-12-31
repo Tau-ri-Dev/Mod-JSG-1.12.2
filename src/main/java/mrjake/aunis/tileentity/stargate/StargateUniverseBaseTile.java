@@ -333,7 +333,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
   @Override
   protected boolean checkAddressLength(StargateAddressDynamic address, StargatePos targetGatePosition) {
-
+    System.out.println("je to uni");
+    System.out.println("nearby: " + dialingNearby);
     if (dialingNearby) return address.size() < 7;
     return super.checkAddressLength(address, targetGatePosition);
   }

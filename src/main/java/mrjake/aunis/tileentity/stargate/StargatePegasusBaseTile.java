@@ -150,8 +150,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
 
     if(allowIncomingAnimation) {
-      playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
-      addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 80));
+      //playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
 /*
       spinDirection = EnumSpinDirection.COUNTER_CLOCKWISE;
 

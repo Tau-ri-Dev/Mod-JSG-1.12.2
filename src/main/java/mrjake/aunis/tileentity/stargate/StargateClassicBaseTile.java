@@ -720,12 +720,16 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         boolean moveOnly = targetRingSymbol == currentRingSymbol;
 
-        if (moveOnly) {
+
+        if(moveOnly && !(targetSymbol instanceof SymbolUniverseEnum))
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 0));
-        } else {
+        else {
             spinDirection = spinDirection.opposite();
 
             float distance = spinDirection.getDistance(currentRingSymbol, targetRingSymbol);
+            if (moveOnly)
+                distance = 360;
+
             if (distance < 90 && !AunisConfig.stargateConfig.fasterMWGateDial) {
                 spinDirection = spinDirection.opposite();
                 distance = spinDirection.getDistance(currentRingSymbol, targetRingSymbol);
@@ -750,9 +754,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             ringSpinContext = context;
             if (context != null)
                 sendSignal(context, "stargate_spin_start", new Object[]{dialedAddress.size(), stargateWillLock(targetRingSymbol), targetSymbol.getEnglishName()});
-        }
 
-        markDirty();
+            markDirty();
+        }
     }
 
     // -----------------------------------------------------------------------------
