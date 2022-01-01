@@ -8,6 +8,7 @@ import mrjake.aunis.raycaster.util.Box;
 import mrjake.aunis.raycaster.util.Ray;
 import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
 import mrjake.aunis.stargate.network.SymbolPegasusEnum;
+import mrjake.aunis.tileentity.DHDPegasusTile;
 import mrjake.vector.Vector2f;
 import mrjake.vector.Vector3f;
 import net.minecraft.entity.player.EntityPlayer;
@@ -139,14 +140,19 @@ public class RaycasterDHD extends Raycaster {
 					button -= 19;
 			}
 
-			if (player.getEntityWorld().isRemote) {
-				AunisPacketHandler.INSTANCE.sendToServer(new DHDButtonClickedToServer(pos, SymbolMilkyWayEnum.valueOf(button)));
-				SymbolPegasusEnum symbol = SymbolPegasusEnum.valueOf(button);
-				if (symbol == SymbolPegasusEnum.UNKNOW1 || symbol == SymbolPegasusEnum.UNKNOW2)
-					player.sendStatusMessage(
-							new TextComponentTranslation("tile.aunis.dhd_pegasus_block.unknown_buttons"),
-							true);
-				else AunisPacketHandler.INSTANCE.sendToServer(new DHDPegasusButtonClickedToServer(pos, symbol));
+			World world = player.getEntityWorld();
+			if (world.isRemote) {
+				boolean pegasusDHD = world.getTileEntity(pos) instanceof DHDPegasusTile;
+				if (!pegasusDHD)
+					AunisPacketHandler.INSTANCE.sendToServer(new DHDButtonClickedToServer(pos, SymbolMilkyWayEnum.valueOf(button)));
+				else {
+					SymbolPegasusEnum symbol = SymbolPegasusEnum.valueOf(button);
+					if (symbol == SymbolPegasusEnum.UNKNOW1 || symbol == SymbolPegasusEnum.UNKNOW2)
+						player.sendStatusMessage(
+								new TextComponentTranslation("tile.aunis.dhd_pegasus_block.unknown_buttons"),
+								true);
+					else AunisPacketHandler.INSTANCE.sendToServer(new DHDPegasusButtonClickedToServer(pos, symbol));
+				}
 			}
 			return true;
 		}
