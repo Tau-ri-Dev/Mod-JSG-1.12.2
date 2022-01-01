@@ -721,7 +721,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         boolean moveOnly = targetRingSymbol == currentRingSymbol;
 
 
-        if(moveOnly && !(targetSymbol instanceof SymbolUniverseEnum))
+        if(moveOnly && targetSymbol instanceof SymbolUniverseEnum)
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 0));
         else {
             spinDirection = spinDirection.opposite();

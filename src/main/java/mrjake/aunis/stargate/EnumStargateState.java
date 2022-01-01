@@ -10,7 +10,8 @@ public enum EnumStargateState {
 	ENGAGED(3),
 	ENGAGED_INITIATING(4),
 	UNSTABLE(5),
-	FAILING(6);
+	FAILING(6),
+	INCOMING(7);
 
 	
 	public int id;
@@ -21,6 +22,10 @@ public enum EnumStargateState {
 	
 	public boolean idle() {
 		return this == IDLE;
+	}
+
+	public boolean incoming() {
+		return this == INCOMING;
 	}
 	
 	public boolean engaged() {

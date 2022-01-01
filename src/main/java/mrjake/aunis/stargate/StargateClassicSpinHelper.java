@@ -126,7 +126,6 @@ public class StargateClassicSpinHelper implements ISpinHelper {
   public void initRotation(long totalWorldTime, SymbolInterface targetSymbol, EnumSpinDirection direction, float startOffset) {
     float distance = direction.getDistance(currentSymbol, targetSymbol);
     if(targetSymbol == SymbolUniverseEnum.G37) distance = 360;
-    else if(targetSymbol == SymbolUniverseEnum.TOP_CHEVRON) distance += 360;
 
     if(distance == 0 && !(targetSymbol instanceof SymbolUniverseEnum))
       distance += 360;

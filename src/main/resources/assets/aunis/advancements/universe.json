@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "aunis:stargate_universe_base_block"
+    },
+    "title": {
+      "translate": "aunis.advancements.universe.title"
+    },
+    "description": {
+      "translate": "aunis.advancements.universe.desc"
+    },
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "parent": "aunis:aunis",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:enter_block",
+      "conditions": {
+        "block": "minecraft:air"
+      }
+    }
+  }
+}

@@ -157,19 +157,21 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         boolean allowConnectToDialing = AunisConfig.stargateConfig.allowConnectToDialing;
 
         if (allowConnectToDialing) {
-            if (isMerged && stargateState.idle()) {
-                return true;
+            if (isMerged) {
+                switch (stargateState) {
+                    case IDLE:
+                    case DIALING:
+                    case DIALING_COMPUTER:
+                    case INCOMING:
+                        return true;
+                    default:
+                        break;
+                }
+                return false;
             }
-            if (isMerged && stargateState.dialing()) {
-                return true;
-            }
-            if (isMerged && stargateState.dialingComputer()) {
-                return true;
-            }
-            return false;
-        } else {
-            return isMerged && stargateState.idle();
-        }
+        } else
+            return isMerged && (stargateState.idle() || stargateState.incoming());
+        return false;
     }
 
     protected void sendRenderingUpdate(EnumGateAction gateAction, int chevronCount, boolean modifyFinal, EnumIrisType irisType, EnumIrisState irisState, long irisAnimation) {
@@ -480,13 +482,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         dialAddr_backup.clear();
         dialAddr_backup.addAll(dialedAddress);
         if(symbol != getSymbolType().getOrigin()) {
-            //System.out.println("Added 1");
             if(dialedAddress.size() >= 6) {
-                //System.out.println("Added 2 " + dialedAddress.size());
                 dialedAddress.addOrigin();
 
                 if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate) {
-                    //System.out.println("Added 3 - incoming");
                     int size = dialedAddress.size();
 
                     connectedToGate = true;
@@ -494,20 +493,16 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                     network.getStargate(dialedAddress).getTileEntity().incomingWormhole(size);
                     network.getStargate(dialedAddress).getTileEntity().sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
                     network.getStargate(dialedAddress).getTileEntity().failGate();
+                    network.getStargate(dialedAddress).getTileEntity().stargateState = EnumStargateState.INCOMING;
                 }
                 else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
-                    //System.out.println("Added 4 - wrong");
                     network.getStargate(dialedAddress).getTileEntity().disconnectGate();
                 }
 
                 dialedAddress.clear();
                 dialedAddress.addAll(dialAddr_backup);
-                //System.out.println("" + dialedAddress.size());
             }
         }
-        /*else {
-            //System.out.println("Added origin");
-        }*/
     }
 
     /**
@@ -517,7 +512,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      */
     public void incomingWormhole(int dialedAddressSize) {
         dialedAddress.clear();
-        stargateState = EnumStargateState.ENGAGED_INITIATING;
 
         sendSignal(null, "stargate_incoming_wormhole", new Object[]{dialedAddressSize});
 

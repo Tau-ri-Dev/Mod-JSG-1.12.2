@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "aunis:stargate_milkyway_base_block"
+    },
+    "title": {
+      "translate": "aunis.advancements.milkyway.title"
+    },
+    "description": {
+      "translate": "aunis.advancements.milkyway.desc"
+    },
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "parent": "aunis:aunis",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:enter_block",
+      "conditions": {
+        "block": "minecraft:air"
+      }
+    }
+  }
+}

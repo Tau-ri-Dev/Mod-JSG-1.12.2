@@ -1,8 +1,8 @@
 [
   {
     "modid": "aunis",
-    "name": "The AUNIS Mod",
-    "description": "Stargate mod - unofficial version",
+    "name": "AUNIS:Resurrection",
+    "description": "Stargate mod",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "https://github.com/MrJake222/AUNIS",
