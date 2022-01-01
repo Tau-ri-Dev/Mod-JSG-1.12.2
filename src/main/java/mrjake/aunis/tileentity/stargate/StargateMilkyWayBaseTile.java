@@ -200,6 +200,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
     @Override
     public void onGateBroken() {
+        if(this.getStargateAddress(SymbolTypeEnum.MILKYWAY) == network.getNetherGate()) network.deleteNetherGate();
         super.onGateBroken();
 
         if (isLinked()) {

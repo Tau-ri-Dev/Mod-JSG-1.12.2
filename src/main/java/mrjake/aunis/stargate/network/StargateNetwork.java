@@ -103,6 +103,11 @@ public class StargateNetwork extends WorldSavedData {
     markDirty();
   }
 
+  public void deleteNetherGate() {
+    netherGateAddress = null;
+    markDirty();
+  }
+
   public StargateAddress getNetherGate() {
     return netherGateAddress;
   }
