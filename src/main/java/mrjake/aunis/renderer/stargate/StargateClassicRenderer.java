@@ -83,7 +83,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     public static final int SHIELD_IRIS_ANIMATION_LENGTH = 10;
 
     @Override
-    public void renderIris(double partialTicks, World world, S rendererState) {
+    public void renderIris(double partialTicks, World world, S rendererState, boolean backOnly) {
         float irisAnimationStage = (world.getTotalWorldTime() - rendererState.irisAnimation);
         /*
          *
@@ -119,7 +119,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             GlStateManager.disableLighting();
             GlStateManager.translate(0, 0, 0.13);
             //GlStateManager.translate(0, 0, 0.13);
-            for (int k = 0; k < 2; k++) {
+            for (int k = (backOnly ? 1 : 0); k < 2; k++) {
                 if (k == 1 /* && !rendererState.doEventHorizonRender*/) {
                     GlStateManager.rotate(180, 0, 1, 0);
                 } /*else if (k == 1) break;*/
@@ -135,7 +135,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             GlStateManager.disableBlend();
             GlStateManager.popMatrix();
         }
-        if (irisType == EnumIrisType.IRIS_TITANIUM || irisType == EnumIrisType.IRIS_TRINIUM) {
+        if ((irisType == EnumIrisType.IRIS_TITANIUM || irisType == EnumIrisType.IRIS_TRINIUM) && backOnly) {
             irisAnimationStage *= 1.7f / PHYSICAL_IRIS_ANIMATION_LENGTH;
             if (irisAnimationStage > 1.7f) irisAnimationStage = 1.7f;
             if (irisAnimationStage < 0) irisAnimationStage = 0;

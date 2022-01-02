@@ -1088,9 +1088,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     if (getStargateState().engaged()) {
                         if (irisState == EnumIrisState.OPENED) toggleIris();
                     } else {
-                        if (isClosed()) {
-                            toggleIris();
-                        }
+                        if (isClosed()) toggleIris();
                     }
                     break;
                 case OC:
