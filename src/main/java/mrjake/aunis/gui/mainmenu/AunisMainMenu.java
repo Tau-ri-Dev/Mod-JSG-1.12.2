@@ -44,7 +44,8 @@ public class AunisMainMenu extends GuiMainMenu {
     // ---------------------------------------------------
     // VERSION
     // this must be same as in version.txt !!!
-    protected static final String Version = "4.9.1.2-dev4";
+    protected static final String VERSION = Aunis.Version.replace("1.12.2-", "");
+
     // ---------------------------------------------------
 
     protected static float animationStage = 0;
@@ -422,12 +423,12 @@ public class AunisMainMenu extends GuiMainMenu {
         // ------------------------------
         // DRAWING TEXTS
 
-        String versionInfo = "Aunis version: " + Version;
+        String versionInfo = "Aunis version: " + VERSION;
 
         if (renderButtonsAndStuff) {
             if (renderButtonsAlpha < 1.0f && showVersionAlert != 1) renderButtonsAlpha += 0.05f;
 
-            if (!Version.equals(Latest) && AunisConfig.enableAutoUpdater) {
+            if (!VERSION.equals(Latest) && AunisConfig.enableAutoUpdater) {
                 versionInfo += " || Latest build: " + Latest;
                 if (showVersionAlert != 2) showVersionAlert = 1;
             }
