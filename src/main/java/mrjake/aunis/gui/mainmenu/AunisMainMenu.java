@@ -78,7 +78,7 @@ public class AunisMainMenu extends GuiMainMenu {
     protected static final ResourceLocation BACKGROUND_TEXTURE = AunisConfig.mainMenuConfig.disableAunisMainMenu ? null : new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");
     protected static final ResourceLocation EVENT_HORIZON_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/event_horizon.jpg");
 
-    protected static final String Latest = getTextFromGithub("https://raw.githubusercontent.com/MineDragonCZ/Aunis1/master/version.txt");
+    protected static final String LATEST = getTextFromGithub("https://amazingworlds.eu/curseapi/1.12.2/?t=name").split("-")[2];
     protected static int showVersionAlert = 0;
     protected String nextEvent = "------";
 
@@ -428,8 +428,8 @@ public class AunisMainMenu extends GuiMainMenu {
         if (renderButtonsAndStuff) {
             if (renderButtonsAlpha < 1.0f && showVersionAlert != 1) renderButtonsAlpha += 0.05f;
 
-            if (!VERSION.equals(Latest) && AunisConfig.enableAutoUpdater) {
-                versionInfo += " || Latest build: " + Latest;
+            if (!VERSION.equals(LATEST) && AunisConfig.enableAutoUpdater) {
+                versionInfo += " - Latest build: " + LATEST;
                 if (showVersionAlert != 2) showVersionAlert = 1;
             }
 
@@ -500,7 +500,7 @@ public class AunisMainMenu extends GuiMainMenu {
                 GlStateManager.translate(screenCenterWidth, screenCenterHeight - 60, 0);
                 GlStateManager.scale(1.5, 1.5, 1.5);
 
-                if (Latest.equals("Error was occurred while updating Aunis!")) {
+                if (LATEST.equals("Error was occurred while updating Aunis!")) {
                     drawCenteredString(fontRenderer, "Could not connect to Aunis network! (github)", 0, 0, 0xffffff);
                     GlStateManager.popMatrix();
 

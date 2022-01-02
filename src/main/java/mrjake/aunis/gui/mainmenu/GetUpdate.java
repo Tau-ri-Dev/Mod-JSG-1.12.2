@@ -15,7 +15,6 @@ import java.util.Map;
 
 public class GetUpdate {
 
-    //todo check from curse
     public static String getTextFromGithub(String link) {
         URL Url = null;
         try {
