@@ -888,7 +888,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         int configPower = AunisConfig.openLimitConfig.maxOpenedPowerDrawAfterLimit;
         if (AunisConfig.openLimitConfig.maxOpenedEnabled && getAutoCloseManager().afterLimitSeconds()) {
             if (AunisConfig.openLimitConfig.maxOpenedWhat.equals("closeGate")){
-                targetGatePos.getTileEntity().attemptClose(StargateClosedReasonEnum.TIMELIMIT);
+                attemptClose(StargateClosedReasonEnum.TIMELIMIT);
                 resetLimitSeconds();
             }
             else

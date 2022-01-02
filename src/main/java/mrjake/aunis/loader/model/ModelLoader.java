@@ -24,7 +24,7 @@ public class ModelLoader {
 		LOADED_MODELS.clear();
 		
 		List<String> modelPaths = FolderLoader.getAllFiles(MODELS_PATH, ".obj");
-		ProgressBar progressBar = ProgressManager.push("Aunis:Resurrection - Loading models", modelPaths.size());
+		ProgressBar progressBar = ProgressManager.push("Aunis: Resurrection - Loading models", modelPaths.size());
 		
 		long start = System.currentTimeMillis();
 

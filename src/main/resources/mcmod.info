@@ -1,7 +1,7 @@
 [
   {
     "modid": "aunis",
-    "name": "AUNIS:Resurrection",
+    "name": "Aunis: Resurrection",
     "description": "Stargate mod",
     "version": "${version}",
     "mcversion": "${mcversion}",
