@@ -150,38 +150,6 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
 
     if(allowIncomingAnimation) {
-      //playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
-/*
-      spinDirection = EnumSpinDirection.COUNTER_CLOCKWISE;
-
-
-      ChevronEnum targetChevron = ChevronEnum.C1;
-
-      ChevronEnum currentChevron = ChevronEnum.C7;
-
-      int indexDiff = slotFromChevron(currentChevron) - slotFromChevron(targetChevron);
-
-      float distance = (float) Math.abs(indexDiff);
-      if (distance <= 20) distance += 36;
-
-
-
-      float distance = 360;
-      int duration = (int) (distance);
-
-
-
-      AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(SymbolPegasusEnum.AAXEL, spinDirection, false)), targetPoint);
-      addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 1));
-      addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, duration - 1));
-      addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_DIM, duration - 1));
-
-      isSpinning = true;
-      spinStartTime = world.getTotalWorldTime();
-      markDirty();
-*/
-
-      // ----------
 
       final int[] i = {1};
       Timer timer = new Timer();

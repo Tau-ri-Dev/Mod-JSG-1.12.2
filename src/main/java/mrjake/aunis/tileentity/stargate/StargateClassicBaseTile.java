@@ -62,6 +62,7 @@ import java.util.stream.IntStream;
 
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.PHYSICAL_IRIS_ANIMATION_LENGTH;
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.SHIELD_IRIS_ANIMATION_LENGTH;
+import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
 /**
  * This class wraps common behavior for the fully-functional Stargates i.e.
@@ -134,24 +135,23 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         this.isFinalActive = true;
     }
 
-    /*
-     * TODO: this shit
-     * public void abortDialingSequence(int type) {
-     * if(stargateState.dialingComputer() || stargateState.idle()) {
-     * spinStartTime = world.getTotalWorldTime() + 3000;
-     * isSpinning = false;
-     * dialingAborted = true;
-     * AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, true)), targetPoint);
-     * addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, 0));
-     * playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
-     * super.failGate();
-     * if(type == 2 && this instanceof StargateUniverseBaseTile)
-     * addSymbolToAddressManual(TOP_CHEVRON, null);
-     * markDirty();
-     * if(type == 1) abortDialingSequence(2);
-     * }
-     * }
-     */
+    public void abortDialingSequence(int type) {
+        if (stargateState.dialingComputer() || stargateState.idle()) {
+            spinStartTime = world.getTotalWorldTime() + 3000;
+            isSpinning = false;
+            dialingAborted = true;
+            AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, true)), targetPoint);
+            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, 0));
+            playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
+            super.failGate();
+            super.disconnectGate();
+            if (type == 2 && this instanceof StargateUniverseBaseTile)
+                addSymbolToAddressManual(TOP_CHEVRON, null);
+            markDirty();
+            if (type == 1) abortDialingSequence(2);
+        }
+    }
+
 
     @Override
     public void incomingWormhole(int dialedAddressSize) {
@@ -1375,11 +1375,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public Object[] abortDialing(Context context, Arguments args) {
         if (!isMerged()) return new Object[]{null, "stargate_failure_not_merged", "Stargate is not merged"};
 
-//        if (stargateState.dialingComputer() ||stargateState.idle()) {
-//            abortDialingSequence(1);
-//            markDirty();
-//            return new Object[]{null, "stargate_aborting", "Aborting dialing"};
-//        }
+        if (stargateState.dialingComputer() ||stargateState.idle()) {
+            abortDialingSequence(1);
+            markDirty();
+            return new Object[]{null, "stargate_aborting", "Aborting dialing"};
+        }
         return new Object[]{null, "stargate_aborting_failed", "Aborting dialing failed"};
     }
 
