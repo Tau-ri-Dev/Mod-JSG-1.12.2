@@ -634,7 +634,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         sendRenderingUpdate(EnumGateAction.CHEVRON_OPEN, 0, false);
 
         if (canAddSymbol(targetRingSymbol)) {
-          addSymbolToAddress(targetRingSymbol, false);
+          if(stargateState == EnumStargateState.DIALING_COMPUTER) addSymbolToAddress(targetRingSymbol, true);
+          else addSymbolToAddress(targetRingSymbol, false);
 
           if (stargateWillLock(targetRingSymbol)) {
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN_SECOND, 0));
@@ -646,6 +647,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         break;
 
       case STARGATE_CHEVRON_OPEN_SECOND:
+        playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
         playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
         addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_LIGHT_UP, 0));
 
