@@ -43,6 +43,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
 
             if (shouldRender(rendererState)) {
+
                 if (AunisConfig.debugConfig.renderBoundingBoxes || AunisConfig.debugConfig.renderWholeKawooshBoundingBox) {
                     te.getEventHorizonLocalBox().render();
 
@@ -66,13 +67,15 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                 GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
 
                 renderGate(rendererState, partialTicks);
+                renderIris(partialTicks, getWorld(), rendererState, true);
+
                 if (rendererState.doEventHorizonRender) {
                     GlStateManager.pushMatrix();
                     renderKawoosh(rendererState, partialTicks);
                     GlStateManager.popMatrix();
                 }
 
-                renderIris(partialTicks, getWorld(), rendererState);
+                renderIris(partialTicks, getWorld(), rendererState, false);
 
             } else {
                 GlStateManager.enableBlend();
@@ -409,6 +412,6 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         return true;
     }
 
-    protected void renderIris(double partialTicks, World world, S rendererState) {
+    protected void renderIris(double partialTicks, World world, S rendererState, boolean backOnly) {
     }
 }

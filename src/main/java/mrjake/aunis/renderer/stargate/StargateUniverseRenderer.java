@@ -72,14 +72,14 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
   }
   private static final float darkness = .6f;
   @Override
-  public void renderIris(double partialTicks, World world, StargateUniverseRendererState rendererState) {
+  public void renderIris(double partialTicks, World world, StargateUniverseRendererState rendererState, boolean backOnly) {
     GlStateManager.pushMatrix();
     GlStateManager.translate(0, 0.04, 0);
     GlStateManager.rotate(90, 1, 0, 0);
     GlStateManager.scale(0.9, 0.9, 0.9);
     if (rendererState.irisType == EnumIrisType.SHIELD) GlStateManager.color(1,1 ,1);
     else GlStateManager.color(darkness, darkness, darkness);
-    super.renderIris(partialTicks, world, rendererState);
+    super.renderIris(partialTicks, world, rendererState, backOnly);
     GlStateManager.popMatrix();
   }
 
