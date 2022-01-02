@@ -1,7 +1,6 @@
 package mrjake.aunis.item.dialer;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.beamer.BeamerModeEnum;
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
 import mrjake.aunis.config.AunisConfig;
@@ -11,7 +10,7 @@ import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
 import mrjake.aunis.stargate.StargateClosedReasonEnum;
 import mrjake.aunis.stargate.network.*;
-import mrjake.aunis.tileentity.TransportRingsTile;
+import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
@@ -45,7 +44,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ConcurrentModificationException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -259,7 +257,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                         break;
 
                                     case RINGS:
-                                        TransportRingsTile ringsTile = (TransportRingsTile) world.getTileEntity(targetPos);
+                                        TransportRingsAncientTile ringsTile = (TransportRingsAncientTile) world.getTileEntity(targetPos);
                                         NBTTagList ringsList = new NBTTagList();
 
                                         for (TransportRings rings : ringsTile.ringsMap.values()) {
@@ -343,7 +341,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                     break;
 
                 case RINGS:
-                    TransportRingsTile ringsTile = (TransportRingsTile) world.getTileEntity(linkedPos);
+                    TransportRingsAncientTile ringsTile = (TransportRingsAncientTile) world.getTileEntity(linkedPos);
                     ringsTile.attemptTransportTo(new TransportRings(selectedCompound).getAddress(), 0).sendMessageIfFailed(player);
 
                     break;

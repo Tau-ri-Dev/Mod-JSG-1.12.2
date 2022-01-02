@@ -36,6 +36,7 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
     private int openTabId = -1;
     private EnumIrisMode irisMode;
     private int irisCode;
+    private float openedSeconds;
 
     @Override
     public int getOpenTabId() {
@@ -189,7 +190,9 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
         if (lastEnergyStored != energyStorage.getEnergyStoredInternally()
                 || lastEnergySecondsToClose != gateTile.getEnergySecondsToClose()
                 || energyTransferedLastTick != gateTile.getEnergyTransferedLastTick()
-                || irisMode != gateTile.getIrisMode() || irisCode != gateTile.getIrisCode()
+                || irisMode != gateTile.getIrisMode()
+                || irisCode != gateTile.getIrisCode()
+                || openedSeconds != gateTile.getOpenedSecondsToDisplay()
 
         ) {
             for (IContainerListener listener : listeners) {
@@ -201,6 +204,7 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
             lastEnergyStored = energyStorage.getEnergyStoredInternally();
             energyTransferedLastTick = gateTile.getEnergyTransferedLastTick();
             lastEnergySecondsToClose = gateTile.getEnergySecondsToClose();
+            openedSeconds = gateTile.getOpenedSecondsToDisplay();
             irisMode = gateTile.getIrisMode();
             irisCode = gateTile.getIrisCode();
         }

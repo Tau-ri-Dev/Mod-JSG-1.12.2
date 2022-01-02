@@ -108,9 +108,13 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
   @Override
   public void addSymbolToAddress(SymbolInterface symbol) {
+    addSymbolToAddress(symbol, true);
+  }
+
+  public void addSymbolToAddress(SymbolInterface symbol, boolean activateSymbol) {
 
     if (isLinkedAndDHDOperational()) {
-      getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) symbol);
+      if(activateSymbol) getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) symbol);
     }
 
     if (symbol.origin() && dialedAddress.size() >= 6 && dialedAddress.equals(StargateNetwork.EARTH_ADDRESS) && !network.isStargateInNetwork(StargateNetwork.EARTH_ADDRESS)) {
@@ -150,38 +154,6 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
 
     if(allowIncomingAnimation) {
-      //playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
-/*
-      spinDirection = EnumSpinDirection.COUNTER_CLOCKWISE;
-
-
-      ChevronEnum targetChevron = ChevronEnum.C1;
-
-      ChevronEnum currentChevron = ChevronEnum.C7;
-
-      int indexDiff = slotFromChevron(currentChevron) - slotFromChevron(targetChevron);
-
-      float distance = (float) Math.abs(indexDiff);
-      if (distance <= 20) distance += 36;
-
-
-
-      float distance = 360;
-      int duration = (int) (distance);
-
-
-
-      AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(SymbolPegasusEnum.AAXEL, spinDirection, false)), targetPoint);
-      addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 1));
-      addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, duration - 1));
-      addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_DIM, duration - 1));
-
-      isSpinning = true;
-      spinStartTime = world.getTotalWorldTime();
-      markDirty();
-*/
-
-      // ----------
 
       final int[] i = {1};
       Timer timer = new Timer();
@@ -529,6 +501,11 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
   public void addSymbolToAddressDHD(SymbolInterface targetSymbol) {
     if(AunisConfig.dhdConfig.animatePegDHDDial) {
+
+      if (isLinkedAndDHDOperational()) {
+        getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) targetSymbol);
+      }
+
       Object context = null;
       stargateState = EnumStargateState.DIALING;
 
@@ -657,7 +634,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         sendRenderingUpdate(EnumGateAction.CHEVRON_OPEN, 0, false);
 
         if (canAddSymbol(targetRingSymbol)) {
-          addSymbolToAddress(targetRingSymbol);
+          addSymbolToAddress(targetRingSymbol, false);
 
           if (stargateWillLock(targetRingSymbol)) {
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN_SECOND, 0));

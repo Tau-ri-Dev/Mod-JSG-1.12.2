@@ -1,6 +1,6 @@
 package mrjake.aunis.stargate;
 
-import mrjake.aunis.tileentity.TransportRingsTile;
+import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,9 +24,9 @@ public enum EnumScheduledTask {
   STARGATE_HORIZON_SHRINK(12, -1, false),
 
   RINGS_START_ANIMATION(13, 20),
-  RINGS_FADE_OUT(14, TransportRingsTile.TIMEOUT_FADE_OUT),
-  RINGS_TELEPORT(15, TransportRingsTile.TIMEOUT_TELEPORT),
-  RINGS_CLEAR_OUT(15, TransportRingsTile.RINGS_CLEAR_OUT),
+  RINGS_FADE_OUT(14, TransportRingsAncientTile.TIMEOUT_FADE_OUT),
+  RINGS_TELEPORT(15, TransportRingsAncientTile.TIMEOUT_TELEPORT),
+  RINGS_CLEAR_OUT(15, TransportRingsAncientTile.RINGS_CLEAR_OUT),
   RINGS_SOLID_BLOCKS(16, 20),
 
   STARGATE_ACTIVATE_CHEVRON(17, 10),

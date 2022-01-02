@@ -497,12 +497,17 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 }
                 else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
                     network.getStargate(dialedAddress).getTileEntity().disconnectGate();
+                    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, stargateState.dialingComputer() ? 83 : 53));
                 }
 
                 dialedAddress.clear();
                 dialedAddress.addAll(dialAddr_backup);
             }
         }
+    }
+
+    protected boolean isConnected() {
+        return connectedToGate;
     }
 
     /**
@@ -764,6 +769,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 int energyStored = getEnergyStorage().getEnergyStored();
 
                 // Max Open Time
+                targetGatePos.getTileEntity().addTimeLimitSecond();
                 int morePower = doTimeLimitFunc();
                 energySecondsToClose = energyStored / (float) (keepAliveEnergyPerTick + morePower + shieldKeepAlive) / 20f;
 
@@ -800,7 +806,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             }
             else{
                 if(shieldKeepAlive > 0) getEnergyStorage().extractEnergy(shieldKeepAlive, false);
-                if(getOpenedSeconds() > 0) resetLimitSeconds();
+                if(getOpenedSeconds() > 0 && stargateState != EnumStargateState.ENGAGED) resetLimitSeconds();
             }
 
             energyTransferedLastTick = getEnergyStorage().getEnergyStored() - energyStoredLastTick;
@@ -871,11 +877,14 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         return getAutoCloseManager().shouldClose(targetGatePos);
     }
     protected void resetLimitSeconds() {
+        secondsOpened = 0;
         getAutoCloseManager().resetLimitSeconds();
     }
 
     protected int doTimeLimitFunc(){
         int morePower = 0;
+        getOpenedSeconds();
+        addTimeLimitSecond();
         int configPower = AunisConfig.openLimitConfig.maxOpenedPowerDrawAfterLimit;
         if (AunisConfig.openLimitConfig.maxOpenedEnabled && getAutoCloseManager().afterLimitSeconds()) {
             if (AunisConfig.openLimitConfig.maxOpenedWhat.equals("closeGate")){
@@ -888,8 +897,17 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         return morePower;
     }
 
-    protected int getOpenedSeconds(){
-        return getAutoCloseManager().getOpenedSeconds();
+    protected void addTimeLimitSecond(){
+        getAutoCloseManager().addLimitSecond();
+    }
+
+    public int getOpenedSeconds(){
+        secondsOpened = getAutoCloseManager().getOpenedSeconds();
+        return (int) secondsOpened;
+    }
+
+    public float getOpenedSecondsToDisplay(){
+        return secondsOpened;
     }
 
     protected void extractEnergyByShield(int keepAlive){
@@ -1377,6 +1395,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     private int energyStoredLastTick = 0;
     protected int energyTransferedLastTick = 0;
     protected float energySecondsToClose = 0;
+    protected float secondsOpened = 0;
 
     public int getEnergyTransferedLastTick() {
         return energyTransferedLastTick;

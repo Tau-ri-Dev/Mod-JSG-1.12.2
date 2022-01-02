@@ -4,7 +4,7 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.state.StateTypeEnum;
-import mrjake.aunis.tileentity.TransportRingsTile;
+import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -40,7 +40,7 @@ public class TransportRingsBlock extends Block {
   // ------------------------------------------------------------------------
   @Override
   public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-    TransportRingsTile ringsTile = (TransportRingsTile) world.getTileEntity(pos);
+    TransportRingsAncientTile ringsTile = (TransportRingsAncientTile) world.getTileEntity(pos);
 
     if (!world.isRemote) {
       //			if (player.getHeldItem(hand).getItem() == AunisItems.analyzerAncient)
@@ -52,7 +52,7 @@ public class TransportRingsBlock extends Block {
 
   @Override
   public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-    TransportRingsTile ringsTile = (TransportRingsTile) world.getTileEntity(pos);
+    TransportRingsAncientTile ringsTile = (TransportRingsAncientTile) world.getTileEntity(pos);
 
     if (!world.isRemote) {
       ringsTile.updateLinkStatus();
@@ -61,7 +61,7 @@ public class TransportRingsBlock extends Block {
 
   @Override
   public void breakBlock(World world, BlockPos pos, IBlockState state) {
-    TransportRingsTile ringsTile = (TransportRingsTile) world.getTileEntity(pos);
+    TransportRingsAncientTile ringsTile = (TransportRingsAncientTile) world.getTileEntity(pos);
 
     if (ringsTile.isLinked()) ringsTile.getLinkedControllerTile(world).setLinkedRings(null, -1);
 
@@ -75,7 +75,7 @@ public class TransportRingsBlock extends Block {
   }
 
   @Override
-  public TransportRingsTile createTileEntity(World world, IBlockState state) {
-    return new TransportRingsTile();
+  public TransportRingsAncientTile createTileEntity(World world, IBlockState state) {
+    return new TransportRingsAncientTile();
   }
 }

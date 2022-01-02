@@ -115,11 +115,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
 
     if(allowIncomingAnimation) {
-    /*if(stargateState == EnumStargateState.IDLE) {
-      dialedAddress.clear();
-      dialedAddress.addSymbol(SymbolUniverseEnum.TOP_CHEVRON);
-      addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 0));
-    }*/
       final int[] i = {1};
       Timer timer = new Timer();
       timer.schedule(new TimerTask() {

@@ -17,6 +17,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -145,7 +146,6 @@ public class EventHorizon {
                     if (AunisConfig.irisConfig.killAtDestination) {
                         packet.teleport(false);
                     }
-                    //packet.getEntity().setDead();
                     if (AunisConfig.irisConfig.allowCreative
                             && packet.getEntity() instanceof EntityPlayer
                             && ((EntityPlayer) packet.getEntity()).capabilities.isCreativeMode) {
@@ -154,9 +154,11 @@ public class EventHorizon {
                         }
                     } else {
                         if (!packet.getEntity().getPassengers().isEmpty()) {
-                            for (Entity passenger : packet.getEntity().getPassengers()) irisKill(passenger);
+                            for (Entity passenger : packet.getEntity().getPassengers())
+                                irisKill(passenger);
                         }
                         irisKill(packet.getEntity());
+                        packet.getEntity().setDead();
                     }
 
                 }
