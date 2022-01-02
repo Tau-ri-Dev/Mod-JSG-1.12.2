@@ -486,3 +486,55 @@ aunis.subtitle.gdo_button_beep=GDO-Knopf gedrückt
 menu.about=Über AUNIS
 menu.gate_overlay=Gate
 menu.music_toggle=Music
+
+
+# category: main
+aunis.advancements.main.title=§3AUNIS
+aunis.advancements.main.desc=All You Need Is Stargate
+
+aunis.advancements.main.liquid_naquadah.title=§2DAS ist jetzt heißes Zeug!
+aunis.advancements.main.liquid_naquadah.desc=Besorge flüssiges Naquadah
+aunis.advancements.main.naquadah_alloy.title=§3Der beste Supraleiter
+aunis.advancements.main.naquadah_alloy.desc=Stelle Naquadah-Legierung her
+aunis.advancements.main.raw_naquadah_alloy.title=§dEin bisschen kratzig...
+aunis.advancements.main.raw_naquadah_alloy.desc=Stelle Rohe Naquadah-Legierung her
+aunis.advancements.main.beamer.title=§bTransporter werden tansportieren
+aunis.advancements.main.beamer.desc=Baue einen Transporter
+
+aunis.advancements.main.tr.title=§5Abkürzung
+aunis.advancements.main.tr.desc=Nutze Transportringe zur Teleportation
+
+aunis.advancements.orlin.gate.title=§6Du wirst einen neuen Toaster benötigen, Carter
+aunis.advancements.orlin.gate.desc=Baue ein Orlin Stargate
+
+# category: milkyway
+aunis.advancements.milkyway.title=§cMilchstraße
+aunis.advancements.milkyway.desc=Milchstraßen Kategorie
+
+aunis.advancements.milkyway.gate.title=§6Das gute alte Sternentor
+aunis.advancements.milkyway.gate.desc=Baue ein Milchstraßen Stargate
+
+aunis.advancements.milkyway.gdo.title=§7Garagentor-öffner
+aunis.advancements.milkyway.gdo.desc=Baue ein GDO und versuch es nicht zu vergessen...
+aunis.advancements.milkyway.dhd.title=§4Wie die alten Telefone
+aunis.advancements.milkyway.dhd.desc=Baue ein Milchstraßen DHD
+
+# category: universe
+aunis.advancements.universe.title=§cUniverse
+aunis.advancements.universe.desc=Universe Kategorie
+
+aunis.advancements.universe.gate.title=§7Antik in vielerlei Hinsicht
+aunis.advancements.universe.gate.desc=Baue ein Universe Stargate
+
+aunis.advancements.universe.unidailer.title=§8Antikes Handgerät
+aunis.advancements.universe.unidailer.desc=Erhalte einen Universe Dialer
+
+# category: pegasus
+aunis.advancements.pegasus.title=§cPegasus
+aunis.advancements.pegasus.desc=Pegasus Kategorie
+
+aunis.advancements.pegasus.gate.title=§9Fortschrittliche Technologie
+aunis.advancements.pegasus.gate.desc=Baue ein Pegasus Stargate
+
+aunis.advancements.pegasus.dhd.title=§4Moderne Smartphones
+aunis.advancements.pegasus.dhd.desc=Baue ein Pegasus DHD
