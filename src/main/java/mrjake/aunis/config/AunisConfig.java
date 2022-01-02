@@ -432,14 +432,14 @@ public class AunisConfig {
         @Comment({
                 "U can use: closeGate, drawMorePower"
         })
-        public String maxOpenedWhat = "closeGate";
+        public String maxOpenedWhat = "drawMorePower";
 
         @Name("Enable max open time?")
         public boolean maxOpenedEnabled = true;
 
         @Name("Power draw after opened time limit")
         @RangeInt(min = 0, max = 50000)
-        public int maxOpenedPowerDrawAfterLimit = 1000;
+        public int maxOpenedPowerDrawAfterLimit = 10000;
     }
 
     public static class BeamerConfig {
