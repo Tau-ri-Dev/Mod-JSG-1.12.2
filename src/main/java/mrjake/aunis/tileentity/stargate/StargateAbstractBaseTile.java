@@ -762,7 +762,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
              */
             if (stargateState.initiating()) {
                 int energyStored = getEnergyStorage().getEnergyStored();
-                energySecondsToClose = energyStored / (float) keepAliveEnergyPerTick / 20f;
+
+                // Max Open Time
+                int morePower = doTimeLimitFunc();
+                energySecondsToClose = energyStored / (float) (keepAliveEnergyPerTick + morePower + shieldKeepAlive) / 20f;
 
                 if (energySecondsToClose >= 1) {
 
@@ -789,22 +792,15 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                         updateFlashState(false);
                     }
 
-                    getEnergyStorage().extractEnergy(keepAliveEnergyPerTick, false);
-                    // Max Open Time
-                    if (world.getTotalWorldTime() % 20 == 0 && stargateState == EnumStargateState.ENGAGED && AunisConfig.openLimitConfig.maxOpenedEnabled && after38Minutes()) {
-                        if (AunisConfig.openLimitConfig.maxOpenedWhat.equals("closeGate"))
-                            targetGatePos.getTileEntity().attemptClose(StargateClosedReasonEnum.AUTOCLOSE);
-                        else if (AunisConfig.openLimitConfig.maxOpenedWhat.equals("drawMorePower"))
-                            getEnergyStorage().extractEnergy(AunisConfig.openLimitConfig.maxOpenedPowerDrawAfterLimit, false);
-                        else
-                            Aunis.logger.info("Please setup correct value for \"What happens after the open time reach this time\" in config!");
-                    }
+                    getEnergyStorage().extractEnergy(keepAliveEnergyPerTick + morePower + shieldKeepAlive, false);
 
                     markDirty();
-                    //					Aunis.info("Stargate energy: " + energyStorage.getEnergyStored() + " / " + energyStorage.getMaxEnergyStored() + "\t\tAlive for: " + (float)(energyStorage.getEnergyStored())/keepAliveCostPerTick/20);
-                } else {
+                } else
                     attemptClose(StargateClosedReasonEnum.OUT_OF_POWER);
-                }
+            }
+            else{
+                if(shieldKeepAlive > 0) getEnergyStorage().extractEnergy(shieldKeepAlive, false);
+                if(getOpenedSeconds() > 0) resetLimitSeconds();
             }
 
             energyTransferedLastTick = getEnergyStorage().getEnergyStored() - energyStoredLastTick;
@@ -874,10 +870,30 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected boolean shouldAutoclose() {
         return getAutoCloseManager().shouldClose(targetGatePos);
     }
+    protected void resetLimitSeconds() {
+        getAutoCloseManager().resetLimitSeconds();
+    }
 
+    protected int doTimeLimitFunc(){
+        int morePower = 0;
+        int configPower = AunisConfig.openLimitConfig.maxOpenedPowerDrawAfterLimit;
+        if (AunisConfig.openLimitConfig.maxOpenedEnabled && getAutoCloseManager().afterLimitSeconds()) {
+            if (AunisConfig.openLimitConfig.maxOpenedWhat.equals("closeGate")){
+                targetGatePos.getTileEntity().attemptClose(StargateClosedReasonEnum.TIMELIMIT);
+                resetLimitSeconds();
+            }
+            else
+                morePower = (configPower + (getOpenedSeconds() * (configPower / 100)));
+        }
+        return morePower;
+    }
 
-    protected boolean after38Minutes() {
-        return getAutoCloseManager().after38Minutes(targetGatePos);
+    protected int getOpenedSeconds(){
+        return getAutoCloseManager().getOpenedSeconds();
+    }
+
+    protected void extractEnergyByShield(int keepAlive){
+        this.shieldKeepAlive = keepAlive;
     }
 
     @Override
@@ -1357,6 +1373,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     // Power system
 
     private int keepAliveEnergyPerTick = 0;
+    private int shieldKeepAlive = 0;
     private int energyStoredLastTick = 0;
     protected int energyTransferedLastTick = 0;
     protected float energySecondsToClose = 0;
@@ -1391,7 +1408,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         StargateEnergyRequired energyRequired = new StargateEnergyRequired(AunisConfig.powerConfig.openingBlockToEnergyRatio, AunisConfig.powerConfig.keepAliveBlockToEnergyRatioPerTick);
         energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(world.provider.getDimensionType(), targetDim));
 
-        Aunis.logger.info(String.format("Energy required to dial [distance=%,d, from=%s, to=%s] = %,d / keepAlive: %,d/t, stored=%,d", Math.round(distance), sourceDim, targetDim, energyRequired.energyToOpen, energyRequired.keepAlive, getEnergyStorage().getEnergyStored()));
+        //Aunis.logger.info(String.format("Energy required to dial [distance=%,d, from=%s, to=%s] = %,d / keepAlive: %,d/t, stored=%,d", Math.round(distance), sourceDim, targetDim, energyRequired.energyToOpen, energyRequired.keepAlive, getEnergyStorage().getEnergyStored()));
 
         return energyRequired;
     }

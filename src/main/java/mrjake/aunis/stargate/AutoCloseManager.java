@@ -64,7 +64,7 @@ public class AutoCloseManager implements INBTSerializable<NBTTagCompound> {
 					secondsPassed++;
 				}
 			}
-			
+
 			if (secondsPassed >= AunisConfig.autoCloseConfig.secondsToAutoclose) {
 				return true;
 			}
@@ -73,15 +73,18 @@ public class AutoCloseManager implements INBTSerializable<NBTTagCompound> {
 		return false;
 	}
 
-	public boolean after38Minutes(StargatePos sourceStargatePos){
-		if (gateTile.getWorld().getTotalWorldTime() % 20 == 0) {
-			if (secondsOpened >= AunisConfig.openLimitConfig.maxOpenedSeconds) {
-				secondsOpened = 0;
-				return true;
-			}
-		}
-		secondsOpened++;
-		return false;
+	public boolean afterLimitSeconds(){
+		if (gateTile.getWorld().getTotalWorldTime() % 20 == 0)
+			secondsOpened++;
+		return secondsOpened >= AunisConfig.openLimitConfig.maxOpenedSeconds;
+	}
+
+	public void resetLimitSeconds(){
+		secondsOpened = 0;
+	}
+
+	public int getOpenedSeconds(){
+		return secondsOpened;
 	}
 
 	

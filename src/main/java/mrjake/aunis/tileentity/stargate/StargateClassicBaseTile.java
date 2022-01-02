@@ -232,6 +232,23 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public void update() {
+
+        /*
+         * Draw power (shield)
+         */
+        super.extractEnergyByShield(0);
+        if (!world.isRemote && isShieldIris()) {
+            shieldKeepAlive = AunisConfig.irisConfig.shieldPowerDraw;
+            //if (isClosed()) getEnergyStorage().extractEnergy(shieldKeepAlive, false);
+            if (isClosed()) super.extractEnergyByShield(shieldKeepAlive);
+            if (getEnergyStorage().getEnergyStored() < shieldKeepAlive) {
+                toggleIris();
+                sendSignal(null, "stargate_iris_out_of_power", new Object[]{"Shield runs out of power! Opening shield..."});
+            } else if (irisMode == EnumIrisMode.CLOSED && isOpened()) {
+                toggleIris();
+            }
+        }
+
         super.update();
 
         if (!world.isRemote) {
@@ -309,21 +326,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         break;
                     default:
                         break;
-                }
-                markDirty();
-            }
-
-            /*
-             * Draw power (shield)
-             */
-            if (isShieldIris()) {
-                shieldKeepAlive = AunisConfig.irisConfig.shieldPowerDraw;
-                if (isClosed()) getEnergyStorage().extractEnergy(shieldKeepAlive, false);
-                if (getEnergyStorage().getEnergyStored() < shieldKeepAlive) {
-                    toggleIris();
-                    sendSignal(null, "stargate_iris_out_of_power", new Object[]{"Shield runs out of power! Opening shield..."});
-                } else if (irisMode == EnumIrisMode.CLOSED && isOpened()) {
-                    toggleIris();
                 }
                 markDirty();
             }
