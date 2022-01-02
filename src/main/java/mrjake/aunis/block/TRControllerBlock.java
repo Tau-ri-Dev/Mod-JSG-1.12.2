@@ -3,7 +3,7 @@ package mrjake.aunis.block;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.raycaster.RaycasterRingsController;
-import mrjake.aunis.tileentity.TRControllerTile;
+import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -84,7 +84,7 @@ public class TRControllerBlock extends Block {
 
   @Override
   public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-    TRControllerTile controllerTile = (TRControllerTile) world.getTileEntity(pos);
+    TRControllerGoauldTile controllerTile = (TRControllerGoauldTile) world.getTileEntity(pos);
 
     if (!world.isRemote) {
       controllerTile.updateLinkStatus();
@@ -93,7 +93,7 @@ public class TRControllerBlock extends Block {
 
   @Override
   public void breakBlock(World world, BlockPos pos, IBlockState state) {
-    TRControllerTile controllerTile = (TRControllerTile) world.getTileEntity(pos);
+    TRControllerGoauldTile controllerTile = (TRControllerGoauldTile) world.getTileEntity(pos);
 
     if (!world.isRemote && controllerTile.isLinked())
       controllerTile.getLinkedRingsTile(world).setLinkedController(null, -1);
@@ -136,8 +136,8 @@ public class TRControllerBlock extends Block {
   }
 
   @Override
-  public TRControllerTile createTileEntity(World world, IBlockState state) {
-    return new TRControllerTile();
+  public TRControllerGoauldTile createTileEntity(World world, IBlockState state) {
+    return new TRControllerGoauldTile();
   }
 
   @Override

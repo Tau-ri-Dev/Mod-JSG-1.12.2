@@ -1,4 +1,4 @@
-package mrjake.aunis.tileentity;
+package mrjake.aunis.tileentity.transportrings;
 
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 
 import java.util.EnumSet;
 
-public class TRControllerTile extends TileEntity implements ITickable, ILinkable, RendererProviderInterface {
+public class TRControllerGoauldTile extends TileEntity implements ITickable, ILinkable, RendererProviderInterface {
 
   private BiomeOverlayEnum biomeOverlay = BiomeOverlayEnum.NORMAL;
 
@@ -73,8 +73,8 @@ public class TRControllerTile extends TileEntity implements ITickable, ILinkable
     return linkedRings != null;
   }
 
-  public TransportRingsTile getLinkedRingsTile(World world) {
-    return (linkedRings != null ? ((TransportRingsTile) world.getTileEntity(linkedRings)) : null);
+  public TransportRingsAncientTile getLinkedRingsTile(World world) {
+    return (linkedRings != null ? ((TransportRingsAncientTile) world.getTileEntity(linkedRings)) : null);
   }
 
   @Override
@@ -95,7 +95,7 @@ public class TRControllerTile extends TileEntity implements ITickable, ILinkable
     int linkId = closestRings == null ? -1 : LinkingHelper.getLinkId();
 
     if (closestRings != null) {
-      TransportRingsTile ringsTile = (TransportRingsTile) world.getTileEntity(closestRings);
+      TransportRingsAncientTile ringsTile = (TransportRingsAncientTile) world.getTileEntity(closestRings);
       ringsTile.setLinkedController(pos, linkId);
     }
 

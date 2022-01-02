@@ -8,6 +8,8 @@ import mrjake.aunis.item.StargatePegasusMemberItemBlock;
 import mrjake.aunis.item.StargateUniverseMemberItemBlock;
 import mrjake.aunis.tileentity.*;
 import mrjake.aunis.tileentity.stargate.*;
+import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
+import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
 import mrjake.aunis.util.BlockHelpers;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -102,8 +104,8 @@ public class AunisBlocks {
     GameRegistry.registerTileEntity(StargatePegasusMemberTile.class, AunisBlocks.STARGATE_PEGASUS_MEMBER_BLOCK.getRegistryName());
     GameRegistry.registerTileEntity(DHDTile.class, AunisBlocks.DHD_BLOCK.getRegistryName());
     GameRegistry.registerTileEntity(DHDPegasusTile.class, AunisBlocks.DHD_PEGASUS_BLOCK.getRegistryName());
-    GameRegistry.registerTileEntity(TransportRingsTile.class, AunisBlocks.TRANSPORT_RINGS_BLOCK.getRegistryName());
-    GameRegistry.registerTileEntity(TRControllerTile.class, AunisBlocks.TR_CONTROLLER_BLOCK.getRegistryName());
+    GameRegistry.registerTileEntity(TransportRingsAncientTile.class, AunisBlocks.TRANSPORT_RINGS_BLOCK.getRegistryName());
+    GameRegistry.registerTileEntity(TRControllerGoauldTile.class, AunisBlocks.TR_CONTROLLER_BLOCK.getRegistryName());
     GameRegistry.registerTileEntity(CapacitorTile.class, AunisBlocks.CAPACITOR_BLOCK.getRegistryName());
     GameRegistry.registerTileEntity(BeamerTile.class, AunisBlocks.BEAMER_BLOCK.getRegistryName());
   }

@@ -1,4 +1,4 @@
-package mrjake.aunis.tileentity;
+package mrjake.aunis.tileentity.transportrings;
 
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
@@ -50,7 +50,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.*;
 
 @Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers")
-public class TransportRingsTile extends TileEntity implements ITickable, RendererProviderInterface, StateProviderInterface, ScheduledTaskExecutorInterface, ILinkable, Environment {
+public class TransportRingsAncientTile extends TileEntity implements ITickable, RendererProviderInterface, StateProviderInterface, ScheduledTaskExecutorInterface, ILinkable, Environment {
 
   // ---------------------------------------------------------------------------------
   // Ticking and loading
@@ -162,7 +162,7 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
         setBarrierBlocks(false, false);
         setBusy(false);
 
-        TransportRingsTile targetRingsTile = (TransportRingsTile) world.getTileEntity(targetRingsPos);
+        TransportRingsAncientTile targetRingsTile = (TransportRingsAncientTile) world.getTileEntity(targetRingsPos);
         if (targetRingsTile != null) targetRingsTile.setBusy(false);
 
         sendSignal(ocContext, "transportrings_teleport_finished", initiating);
@@ -235,7 +235,7 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
     // Binding exists
     if (rings != null) {
       BlockPos targetRingsPos = rings.getPos();
-      TransportRingsTile targetRingsTile = (TransportRingsTile) world.getTileEntity(targetRingsPos);
+      TransportRingsAncientTile targetRingsTile = (TransportRingsAncientTile) world.getTileEntity(targetRingsPos);
 
       if (targetRingsTile.checkIfObstructed()) {
         return TransportResult.OBSTRUCTED_TARGET;
@@ -318,11 +318,11 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
   }
 
   public boolean isLinked() {
-    return linkedController != null && world.getTileEntity(linkedController) instanceof TRControllerTile;
+    return linkedController != null && world.getTileEntity(linkedController) instanceof TRControllerGoauldTile;
   }
 
-  public TRControllerTile getLinkedControllerTile(World world) {
-    return (linkedController != null ? ((TRControllerTile) world.getTileEntity(linkedController)) : null);
+  public TRControllerGoauldTile getLinkedControllerTile(World world) {
+    return (linkedController != null ? ((TRControllerGoauldTile) world.getTileEntity(linkedController)) : null);
   }
 
   @Override
@@ -348,8 +348,8 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
   }
 
   /**
-   * Gets clone of {@link TransportRingsTile#rings} object. Sets the distance from
-   * callerPos to this tile. Called from {@link TransportRingsTile#addRings(TransportRingsTile)}.
+   * Gets clone of {@link TransportRingsAncientTile#rings} object. Sets the distance from
+   * callerPos to this tile. Called from {@link TransportRingsAncientTile#addRings(TransportRingsAncientTile)}.
    *
    * @param callerPos - calling tile position
    *
@@ -360,17 +360,17 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
   }
 
   /**
-   * Contains neighborhooding rings(clones of {@link TransportRingsTile#rings}) with distance set to this tile
+   * Contains neighborhooding rings(clones of {@link TransportRingsAncientTile#rings}) with distance set to this tile
    */
   public Map<Integer, TransportRings> ringsMap = new HashMap<>();
 
   /**
-   * Adds rings to {@link TransportRingsTile#ringsMap}, by cloning caller's {@link TransportRingsTile#rings} and
+   * Adds rings to {@link TransportRingsAncientTile#ringsMap}, by cloning caller's {@link TransportRingsAncientTile#rings} and
    * setting distance
    *
    * @param caller - Caller rings tile
    */
-  public void addRings(TransportRingsTile caller) {
+  public void addRings(TransportRingsAncientTile caller) {
     TransportRings clonedRings = caller.getClonedRings(this.pos);
 
     if (clonedRings.isInGrid()) {
@@ -388,8 +388,8 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
     TransportRings rings = ringsMap.get(address);
     if (rings != null) {
       TileEntity tile = world.getTileEntity(rings.getPos());
-      if (tile instanceof TransportRingsTile) {
-        ((TransportRingsTile) tile).removeRingsFromMap(getRings().getAddress());
+      if (tile instanceof TransportRingsAncientTile) {
+        ((TransportRingsAncientTile) tile).removeRingsFromMap(getRings().getAddress());
       }
     }
     removeRingsFromMap(address);
@@ -410,12 +410,12 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
     int y = pos.getY();
     int vertical = AunisConfig.ringsConfig.rangeVertical;
 
-    List<TransportRingsTile> ringsTilesInRange = new ArrayList<>();
+    List<TransportRingsAncientTile> ringsTilesInRange = new ArrayList<>();
 
     for (BlockPos newRingsPos : BlockPos.getAllInBoxMutable(new BlockPos(x - radius, y - vertical, z - radius), new BlockPos(x + radius, y + vertical, z + radius))) {
       if (world.getBlockState(newRingsPos).getBlock() == AunisBlocks.TRANSPORT_RINGS_BLOCK && !pos.equals(newRingsPos)) {
 
-        TransportRingsTile newRingsTile = (TransportRingsTile) world.getTileEntity(newRingsPos);
+        TransportRingsAncientTile newRingsTile = (TransportRingsAncientTile) world.getTileEntity(newRingsPos);
         ringsTilesInRange.add(newRingsTile);
         int newRingsAddress = newRingsTile.getClonedRings(pos).getAddress();
         // if nearby rings has same address or has in range rings with that address
@@ -430,7 +430,7 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
     getRings().setAddress(address);
     getRings().setName(name);
 
-    for (TransportRingsTile newRingsTile : ringsTilesInRange) {
+    for (TransportRingsAncientTile newRingsTile : ringsTilesInRange) {
       this.addRings(newRingsTile);
       newRingsTile.addRings(this);
     }
@@ -617,7 +617,7 @@ public class TransportRingsTile extends TileEntity implements ITickable, Rendere
     int linkId = closestController == null ? -1 : LinkingHelper.getLinkId();
 
     if (closestController != null) {
-      TRControllerTile controllerTile = (TRControllerTile) world.getTileEntity(closestController);
+      TRControllerGoauldTile controllerTile = (TRControllerGoauldTile) world.getTileEntity(closestController);
       controllerTile.setLinkedRings(pos, linkId);
     }
 

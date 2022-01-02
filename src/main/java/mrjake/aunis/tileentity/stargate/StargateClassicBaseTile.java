@@ -1312,7 +1312,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Callback(doc = "function(message:string) -- Sends message to last person, who sent code for iris")
     public Object[] sendMessageToIncoming(Context context, Arguments args) {
         if (!isMerged()) return new Object[]{null, "stargate_failure_not_merged", "Stargate is not merged"};
-        if (!stargateState.engaged()) return new Object[]{null, "stargate_failure_not_engaged", "Stargate is not merged"};
+        if (!stargateState.engaged()) return new Object[]{null, "stargate_failure_not_engaged", "Stargate is not engaged"};
         if (!args.isString(0)) return new Object[]{false, "wrong_argument_type"};
 
         if (codeSender != null && codeSender.canReceiveMessage()) {
