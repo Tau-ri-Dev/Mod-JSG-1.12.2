@@ -108,9 +108,13 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
   @Override
   public void addSymbolToAddress(SymbolInterface symbol) {
+    addSymbolToAddress(symbol, true);
+  }
+
+  public void addSymbolToAddress(SymbolInterface symbol, boolean activateSymbol) {
 
     if (isLinkedAndDHDOperational()) {
-      getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) symbol);
+      if(activateSymbol) getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) symbol);
     }
 
     if (symbol.origin() && dialedAddress.size() >= 6 && dialedAddress.equals(StargateNetwork.EARTH_ADDRESS) && !network.isStargateInNetwork(StargateNetwork.EARTH_ADDRESS)) {
@@ -497,6 +501,11 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
   public void addSymbolToAddressDHD(SymbolInterface targetSymbol) {
     if(AunisConfig.dhdConfig.animatePegDHDDial) {
+
+      if (isLinkedAndDHDOperational()) {
+        getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) targetSymbol);
+      }
+
       Object context = null;
       stargateState = EnumStargateState.DIALING;
 
@@ -625,7 +634,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         sendRenderingUpdate(EnumGateAction.CHEVRON_OPEN, 0, false);
 
         if (canAddSymbol(targetRingSymbol)) {
-          addSymbolToAddress(targetRingSymbol);
+          addSymbolToAddress(targetRingSymbol, false);
 
           if (stargateWillLock(targetRingSymbol)) {
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN_SECOND, 0));

@@ -74,9 +74,12 @@ public class AutoCloseManager implements INBTSerializable<NBTTagCompound> {
 	}
 
 	public boolean afterLimitSeconds(){
+		return secondsOpened >= AunisConfig.openLimitConfig.maxOpenedSeconds;
+	}
+
+	public void addLimitSecond(){
 		if (gateTile.getWorld().getTotalWorldTime() % 20 == 0)
 			secondsOpened++;
-		return secondsOpened >= AunisConfig.openLimitConfig.maxOpenedSeconds;
 	}
 
 	public void resetLimitSeconds(){

@@ -12,6 +12,7 @@ import mrjake.aunis.stargate.network.SymbolPegasusEnum;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.stargate.network.SymbolUniverseEnum;
 import mrjake.aunis.stargate.power.StargateClassicEnergyStorage;
+import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.StargateUpgradeEnum;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -31,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.lang.Integer.parseInt;
 
 public class StargateContainerGui extends GuiContainer implements TabbedContainerInterface {
 	
@@ -228,6 +231,8 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 		
 		for (int i=7; i<11; i++)
 			((SlotTab) container.getSlot(i)).updatePos();
+
+
 				
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
@@ -266,6 +271,18 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				
 		String energyPercent = String.format("%.2f", energyStored/(float)maxEnergyStored * 100) + " %";
 		fontRenderer.drawString(energyPercent, 168-fontRenderer.getStringWidth(energyPercent)+2, 71, 4210752);
+
+		// opened time
+		float openedSeconds = container.gateTile.getOpenedSecondsToDisplay();
+		if(openedSeconds > 0) {
+			int minutes = ((int) Math.floor(openedSeconds / 60));
+			int seconds = ((int) (openedSeconds - (60 * minutes)));
+			String openedTime = "Opened: " + minutes + ":" + seconds + "min";
+			fontRenderer.drawString(openedTime, 46, 16, 4210752);
+		}
+		else{
+			fontRenderer.drawString("Gate closed", 46, 16, 4210752);
+		}
 
 		fontRenderer.drawString(I18n.format("gui.upgrades"), 7, 6, 4210752);
         fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);

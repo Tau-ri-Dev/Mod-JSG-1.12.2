@@ -12,13 +12,15 @@ public class StargateContainerGuiUpdate extends State {
 	public float secondsToClose;
 	public EnumIrisMode irisMode;
 	public int irisCode;
+	public float openedSeconds;
 
-	public StargateContainerGuiUpdate(int energyStored, int transferedLastTick, float secondsToClose, EnumIrisMode irisMode, int irisCode) {
+	public StargateContainerGuiUpdate(int energyStored, int transferedLastTick, float secondsToClose, EnumIrisMode irisMode, int irisCode, float openedSeconds) {
 		this.energyStored = energyStored;
 		this.transferedLastTick = transferedLastTick;
 		this.secondsToClose = secondsToClose;
 		this.irisMode = irisMode;
 		this.irisCode = irisCode;
+		this.openedSeconds = openedSeconds;
 	}
 	
 	@Override
@@ -28,6 +30,7 @@ public class StargateContainerGuiUpdate extends State {
 		buf.writeFloat(secondsToClose);
 		buf.writeByte(irisMode.id);
 		buf.writeInt(irisCode);
+		buf.writeFloat(openedSeconds);
 	}
 
 	@Override
@@ -37,5 +40,6 @@ public class StargateContainerGuiUpdate extends State {
 		secondsToClose = buf.readFloat();
 		irisMode = EnumIrisMode.getValue(buf.readByte());
 		irisCode = buf.readInt();
+		openedSeconds = buf.readFloat();
 	}
 }
