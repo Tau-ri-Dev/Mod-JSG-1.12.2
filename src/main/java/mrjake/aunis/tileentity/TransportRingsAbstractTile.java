@@ -1,4 +1,4 @@
-package mrjake.aunis.tileentity.transportrings;
+package mrjake.aunis.tileentity;
 
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
@@ -13,9 +13,8 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.RingsGUI;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
-import mrjake.aunis.packet.StateUpdateRequestToServer;
 import mrjake.aunis.packet.transportrings.StartPlayerFadeOutToClient;
-import mrjake.aunis.renderer.transportrings.TransportRingsRenderer;
+import mrjake.aunis.renderer.transportrings.TransportRingsAbstractRenderer;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.EnumScheduledTask;
@@ -49,7 +48,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
 
+@Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
 public abstract class TransportRingsAbstractTile extends TileEntity implements ITickable, RendererProviderInterface, StateProviderInterface, ScheduledTaskExecutorInterface, ILinkable, Environment {
+    public static final int FADE_OUT_TOTAL_TIME = 2 * 20; // 2s
+    public static final int TIMEOUT_TELEPORT = FADE_OUT_TOTAL_TIME / 2;
+    public static final int TIMEOUT_FADE_OUT = (int) (30 + TransportRingsAbstractRenderer.INTERVAL_UPRISING * TransportRingsAbstractRenderer.RING_COUNT + TransportRingsAbstractRenderer.ANIMATION_SPEED_DIVISOR * Math.PI);
+    public static final int RINGS_CLEAR_OUT = (int) (15 + TransportRingsAbstractRenderer.INTERVAL_FALLING * TransportRingsAbstractRenderer.RING_COUNT + TransportRingsAbstractRenderer.ANIMATION_SPEED_DIVISOR * Math.PI);
     // ---------------------------------------------------------------------------------
     // Ticking and loading
 
@@ -76,16 +80,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     @Override
     public void onLoad() {
-
-        if (!world.isRemote) {
-            setBarrierBlocks(false, false);
-
-            Aunis.ocWrapper.joinOrCreateNetwork(this);
-            globalTeleportBox = LOCAL_TELEPORT_BOX.offset(pos);
-        } else {
-            renderer = new TransportRingsRenderer(world, pos, LOCAL_TELEPORT_BOX);
-            AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
-        }
+        Aunis.ocWrapper.joinOrCreateNetwork(this);
     }
 
 
@@ -166,10 +161,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     // ---------------------------------------------------------------------------------
     // Teleportation
-    private BlockPos targetRingsPos = new BlockPos(0, 0, 0);
-    private List<Entity> excludedEntities = new ArrayList<>();
-    private Object ocContext;
-    private boolean initiating;
+    protected BlockPos targetRingsPos = new BlockPos(0, 0, 0);
+    protected List<Entity> excludedEntities = new ArrayList<>();
+    protected Object ocContext;
+    protected boolean initiating;
 
     /**
      * True if there is an active transport.
@@ -271,7 +266,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return false;
     }
 
-    private void setBarrierBlocks(boolean set, boolean passable) {
+    protected void setBarrierBlocks(boolean set, boolean passable) {
         IBlockState invBlockState = AunisBlocks.INVISIBLE_BLOCK.getDefaultState();
 
         if (passable) invBlockState = invBlockState.withProperty(AunisProps.HAS_COLLISIONS, false);
@@ -307,11 +302,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     public boolean isLinked() {
-        return linkedController != null && world.getTileEntity(linkedController) instanceof TRControllerGoauldTile;
+        return linkedController != null && world.getTileEntity(linkedController) instanceof TRControllerAbstractTile;
     }
 
-    public TRControllerGoauldTile getLinkedControllerTile(World world) {
-        return (linkedController != null ? ((TRControllerGoauldTile) world.getTileEntity(linkedController)) : null);
+    public TRControllerAbstractTile getLinkedControllerTile(World world) {
+        return (linkedController != null ? ((TRControllerAbstractTile) world.getTileEntity(linkedController)) : null);
     }
 
     @Override
@@ -328,7 +323,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     // ---------------------------------------------------------------------------------
     // Rings network
-    private TransportRings rings;
+    protected TransportRings rings;
 
     protected TransportRings getRings() {
         if (rings == null) rings = new TransportRings(pos);
@@ -589,7 +584,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         int linkId = closestController == null ? -1 : LinkingHelper.getLinkId();
 
         if (closestController != null) {
-            TRControllerGoauldTile controllerTile = (TRControllerGoauldTile) world.getTileEntity(closestController);
+            TRControllerAbstractTile controllerTile = (TRControllerAbstractTile) world.getTileEntity(closestController);
             controllerTile.setLinkedRings(pos, linkId);
         }
 
@@ -598,7 +593,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     // ---------------------------------------------------------------------------------
     // Renders
-    TransportRingsRenderer renderer;
+    TransportRingsAbstractRenderer renderer;
     TransportRingsRendererState rendererState = new TransportRingsRendererState();
 
     @Override

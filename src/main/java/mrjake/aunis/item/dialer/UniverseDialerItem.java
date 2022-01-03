@@ -10,7 +10,7 @@ import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
 import mrjake.aunis.stargate.StargateClosedReasonEnum;
 import mrjake.aunis.stargate.network.*;
-import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
+import mrjake.aunis.tileentity.TransportRingsAbstractTile;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
@@ -257,7 +257,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                         break;
 
                                     case RINGS:
-                                        TransportRingsAncientTile ringsTile = (TransportRingsAncientTile) world.getTileEntity(targetPos);
+                                        TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(targetPos);
                                         NBTTagList ringsList = new NBTTagList();
 
                                         for (TransportRings rings : ringsTile.ringsMap.values()) {
@@ -341,7 +341,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                     break;
 
                 case RINGS:
-                    TransportRingsAncientTile ringsTile = (TransportRingsAncientTile) world.getTileEntity(linkedPos);
+                    TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(linkedPos);
                     ringsTile.attemptTransportTo(new TransportRings(selectedCompound).getAddress(), 0).sendMessageIfFailed(player);
 
                     break;

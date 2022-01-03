@@ -1,10 +1,10 @@
-package mrjake.aunis.block;
+package mrjake.aunis.block.transportrings;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.state.StateTypeEnum;
-import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
+import mrjake.aunis.tileentity.TransportRingsAncientTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -18,11 +18,11 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TransportRingsBlock extends Block {
+public class TransportRingsAncientBlock extends Block {
 
   private static final String blockName = "transportrings_block";
 
-  public TransportRingsBlock() {
+  public TransportRingsAncientBlock() {
     super(Material.IRON);
 
     setRegistryName(Aunis.ModID + ":" + blockName);

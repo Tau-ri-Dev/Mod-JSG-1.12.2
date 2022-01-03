@@ -3,18 +3,18 @@ package mrjake.aunis.renderer.transportrings;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.tesr.RendererInterface;
-import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
+import mrjake.aunis.tileentity.TRControllerAbstractTile;
 import mrjake.vector.Vector3f;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumFacing;
 
-public class TRControllerRenderer implements RendererInterface {
+public abstract class TRControllerAbstractRenderer implements RendererInterface {
 
-	private TRControllerGoauldTile controllerTile;
+	private TRControllerAbstractTile controllerTile;
 	private EnumFacing facing;
 	
-	public TRControllerRenderer(TRControllerGoauldTile controllerTile) {
+	public TRControllerAbstractRenderer(TRControllerAbstractTile controllerTile) {
 		this.controllerTile = controllerTile;
 		
 		IBlockState blockState = controllerTile.getWorld().getBlockState(controllerTile.getPos());

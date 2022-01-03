@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransportRingsRenderer implements RendererInterface {
+public abstract class TransportRingsAbstractRenderer implements RendererInterface {
 
 	public static final int RING_COUNT = 5; 
 	public static final int INTERVAL_UPRISING = 5; 
@@ -25,7 +25,7 @@ public class TransportRingsRenderer implements RendererInterface {
 	private AunisAxisAlignedBB localTeleportBox;
 	private List<Ring> rings;
 		
-	public TransportRingsRenderer(World world, BlockPos pos, AunisAxisAlignedBB localTeleportBox) {
+	public TransportRingsAbstractRenderer(World world, BlockPos pos, AunisAxisAlignedBB localTeleportBox) {
 		this.world = world;
 		this.localTeleportBox = localTeleportBox;
 		

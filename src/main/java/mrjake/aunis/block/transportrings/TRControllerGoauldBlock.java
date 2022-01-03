@@ -1,9 +1,9 @@
-package mrjake.aunis.block;
+package mrjake.aunis.block.transportrings;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.raycaster.RaycasterRingsController;
-import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
+import mrjake.aunis.tileentity.TRControllerGoauldTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -23,11 +23,11 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class TRControllerBlock extends Block {
+public class TRControllerGoauldBlock extends Block {
 
   private static final String blockName = "transportrings_controller_block";
 
-  public TRControllerBlock() {
+  public TRControllerGoauldBlock() {
     super(Material.ROCK);
 
     setRegistryName(Aunis.ModID + ":" + blockName);

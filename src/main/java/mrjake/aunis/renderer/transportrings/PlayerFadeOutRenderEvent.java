@@ -1,6 +1,6 @@
 package mrjake.aunis.renderer.transportrings;
 
-import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
+import mrjake.aunis.tileentity.TransportRingsAbstractTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -21,7 +21,7 @@ public class PlayerFadeOutRenderEvent {
 	public static double calcFog(World world, long tickStart, double partialTicks) {
 		double effTick = world.getTotalWorldTime() - tickStart + partialTicks;
 				
-		return -(effTick * (effTick- TransportRingsAncientTile.FADE_OUT_TOTAL_TIME)) / (20*20);
+		return -(effTick * (effTick- TransportRingsAbstractTile.FADE_OUT_TOTAL_TIME)) / (20*20);
 	}
 	
 	@SubscribeEvent

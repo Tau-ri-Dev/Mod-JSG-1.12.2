@@ -4,7 +4,7 @@ import mrjake.aunis.AunisProps;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.transportrings.TRControllerActivatedToServer;
 import mrjake.aunis.raycaster.util.Ray;
-import mrjake.aunis.renderer.transportrings.TRControllerRenderer;
+import mrjake.aunis.renderer.transportrings.TRControllerAbstractRenderer;
 import mrjake.vector.Vector3f;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
@@ -53,7 +53,7 @@ public class RaycasterRingsController extends Raycaster {
 	
 	public void onActivated(World world, BlockPos pos, EntityPlayer player) {
 		EnumFacing facing = world.getBlockState(pos).getValue(AunisProps.FACING_HORIZONTAL);
-		float rotation = TRControllerRenderer.getRotation(facing);
+		float rotation = TRControllerAbstractRenderer.getRotation(facing);
 		
 		super.onActivated(world, pos, player, rotation, EnumHand.MAIN_HAND);
 	}
@@ -62,7 +62,7 @@ public class RaycasterRingsController extends Raycaster {
 	protected Vector3f getTranslation(World world, BlockPos pos) {
 		EnumFacing facing = world.getBlockState(pos).getValue(AunisProps.FACING_HORIZONTAL);
 		
-		return TRControllerRenderer.getTranslation(facing);
+		return TRControllerAbstractRenderer.getTranslation(facing);
 	}
 	
 	@Override

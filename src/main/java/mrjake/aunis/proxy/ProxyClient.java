@@ -22,8 +22,8 @@ import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateOrlinBaseTile;
 import mrjake.aunis.tileentity.stargate.StargatePegasusBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
-import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
-import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
+import mrjake.aunis.tileentity.TRControllerGoauldTile;
+import mrjake.aunis.tileentity.TransportRingsAncientTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.block.statemap.StateMap;
@@ -67,8 +67,6 @@ public class ProxyClient implements IProxy {
   private void registerRenderers() {
     OBJLoader.INSTANCE.addDomain("aunis");
 
-    SpecialRenderer specialRenderer = new SpecialRenderer();
-
     ClientRegistry.bindTileEntitySpecialRenderer(StargateMilkyWayBaseTile.class, new StargateMilkyWayRenderer());
     ClientRegistry.bindTileEntitySpecialRenderer(StargateUniverseBaseTile.class, new StargateUniverseRenderer());
     ClientRegistry.bindTileEntitySpecialRenderer(StargateOrlinBaseTile.class, new StargateOrlinRenderer());
@@ -76,8 +74,8 @@ public class ProxyClient implements IProxy {
     ClientRegistry.bindTileEntitySpecialRenderer(DHDTile.class, new DHDRenderer());
     ClientRegistry.bindTileEntitySpecialRenderer(DHDPegasusTile.class, new DHDPegasusRenderer());
 
-    ClientRegistry.bindTileEntitySpecialRenderer(TransportRingsAncientTile.class, specialRenderer);
-    ClientRegistry.bindTileEntitySpecialRenderer(TRControllerGoauldTile.class, specialRenderer);
+    ClientRegistry.bindTileEntitySpecialRenderer(TransportRingsAncientTile.class, new SpecialRenderer());
+    ClientRegistry.bindTileEntitySpecialRenderer(TRControllerGoauldTile.class, new SpecialRenderer());
 
     ClientRegistry.bindTileEntitySpecialRenderer(BeamerTile.class, new BeamerRenderer());
   }

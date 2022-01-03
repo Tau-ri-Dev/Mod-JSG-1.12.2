@@ -1,6 +1,7 @@
 package mrjake.aunis.renderer.stargate;
 
 import mrjake.aunis.loader.ElementEnum;
+import mrjake.aunis.loader.texture.Texture;
 import mrjake.aunis.loader.texture.TextureLoader;
 import mrjake.aunis.stargate.network.SymbolPegasusEnum;
 import mrjake.aunis.util.math.NumberUtils;
@@ -88,30 +89,33 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
         GlStateManager.rotate(chevron.rotation, 0, 0, 1);
 
-        TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron)).bindTexture();
+        Texture chevronTexture = TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron));
+        if(chevronTexture != null) {
+            chevronTexture.bindTexture();
 
-        if (chevron.isFinal()) {
-            float chevronOffset = 0;
+            if (chevron.isFinal()) {
+                float chevronOffset = 0;
 
-            GlStateManager.pushMatrix();
+                GlStateManager.pushMatrix();
 
-            GlStateManager.translate(0, chevronOffset, 0);
-            ElementEnum.PEGASUS_CHEVRON_LIGHT.render();
+                GlStateManager.translate(0, chevronOffset, 0);
+                ElementEnum.PEGASUS_CHEVRON_LIGHT.render();
 
-            GlStateManager.translate(0, -2 * chevronOffset, 0);
-            ElementEnum.PEGASUS_CHEVRON_MOVING.render();
+                GlStateManager.translate(0, -2 * chevronOffset, 0);
+                ElementEnum.PEGASUS_CHEVRON_MOVING.render();
+
+                GlStateManager.popMatrix();
+            } else {
+                ElementEnum.PEGASUS_CHEVRON_MOVING.render();
+                ElementEnum.PEGASUS_CHEVRON_LIGHT.render();
+            }
+
+            ElementEnum.PEGASUS_CHEVRON_FRAME.bindTextureAndRender(rendererState.getBiomeOverlay());
+            ElementEnum.PEGASUS_CHEVRON_BACK.render();
+
 
             GlStateManager.popMatrix();
-        } else {
-            ElementEnum.PEGASUS_CHEVRON_MOVING.render();
-            ElementEnum.PEGASUS_CHEVRON_LIGHT.render();
         }
-
-        ElementEnum.PEGASUS_CHEVRON_FRAME.bindTextureAndRender(rendererState.getBiomeOverlay());
-        ElementEnum.PEGASUS_CHEVRON_BACK.render();
-
-
-        GlStateManager.popMatrix();
     }
 
     private double[] getPositionInRingAtIndex(double radius, int index) {

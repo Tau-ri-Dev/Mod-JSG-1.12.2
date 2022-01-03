@@ -5,8 +5,8 @@ import mrjake.aunis.packet.PositionedPacket;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.EnumScheduledTask;
-import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
-import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
+import mrjake.aunis.tileentity.TRControllerAbstractTile;
+import mrjake.aunis.tileentity.TransportRingsAbstractTile;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -50,8 +50,8 @@ public class TRControllerActivatedToServer extends PositionedPacket {
 			WorldServer world = player.getServerWorld();
 			
 			world.addScheduledTask(() -> {
-				TRControllerGoauldTile controllerTile = (TRControllerGoauldTile) world.getTileEntity(message.pos);
-				TransportRingsAncientTile ringsTile = controllerTile.getLinkedRingsTile(world);
+				TRControllerAbstractTile controllerTile = (TRControllerAbstractTile) world.getTileEntity(message.pos);
+				TransportRingsAbstractTile ringsTile = controllerTile.getLinkedRingsTile(world);
 				
 				if (ringsTile != null) {
 					AunisSoundHelper.playSoundEvent(world, message.pos, SoundEventEnum.RINGS_CONTROLLER_BUTTON);

@@ -5,7 +5,7 @@ import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.PositionedPacket;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.state.StateTypeEnum;
-import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
+import mrjake.aunis.tileentity.TransportRingsAbstractTile;
 import mrjake.aunis.transportrings.ParamsSetResult;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
@@ -57,7 +57,7 @@ public class SaveRingsParametersToServer extends PositionedPacket {
 			WorldServer world = player.getServerWorld();
 			
 			world.addScheduledTask(() -> {
-				TransportRingsAncientTile ringsTile = (TransportRingsAncientTile) world.getTileEntity(message.pos);
+				TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(message.pos);
 				if (ringsTile.setRingsParams(message.address, message.name) == ParamsSetResult.DUPLICATE_ADDRESS)
 					player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_block.duplicate_address"), true);
 			

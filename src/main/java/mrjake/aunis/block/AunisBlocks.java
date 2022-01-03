@@ -2,14 +2,16 @@ package mrjake.aunis.block;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.stargate.*;
+import mrjake.aunis.block.transportrings.TRControllerGoauldBlock;
+import mrjake.aunis.block.transportrings.TransportRingsAncientBlock;
 import mrjake.aunis.item.CapacitorItemBlock;
 import mrjake.aunis.item.StargateMilkyWayMemberItemBlock;
 import mrjake.aunis.item.StargatePegasusMemberItemBlock;
 import mrjake.aunis.item.StargateUniverseMemberItemBlock;
 import mrjake.aunis.tileentity.*;
 import mrjake.aunis.tileentity.stargate.*;
-import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
-import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
+import mrjake.aunis.tileentity.TRControllerGoauldTile;
+import mrjake.aunis.tileentity.TransportRingsAncientTile;
 import mrjake.aunis.util.BlockHelpers;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -53,8 +55,8 @@ public class AunisBlocks {
   public static final DHDBlock DHD_BLOCK = new DHDBlock();
   public static final DHDPegasusBlock DHD_PEGASUS_BLOCK = new DHDPegasusBlock();
 
-  public static final TransportRingsBlock TRANSPORT_RINGS_BLOCK = new TransportRingsBlock();
-  public static final TRControllerBlock TR_CONTROLLER_BLOCK = new TRControllerBlock();
+  public static final TransportRingsAncientBlock TRANSPORT_RINGS_BLOCK = new TransportRingsAncientBlock();
+  public static final TRControllerGoauldBlock TR_CONTROLLER_BLOCK = new TRControllerGoauldBlock();
   public static final InvisibleBlock INVISIBLE_BLOCK = new InvisibleBlock();
   public static final IrisBlock IRIS_BLOCK = new IrisBlock();
 
