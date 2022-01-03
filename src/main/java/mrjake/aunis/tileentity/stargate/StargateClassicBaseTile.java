@@ -7,11 +7,13 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.beamer.BeamerLinkingHelper;
 import mrjake.aunis.block.AunisBlocks;
+import mrjake.aunis.chunkloader.ChunkManager;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateSizeEnum;
 import mrjake.aunis.gui.container.StargateContainerGuiState;
 import mrjake.aunis.gui.container.StargateContainerGuiUpdate;
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.item.UpgradeIris;
 import mrjake.aunis.item.gdo.GDOMessages;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.packet.AunisPacketHandler;
@@ -19,6 +21,7 @@ import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState.StargateClassicRendererStateBuilder;
+import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.sound.StargateSoundEventEnum;
 import mrjake.aunis.sound.StargateSoundPositionedEnum;
@@ -38,6 +41,12 @@ import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -47,11 +56,13 @@ import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.CapabilityItemHandler;
 
@@ -60,6 +71,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.IntStream;
 
+import static mrjake.aunis.item.AunisItems.UPGRADE_IRIS;
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.PHYSICAL_IRIS_ANIMATION_LENGTH;
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.SHIELD_IRIS_ANIMATION_LENGTH;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
@@ -232,6 +244,101 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public void update() {
+        int wait = 10 * 20;
+
+        /*
+         * Stargate random incoming wormholes updater
+         */
+
+        if (!world.isRemote && randomIncomingIsActive) {
+            if(isMerged()) {
+                if (randomIncomingDelay <= 0) {
+                    randomIncomingDelay = 0;
+                    if (randomIncomingState == 0) { // incoming wormhole
+                        randomIncomingState++;
+                        this.incomingWormhole(randomIncomingAddrSize);
+                        this.sendSignal(null, "stargate_incoming_wormhole", new Object[]{randomIncomingAddrSize});
+                        this.failGate();
+                    } else if (randomIncomingState < 45) { // wait 45 ticks to open gate
+                        randomIncomingState++;
+                    } else if (randomIncomingState == 45) { // open gate
+                        randomIncomingState++;
+                        targetGatePos = null;
+                        this.stargateState = EnumStargateState.UNSTABLE;
+
+                        ChunkManager.forceChunk(world, new ChunkPos(pos));
+
+                        sendRenderingUpdate(EnumGateAction.OPEN_GATE, 0, false);
+
+                        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_OPEN_SOUND, getOpenSoundDelay()));
+                        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_HORIZON_LIGHT_BLOCK, EnumScheduledTask.STARGATE_OPEN_SOUND.waitTicks + 19 + getTicksPerHorizonSegment(true)));
+                        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_HORIZON_WIDEN, EnumScheduledTask.STARGATE_OPEN_SOUND.waitTicks + 23 + getTicksPerHorizonSegment(true))); // 1.3s of the sound to the kill
+                        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ENGAGE));
+
+                        sendSignal(null, "stargate_open", new Object[]{false});
+
+                        markDirty();
+
+                        this.isFinalActive = true;
+                    } else if (randomIncomingState < (45 + wait)) {
+                        randomIncomingState++;
+                    } else if (randomIncomingState >= (45 + wait) && randomIncomingEntities > 0 && stargateState == EnumStargateState.ENGAGED) {
+                        randomIncomingState++;
+                        if (randomIncomingState % 80 == 0) {
+                            randomIncomingEntities--;
+                            int posX = this.getGateCenterPos().getX();
+                            int posY = this.getGateCenterPos().getY();
+                            int posZ = this.getGateCenterPos().getZ();
+
+                            EntityZombie zombie = new EntityZombie(world);
+                            zombie.setLocationAndAngles(posX, posY, posZ, 0, 0);
+                            if (isOpened() || irisType.equals(EnumIrisType.NULL)) {
+                                // spawn zombie
+                                this.world.spawnEntity(zombie);
+                                AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.WORMHOLE_GO);
+                            } else {
+                                // do iris shit
+
+                                if (isPhysicalIris()) {
+                                    AunisSoundHelper.playSoundEvent(world,
+                                            getGateCenterPos(),
+                                            SoundEventEnum.IRIS_HIT);
+                                } else if (isShieldIris()) {
+                                    AunisSoundHelper.playSoundEvent(world,
+                                            getGateCenterPos(),
+                                            SoundEventEnum.SHIELD_HIT);
+                                }
+                                ItemStack irisItem = getItemHandler().getStackInSlot(11);
+                                if (irisItem.getItem() instanceof UpgradeIris) {
+                                    // different damages per source
+                                    int chance = EnchantmentHelper.getEnchantments(irisItem).containsKey(Enchantments.UNBREAKING) ? (AunisConfig.irisConfig.unbreakingChance * EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, irisItem)) : 0;
+                                    int random = new Random().nextInt(100);
+
+                                    if (random > chance) {
+                                        UPGRADE_IRIS.setDamage(irisItem, UPGRADE_IRIS.getDamage(irisItem) + 1);
+                                    }
+                                    if (irisItem.getCount() == 0) {
+                                        updateIrisType();
+                                    }
+                                } else {
+                                    IEnergyStorage energyStorage = getCapability(CapabilityEnergy.ENERGY, null);
+                                    if (energyStorage != null) {
+                                        energyStorage.extractEnergy(500, false);
+                                    }
+                                }
+                                sendSignal(null, "stargate_event_iris_hit", new Object[]{"Something just hit the IRIS!"});
+                            }
+
+                        }
+                    } else if ((randomIncomingEntities <= 0 && randomIncomingState >= (45 + wait)) || stargateState != EnumStargateState.ENGAGED) {
+                        resetRandomIncoming();
+                        closeGate(StargateClosedReasonEnum.REQUESTED);
+                    }
+                } else randomIncomingDelay--;
+            }
+            else resetRandomIncoming();
+        }
+
 
         /*
          * Draw power (shield)

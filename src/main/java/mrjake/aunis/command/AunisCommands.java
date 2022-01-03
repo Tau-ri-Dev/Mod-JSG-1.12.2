@@ -16,7 +16,9 @@ public final class AunisCommands {
           new CommandPageGive(),
           new CommandStargateLinkDHD(),
           new CommandDebug(),
-          new CommandFix());
+          new CommandFix(),
+          new CommandTestIncomingEntity()
+  );
 
   public static void registerCommands(FMLServerStartingEvent event) {
     for (CommandBase command : commands) {

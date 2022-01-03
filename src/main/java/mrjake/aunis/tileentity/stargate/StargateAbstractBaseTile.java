@@ -89,7 +89,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         AunisSoundHelper.playPositionedSound(world, getGateCenterPos(), SoundPositionedEnum.WORMHOLE_LOOP, true);
 
-        new StargateOpenedEvent(this, targetGatePos.getTileEntity(), isInitiating).post();
+        if(targetGatePos != null) new StargateOpenedEvent(this, targetGatePos.getTileEntity(), isInitiating).post();
+        else if(randomIncomingIsActive) new StargateOpenedEvent(this, this, isInitiating).post();
 
         sendSignal(null, "stargate_wormhole_stabilized", new Object[]{isInitiating});
 
@@ -624,7 +625,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * @return True if the connecion is valid.
      */
     protected boolean verifyConnection() {
-        if (targetGatePos == null || !(targetGatePos.getTileEntity() instanceof StargateAbstractBaseTile)) {
+        if ((targetGatePos == null || !(targetGatePos.getTileEntity() instanceof StargateAbstractBaseTile)) && !randomIncomingIsActive) {
             closeGate(StargateClosedReasonEnum.CONNECTION_LOST);
             return false;
         }
@@ -719,6 +720,31 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     private boolean addedToNetwork;
 
+    // ------------------------------------------------------------------------
+    // Stargate incoming wormhole from unknow
+
+    public int randomIncomingEntities = 0;
+    public int randomIncomingDelay = 0;
+    public int randomIncomingAddrSize = 7;
+    public float randomIncomingState = 0;
+    public boolean randomIncomingIsActive = false;
+
+    public void generateIncoming(int delay, int entities, int addressSize){
+        this.randomIncomingEntities = entities;
+        this.randomIncomingDelay = delay;
+        this.randomIncomingAddrSize = addressSize;
+        this.randomIncomingState = 0;
+        this.randomIncomingIsActive = true;
+    }
+
+    public void resetRandomIncoming(){
+        this.randomIncomingIsActive = false;
+        this.randomIncomingEntities = 0;
+        this.randomIncomingState = 0;
+        this.randomIncomingDelay = 0;
+        this.randomIncomingAddrSize = 7;
+    }
+
     @Override
     public void update() {
         // Scheduled tasks
@@ -734,7 +760,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 // Aunis.info(pos + ": Stargate joined OC network");
             }
 
-            if (stargateState.engaged() && targetGatePos == null) {
+            if (stargateState.engaged() && targetGatePos == null && !randomIncomingIsActive) {
                 Aunis.logger.error("A stargateState indicates the Gate should be open, but targetGatePos is null. This is a bug. Closing gate...");
                 attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
             }
@@ -746,7 +772,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
             // Autoclose
             if (world.getTotalWorldTime() % 20 == 0 && stargateState == EnumStargateState.ENGAGED && AunisConfig.autoCloseConfig.autocloseEnabled && shouldAutoclose()) {
-                targetGatePos.getTileEntity().attemptClose(StargateClosedReasonEnum.AUTOCLOSE);
+                if(targetGatePos != null) targetGatePos.getTileEntity().attemptClose(StargateClosedReasonEnum.AUTOCLOSE);
+                else attemptClose(StargateClosedReasonEnum.AUTOCLOSE);
             }
 
             if (horizonFlashTask != null && horizonFlashTask.isActive()) {
@@ -872,7 +899,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * @return {@code True} if the gate should be closed, false otherwise.
      */
     protected boolean shouldAutoclose() {
-        return getAutoCloseManager().shouldClose(targetGatePos);
+        if(!randomIncomingIsActive && targetGatePos != null) return getAutoCloseManager().shouldClose(targetGatePos);
+        else if(!randomIncomingIsActive) return true;
+        return false;
     }
     protected void resetLimitSeconds() {
         secondsOpened = 0;
