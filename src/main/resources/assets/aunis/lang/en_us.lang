@@ -162,6 +162,8 @@ commands.sgcloseall.usage=/sgcloseall [(x y z) (x y z)] [dim=X]
 commands.sgcloseall.closing=Closing Stargates in dim=%s, %s.
 commands.sgcloseall.closed=Closed %s gates.
 commands.sgcloseall.number_expected=Number or "current" expected as dimension ID
+commands.sggenincoming.usage=/sggenincoming (x y z) (entities<0-10>) (addressLength<7-9>)
+commands.sggenincoming.notstargate=Targeted block is not a Stargate Base
 
 death.attack.eventHorizon=%s was given a kawoosh cremation
 death.attack.irisDeath=%s was given a iris cremation

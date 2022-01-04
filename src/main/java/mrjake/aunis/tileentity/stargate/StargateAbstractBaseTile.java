@@ -724,14 +724,12 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     // Stargate incoming wormhole from unknow
 
     public int randomIncomingEntities = 0;
-    public int randomIncomingDelay = 0;
     public int randomIncomingAddrSize = 7;
     public float randomIncomingState = 0;
     public boolean randomIncomingIsActive = false;
 
-    public void generateIncoming(int delay, int entities, int addressSize){
+    public void generateIncoming(int entities, int addressSize){
         this.randomIncomingEntities = entities;
-        this.randomIncomingDelay = delay;
         this.randomIncomingAddrSize = addressSize;
         this.randomIncomingState = 0;
         this.randomIncomingIsActive = true;
@@ -741,7 +739,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         this.randomIncomingIsActive = false;
         this.randomIncomingEntities = 0;
         this.randomIncomingState = 0;
-        this.randomIncomingDelay = 0;
         this.randomIncomingAddrSize = 7;
     }
 

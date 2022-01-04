@@ -39,12 +39,16 @@ import mrjake.aunis.tileentity.BeamerTile;
 import mrjake.aunis.tileentity.util.IUpgradable;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.*;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
@@ -54,9 +58,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.registry.RegistryNamespaced;
+import net.minecraft.util.registry.RegistrySimple;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -64,6 +71,7 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
@@ -244,16 +252,42 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public void update() {
-        int wait = 10 * 20;
 
         /*
+         * =========================================================================
          * Stargate random incoming wormholes updater
          */
+        if(!world.isRemote) {
+            int wait = 4 * 20;
 
-        if (!world.isRemote && randomIncomingIsActive) {
-            if(isMerged()) {
-                if (randomIncomingDelay <= 0) {
-                    randomIncomingDelay = 0;
+            // Load entities
+            String[] entityListString = AunisConfig.randomIncoming.entitiesToSpawn;
+            List<Entity> entityList = new ArrayList<Entity>();
+            for(String entityString : entityListString){
+                String entityStringNew = entityString.split(":")[1];
+                ResourceLocation rlString = new ResourceLocation(entityStringNew);
+                entityList.add(EntityList.createEntityByIDFromName(rlString, world));
+            }
+
+
+
+            Random rand = new Random();
+            if(AunisConfig.randomIncoming.enableRandomIncoming) {
+                if (world.getTotalWorldTime() % 40 == 0) { // every 2 seconds
+                    int chanceToRandom = rand.nextInt(1000);
+
+                    //if chance <= 0.1% && stargate state is idle or dialing by DHD and RANDOM INCOMING IS NOT ACTIVATED YET
+                    if (chanceToRandom <= 1 && (stargateState.idle() || (stargateState.dialing() && !stargateState.dialingComputer())) && !randomIncomingIsActive) {
+                        int entities = rand.nextInt(10);
+                        if (entities < 3) entities = 3;
+
+                        generateIncoming(entities, 7); // execute
+                    }
+                }
+            }
+
+            if (randomIncomingIsActive) {
+                if (isMerged()) {
                     if (randomIncomingState == 0) { // incoming wormhole
                         randomIncomingState++;
                         this.incomingWormhole(randomIncomingAddrSize);
@@ -284,17 +318,25 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         randomIncomingState++;
                     } else if (randomIncomingState >= (45 + wait) && randomIncomingEntities > 0 && stargateState == EnumStargateState.ENGAGED) {
                         randomIncomingState++;
-                        if (randomIncomingState % 80 == 0) {
+                        int randomDelay = new Random().nextInt(16);
+                        if (randomDelay <= 0) randomDelay = 1;
+                        if (randomIncomingState % (5 * randomDelay) == 0) {
                             randomIncomingEntities--;
                             int posX = this.getGateCenterPos().getX();
                             int posY = this.getGateCenterPos().getY();
                             int posZ = this.getGateCenterPos().getZ();
+                            // create entity
+                            Entity mobEntity = new EntityZombie(world);
 
-                            EntityZombie zombie = new EntityZombie(world);
-                            zombie.setLocationAndAngles(posX, posY, posZ, 0, 0);
+                            int entitiesLength = entityList.size();
+                            if(entitiesLength > 0) {
+                                int randomEntity = rand.nextInt(entitiesLength);
+                                mobEntity = entityList.get(randomEntity);
+                            }
+                            mobEntity.setLocationAndAngles(posX, posY, posZ, 0, 0);
                             if (isOpened() || irisType.equals(EnumIrisType.NULL)) {
                                 // spawn zombie
-                                this.world.spawnEntity(zombie);
+                                this.world.spawnEntity(mobEntity);
                                 AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.WORMHOLE_GO);
                             } else {
                                 // do iris shit
@@ -312,7 +354,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                                 if (irisItem.getItem() instanceof UpgradeIris) {
                                     // different damages per source
                                     int chance = EnchantmentHelper.getEnchantments(irisItem).containsKey(Enchantments.UNBREAKING) ? (AunisConfig.irisConfig.unbreakingChance * EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, irisItem)) : 0;
-                                    int random = new Random().nextInt(100);
+                                    int random = rand.nextInt(100);
 
                                     if (random > chance) {
                                         UPGRADE_IRIS.setDamage(irisItem, UPGRADE_IRIS.getDamage(irisItem) + 1);
@@ -334,10 +376,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         resetRandomIncoming();
                         closeGate(StargateClosedReasonEnum.REQUESTED);
                     }
-                } else randomIncomingDelay--;
+                } else resetRandomIncoming();
             }
-            else resetRandomIncoming();
         }
+
+        /*
+         * =========================================================================
+         */
 
 
         /*

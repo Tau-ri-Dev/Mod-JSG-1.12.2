@@ -68,6 +68,9 @@ public class AunisConfig {
     @Name("Integrations config")
     public static IntegrationsConfig integrationsConfig = new IntegrationsConfig();
 
+    @Name("Random incoming config")
+    public static RandomIncomingConfig randomIncoming = new RandomIncomingConfig();
+
     public static class StargateConfig {
         @Name("Orlin's gate max open count")
         @RangeInt(min = 0)
@@ -551,6 +554,24 @@ public class AunisConfig {
     public static class IntegrationsConfig {
         @Name("Enable Tinkers' Construct integration")
         public boolean tConstructIntegration = false;
+    }
+
+    public static class RandomIncomingConfig {
+
+        @Name("Enable random incoming wormholes")
+        @Comment({
+                "Enable random incoming wormholes"
+        })
+        public boolean enableRandomIncoming = true;
+
+        @Name("Entities to spawn")
+        @SuppressWarnings("serial")
+        @Comment({
+                "Format: \"modid:entityid[:meta]\", for example: ",
+                "\"minecraft:zombie\"",
+                "\"minecraft:creeper\""
+        })
+        public String[] entitiesToSpawn = {};
     }
 
     public static void resetCache() {
