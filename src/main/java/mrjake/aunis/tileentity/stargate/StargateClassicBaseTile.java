@@ -255,7 +255,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         /*
          * =========================================================================
-         * Stargate random incoming wormholes updater
+         * Stargate Random Incoming Generator (RIG)
          */
         if(!world.isRemote) {
             int wait = 4 * 20;
