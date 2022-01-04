@@ -331,7 +331,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                             int entitiesLength = entityList.size();
                             if(entitiesLength > 0) {
                                 int randomEntity = rand.nextInt(entitiesLength);
-                                mobEntity = entityList.get(randomEntity);
+                                if(entityList.get(randomEntity) != null)
+                                    mobEntity = entityList.get(randomEntity);
                             }
                             mobEntity.setLocationAndAngles(posX, posY, posZ, 0, 0);
                             if (isOpened() || irisType.equals(EnumIrisType.NULL)) {
