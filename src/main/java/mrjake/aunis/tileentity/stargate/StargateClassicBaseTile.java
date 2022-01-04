@@ -4,7 +4,6 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
 import mrjake.aunis.beamer.BeamerLinkingHelper;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.chunkloader.ChunkManager;
@@ -39,16 +38,11 @@ import mrjake.aunis.tileentity.BeamerTile;
 import mrjake.aunis.tileentity.util.IUpgradable;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.*;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
@@ -62,8 +56,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.RegistryNamespaced;
-import net.minecraft.util.registry.RegistrySimple;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -71,7 +63,6 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
@@ -259,17 +250,23 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
          */
         if(!world.isRemote) {
             int wait = 4 * 20;
+            int waitOpen = 60;
 
             // Load entities
             String[] entityListString = AunisConfig.randomIncoming.entitiesToSpawn;
             List<Entity> entityList = new ArrayList<Entity>();
             for(String entityString : entityListString){
-                String entityStringNew = entityString.split(":")[1];
+                String[] entityTemporallyList = entityString.split(":");
+                if(entityTemporallyList.length < 2) continue; // prevents from Ticking block entity null pointer
+                String entityStringNew =
+                        (
+                                (entityTemporallyList[0] == "minecraft")
+                                        ? entityTemporallyList[1]
+                                        : entityTemporallyList[0] + ":" + entityTemporallyList[1]
+                        );
                 ResourceLocation rlString = new ResourceLocation(entityStringNew);
                 entityList.add(EntityList.createEntityByIDFromName(rlString, world));
             }
-
-
 
             Random rand = new Random();
             if(AunisConfig.randomIncoming.enableRandomIncoming) {
@@ -277,7 +274,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     int chanceToRandom = rand.nextInt(1000);
 
                     //if chance <= 0.1% && stargate state is idle or dialing by DHD and RANDOM INCOMING IS NOT ACTIVATED YET
-                    if (chanceToRandom <= 1 && (stargateState.idle() || (stargateState.dialing() && !stargateState.dialingComputer())) && !randomIncomingIsActive) {
+                    if (chanceToRandom <= 1) {
                         int entities = rand.nextInt(10);
                         if (entities < 3) entities = 3;
 
@@ -293,9 +290,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         this.incomingWormhole(randomIncomingAddrSize);
                         this.sendSignal(null, "stargate_incoming_wormhole", new Object[]{randomIncomingAddrSize});
                         this.failGate();
-                    } else if (randomIncomingState < 45) { // wait 45 ticks to open gate
+                    } else if (randomIncomingState < waitOpen) { // wait waitOpen ticks to open gate
                         randomIncomingState++;
-                    } else if (randomIncomingState == 45) { // open gate
+                    } else if (randomIncomingState == waitOpen) { // open gate
                         randomIncomingState++;
                         targetGatePos = null;
                         this.stargateState = EnumStargateState.UNSTABLE;
@@ -311,12 +308,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
                         sendSignal(null, "stargate_open", new Object[]{false});
 
+                        // activate DHD brb
+                        activateDHDSymbolBRB();
+
                         markDirty();
 
                         this.isFinalActive = true;
-                    } else if (randomIncomingState < (45 + wait)) {
+                    } else if (randomIncomingState < (waitOpen + wait)) {
                         randomIncomingState++;
-                    } else if (randomIncomingState >= (45 + wait) && randomIncomingEntities > 0 && stargateState == EnumStargateState.ENGAGED) {
+                    } else if (randomIncomingState >= (waitOpen + wait) && randomIncomingEntities > 0 && stargateState == EnumStargateState.ENGAGED) {
                         randomIncomingState++;
                         int randomDelay = new Random().nextInt(16);
                         if (randomDelay <= 0) randomDelay = 1;
@@ -373,11 +373,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                             }
 
                         }
-                    } else if ((randomIncomingEntities <= 0 && randomIncomingState >= (45 + wait)) || stargateState != EnumStargateState.ENGAGED) {
+                    } else if ((randomIncomingEntities <= 0 && randomIncomingState >= (waitOpen + wait)) || stargateState != EnumStargateState.ENGAGED) {
                         resetRandomIncoming();
                         closeGate(StargateClosedReasonEnum.REQUESTED);
                     }
                 } else resetRandomIncoming();
+            }
+            else{
+                if(horizonKilling) horizonKilling = false;
+                if(horizonSegments > 0) horizonSegments = 0;
             }
         }
 

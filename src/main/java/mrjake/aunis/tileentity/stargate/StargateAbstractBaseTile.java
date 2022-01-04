@@ -729,6 +729,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public boolean randomIncomingIsActive = false;
 
     public void generateIncoming(int entities, int addressSize){
+        if(!((stargateState.idle() || (stargateState.dialing() && !stargateState.dialingComputer())) && !randomIncomingIsActive)) return;
         this.randomIncomingEntities = entities;
         this.randomIncomingAddrSize = addressSize;
         this.randomIncomingState = 0;
@@ -740,6 +741,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         this.randomIncomingEntities = 0;
         this.randomIncomingState = 0;
         this.randomIncomingAddrSize = 7;
+    }
+
+    public void activateDHDSymbolBRB(){
+
     }
 
     @Override
@@ -1032,8 +1037,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         return localInnerEntityBoxes;
     }
 
-    private boolean horizonKilling = false;
-    private int horizonSegments = 0;
+    protected boolean horizonKilling = false;
+    protected int horizonSegments = 0;
 
     // ------------------------------------------------------------------------
     // Rendering

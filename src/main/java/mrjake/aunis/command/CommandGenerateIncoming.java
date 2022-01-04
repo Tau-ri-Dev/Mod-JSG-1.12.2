@@ -33,7 +33,7 @@ public class CommandGenerateIncoming extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if(args.length >= 3) {
+        if(args.length == 5) {
             World world = sender.getEntityWorld();
             BlockPos pos = sender.getPosition();
             int x1 = (int) parseCoordinate(pos.getX(), args[0], false).getResult();

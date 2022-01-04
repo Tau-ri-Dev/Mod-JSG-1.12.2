@@ -84,6 +84,13 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         }
     }
 
+    @Override
+    public void activateDHDSymbolBRB(){
+        if (isLinkedAndDHDOperational()) {
+            getLinkedDHD(world).activateSymbol(SymbolMilkyWayEnum.BRB);
+        }
+    }
+
     // ------------------------------------------------------------------------
     // Stargate Network
 
