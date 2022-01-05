@@ -1,6 +1,6 @@
 package mrjake.aunis.renderer.transportrings;
 
-import mrjake.aunis.tileentity.TransportRingsAbstractTile;
+import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;

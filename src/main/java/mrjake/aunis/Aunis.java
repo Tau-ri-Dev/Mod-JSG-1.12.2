@@ -7,10 +7,10 @@ import mrjake.aunis.command.AunisCommands;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateDimensionConfig;
 import mrjake.aunis.config.StargateSizeEnum;
-import mrjake.aunis.crafting.AunisRecipeHandler;
+import mrjake.aunis.creativetabs.*;
 import mrjake.aunis.datafixer.TileNamesFixer;
 import mrjake.aunis.fluid.AunisFluids;
-import mrjake.aunis.gui.AunisGuiHandler;
+import mrjake.aunis.gui.base.AunisGuiHandler;
 import mrjake.aunis.integration.OCWrapperInterface;
 import mrjake.aunis.integration.ThermalIntegration;
 import mrjake.aunis.integration.tconstruct.TConstructIntegration;
@@ -52,7 +52,10 @@ public class Aunis {
     public static final String CLIENT = "mrjake.aunis.proxy.ProxyClient";
     public static final String SERVER = "mrjake.aunis.proxy.ProxyServer";
     
-  public static final AunisCreativeTab aunisCreativeTab= new AunisCreativeTab();
+    public static final AunisGatesCreativeTabBuilder aunisGatesCreativeTab = new AunisGatesCreativeTabBuilder();
+    public static final AunisRingsCreativeTabBuilder aunisRingsCreativeTab = new AunisRingsCreativeTabBuilder();
+    public static final AunisItemsCreativeTabBuilder aunisItemsCreativeTab = new AunisItemsCreativeTabBuilder();
+    public static final AunisOresCreativeTabBuilder aunisOresCreativeTab = new AunisOresCreativeTabBuilder();
 
     @Instance(ModID)
 	public static Aunis instance;

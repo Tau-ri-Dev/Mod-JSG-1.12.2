@@ -26,7 +26,7 @@ import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
 import mrjake.aunis.stargate.power.StargateEnergyRequired;
-import mrjake.aunis.state.StargateOrlinSparkState;
+import mrjake.aunis.state.stargate.StargateOrlinSparkState;
 import mrjake.aunis.state.State;
 import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.tileentity.util.ScheduledTask;

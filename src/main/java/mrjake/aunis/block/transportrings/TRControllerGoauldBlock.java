@@ -3,7 +3,7 @@ package mrjake.aunis.block.transportrings;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.raycaster.RaycasterRingsController;
-import mrjake.aunis.tileentity.TRControllerGoauldTile;
+import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -34,7 +34,7 @@ public class TRControllerGoauldBlock extends Block {
     setUnlocalizedName(Aunis.ModID + "." + blockName);
 
     setSoundType(SoundType.STONE);
-    setCreativeTab(Aunis.aunisCreativeTab);
+    setCreativeTab(Aunis.aunisRingsCreativeTab);
 
     setDefaultState(blockState.getBaseState().withProperty(AunisProps.FACING_HORIZONTAL, EnumFacing.NORTH));
 

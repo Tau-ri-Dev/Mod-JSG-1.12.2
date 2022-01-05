@@ -6,7 +6,7 @@ import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.stargate.StargateClosedReasonEnum;
 import mrjake.aunis.stargate.StargateOpenResult;
 import mrjake.aunis.stargate.network.SymbolPegasusEnum;
-import mrjake.aunis.tileentity.DHDPegasusTile;
+import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
 import mrjake.aunis.tileentity.stargate.StargatePegasusBaseTile;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
@@ -72,7 +72,7 @@ public class DHDPegasusButtonClickedToServer extends PositionedPacket {
 							gateTile.attemptClose(StargateClosedReasonEnum.REQUESTED);
 						else
 							player.sendStatusMessage(new TextComponentTranslation("tile.aunis.dhd_block.incoming_wormhole_warn"), true);
-					} else if (gateState.idle()) {
+					} else if ((gateState.idle() || gateState.dialing()) && !gateState.dialingComputer()) {
 						// Gate is idle, some glyph was pressed
 
 						if (message.symbol.brb()) {

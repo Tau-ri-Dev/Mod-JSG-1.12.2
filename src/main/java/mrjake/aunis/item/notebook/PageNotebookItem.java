@@ -23,6 +23,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
+import static mrjake.aunis.Aunis.aunisItemsCreativeTab;
+
 public class PageNotebookItem extends Item implements CustomModelItemInterface {
 
 	public static final String ITEM_NAME = "page_notebook";
@@ -31,7 +33,7 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 		setRegistryName(Aunis.ModID + ":" + ITEM_NAME);
 		setUnlocalizedName(Aunis.ModID + "." + ITEM_NAME);
 		
-		setCreativeTab(Aunis.aunisCreativeTab);
+		setCreativeTab(aunisItemsCreativeTab);
 		
 		setHasSubtypes(true);
 		setMaxDamage(0);

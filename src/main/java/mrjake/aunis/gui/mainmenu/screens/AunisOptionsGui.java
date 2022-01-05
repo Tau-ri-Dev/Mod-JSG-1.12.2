@@ -2,8 +2,8 @@ package mrjake.aunis.gui.mainmenu.screens;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.gui.AunisGuiButton;
-import mrjake.aunis.gui.AunisGuiSlider;
+import mrjake.aunis.gui.base.AunisGuiButton;
+import mrjake.aunis.gui.base.AunisGuiSlider;
 import mrjake.aunis.gui.mainmenu.screens.options.*;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;

@@ -6,14 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
 import com.google.common.base.Strings;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.gui.AunisGuiButton;
+import mrjake.aunis.gui.base.AunisGuiButton;
 import mrjake.aunis.gui.mainmenu.screens.modlist.AunisGuiScrollingList;
 import mrjake.aunis.gui.mainmenu.screens.modlist.AunisGuiSlotModList;
 import mrjake.aunis.gui.mainmenu.screens.options.AunisLanguageOptions;

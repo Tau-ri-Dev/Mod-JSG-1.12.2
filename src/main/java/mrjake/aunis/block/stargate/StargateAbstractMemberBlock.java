@@ -31,7 +31,7 @@ public abstract class StargateAbstractMemberBlock extends Block {
         setUnlocalizedName(Aunis.ModID + "." + blockName);
 
         setSoundType(SoundType.METAL);
-        setCreativeTab(Aunis.aunisCreativeTab);
+        setCreativeTab(Aunis.aunisGatesCreativeTab);
 
         setHardness(3.0f);
         setHarvestLevel("pickaxe", 3);

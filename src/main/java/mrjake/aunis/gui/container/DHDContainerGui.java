@@ -7,7 +7,7 @@ import mrjake.aunis.gui.element.Diode.DiodeStatus;
 import mrjake.aunis.gui.element.Tab.SlotTab;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.SetOpenTabToServer;
-import mrjake.aunis.tileentity.DHDTile;
+import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
 import mrjake.aunis.tileentity.util.ReactorStateEnum;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -58,7 +58,7 @@ public class DHDContainerGui extends GuiContainer implements TabbedContainerInte
 				.putStatus(DiodeStatus.OFF, I18n.format("gui.dhd.not_linked"))
 				.putStatus(DiodeStatus.ON, I18n.format("gui.dhd.linked"))
 				.setStatusMapper(() -> {
-					return container.dhdTile.isLinkedClient ? DiodeStatus.ON : DiodeStatus.OFF;
+					return container.dhdMilkyWayTile.isLinkedClient ? DiodeStatus.ON : DiodeStatus.OFF;
 				}));
 		
 		diodes.add(new Diode(this, 26, 55, I18n.format("gui.dhd.reactorStatus"))
@@ -66,7 +66,7 @@ public class DHDContainerGui extends GuiContainer implements TabbedContainerInte
 				.putStatus(DiodeStatus.WARN, I18n.format("gui.dhd.standby"))
 				.putStatus(DiodeStatus.ON, I18n.format("gui.dhd.running"))
 				.setStatusMapper(() -> {
-					switch (container.dhdTile.getReactorState()) {
+					switch (container.dhdMilkyWayTile.getReactorState()) {
 						case NOT_LINKED:
 						case NO_FUEL:
 						case NO_CRYSTAL:
@@ -83,7 +83,7 @@ public class DHDContainerGui extends GuiContainer implements TabbedContainerInte
 					}
 				})
 				.setStatusStringMapper(() -> {
-					switch (container.dhdTile.getReactorState()) {
+					switch (container.dhdMilkyWayTile.getReactorState()) {
 						case NOT_LINKED: return I18n.format("gui.dhd.not_linked");
 						case NO_CRYSTAL: return I18n.format("gui.dhd.no_crystal");
 						default: return null;
@@ -99,7 +99,7 @@ public class DHDContainerGui extends GuiContainer implements TabbedContainerInte
 		tabs.clear();
 		
 		overlayTab = (TabBiomeOverlay) TabBiomeOverlay.builder()
-				.setSupportedOverlays(container.dhdTile.getSupportedOverlays())
+				.setSupportedOverlays(container.dhdMilkyWayTile.getSupportedOverlays())
 				.setSlotTexture(176, 86)
 				.setGuiSize(xSize, ySize)
 				.setGuiPosition(guiLeft, guiTop)
@@ -117,7 +117,7 @@ public class DHDContainerGui extends GuiContainer implements TabbedContainerInte
 		
 		tabs.add(overlayTab);
 		
-		container.inventorySlots.set(DHDTile.BIOME_OVERRIDE_SLOT, overlayTab.createAndSaveSlot((SlotItemHandler) container.getSlot(DHDTile.BIOME_OVERRIDE_SLOT)));
+		container.inventorySlots.set(DHDMilkyWayTile.BIOME_OVERRIDE_SLOT, overlayTab.createAndSaveSlot((SlotItemHandler) container.getSlot(DHDMilkyWayTile.BIOME_OVERRIDE_SLOT)));
 	}
 
 	@Override
@@ -151,7 +151,7 @@ public class DHDContainerGui extends GuiContainer implements TabbedContainerInte
 		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		GlStateManager.color(1, 1, 1, 1);
 		
-		if (container.dhdTile.getReactorState() == ReactorStateEnum.ONLINE) {
+		if (container.dhdMilkyWayTile.getReactorState() == ReactorStateEnum.ONLINE) {
 			TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(AunisFluids.moltenNaquadahRefined.getStill().toString());
 			
 			// Top duct Naquadah

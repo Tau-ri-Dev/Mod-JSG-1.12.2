@@ -2,7 +2,7 @@ package mrjake.aunis.renderer.transportrings;
 
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
-import mrjake.aunis.state.TransportRingsRendererState;
+import mrjake.aunis.state.transportrings.TransportRingsRendererState;
 import mrjake.aunis.tesr.RendererInterface;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.client.renderer.GlStateManager;

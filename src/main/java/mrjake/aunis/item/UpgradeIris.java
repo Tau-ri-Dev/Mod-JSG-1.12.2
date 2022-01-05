@@ -5,9 +5,7 @@ import mrjake.aunis.config.AunisConfig;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,6 +14,8 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
+
+import static mrjake.aunis.Aunis.aunisItemsCreativeTab;
 
 /**
  * @author matousss
@@ -28,7 +28,7 @@ public class UpgradeIris extends Item {
         setRegistryName(Aunis.ModID + ":" + name);
         setUnlocalizedName(Aunis.ModID + "." + name);
 
-        setCreativeTab(Aunis.aunisCreativeTab);
+        setCreativeTab(aunisItemsCreativeTab);
     }
 
     @Override

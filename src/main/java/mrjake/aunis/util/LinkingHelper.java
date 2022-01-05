@@ -2,7 +2,7 @@ package mrjake.aunis.util;
 
 import li.cil.oc.api.event.RackMountableRenderEvent.TileEntity;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.tileentity.DHDTile;
+import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
 import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
@@ -62,11 +62,11 @@ public class LinkingHelper {
 
   public static void updateLinkedGate(World world, BlockPos gatePos, BlockPos dhdPos) {
     StargateMilkyWayBaseTile gateTile = (StargateMilkyWayBaseTile) world.getTileEntity(gatePos);
-    DHDTile dhdTile = (DHDTile) world.getTileEntity(dhdPos);
+    DHDMilkyWayTile dhdMilkyWayTile = (DHDMilkyWayTile) world.getTileEntity(dhdPos);
 
-    if (dhdTile != null) {
+    if (dhdMilkyWayTile != null) {
       int linkId = getLinkId();
-      dhdTile.setLinkedGate(gatePos, linkId);
+      dhdMilkyWayTile.setLinkedGate(gatePos, linkId);
       gateTile.setLinkedDHD(dhdPos, linkId);
     }
   }

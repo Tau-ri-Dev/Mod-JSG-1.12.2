@@ -10,7 +10,7 @@ import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
 import mrjake.aunis.stargate.StargateClosedReasonEnum;
 import mrjake.aunis.stargate.network.*;
-import mrjake.aunis.tileentity.TransportRingsAbstractTile;
+import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
@@ -47,6 +47,8 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Map;
 
+import static mrjake.aunis.Aunis.aunisItemsCreativeTab;
+
 public class UniverseDialerItem extends Item implements CustomModelItemInterface {
 
     public static final String ITEM_NAME = "universe_dialer";
@@ -79,7 +81,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
         setUnlocalizedName(Aunis.ModID + "." + ITEM_NAME);
         setHasSubtypes(true);
         setMaxDamage(0);
-        setCreativeTab(Aunis.aunisCreativeTab);
+        setCreativeTab(aunisItemsCreativeTab);
         // setMaxStackSize(1);
     }
 

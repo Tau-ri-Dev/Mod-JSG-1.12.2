@@ -7,6 +7,8 @@ import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.packet.StateUpdateRequestToServer;
 import mrjake.aunis.stargate.EnumMemberVariant;
 import mrjake.aunis.state.*;
+import mrjake.aunis.state.stargate.StargateCamoState;
+import mrjake.aunis.state.stargate.StargateLightState;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.state.IBlockState;

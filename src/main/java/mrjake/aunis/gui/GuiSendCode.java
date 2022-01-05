@@ -1,6 +1,8 @@
 package mrjake.aunis.gui;
 
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.gui.base.AunisGuiButton;
+import mrjake.aunis.gui.base.AunisGuiBase;
 import mrjake.aunis.gui.element.NumberOnlyTextField;
 import mrjake.aunis.item.gdo.GDOActionEnum;
 import mrjake.aunis.item.gdo.GDOActionPacketToServer;
@@ -8,17 +10,12 @@ import mrjake.aunis.item.gdo.GDOItem;
 import mrjake.aunis.item.gdo.GDOMessages;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.sound.AunisSoundHelper;
-import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundEventEnum;
-import mrjake.aunis.sound.SoundPositionedEnum;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +25,7 @@ import java.util.List;
  * @author matousss
  * @author MineDragonCZ_
  */
-public class GuiSendCode extends GuiBase {
+public class GuiSendCode extends AunisGuiBase {
     EnumHand hand;
 
     public GuiSendCode(EnumHand hand) {

@@ -34,7 +34,7 @@ public abstract class StargateAbstractBaseBlock extends Block {
     setUnlocalizedName(Aunis.ModID + "." + blockName);
 
     setSoundType(SoundType.METAL);
-    setCreativeTab(Aunis.aunisCreativeTab);
+    setCreativeTab(Aunis.aunisGatesCreativeTab);
 
     setDefaultState(blockState.getBaseState().withProperty(AunisProps.FACING_HORIZONTAL, EnumFacing.NORTH).withProperty(AunisProps.RENDER_BLOCK, true));
 

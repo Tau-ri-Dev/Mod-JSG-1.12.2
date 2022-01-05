@@ -2,13 +2,11 @@ package mrjake.aunis.gui.mainmenu.screens.options;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.gui.AunisGuiButton;
-import mrjake.aunis.gui.AunisGuiSlider;
-import mrjake.aunis.gui.AunisOptionButton;
-import mrjake.aunis.gui.GuiBase;
-import mrjake.aunis.gui.AunisGuiSliderSounds;
-import mrjake.aunis.gui.mainmenu.screens.options.resourcepacks.AunisGuiResourcePackSelected;
-import mrjake.aunis.gui.mainmenu.screens.options.resourcepacks.AunisGuiResourcePacksAvailable;
+import mrjake.aunis.gui.base.AunisGuiButton;
+import mrjake.aunis.gui.base.AunisGuiSlider;
+import mrjake.aunis.gui.base.AunisOptionButton;
+import mrjake.aunis.gui.base.AunisGuiBase;
+import mrjake.aunis.gui.base.AunisGuiSliderSounds;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
@@ -341,7 +339,7 @@ public class AunisAudioOptions extends GuiScreenOptionsSounds {
 
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 //this.drawTexturedModalRect(this.x + (int)(this.volume * (float)(this.width - 8)), this.y, 0, 66, 4, 20);
-                drawRect(this.x + (int)(this.volume * (float)(this.width - 8)), this.y, this.x + (int)(this.volume * (float)(this.width - 8)) + 8, this.y + 20, GuiBase.FRAME_COLOR);
+                drawRect(this.x + (int)(this.volume * (float)(this.width - 8)), this.y, this.x + (int)(this.volume * (float)(this.width - 8)) + 8, this.y + 20, AunisGuiBase.FRAME_COLOR);
             }
         }
 

@@ -2,7 +2,7 @@ package mrjake.aunis.gui.mainmenu;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.gui.AunisGuiButton;
+import mrjake.aunis.gui.base.AunisGuiButton;
 import mrjake.aunis.gui.mainmenu.screens.AunisModListGui;
 import mrjake.aunis.gui.mainmenu.screens.AunisOptionsGui;
 import mrjake.aunis.gui.mainmenu.screens.options.AunisLanguageOptions;

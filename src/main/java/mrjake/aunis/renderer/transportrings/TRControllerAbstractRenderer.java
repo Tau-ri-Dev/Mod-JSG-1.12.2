@@ -3,7 +3,7 @@ package mrjake.aunis.renderer.transportrings;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.tesr.RendererInterface;
-import mrjake.aunis.tileentity.TRControllerAbstractTile;
+import mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile;
 import mrjake.vector.Vector3f;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;

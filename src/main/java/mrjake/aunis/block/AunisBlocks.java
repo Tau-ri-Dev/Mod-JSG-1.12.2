@@ -1,6 +1,16 @@
 package mrjake.aunis.block;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.block.beamer.BeamerBlock;
+import mrjake.aunis.block.capacitor.CapacitorBlock;
+import mrjake.aunis.block.capacitor.CapacitorBlockEmpty;
+import mrjake.aunis.block.dialhomedevice.DHDBlock;
+import mrjake.aunis.block.dialhomedevice.DHDPegasusBlock;
+import mrjake.aunis.block.invisible.InvisibleBlock;
+import mrjake.aunis.block.invisible.IrisBlock;
+import mrjake.aunis.block.ore.NaquadahOreBlock;
+import mrjake.aunis.block.ore.TitaniumOreBlock;
+import mrjake.aunis.block.ore.TriniumOreBlock;
 import mrjake.aunis.block.stargate.*;
 import mrjake.aunis.block.transportrings.TRControllerGoauldBlock;
 import mrjake.aunis.block.transportrings.TransportRingsAncientBlock;
@@ -9,9 +19,11 @@ import mrjake.aunis.item.StargateMilkyWayMemberItemBlock;
 import mrjake.aunis.item.StargatePegasusMemberItemBlock;
 import mrjake.aunis.item.StargateUniverseMemberItemBlock;
 import mrjake.aunis.tileentity.*;
+import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
+import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
 import mrjake.aunis.tileentity.stargate.*;
-import mrjake.aunis.tileentity.TRControllerGoauldTile;
-import mrjake.aunis.tileentity.TransportRingsAncientTile;
+import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
+import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
 import mrjake.aunis.util.BlockHelpers;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -30,6 +42,8 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nullable;
 
+import static mrjake.aunis.Aunis.aunisOresCreativeTab;
+
 @EventBusSubscriber
 public class AunisBlocks {
   public static final NaquadahOreBlock ORE_NAQUADAH_BLOCK = new NaquadahOreBlock("naquadah_ore");
@@ -41,9 +55,9 @@ public class AunisBlocks {
 
   // -----------------------------------------------------------------------------
 
-  public static final Block NAQUADAH_BLOCK_RAW = BlockHelpers.createSimpleBlock("naquadah_block_raw", Material.IRON).setHardness(3);
-  public static final Block TRINIUM_BLOCK = BlockHelpers.createSimpleBlock("trinium_block", Material.IRON);
-  public static final Block TITANIUM_BLOCK = BlockHelpers.createSimpleBlock("titanium_block", Material.IRON);
+  public static final Block NAQUADAH_BLOCK_RAW = BlockHelpers.createSimpleBlock("naquadah_block_raw", Material.IRON, aunisOresCreativeTab).setHardness(3);
+  public static final Block TRINIUM_BLOCK = BlockHelpers.createSimpleBlock("trinium_block", Material.IRON, aunisOresCreativeTab);
+  public static final Block TITANIUM_BLOCK = BlockHelpers.createSimpleBlock("titanium_block", Material.IRON, aunisOresCreativeTab);
 
   // -----------------------------------------------------------------------------
 
@@ -104,7 +118,7 @@ public class AunisBlocks {
     GameRegistry.registerTileEntity(StargateUniverseMemberTile.class, AunisBlocks.STARGATE_UNIVERSE_MEMBER_BLOCK.getRegistryName());
     GameRegistry.registerTileEntity(StargateOrlinMemberTile.class, AunisBlocks.STARGATE_ORLIN_MEMBER_BLOCK.getRegistryName());
     GameRegistry.registerTileEntity(StargatePegasusMemberTile.class, AunisBlocks.STARGATE_PEGASUS_MEMBER_BLOCK.getRegistryName());
-    GameRegistry.registerTileEntity(DHDTile.class, AunisBlocks.DHD_BLOCK.getRegistryName());
+    GameRegistry.registerTileEntity(DHDMilkyWayTile.class, AunisBlocks.DHD_BLOCK.getRegistryName());
     GameRegistry.registerTileEntity(DHDPegasusTile.class, AunisBlocks.DHD_PEGASUS_BLOCK.getRegistryName());
     GameRegistry.registerTileEntity(TransportRingsAncientTile.class, AunisBlocks.TRANSPORT_RINGS_BLOCK.getRegistryName());
     GameRegistry.registerTileEntity(TRControllerGoauldTile.class, AunisBlocks.TR_CONTROLLER_BLOCK.getRegistryName());

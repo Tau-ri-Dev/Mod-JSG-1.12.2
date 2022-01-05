@@ -2,8 +2,6 @@ package mrjake.aunis.event;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
-import mrjake.aunis.block.InvisibleBlock;
-import mrjake.aunis.block.IrisBlock;
 import mrjake.aunis.raycaster.RaycasterDHD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;

@@ -3,14 +3,13 @@ package mrjake.aunis.gui.mainmenu.screens.bindings;
 import java.util.Arrays;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.gui.AunisGuiButton;
+import mrjake.aunis.gui.base.AunisGuiButton;
 import mrjake.aunis.gui.mainmenu.screens.options.AunisBindingOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
@@ -19,8 +18,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
-
-import static net.minecraft.client.gui.Gui.drawScaledCustomSizeModalRect;
 
 @SideOnly(Side.CLIENT)
 public class AunisGuiKeyBindingList extends GuiListExtended {

@@ -1,6 +1,6 @@
 package mrjake.aunis.stargate;
 
-import mrjake.aunis.tileentity.TransportRingsAbstractTile;
+import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
 
 import java.util.HashMap;
 import java.util.Map;

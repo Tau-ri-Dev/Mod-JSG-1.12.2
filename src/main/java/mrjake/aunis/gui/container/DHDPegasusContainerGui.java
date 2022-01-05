@@ -7,7 +7,7 @@ import mrjake.aunis.gui.element.Diode.DiodeStatus;
 import mrjake.aunis.gui.element.Tab.SlotTab;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.SetOpenTabToServer;
-import mrjake.aunis.tileentity.DHDPegasusTile;
+import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
 import mrjake.aunis.tileentity.util.ReactorStateEnum;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;

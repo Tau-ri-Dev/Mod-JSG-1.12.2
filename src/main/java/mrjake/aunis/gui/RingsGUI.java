@@ -1,9 +1,11 @@
 package mrjake.aunis.gui;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.gui.base.AunisGuiButton;
+import mrjake.aunis.gui.base.AunisGuiBase;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.transportrings.SaveRingsParametersToServer;
-import mrjake.aunis.state.TransportRingsGuiState;
+import mrjake.aunis.state.transportrings.TransportRingsGuiState;
 import mrjake.aunis.transportrings.TransportRings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -17,7 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RingsGUI extends GuiBase {
+public class RingsGUI extends AunisGuiBase {
 	
 	private BlockPos pos;
 	public TransportRingsGuiState state;

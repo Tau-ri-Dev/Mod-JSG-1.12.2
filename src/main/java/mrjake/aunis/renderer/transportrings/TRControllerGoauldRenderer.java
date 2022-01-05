@@ -1,6 +1,6 @@
 package mrjake.aunis.renderer.transportrings;
 
-import mrjake.aunis.tileentity.TRControllerGoauldTile;
+import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
 
 public class TRControllerGoauldRenderer extends TRControllerAbstractRenderer{
     // todo: controller

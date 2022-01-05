@@ -1,7 +1,7 @@
 package mrjake.aunis.gui.entry;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.gui.BetterButton;
+import mrjake.aunis.gui.base.BetterButton;
 import mrjake.aunis.gui.util.ArrowButton;
 import mrjake.aunis.item.dialer.UniverseDialerActionEnum;
 import mrjake.aunis.item.dialer.UniverseDialerActionPacketToServer;

@@ -4,7 +4,7 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.state.StateTypeEnum;
-import mrjake.aunis.tileentity.TransportRingsAncientTile;
+import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -29,7 +29,7 @@ public class TransportRingsAncientBlock extends Block {
     setUnlocalizedName(Aunis.ModID + "." + blockName);
 
     setSoundType(SoundType.STONE);
-    setCreativeTab(Aunis.aunisCreativeTab);
+    setCreativeTab(Aunis.aunisRingsCreativeTab);
 
     setLightOpacity(0);
 

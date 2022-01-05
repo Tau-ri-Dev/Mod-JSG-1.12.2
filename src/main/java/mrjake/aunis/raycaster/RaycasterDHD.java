@@ -8,7 +8,7 @@ import mrjake.aunis.raycaster.util.Box;
 import mrjake.aunis.raycaster.util.Ray;
 import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
 import mrjake.aunis.stargate.network.SymbolPegasusEnum;
-import mrjake.aunis.tileentity.DHDPegasusTile;
+import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
 import mrjake.vector.Vector2f;
 import mrjake.vector.Vector3f;
 import net.minecraft.entity.player.EntityPlayer;

@@ -1,7 +1,7 @@
 package mrjake.aunis.gui.util;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.gui.BetterButton;
+import mrjake.aunis.gui.base.BetterButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 

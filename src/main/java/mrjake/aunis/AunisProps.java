@@ -1,9 +1,9 @@
 package mrjake.aunis;
 
-import mrjake.aunis.block.BeamerBlock;
-import mrjake.aunis.block.CapacitorBlock;
-import mrjake.aunis.block.DHDBlock;
-import mrjake.aunis.block.InvisibleBlock;
+import mrjake.aunis.block.beamer.BeamerBlock;
+import mrjake.aunis.block.capacitor.CapacitorBlock;
+import mrjake.aunis.block.dialhomedevice.DHDBlock;
+import mrjake.aunis.block.invisible.InvisibleBlock;
 import mrjake.aunis.block.stargate.StargateMilkyWayMemberBlock;
 import mrjake.aunis.block.stargate.StargateOrlinMemberBlock;
 import mrjake.aunis.property.PropertyBeamerMode;

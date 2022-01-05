@@ -1,6 +1,6 @@
 package mrjake.aunis.item;
 
-import mrjake.aunis.block.CapacitorBlock;
+import mrjake.aunis.block.capacitor.CapacitorBlock;
 import mrjake.aunis.capability.CapacitorCapabilityProvider;
 import mrjake.aunis.stargate.power.StargateItemEnergyStorage;
 import net.minecraft.block.Block;

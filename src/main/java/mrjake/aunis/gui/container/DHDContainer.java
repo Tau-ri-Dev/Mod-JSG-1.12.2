@@ -5,7 +5,7 @@ import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.state.StateTypeEnum;
-import mrjake.aunis.tileentity.DHDTile;
+import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
 import mrjake.aunis.tileentity.util.ReactorStateEnum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -26,7 +26,7 @@ public class DHDContainer extends Container implements OpenTabHolderInterface {
 
 	public Slot slotCrystal;
 	public FluidTank tankNaquadah;
-	public DHDTile dhdTile;
+	public DHDMilkyWayTile dhdMilkyWayTile;
 		
 	private BlockPos pos;
 	private int tankLastAmount;
@@ -46,14 +46,14 @@ public class DHDContainer extends Container implements OpenTabHolderInterface {
 	
 	public DHDContainer(IInventory playerInventory, World world, int x, int y, int z) {	
 		pos = new BlockPos(x, y, z);
-		dhdTile = (DHDTile) world.getTileEntity(pos);
-		IItemHandler itemHandler = dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+		dhdMilkyWayTile = (DHDMilkyWayTile) world.getTileEntity(pos);
+		IItemHandler itemHandler = dhdMilkyWayTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		
 		// Crystal slot (index 0)
 		slotCrystal = new SlotItemHandler(itemHandler, 0, 80, 35);
 		addSlotToContainer(slotCrystal);
 		
-		tankNaquadah = (FluidTank) dhdTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+		tankNaquadah = (FluidTank) dhdMilkyWayTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 		
 		// Upgrades (index 1-4)
 		for (int row=0; row<2; row++) {
@@ -101,7 +101,7 @@ public class DHDContainer extends Container implements OpenTabHolderInterface {
         		}
         	}
         	
-        	else if (DHDTile.SUPPORTED_UPGRADES.contains(stack.getItem()) && !dhdTile.hasUpgrade(stack.getItem())) {
+        	else if (DHDMilkyWayTile.SUPPORTED_UPGRADES.contains(stack.getItem()) && !dhdMilkyWayTile.hasUpgrade(stack.getItem())) {
         		for (int i=1; i<5; i++) {
         			if (!getSlot(i).getHasStack()) {
         				ItemStack stack1 = stack.copy();
@@ -138,16 +138,16 @@ public class DHDContainer extends Container implements OpenTabHolderInterface {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 				
-		if (tankLastAmount != tankNaquadah.getFluidAmount() || lastReactorState != dhdTile.getReactorState() || lastLinked != dhdTile.isLinked()) {			
+		if (tankLastAmount != tankNaquadah.getFluidAmount() || lastReactorState != dhdMilkyWayTile.getReactorState() || lastLinked != dhdMilkyWayTile.isLinked()) {
 			for (IContainerListener listener : listeners) {
 				if (listener instanceof EntityPlayerMP) {
-					AunisPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(pos, StateTypeEnum.GUI_UPDATE, new DHDContainerGuiUpdate(tankNaquadah.getFluidAmount(), tankNaquadah.getCapacity(), dhdTile.getReactorState(), dhdTile.isLinked())), (EntityPlayerMP) listener);
+					AunisPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(pos, StateTypeEnum.GUI_UPDATE, new DHDContainerGuiUpdate(tankNaquadah.getFluidAmount(), tankNaquadah.getCapacity(), dhdMilkyWayTile.getReactorState(), dhdMilkyWayTile.isLinked())), (EntityPlayerMP) listener);
 				}
 			}
 			
 			tankLastAmount = tankNaquadah.getFluidAmount();
-			lastReactorState = dhdTile.getReactorState();
-			lastLinked = dhdTile.isLinked();
+			lastReactorState = dhdMilkyWayTile.getReactorState();
+			lastLinked = dhdMilkyWayTile.isLinked();
 		}
 	}
 }

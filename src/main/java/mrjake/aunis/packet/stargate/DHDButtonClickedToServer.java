@@ -6,7 +6,7 @@ import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.stargate.StargateClosedReasonEnum;
 import mrjake.aunis.stargate.StargateOpenResult;
 import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
-import mrjake.aunis.tileentity.DHDTile;
+import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
 import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
@@ -48,22 +48,22 @@ public class DHDButtonClickedToServer extends PositionedPacket {
 
 			EntityPlayerMP player = ctx.getServerHandler().player;
 			WorldServer world = player.getServerWorld();
-			if(world.getTileEntity(message.pos) instanceof DHDTile) {
+			if(world.getTileEntity(message.pos) instanceof DHDMilkyWayTile) {
 
 				world.addScheduledTask(() -> {
-					DHDTile dhdTile = (DHDTile) world.getTileEntity(message.pos);
+					DHDMilkyWayTile dhdMilkyWayTile = (DHDMilkyWayTile) world.getTileEntity(message.pos);
 
-					if (dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).getStackInSlot(0).isEmpty()) {
+					if (dhdMilkyWayTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).getStackInSlot(0).isEmpty()) {
 						player.sendStatusMessage(new TextComponentTranslation("tile.aunis.dhd_block.no_crystal_warn"), true);
 						return;
 					}
 
-					if (!dhdTile.isLinked()) {
+					if (!dhdMilkyWayTile.isLinked()) {
 						player.sendStatusMessage(new TextComponentTranslation("tile.aunis.dhd_block.not_linked_warn"), true);
 						return;
 					}
 
-					StargateMilkyWayBaseTile gateTile = (StargateMilkyWayBaseTile) dhdTile.getLinkedGate(world);
+					StargateMilkyWayBaseTile gateTile = (StargateMilkyWayBaseTile) dhdMilkyWayTile.getLinkedGate(world);
 					EnumStargateState gateState = gateTile.getStargateState();
 
 					if (gateState.engaged() && message.symbol.brb()) {

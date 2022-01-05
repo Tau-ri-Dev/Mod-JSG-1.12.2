@@ -18,6 +18,8 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
+import static mrjake.aunis.Aunis.aunisItemsCreativeTab;
+
 public class PageMysteriousItem extends Item {
 	public static final String ITEM_NAME = "page_mysterious";
 
@@ -25,7 +27,7 @@ public class PageMysteriousItem extends Item {
 		setRegistryName(Aunis.ModID + ":" + ITEM_NAME);
 		setUnlocalizedName(Aunis.ModID + "." + ITEM_NAME);
 		
-		setCreativeTab(Aunis.aunisCreativeTab);
+		setCreativeTab(aunisItemsCreativeTab);
 	}
 	
 	@Override

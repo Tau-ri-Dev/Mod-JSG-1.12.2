@@ -1,4 +1,7 @@
-itemGroup.aunis=Aunis: Resurrection
+itemGroup.aunis_gates=Aunis: Gates
+itemGroup.aunis_items=Aunis: Items
+itemGroup.aunis_rings=Aunis: Rings
+itemGroup.aunis_ores=Aunis: Ores
 
 soundCategory.aunis=Aunis
 

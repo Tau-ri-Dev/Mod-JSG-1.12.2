@@ -17,77 +17,80 @@ import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import static mrjake.aunis.Aunis.aunisItemsCreativeTab;
+
 @EventBusSubscriber
 public class AunisItems {
 
     /**
      * DHD power/control crystal
      */
-    public static final Item CRYSTAL_CONTROL_DHD = ItemHelper.createGenericItem("crystal_control_dhd");
-    public static final Item CRYSTAL_CONTROL_PEGASUS_DHD = ItemHelper.createGenericItem("crystal_control_pegasus_dhd");
+    public static final Item CRYSTAL_CONTROL_DHD = ItemHelper.createGenericItem("crystal_control_dhd", aunisItemsCreativeTab);
+    public static final Item CRYSTAL_CONTROL_PEGASUS_DHD = ItemHelper.createGenericItem("crystal_control_pegasus_dhd", aunisItemsCreativeTab);
     /**
      * DHD Pegasus control crystal crafting
      */
-    public static final Item CRYSTAL_RAW_PEGASUS_DHD = ItemHelper.createGenericItem("raw_pegasus_dhd_crystal");
-    public static final Item CRYSTAL_BLUE_PEGASUS = ItemHelper.createGenericItem("crystal_blue_pegasus");
+    public static final Item CRYSTAL_RAW_PEGASUS_DHD = ItemHelper.createGenericItem("raw_pegasus_dhd_crystal", aunisItemsCreativeTab);
+    public static final Item CRYSTAL_BLUE_PEGASUS = ItemHelper.createGenericItem("crystal_blue_pegasus", aunisItemsCreativeTab);
 
     /**
      * Iris/Shield upgrade
      */
-    public static final Item IRIS_BLADE = ItemHelper.createGenericItem("iris_blade");
-    public static final Item QUAD_IRIS_BLADE = ItemHelper.createGenericItem("quad_iris_blade");
+    public static final Item IRIS_BLADE = ItemHelper.createGenericItem("iris_blade", aunisItemsCreativeTab);
+    public static final Item QUAD_IRIS_BLADE = ItemHelper.createGenericItem("quad_iris_blade", aunisItemsCreativeTab);
     public static final Item UPGRADE_IRIS = new UpgradeIris("upgrade_iris", AunisConfig.irisConfig.titaniumIrisDurability);
-    public static final Item IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("iris_blade_trinium");
-    public static final Item QUAD_IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("quad_iris_blade_trinium");
+
+    public static final Item IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("iris_blade_trinium", aunisItemsCreativeTab);
+    public static final Item QUAD_IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("quad_iris_blade_trinium", aunisItemsCreativeTab);
     public static final Item UPGRADE_IRIS_TRINIUM = new UpgradeIris("upgrade_iris_trinium", AunisConfig.irisConfig.triniumIrisDurability);
 
-    public static final Item UPGRADE_SHIELD = ItemHelper.createGenericItem("upgrade_shield");
-    public static final Item SHIELD_EMITTER = ItemHelper.createGenericItem("shield_emitter");
+    public static final Item UPGRADE_SHIELD = ItemHelper.createGenericItem("upgrade_shield", aunisItemsCreativeTab);
+    public static final Item SHIELD_EMITTER = ItemHelper.createGenericItem("shield_emitter", aunisItemsCreativeTab);
 
     /**
      * These allow for dialing 8th glyph(cross dimension travel) and show different address spaces
      */
-    public static final Item CRYSTAL_GLYPH_DHD = ItemHelper.createGenericItem("crystal_glyph_dhd");
-    public static final Item CRYSTAL_GLYPH_STARGATE = ItemHelper.createGenericItem("crystal_glyph_stargate");
-    public static final Item CRYSTAL_GLYPH_MILKYWAY = ItemHelper.createGenericItem("crystal_glyph_milkyway");
-    public static final Item CRYSTAL_GLYPH_PEGASUS = ItemHelper.createGenericItem("crystal_glyph_pegasus");
-    public static final Item CRYSTAL_GLYPH_UNIVERSE = ItemHelper.createGenericItem("crystal_glyph_universe");
+    public static final Item CRYSTAL_GLYPH_DHD = ItemHelper.createGenericItem("crystal_glyph_dhd", aunisItemsCreativeTab);
+    public static final Item CRYSTAL_GLYPH_STARGATE = ItemHelper.createGenericItem("crystal_glyph_stargate", aunisItemsCreativeTab);
+    public static final Item CRYSTAL_GLYPH_MILKYWAY = ItemHelper.createGenericItem("crystal_glyph_milkyway", aunisItemsCreativeTab);
+    public static final Item CRYSTAL_GLYPH_PEGASUS = ItemHelper.createGenericItem("crystal_glyph_pegasus", aunisItemsCreativeTab);
+    public static final Item CRYSTAL_GLYPH_UNIVERSE = ItemHelper.createGenericItem("crystal_glyph_universe", aunisItemsCreativeTab);
 
     /**
      * Diffrent Naquadah(main Stargate building material) stages of purity
      */
-    public static final Item NAQUADAH_SHARD = ItemHelper.createGenericItem("naquadah_shard");
-    public static final Item NAQUADAH_ALLOY_RAW = ItemHelper.createGenericItem("naquadah_alloy_raw");
-    public static final Item NAQUADAH_ALLOY = ItemHelper.createGenericItem("naquadah_alloy");
+    public static final Item NAQUADAH_SHARD = ItemHelper.createGenericItem("naquadah_shard", aunisItemsCreativeTab);
+    public static final Item NAQUADAH_ALLOY_RAW = ItemHelper.createGenericItem("naquadah_alloy_raw", aunisItemsCreativeTab);
+    public static final Item NAQUADAH_ALLOY = ItemHelper.createGenericItem("naquadah_alloy", aunisItemsCreativeTab);
 
     /**
      * Titanium & Trinium
      */
-    public static final Item TITANIUM_INGOT = ItemHelper.createGenericItem("titanium_ingot");
-    public static final Item TRINIUM_INGOT = ItemHelper.createGenericItem("trinium_ingot");
+    public static final Item TITANIUM_INGOT = ItemHelper.createGenericItem("titanium_ingot", aunisItemsCreativeTab);
+    public static final Item TRINIUM_INGOT = ItemHelper.createGenericItem("trinium_ingot", aunisItemsCreativeTab);
 
     /**
      * Crafting items
      */
-    public static final Item CRYSTAL_SEED = ItemHelper.createGenericItem("crystal_fragment");
-    public static final Item CRYSTAL_BLUE = ItemHelper.createGenericItem("crystal_blue");
-    public static final Item CRYSTAL_RED = ItemHelper.createGenericItem("crystal_red");
-    public static final Item CRYSTAL_ENDER = ItemHelper.createGenericItem("crystal_ender");
-    public static final Item CRYSTAL_YELLOW = ItemHelper.createGenericItem("crystal_yellow");
-    public static final Item CRYSTAL_WHITE = ItemHelper.createGenericItem("crystal_white");
+    public static final Item CRYSTAL_SEED = ItemHelper.createGenericItem("crystal_fragment", aunisItemsCreativeTab);
+    public static final Item CRYSTAL_BLUE = ItemHelper.createGenericItem("crystal_blue", aunisItemsCreativeTab);
+    public static final Item CRYSTAL_RED = ItemHelper.createGenericItem("crystal_red", aunisItemsCreativeTab);
+    public static final Item CRYSTAL_ENDER = ItemHelper.createGenericItem("crystal_ender", aunisItemsCreativeTab);
+    public static final Item CRYSTAL_YELLOW = ItemHelper.createGenericItem("crystal_yellow", aunisItemsCreativeTab);
+    public static final Item CRYSTAL_WHITE = ItemHelper.createGenericItem("crystal_white", aunisItemsCreativeTab);
 
-    public static final Item CIRCUIT_CONTROL_BASE = ItemHelper.createGenericItem("circuit_control_base");
-    public static final Item CIRCUIT_CONTROL_CRYSTAL = ItemHelper.createGenericItem("circuit_control_crystal");
-    public static final Item CIRCUIT_CONTROL_NAQUADAH = ItemHelper.createGenericItem("circuit_control_naquadah");
+    public static final Item CIRCUIT_CONTROL_BASE = ItemHelper.createGenericItem("circuit_control_base", aunisItemsCreativeTab);
+    public static final Item CIRCUIT_CONTROL_CRYSTAL = ItemHelper.createGenericItem("circuit_control_crystal", aunisItemsCreativeTab);
+    public static final Item CIRCUIT_CONTROL_NAQUADAH = ItemHelper.createGenericItem("circuit_control_naquadah", aunisItemsCreativeTab);
 
-    public static final Item STARGATE_RING_FRAGMENT = ItemHelper.createGenericItem("stargate_ring_fragment");
-    public static final Item UNIVERSE_RING_FRAGMENT = ItemHelper.createGenericItem("universe_ring_fragment");
-    public static final Item TR_RING_FRAGMENT = ItemHelper.createGenericItem("transportrings_ring_fragment");
-    public static final Item HOLDER_CRYSTAL = ItemHelper.createGenericItem("holder_crystal");
-    public static final Item HOLDER_CRYSTAL_PEGASUS = ItemHelper.createGenericItem("holder_crystal_pegasus");
+    public static final Item STARGATE_RING_FRAGMENT = ItemHelper.createGenericItem("stargate_ring_fragment", aunisItemsCreativeTab);
+    public static final Item UNIVERSE_RING_FRAGMENT = ItemHelper.createGenericItem("universe_ring_fragment", aunisItemsCreativeTab);
+    public static final Item TR_RING_FRAGMENT = ItemHelper.createGenericItem("transportrings_ring_fragment", aunisItemsCreativeTab);
+    public static final Item HOLDER_CRYSTAL = ItemHelper.createGenericItem("holder_crystal", aunisItemsCreativeTab);
+    public static final Item HOLDER_CRYSTAL_PEGASUS = ItemHelper.createGenericItem("holder_crystal_pegasus", aunisItemsCreativeTab);
 
-    public static final Item DHD_BRB = ItemHelper.createGenericItem("dhd_brb");
-    public static final Item DHD_BBB = ItemHelper.createGenericItem("dhd_bbb");
+    public static final Item DHD_BRB = ItemHelper.createGenericItem("dhd_brb", aunisItemsCreativeTab);
+    public static final Item DHD_BBB = ItemHelper.createGenericItem("dhd_bbb", aunisItemsCreativeTab);
 
     public static final NotebookItem NOTEBOOK_ITEM = new NotebookItem();
     public static final PageNotebookItem PAGE_NOTEBOOK_ITEM = new PageNotebookItem();
@@ -96,9 +99,9 @@ public class AunisItems {
 
     public static final GDOItem GDO = new GDOItem();
 
-    public static final Item BEAMER_CRYSTAL_POWER = ItemHelper.createGenericItem("beamer_crystal_power");
-    public static final Item BEAMER_CRYSTAL_FLUID = ItemHelper.createGenericItem("beamer_crystal_fluid");
-    public static final Item BEAMER_CRYSTAL_ITEMS = ItemHelper.createGenericItem("beamer_crystal_items");
+    public static final Item BEAMER_CRYSTAL_POWER = ItemHelper.createGenericItem("beamer_crystal_power", aunisItemsCreativeTab);
+    public static final Item BEAMER_CRYSTAL_FLUID = ItemHelper.createGenericItem("beamer_crystal_fluid", aunisItemsCreativeTab);
+    public static final Item BEAMER_CRYSTAL_ITEMS = ItemHelper.createGenericItem("beamer_crystal_items", aunisItemsCreativeTab);
 
     private static Item[] items = {
             CRYSTAL_CONTROL_DHD,

@@ -19,6 +19,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
+import static mrjake.aunis.Aunis.aunisItemsCreativeTab;
+
 public class NotebookItem extends Item implements CustomModelItemInterface {
 
 	public static final String ITEM_NAME = "notebook";

@@ -43,7 +43,7 @@ public class GDOItem extends Item implements CustomModelItemInterface {
         setRegistryName(new ResourceLocation(Aunis.ModID, ITEM_NAME));
         setUnlocalizedName(Aunis.ModID + "." + ITEM_NAME);
 
-        setCreativeTab(Aunis.aunisCreativeTab);
+        setCreativeTab(Aunis.aunisItemsCreativeTab);
     }
 
     // TODO replace with capabilities. If item will have NBT like "display:Name" it will not init custom NBT! -- slava110

@@ -3,7 +3,7 @@ package mrjake.aunis.block.stargate;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
-import mrjake.aunis.block.DHDBlock;
+import mrjake.aunis.block.dialhomedevice.DHDBlock;
 import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.stargate.CamoPropertiesHelper;
 import mrjake.aunis.stargate.EnumMemberVariant;

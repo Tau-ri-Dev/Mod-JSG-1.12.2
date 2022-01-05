@@ -1,7 +1,7 @@
 package mrjake.aunis.gui.entry;
 
-import mrjake.aunis.gui.BetterButton;
-import mrjake.aunis.gui.BetterTextField;
+import mrjake.aunis.gui.base.BetterButton;
+import mrjake.aunis.gui.base.BetterTextField;
 import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.gui.entry.EntryDataTypeEnum;

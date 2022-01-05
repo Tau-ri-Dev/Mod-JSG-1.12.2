@@ -1,6 +1,8 @@
 package mrjake.aunis.tileentity.stargate;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.api.event.StargateChevronEngagedEvent;
+import mrjake.aunis.api.event.StargateDialFailEvent;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateDimensionConfig;
@@ -19,18 +21,24 @@ import mrjake.aunis.sound.StargateSoundPositionedEnum;
 import mrjake.aunis.stargate.EnumScheduledTask;
 import mrjake.aunis.stargate.EnumSpinDirection;
 import mrjake.aunis.stargate.EnumStargateState;
+import mrjake.aunis.stargate.StargateOpenResult;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargatePegasusMergeHelper;
 import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.state.*;
-import mrjake.aunis.state.StargateRendererActionState.EnumGateAction;
-import mrjake.aunis.tileentity.DHDPegasusTile;
+import mrjake.aunis.state.dialhomedevice.DHDActivateButtonPegasusState;
+import mrjake.aunis.state.stargate.StargateBiomeOverrideState;
+import mrjake.aunis.state.stargate.StargateRendererActionState;
+import mrjake.aunis.state.stargate.StargateRendererActionState.EnumGateAction;
+import mrjake.aunis.state.stargate.StargateSpinState;
+import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import mrjake.aunis.util.ILinkable;
 import mrjake.aunis.util.LinkingHelper;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -39,10 +47,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class StargatePegasusBaseTile extends StargateClassicBaseTile implements ILinkable {
   @Override
@@ -57,6 +62,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   protected void disconnectGate() {
     super.disconnectGate();
 
+    resetToDialSymbols();
+
     if (isLinkedAndDHDOperational()) getLinkedDHD(world).clearSymbols();
   }
 
@@ -64,12 +71,20 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   protected void failGate() {
     super.failGate();
 
+    resetToDialSymbols();
+
     if (isLinkedAndDHDOperational()) getLinkedDHD(world).clearSymbols();
   }
 
   @Override
+  protected void dialingFailed(StargateOpenResult reason) {
+    resetToDialSymbols();
+    super.dialingFailed(reason);
+  }
+
+  @Override
   protected void addFailedTaskAndPlaySound() {
-    if(stargateState == EnumStargateState.DIALING || stargateState == EnumStargateState.DIALING_COMPUTER || stargateState == EnumStargateState.IDLE ) {
+    if (stargateState == EnumStargateState.DIALING || stargateState == EnumStargateState.DIALING_COMPUTER || stargateState == EnumStargateState.IDLE) {
       addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, stargateState.dialingComputer() ? 83 : 53));
       playSoundEvent(StargateSoundEventEnum.DIAL_FAILED);
     }
@@ -83,13 +98,15 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   public void openGate(StargatePos targetGatePos, boolean isInitiating) {
     super.openGate(targetGatePos, isInitiating);
 
+    resetToDialSymbols();
+
     if (isLinkedAndDHDOperational()) {
       getLinkedDHD(world).activateSymbol(SymbolPegasusEnum.BRB);
     }
   }
 
   @Override
-  public void activateDHDSymbolBRB(){
+  public void activateDHDSymbolBRB() {
     if (isLinkedAndDHDOperational()) {
       getLinkedDHD(world).activateSymbol(SymbolPegasusEnum.BRB);
     }
@@ -121,7 +138,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   public void addSymbolToAddress(SymbolInterface symbol, boolean activateSymbol) {
 
     if (isLinkedAndDHDOperational()) {
-      if(activateSymbol) getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) symbol);
+      if (activateSymbol) getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) symbol);
     }
 
     if (symbol.origin() && dialedAddress.size() >= 6 && dialedAddress.equals(StargateNetwork.EARTH_ADDRESS) && !network.isStargateInNetwork(StargateNetwork.EARTH_ADDRESS)) {
@@ -140,7 +157,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   }
 
 
-  public void incomingWormhole(int dialedAddressSize){
+  public void incomingWormhole(int dialedAddressSize) {
     super.incomingWormhole(dialedAddressSize);
 
     if (isLinkedAndDHDOperational()) {
@@ -151,16 +168,16 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   }
 
 
-  public void prepareGateToConnect(int dialedAddressSize){
+  public void prepareGateToConnect(int dialedAddressSize) {
     // --- do spin animation ---
 
-    if(stargateState.dialingComputer()) {
+    if (stargateState.dialingComputer()) {
       addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 0));
     }
 
     boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
 
-    if(allowIncomingAnimation) {
+    if (allowIncomingAnimation) {
 
       final int[] i = {1};
       Timer timer = new Timer();
@@ -175,8 +192,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
           }
         }
       }, 0, 400);
-    }
-    else{
+    } else {
       final int[] i = {1};
       Timer timer = new Timer();
       timer.schedule(new TimerTask() {
@@ -359,17 +375,37 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   }
 
   private BlockPos lastPos = BlockPos.ORIGIN;
+
+  protected List<SymbolPegasusEnum> toDialSymbols = new ArrayList<SymbolPegasusEnum>();
+
+  public void resetToDialSymbols() {
+    toDialSymbols.clear();
+  }
+
+  @Override
+  protected boolean canAddSymbolInternal(SymbolInterface symbol) {
+    if (dialedAddress.contains(symbol)) return false;
+
+    return (dialedAddress.size()) != getMaxChevrons();
+  }
+
   @Override
   public void update() {
     super.update();
 
     if (!world.isRemote) {
-      if (!lastPos.equals(pos)) {
-        lastPos = pos;
 
-        updateLinkStatus();
-        markDirty();
+      if ((toDialSymbols.size() > 0) && (world.getTotalWorldTime() % 5 == 0) && stargateState.idle()) {
+        if (canAddSymbolInternal(toDialSymbols.get(0))) addSymbolToAddressByList(toDialSymbols.get(0));
+        if(toDialSymbols.size() > 0) toDialSymbols.remove(0);
       }
+    }
+
+    if (!lastPos.equals(pos)) {
+      lastPos = pos;
+
+      updateLinkStatus();
+      markDirty();
     }
   }
   public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.AGED);
@@ -507,11 +543,15 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   }
 
   public void addSymbolToAddressDHD(SymbolInterface targetSymbol) {
-    if(AunisConfig.dhdConfig.animatePegDHDDial) {
+    toDialSymbols.add((SymbolPegasusEnum) targetSymbol);
 
-      if (isLinkedAndDHDOperational()) {
-        getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) targetSymbol);
-      }
+    if (isLinkedAndDHDOperational()) {
+      getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) targetSymbol);
+    }
+  }
+
+  public void addSymbolToAddressByList(SymbolInterface targetSymbol) {
+    if(AunisConfig.dhdConfig.animatePegDHDDial) {
 
       Object context = null;
       stargateState = EnumStargateState.DIALING;

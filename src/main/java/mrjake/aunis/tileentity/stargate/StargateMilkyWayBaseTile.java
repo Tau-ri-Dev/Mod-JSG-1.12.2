@@ -17,12 +17,12 @@ import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
 import mrjake.aunis.stargate.network.*;
-import mrjake.aunis.state.StargateRendererActionState;
-import mrjake.aunis.state.StargateRendererActionState.EnumGateAction;
+import mrjake.aunis.state.stargate.StargateRendererActionState;
+import mrjake.aunis.state.stargate.StargateRendererActionState.EnumGateAction;
 import mrjake.aunis.state.State;
 import mrjake.aunis.state.StateTypeEnum;
-import mrjake.aunis.tileentity.DHDTile;
-import mrjake.aunis.tileentity.DHDTile.DHDUpgradeEnum;
+import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
+import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile.DHDUpgradeEnum;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import mrjake.aunis.util.ILinkable;
@@ -237,21 +237,21 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     private int linkId = -1;
 
     @Nullable
-    public DHDTile getLinkedDHD(World world) {
+    public DHDMilkyWayTile getLinkedDHD(World world) {
         if (linkedDHD == null) return null;
 
-        return (DHDTile) world.getTileEntity(linkedDHD);
+        return (DHDMilkyWayTile) world.getTileEntity(linkedDHD);
     }
 
     public boolean isLinked() {
-        return linkedDHD != null && world.getTileEntity(linkedDHD) instanceof DHDTile;
+        return linkedDHD != null && world.getTileEntity(linkedDHD) instanceof DHDMilkyWayTile;
     }
 
     public boolean isLinkedAndDHDOperational() {
         if (!isLinked()) return false;
 
-        DHDTile dhdTile = getLinkedDHD(world);
-        if (!dhdTile.hasControlCrystal()) return false;
+        DHDMilkyWayTile dhdMilkyWayTile = getLinkedDHD(world);
+        if (!dhdMilkyWayTile.hasControlCrystal()) return false;
 
         return true;
     }
@@ -268,9 +268,9 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         int linkId = LinkingHelper.getLinkId();
 
         if (closestDhd != null) {
-            DHDTile dhdTile = (DHDTile) world.getTileEntity(closestDhd);
+            DHDMilkyWayTile dhdMilkyWayTile = (DHDMilkyWayTile) world.getTileEntity(closestDhd);
 
-            dhdTile.setLinkedGate(pos, linkId);
+            dhdMilkyWayTile.setLinkedGate(pos, linkId);
             setLinkedDHD(closestDhd, linkId);
             markDirty();
         }
