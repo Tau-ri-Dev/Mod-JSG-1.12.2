@@ -14,7 +14,6 @@ import mrjake.aunis.block.ore.TriniumOreBlock;
 import mrjake.aunis.block.stargate.*;
 import mrjake.aunis.block.transportrings.TRControllerGoauldBlock;
 import mrjake.aunis.block.transportrings.TransportRingsAncientBlock;
-import mrjake.aunis.block.zpm.ZPMBlock;
 import mrjake.aunis.block.zpm.ZPMHubBlock;
 import mrjake.aunis.item.CapacitorItemBlock;
 import mrjake.aunis.item.StargateMilkyWayMemberItemBlock;

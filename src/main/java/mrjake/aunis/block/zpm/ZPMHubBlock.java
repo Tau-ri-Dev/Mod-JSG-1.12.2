@@ -166,12 +166,12 @@ public class ZPMHubBlock extends Block {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return new AunisAxisAlignedBB(1.25, 0, 1.25, -0.25, 1, -0.25);
+        return new AunisAxisAlignedBB(1, 0, 1, 0, 1, 0);
     }
 
     @Nullable
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return new AunisAxisAlignedBB(1.25, 0, 1.25, -0.25, 1, -0.25);
+        return new AunisAxisAlignedBB(1, 0, 1, 0, 1, 0);
     }
 }

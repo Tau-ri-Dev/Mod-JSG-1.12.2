@@ -20,10 +20,10 @@ public class ZPMHubRenderer<S extends ZPMHubRendererState> extends TileEntitySpe
             if (state.getBlock() != AunisBlocks.ZPM_HUB) return;
             GlStateManager.pushMatrix();
             GlStateManager.translate(x, y, z);
-            GlStateManager.scale(0.03, 0.03, 0.03);
+            GlStateManager.scale(0.05, 0.05, 0.05);
             // todo: waiting on Haralds model redone
             //GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
-            GlStateManager.translate(-5, 0, -5);
+            GlStateManager.translate(-2, 0, 0);
 
             ElementEnum.ZPM_HUB.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
 

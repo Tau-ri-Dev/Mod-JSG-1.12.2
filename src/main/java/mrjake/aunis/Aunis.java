@@ -41,7 +41,7 @@ import java.io.IOException;
 public class Aunis {	
     public static final String ModID = "aunis";
     public static final String Name = "Aunis";
-    // I didn't maged to make it work
+    // I didn't manage to make it work
     //public static final String Version = "${version}"; // It works only in final builds.
     public static final String Version = "@VERSION@";
     public static final int DATA_VERSION = 7;
