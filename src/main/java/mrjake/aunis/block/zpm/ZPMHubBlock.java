@@ -93,7 +93,7 @@ public class ZPMHubBlock extends Block {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        // todo zpm gui open
+        // todo check if slot is empty or fill -> place zpm into it
         return false;
     }
 

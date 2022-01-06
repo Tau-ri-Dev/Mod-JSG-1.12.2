@@ -21,7 +21,7 @@ public class ZPMRenderer<S extends ZPMRendererState> extends TileEntitySpecialRe
             GlStateManager.pushMatrix();
             GlStateManager.translate(x, y, z);
             GlStateManager.scale(1, 1, 1);
-            GlStateManager.translate(0.37, 0.25, 0.3);
+            GlStateManager.translate(0.315, 0.3, 0.431);
 
             ElementEnum.ZPM.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
 

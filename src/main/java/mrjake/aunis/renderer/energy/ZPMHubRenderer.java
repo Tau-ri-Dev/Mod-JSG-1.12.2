@@ -23,6 +23,7 @@ public class ZPMHubRenderer<S extends ZPMHubRendererState> extends TileEntitySpe
             GlStateManager.scale(0.05, 0.05, 0.05);
             GlStateManager.translate(0, 0, 20);
             GlStateManager.scale(2, 2, 2);
+            GlStateManager.translate(-5, 0, 3);
 
             ElementEnum.ZPM_HUB.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
 

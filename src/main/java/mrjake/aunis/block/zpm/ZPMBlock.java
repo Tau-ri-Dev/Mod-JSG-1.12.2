@@ -93,18 +93,16 @@ public class ZPMBlock extends Block {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        // todo zpm gui open
         return false;
     }
 
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        // todo drop inserted zpms
         super.breakBlock(world, pos, state);
     }
 
     private int getPower(IBlockAccess world, BlockPos pos) {
-        // todo return power by counting zpms
+        // todo return power by charge
         return 0;
     }
 
