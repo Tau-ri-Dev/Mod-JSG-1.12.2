@@ -14,6 +14,7 @@ import mrjake.aunis.block.ore.TriniumOreBlock;
 import mrjake.aunis.block.stargate.*;
 import mrjake.aunis.block.transportrings.TRControllerGoauldBlock;
 import mrjake.aunis.block.transportrings.TransportRingsAncientBlock;
+import mrjake.aunis.block.zpm.ZPMBlock;
 import mrjake.aunis.block.zpm.ZPMHubBlock;
 import mrjake.aunis.item.CapacitorItemBlock;
 import mrjake.aunis.item.StargateMilkyWayMemberItemBlock;
@@ -24,6 +25,7 @@ import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
 import mrjake.aunis.tileentity.energy.CapacitorTile;
 import mrjake.aunis.tileentity.energy.ZPMHubTile;
+import mrjake.aunis.tileentity.energy.ZPMTile;
 import mrjake.aunis.tileentity.stargate.*;
 import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
@@ -80,7 +82,7 @@ public class AunisBlocks {
   // -----------------------------------------------------------------------------
 
   public static final ZPMHubBlock ZPM_HUB = new ZPMHubBlock();
-  //public static final ZPMBlock ZPM = new ZPMBlock();
+  public static final ZPMBlock ZPM = new ZPMBlock();
 
   // -----------------------------------------------------------------------------
 
@@ -106,7 +108,7 @@ public class AunisBlocks {
 
     TRANSPORT_RINGS_BLOCK, TR_CONTROLLER_BLOCK, INVISIBLE_BLOCK, IRIS_BLOCK,
 
-    CAPACITOR_BLOCK_EMPTY, BEAMER_BLOCK, ZPM_HUB
+    CAPACITOR_BLOCK_EMPTY, BEAMER_BLOCK, ZPM_HUB, ZPM
 
 
   };
@@ -138,6 +140,7 @@ public class AunisBlocks {
     GameRegistry.registerTileEntity(BeamerTile.class, AunisBlocks.BEAMER_BLOCK.getRegistryName());
 
     GameRegistry.registerTileEntity(ZPMHubTile.class, AunisBlocks.ZPM_HUB.getRegistryName());
+    GameRegistry.registerTileEntity(ZPMTile.class, AunisBlocks.ZPM.getRegistryName());
   }
 
   @SubscribeEvent

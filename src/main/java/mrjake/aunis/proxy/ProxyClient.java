@@ -15,6 +15,7 @@ import mrjake.aunis.renderer.dialhomedevice.DHDPegasusRenderer;
 import mrjake.aunis.renderer.dialhomedevice.DHDMilkyWayRenderer;
 import mrjake.aunis.renderer.energy.ZPMHubRenderer;
 import mrjake.aunis.renderer.SpecialRenderer;
+import mrjake.aunis.renderer.energy.ZPMRenderer;
 import mrjake.aunis.renderer.stargate.*;
 import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundPositionedEnum;
@@ -22,6 +23,7 @@ import mrjake.aunis.tileentity.*;
 import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
 import mrjake.aunis.tileentity.energy.ZPMHubTile;
+import mrjake.aunis.tileentity.energy.ZPMTile;
 import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateOrlinBaseTile;
 import mrjake.aunis.tileentity.stargate.StargatePegasusBaseTile;
@@ -77,6 +79,7 @@ public class ProxyClient implements IProxy {
     ClientRegistry.bindTileEntitySpecialRenderer(StargatePegasusBaseTile.class, new StargatePegasusRenderer());
     ClientRegistry.bindTileEntitySpecialRenderer(DHDMilkyWayTile.class, new DHDMilkyWayRenderer());
     ClientRegistry.bindTileEntitySpecialRenderer(ZPMHubTile.class, new ZPMHubRenderer());
+    ClientRegistry.bindTileEntitySpecialRenderer(ZPMTile.class, new ZPMRenderer());
     ClientRegistry.bindTileEntitySpecialRenderer(DHDPegasusTile.class, new DHDPegasusRenderer());
 
     ClientRegistry.bindTileEntitySpecialRenderer(TransportRingsAncientTile.class, new SpecialRenderer());
