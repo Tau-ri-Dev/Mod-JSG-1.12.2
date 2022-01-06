@@ -1,4 +1,4 @@
-package mrjake.aunis.tileentity;
+package mrjake.aunis.tileentity.energy;
 
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.container.CapacitorContainerGuiUpdate;

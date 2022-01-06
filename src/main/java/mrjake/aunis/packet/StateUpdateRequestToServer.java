@@ -57,7 +57,7 @@ public class StateUpdateRequestToServer extends PositionedPacket {
 							if (state != null)
 								AunisPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(message.pos, message.stateType, state), player);							
 							else
-								throw new NotImplementedError("State not implemented on " + te.toString());
+								throw new NotImplementedError("State not implemented on " + te.toString() + " : " + message.stateType.toString());
 						}
 						
 						catch (UnsupportedOperationException e) {

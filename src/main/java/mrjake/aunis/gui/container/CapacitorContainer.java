@@ -5,7 +5,7 @@ import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
 import mrjake.aunis.state.StateTypeEnum;
-import mrjake.aunis.tileentity.CapacitorTile;
+import mrjake.aunis.tileentity.energy.CapacitorTile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;

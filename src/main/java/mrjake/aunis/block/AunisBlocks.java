@@ -14,6 +14,7 @@ import mrjake.aunis.block.ore.TriniumOreBlock;
 import mrjake.aunis.block.stargate.*;
 import mrjake.aunis.block.transportrings.TRControllerGoauldBlock;
 import mrjake.aunis.block.transportrings.TransportRingsAncientBlock;
+import mrjake.aunis.block.zpm.ZPMHubBlock;
 import mrjake.aunis.item.CapacitorItemBlock;
 import mrjake.aunis.item.StargateMilkyWayMemberItemBlock;
 import mrjake.aunis.item.StargatePegasusMemberItemBlock;
@@ -21,6 +22,8 @@ import mrjake.aunis.item.StargateUniverseMemberItemBlock;
 import mrjake.aunis.tileentity.*;
 import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
+import mrjake.aunis.tileentity.energy.CapacitorTile;
+import mrjake.aunis.tileentity.energy.ZPMHubTile;
 import mrjake.aunis.tileentity.stargate.*;
 import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
@@ -75,6 +78,11 @@ public class AunisBlocks {
   public static final IrisBlock IRIS_BLOCK = new IrisBlock();
 
   // -----------------------------------------------------------------------------
+
+  public static final ZPMHubBlock ZPM_HUB = new ZPMHubBlock();
+
+  // -----------------------------------------------------------------------------
+
   public static final StargateMilkyWayMemberBlock STARGATE_MILKY_WAY_MEMBER_BLOCK = new StargateMilkyWayMemberBlock();
   public static final StargateUniverseMemberBlock STARGATE_UNIVERSE_MEMBER_BLOCK = new StargateUniverseMemberBlock();
   public static final StargateOrlinMemberBlock STARGATE_ORLIN_MEMBER_BLOCK = new StargateOrlinMemberBlock();
@@ -97,7 +105,10 @@ public class AunisBlocks {
 
     TRANSPORT_RINGS_BLOCK, TR_CONTROLLER_BLOCK, INVISIBLE_BLOCK, IRIS_BLOCK,
 
-    CAPACITOR_BLOCK_EMPTY, BEAMER_BLOCK};
+    CAPACITOR_BLOCK_EMPTY, BEAMER_BLOCK, ZPM_HUB
+
+
+  };
 
   @SubscribeEvent
   public static void onRegisterBlocks(Register<Block> event) {
@@ -124,6 +135,8 @@ public class AunisBlocks {
     GameRegistry.registerTileEntity(TRControllerGoauldTile.class, AunisBlocks.TR_CONTROLLER_BLOCK.getRegistryName());
     GameRegistry.registerTileEntity(CapacitorTile.class, AunisBlocks.CAPACITOR_BLOCK.getRegistryName());
     GameRegistry.registerTileEntity(BeamerTile.class, AunisBlocks.BEAMER_BLOCK.getRegistryName());
+
+    GameRegistry.registerTileEntity(ZPMHubTile.class, AunisBlocks.ZPM_HUB.getRegistryName());
   }
 
   @SubscribeEvent

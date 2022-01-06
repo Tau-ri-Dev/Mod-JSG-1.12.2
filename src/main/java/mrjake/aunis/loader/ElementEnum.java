@@ -70,6 +70,11 @@ public enum ElementEnum {
   RINGSCONTROLLER_GOAULD("transportrings/plate_goauld.obj", "transportrings/goauld_panel"),
   RINGSCONTROLLER_GOAULD_BUTTONS("transportrings/buttons_goauld.obj", "transportrings/goauld_buttons"),
 
+  // --------------------------------------------------------------------------------------------
+  // ZPM things
+
+  ZPM_HUB("zpm/zpmhub.obj", "zpm/hub/zpmhub"),
+  ZPM("zpm/zpm.obj", "zpm/item/zpm"),
 
   // --------------------------------------------------------------------------------------------
   // Irises/Shields

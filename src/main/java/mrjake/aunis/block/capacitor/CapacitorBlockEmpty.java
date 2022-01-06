@@ -25,7 +25,7 @@ public class CapacitorBlockEmpty extends Block {
 		setUnlocalizedName(Aunis.ModID + "." + BLOCK_NAME);
 		
 		setSoundType(SoundType.METAL); 
-		setCreativeTab(Aunis.aunisGatesCreativeTab);
+		setCreativeTab(Aunis.aunisEnergyCreativeTab);
 		
 		setDefaultState(blockState.getBaseState()
 				.withProperty(AunisProps.FACING_HORIZONTAL, EnumFacing.NORTH));

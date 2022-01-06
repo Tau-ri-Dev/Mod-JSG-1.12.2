@@ -5,7 +5,7 @@ import mrjake.aunis.AunisProps;
 import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
 import mrjake.aunis.stargate.power.StargateItemEnergyStorage;
-import mrjake.aunis.tileentity.CapacitorTile;
+import mrjake.aunis.tileentity.energy.CapacitorTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -39,7 +39,7 @@ public class CapacitorBlock extends Block {
 		setUnlocalizedName(Aunis.ModID + "." + BLOCK_NAME);
 		
 		setSoundType(SoundType.METAL); 
-		setCreativeTab(Aunis.aunisGatesCreativeTab);
+		setCreativeTab(Aunis.aunisEnergyCreativeTab);
 		
 		setDefaultState(blockState.getBaseState()
 				.withProperty(AunisProps.FACING_HORIZONTAL, EnumFacing.NORTH));
