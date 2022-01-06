@@ -2,6 +2,7 @@ itemGroup.aunis_gates=Aunis: Gates
 itemGroup.aunis_items=Aunis: Items
 itemGroup.aunis_rings=Aunis: Rings
 itemGroup.aunis_ores=Aunis: Ores
+itemGroup.aunis_energy=Aunis: Energy
 
 soundCategory.aunis=Aunis
 
@@ -165,6 +166,8 @@ commands.sgcloseall.usage=/sgcloseall [(x y z) (x y z)] [dim
 commands.sgcloseall.closing=Closing Stargates in dim
 commands.sgcloseall.closed=Closed %s gates.
 commands.sgcloseall.number_expected=Number or "current" expected as dimension ID
+commands.sggenincoming.usage=/sggenincoming (x y z) (entities<0-10>) (addressLength<7-9>)
+commands.sggenincoming.notstargate=Targeted block is not a Stargate Base
 
 death.attack.eventHorizon=%s был кремирован Нестабильной червоточиной
 death.attack.irisDeath=%s поцеловал Диафрагму
@@ -288,6 +291,8 @@ glyph.aunis.universe.g33=Glyph 33
 glyph.aunis.universe.g34=Glyph 34
 glyph.aunis.universe.g35=Glyph 35
 glyph.aunis.universe.g36=Glyph 36
+glyph.aunis.universe.g37=Symbol 37
+# trololo
 
 gui.upgrades=Улучшения
 
@@ -489,3 +494,57 @@ aunis.subtitle.gdo_button_beep=Pressed GDO button
 menu.about=About Aunis
 menu.gate_overlay=Gate
 menu.music_toggle=Music
+
+
+# category: main
+aunis.advancements.main.title=§3Aunis
+aunis.advancements.main.desc=All you need is stargate
+
+aunis.advancements.main.liquid_naquadah.title=§2Now THIS is hot stuff!
+aunis.advancements.main.liquid_naquadah.desc=Obtain Liquid Naquadah
+aunis.advancements.main.naquadah_alloy.title=§3The best Super Conductor
+aunis.advancements.main.naquadah_alloy.desc=Craft Naquadah alloy
+aunis.advancements.main.raw_naquadah_alloy.title=§dA little scabrous...
+aunis.advancements.main.raw_naquadah_alloy.desc=Craft Raw Naquadah alloy
+aunis.advancements.main.beamer.title=§bBeamers gonna Beam
+aunis.advancements.main.beamer.desc=Craft a Beamer
+aunis.advancements.main.beamer.title=§bBeamers gonna Beam
+aunis.advancements.main.beamer.desc=Craft a Beamer
+
+aunis.advancements.main.tr.title=§5Shortcut
+aunis.advancements.main.tr.desc=Use Transport rings to teleport
+
+aunis.advancements.orlin.gate.title=§6You will need a new toaster, Carter
+aunis.advancements.orlin.gate.desc=Build an Orlin´s gate
+
+# category: milkyway
+aunis.advancements.milkyway.title=§cMilkyWay
+aunis.advancements.milkyway.desc=MilkyWay category
+
+aunis.advancements.milkyway.gate.title=§6A good old one
+aunis.advancements.milkyway.gate.desc='Build a MilkyWay gate
+
+aunis.advancements.milkyway.gdo.title=§7Garage Door Opener
+aunis.advancements.milkyway.gdo.desc=Craft GDO and try not forget about it
+aunis.advancements.milkyway.dhd.title=§4Just like the old phones
+aunis.advancements.milkyway.dhd.desc=Craft Dial Home Device
+
+# category: universe
+aunis.advancements.universe.title=§cUniverse
+aunis.advancements.universe.desc=Universe category
+
+aunis.advancements.universe.gate.title=§7Ancient, in both meanings
+aunis.advancements.universe.gate.desc=Build a Universe gate
+
+aunis.advancements.universe.unidailer.title=§8Ancient handheld device
+aunis.advancements.universe.unidailer.desc=Obtain Universe Dialer
+
+# category: pegasus
+aunis.advancements.pegasus.title=§cPegasus
+aunis.advancements.pegasus.desc=Pegasus category
+
+aunis.advancements.pegasus.gate.title=§9Advanced Technologies
+aunis.advancements.pegasus.gate.desc=Build a Pegasus gate
+
+aunis.advancements.pegasus.dhd.title=§4Modern smartphones
+aunis.advancements.pegasus.dhd.desc=Craft Pegasus Dial Home Device

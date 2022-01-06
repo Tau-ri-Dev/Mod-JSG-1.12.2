@@ -2,6 +2,7 @@ itemGroup.aunis_gates=Aunis: Gates
 itemGroup.aunis_items=Aunis: Items
 itemGroup.aunis_rings=Aunis: Rings
 itemGroup.aunis_ores=Aunis: Ores
+itemGroup.aunis_energy=Aunis: Energy
 
 soundCategory.aunis=Aunis
 
@@ -165,6 +166,8 @@ commands.sgcloseall.usage=/sgcloseall [(x y z) (x y z)] [dim]
 commands.sgcloseall.closing=Schließe Stargates in der Dimension
 commands.sgcloseall.closed=%s Stargates geschlossen.
 commands.sgcloseall.number_expected=Nummer oder "current" erwartet als Dimensions ID
+commands.sggenincoming.usage=/sggenincoming (x y z) (entities<0-10>) (addressLength<7-9>)
+commands.sggenincoming.notstargate=Targeted block is not a Stargate Base
 
 death.attack.eventHorizon=%s wurde durch das Kawoosh ausgelöscht
 death.attack.irisDeath=%s warf sich gegen eine Iris
@@ -288,6 +291,8 @@ glyph.aunis.universe.g33=Glyph 33
 glyph.aunis.universe.g34=Glyph 34
 glyph.aunis.universe.g35=Glyph 35
 glyph.aunis.universe.g36=Glyph 36
+glyph.aunis.universe.g37=Symbol 37
+# trololo
 
 gui.upgrades=Upgrades
 
@@ -501,6 +506,8 @@ aunis.advancements.main.naquadah_alloy.title=§3Der beste Supraleiter
 aunis.advancements.main.naquadah_alloy.desc=Stelle Naquadah-Legierung her
 aunis.advancements.main.raw_naquadah_alloy.title=§dEin bisschen kratzig...
 aunis.advancements.main.raw_naquadah_alloy.desc=Stelle Rohe Naquadah-Legierung her
+aunis.advancements.main.beamer.title=§bTransporter werden tansportieren
+aunis.advancements.main.beamer.desc=Baue einen Transporter
 aunis.advancements.main.beamer.title=§bTransporter werden tansportieren
 aunis.advancements.main.beamer.desc=Baue einen Transporter
 
