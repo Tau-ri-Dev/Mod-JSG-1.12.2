@@ -166,20 +166,12 @@ public class ZPMHubBlock extends Block {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-        int rotation = (int) (state.getValue(AunisProps.ROTATION_HORIZONTAL) * 22.5f);
-
-        if (rotation % 90 == 0)
-            return new AunisAxisAlignedBB(-0.5, 0, -0.25, 0.5, 1, 0.25).rotate(rotation).offset(0.5, 0, 0.5);
-        else return new AunisAxisAlignedBB(0.25, 0, 0.25, 0.75, 1, 0.75);
+        return new AunisAxisAlignedBB(1.25, 0, 1.25, -0.25, 1, -0.25);
     }
 
     @Nullable
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-        int rotation = (int) (state.getValue(AunisProps.ROTATION_HORIZONTAL) * 22.5f);
-
-        if (rotation % 90 == 0)
-            return new AunisAxisAlignedBB(-0.5, 0, -0.25, 0.5, 1, 0.25).rotate(rotation).offset(0.5, 0, 0.5);
-        else return new AunisAxisAlignedBB(0.25, 0, 0.25, 0.75, 1, 0.75);
+        return new AunisAxisAlignedBB(1.25, 0, 1.25, -0.25, 1, -0.25);
     }
 }

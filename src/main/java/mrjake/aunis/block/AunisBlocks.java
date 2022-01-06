@@ -14,6 +14,7 @@ import mrjake.aunis.block.ore.TriniumOreBlock;
 import mrjake.aunis.block.stargate.*;
 import mrjake.aunis.block.transportrings.TRControllerGoauldBlock;
 import mrjake.aunis.block.transportrings.TransportRingsAncientBlock;
+import mrjake.aunis.block.zpm.ZPMBlock;
 import mrjake.aunis.block.zpm.ZPMHubBlock;
 import mrjake.aunis.item.CapacitorItemBlock;
 import mrjake.aunis.item.StargateMilkyWayMemberItemBlock;
@@ -80,6 +81,7 @@ public class AunisBlocks {
   // -----------------------------------------------------------------------------
 
   public static final ZPMHubBlock ZPM_HUB = new ZPMHubBlock();
+  //public static final ZPMBlock ZPM = new ZPMBlock();
 
   // -----------------------------------------------------------------------------
 
