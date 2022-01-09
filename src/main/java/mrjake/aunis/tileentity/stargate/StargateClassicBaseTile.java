@@ -381,10 +381,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     }
                 } else resetRandomIncoming();
             }
-            else{
-                if(horizonKilling) horizonKilling = false;
-                if(horizonSegments > 0) horizonSegments = 0;
-            }
         }
 
         /*

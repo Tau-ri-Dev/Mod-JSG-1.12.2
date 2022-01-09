@@ -570,7 +570,10 @@ public class AunisConfig {
                 "\"minecraft:zombie\"",
                 "\"minecraft:creeper\""
         })
-        public String[] entitiesToSpawn = {};
+        public String[] entitiesToSpawn = {
+                "minecraft:zombie",
+                "minecraft:skeleton"
+        };
     }
 
     public static void resetCache() {

@@ -795,6 +795,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
              * 	False: Update the source gate about consumed energy each second
              */
             if (stargateState.initiating()) {
+                if(targetGatePos == null) targetGatePos = network.getStargate(this.getStargateAddress(SymbolTypeEnum.MILKYWAY));
                 int energyStored = getEnergyStorage().getEnergyStored();
 
                 // Max Open Time
@@ -846,23 +847,25 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected void kawooshDestruction() {
         // Event horizon killing
         if (horizonKilling) {
-            List<EntityLivingBase> entities = new ArrayList<EntityLivingBase>();
+            List<Entity> entities = new ArrayList<Entity>();
             List<BlockPos> blocks = new ArrayList<BlockPos>();
 
             // Get all blocks and entities inside the kawoosh
             for (int i = 0; i < horizonSegments; i++) {
-                AunisAxisAlignedBB gBox = localKillingBoxes.get(i).offset(pos);
+                if(localKillingBoxes.size() > i) {
+                    AunisAxisAlignedBB gBox = localKillingBoxes.get(i).offset(pos);
 
-                entities.addAll(world.getEntitiesWithinAABB(EntityLivingBase.class, gBox));
+                    entities.addAll(world.getEntitiesWithinAABB(Entity.class, gBox));
 
-                //					Aunis.info(new AxisAlignedBB((int)Math.floor(gBox.minX), (int)Math.floor(gBox.minY+1), (int)Math.floor(gBox.minZ), (int)Math.ceil(gBox.maxX-1), (int)Math.ceil(gBox.maxY-1), (int)Math.ceil(gBox.maxZ-1)).toString());
-                for (BlockPos bPos : BlockPos.getAllInBox((int) Math.floor(gBox.minX), (int) Math.floor(gBox.minY), (int) Math.floor(gBox.minZ), (int) Math.ceil(gBox.maxX) - 1, (int) Math.ceil(gBox.maxY) - 1, (int) Math.ceil(gBox.maxZ) - 1))
-                    blocks.add(bPos);
+                    //					Aunis.info(new AxisAlignedBB((int)Math.floor(gBox.minX), (int)Math.floor(gBox.minY+1), (int)Math.floor(gBox.minZ), (int)Math.ceil(gBox.maxX-1), (int)Math.ceil(gBox.maxY-1), (int)Math.ceil(gBox.maxZ-1)).toString());
+                    for (BlockPos bPos : BlockPos.getAllInBox((int) Math.floor(gBox.minX), (int) Math.floor(gBox.minY), (int) Math.floor(gBox.minZ), (int) Math.ceil(gBox.maxX) - 1, (int) Math.ceil(gBox.maxY) - 1, (int) Math.ceil(gBox.maxZ) - 1))
+                        blocks.add(bPos);
+                }
             }
 
             // Get all entities inside the gate
             for (AunisAxisAlignedBB lBox : localInnerEntityBoxes)
-                entities.addAll(world.getEntitiesWithinAABB(EntityLivingBase.class, lBox.offset(pos)));
+                entities.addAll(world.getEntitiesWithinAABB(Entity.class, lBox.offset(pos)));
 
             // Get all blocks inside the gate
             for (AunisAxisAlignedBB lBox : localInnerBlockBoxes) {
@@ -877,8 +880,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             }
 
             // Kill them
-            for (EntityLivingBase entity : entities) {
-                entity.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_HORIZON, entity.getHealth());
+            for (Entity entity : entities) {
+                entity.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_HORIZON, Float.MAX_VALUE);
                 AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.STARGATE_VAPORIZE_BLOCK_PARTICLES, new StargateVaporizeBlockParticlesRequest(entity.getPosition())), targetPoint);
             }
 
