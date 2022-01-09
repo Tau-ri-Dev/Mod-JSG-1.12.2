@@ -111,6 +111,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         sendSignal(null, "stargate_wormhole_closed_fully", new Object[]{isInitiating});
 
         connectedToGate = false;
+        connectingToGate = false;
 
         markDirty();
     }
@@ -118,6 +119,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected void failGate() {
         stargateState = EnumStargateState.IDLE;
         connectedToGate = false;
+        connectingToGate = false;
 
         if (!(this instanceof StargateOrlinBaseTile)) dialedAddress.clear();
 
@@ -140,6 +142,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         dialedAddress.clear();
         connectedToGate = false;
+        connectingToGate = false;
         targetGatePos = null;
         scheduledTasks.clear();
         stargateState = EnumStargateState.IDLE;
@@ -401,6 +404,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected StargateAddressDynamic dialedAddress = new StargateAddressDynamic(getSymbolType());
     protected StargatePos targetGatePos;
     protected boolean connectedToGate = false;
+    protected boolean connectingToGate = false;
 
     @Nullable
     public StargateAddress getStargateAddress(SymbolTypeEnum symbolType) {
@@ -478,6 +482,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      */
     protected void addSymbolToAddress(SymbolInterface symbol) {
         if (!canAddSymbol(symbol)) throw new IllegalStateException("Cannot add that symbol");
+        boolean byComputer = (this.stargateState == EnumStargateState.DIALING_COMPUTER);
         dialedAddress.addSymbol(symbol);
         StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
         dialAddr_backup.clear();
@@ -487,14 +492,19 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 dialedAddress.addOrigin();
 
                 if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate) {
-                    int size = dialedAddress.size();
+                    if(byComputer){
+                        connectingToGate = true;
+                    }
+                    else {
+                        int size = dialedAddress.size();
 
-                    connectedToGate = true;
+                        connectedToGate = true;
 
-                    network.getStargate(dialedAddress).getTileEntity().incomingWormhole(size);
-                    network.getStargate(dialedAddress).getTileEntity().sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
-                    network.getStargate(dialedAddress).getTileEntity().failGate();
-                    network.getStargate(dialedAddress).getTileEntity().stargateState = EnumStargateState.INCOMING;
+                        network.getStargate(dialedAddress).getTileEntity().incomingWormhole(size);
+                        network.getStargate(dialedAddress).getTileEntity().sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
+                        network.getStargate(dialedAddress).getTileEntity().failGate();
+                        network.getStargate(dialedAddress).getTileEntity().stargateState = EnumStargateState.INCOMING;
+                    }
                 }
                 else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
                     network.getStargate(dialedAddress).getTileEntity().disconnectGate();
@@ -504,6 +514,40 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 dialedAddress.clear();
                 dialedAddress.addAll(dialAddr_backup);
             }
+        }
+    }
+
+    protected void doIncomingAnimation(int time){
+        if(!connectingToGate) return;
+        connectingToGate = false;
+        boolean byComputer = (this.stargateState == EnumStargateState.DIALING_COMPUTER);
+        StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
+        dialAddr_backup.clear();
+        dialAddr_backup.addAll(dialedAddress);
+        if(dialedAddress.size() >= 6) {
+            dialedAddress.addOrigin();
+
+            if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate) {
+                if(byComputer){
+                    int size = dialedAddress.size();
+
+                    connectedToGate = true;
+
+                    // todo: fix this shit
+                    int period = (time / size) * 100;
+                    network.getStargate(dialedAddress).getTileEntity().incomingWormhole(size, period);
+                    network.getStargate(dialedAddress).getTileEntity().sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
+                    network.getStargate(dialedAddress).getTileEntity().failGate();
+                    network.getStargate(dialedAddress).getTileEntity().stargateState = EnumStargateState.INCOMING;
+                }
+            }
+            else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
+                network.getStargate(dialedAddress).getTileEntity().disconnectGate();
+                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, stargateState.dialingComputer() ? 83 : 53));
+            }
+
+            dialedAddress.clear();
+            dialedAddress.addAll(dialAddr_backup);
         }
     }
 
@@ -533,6 +577,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 }
             }
         }, 1000, 500);
+    }
+
+    public void incomingWormhole(int dialedAddressSize, int time) {
+        incomingWormhole(dialedAddressSize);
     }
 
     protected int getOpenSoundDelay() {
@@ -594,6 +642,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         targetGatePos = null;
         connectedToGate = false;
+        connectingToGate = false;
 
         markDirty();
     }

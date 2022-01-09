@@ -879,8 +879,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         boolean moveOnly = targetRingSymbol == currentRingSymbol;
 
 
-        if(moveOnly && targetSymbol instanceof SymbolUniverseEnum)
+        if(moveOnly && targetSymbol instanceof SymbolUniverseEnum) {
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 0));
+            doIncomingAnimation(10);
+        }
         else {
             spinDirection = spinDirection.opposite();
 
@@ -899,6 +901,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             }
 
             int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
+            doIncomingAnimation(duration);
 
             Aunis.logger.debug("addSymbolToAddressManual: " + "current:" + currentRingSymbol + ", " + "target:" + targetSymbol + ", " + "direction:" + spinDirection + ", " + "distance:" + distance + ", " + "duration:" + duration + ", " + "moveOnly:" + moveOnly);
 

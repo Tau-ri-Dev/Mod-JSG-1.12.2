@@ -157,6 +157,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   }
 
 
+  @Override
   public void incomingWormhole(int dialedAddressSize) {
     super.incomingWormhole(dialedAddressSize);
 
@@ -164,11 +165,21 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       getLinkedDHD(world).clearSymbols();
     }
 
-    prepareGateToConnect(dialedAddressSize);
+    prepareGateToConnect(dialedAddressSize, 400);
+  }
+
+  @Override
+  public void incomingWormhole(int dialedAddressSize, int time) {
+    super.incomingWormhole(dialedAddressSize);
+
+    if (isLinkedAndDHDOperational()) {
+      getLinkedDHD(world).clearSymbols();
+    }
+    prepareGateToConnect(dialedAddressSize, time);
   }
 
 
-  public void prepareGateToConnect(int dialedAddressSize) {
+  public void prepareGateToConnect(int dialedAddressSize, int period) {
     // --- do spin animation ---
 
     if (stargateState.dialingComputer()) {
@@ -191,7 +202,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
             timer.cancel();
           }
         }
-      }, 0, 400);
+      }, 0, period);
     } else {
       final int[] i = {1};
       Timer timer = new Timer();
@@ -576,6 +587,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       if (distance <= 20) distance += 36;
 
       int duration = (int) (distance);
+      doIncomingAnimation(duration);
 
       //Aunis.logger.debug("addSymbolToAddressManual: " + "current:" + currentRingSymbol + ", " + "target:" + targetSymbol + ", " + "direction:" + spinDirection + ", " + "distance:" + distance + ", " + "duration:" + duration + ", " + "moveOnly:" + moveOnly);
 
@@ -601,6 +613,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
       sendSignal(null, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), isFinalActive, targetSymbol.getEnglishName()});
       addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10));
+      doIncomingAnimation(10);
     }
     markDirty();
   }
@@ -635,6 +648,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       if (distance <= 20) distance += 36;
 
       int duration = (int) (distance);
+      doIncomingAnimation(duration);
 
       Aunis.logger.debug("addSymbolToAddressManual: " + "current:" + currentRingSymbol + ", " + "target:" + targetSymbol + ", " + "direction:" + spinDirection + ", " + "distance:" + distance + ", " + "duration:" + duration + ", " + "moveOnly:" + moveOnly);
 

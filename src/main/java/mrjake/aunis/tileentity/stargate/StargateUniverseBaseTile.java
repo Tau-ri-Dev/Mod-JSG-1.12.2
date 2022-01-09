@@ -105,12 +105,19 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
   @Override
   public void incomingWormhole(int dialedAddressSize){
-    prepareGateToConnect(dialedAddressSize);
+    prepareGateToConnect(dialedAddressSize, 0);
 
     super.incomingWormhole(9);
   }
 
-  public void prepareGateToConnect(int dialedAddressSize){
+  @Override
+  public void incomingWormhole(int dialedAddressSize, int time){
+    prepareGateToConnect(dialedAddressSize, time);
+
+    super.incomingWormhole(9);
+  }
+
+  public void prepareGateToConnect(int dialedAddressSize, int time){
     // do spin animation
     boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
 
@@ -127,7 +134,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
             timer.cancel();
           }
         }
-      }, 400, 100);
+      }, time, 100);
 
       playSoundEvent(StargateSoundEventEnum.INCOMING);
     }

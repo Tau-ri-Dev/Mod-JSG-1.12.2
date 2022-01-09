@@ -151,6 +151,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         super.addSymbolToAddressManual(targetSymbol, context);
     }
 
+    @Override
     public void incomingWormhole(int dialedAddressSize) {
         super.incomingWormhole(dialedAddressSize);
 
@@ -158,14 +159,25 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
             getLinkedDHD(world).clearSymbols();
         }
 
-        prepareGateToConnect(dialedAddressSize);
+        prepareGateToConnect(dialedAddressSize, 400);
+        markDirty();
+    }
+
+    @Override
+    public void incomingWormhole(int dialedAddressSize, int time) {
+        super.incomingWormhole(dialedAddressSize);
+
+        if (isLinkedAndDHDOperational()) {
+            getLinkedDHD(world).clearSymbols();
+        }
+        prepareGateToConnect(dialedAddressSize, time);
         markDirty();
     }
 
     // incoming animation
 
 
-    public void prepareGateToConnect(int dialedAddressSize) {
+    public void prepareGateToConnect(int dialedAddressSize, int period) {
         if (stargateState.dialingComputer()) {
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 0));
         }
@@ -185,7 +197,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                         timer.cancel();
                     }
                 }
-            }, 0, 400);
+            }, 0, period);
         } else {
             timer.schedule(new TimerTask() {
                 public void run() {
