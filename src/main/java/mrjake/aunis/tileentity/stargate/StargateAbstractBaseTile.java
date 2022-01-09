@@ -466,7 +466,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected boolean canAddSymbolInternal(SymbolInterface symbol) {
         if (dialedAddress.contains(symbol)) return false;
 
-        if (dialedAddress.size() == getMaxChevrons()) return false;
+        if ((dialedAddress.size()) >= getMaxChevrons()) return false;
 
         return true;
     }

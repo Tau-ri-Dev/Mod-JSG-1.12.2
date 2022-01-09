@@ -54,10 +54,11 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
   }
 
   @Override
-  protected ResourceLocation getEventHorizonTextureResource(StargateAbstractRendererState rendererState) {
-    if (AunisConfig.stargateConfig.disableAnimatedEventHorizon) return EV_HORIZON_DESATURATED_TEXTURE;
+  protected ResourceLocation getEventHorizonTextureResource(StargateAbstractRendererState rendererState, boolean kawoosh) {
+    if (AunisConfig.stargateConfig.disableAnimatedEventHorizon)
+      return (kawoosh ? EV_HORIZON_DESATURATED_KAWOOSH_TEXTURE : EV_HORIZON_DESATURATED_TEXTURE);
 
-    return EV_HORIZON_DESATURATED_TEXTURE_ANIMATED;
+    return (kawoosh ? EV_HORIZON_DESATURATED_KAWOOSH_TEXTURE_ANIMATED : EV_HORIZON_DESATURATED_TEXTURE_ANIMATED);
   }
 
   @Override

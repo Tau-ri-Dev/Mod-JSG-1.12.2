@@ -2,25 +2,64 @@ package mrjake.aunis.tileentity.energy;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.gui.container.CapacitorContainerGuiUpdate;
+import mrjake.aunis.gui.container.zpm.ZPMContainerGuiUpdate;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.packet.StateUpdateRequestToServer;
 import mrjake.aunis.renderer.energy.ZPMRendererState;
+import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
 import mrjake.aunis.state.State;
 import mrjake.aunis.state.StateProviderInterface;
 import mrjake.aunis.state.StateTypeEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 
 public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvider, StateProviderInterface {
+
+    // -----------------------------------------------------------------------------
+    // Power system
+
+    private int energyStoredLastTick = 0;
+    private int energyTransferedLastTick = 0;
+
+    public int getEnergyTransferedLastTick() {
+        return energyTransferedLastTick;
+    }
+
+    private StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(100000000) {
+
+        @Override
+        protected void onEnergyChanged() {
+            markDirty();
+        }
+    };
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return (capability == CapabilityEnergy.ENERGY) || super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityEnergy.ENERGY) {
+            return CapabilityEnergy.ENERGY.cast(energyStorage);
+        }
+
+        return super.getCapability(capability, facing);
+    }
 
     @Override
     public void rotate(Rotation rotation) {
@@ -61,6 +100,19 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
             if (!lastPos.equals(pos)) {
                 lastPos = pos;
             }
+            for (EnumFacing facing : EnumFacing.VALUES) {
+                TileEntity tile = world.getTileEntity(pos.offset(facing));
+
+                if (tile != null && tile.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
+                    int extracted = energyStorage.extractEnergy(AunisConfig.powerConfig.stargateMaxEnergyTransfer, true);
+                    extracted = tile.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).receiveEnergy(extracted, false);
+
+                    energyStorage.extractEnergy(extracted, false);
+                }
+            }
+
+            energyTransferedLastTick = energyStorage.getEnergyStored() - energyStoredLastTick;
+            energyStoredLastTick = energyStorage.getEnergyStored();
         }
     }
 
@@ -82,8 +134,10 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
     public State getState(StateTypeEnum stateType) {
         switch (stateType) {
             case RENDERER_STATE:
-
                 return new ZPMRendererState(true);
+
+            case GUI_UPDATE:
+                return new ZPMContainerGuiUpdate(energyStorage.getEnergyStored(), energyTransferedLastTick);
 
             default:
                 throw new UnsupportedOperationException("EnumStateType." + stateType.name() + " not implemented on " + this.getClass().getName());
@@ -96,12 +150,13 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
             case RENDERER_STATE:
                 return new ZPMRendererState();
 
+            case GUI_UPDATE:
+                return new ZPMContainerGuiUpdate();
+
             default:
                 throw new UnsupportedOperationException("EnumStateType." + stateType.name() + " not implemented on " + this.getClass().getName());
         }
     }
-
-    public boolean isLinkedClient;
 
     @Override
     public void setState(StateTypeEnum stateType, State state) {
@@ -110,6 +165,12 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
                 float horizontalRotation = world.getBlockState(pos).getValue(AunisProps.ROTATION_HORIZONTAL) * -22.5f;
                 rendererStateClient = ((ZPMRendererState) state).initClient(pos, horizontalRotation);
 
+                break;
+
+            case GUI_UPDATE:
+                ZPMContainerGuiUpdate guiUpdate = (ZPMContainerGuiUpdate) state;
+                energyStorage.setEnergyStored(guiUpdate.energyStored);
+                energyTransferedLastTick = guiUpdate.energyTransferedLastTick;
                 break;
 
             default:
@@ -122,11 +183,15 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        compound.setTag("energyStorage", energyStorage.serializeNBT());
+
         return super.writeToNBT(compound);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
+        energyStorage.deserializeNBT(compound.getCompoundTag("energyStorage"));
+
         super.readFromNBT(compound);
     }
 

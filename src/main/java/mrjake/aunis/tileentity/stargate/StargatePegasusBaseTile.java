@@ -386,7 +386,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   protected boolean canAddSymbolInternal(SymbolInterface symbol) {
     if (dialedAddress.contains(symbol)) return false;
 
-    return (dialedAddress.size()) != getMaxChevrons();
+    return !((dialedAddress.size() + toDialSymbols.size()) >= getMaxChevrons());
   }
 
   @Override

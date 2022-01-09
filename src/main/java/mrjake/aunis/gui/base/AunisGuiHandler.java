@@ -2,6 +2,8 @@ package mrjake.aunis.gui.base;
 
 import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.gui.container.*;
+import mrjake.aunis.gui.container.zpm.ZPMContainer;
+import mrjake.aunis.gui.container.zpm.ZPMContainerGui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,6 +28,9 @@ public class AunisGuiHandler implements IGuiHandler {
 				
 			case GUI_BEAMER:
 				return new BeamerContainer(player.inventory, world, x, y ,z);
+
+			case GUI_ZPM:
+				return new ZPMContainer(player.inventory, world, x, y ,z);
 		}
 		
 		return null;
@@ -48,6 +53,9 @@ public class AunisGuiHandler implements IGuiHandler {
 				
 			case GUI_BEAMER:
 				return new BeamerContainerGui(new BeamerContainer(player.inventory, world, x, y ,z));
+
+			case GUI_ZPM:
+				return new ZPMContainerGui(new ZPMContainer(player.inventory, world, x, y ,z));
 				
 		}
 		

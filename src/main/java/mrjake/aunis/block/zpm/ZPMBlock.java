@@ -2,6 +2,10 @@ package mrjake.aunis.block.zpm;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.gui.GuiIdEnum;
+import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
+import mrjake.aunis.stargate.power.StargateItemEnergyStorage;
+import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
 import mrjake.aunis.tileentity.energy.ZPMTile;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.block.Block;
@@ -11,10 +15,12 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -24,8 +30,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
 
 public class ZPMBlock extends Block {
 
@@ -45,6 +55,53 @@ public class ZPMBlock extends Block {
         setHardness(3.0f);
         setHarvestLevel("pickaxe", 3);
     }
+
+    protected static final int ENERGY_MAX = 100000000;
+
+    public void setEnergy(ItemStack stack, int energy) {
+        NBTTagCompound nbt;
+        if (stack.hasTagCompound()) {
+            nbt = stack.getTagCompound();
+        } else {
+            nbt = new NBTTagCompound();
+        }
+        nbt.setInteger("energy", energy);
+        stack.setTagCompound(nbt);
+    }
+
+    public int getEnergy(ItemStack stack) {
+        if (stack.hasTagCompound()) {
+            NBTTagCompound nbt = stack.getTagCompound();
+            if (nbt.hasKey("energy")) {
+                return nbt.getInteger("energy");
+            }
+            else {
+                nbt.setInteger("energy", ENERGY_MAX);
+                stack.setTagCompound(nbt);
+            }
+        }
+
+        return ENERGY_MAX;
+
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add("Energy: " + getEnergy(stack) + "/" + ENERGY_MAX + "RF");
+    }
+
+    @Override
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        StargateAbstractEnergyStorage capacitorEnergyStorage = (StargateAbstractEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
+
+        ItemStack stack = new ItemStack(this);
+        ((StargateItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null)).setEnergyStored(capacitorEnergyStorage.getEnergyStored());
+
+        return Arrays.asList(stack);
+    }
+
+
+
     // ------------------------------------------------------------------------
     @Override
     protected BlockStateContainer createBlockState() {
@@ -93,7 +150,15 @@ public class ZPMBlock extends Block {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        return false;
+
+        if (!world.isRemote) {
+            // Server
+            if (!player.isSneaking()) {
+                // Not sneaking
+                player.openGui(Aunis.instance, GuiIdEnum.GUI_ZPM.id, world, pos.getX(), pos.getY(), pos.getZ());
+            }
+        }
+        return !player.isSneaking();
     }
 
     @Override

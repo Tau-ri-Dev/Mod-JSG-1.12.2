@@ -14,6 +14,10 @@ public class StargateAbstractEnergyStorage extends EnergyStorage implements INBT
 	public StargateAbstractEnergyStorage(int capacity, int maxTransfer) {
 		super(capacity, maxTransfer);
 	}
+
+	public StargateAbstractEnergyStorage(int capacity) {
+		super(capacity, AunisConfig.powerConfig.stargateMaxEnergyTransfer);
+	}
 	
 	@Override
 	public NBTTagCompound serializeNBT() {
