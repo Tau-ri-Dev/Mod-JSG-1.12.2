@@ -277,7 +277,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
                     //if chance <= 0.1% && stargate state is idle or dialing by DHD and RANDOM INCOMING IS NOT ACTIVATED YET
                     if (chanceToRandom <= 1) {
-                        int entities = rand.nextInt(10);
+                        int entities = rand.nextInt(25);
                         if (entities < 3) entities = 3;
 
                         generateIncoming(entities, 7); // execute
@@ -318,7 +318,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         this.isFinalActive = true;
                     } else if (randomIncomingState < (waitOpen + wait)) {
                         randomIncomingState++;
-                    } else if (randomIncomingState >= (waitOpen + wait) && randomIncomingEntities > 0 && stargateState == EnumStargateState.ENGAGED) {
+                    } else if (randomIncomingState >= (waitOpen + wait) && randomIncomingEntities > 0 && (stargateState == EnumStargateState.ENGAGED || stargateState == EnumStargateState.INCOMING)) {
                         randomIncomingState++;
                         int randomDelay = new Random().nextInt(16);
                         if (randomDelay <= 0) randomDelay = 1;
@@ -725,9 +725,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     case CHEVRON_ACTIVATE:
                         if (gateActionState.modifyFinal)
                             getRendererStateClient().chevronTextureList.activateFinalChevron(world.getTotalWorldTime());
-                        else getRendererStateClient().chevronTextureList.activateNextChevron(world.getTotalWorldTime());
+                        else getRendererStateClient().chevronTextureList.activateNextChevron(world.getTotalWorldTime(), gateActionState.chevronCount);
 
                         break;
+
 
                     case CLEAR_CHEVRONS:
 

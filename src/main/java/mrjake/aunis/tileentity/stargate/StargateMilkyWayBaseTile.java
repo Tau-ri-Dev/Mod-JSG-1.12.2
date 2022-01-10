@@ -6,6 +6,7 @@ import mrjake.aunis.config.StargateDimensionConfig;
 import mrjake.aunis.config.StargateSizeEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateAbstractRendererState;
+import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.renderer.stargate.StargateMilkyWayRendererState;
 import mrjake.aunis.renderer.stargate.StargateMilkyWayRendererState.StargateMilkyWayRendererStateBuilder;
 import mrjake.aunis.sound.SoundEventEnum;
@@ -183,17 +184,17 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         }
 
         boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
-        final int[] i = {1};
+        final int[] i = {0};
         Timer timer = new Timer();
         if (allowIncomingAnimation) {
             timer.schedule(new TimerTask() {
                 public void run() {
-                    if (i[0] <= dialedAddressSize) {
-                        sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, i[0], false);
-                        playSoundEvent(StargateSoundEventEnum.INCOMING);
+                    playSoundEvent(StargateSoundEventEnum.INCOMING);
+                    if (i[0] < dialedAddressSize) {
+                        sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, i[0] + 9, false);
                         i[0]++;
                     } else {
-                        //sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddressSize, true);
+                        sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, 0, true);
                         timer.cancel();
                     }
                 }

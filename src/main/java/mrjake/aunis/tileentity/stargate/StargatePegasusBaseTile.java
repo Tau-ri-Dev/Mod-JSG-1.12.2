@@ -13,6 +13,7 @@ import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
 import mrjake.aunis.renderer.stargate.StargateAbstractRendererState;
+import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.renderer.stargate.StargatePegasusRendererState;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.sound.SoundPositionedEnum;
@@ -157,7 +158,6 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   }
 
 
-  @Override
   public void incomingWormhole(int dialedAddressSize) {
     super.incomingWormhole(dialedAddressSize);
 
@@ -168,7 +168,6 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     prepareGateToConnect(dialedAddressSize, 400);
   }
 
-  @Override
   public void incomingWormhole(int dialedAddressSize, int time) {
     super.incomingWormhole(dialedAddressSize);
 
@@ -190,15 +189,16 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
     if (allowIncomingAnimation) {
 
-      final int[] i = {1};
+      final int[] i = {0};
       Timer timer = new Timer();
       timer.schedule(new TimerTask() {
         public void run() {
-          if (i[0] <= dialedAddressSize) {
-            sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, i[0], false);
-            playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
+          playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
+          if (i[0] < dialedAddressSize) {
+            sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, i[0] + 9, false);
             i[0]++;
           } else {
+            sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, 0, true);
             timer.cancel();
           }
         }
@@ -397,7 +397,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   protected boolean canAddSymbolInternal(SymbolInterface symbol) {
     if (dialedAddress.contains(symbol)) return false;
 
-    return !((dialedAddress.size() + toDialSymbols.size()) >= getMaxChevrons());
+    return !((dialedAddress.size()) >= getMaxChevrons());
   }
 
   @Override
@@ -628,6 +628,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
     if (moveOnly) {
       addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 0));
+      doIncomingAnimation(0);
     } else {
       spinDirection = spinDirection.opposite();
 

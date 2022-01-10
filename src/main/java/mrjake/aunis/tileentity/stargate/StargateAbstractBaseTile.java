@@ -21,6 +21,7 @@ import mrjake.aunis.particle.ParticleWhiteSmoke;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateAbstractRendererState;
 import mrjake.aunis.renderer.stargate.StargateAbstractRendererState.StargateAbstractRendererStateBuilder;
+import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.sound.*;
 import mrjake.aunis.stargate.*;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
@@ -500,10 +501,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
                         connectedToGate = true;
 
-                        network.getStargate(dialedAddress).getTileEntity().incomingWormhole(size);
-                        network.getStargate(dialedAddress).getTileEntity().sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
-                        network.getStargate(dialedAddress).getTileEntity().failGate();
-                        network.getStargate(dialedAddress).getTileEntity().stargateState = EnumStargateState.INCOMING;
+                        StargateAbstractBaseTile targetGateTile = network.getStargate(dialedAddress).getTileEntity();
+                        targetGateTile.incomingWormhole(size);
+                        targetGateTile.sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
+                        targetGateTile.failGate();
+                        targetGateTile.stargateState = EnumStargateState.INCOMING;
                     }
                 }
                 else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
@@ -534,7 +536,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                     connectedToGate = true;
 
                     // todo: fix this shit
-                    int period = (time / size) * 100;
+                    time += 20; // add 20 ticks to time
+                    int period = ((time / 20) * 1000) / size;
                     network.getStargate(dialedAddress).getTileEntity().incomingWormhole(size, period);
                     network.getStargate(dialedAddress).getTileEntity().sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
                     network.getStargate(dialedAddress).getTileEntity().failGate();

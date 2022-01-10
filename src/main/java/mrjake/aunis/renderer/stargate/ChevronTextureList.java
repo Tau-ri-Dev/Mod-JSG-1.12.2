@@ -71,6 +71,17 @@ public class ChevronTextureList {
     activeChevrons.add(next);
   }
 
+  public void activateNextChevron(long totalWorldTime, int chevron) {
+    if(chevron < 10){
+      activateNextChevron(totalWorldTime);
+      return;
+    }
+    ChevronEnum chev = ChevronEnum.valueOf(chevron-10);
+
+    activationList.add(new StargateActivation(chev, totalWorldTime, false));
+    activeChevrons.add(chev);
+  }
+
   public void activateFinalChevron(long totalWorldTime) {
     activationList.add(new StargateActivation(ChevronEnum.getFinal(), totalWorldTime, false));
     activeChevrons.add(ChevronEnum.getFinal());

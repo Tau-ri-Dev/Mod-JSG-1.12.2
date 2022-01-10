@@ -30,7 +30,7 @@ public class BeamerBlock extends Block {
 	
 	public static final String BLOCK_NAME = "beamer_block";
 	
-	public BeamerBlock() {		
+	public BeamerBlock() {
 		super(Material.IRON);
 		
 		setRegistryName(Aunis.ModID + ":" + BLOCK_NAME);

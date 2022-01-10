@@ -105,7 +105,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
   @Override
   public void incomingWormhole(int dialedAddressSize){
-    prepareGateToConnect(dialedAddressSize, 0);
+    prepareGateToConnect(dialedAddressSize, 10);
 
     super.incomingWormhole(9);
   }
@@ -118,41 +118,18 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
   }
 
   public void prepareGateToConnect(int dialedAddressSize, int time){
+    time = 10;
     // do spin animation
-    boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
-
-    if(allowIncomingAnimation) {
-      final int[] i = {1};
-      Timer timer = new Timer();
-      timer.schedule(new TimerTask() {
-        public void run() {
-          if (i[0] <= 1) {
-            sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
-            sendSignal(null, "stargate_incoming_wormhole", new Object[]{dialedAddressSize});
-            i[0]++;
-          } else {
-            timer.cancel();
-          }
-        }
-      }, time, 100);
-
-      playSoundEvent(StargateSoundEventEnum.INCOMING);
-    }
-    else{
-      final int[] i = {1};
-      Timer timer = new Timer();
-      timer.schedule(new TimerTask() {
-        public void run() {
-          if (i[0] <= 2) {
-            sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddressSize, false);
-            i[0]++;
-          } else {
-            timer.cancel();
-          }
-        }
-      }, 0, 100);
-      playSoundEvent(StargateSoundEventEnum.INCOMING);
-    }
+    final int[] i = {1};
+    Timer timer = new Timer();
+    timer.schedule(new TimerTask() {
+      public void run() {
+        sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
+        sendSignal(null, "stargate_incoming_wormhole", new Object[]{dialedAddressSize});
+        playSoundEvent(StargateSoundEventEnum.INCOMING);
+        timer.cancel();
+      }
+    }, time, 100);
   }
 
   @Override
@@ -335,8 +312,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
   @Override
   protected boolean checkAddressLength(StargateAddressDynamic address, StargatePos targetGatePosition) {
-    System.out.println("je to uni");
-    System.out.println("nearby: " + dialingNearby);
     if (dialingNearby) return address.size() < 7;
     return super.checkAddressLength(address, targetGatePosition);
   }
