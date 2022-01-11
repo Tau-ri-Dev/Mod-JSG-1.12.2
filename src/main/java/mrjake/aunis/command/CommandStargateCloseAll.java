@@ -117,6 +117,8 @@ public class CommandStargateCloseAll extends CommandBase {
 					gateTile.attemptClose(StargateClosedReasonEnum.COMMAND);
 					closed++;
 				}
+				else if(gateTile.resetRandomIncoming())
+					closed++;
 			}
 			
 			else {

@@ -46,6 +46,9 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
                 if (!rendererState.spinHelper.getIsSpinning() && rendererState.slotToGlyphMap.size() == 0) {
                     renderGlyph(i, i, true);
                 }
+                else if(!rendererState.spinHelper.getIsSpinning() && rendererState.slotToGlyphMap.containsKey(i)){
+                    renderGlyph(i, i, true);
+                }
                 continue;
             }
 
@@ -124,7 +127,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         return new double[]{radius * Math.cos(rad), radius * Math.sin(rad), deg};
     }
 
-    protected void renderGlyph(int glyphId, int slot, boolean dim) {
+    protected void renderGlyph(int glyphId, int slot, boolean deactivated) {
         GlStateManager.pushMatrix();
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
@@ -138,7 +141,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         GlStateManager.translate(NumberUtils.round(slotPos[0], 3), NumberUtils.round(slotPos[1], 3), 0.205);
         GlStateManager.rotate(90, 1, 0, 0);
 
-        String path = String.format("pegasus/%s.png", dim ? "glyphs_off" : "glyphs");
+        String path = String.format("pegasus/%s.png", deactivated ? "glyphs_off" : "glyphs");
         Minecraft.getMinecraft().getTextureManager().bindTexture(TextureLoader.getTextureResource(path));
 
         Tessellator tessellator = Tessellator.getInstance();

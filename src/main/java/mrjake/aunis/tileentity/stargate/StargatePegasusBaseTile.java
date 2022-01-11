@@ -188,16 +188,42 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
 
     if (allowIncomingAnimation) {
+      int symbolsPeriod = (period * dialedAddressSize) / 36;
 
-      final int[] i = {0};
+      final int[] y = {0};
+      Timer timer1 = new Timer();
+      timer1.schedule(new TimerTask() {
+        public void run() {
+          if (y[0] <= 36) {
+            sendRenderingUpdate(EnumGateAction.ACTIVATE_GLYPH, y[0], false);
+            y[0]++;
+          } else {
+            timer1.cancel();
+          }
+        }
+      }, 0, symbolsPeriod);
+
+      period = (period * dialedAddressSize) / 9;
+
+      final int[] i = {1};
       Timer timer = new Timer();
       timer.schedule(new TimerTask() {
         public void run() {
-          playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
-          if (i[0] < dialedAddressSize) {
-            sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, i[0] + 9, false);
+          if (i[0] < 10) {
+            int[] pattern_9 = new int[]{1, 2, 3, 8, 9, 4, 5, 6, 7};
+            int[] pattern_8 = new int[]{1, 2, 3, 8, 0, 4, 5, 6, 7};
+            int[] pattern_7 = new int[]{1, 2, 3, 0, 0, 4, 5, 6, 7};
+            int m = i[0] + 9;
+            if(dialedAddressSize == 7) m = pattern_7[i[0]-1] + 9;
+            if(dialedAddressSize == 8) m = pattern_8[i[0]-1] + 9;
+            if(dialedAddressSize == 9) m = pattern_9[i[0]-1] + 9;
+            if(m != 9){
+              sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, m - 1, false);
+              playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
+            }
             i[0]++;
           } else {
+            playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
             sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, 0, true);
             timer.cancel();
           }
@@ -516,6 +542,12 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
           case CHEVRON_CLOSE:
             getRendererStateClient().closeChevron(world.getTotalWorldTime());
             break;
+          case ACTIVATE_GLYPH:
+            int slot = ((StargateRendererActionState) state).chevronCount;
+            slot = 36 - (slot - 9);
+            if(slot > 36) slot -= 36;
+            getRendererStateClient().setGlyphAtSlot(slot, slot);
+            break;
 
           case CHEVRON_ACTIVATE:
             getRendererStateClient().spinHelper.setIsSpinning(false);
@@ -686,8 +718,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         break;
 
       case STARGATE_SPIN_FINISHED:
-        if(!super.dialingAborted) addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 0));
-        else super.dialingAborted = false;
+        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 0));
 
         break;
 

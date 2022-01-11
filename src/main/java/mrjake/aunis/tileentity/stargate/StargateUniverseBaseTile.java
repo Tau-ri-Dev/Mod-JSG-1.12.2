@@ -9,6 +9,7 @@ import mrjake.aunis.renderer.stargate.StargateClassicRendererState.StargateClass
 import mrjake.aunis.renderer.stargate.StargateUniverseRendererState;
 import mrjake.aunis.renderer.stargate.StargateUniverseRendererState.StargateUniverseRendererStateBuilder;
 import mrjake.aunis.sound.*;
+import mrjake.aunis.stargate.EnumIrisMode;
 import mrjake.aunis.stargate.EnumScheduledTask;
 import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.stargate.StargateOpenResult;
@@ -114,7 +115,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
   public void incomingWormhole(int dialedAddressSize, int time){
     prepareGateToConnect(dialedAddressSize, time);
 
-    super.incomingWormhole(9);
+    super.incomingWormhole(9, false);
   }
 
   public void prepareGateToConnect(int dialedAddressSize, int time){
@@ -124,6 +125,9 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     Timer timer = new Timer();
     timer.schedule(new TimerTask() {
       public void run() {
+        if (irisMode == EnumIrisMode.AUTO && isOpened()) {
+          toggleIris();
+        }
         sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
         sendSignal(null, "stargate_incoming_wormhole", new Object[]{dialedAddressSize});
         playSoundEvent(StargateSoundEventEnum.INCOMING);

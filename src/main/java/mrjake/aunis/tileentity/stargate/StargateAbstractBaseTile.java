@@ -44,7 +44,6 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -118,7 +117,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     protected void failGate() {
-        stargateState = EnumStargateState.IDLE;
+        if(stargateState != EnumStargateState.INCOMING) stargateState = EnumStargateState.IDLE;
         connectedToGate = false;
         connectingToGate = false;
 
@@ -535,13 +534,13 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
                     connectedToGate = true;
 
-                    // todo: fix this shit
                     time += 20; // add 20 ticks to time
                     int period = ((time / 20) * 1000) / size;
-                    network.getStargate(dialedAddress).getTileEntity().incomingWormhole(size, period);
-                    network.getStargate(dialedAddress).getTileEntity().sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
-                    network.getStargate(dialedAddress).getTileEntity().failGate();
-                    network.getStargate(dialedAddress).getTileEntity().stargateState = EnumStargateState.INCOMING;
+                    StargateAbstractBaseTile targetGateTile = network.getStargate(dialedAddress).getTileEntity();
+                    targetGateTile.incomingWormhole(size, period);
+                    targetGateTile.sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
+                    targetGateTile.stargateState = EnumStargateState.INCOMING;
+                    targetGateTile.failGate();
                 }
             }
             else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
@@ -779,22 +778,34 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     public int randomIncomingEntities = 0;
     public int randomIncomingAddrSize = 7;
+    public int randomIncomingOpenDelay = 0;
     public float randomIncomingState = 0;
     public boolean randomIncomingIsActive = false;
 
     public void generateIncoming(int entities, int addressSize){
+        generateIncoming(entities, addressSize, 80);
+    }
+
+    public void generateIncoming(int entities, int addressSize, int delay){
         if(!((stargateState.idle() || (stargateState.dialing() && !stargateState.dialingComputer())) && !randomIncomingIsActive)) return;
         this.randomIncomingEntities = entities;
         this.randomIncomingAddrSize = addressSize;
+        this.randomIncomingOpenDelay = delay;
         this.randomIncomingState = 0;
         this.randomIncomingIsActive = true;
     }
 
-    public void resetRandomIncoming(){
+    public boolean resetRandomIncoming(){
+        boolean returning = false;
+        if(randomIncomingIsActive) returning = true;
+
         this.randomIncomingIsActive = false;
         this.randomIncomingEntities = 0;
         this.randomIncomingState = 0;
         this.randomIncomingAddrSize = 7;
+        this.randomIncomingOpenDelay = 0;
+
+        return returning;
     }
 
     public void activateDHDSymbolBRB(){
@@ -1362,7 +1373,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     /**
      * List of scheduled tasks to be performed on {@link ITickable#update()}.
      */
-    private List<ScheduledTask> scheduledTasks = new ArrayList<>();
+    protected List<ScheduledTask> scheduledTasks = new ArrayList<>();
+
+    protected ScheduledTask lastSpinFinished;
 
     @Override
     public void addTask(ScheduledTask scheduledTask) {
@@ -1370,6 +1383,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         scheduledTask.setTaskCreated(world.getTotalWorldTime());
 
         scheduledTasks.add(scheduledTask);
+        markDirty();
+    }
+
+    public void removeTask(ScheduledTask scheduledTask) {
+        scheduledTasks.remove(scheduledTask);
         markDirty();
     }
 

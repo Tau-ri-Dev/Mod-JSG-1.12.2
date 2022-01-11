@@ -89,15 +89,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     private EnumIrisState irisState = EnumIrisState.OPENED;
     private EnumIrisType irisType = EnumIrisType.NULL;
     private int irisCode = -1;
-    private EnumIrisMode irisMode = EnumIrisMode.OPENED;
+    protected EnumIrisMode irisMode = EnumIrisMode.OPENED;
     private long irisAnimation = 0;
 
     public int shieldKeepAlive = 0;
 
     private int irisDurability = 0;
     private int irisMaxDurability = 0;
-
-    protected boolean dialingAborted = false;
 
 
     // ------------------------------------------------------------------------
@@ -137,8 +135,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         isFinalActive = false;
 
-        updateChevronLight(0, false);
-        sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, dialedAddress.size(), isFinalActive);
+        if(stargateState != EnumStargateState.INCOMING){
+            updateChevronLight(0, false);
+            sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, dialedAddress.size(), isFinalActive);
+        }
     }
 
     @Override
@@ -152,12 +152,14 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (stargateState.dialingComputer() || stargateState.idle()) {
             spinStartTime = world.getTotalWorldTime() + 3000;
             isSpinning = false;
-            dialingAborted = true;
             AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, true)), targetPoint);
-            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, 0));
+            addFailedTaskAndPlaySound();
             playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
-            super.failGate();
-            super.disconnectGate();
+            // remove last spinning finished task
+            if(lastSpinFinished != null && scheduledTasks.contains(lastSpinFinished))
+                removeTask(lastSpinFinished);
+            failGate();
+            disconnectGate();
             if (type == 2 && this instanceof StargateUniverseBaseTile)
                 addSymbolToAddressManual(TOP_CHEVRON, null);
             markDirty();
@@ -168,7 +170,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public void incomingWormhole(int dialedAddressSize) {
-        if (irisMode == EnumIrisMode.AUTO && isOpened()) {
+        incomingWormhole(dialedAddressSize, true);
+    }
+
+    public void incomingWormhole(int dialedAddressSize, boolean toggleIris) {
+        if (irisMode == EnumIrisMode.AUTO && isOpened() && toggleIris) {
             toggleIris();
         }
         super.incomingWormhole(dialedAddressSize);
@@ -251,8 +257,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
          * Stargate Random Incoming Generator (RIG)
          */
         if(!world.isRemote) {
-            int wait = 4 * 20;
-            int waitOpen = 60;
 
             // Load entities
             String[] entityListString = AunisConfig.randomIncoming.entitiesToSpawn;
@@ -278,26 +282,35 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     //if chance <= 0.1% && stargate state is idle or dialing by DHD and RANDOM INCOMING IS NOT ACTIVATED YET
                     if (chanceToRandom <= 1) {
                         int entities = rand.nextInt(25);
-                        if (entities < 3) entities = 3;
+                        int delay = rand.nextInt(100);
+                        if(delay < 80) delay = 80;
+                        if(entities < 3) entities = 3;
 
-                        generateIncoming(entities, 7); // execute
+                        generateIncoming(entities, 7, delay); // execute
                     }
                 }
             }
 
             if (randomIncomingIsActive) {
+
+                int wait = 4 * 20;
+                int waitOpen = randomIncomingOpenDelay + 80;
+                if(waitOpen < 80) waitOpen = 80;
+
                 if (isMerged()) {
                     if (randomIncomingState == 0) { // incoming wormhole
                         randomIncomingState++;
-                        this.incomingWormhole(randomIncomingAddrSize);
+                        int period = (((waitOpen) / 20) * 1000) / randomIncomingAddrSize;
+                        stargateState = EnumStargateState.INCOMING;
+                        this.incomingWormhole(randomIncomingAddrSize, period);
                         this.sendSignal(null, "stargate_incoming_wormhole", new Object[]{randomIncomingAddrSize});
                         this.failGate();
                     } else if (randomIncomingState < waitOpen) { // wait waitOpen ticks to open gate
+                        stargateState = EnumStargateState.INCOMING;
                         randomIncomingState++;
                     } else if (randomIncomingState == waitOpen) { // open gate
                         randomIncomingState++;
                         targetGatePos = null;
-                        this.stargateState = EnumStargateState.UNSTABLE;
 
                         ChunkManager.forceChunk(world, new ChunkPos(pos));
 
@@ -831,8 +844,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 currentRingSymbol = targetRingSymbol;
 
                 playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
-                if (!dialingAborted) playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
-                else dialingAborted = false;
+                playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
 
                 markDirty();
                 break;
@@ -907,7 +919,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             Aunis.logger.debug("addSymbolToAddressManual: " + "current:" + currentRingSymbol + ", " + "target:" + targetSymbol + ", " + "direction:" + spinDirection + ", " + "distance:" + distance + ", " + "duration:" + duration + ", " + "moveOnly:" + moveOnly);
 
             AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false)), targetPoint);
-            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 5));
+            lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 5);
+            addTask(lastSpinFinished);
             playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
 
             isSpinning = true;
@@ -1527,13 +1540,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         return new Object[]{"stargate_spin"};
     }
-    // todo make it work again
+
     @Optional.Method(modid = "opencomputers")
-    @Callback(doc = "function(symbolName:string) -- WIP")
+    @Callback(doc = "function() - aborts dialing")
     public Object[] abortDialing(Context context, Arguments args) {
         if (!isMerged()) return new Object[]{null, "stargate_failure_not_merged", "Stargate is not merged"};
 
-        if (stargateState.dialingComputer() ||stargateState.idle()) {
+        if (stargateState.dialingComputer() || stargateState.idle()) {
             abortDialingSequence(1);
             markDirty();
             return new Object[]{null, "stargate_aborting", "Aborting dialing"};
