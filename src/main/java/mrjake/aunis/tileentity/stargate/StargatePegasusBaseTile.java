@@ -210,9 +210,9 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       timer.schedule(new TimerTask() {
         public void run() {
           if (i[0] < 10) {
-            int[] pattern_9 = new int[]{1, 2, 3, 8, 9, 4, 5, 6, 7};
-            int[] pattern_8 = new int[]{1, 2, 3, 8, 0, 4, 5, 6, 7};
-            int[] pattern_7 = new int[]{1, 2, 3, 0, 0, 4, 5, 6, 7};
+            int[] pattern_9 = new int[]{2, 3, 4, 8, 9, 5, 6, 7, 0};
+            int[] pattern_8 = new int[]{2, 3, 4, 8, 0, 5, 6, 7, 0};
+            int[] pattern_7 = new int[]{2, 3, 4, 0, 0, 5, 6, 7, 0};
             int m = i[0] + 9;
             if(dialedAddressSize == 7) m = pattern_7[i[0]-1] + 9;
             if(dialedAddressSize == 8) m = pattern_8[i[0]-1] + 9;
