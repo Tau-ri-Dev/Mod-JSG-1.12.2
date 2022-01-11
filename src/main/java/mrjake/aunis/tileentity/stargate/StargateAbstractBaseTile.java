@@ -537,7 +537,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                     time += 20; // add 20 ticks to time
                     int period = ((time / 20) * 1000) / size;
                     StargateAbstractBaseTile targetGateTile = network.getStargate(dialedAddress).getTileEntity();
-                    targetGateTile.incomingWormhole(size, period);
+                    if(AunisConfig.stargateConfig.allowIncomingAnimations) targetGateTile.incomingWormhole(size, period);
+                    else targetGateTile.incomingWormhole(size);
                     targetGateTile.sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
                     targetGateTile.stargateState = EnumStargateState.INCOMING;
                     targetGateTile.failGate();

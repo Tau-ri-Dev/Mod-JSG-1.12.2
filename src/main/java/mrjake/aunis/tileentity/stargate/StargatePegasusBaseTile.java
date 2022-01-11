@@ -190,45 +190,40 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     if (allowIncomingAnimation) {
       int symbolsPeriod = (period * dialedAddressSize) / 36;
 
-      final int[] y = {0};
-      Timer timer1 = new Timer();
-      timer1.schedule(new TimerTask() {
-        public void run() {
-          if (y[0] <= 36) {
-            sendRenderingUpdate(EnumGateAction.ACTIVATE_GLYPH, y[0], false);
-            y[0]++;
-          } else {
-            timer1.cancel();
-          }
-        }
-      }, 0, symbolsPeriod);
+      playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
 
-      period = (period * dialedAddressSize) / 9;
-
-      final int[] i = {1};
+      final int[] y = {1};
       Timer timer = new Timer();
       timer.schedule(new TimerTask() {
         public void run() {
-          if (i[0] < 10) {
-            int[] pattern_9 = new int[]{2, 3, 4, 8, 9, 5, 6, 7, 0};
-            int[] pattern_8 = new int[]{2, 3, 4, 8, 0, 5, 6, 7, 0};
-            int[] pattern_7 = new int[]{2, 3, 4, 0, 0, 5, 6, 7, 0};
-            int m = i[0] + 9;
-            if(dialedAddressSize == 7) m = pattern_7[i[0]-1] + 9;
-            if(dialedAddressSize == 8) m = pattern_8[i[0]-1] + 9;
-            if(dialedAddressSize == 9) m = pattern_9[i[0]-1] + 9;
-            if(m != 9){
-              sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, m - 1, false);
-              playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
+          if (y[0] <= 37) {
+            int z = y[0];
+            if(z % 4 == 0 && z > 0){
+              int chevron = z / 4;
+
+              int[] pattern = {1, 2, 3, 8, 9, 4, 5, 6, 7};
+
+              // todo: fix 8th and 9th chevrons
+              if(chevron < 9) {
+                if(pattern[chevron-1] <= dialedAddressSize) {
+                  sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, (pattern[chevron - 1] + 9), false);
+                  playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
+                }
+              }
+              else{
+                sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, 0, true);
+                playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
+                playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
+              }
             }
-            i[0]++;
+
+            sendRenderingUpdate(EnumGateAction.ACTIVATE_GLYPH, y[0], false);
+            y[0]++;
           } else {
-            playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
-            sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, 0, true);
             timer.cancel();
           }
         }
-      }, 0, period);
+      }, 0, symbolsPeriod);
     } else {
       final int[] i = {1};
       Timer timer = new Timer();
@@ -546,6 +541,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
             int slot = ((StargateRendererActionState) state).chevronCount;
             slot = 36 - (slot - 9);
             if(slot > 36) slot -= 36;
+            if(slot < 0) slot += 36;
             getRendererStateClient().setGlyphAtSlot(slot, slot);
             break;
 

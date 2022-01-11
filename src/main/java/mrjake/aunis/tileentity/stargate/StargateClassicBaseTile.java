@@ -302,7 +302,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         randomIncomingState++;
                         int period = (((waitOpen) / 20) * 1000) / randomIncomingAddrSize;
                         stargateState = EnumStargateState.INCOMING;
-                        this.incomingWormhole(randomIncomingAddrSize, period);
+                        if(AunisConfig.stargateConfig.allowIncomingAnimations) this.incomingWormhole(randomIncomingAddrSize, period);
+                        else this.incomingWormhole(randomIncomingAddrSize);
                         this.sendSignal(null, "stargate_incoming_wormhole", new Object[]{randomIncomingAddrSize});
                         this.failGate();
                     } else if (randomIncomingState < waitOpen) { // wait waitOpen ticks to open gate
