@@ -181,12 +181,12 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         if (stargateState.dialingComputer()) {
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 0));
         }
-        period -= (20/dialedAddressSize);
+        period -= (30/dialedAddressSize);
 
         boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
-        final int[] i = {1};
-        Timer timer = new Timer();
         if (allowIncomingAnimation) {
+            final int[] i = {1};
+            Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 public void run() {
                     if (i[0] < dialedAddressSize) {
@@ -200,16 +200,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 }
             }, 0, period);
         } else {
-            timer.schedule(new TimerTask() {
-                public void run() {
-                    if (i[0] <= 2) {
-                        sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddressSize, false);
-                        i[0]++;
-                    } else {
-                        timer.cancel();
-                    }
-                }
-            }, 0, 100);
+            sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddressSize, false);
             playSoundEvent(StargateSoundEventEnum.INCOMING);
         }
     }

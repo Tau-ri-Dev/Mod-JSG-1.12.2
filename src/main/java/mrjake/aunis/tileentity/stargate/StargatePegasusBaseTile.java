@@ -188,7 +188,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
 
     if (allowIncomingAnimation) {
-      int symbolsPeriod = (period * dialedAddressSize) / 36;
+      period = (period * dialedAddressSize) / 36;
 
       playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
 
@@ -200,12 +200,10 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
             int z = y[0];
             if(z % 4 == 0 && z > 0){
               int chevron = z / 4;
+              int[] pattern = {1, 2, 3, 7, 8, 4, 5, 6, 9}; // pattern of chevrons
 
-              int[] pattern = {1, 2, 3, 8, 9, 4, 5, 6, 7};
-
-              // todo: fix 8th and 9th chevrons
               if(chevron < 9) {
-                if(pattern[chevron-1] <= dialedAddressSize) {
+                if(pattern[chevron-1] < dialedAddressSize) {
                   sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, (pattern[chevron - 1] + 9), false);
                   playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
                 }
@@ -223,20 +221,9 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
             timer.cancel();
           }
         }
-      }, 0, symbolsPeriod);
+      }, 0, period);
     } else {
-      final int[] i = {1};
-      Timer timer = new Timer();
-      timer.schedule(new TimerTask() {
-        public void run() {
-          if (i[0] <= 2) {
-            sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddressSize, false);
-            i[0]++;
-          } else {
-            timer.cancel();
-          }
-        }
-      }, 0, 100);
+      sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddressSize, false);
       playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
     }
   }

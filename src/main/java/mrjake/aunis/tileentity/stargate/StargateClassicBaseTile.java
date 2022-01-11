@@ -294,7 +294,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             if (randomIncomingIsActive) {
 
                 int wait = 4 * 20;
-                int waitOpen = randomIncomingOpenDelay + 80;
+                int waitOpen = randomIncomingOpenDelay + 20;
                 if(waitOpen < 80) waitOpen = 80;
 
                 if (isMerged()) {
