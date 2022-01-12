@@ -42,7 +42,9 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
 
   DHD_PEGASUS_PRESS(10, "dhd_pegasus_press", 0.5f), DHD_PEGASUS_PRESS_BRB(11, "dhd_pegasus_press_brb", 0.5f),
 
-  GATE_PEGASUS_CHEVRON_OPEN(80, "gate_pegasus_chevron_open", 0.25f), GATE_PEGASUS_CHEVRON_SHUT(81, "gate_pegasus_chevron_shut", 0.25f), GATE_PEGASUS_OPEN(82, "gate_pegasus_open", 0.5f), GATE_PEGASUS_INCOMING(83, "gate_pegasus_incoming", 0.5f), GATE_PEGASUS_DIAL_FAILED(84, "gate_pegasus_dial_fail", 0.3f),
+  GATE_PEGASUS_CHEVRON_OPEN(80, "gate_pegasus_chevron_open", 0.25f), GATE_PEGASUS_CHEVRON_SHUT(81, "gate_pegasus_chevron_shut", 0.25f),
+  GATE_PEGASUS_OPEN(82, "gate_pegasus_open", 0.5f), GATE_PEGASUS_INCOMING(83, "gate_pegasus_incoming", 0.5f),
+  GATE_PEGASUS_DIAL_FAILED(84, "gate_pegasus_dial_fail", 0.3f),
 
   // ----------------------------------------------------------
   // Ring transporter
@@ -56,7 +58,9 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
   // ----------------------------------------------------------
   // Misc
   PAGE_FLIP(120, "page_flip", 1.0f),
-  GUI_SEND_CODE_BUTTON_PRESS(121, "gui_send_code_button_press", .5f);
+  GUI_SEND_CODE_BUTTON_PRESS(121, "gui_send_code_button_press", .5f),
+  UNIVERSE_DIALER_MODE_CHANGE(122, "universe_dialer_mode_change", 0.5f),
+  UNIVERSE_DIALER_START_DIAL(123, "universe_dialer_start_dial", .5f);
   // ----------------------------------------------------------
     public int id;
   public SoundEvent soundEvent;

@@ -180,14 +180,12 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
   public void prepareGateToConnect(int dialedAddressSize, int period) {
     // --- do spin animation ---
-
-    if (stargateState.dialingComputer()) {
-      addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 0));
-    }
+    if(stargateState == EnumStargateState.DIALING_COMPUTER) abortDialingSequence(1);
 
     boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
 
     if (allowIncomingAnimation) {
+      sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 0, false);
       period = (period * dialedAddressSize) / 36;
 
       playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
@@ -205,13 +203,13 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
               if(chevron < 9) {
                 if(pattern[chevron-1] < dialedAddressSize) {
                   sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, (pattern[chevron - 1] + 9), false);
-                  playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
+                  playSoundEvent(StargateSoundEventEnum.INCOMING);
                 }
               }
               else{
                 sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, 0, true);
                 playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
-                playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
+                playSoundEvent(StargateSoundEventEnum.INCOMING);
               }
             }
 
@@ -224,7 +222,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       }, 0, period);
     } else {
       sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddressSize, false);
-      playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
+      playSoundEvent(StargateSoundEventEnum.INCOMING);
     }
   }
 
@@ -367,8 +365,6 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       case DIAL_FAILED:
         return stargateState.dialingComputer() ? SoundEventEnum.GATE_PEGASUS_DIAL_FAILED : SoundEventEnum.GATE_PEGASUS_DIAL_FAILED;
       case INCOMING:
-        return SoundEventEnum.GATE_MILKYWAY_INCOMING;
-      case PEGASUS_INCOMING:
         return SoundEventEnum.GATE_PEGASUS_INCOMING;
       case CHEVRON_OPEN:
         return SoundEventEnum.GATE_PEGASUS_CHEVRON_OPEN;
@@ -534,8 +530,10 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
           case CHEVRON_ACTIVATE:
             getRendererStateClient().spinHelper.setIsSpinning(false);
-            ChevronEnum chevron = gateActionState.modifyFinal ? ChevronEnum.getFinal() : getRendererStateClient().chevronTextureList.getNextChevron();
-            getRendererStateClient().lockChevron(getRendererStateClient().spinHelper.getTargetSymbol().getId(), chevron);
+            if(stargateState != EnumStargateState.INCOMING){
+              ChevronEnum chevron = gateActionState.modifyFinal ? ChevronEnum.getFinal() : getRendererStateClient().chevronTextureList.getNextChevron();
+              getRendererStateClient().lockChevron(getRendererStateClient().spinHelper.getTargetSymbol().getId(), chevron);
+            }
 
             break;
 

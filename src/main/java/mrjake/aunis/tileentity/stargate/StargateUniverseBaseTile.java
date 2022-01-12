@@ -67,7 +67,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
   }
 
   public void abort() {
-    abortDialing = true;
+    abortDialingSequence(1);
+    //abortDialing = true;
     markDirty();
   }
 
@@ -119,7 +120,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
   }
 
   public void prepareGateToConnect(int dialedAddressSize, int time){
-    time = 10;
+    time = time * dialedAddressSize;
     // do spin animation
     final int[] i = {1};
     Timer timer = new Timer();

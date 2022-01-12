@@ -490,6 +490,7 @@ aunis.subtitle.beamer_stop=Transporter stoppt
 aunis.subtitle.beamer_loop=Transporter transportiert
 aunis.subtitle.page_flip=Seite schlägt um
 aunis.subtitle.gdo_button_beep=GDO-Knopf gedrückt
+aunis.subtitle.universe_dialer_beep=Pressed Universe Dialer button
 
 menu.about=Über AUNIS
 menu.gate_overlay=Gate

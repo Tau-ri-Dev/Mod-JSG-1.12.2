@@ -2,6 +2,8 @@ package mrjake.aunis.item.dialer;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.sound.AunisSoundHelper;
+import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -62,6 +64,7 @@ public class UniverseDialerActionPacketToServer implements IMessage {
 					switch (message.action) {
 					
 						case MODE_CHANGE:
+							AunisSoundHelper.playSoundEvent(world, player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_MODE_CHANGE);
 							if (message.next) // message.offset < 0
 								mode = mode.next();
 							else

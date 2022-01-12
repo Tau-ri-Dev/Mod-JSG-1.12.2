@@ -490,6 +490,7 @@ aunis.subtitle.beamer_stop=Láser se detiene
 aunis.subtitle.beamer_loop=Sonido de láser
 aunis.subtitle.page_flip=Cambio de página
 aunis.subtitle.gdo_button_beep=Pressed GDO button
+aunis.subtitle.universe_dialer_beep=Pressed Universe Dialer button
 
 menu.about=Acerca de Aunis
 menu.gate_overlay=Gate

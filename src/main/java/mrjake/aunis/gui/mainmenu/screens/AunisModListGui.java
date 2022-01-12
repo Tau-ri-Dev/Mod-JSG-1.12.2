@@ -319,7 +319,7 @@ public class AunisModListGui extends GuiModList
             if (this.gatePosY > 0.0f) this.gatePosY -= step * 4f;
             if (this.gateZoom > 0.0f) this.gateZoom -= step;
 
-            if (this.gatePosY+((step*4) + 25) >= ((float) height) / 2f) this.mc.displayGuiScreen(this.mainMenu);
+            if (this.gateZoom+step <= 0.0f) this.mc.displayGuiScreen(this.mainMenu);
         }
         if (animationStage > 360) animationStage = 0f;
         updateRingSpeed();

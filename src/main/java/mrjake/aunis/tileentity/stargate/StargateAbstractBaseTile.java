@@ -483,6 +483,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected void addSymbolToAddress(SymbolInterface symbol) {
         if (!canAddSymbol(symbol)) throw new IllegalStateException("Cannot add that symbol");
         boolean byComputer = (this.stargateState == EnumStargateState.DIALING_COMPUTER);
+        if((this instanceof StargatePegasusBaseTile || this instanceof StargateUniverseBaseTile) && this.stargateState == EnumStargateState.DIALING)
+            byComputer = true;
         dialedAddress.addSymbol(symbol);
         StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
         dialAddr_backup.clear();
@@ -522,6 +524,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         if(!connectingToGate) return;
         connectingToGate = false;
         boolean byComputer = (this.stargateState == EnumStargateState.DIALING_COMPUTER);
+        if((this instanceof StargatePegasusBaseTile || this instanceof StargateUniverseBaseTile) && this.stargateState == EnumStargateState.DIALING)
+            byComputer = true;
         StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
         dialAddr_backup.clear();
         dialAddr_backup.addAll(dialedAddress);
@@ -986,7 +990,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         int configPower = AunisConfig.openLimitConfig.maxOpenedPowerDrawAfterLimit;
         if (AunisConfig.openLimitConfig.maxOpenedEnabled && getAutoCloseManager().afterLimitSeconds()) {
             if (AunisConfig.openLimitConfig.maxOpenedWhat.equals("closeGate")){
-                attemptClose(StargateClosedReasonEnum.TIMELIMIT);
+                //attemptClose(StargateClosedReasonEnum.TIMELIMIT);
+                attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
                 resetLimitSeconds();
             }
             else

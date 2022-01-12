@@ -149,7 +149,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public void abortDialingSequence(int type) {
-        if (stargateState.dialingComputer() || stargateState.idle()) {
+        if (stargateState.dialingComputer() || stargateState.idle() || stargateState.dialing()) {
             spinStartTime = world.getTotalWorldTime() + 3000;
             isSpinning = false;
             AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, true)), targetPoint);
@@ -1441,6 +1441,21 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     // -----------------------------------------------------------------
     // OpenComputers methods
+
+
+    @Optional.Method(modid = "opencomputers")
+    @Callback
+    public Object[] getOpenedTime(Context context, Arguments args) {
+        if (stargateState.engaged()) {
+            float openedSeconds = getOpenedSecondsToDisplay();
+            int minutes = ((int) Math.floor(openedSeconds / 60));
+            int seconds = ((int) (openedSeconds - (60 * minutes)));
+            String secondsString = ((seconds < 10) ? "0" + seconds : "" + seconds);
+            if(openedSeconds > 0) return new Object[]{true, "stargate_time", "" + minutes, "" + secondsString};
+            return new Object[] {false, "stargate_not_connected"};
+        }
+        return new Object[] {false, "stargate_not_connected"};
+    }
 
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function() -- close/open the iris/shield")

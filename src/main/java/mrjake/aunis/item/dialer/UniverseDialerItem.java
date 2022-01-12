@@ -8,6 +8,9 @@ import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
+import mrjake.aunis.sound.AunisSoundHelper;
+import mrjake.aunis.sound.SoundEventEnum;
+import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.stargate.StargateClosedReasonEnum;
 import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
@@ -325,6 +328,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                         case IDLE:
                             int maxSymbols = SymbolUniverseEnum.getMaxSymbolsDisplay(selectedCompound.getBoolean("hasUpgrade"));
                             gateTile.dial(new StargateAddress(selectedCompound), maxSymbols, mode == UniverseDialerMode.NEARBY);
+                            AunisSoundHelper.playSoundEvent(world, player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_START_DIAL);
                             break;
 
                         case ENGAGED_INITIATING:
@@ -336,6 +340,11 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                             break;
 
                         default:
+                            if (gateTile.getStargateState() == EnumStargateState.DIALING) {
+                                gateTile.abort();
+                                player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.aborting"), true);
+                                break;
+                            }
                             player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.gate_busy"), true);
                             break;
                     }

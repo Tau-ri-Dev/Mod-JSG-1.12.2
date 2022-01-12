@@ -490,6 +490,7 @@ aunis.subtitle.beamer_stop=Arrêt du Beamer
 aunis.subtitle.beamer_loop=Faisceaux du Beamer
 aunis.subtitle.page_flip=Feuillets de pageitem.aunis.upgrade_shield.name
 aunis.subtitle.gdo_button_beep=Pressed GDO button
+aunis.subtitle.universe_dialer_beep=Pressed Universe Dialer button
 
 menu.about=About Aunis
 menu.gate_overlay=Gate

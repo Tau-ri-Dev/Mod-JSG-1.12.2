@@ -490,6 +490,7 @@ aunis.subtitle.beamer_stop=Лучевой передатчик отключае�
 aunis.subtitle.beamer_loop=Лучевой передатчик передаёт
 aunis.subtitle.page_flip=Перелистывание страницы
 aunis.subtitle.gdo_button_beep=Pressed GDO button
+aunis.subtitle.universe_dialer_beep=Pressed Universe Dialer button
 
 menu.about=About Aunis
 menu.gate_overlay=Gate
