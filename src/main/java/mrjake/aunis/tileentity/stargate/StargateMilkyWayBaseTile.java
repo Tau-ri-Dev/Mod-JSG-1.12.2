@@ -519,6 +519,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
                 sendRenderingUpdate(EnumGateAction.CHEVRON_OPEN, 0, false);
 
+                // todo: prevent last chevron from locking 9th chevorn
                 if(stargateState == EnumStargateState.INCOMING){
                     addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN_SECOND, 7));
                     break;
