@@ -28,6 +28,7 @@ public class StargateAbstractRendererState extends State {
 			facing = facing.getOpposite();
 		
 		this.horizontalRotation = facing.getHorizontalAngle();
+		this.verticalRotation = facing.getHorizontalAngle();
 		this.biomeOverlay = biomeOverlay;
 		
 		return this;
@@ -38,6 +39,7 @@ public class StargateAbstractRendererState extends State {
 	public BlockPos pos;
 	public EnumFacing facing;
 	public float horizontalRotation;
+	public float verticalRotation;
 	private BiomeOverlayEnum biomeOverlay;
 	
 	// Gate

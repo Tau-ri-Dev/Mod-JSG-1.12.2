@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public final class StargateItemEnergyStorage implements IEnergyStorage {
+public class StargateItemEnergyStorage implements IEnergyStorage {
     private final ItemStack stack;
 
     public StargateItemEnergyStorage(ItemStack stack) {

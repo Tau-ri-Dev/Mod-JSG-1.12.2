@@ -70,6 +70,9 @@ public class Aunis {
     
     private static final String OC_WRAPPER_LOADED = "mrjake.aunis.integration.OCWrapperLoaded";
     private static final String OC_WRAPPER_NOT_LOADED = "mrjake.aunis.integration.OCWrapperNotLoaded";
+
+    private static final String IC2_WRAPPER_LOADED = "mrjake.aunis.integration.IC2WrapperLoaded";
+    private static final String IC2_WRAPPER_NOT_LOADED = "mrjake.aunis.integration.IC2WrapperNotLoaded";
     
     public static OCWrapperInterface ocWrapper;
     

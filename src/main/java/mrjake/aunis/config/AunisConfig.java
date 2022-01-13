@@ -1,5 +1,6 @@
 package mrjake.aunis.config;
 
+import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.util.ItemMetaPair;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Config(modid = "aunis", name = "aunis")
+@Config(modid = "aunis", name = "aunis_" + Aunis.Version)
 public class AunisConfig {
 
     @Name("Stargate size")
@@ -328,6 +329,10 @@ public class AunisConfig {
 
         @Name("Capacitors supported by Universe gates")
         public int universeCapacitors = 0;
+
+        @Name("ZPM Capacity")
+        @RangeInt(min = 0, max = 1000000000)
+        public int zpmEnergyStorage = 100000000;
     }
 
     public static class RingsConfig {
@@ -393,6 +398,9 @@ public class AunisConfig {
 
         @Name("Render invisible blocks")
         public boolean renderInvisibleBlocks = false;
+
+        @Name("Show loading texture in log")
+        public boolean logTexturesLoading = false;
     }
 
     public static class MysteriousConfig {

@@ -58,6 +58,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     @Override
     public void update() {
         if (!world.isRemote) {
+            AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
             if (!lastPos.equals(pos)) {
                 lastPos = pos;
             }

@@ -3,9 +3,8 @@ package mrjake.aunis.gui.container.zpm;
 import mrjake.aunis.gui.util.ContainerHelper;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
-import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
+import mrjake.aunis.stargate.power.ZPMEnergyStorage;
 import mrjake.aunis.state.StateTypeEnum;
-import mrjake.aunis.tileentity.energy.CapacitorTile;
 import mrjake.aunis.tileentity.energy.ZPMTile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -48,7 +47,7 @@ public class ZPMContainer extends Container {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) zpmTile.getCapability(CapabilityEnergy.ENERGY, null);
+        ZPMEnergyStorage energyStorage = (ZPMEnergyStorage) zpmTile.getCapability(CapabilityEnergy.ENERGY, null);
 
         if (lastEnergyStored != energyStorage.getEnergyStored() || energyTransferedLastTick != zpmTile.getEnergyTransferedLastTick()) {
             for (IContainerListener listener : listeners) {

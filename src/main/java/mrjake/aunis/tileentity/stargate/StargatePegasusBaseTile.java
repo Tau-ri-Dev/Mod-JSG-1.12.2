@@ -113,6 +113,13 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     }
   }
 
+  @Override
+  public void clearDHDSymbols(){
+    if (isLinkedAndDHDOperational()) {
+      getLinkedDHD(world).clearSymbols();
+    }
+  }
+
   // ------------------------------------------------------------------------
   // Stargate Network
 

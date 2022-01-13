@@ -2,7 +2,7 @@ package mrjake.aunis.gui.container.zpm;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
+import mrjake.aunis.stargate.power.ZPMEnergyStorage;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -14,8 +14,7 @@ import java.util.List;
 
 public class ZPMContainerGui extends GuiContainer {
 
-    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_capacitor.png");
-    //private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_zpm.png");
+    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_zpm.png");
 
     private ZPMContainer container;
 
@@ -40,19 +39,18 @@ public class ZPMContainerGui extends GuiContainer {
         mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-        StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.zpmTile.getCapability(CapabilityEnergy.ENERGY, null);
+        ZPMEnergyStorage energyStorage = (ZPMEnergyStorage) container.zpmTile.getCapability(CapabilityEnergy.ENERGY, null);
 
-        int width = Math.round((energyStorage.getEnergyStored()/((float) AunisConfig.powerConfig.stargateEnergyStorage/4) * 156));
+        int width = Math.round((energyStorage.getEnergyStored()/((float) AunisConfig.powerConfig.zpmEnergyStorage) * 156));
         drawGradientRect(guiLeft+10, guiTop+61, guiLeft+10+width, guiTop+61+6, 0xffcc2828, 0xff731616);
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        fontRenderer.drawString(I18n.format("gui.capacitor.name"), 7, 6, 4210752);
-        //fontRenderer.drawString(I18n.format("gui.zpm.name"), 7, 6, 4210752);
+        fontRenderer.drawString(I18n.format("gui.zpm.name"), 7, 6, 4210752);
         fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 
-        StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.zpmTile.getCapability(CapabilityEnergy.ENERGY, null);
+        ZPMEnergyStorage energyStorage = (ZPMEnergyStorage) container.zpmTile.getCapability(CapabilityEnergy.ENERGY, null);
 
         int energyStored = energyStorage.getEnergyStored();
         int maxEnergyStored = energyStorage.getMaxEnergyStored();

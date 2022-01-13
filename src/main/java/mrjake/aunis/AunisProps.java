@@ -27,8 +27,8 @@ public class AunisProps {
 	 * 
 	 * Used for ex. by Stargate blocks since only vertical Stargates are supported at the moment
 	 */
-	public static final PropertyDirection FACING_HORIZONTAL = PropertyDirection.create("facing", Arrays.asList(EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST)); 
-	
+	public static final PropertyDirection FACING_HORIZONTAL = PropertyDirection.create("facing", Arrays.asList(EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST));
+
 	/**
 	 * Holds rotation(something like extended facing)
 	 * Calculated as ([value] * -22.5) and passed to OpenGL rotate function 

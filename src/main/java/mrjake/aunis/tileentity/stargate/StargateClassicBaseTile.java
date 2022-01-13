@@ -391,7 +391,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         }
                     } else if ((randomIncomingEntities <= 0 && randomIncomingState >= (waitOpen + wait)) || stargateState != EnumStargateState.ENGAGED) {
                         resetRandomIncoming();
-                        closeGate(StargateClosedReasonEnum.REQUESTED);
+                        closeGate(StargateClosedReasonEnum.AUTOCLOSE);
+                        clearDHDSymbols();
                     }
                 } else resetRandomIncoming();
             }

@@ -507,6 +507,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                         targetGateTile.sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
                         targetGateTile.failGate();
                         targetGateTile.stargateState = EnumStargateState.INCOMING;
+                        targetGateTile.markDirty();
                     }
                 }
                 else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
@@ -545,6 +546,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                     else targetGateTile.incomingWormhole(size);
                     targetGateTile.sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
                     targetGateTile.stargateState = EnumStargateState.INCOMING;
+                    targetGateTile.markDirty();
                     targetGateTile.failGate();
                 }
             }
@@ -816,6 +818,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public void activateDHDSymbolBRB(){
 
     }
+    public void clearDHDSymbols(){
+
+    }
 
     @Override
     public void update() {
@@ -992,6 +997,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             if (AunisConfig.openLimitConfig.maxOpenedWhat.equals("closeGate")){
                 //attemptClose(StargateClosedReasonEnum.TIMELIMIT);
                 attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
+                clearDHDSymbols();
                 resetLimitSeconds();
             }
             else

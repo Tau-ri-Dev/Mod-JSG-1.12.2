@@ -1,6 +1,7 @@
 package mrjake.aunis.loader.model;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.FolderLoader;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ProgressManager;
@@ -30,6 +31,8 @@ public class ModelLoader {
 
 		Aunis.logger.info("Started loading models...");
 		for (String modelPath : modelPaths) {
+			if(AunisConfig.debugConfig.logTexturesLoading)
+				Aunis.logger.info("Loading model: " + modelPath);
 			String modelResourcePath = modelPath.replaceFirst("assets/aunis/", "");
 			progressBar.step(modelResourcePath.replaceFirst("models/", ""));
 			LOADED_MODELS.put(new ResourceLocation(Aunis.ModID, modelResourcePath), OBJLoader.loadModel(modelPath));

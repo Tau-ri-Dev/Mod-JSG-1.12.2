@@ -9,13 +9,13 @@ public class ZPMRendererState extends State {
 
     public ZPMRendererState() {}
 
-    public ZPMRendererState(boolean isCharged) {
-        this.isCharged = isCharged;
+    public ZPMRendererState(int charge) {
+        this.charge = charge;
     }
 
-    public ZPMRendererState initClient(BlockPos pos, float horizontalRotation) {
+    public ZPMRendererState initClient(BlockPos pos, int powerLevel) {
         this.pos = pos;
-        this.horizontalRotation = horizontalRotation;
+        this.charge = powerLevel;
 
         // todo register and save zpms state
 
@@ -27,21 +27,20 @@ public class ZPMRendererState extends State {
     // Not saved
     //private final Map<Integer, Integer> ZMP_STATE_MAP = new HashMap<>(3);
     public BlockPos pos;
-    public float horizontalRotation;
 
     // zpmsActive
     // Saved
-    public boolean isCharged;
+    public int charge;
 
     public BiomeOverlayEnum getBiomeOverlay() {
         return BiomeOverlayEnum.NORMAL;
     }
 
     public void toBytes(ByteBuf buf) {
-        buf.writeBoolean(isCharged);
+        buf.writeInt(charge);
     }
 
     public void fromBytes(ByteBuf buf) {
-        isCharged = buf.readBoolean();
+        charge = buf.readInt();
     }
 }

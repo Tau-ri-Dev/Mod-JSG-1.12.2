@@ -74,7 +74,7 @@ public enum ElementEnum {
   // ZPM things
 
   ZPM_HUB("zpm/zpmhub.obj", "zpm/hub/zpmhub"),
-  ZPM("zpm/zpm.obj", "zpm/item/zpm_1"), // todo: make zpm light up like chevrons
+  //ZPM("zpm/zpm.obj", "zpm/item/zpm_1"),
 
   // --------------------------------------------------------------------------------------------
   // Irises/Shields

@@ -33,17 +33,12 @@ import static mrjake.aunis.gui.mainmenu.GetUpdate.getTextFromGithub;
 
 @SideOnly(Side.CLIENT)
 public class AunisMainMenu extends GuiMainMenu {
-    @SubscribeEvent
-    public static void onSounds(PlaySoundEvent event) {
-        event.setResultSound(null);
-    }
 
     // ------------------------------------------
     // DEFINE VARIABLES
 
     // ---------------------------------------------------
     // VERSION
-    // this must be same as in version.txt !!!
     protected static final String VERSION = Aunis.Version.replace("1.12.2-", "");
 
     // ---------------------------------------------------

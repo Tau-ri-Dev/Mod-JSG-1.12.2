@@ -24,12 +24,16 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
 	// ------------------------------------------------------------------------
 	// Loading & ticking
 	
-	private TargetPoint targetPoint;
-	private int powerLevel;
-	private int lastPowerLevel;
+	protected TargetPoint targetPoint;
+	protected int powerLevel;
+	protected int lastPowerLevel;
 	
 	public int getPowerLevel() {
 		return powerLevel;
+	}
+
+	public StargateAbstractEnergyStorage getEnergyStorage(){
+		return energyStorage;
 	}
 	
 	@Override
@@ -37,7 +41,6 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
 		if (!world.isRemote) {
 			targetPoint = new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
 		}
-		
 		else {
 			AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_UPDATE));
 		}
@@ -90,14 +93,14 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
 	
 	// -----------------------------------------------------------------------------
 	// Power system
-	
-	private int energyStoredLastTick = 0;
-	private int energyTransferedLastTick = 0;
+
+	protected int energyStoredLastTick = 0;
+	protected int energyTransferedLastTick = 0;
 	
 	public int getEnergyTransferedLastTick() {
 		return energyTransferedLastTick;
 	}
-	
+
 	private StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage() {
 		
 		@Override

@@ -1,56 +1,42 @@
 package mrjake.aunis.tileentity.energy;
 
-import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.gui.container.CapacitorContainerGuiUpdate;
 import mrjake.aunis.gui.container.zpm.ZPMContainerGuiUpdate;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.packet.StateUpdateRequestToServer;
 import mrjake.aunis.renderer.energy.ZPMRendererState;
-import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
-import mrjake.aunis.state.State;
-import mrjake.aunis.state.StateProviderInterface;
-import mrjake.aunis.state.StateTypeEnum;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
+import mrjake.aunis.stargate.power.ZPMEnergyStorage;
+import mrjake.aunis.state.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 
-public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvider, StateProviderInterface {
+public class ZPMTile extends CapacitorTile {
 
-    // -----------------------------------------------------------------------------
-    // Power system
+    // ---------------------------------------------------------------------------------------------------
+    // Renderer state
 
-    private int energyStoredLastTick = 0;
-    private int energyTransferedLastTick = 0;
+    private ZPMRendererState rendererStateClient;
 
-    public int getEnergyTransferedLastTick() {
-        return energyTransferedLastTick;
+    public ZPMRendererState getRendererStateClient() {
+        return rendererStateClient;
     }
 
-    private StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(100000000) {
+    public ZPMEnergyStorage getEnergyStorage(){
+        return energyStorage;
+    }
+
+    protected ZPMEnergyStorage energyStorage = new ZPMEnergyStorage() {
 
         @Override
         protected void onEnergyChanged() {
             markDirty();
         }
     };
-
-    @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        return (capability == CapabilityEnergy.ENERGY) || super.hasCapability(capability, facing);
-    }
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
@@ -62,28 +48,6 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
     }
 
     @Override
-    public void rotate(Rotation rotation) {
-        IBlockState state = world.getBlockState(pos);
-
-        int rotationOrig = state.getValue(AunisProps.ROTATION_HORIZONTAL);
-        world.setBlockState(pos, state.withProperty(AunisProps.ROTATION_HORIZONTAL, rotation.rotate(rotationOrig, 16)));
-    }
-
-    // ---------------------------------------------------------------------------------------------------
-    // Renderer state
-
-    private ZPMRendererState rendererStateClient;
-
-    public ZPMRendererState getRendererStateClient() {
-        return rendererStateClient;
-    }
-
-    // ---------------------------------------------------------------------------------------------------
-    // Loading and ticking
-
-    private NetworkRegistry.TargetPoint targetPoint;
-
-    @Override
     public void onLoad() {
         if (!world.isRemote) {
             targetPoint = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
@@ -92,14 +56,9 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
         }
     }
 
-    private BlockPos lastPos = BlockPos.ORIGIN;
-
     @Override
     public void update() {
         if (!world.isRemote) {
-            if (!lastPos.equals(pos)) {
-                lastPos = pos;
-            }
             for (EnumFacing facing : EnumFacing.VALUES) {
                 TileEntity tile = world.getTileEntity(pos.offset(facing));
 
@@ -111,6 +70,13 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
                 }
             }
 
+            powerLevel = Math.round(energyStorage.getEnergyStored() / (float)energyStorage.getMaxEnergyStored() * 10);
+            if (powerLevel != lastPowerLevel) {
+                AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE)), targetPoint);
+
+                lastPowerLevel = powerLevel;
+            }
+
             energyTransferedLastTick = energyStorage.getEnergyStored() - energyStoredLastTick;
             energyStoredLastTick = energyStorage.getEnergyStored();
         }
@@ -118,53 +84,50 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
 
 
     // -----------------------------------------------------------------------------
-    // States
-
-    protected void sendState(StateTypeEnum type, State state) {
-        if (world.isRemote) return;
-
-        if (targetPoint != null) {
-            AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, type, state), targetPoint);
-        } else {
-            Aunis.logger.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
-        }
-    }
+    // State
 
     @Override
     public State getState(StateTypeEnum stateType) {
         switch (stateType) {
-            case RENDERER_STATE:
-                return new ZPMRendererState(true);
+            case RENDERER_UPDATE:
+                return new ZPMPowerLevelUpdate(powerLevel);
 
             case GUI_UPDATE:
                 return new ZPMContainerGuiUpdate(energyStorage.getEnergyStored(), energyTransferedLastTick);
 
+            case RENDERER_STATE:
+                return new ZPMRendererState(powerLevel);
+
             default:
-                throw new UnsupportedOperationException("EnumStateType." + stateType.name() + " not implemented on " + this.getClass().getName());
+                return null;
         }
     }
+
 
     @Override
     public State createState(StateTypeEnum stateType) {
         switch (stateType) {
-            case RENDERER_STATE:
-                return new ZPMRendererState();
+            case RENDERER_UPDATE:
+                return new ZPMPowerLevelUpdate();
 
             case GUI_UPDATE:
                 return new ZPMContainerGuiUpdate();
 
+            case RENDERER_STATE:
+                return new ZPMRendererState();
+
             default:
-                throw new UnsupportedOperationException("EnumStateType." + stateType.name() + " not implemented on " + this.getClass().getName());
+                return null;
         }
     }
+
 
     @Override
     public void setState(StateTypeEnum stateType, State state) {
         switch (stateType) {
-            case RENDERER_STATE:
-                float horizontalRotation = world.getBlockState(pos).getValue(AunisProps.ROTATION_HORIZONTAL) * -22.5f;
-                rendererStateClient = ((ZPMRendererState) state).initClient(pos, horizontalRotation);
-
+            case RENDERER_UPDATE:
+                powerLevel = ((ZPMPowerLevelUpdate) state).powerLevel;
+                world.markBlockRangeForRenderUpdate(pos, pos);
                 break;
 
             case GUI_UPDATE:
@@ -173,39 +136,14 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
                 energyTransferedLastTick = guiUpdate.energyTransferedLastTick;
                 break;
 
+
+            case RENDERER_STATE:
+                rendererStateClient = ((ZPMRendererState) state).initClient(pos, powerLevel);
+
+                break;
+
             default:
-                throw new UnsupportedOperationException("EnumStateType." + stateType.name() + " not implemented on " + this.getClass().getName());
+                break;
         }
-    }
-
-    // ---------------------------------------------------------------------------------------------------
-    // NBT
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound.setTag("energyStorage", energyStorage.serializeNBT());
-
-        return super.writeToNBT(compound);
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        energyStorage.deserializeNBT(compound.getCompoundTag("energyStorage"));
-
-        super.readFromNBT(compound);
-    }
-
-
-    // ---------------------------------------------------------------------------------------------------
-    // Rendering distance
-
-    @Override
-    public AxisAlignedBB getRenderBoundingBox() {
-        return new AxisAlignedBB(getPos().add(-1, 0, -1), getPos().add(1, 2, 1));
-    }
-
-    @Override
-    public double getMaxRenderDistanceSquared() {
-        return 65536;
     }
 }

@@ -51,16 +51,25 @@ public class TextureLoader {
 			texturePath = texturePath.replaceFirst("assets/aunis/", "");
 			progressBar.step(texturePath.replaceFirst("textures/", ""));
 			
-			if (AunisConfig.stargateConfig.disableAnimatedEventHorizon &&
-				(texturePath.equals("textures/tesr/event_horizon_animated.jpg")
-				|| texturePath.equals("textures/tesr/event_horizon_animated_unstable.jpg")))
-					continue;
+			if (AunisConfig.stargateConfig.disableAnimatedEventHorizon){
+				switch (texturePath){
+					case "textures/tesr/event_horizon_animated_unstable.jpg":
+					case "textures/tesr/event_horizon_animated.jpg":
+					case "textures/tesr/event_horizon_animated_kawoosh.jpg":
+					case "textures/tesr/event_horizon_animated_kawoosh_unstable.jpg":
+						if(AunisConfig.debugConfig.logTexturesLoading)
+							Aunis.logger.info("Skipping: " + texturePath);
+						continue;
+				}
+			}
 						
 			ResourceLocation resourceLocation = new ResourceLocation(Aunis.ModID, texturePath);
 			IResource resource = null;
 			
 			try {
 				resource = resourceManager.getResource(resourceLocation);
+				if(AunisConfig.debugConfig.logTexturesLoading)
+					Aunis.logger.info("Loading texture: " + texturePath);
 				BufferedImage bufferedImage = TextureUtil.readBufferedImage(resource.getInputStream());
 				LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage, false));
 				
