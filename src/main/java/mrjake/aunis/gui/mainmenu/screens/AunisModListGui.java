@@ -201,6 +201,9 @@ public class AunisModListGui extends GuiModList
     @Override
     public void initGui()
     {
+        screenCenterHeight = (((float) height) / 2f);
+        screenCenterWidth = ((float) width) / 2f;
+
         aunisButtonList.clear();
         int slotHeight = 35;
         for (ModContainer mod : mods)
@@ -297,6 +300,7 @@ public class AunisModListGui extends GuiModList
 
     // update ring rotation and overlay
     public void updateAnimation() {
+
         this.screenCenterHeight = (((float) height) / 2f);
         this.screenCenterWidth = ((float) width) / 2f;
 
@@ -319,7 +323,7 @@ public class AunisModListGui extends GuiModList
             if (this.gatePosY > 0.0f) this.gatePosY -= step * 4f;
             if (this.gateZoom > 0.0f) this.gateZoom -= step;
 
-            if (this.gatePosY+((step*4) + 25) >= ((float) height) / 2f) this.mc.displayGuiScreen(this.mainMenu);
+            if (this.gatePosY+((step*4) + 25) <= ((float) height) / 2f) this.mc.displayGuiScreen(this.mainMenu);
         }
         if (animationStage > 360) animationStage = 0f;
         updateRingSpeed();

@@ -17,7 +17,9 @@ import mrjake.aunis.integration.tconstruct.TConstructIntegration;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.proxy.IProxy;
+import mrjake.aunis.sound.AunisSoundCategory;
 import mrjake.aunis.worldgen.AunisWorldGen;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.CompoundDataFixer;
@@ -51,6 +53,8 @@ public class Aunis {
 
     public static final String CLIENT = "mrjake.aunis.proxy.ProxyClient";
     public static final String SERVER = "mrjake.aunis.proxy.ProxyServer";
+
+    public static SoundCategory AUNIS_SOUNDS;
     
     public static final AunisGatesCreativeTabBuilder aunisGatesCreativeTab = new AunisGatesCreativeTabBuilder();
     public static final AunisRingsCreativeTabBuilder aunisRingsCreativeTab = new AunisRingsCreativeTabBuilder();
@@ -84,6 +88,8 @@ public class Aunis {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog(); // This is the recommended way of getting a logger
+
+        AUNIS_SOUNDS = AunisSoundCategory.add("AUNIS_SOUNDS");
         
         AunisPacketHandler.registerPackets();
         if (Loader.isModLoaded("tconstruct") && AunisConfig.integrationsConfig.tConstructIntegration) {

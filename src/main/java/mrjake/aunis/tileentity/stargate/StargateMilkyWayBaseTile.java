@@ -14,6 +14,7 @@ import mrjake.aunis.sound.StargateSoundEventEnum;
 import mrjake.aunis.sound.StargateSoundPositionedEnum;
 import mrjake.aunis.stargate.EnumScheduledTask;
 import mrjake.aunis.stargate.EnumStargateState;
+import mrjake.aunis.stargate.StargateClosedReasonEnum;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
 import mrjake.aunis.stargate.network.*;
@@ -21,6 +22,8 @@ import mrjake.aunis.state.stargate.StargateRendererActionState;
 import mrjake.aunis.state.stargate.StargateRendererActionState.EnumGateAction;
 import mrjake.aunis.state.State;
 import mrjake.aunis.state.StateTypeEnum;
+import mrjake.aunis.state.stargate.StargateSpinState;
+import mrjake.aunis.tileentity.BeamerTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile.DHDUpgradeEnum;
 import mrjake.aunis.tileentity.util.ScheduledTask;
@@ -74,6 +77,14 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
     // ------------------------------------------------------------------------
     // Stargate connection
+
+    @Override
+    public void closeGate(StargateClosedReasonEnum reason) {
+        super.closeGate(reason);
+        if (isLinkedAndDHDOperational()) {
+            getLinkedDHD(world).clearSymbols();
+        }
+    }
 
     @Override
     public void openGate(StargatePos targetGatePos, boolean isInitiating) {
@@ -186,7 +197,8 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
     public void prepareGateToConnect(int dialedAddressSize, int period) {
         if(stargateState == EnumStargateState.DIALING_COMPUTER) abortDialingSequence(1);
-        period -= (50/dialedAddressSize);
+        period -= (80/dialedAddressSize);
+        this.stargateState = EnumStargateState.INCOMING;
 
         boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
         if (allowIncomingAnimation) {
@@ -195,13 +207,18 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 public void run() {
-                    if (i[0] < dialedAddressSize) {
+                    if (i[0] < dialedAddressSize && !stargateState.idle()) {
                         playSoundEvent(StargateSoundEventEnum.INCOMING);
                         sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, i[0] + 9, false);
                         i[0]++;
-                    } else {
+                    }
+                    else if(!stargateState.idle()){
                         stargateState = EnumStargateState.INCOMING;
-                        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 1));
+                        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 10));
+                        timer.cancel();
+                    }
+                    else{
+                        sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 0, false);
                         timer.cancel();
                     }
                 }

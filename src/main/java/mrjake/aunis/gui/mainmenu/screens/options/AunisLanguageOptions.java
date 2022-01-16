@@ -248,6 +248,9 @@ public class AunisLanguageOptions extends GuiLanguage {
     @Override
     public void initGui()
     {
+        screenCenterHeight = (((float) height) / 2f);
+        screenCenterWidth = ((float) width) / 2f;
+
         aunisButtonList.clear();
         aunisButtonList.add(new AunisOptionButton(100, this.width / 2 - 205, this.height - 38, GameSettings.Options.FORCE_UNICODE_FONT, this.game_settings_3.getKeyBinding(GameSettings.Options.FORCE_UNICODE_FONT)));
         aunisButtonList.add(new AunisGuiButton(6, this.width / 2 + 5, this.height - 38, I18n.format("gui.done")));

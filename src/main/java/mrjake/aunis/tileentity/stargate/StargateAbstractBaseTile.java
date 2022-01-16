@@ -91,16 +91,26 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         AunisSoundHelper.playPositionedSound(world, getGateCenterPos(), SoundPositionedEnum.WORMHOLE_LOOP, true);
 
-        if(targetGatePos != null) new StargateOpenedEvent(this, targetGatePos.getTileEntity(), isInitiating).post();
-        else if(randomIncomingIsActive) new StargateOpenedEvent(this, this, isInitiating).post();
+        if(targetGatePos != null)
+            new StargateOpenedEvent(this, targetGatePos.getTileEntity(), isInitiating).post();
+        else if(randomIncomingIsActive)
+            new StargateOpenedEvent(this, this, isInitiating).post();
 
         sendSignal(null, "stargate_wormhole_stabilized", new Object[]{isInitiating});
 
         markDirty();
     }
 
+    protected void disconnectGate(boolean force) {
+        disconnectGate();
+        if(force)
+            stargateState = EnumStargateState.IDLE;
+    }
+
     protected void disconnectGate() {
-        stargateState = EnumStargateState.IDLE;
+
+        if(stargateState != EnumStargateState.INCOMING)
+            stargateState = EnumStargateState.IDLE;
         getAutoCloseManager().reset();
 
         if (!(this instanceof StargateOrlinBaseTile)) dialedAddress.clear();
@@ -493,26 +503,18 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             if(dialedAddress.size() >= 6) {
                 dialedAddress.addOrigin();
 
-                if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate) {
+                if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate && !network.getStargate(dialedAddress).getTileEntity().stargateState.incoming()) {
                     if(byComputer){
                         connectingToGate = true;
                     }
                     else {
-                        int size = dialedAddress.size();
-
-                        connectedToGate = true;
-
-                        StargateAbstractBaseTile targetGateTile = network.getStargate(dialedAddress).getTileEntity();
-                        targetGateTile.incomingWormhole(size);
-                        targetGateTile.sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
-                        targetGateTile.failGate();
-                        targetGateTile.stargateState = EnumStargateState.INCOMING;
-                        targetGateTile.markDirty();
+                        connectingToGate = true;
+                        doIncomingAnimation(10 * 20);
                     }
                 }
                 else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
-                    network.getStargate(dialedAddress).getTileEntity().disconnectGate();
-                    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, stargateState.dialingComputer() ? 83 : 53));
+                    network.getStargate(dialedAddress).getTileEntity().disconnectGate(true);
+                    //addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, stargateState.dialingComputer() ? 83 : 53));
                 }
 
                 dialedAddress.clear();
@@ -549,10 +551,23 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                     targetGateTile.markDirty();
                     targetGateTile.failGate();
                 }
+                else{
+                    int size = dialedAddress.size();
+
+                    connectedToGate = true;
+                    int period = 400;
+                    StargateAbstractBaseTile targetGateTile = network.getStargate(dialedAddress).getTileEntity();
+                    if(AunisConfig.stargateConfig.allowIncomingAnimations) targetGateTile.incomingWormhole(size, period);
+                    else targetGateTile.incomingWormhole(size);
+                    targetGateTile.sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
+                    targetGateTile.stargateState = EnumStargateState.INCOMING;
+                    targetGateTile.markDirty();
+                    targetGateTile.failGate();
+                }
             }
             else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
-                network.getStargate(dialedAddress).getTileEntity().disconnectGate();
-                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, stargateState.dialingComputer() ? 83 : 53));
+                network.getStargate(dialedAddress).getTileEntity().disconnectGate(true);
+                //addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, stargateState.dialingComputer() ? 83 : 53));
             }
 
             dialedAddress.clear();
@@ -667,7 +682,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             new StargateDialFailEvent(this, reason).post();
 
             addFailedTaskAndPlaySound();
-            stargateState = EnumStargateState.FAILING;
+            if(stargateState != EnumStargateState.INCOMING)
+                stargateState = EnumStargateState.FAILING;
 
             markDirty();
         }
@@ -818,6 +834,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public void activateDHDSymbolBRB(){
 
     }
+
     public void clearDHDSymbols(){
 
     }

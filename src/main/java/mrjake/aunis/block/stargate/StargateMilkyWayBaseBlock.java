@@ -11,7 +11,6 @@ public final class StargateMilkyWayBaseBlock extends StargateClassicBaseBlock {
 	
 	public StargateMilkyWayBaseBlock() {
 		super(BLOCK_NAME);
-		setResistance(2000.0f);
 	}
 
 	@Override

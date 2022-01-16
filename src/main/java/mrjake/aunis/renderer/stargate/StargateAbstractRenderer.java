@@ -339,10 +339,6 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         // Rendering proper event horizon or the <rendererState.backStrip> for vortex
         if (rendererState.vortexState != null) {
             if (rendererState.vortexState == (EnumVortexState.STILL) || rendererState.vortexState == EnumVortexState.CLOSING) {
-
-                //				if (rendererState.horizonUnstable)
-                //					ModelLoader.bindTexture(ModelLoader.getTexture("stargate/event_horizon_by_mclatchyt_2_unstable.jpg"));
-
                 if (rendererState.vortexState == EnumVortexState.CLOSING)
                     renderEventHorizon(partialTicks, true, rendererState.whiteOverlayAlpha, backOnly, 1.7f);
                 else renderEventHorizon(partialTicks, false, null, backOnly, rendererState.horizonUnstable ? 1.2f : 1);

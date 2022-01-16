@@ -19,10 +19,7 @@ import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.sound.SoundPositionedEnum;
 import mrjake.aunis.sound.StargateSoundEventEnum;
 import mrjake.aunis.sound.StargateSoundPositionedEnum;
-import mrjake.aunis.stargate.EnumScheduledTask;
-import mrjake.aunis.stargate.EnumSpinDirection;
-import mrjake.aunis.stargate.EnumStargateState;
-import mrjake.aunis.stargate.StargateOpenResult;
+import mrjake.aunis.stargate.*;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargatePegasusMergeHelper;
 import mrjake.aunis.stargate.network.*;
@@ -94,6 +91,14 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
   // ------------------------------------------------------------------------
   // Stargate connection
+
+  @Override
+  public void closeGate(StargateClosedReasonEnum reason) {
+    super.closeGate(reason);
+    if (isLinkedAndDHDOperational()) {
+      getLinkedDHD(world).clearSymbols();
+    }
+  }
 
   @Override
   public void openGate(StargatePos targetGatePos, boolean isInitiating) {
@@ -188,6 +193,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   public void prepareGateToConnect(int dialedAddressSize, int period) {
     // --- do spin animation ---
     if(stargateState == EnumStargateState.DIALING_COMPUTER) abortDialingSequence(1);
+    this.stargateState = EnumStargateState.INCOMING;
 
     boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
 
@@ -208,15 +214,19 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
               int[] pattern = {1, 2, 3, 7, 8, 4, 5, 6, 9}; // pattern of chevrons
 
               if(chevron < 9) {
-                if(pattern[chevron-1] < dialedAddressSize) {
+                if(pattern[chevron-1] < dialedAddressSize && !stargateState.idle()) {
                   sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, (pattern[chevron - 1] + 9), false);
                   playSoundEvent(StargateSoundEventEnum.INCOMING);
                 }
               }
-              else{
+              else if(!stargateState.idle()){
                 sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, 0, true);
                 playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
-                playSoundEvent(StargateSoundEventEnum.INCOMING);
+                playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
+              }
+              else{
+                sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 0, false);
+                timer.cancel();
               }
             }
 

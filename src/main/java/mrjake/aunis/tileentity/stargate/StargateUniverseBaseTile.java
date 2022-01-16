@@ -9,10 +9,7 @@ import mrjake.aunis.renderer.stargate.StargateClassicRendererState.StargateClass
 import mrjake.aunis.renderer.stargate.StargateUniverseRendererState;
 import mrjake.aunis.renderer.stargate.StargateUniverseRendererState.StargateUniverseRendererStateBuilder;
 import mrjake.aunis.sound.*;
-import mrjake.aunis.stargate.EnumIrisMode;
-import mrjake.aunis.stargate.EnumScheduledTask;
-import mrjake.aunis.stargate.EnumStargateState;
-import mrjake.aunis.stargate.StargateOpenResult;
+import mrjake.aunis.stargate.*;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargateUniverseMergeHelper;
 import mrjake.aunis.stargate.network.*;
@@ -43,7 +40,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
   // --------------------------------------------------------------------------------
   // Dialing
 
-  private StargateAddress addressToDial;
+  public StargateAddress addressToDial;
   private int addressPosition;
   private int maxSymbols;
   private boolean abortDialing;
@@ -94,7 +91,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     if (context != null) stargateState = EnumStargateState.DIALING_COMPUTER;
     else stargateState = EnumStargateState.DIALING;
 
-    if (stargateState.dialingComputer() && dialedAddress.size() == 0) {
+    if (stargateState.dialingComputer() && dialedAddress.size() == 0 && !targetSymbol.equals(SymbolUniverseEnum.G37)) {
       AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_UNIVERSE_DIAL_START);
       sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
 
@@ -121,20 +118,44 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
   public void prepareGateToConnect(int dialedAddressSize, int time){
     time = time * dialedAddressSize;
+    this.stargateState = EnumStargateState.INCOMING;
     // do spin animation
+
     final int[] i = {1};
     Timer timer = new Timer();
-    timer.schedule(new TimerTask() {
-      public void run() {
-        if (irisMode == EnumIrisMode.AUTO && isOpened()) {
-          toggleIris();
+
+    if(((time/1000)*20)+80 >= StargateClassicSpinHelper.getAnimationDuration(360)){
+      timer.schedule(new TimerTask() {
+        public void run() {
+          if (irisMode == EnumIrisMode.AUTO && isOpened()) {
+            toggleIris();
+          }
+          timer.cancel();
         }
-        sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
-        sendSignal(null, "stargate_incoming_wormhole", new Object[]{dialedAddressSize});
-        playSoundEvent(StargateSoundEventEnum.INCOMING);
-        timer.cancel();
-      }
-    }, time, 100);
+      }, time, 100);
+
+      addSymbolToAddressManual(SymbolUniverseEnum.G37, null);
+
+      sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
+      sendSignal(null, "stargate_incoming_wormhole", new Object[]{dialedAddressSize});
+      playSoundEvent(StargateSoundEventEnum.INCOMING);
+
+    }
+    else {
+
+      timer.schedule(new TimerTask() {
+        public void run() {
+          if (irisMode == EnumIrisMode.AUTO && isOpened()) {
+            toggleIris();
+          }
+          sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
+          sendSignal(null, "stargate_incoming_wormhole", new Object[]{dialedAddressSize});
+          playSoundEvent(StargateSoundEventEnum.INCOMING);
+          timer.cancel();
+        }
+      }, time, 100);
+
+    }
   }
 
   @Override

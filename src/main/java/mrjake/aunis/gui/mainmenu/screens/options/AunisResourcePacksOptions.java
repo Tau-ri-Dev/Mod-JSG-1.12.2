@@ -245,6 +245,9 @@ public class AunisResourcePacksOptions extends GuiScreenResourcePacks {
     @Override
     public void initGui()
     {
+        screenCenterHeight = (((float) height) / 2f);
+        screenCenterWidth = ((float) width) / 2f;
+
         aunisButtonList.clear();
 
         aunisButtonList.add(new AunisGuiButton(2, this.width / 2 - 205, this.height - 38, I18n.format("resourcePack.openFolder")));

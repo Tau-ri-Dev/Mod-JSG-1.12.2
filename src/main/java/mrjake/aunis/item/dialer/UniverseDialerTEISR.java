@@ -11,6 +11,7 @@ import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.stargate.network.SymbolUniverseEnum;
+import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import mrjake.aunis.transportrings.TransportRings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -22,6 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants.NBT;
 import org.lwjgl.opengl.GL11;
 
@@ -135,12 +137,25 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 								
 								else {
 									StargateAddress address = new StargateAddress(entryCompound);
-									int symbolCount = SymbolUniverseEnum.getMaxSymbolsDisplay(entryCompound.getBoolean("hasUpgrade")); 
+
+									int symbolCount = SymbolUniverseEnum.getMaxSymbolsDisplay(entryCompound.getBoolean("hasUpgrade"));
+									int symbolsDialed = entryCompound.getInteger("dialed");
+									boolean engage;
+									boolean locked = false;
 									
-									for (int i=0; i<symbolCount; i++)
-										renderSymbol(offset, i, address.get(i), active, symbolCount == 8);
+									for (int i=0; i<symbolCount; i++) {
+										if(symbolsDialed == -1) engage = false;
+										else engage = (i < symbolsDialed);
+										renderSymbol(offset, i, address.get(i), active, symbolCount == 8, engage, locked);
+									}
+									if(symbolsDialed == -1) engage = false;
+									else if(symbolCount == 8)
+										engage = (symbolsDialed == 9);
+									else
+										engage = (symbolsDialed == 7);
+									if(engage) locked = true;
 									
-									renderSymbol(offset, symbolCount, SymbolUniverseEnum.getOrigin(), active, symbolCount == 8);
+									renderSymbol(offset, symbolCount, SymbolUniverseEnum.getOrigin(), active, symbolCount == 8, engage, locked);
 								}
 								
 								break;
@@ -188,7 +203,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 		GlStateManager.popMatrix();
 	}
 	
-	private static void renderSymbol(int row, int col, SymbolInterface symbol, boolean isActive, boolean is9Chevron) {
+	private static void renderSymbol(int row, int col, SymbolInterface symbol, boolean isActive, boolean is9Chevron, boolean engage, boolean locked) {
 		float x = col * 0.09f - 0.05f;
 		float y = -row * 0.32f - 0.16f;
 		float scale = 0.7f;
@@ -201,11 +216,21 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource());
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableBlend();
-		
-		if (isActive)
-			GlStateManager.color(0.91f, 1, 1, 1);
-		else
-			GlStateManager.color(0.0f, 0.38f, 0.40f, 1f);
+
+		float red = 1f;
+		float green = 1f;
+		float blue = 1f;
+		float alpha = 1f;
+
+		if(!isActive)
+			alpha = 0.3f;
+		if(engage)
+			red = green = 0.3f;
+		if(locked)
+			red = blue = 0.3f;
+
+
+		GlStateManager.color(red, green, blue, alpha);
 		
 		drawTexturedRect(x, y, 0, w, h);
 		float shadow = 0.008f;

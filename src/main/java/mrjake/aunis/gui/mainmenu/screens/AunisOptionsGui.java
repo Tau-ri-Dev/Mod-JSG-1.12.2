@@ -236,6 +236,9 @@ public class AunisOptionsGui extends GuiOptions {
 
     @Override
     public void initGui(){
+        screenCenterHeight = (((float) height) / 2f);
+        screenCenterWidth = ((float) width) / 2f;
+
         aunisButtonList.clear();
         aunisButtonSliders.clear();
         this.title = I18n.format("options.title");

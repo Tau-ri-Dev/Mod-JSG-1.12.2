@@ -18,7 +18,6 @@ public final class StargateMilkyWayMemberBlock extends StargateClassicMemberBloc
 	
 	public StargateMilkyWayMemberBlock() {
 		super(BLOCK_NAME);
-		setResistance(2000.0f);
 	}
 
 	@Override

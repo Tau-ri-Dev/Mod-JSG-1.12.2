@@ -97,6 +97,9 @@ public class AunisBindingOptions extends GuiControls {
 
     @Override
     public void initGui(){
+        screenCenterHeight = (((float) height) / 2f);
+        screenCenterWidth = ((float) width) / 2f;
+
         aunisButtonList.clear();
         this.keyBindingList = new AunisGuiKeyBindingList(this, this.mc);
         this.aunisButtonList.add(new AunisGuiButton(200, width / 2 + 5, height - 29, 150, 20, I18n.format("gui.done")));

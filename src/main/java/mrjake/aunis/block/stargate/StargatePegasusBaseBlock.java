@@ -11,7 +11,6 @@ public final class StargatePegasusBaseBlock extends StargateClassicBaseBlock {
 
   public StargatePegasusBaseBlock() {
     super(BLOCK_NAME);
-    setResistance(2000.0f);
   }
 
   @Override

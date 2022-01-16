@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Random;
 
 import static mrjake.aunis.gui.mainmenu.GetUpdate.getTextFromGithub;
+import static mrjake.aunis.sound.AunisSoundHelperClient.stopAllSounds;
 
 @SideOnly(Side.CLIENT)
 public class AunisMainMenu extends GuiMainMenu {
@@ -58,6 +59,7 @@ public class AunisMainMenu extends GuiMainMenu {
     protected boolean chevronSound1 = false;
     protected boolean chevronSound2 = false;
     protected boolean chevronSound3 = false;
+    protected boolean playingSounds = false;
     protected BiomeOverlayEnum[] overlays = {
             BiomeOverlayEnum.AGED,
             BiomeOverlayEnum.FROST,
@@ -71,7 +73,7 @@ public class AunisMainMenu extends GuiMainMenu {
     protected List<GuiButton> aunisButtonList = new ArrayList<>();
     protected List<GuiButton> versionButtons = new ArrayList<>();
     protected static final ResourceLocation BACKGROUND_TEXTURE = AunisConfig.mainMenuConfig.disableAunisMainMenu ? null : new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");
-    protected static final ResourceLocation EVENT_HORIZON_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/event_horizon.jpg");
+    protected static ResourceLocation EVENT_HORIZON_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/event_horizon.jpg");
 
     protected static final String LATEST = getTextFromGithub("https://amazingworlds.eu/curseapi/1.12.2/?t=name").split("-")[2];
     protected static int showVersionAlert = 0;
@@ -184,10 +186,12 @@ public class AunisMainMenu extends GuiMainMenu {
 
     // play sound
     public void updateSound() {
+
         if (this.mc.gameSettings.getKeyBinding(GameSettings.Options.AUTO_JUMP).equals("Auto-Jump: ON"))
             this.mc.gameSettings.setOptionValue(GameSettings.Options.AUTO_JUMP, 1);
 
-        AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1, 0, 0), SoundPositionedEnum.MAINMENU_MUSIC, AunisConfig.mainMenuConfig.playMusic);
+        AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(1, 0, 0), SoundPositionedEnum.MAINMENU_MUSIC,
+                AunisConfig.mainMenuConfig.playMusic);
         AunisSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 1), SoundPositionedEnum.MAINMENU_RING_ROLL,
                 (AunisConfig.mainMenuConfig.gateRotation && kawooshState == 0 && ringAnimationSpeed > 0.0f));
     }
@@ -282,6 +286,7 @@ public class AunisMainMenu extends GuiMainMenu {
 
     // EVENT HORIZON RENDER
     public void renderEventHorizon(boolean doKawoosh) {
+
         if (!doKawoosh) {
             quadStrips.clear();
             for (int i = 0; i < 16; i++) {
@@ -557,6 +562,8 @@ public class AunisMainMenu extends GuiMainMenu {
             drawString(fontRenderer, "Event horizon state: " + kawooshState, 0, 0, 0xffffff);
             GlStateManager.translate(0, 10, 0);
             drawString(fontRenderer, "Next event: " + nextEvent, 0, 0, 0xffffff);
+            GlStateManager.translate(0, 10, 0);
+            drawString(fontRenderer, "Playing sounds: " + playingSounds, 0, 0, 0xffffff);
             GlStateManager.disableTexture2D();
             GlStateManager.popMatrix();
         }

@@ -20,6 +20,7 @@ import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import mrjake.aunis.transportrings.TransportRings;
 import mrjake.aunis.util.EnumKeyInterface;
 import mrjake.aunis.util.EnumKeyMap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -27,6 +28,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -201,87 +203,108 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                         if (!mode.matcher.apply(world.getBlockState(tilePos)) || tilePos.distanceSq(pos) > reachSquared) {
                             compound.removeTag(mode.tagPosName);
                         }
-                    } else {
-                        boolean found = false;
+                    }
 
-                        for (BlockPos targetPos : BlockPos.getAllInBoxMutable(pos.add(-10, -10, -10), pos.add(10, 10, 10))) {
-                            if (mode.matcher.apply(world.getBlockState(targetPos))) {
-                                switch (mode) {
-                                    case MEMORY:
-                                    case NEARBY:
-                                        StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(targetPos);
+                    boolean found = false;
 
-                                        if (!gateTile.isMerged())
+                    for (BlockPos targetPos : BlockPos.getAllInBoxMutable(pos.add(-10, -10, -10), pos.add(10, 10, 10))) {
+                        if (mode.matcher.apply(world.getBlockState(targetPos))) {
+                            switch (mode) {
+                                case MEMORY:
+                                case NEARBY:
+                                    StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(targetPos);
+
+                                    if (!gateTile.isMerged())
+                                        continue;
+
+                                    NBTTagList nearbyList = new NBTTagList();
+                                    int squaredGate = AunisConfig.stargateConfig.universeGateNearbyReach * AunisConfig.stargateConfig.universeGateNearbyReach;
+                                    // todo something here crash mc
+                                try {
+                                    for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet()) {
+
+                                        StargatePos stargatePos = entry.getValue();
+
+                                        if (stargatePos.dimensionID != world.provider.getDimension())
                                             continue;
 
-                                        NBTTagList nearbyList = new NBTTagList();
-                                        int squaredGate = AunisConfig.stargateConfig.universeGateNearbyReach * AunisConfig.stargateConfig.universeGateNearbyReach;
-                                        // todo something here crash mc
-                                    try {
-                                        for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet()) {
+                                        if (stargatePos.gatePos.distanceSq(targetPos) > squaredGate)
+                                            continue;
 
-                                            StargatePos stargatePos = entry.getValue();
+                                        if (stargatePos.gatePos.equals(targetPos))
+                                            continue;
 
-                                            if (stargatePos.dimensionID != world.provider.getDimension())
-                                                continue;
+                                        StargateAbstractBaseTile targetGateTile = stargatePos.getTileEntity();
 
-                                            if (stargatePos.gatePos.distanceSq(targetPos) > squaredGate)
-                                                continue;
+                                        if (!(targetGateTile instanceof StargateClassicBaseTile))
+                                            continue;
 
-                                            if (stargatePos.gatePos.equals(targetPos))
-                                                continue;
+                                        if (!targetGateTile.isMerged())
+                                            continue;
 
-                                            StargateAbstractBaseTile targetGateTile = stargatePos.getTileEntity();
+                                        NBTTagCompound entryCompound = entry.getKey().serializeNBT();
 
-                                            if (!(targetGateTile instanceof StargateClassicBaseTile))
-                                                continue;
-
-                                            if (!targetGateTile.isMerged())
-                                                continue;
-
-                                            NBTTagCompound entryCompound = entry.getKey().serializeNBT();
-
-                                            entryCompound.setBoolean("requireOnlySeven", true);
-
-                                            nearbyList.appendTag(entryCompound);
+                                        int dialed = -1;
+                                        if(((StargateUniverseBaseTile) gateTile).addressToDial.equals(entry.getKey())){
+                                            dialed = 0;
+                                        }
+                                        for (int i=0; i<9; i++) {
+                                            if(entry.getKey().getSize() > i && dialed > -1) {
+                                                if (gateTile.getDialedAddress().contains(entry.getKey().get(i))) {
+                                                    dialed++;
+                                                }
+                                            }
                                         }
 
-                                        compound.setTag(UniverseDialerMode.NEARBY.tagListName, nearbyList);
-                                        compound.setLong(mode.tagPosName, targetPos.toLong());
-                                        found = true;
+                                        if (gateTile.getDialedAddress().contains(SymbolUniverseEnum.getOrigin())) {
+                                            dialed++;
+                                        }
+
+                                        if(dialed == 0 && gateTile.getStargateState().idle()){
+                                            dialed = -1;
+                                        }
+
+                                        entryCompound.setBoolean("requireOnlySeven", true);
+                                        entryCompound.setInteger("dialed", dialed);
+
+                                        nearbyList.appendTag(entryCompound);
                                     }
-                                    catch (ConcurrentModificationException e) {
-                                        Aunis.logger.error("Error while iterating nearby stargates occurred", e);
 
-                                        if (entity instanceof EntityPlayer) {
-                                            ((EntityPlayer) entity).sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.dialer_broke"), true);
-                                        }
-                                        broke(stack);
-
-                                    }
-                                        break;
-
-                                    case RINGS:
-                                        TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(targetPos);
-                                        NBTTagList ringsList = new NBTTagList();
-
-                                        for (TransportRings rings : ringsTile.ringsMap.values()) {
-                                            ringsList.appendTag(rings.serializeNBT());
-                                        }
-
-                                        compound.setTag(mode.tagListName, ringsList);
-                                        compound.setLong(mode.tagPosName, targetPos.toLong());
-                                        found = true;
-                                        break;
-
-                                    default:
-                                        break;
+                                    compound.setTag(UniverseDialerMode.NEARBY.tagListName, nearbyList);
+                                    compound.setLong(mode.tagPosName, targetPos.toLong());
+                                    found = true;
                                 }
-                            }
+                                catch (ConcurrentModificationException e) {
+                                    Aunis.logger.error("Error while iterating nearby stargates occurred", e);
 
-                            if (found)
-                                break;
+                                    if (entity instanceof EntityPlayer) {
+                                        ((EntityPlayer) entity).sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.dialer_broke"), true);
+                                    }
+                                    broke(stack);
+
+                                }
+                                    break;
+
+                                case RINGS:
+                                    TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(targetPos);
+                                    NBTTagList ringsList = new NBTTagList();
+
+                                    for (TransportRings rings : ringsTile.ringsMap.values()) {
+                                        ringsList.appendTag(rings.serializeNBT());
+                                    }
+
+                                    compound.setTag(mode.tagListName, ringsList);
+                                    compound.setLong(mode.tagPosName, targetPos.toLong());
+                                    found = true;
+                                    break;
+
+                                default:
+                                    break;
+                            }
                         }
+
+                        if (found)
+                            break;
                     }
                 }
             }
@@ -321,6 +344,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
             switch (mode) {
                 case MEMORY:
+                    // todo: add colors into MEMORY list
                 case NEARBY:
                     StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
 

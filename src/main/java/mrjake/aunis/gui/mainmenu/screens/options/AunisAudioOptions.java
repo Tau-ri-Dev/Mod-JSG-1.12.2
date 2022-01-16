@@ -90,6 +90,11 @@ public class AunisAudioOptions extends GuiScreenOptionsSounds {
 
     public void initGui()
     {
+
+        screenCenterHeight = (((float) height) / 2f);
+        screenCenterWidth = ((float) width) / 2f;
+
+
         this.title = I18n.format("options.sounds.title");
         this.offDisplayString = I18n.format("options.off");
         int i = 0;

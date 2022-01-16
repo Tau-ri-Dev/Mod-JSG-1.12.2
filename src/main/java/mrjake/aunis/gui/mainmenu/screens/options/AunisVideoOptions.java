@@ -242,6 +242,9 @@ public class AunisVideoOptions extends GuiVideoSettings {
 
     @Override
     public void initGui(){
+        screenCenterHeight = (((float) height) / 2f);
+        screenCenterWidth = ((float) width) / 2f;
+
         title = I18n.format("options.videoTitle");
         aunisButtonList.clear();
         aunisButtonSliders.clear();

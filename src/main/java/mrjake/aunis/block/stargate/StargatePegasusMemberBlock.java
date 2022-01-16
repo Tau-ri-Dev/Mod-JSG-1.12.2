@@ -18,7 +18,6 @@ public final class StargatePegasusMemberBlock extends StargateClassicMemberBlock
 
   public StargatePegasusMemberBlock() {
     super(BLOCK_NAME);
-    setResistance(2000.0f);
   }
 
   @Override

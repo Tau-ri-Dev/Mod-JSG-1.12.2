@@ -4,7 +4,7 @@ itemGroup.aunis_rings=Aunis: Rings
 itemGroup.aunis_ores=Aunis: Ores
 itemGroup.aunis_energy=Aunis: Energy
 
-soundCategory.aunis=奥尼斯
+soundCategory.aunis_sounds=奥尼斯
 
 item.aunis.analyzer_ancient.name=古人的分析仪
 item.aunis.crystal_control_dhd.name=DHD控制水晶

@@ -276,11 +276,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
             Random rand = new Random();
             if(AunisConfig.randomIncoming.enableRandomIncoming) {
-                if (world.getTotalWorldTime() % 40 == 0) { // every 2 seconds
+                if (world.getTotalWorldTime() % 200 == 0) { // every 10 seconds
                     int chanceToRandom = rand.nextInt(1000);
 
-                    //if chance <= 0.1% && stargate state is idle or dialing by DHD and RANDOM INCOMING IS NOT ACTIVATED YET
-                    if (chanceToRandom <= 1) {
+                    //if chance && stargate state is idle or dialing by DHD and RANDOM INCOMING IS NOT ACTIVATED YET
+                    if (chanceToRandom <= AunisConfig.randomIncoming.chance) {
                         int entities = rand.nextInt(25);
                         int delay = rand.nextInt(100);
                         if(delay < 80) delay = 80;
@@ -894,9 +894,32 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         boolean moveOnly = targetRingSymbol == currentRingSymbol;
 
 
-        if(moveOnly && targetSymbol instanceof SymbolUniverseEnum) {
+        if(moveOnly && targetSymbol instanceof SymbolUniverseEnum && !targetSymbol.equals(SymbolUniverseEnum.G37)) {
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 0));
             doIncomingAnimation(10);
+        }
+        else if(targetSymbol instanceof SymbolUniverseEnum && targetSymbol.equals(SymbolUniverseEnum.G37)){
+            spinDirection = spinDirection.opposite();
+
+            float distance = 360;
+
+            int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
+            doIncomingAnimation(duration);
+
+            Aunis.logger.debug("addSymbolToAddressManual: " + "current:" + currentRingSymbol + ", " + "target:" + targetSymbol + ", " + "direction:" + spinDirection + ", " + "distance:" + distance + ", " + "duration:" + duration + ", " + "moveOnly:" + moveOnly);
+
+            AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false)), targetPoint);
+            lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 5);
+            addTask(lastSpinFinished);
+            playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
+
+            targetRingSymbol = TOP_CHEVRON;
+
+            isSpinning = true;
+            spinStartTime = world.getTotalWorldTime();
+
+            ringSpinContext = null;
+            markDirty();
         }
         else {
             spinDirection = spinDirection.opposite();

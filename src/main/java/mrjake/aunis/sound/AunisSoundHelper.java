@@ -1,5 +1,6 @@
 package mrjake.aunis.sound;
 
+import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.SoundPositionedPlayToClient;
@@ -17,7 +18,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 @EventBusSubscriber
 public class AunisSoundHelper {
 	
-	public static final SoundCategory AUNIS_SOUND_CATEGORY = SoundCategory.BLOCKS;
+	public static final SoundCategory AUNIS_SOUND_CATEGORY = Aunis.AUNIS_SOUNDS;
 	
 	public static void playPositionedSound(World world, BlockPos pos, SoundPositionedEnum soundEnum, boolean play) {
 		AunisPacketHandler.INSTANCE.sendToAllTracking(new SoundPositionedPlayToClient(pos, soundEnum, play), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512));

@@ -571,10 +571,17 @@ public class AunisConfig {
         })
         public boolean enableRandomIncoming = true;
 
+        @Name("Chance of spawning")
+        @Comment({
+                "10 = 1%"
+        })
+        @RangeInt(min = 1, max = 100)
+        public int chance = 1;
+
         @Name("Entities to spawn")
         @SuppressWarnings("serial")
         @Comment({
-                "Format: \"modid:entityid[:meta]\", for example: ",
+                "Format: \"modid:entityid\", for example: ",
                 "\"minecraft:zombie\"",
                 "\"minecraft:creeper\""
         })

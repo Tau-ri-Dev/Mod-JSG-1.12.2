@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Random;
 
 public class StargateAddress implements INBTSerializable<NBTTagCompound> {
-	
-	public StargateAddress(SymbolTypeEnum symbolType) {
+
+    public StargateAddress(SymbolTypeEnum symbolType) {
 		this.symbolType = symbolType;
 	}
 	
@@ -68,6 +68,10 @@ public class StargateAddress implements INBTSerializable<NBTTagCompound> {
 			return null;
 		
 		return address.get(address.size() - 1);
+	}
+
+	public int getSize(){
+		return address.size();
 	}
 	
 	public List<String> getNameList() {

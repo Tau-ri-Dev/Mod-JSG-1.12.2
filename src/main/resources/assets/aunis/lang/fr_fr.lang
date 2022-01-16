@@ -4,7 +4,7 @@ itemGroup.aunis_rings=Aunis: Rings
 itemGroup.aunis_ores=Aunis: Ores
 itemGroup.aunis_energy=Aunis: Energy
 
-soundCategory.aunis=Aunis
+soundCategory.aunis_sounds=Aunis
 
 item.aunis.analyzer_ancient.name=Analyseur Ancien
 item.aunis.crystal_control_dhd.name=Cristal de contrôle du DHD
