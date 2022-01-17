@@ -144,8 +144,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     final int[] i = {1};
     Timer timer = new Timer();
 
-    System.out.println(((time/1000)*20)+80 + " ::: " + StargateClassicSpinHelper.getAnimationDuration(360));
-
     if(((time/1000)*20)+40 >= StargateClassicSpinHelper.getAnimationDuration(360)){
       timer.schedule(new TimerTask() {
         public void run() {
@@ -371,7 +369,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
   @Override
   protected boolean checkAddressLength(StargateAddressDynamic address, StargatePos targetGatePosition) {
-    if (dialingNearby) return address.size() < 7;
     return super.checkAddressLength(address, targetGatePosition);
   }
 

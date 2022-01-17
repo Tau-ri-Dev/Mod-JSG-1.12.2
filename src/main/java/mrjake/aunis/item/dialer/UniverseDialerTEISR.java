@@ -162,6 +162,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 									engage_poo = (dialed == 7);
 
 								if (entryCompound.hasKey("name")) {
+									//todo: color of this as of symbols
 									drawStringWithShadow(-0.05f, 0.32f - 0.32f*offset, entryCompound.getString("name"), active, false, dialed > 0);
 								}
 								else {
