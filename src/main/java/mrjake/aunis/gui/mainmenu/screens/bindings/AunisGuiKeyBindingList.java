@@ -190,7 +190,6 @@ public class AunisGuiKeyBindingList extends GuiListExtended {
             this.drawSelectionBox(k, l, mouseXIn, mouseYIn, partialTicks);
             GlStateManager.disableDepth();
 
-            // TODO: complete header nad footer of all menus like this (an also redone this)
             this.overlayBackground(0, this.top + 5, 255, 255);
             this.overlayBackground(this.bottom - 5, this.height, 255, 255);
 

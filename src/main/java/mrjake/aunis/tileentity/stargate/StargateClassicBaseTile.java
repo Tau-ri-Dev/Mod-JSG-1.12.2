@@ -75,6 +75,7 @@ import java.util.*;
 import static mrjake.aunis.item.AunisItems.UPGRADE_IRIS;
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.PHYSICAL_IRIS_ANIMATION_LENGTH;
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.SHIELD_IRIS_ANIMATION_LENGTH;
+import static mrjake.aunis.stargate.network.SymbolUniverseEnum.G37;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
 /**
@@ -160,8 +161,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 removeTask(lastSpinFinished);
             failGate();
             disconnectGate();
-            if (type == 2 && this instanceof StargateUniverseBaseTile)
-                addSymbolToAddressManual(TOP_CHEVRON, null);
+            if (type == 2 && this instanceof StargateUniverseBaseTile) {
+                addSymbolToAddressManual(G37, null);
+                playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
+            }
             markDirty();
             if (type == 1) abortDialingSequence(2);
         }
@@ -894,11 +897,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         boolean moveOnly = targetRingSymbol == currentRingSymbol;
 
 
-        if(moveOnly && targetSymbol instanceof SymbolUniverseEnum && !targetSymbol.equals(SymbolUniverseEnum.G37)) {
+        if(moveOnly && targetSymbol instanceof SymbolUniverseEnum && !targetSymbol.equals(G37)) {
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 0));
             doIncomingAnimation(10);
         }
-        else if(targetSymbol instanceof SymbolUniverseEnum && targetSymbol.equals(SymbolUniverseEnum.G37)){
+        else if(targetSymbol instanceof SymbolUniverseEnum && targetSymbol.equals(G37)){
             spinDirection = spinDirection.opposite();
 
             float distance = 360;
@@ -1209,14 +1212,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 markDirty();
                 playSoundEvent(closeSound);
                 if (targetGatePos != null) executeTask(EnumScheduledTask.STARGATE_HORIZON_LIGHT_BLOCK, null);
-                // beamers shit
-                // TODO: beamers deactive when iris is close
-                /*for (BlockPos beamerPos : linkedBeamers) {
-                    ((BeamerTile) world.getTileEntity(beamerPos)).gateClosed();
-                }
-                for (BlockPos beamerPos : ((StargateClassicBaseTile) targetGate).linkedBeamers) {
-                    ((BeamerTile) world.getTileEntity(beamerPos)).gateClosed();
-                }*/
                 break;
             case CLOSED:
                 irisState = mrjake.aunis.stargate.EnumIrisState.OPENING;

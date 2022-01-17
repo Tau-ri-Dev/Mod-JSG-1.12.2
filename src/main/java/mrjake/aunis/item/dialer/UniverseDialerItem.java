@@ -217,9 +217,22 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                     if (!gateTile.isMerged())
                                         continue;
 
+
                                     NBTTagList nearbyList = new NBTTagList();
                                     int squaredGate = AunisConfig.stargateConfig.universeGateNearbyReach * AunisConfig.stargateConfig.universeGateNearbyReach;
-                                    // todo something here crash mc
+
+
+                                    compound.setBoolean("requireOnlySeven", true);
+                                    /*
+                                    NBTTagCompound dialedAddress = gateTile.getDialedAddress().serializeNBT();
+                                    NBTTagCompound toDialAddress = ((StargateUniverseBaseTile) gateTile).addressToDial.serializeNBT();
+                                    compound.setTag("dialedAddress", dialedAddress);
+                                    compound.setTag("toDialAddress", toDialAddress);
+                                     */
+
+                                    addrToBytes(gateTile.getDialedAddress(), compound, "dialedAddress");
+                                    addrToBytes(((StargateUniverseBaseTile) gateTile).addressToDial, compound, "toDialAddress");
+                                    compound.setInteger("gateStatus", gateTile.getStargateState().id);
                                 try {
                                     for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet()) {
 
@@ -242,30 +255,13 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                         if (!targetGateTile.isMerged())
                                             continue;
 
+                                        // get only universe gates in nearby
+                                        if (!(targetGateTile instanceof StargateUniverseBaseTile) && mode.equals(UniverseDialerMode.NEARBY))
+                                            continue;
+
                                         NBTTagCompound entryCompound = entry.getKey().serializeNBT();
 
-                                        int dialed = -1;
-                                        if(((StargateUniverseBaseTile) gateTile).addressToDial.equals(entry.getKey())){
-                                            dialed = 0;
-                                        }
-                                        for (int i=0; i<9; i++) {
-                                            if(entry.getKey().getSize() > i && dialed > -1) {
-                                                if (gateTile.getDialedAddress().contains(entry.getKey().get(i))) {
-                                                    dialed++;
-                                                }
-                                            }
-                                        }
-
-                                        if (gateTile.getDialedAddress().contains(SymbolUniverseEnum.getOrigin())) {
-                                            dialed++;
-                                        }
-
-                                        if(dialed == 0 && gateTile.getStargateState().idle()){
-                                            dialed = -1;
-                                        }
-
                                         entryCompound.setBoolean("requireOnlySeven", true);
-                                        entryCompound.setInteger("dialed", dialed);
 
                                         nearbyList.appendTag(entryCompound);
                                     }
@@ -315,6 +311,40 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
         }
     }
 
+    public static NBTTagCompound addrToBytes(StargateAddress address, NBTTagCompound compound, String baseName){
+        if(compound == null || address == null || baseName == null) return compound;
+        compound.setByte(baseName + "_addressLength", (byte) address.getSize());
+        compound.setByte(baseName + "_symbolType", (byte) address.getSymbolType().id);
+        for(int i=0; i < address.getSize(); i++){
+            compound.setByte(baseName + "_" + i, (byte) address.get(i).getId());
+        }
+        return compound;
+    }
+
+    public static StargateAddressDynamic addrFromBytes(NBTTagCompound compound, String baseName){
+        if(compound == null || baseName == null) return null;
+        SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf((int) compound.getByte(baseName + "_symbolType"));
+        StargateAddressDynamic newAddress = new StargateAddressDynamic(symbolType);
+        int addressLength = compound.getByte(baseName + "_addressLength");
+        for(int i=0; i < addressLength; i++){
+            int symbolId = (int) compound.getByte(baseName + "_" + i);
+            switch(symbolType){
+                case MILKYWAY:
+                    newAddress.addSymbol(SymbolMilkyWayEnum.valueOf(symbolId));
+                    break;
+                case PEGASUS:
+                    newAddress.addSymbol(SymbolPegasusEnum.valueOf(symbolId));
+                    break;
+                case UNIVERSE:
+                    newAddress.addSymbol(SymbolUniverseEnum.valueOf(symbolId));
+                    break;
+                default:
+                    break;
+            }
+        }
+        return newAddress;
+    }
+
     @Override
     public boolean onDroppedByPlayer(ItemStack stack, EntityPlayer player) {
         if (stack.getItemDamage() != UniverseDialerVariants.BROKEN.meta)
@@ -344,7 +374,6 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
             switch (mode) {
                 case MEMORY:
-                    // todo: add colors into MEMORY list
                 case NEARBY:
                     StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
 

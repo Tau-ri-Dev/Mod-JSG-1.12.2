@@ -39,7 +39,11 @@ public enum EnumStargateState {
 	public boolean dialingComputer() {
 		return this == DIALING_COMPUTER;
 	}
-	
+
+	public boolean failing() {
+		return this == FAILING;
+	}
+
 	public boolean dialing() {
 		return this == DIALING || this == DIALING_COMPUTER;
 	}

@@ -32,6 +32,21 @@ import java.util.TimerTask;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
 public class StargateUniverseBaseTile extends StargateClassicBaseTile {
+
+  private long actionsCooldown = 0; //ticks
+
+  public void setUpCooldown(){
+    actionsCooldown = 60;
+  }
+
+  @Override
+  public void update(){
+    if(actionsCooldown > 0)
+      actionsCooldown--;
+    super.update();
+  }
+
+
   @Override
   public StargateSizeEnum getStargateSize() {
     return StargateSizeEnum.SMALL;
@@ -47,6 +62,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
   private boolean dialingNearby = false;
 
   public void dial(StargateAddress stargateAddress, int glyphsToDial, boolean nearby) {
+    if(actionsCooldown > 1) return;
+    setUpCooldown();
     addressToDial = stargateAddress;
     addressPosition = 0;
     maxSymbols = glyphsToDial;
@@ -64,8 +81,10 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
   }
 
   public void abort() {
+    if(actionsCooldown > 1) return;
+    setUpCooldown();
     abortDialingSequence(1);
-    //abortDialing = true;
+    abortDialing = true;
     markDirty();
   }
 
@@ -119,12 +138,15 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
   public void prepareGateToConnect(int dialedAddressSize, int time){
     time = time * dialedAddressSize;
     this.stargateState = EnumStargateState.INCOMING;
+    sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 9, true);
     // do spin animation
 
     final int[] i = {1};
     Timer timer = new Timer();
 
-    if(((time/1000)*20)+80 >= StargateClassicSpinHelper.getAnimationDuration(360)){
+    System.out.println(((time/1000)*20)+80 + " ::: " + StargateClassicSpinHelper.getAnimationDuration(360));
+
+    if(((time/1000)*20)+40 >= StargateClassicSpinHelper.getAnimationDuration(360)){
       timer.schedule(new TimerTask() {
         public void run() {
           if (irisMode == EnumIrisMode.AUTO && isOpened()) {
@@ -225,7 +247,14 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
             stargateState = EnumStargateState.IDLE;
             abortDialing = false;
           }
-        } else stargateState = EnumStargateState.IDLE;
+        }
+        else if(abortDialing){
+          dialingFailed(StargateOpenResult.ABORTED);
+
+          stargateState = EnumStargateState.IDLE;
+          abortDialing = false;
+        }
+        else stargateState = EnumStargateState.IDLE;
 
         markDirty();
         break;
@@ -308,6 +337,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     compound.setBoolean("abortDialing", abortDialing);
     compound.setBoolean("dialingNearby", dialingNearby);
 
+    compound.setLong("actionsCooldown", actionsCooldown);
+
     return super.writeToNBT(compound);
   }
 
@@ -320,6 +351,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     maxSymbols = compound.getInteger("maxSymbols");
     abortDialing = compound.getBoolean("abortDialing");
     dialingNearby = compound.getBoolean("dialingNearby");
+
+    actionsCooldown = compound.getLong("actionsCooldown");
   }
 
 

@@ -176,7 +176,10 @@ public class StargateAddress implements INBTSerializable<NBTTagCompound> {
 		if (address == null) {
 			if (other.address != null)
 				return false;
-		} else if (!address.subList(0, 6).equals(other.address.subList(0, 6)))
+		}
+		else if(address.size() < 7) return false;
+		else if(other.address.size() < 7) return false;
+		else if (!address.subList(0, 6).equals(other.address.subList(0, 6)))
 			return false;
 		if (symbolType != other.symbolType)
 			return false;

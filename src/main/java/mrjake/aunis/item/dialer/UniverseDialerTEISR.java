@@ -8,9 +8,8 @@ import mrjake.aunis.item.renderer.ItemRenderHelper;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.loader.texture.TextureLoader;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
-import mrjake.aunis.stargate.network.StargateAddress;
-import mrjake.aunis.stargate.network.SymbolInterface;
-import mrjake.aunis.stargate.network.SymbolUniverseEnum;
+import mrjake.aunis.stargate.EnumStargateState;
+import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import mrjake.aunis.transportrings.TransportRings;
 import net.minecraft.client.Minecraft;
@@ -23,9 +22,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants.NBT;
 import org.lwjgl.opengl.GL11;
+
+import static mrjake.aunis.item.dialer.UniverseDialerItem.addrFromBytes;
+import static mrjake.aunis.stargate.EnumStargateState.UNSTABLE;
 
 public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 
@@ -130,32 +131,46 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 							case MEMORY:
 							case NEARBY:
 								drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, (index+1) + ".", active, false);
-								
-								if (entryCompound.hasKey("name")) {
-									drawStringWithShadow(-0.05f, 0.32f - 0.32f*offset, entryCompound.getString("name"), active, false);
-								}
-								
-								else {
-									StargateAddress address = new StargateAddress(entryCompound);
 
-									int symbolCount = SymbolUniverseEnum.getMaxSymbolsDisplay(entryCompound.getBoolean("hasUpgrade"));
-									int symbolsDialed = entryCompound.getInteger("dialed");
-									boolean engage;
-									boolean locked = false;
-									
+								StargateAddress address = new StargateAddress(entryCompound);
+
+								int symbolCount = SymbolUniverseEnum.getMaxSymbolsDisplay(entryCompound.getBoolean("hasUpgrade"));
+
+								// gate status (might be used in future)
+								EnumStargateState gateStatus = EnumStargateState.valueOf(compound.getInteger("gateStatus"));
+								boolean isIdle = gateStatus.idle();
+
+								StargateAddressDynamic dialedAddress = addrFromBytes(compound, "dialedAddress");
+								StargateAddressDynamic toDialAddress = addrFromBytes(compound, "toDialAddress");
+
+								int dialed = -1;
+								if(toDialAddress != null && toDialAddress.equals(address))
+									dialed = 0;
+
+								if(dialedAddress != null && dialed >= 0)
+									dialed = dialedAddress.getSize();
+
+								if(dialed == 0 && isIdle)
+									dialed = -1;
+
+								boolean engage_poo;
+
+								if(dialed == -1) engage_poo = false;
+								else if(symbolCount == 8)
+									engage_poo = (dialed == 9);
+								else
+									engage_poo = (dialed == 7);
+
+								if (entryCompound.hasKey("name")) {
+									drawStringWithShadow(-0.05f, 0.32f - 0.32f*offset, entryCompound.getString("name"), active, false, dialed > 0);
+								}
+								else {
 									for (int i=0; i<symbolCount; i++) {
-										if(symbolsDialed == -1) engage = false;
-										else engage = (i < symbolsDialed);
-										renderSymbol(offset, i, address.get(i), active, symbolCount == 8, engage, locked);
+										boolean engage_s = (i < dialed);
+										renderSymbol(offset, i, address.get(i), active, symbolCount == 8, engage_s, gateStatus);
 									}
-									if(symbolsDialed == -1) engage = false;
-									else if(symbolCount == 8)
-										engage = (symbolsDialed == 9);
-									else
-										engage = (symbolsDialed == 7);
-									if(engage) locked = true;
-									
-									renderSymbol(offset, symbolCount, SymbolUniverseEnum.getOrigin(), active, symbolCount == 8, engage, locked);
+
+									renderSymbol(offset, symbolCount, SymbolUniverseEnum.getOrigin(), active, symbolCount == 8, engage_poo, gateStatus);
 								}
 								
 								break;
@@ -181,8 +196,12 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 		GlStateManager.disableBlend();
 		GlStateManager.popMatrix();
 	}
+
+	private static void drawStringWithShadow(float x, float y, String text, boolean active, boolean red) {
+		drawStringWithShadow(x,  y, text, active, red, false);
+	}
 	
-	private static void drawStringWithShadow(float x, float y, String text, boolean active, boolean red) {		
+	private static void drawStringWithShadow(float x, float y, String text, boolean active, boolean red, boolean dialing) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, 0);
 		GlStateManager.rotate(180, 0,0,1);
@@ -192,18 +211,29 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 		if (red) {
 			color = 0xA01010;
 		}
+		if(dialing){
+			color = active ? 0x0060FF : 0x003060;
+		}
 		
 		AunisFontRenderer.getFontRenderer().drawString(text, -6, 19, color, false);
 		
 		if (active) {
 			GlStateManager.translate(-0.4, 0.6, -0.1);
-			AunisFontRenderer.getFontRenderer().drawString(text, -6, 19, 0x606060, false);
+			AunisFontRenderer.getFontRenderer().drawString(text, -6, 19, color, false);
 		}
 		
 		GlStateManager.popMatrix();
 	}
 	
-	private static void renderSymbol(int row, int col, SymbolInterface symbol, boolean isActive, boolean is9Chevron, boolean engage, boolean locked) {
+	private static void renderSymbol(int row, int col, SymbolInterface symbol, boolean isActive, boolean is9Chevron, boolean engage, EnumStargateState stargateState) {
+
+		boolean isIdle = stargateState.idle();
+		boolean isEngaged = stargateState.engaged() || stargateState.initiating();
+		boolean isEngagedInitiating = stargateState.initiating();
+		boolean isIncoming = stargateState.incoming();
+		boolean isFailing = stargateState.failing();
+		boolean isUnstable = stargateState == UNSTABLE;
+
 		float x = col * 0.09f - 0.05f;
 		float y = -row * 0.32f - 0.16f;
 		float scale = 0.7f;
@@ -222,12 +252,29 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 		float blue = 1f;
 		float alpha = 1f;
 
-		if(!isActive)
+		if(!isActive || isIncoming || (!isEngagedInitiating && isEngaged))
 			alpha = 0.3f;
-		if(engage)
-			red = green = 0.3f;
-		if(locked)
-			red = blue = 0.3f;
+
+		if(!isEngaged && engage){
+			red = 0.0f;
+			green = 0.5f;
+			blue = 1f;
+		}
+		if(isEngaged && engage){
+			red = 0.0f;
+			green = 1f;
+			blue = 0.5f;
+		}
+		if(isFailing && engage){
+			red = 1f;
+			green = 0.0f;
+			blue = 0.3f;
+		}
+		if(isIncoming || (!isEngagedInitiating && isEngaged)){
+			red = 1f;
+			green = 0.7f;
+			blue = 0.0f;
+		}
 
 
 		GlStateManager.color(red, green, blue, alpha);

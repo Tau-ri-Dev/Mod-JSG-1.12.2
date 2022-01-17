@@ -84,7 +84,10 @@ public abstract class StargateAbstractMemberTile extends TileEntity{
     }
 
     protected StargateAbstractEnergyStorage getEnergyStorage() {
-        return getBaseTile(world).getEnergyStorage();
+        if(getBaseTile(world) != null)
+            return getBaseTile(world).getEnergyStorage();
+        // todo: fix here null pointer
+        else return new StargateAbstractEnergyStorage();
     }
 
 
