@@ -80,12 +80,16 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     markDirty();
   }
 
-  public void abort() {
-    if(actionsCooldown > 1) return;
+  public void abort(boolean force) {
+    if(actionsCooldown > 1 && !force) return;
     setUpCooldown();
-    abortDialingSequence(1);
+    //abortDialingSequence(1);
     abortDialing = true;
     markDirty();
+  }
+
+  public void abort() {
+    abort(true);
   }
 
   @Override

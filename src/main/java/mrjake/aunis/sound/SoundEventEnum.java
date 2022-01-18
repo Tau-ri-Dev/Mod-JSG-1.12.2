@@ -60,7 +60,8 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
   PAGE_FLIP(120, "page_flip", 1.0f),
   GUI_SEND_CODE_BUTTON_PRESS(121, "gui_send_code_button_press", .5f),
   UNIVERSE_DIALER_MODE_CHANGE(122, "universe_dialer_mode_change", 0.5f),
-  UNIVERSE_DIALER_START_DIAL(123, "universe_dialer_start_dial", .5f);
+  UNIVERSE_DIALER_CONNECTED(123, "universe_dialer_connect", 0.8f),
+  UNIVERSE_DIALER_START_DIAL(124, "universe_dialer_start_dial", .5f);
   // ----------------------------------------------------------
     public int id;
   public SoundEvent soundEvent;

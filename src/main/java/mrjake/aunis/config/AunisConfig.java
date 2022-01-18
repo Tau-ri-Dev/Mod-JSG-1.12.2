@@ -1,6 +1,5 @@
 package mrjake.aunis.config;
 
-import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.util.ItemMetaPair;
@@ -13,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Config(modid = "aunis", name = "aunis_" + Aunis.Version)
+@Config(modid = "aunis", name = "aunis") // + Aunis.Version)
 public class AunisConfig {
 
     @Name("Stargate size")

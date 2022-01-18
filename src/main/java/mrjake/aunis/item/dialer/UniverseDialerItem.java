@@ -9,7 +9,9 @@ import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
 import mrjake.aunis.sound.AunisSoundHelper;
+import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundEventEnum;
+import mrjake.aunis.sound.SoundPositionedEnum;
 import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.stargate.StargateClosedReasonEnum;
 import mrjake.aunis.stargate.network.*;
@@ -223,12 +225,6 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
 
                                     compound.setBoolean("requireOnlySeven", true);
-                                    /*
-                                    NBTTagCompound dialedAddress = gateTile.getDialedAddress().serializeNBT();
-                                    NBTTagCompound toDialAddress = ((StargateUniverseBaseTile) gateTile).addressToDial.serializeNBT();
-                                    compound.setTag("dialedAddress", dialedAddress);
-                                    compound.setTag("toDialAddress", toDialAddress);
-                                     */
 
                                     addrToBytes(gateTile.getDialedAddress(), compound, "dialedAddress");
                                     addrToBytes(((StargateUniverseBaseTile) gateTile).addressToDial, compound, "toDialAddress");
@@ -299,8 +295,15 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                             }
                         }
 
-                        if (found)
+                        if (found) {
+                            if(compound.hasKey(mode.tagPosName)){
+                                long targetPosOld = compound.getLong(mode.tagPosName);
+                                if(targetPosOld != targetPos.toLong()){
+                                    AunisSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_CONNECTED);
+                                }
+                            }
                             break;
+                        }
                     }
                 }
             }
@@ -381,7 +384,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                         case IDLE:
                             int maxSymbols = SymbolUniverseEnum.getMaxSymbolsDisplay(selectedCompound.getBoolean("hasUpgrade"));
                             gateTile.dial(new StargateAddress(selectedCompound), maxSymbols, mode == UniverseDialerMode.NEARBY);
-                            AunisSoundHelper.playSoundEvent(world, player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_START_DIAL);
+                            AunisSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_START_DIAL);
                             break;
 
                         case ENGAGED_INITIATING:

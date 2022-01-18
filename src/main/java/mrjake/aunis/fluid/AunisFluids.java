@@ -24,6 +24,9 @@ public class AunisFluids {
 	public static MoltenFluid moltenNaquadahRefined = new MoltenFluid("naquadah_molten_refined");
 	public static MoltenFluid moltenNaquadahAlloy = new MoltenFluid("naquadah_molten_alloy");
 
+	public static MoltenFluid moltenTitanium = new MoltenFluid("titanium_molten");
+	public static MoltenFluid moltenTrinium = new MoltenFluid("trinium_molten");
+
 	private static Fluid[] fluids = {
 			moltenSiliconBlack,
 			moltenSiliconRed,
@@ -34,7 +37,10 @@ public class AunisFluids {
 
 			moltenNaquadahRaw,
 			moltenNaquadahRefined,
-			moltenNaquadahAlloy
+			moltenNaquadahAlloy,
+
+			moltenTitanium,
+			moltenTrinium
 	};
 
 	public static Map<String, AunisBlockFluid> blockFluidMap = new HashMap<>();

@@ -3,9 +3,11 @@ package mrjake.aunis.item.dialer;
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.sound.AunisSoundHelper;
+import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -64,7 +66,7 @@ public class UniverseDialerActionPacketToServer implements IMessage {
 					switch (message.action) {
 					
 						case MODE_CHANGE:
-							AunisSoundHelper.playSoundEvent(world, player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_MODE_CHANGE);
+							AunisSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_MODE_CHANGE);
 							if (message.next) // message.offset < 0
 								mode = mode.next();
 							else
@@ -76,7 +78,8 @@ public class UniverseDialerActionPacketToServer implements IMessage {
 							break;
 							
 							
-						case ADDRESS_CHANGE:							
+						case ADDRESS_CHANGE:
+							AunisSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_MODE_CHANGE);
 							int addressCount = compound.getTagList(mode.tagListName, NBT.TAG_COMPOUND).tagCount();
 							
 							if (message.next && selected < addressCount-1) // message.offset < 0

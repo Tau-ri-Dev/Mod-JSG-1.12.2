@@ -38,7 +38,7 @@ public class ZPMHubBlock extends Block {
         setUnlocalizedName(Aunis.ModID + "." + blockName);
 
         setSoundType(SoundType.STONE);
-        setCreativeTab(Aunis.aunisEnergyCreativeTab);
+        //setCreativeTab(Aunis.aunisEnergyCreativeTab);
 
         setLightOpacity(0);
 
@@ -93,18 +93,18 @@ public class ZPMHubBlock extends Block {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        // todo check if slot is empty or fill -> place zpm into it
+        //todo(Mine): check if slot is empty or fill -> place zpm into it
         return false;
     }
 
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        // todo drop inserted zpms
+        // todo(Mine): drop inserted zpms
         super.breakBlock(world, pos, state);
     }
 
     private int getPower(IBlockAccess world, BlockPos pos) {
-        // todo return power by counting zpms
+        // todo(Mine): return power by counting zpms
         return 0;
     }
 

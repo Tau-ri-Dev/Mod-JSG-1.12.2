@@ -150,6 +150,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public void abortDialingSequence(int type) {
+        //todo(Mine): Fix aborting on uni gates and remove this if statement
+        if(this instanceof StargateUniverseBaseTile){
+            ((StargateUniverseBaseTile) this).abort(true);
+            return;
+        }
+
         if (stargateState.dialingComputer() || stargateState.idle() || stargateState.dialing()) {
             spinStartTime = world.getTotalWorldTime() + 3000;
             isSpinning = false;

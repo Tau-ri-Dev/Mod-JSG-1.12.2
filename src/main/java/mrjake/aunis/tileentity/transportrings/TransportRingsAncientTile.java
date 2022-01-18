@@ -6,7 +6,7 @@ import mrjake.aunis.renderer.transportrings.TransportRingsAncientRenderer;
 import mrjake.aunis.state.StateTypeEnum;
 
 public class TransportRingsAncientTile extends TransportRingsAbstractTile {
-  // todo: tings types
+  // todo(Mine): tings types
 
     @Override
     public void onLoad(){

@@ -42,7 +42,7 @@ public class ZPMBlock extends Block {
         setUnlocalizedName(Aunis.ModID + "." + BLOCK_NAME);
 
         setSoundType(SoundType.METAL);
-        setCreativeTab(Aunis.aunisEnergyCreativeTab);
+        //setCreativeTab(Aunis.aunisEnergyCreativeTab);
 
         setDefaultState(blockState.getBaseState()
                 .withProperty(AunisProps.FACING_HORIZONTAL, EnumFacing.NORTH));

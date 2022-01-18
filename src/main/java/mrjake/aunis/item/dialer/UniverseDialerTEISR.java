@@ -6,11 +6,9 @@ import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.item.renderer.AunisFontRenderer;
 import mrjake.aunis.item.renderer.ItemRenderHelper;
 import mrjake.aunis.loader.ElementEnum;
-import mrjake.aunis.loader.texture.TextureLoader;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.stargate.network.*;
-import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import mrjake.aunis.transportrings.TransportRings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -25,8 +23,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants.NBT;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+
 import static mrjake.aunis.item.dialer.UniverseDialerItem.addrFromBytes;
-import static mrjake.aunis.stargate.EnumStargateState.UNSTABLE;
 
 public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 
@@ -162,8 +161,10 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 									engage_poo = (dialed == 7);
 
 								if (entryCompound.hasKey("name")) {
-									//todo: color of this as of symbols
-									drawStringWithShadow(-0.05f, 0.32f - 0.32f*offset, entryCompound.getString("name"), active, false, dialed > 0);
+									String entryName = entryCompound.getString("name");
+									if(dialed > -1)
+										entryName += " (" + dialed + ")";
+									drawStringWithShadow(-0.05f, 0.32f - 0.32f*offset, entryName, active, false, true, dialed > 0, gateStatus);
 								}
 								else {
 									for (int i=0; i<symbolCount; i++) {
@@ -199,26 +200,61 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 	}
 
 	private static void drawStringWithShadow(float x, float y, String text, boolean active, boolean red) {
-		drawStringWithShadow(x,  y, text, active, red, false);
+		drawStringWithShadow(x,  y, text, active, red, false, false, EnumStargateState.IDLE);
 	}
 	
-	private static void drawStringWithShadow(float x, float y, String text, boolean active, boolean red, boolean dialing) {
+	private static void drawStringWithShadow(float x, float y, String text, boolean isActive, boolean redDef, boolean isAddress, boolean dialing, EnumStargateState stargateState) {
+
+		boolean isEngaged = stargateState.engaged() || stargateState.initiating();
+		boolean isEngagedInitiating = stargateState.initiating();
+		boolean isIncoming = stargateState.incoming();
+		boolean isFailing = stargateState.failing();
+
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, 0);
 		GlStateManager.rotate(180, 0,0,1);
 		GlStateManager.scale(0.015f, 0.015f, 0.015f);
-		
-		int color = active ? 0xFFFFFF : 0x006060;
-		if (red) {
-			color = 0xA01010;
-		}
+
+		int color;
+
+		float red = 1f;
+		float green = 1f;
+		float blue = 1f;
+		float alpha = 1f;
+
+		if(!isActive || isIncoming || (!isEngagedInitiating && isEngaged))
+			alpha = 0.3f;
+
 		if(dialing){
-			color = active ? 0x0060FF : 0x003060;
+			red = 0.0f;
+			green = 0.5f;
+			blue = 1f;
 		}
+		if(isEngaged && dialing){
+			red = 0.0f;
+			green = 1f;
+			blue = 0.5f;
+		}
+		if(isFailing && dialing){
+			red = 1f;
+			green = 0.0f;
+			blue = 0.3f;
+		}
+		if(isIncoming || (!isEngagedInitiating && isEngaged)){
+			red = 1f;
+			green = 0.7f;
+			blue = 0.0f;
+		}
+
+
+		if(!isAddress)
+			color = isActive ? 0xFFFFFF : 0x0060FF;
+		else
+			color = new Color(red, green, blue, alpha).getRGB();
 		
 		AunisFontRenderer.getFontRenderer().drawString(text, -6, 19, color, false);
 		
-		if (active) {
+		if (isActive) {
 			GlStateManager.translate(-0.4, 0.6, -0.1);
 			AunisFontRenderer.getFontRenderer().drawString(text, -6, 19, color, false);
 		}
@@ -228,12 +264,10 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 	
 	private static void renderSymbol(int row, int col, SymbolInterface symbol, boolean isActive, boolean is9Chevron, boolean engage, EnumStargateState stargateState) {
 
-		boolean isIdle = stargateState.idle();
 		boolean isEngaged = stargateState.engaged() || stargateState.initiating();
 		boolean isEngagedInitiating = stargateState.initiating();
 		boolean isIncoming = stargateState.incoming();
 		boolean isFailing = stargateState.failing();
-		boolean isUnstable = stargateState == UNSTABLE;
 
 		float x = col * 0.09f - 0.05f;
 		float y = -row * 0.32f - 0.16f;

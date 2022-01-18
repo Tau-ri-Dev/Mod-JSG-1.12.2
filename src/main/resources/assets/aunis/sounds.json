@@ -330,14 +330,21 @@
     "category": "ambient",
     "subtitle": "aunis.subtitle.universe_dialer_beep",
     "sounds": [
-      "aunis:misc/button_startdial_universe"
+      "aunis:misc/dialer/button_startdial_universe"
     ]
   },
   "universe_dialer_mode_change": {
     "category": "ambient",
     "subtitle": "aunis.subtitle.universe_dialer_change_mode",
     "sounds": [
-      "aunis:misc/button_changemode_universe"
+      "aunis:misc/dialer/button_changemode_universe"
+    ]
+  },
+  "universe_dialer_connect": {
+    "category": "ambient",
+    "subtitle": "aunis.subtitle.universe_dialer_connect",
+    "sounds": [
+      "aunis:misc/dialer/button_connect_universe"
     ]
   }
 }

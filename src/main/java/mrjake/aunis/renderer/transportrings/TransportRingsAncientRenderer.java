@@ -5,7 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class TransportRingsAncientRenderer extends TransportRingsAbstractRenderer{
-    // todo: rings
+    // todo(Mine): rings
     public TransportRingsAncientRenderer(World world, BlockPos pos, AunisAxisAlignedBB localTeleportBox) {
         super(world, pos, localTeleportBox);
     }

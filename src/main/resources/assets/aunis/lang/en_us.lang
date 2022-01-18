@@ -490,7 +490,9 @@ aunis.subtitle.beamer_stop=Beamer stops
 aunis.subtitle.beamer_loop=Beamer beams
 aunis.subtitle.page_flip=Page flips
 aunis.subtitle.gdo_button_beep=Pressed GDO button
-aunis.subtitle.universe_dialer_beep=Pressed Universe Dialer button
+aunis.subtitle.universe_dialer_beep=Universe Dialer started dialing
+aunis.subtitle.universe_dialer_change_mode=Changed Universe Dialer mode
+aunis.subtitle.universe_dialer_connect=Universe Dialer connected
 
 menu.about=About Aunis
 menu.gate_overlay=Gate

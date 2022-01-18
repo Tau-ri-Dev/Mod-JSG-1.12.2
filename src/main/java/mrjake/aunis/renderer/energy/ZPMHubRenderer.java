@@ -21,7 +21,7 @@ public class ZPMHubRenderer<S extends ZPMHubRendererState> extends TileEntitySpe
             GlStateManager.pushMatrix();
             GlStateManager.translate(x, y, z);
 
-            //todo: fix possition and scale
+            //todo(Mine): fix possition and scale
 
             GlStateManager.scale(0.05, 0.05, 0.05);
             GlStateManager.scale(1.1, 1.1, 1.1);
