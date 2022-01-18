@@ -504,11 +504,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 dialedAddress.addOrigin();
 
                 if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate && !network.getStargate(dialedAddress).getTileEntity().stargateState.incoming()) {
-                    if(byComputer){
-                        connectingToGate = true;
-                    }
-                    else {
-                        connectingToGate = true;
+                    connectingToGate = true;
+                    if(!byComputer){
                         doIncomingAnimation(10 * 20);
                     }
                 }
@@ -526,9 +523,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected void doIncomingAnimation(int time){
         if(!connectingToGate) return;
         connectingToGate = false;
-        boolean byComputer = (this.stargateState == EnumStargateState.DIALING_COMPUTER);
-        if((this instanceof StargatePegasusBaseTile || this instanceof StargateUniverseBaseTile) && this.stargateState == EnumStargateState.DIALING)
-            byComputer = true;
+        boolean allowed = (this.stargateState == EnumStargateState.DIALING_COMPUTER);
+        if((this instanceof StargateClassicBaseTile) && this.stargateState == EnumStargateState.DIALING)
+            allowed = true;
         StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
         dialAddr_backup.clear();
         dialAddr_backup.addAll(dialedAddress);
@@ -536,10 +533,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             dialedAddress.addOrigin();
 
             if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate) {
-                if(byComputer){
-                    int size = dialedAddress.size();
+                int size = dialedAddress.size();
 
-                    connectedToGate = true;
+                connectedToGate = true;
+                if(allowed){
 
                     time += 20; // add 20 ticks to time
                     int period = ((time / 20) * 1000) / size;
@@ -552,9 +549,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                     targetGateTile.failGate();
                 }
                 else{
-                    int size = dialedAddress.size();
-
-                    connectedToGate = true;
                     int period = 400;
                     StargateAbstractBaseTile targetGateTile = network.getStargate(dialedAddress).getTileEntity();
                     if(AunisConfig.stargateConfig.allowIncomingAnimations) targetGateTile.incomingWormhole(size, period);

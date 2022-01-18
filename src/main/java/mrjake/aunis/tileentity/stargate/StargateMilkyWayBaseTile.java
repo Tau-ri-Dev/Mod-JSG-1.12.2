@@ -199,6 +199,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         if(stargateState == EnumStargateState.DIALING_COMPUTER) abortDialingSequence(1);
         period -= (80/dialedAddressSize);
         this.stargateState = EnumStargateState.INCOMING;
+        markDirty();
 
         boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
         if (allowIncomingAnimation) {
@@ -214,6 +215,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                     }
                     else if(!stargateState.idle()){
                         stargateState = EnumStargateState.INCOMING;
+                        markDirty();
                         addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 10));
                         timer.cancel();
                     }
