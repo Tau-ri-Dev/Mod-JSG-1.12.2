@@ -505,9 +505,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
                 if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate && !network.getStargate(dialedAddress).getTileEntity().stargateState.incoming()) {
                     connectingToGate = true;
-                    if(!byComputer){
-                        doIncomingAnimation(10 * 20);
-                    }
+                    if(!byComputer)
+                        // todo(Mine): fix milkyway DHD does not trigger this:
+                        doIncomingAnimation(0);
                 }
                 else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
                     network.getStargate(dialedAddress).getTileEntity().disconnectGate(true);
@@ -523,9 +523,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected void doIncomingAnimation(int time){
         if(!connectingToGate) return;
         connectingToGate = false;
-        boolean allowed = (this.stargateState == EnumStargateState.DIALING_COMPUTER);
-        if((this instanceof StargateClassicBaseTile) && this.stargateState == EnumStargateState.DIALING)
-            allowed = true;
+        boolean byComputer = (this.stargateState == EnumStargateState.DIALING_COMPUTER);
+        if((this instanceof StargateUniverseBaseTile || this instanceof StargatePegasusBaseTile)
+                && (this.stargateState == EnumStargateState.DIALING || this.stargateState == EnumStargateState.IDLE))
+            byComputer = true;
         StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
         dialAddr_backup.clear();
         dialAddr_backup.addAll(dialedAddress);
@@ -536,28 +537,18 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 int size = dialedAddress.size();
 
                 connectedToGate = true;
-                if(allowed){
-
+                int period = 400;
+                if(byComputer){
                     time += 20; // add 20 ticks to time
-                    int period = ((time / 20) * 1000) / size;
-                    StargateAbstractBaseTile targetGateTile = network.getStargate(dialedAddress).getTileEntity();
-                    if(AunisConfig.stargateConfig.allowIncomingAnimations) targetGateTile.incomingWormhole(size, period);
-                    else targetGateTile.incomingWormhole(size);
-                    targetGateTile.sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
-                    targetGateTile.stargateState = EnumStargateState.INCOMING;
-                    targetGateTile.markDirty();
-                    targetGateTile.failGate();
+                    period = ((time / 20) * 1000) / size;
                 }
-                else{
-                    int period = 400;
-                    StargateAbstractBaseTile targetGateTile = network.getStargate(dialedAddress).getTileEntity();
-                    if(AunisConfig.stargateConfig.allowIncomingAnimations) targetGateTile.incomingWormhole(size, period);
-                    else targetGateTile.incomingWormhole(size);
-                    targetGateTile.sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
-                    targetGateTile.stargateState = EnumStargateState.INCOMING;
-                    targetGateTile.markDirty();
-                    targetGateTile.failGate();
-                }
+                StargateAbstractBaseTile targetGateTile = network.getStargate(dialedAddress).getTileEntity();
+                if(AunisConfig.stargateConfig.allowIncomingAnimations) targetGateTile.incomingWormhole(size, period);
+                else targetGateTile.incomingWormhole(size);
+                targetGateTile.sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
+                targetGateTile.stargateState = EnumStargateState.INCOMING;
+                targetGateTile.markDirty();
+                targetGateTile.failGate();
             }
             else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
                 network.getStargate(dialedAddress).getTileEntity().disconnectGate(true);
