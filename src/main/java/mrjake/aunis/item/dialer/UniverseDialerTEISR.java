@@ -21,14 +21,16 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants.NBT;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-import static mrjake.aunis.item.dialer.UniverseDialerItem.addrFromBytes;
 
 public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void renderByItem(ItemStack stack) {
 		float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
@@ -197,6 +199,32 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 		GlStateManager.enableLighting();
 		GlStateManager.disableBlend();
 		GlStateManager.popMatrix();
+	}
+
+
+
+	private static StargateAddressDynamic addrFromBytes(NBTTagCompound compound, String baseName){
+		if(compound == null || baseName == null) return null;
+		SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf((int) compound.getByte(baseName + "_symbolType"));
+		StargateAddressDynamic newAddress = new StargateAddressDynamic(symbolType);
+		int addressLength = compound.getByte(baseName + "_addressLength");
+		for(int i=0; i < addressLength; i++){
+			int symbolId = (int) compound.getByte(baseName + "_" + i);
+			switch(symbolType){
+				case MILKYWAY:
+					newAddress.addSymbol(SymbolMilkyWayEnum.valueOf(symbolId));
+					break;
+				case PEGASUS:
+					newAddress.addSymbol(SymbolPegasusEnum.valueOf(symbolId));
+					break;
+				case UNIVERSE:
+					newAddress.addSymbol(SymbolUniverseEnum.valueOf(symbolId));
+					break;
+				default:
+					break;
+			}
+		}
+		return newAddress;
 	}
 
 	private static void drawStringWithShadow(float x, float y, String text, boolean active, boolean red) {

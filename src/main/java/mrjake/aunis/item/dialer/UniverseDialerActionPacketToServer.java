@@ -66,7 +66,6 @@ public class UniverseDialerActionPacketToServer implements IMessage {
 					switch (message.action) {
 					
 						case MODE_CHANGE:
-							AunisSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_MODE_CHANGE);
 							if (message.next) // message.offset < 0
 								mode = mode.next();
 							else
@@ -79,7 +78,6 @@ public class UniverseDialerActionPacketToServer implements IMessage {
 							
 							
 						case ADDRESS_CHANGE:
-							AunisSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_MODE_CHANGE);
 							int addressCount = compound.getTagList(mode.tagListName, NBT.TAG_COMPOUND).tagCount();
 							
 							if (message.next && selected < addressCount-1) // message.offset < 0

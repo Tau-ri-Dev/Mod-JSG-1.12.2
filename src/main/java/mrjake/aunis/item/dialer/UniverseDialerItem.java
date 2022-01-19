@@ -9,9 +9,7 @@ import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
 import mrjake.aunis.sound.AunisSoundHelper;
-import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundEventEnum;
-import mrjake.aunis.sound.SoundPositionedEnum;
 import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.stargate.StargateClosedReasonEnum;
 import mrjake.aunis.stargate.network.*;
@@ -22,7 +20,6 @@ import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import mrjake.aunis.transportrings.TransportRings;
 import mrjake.aunis.util.EnumKeyInterface;
 import mrjake.aunis.util.EnumKeyMap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -30,7 +27,6 @@ import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -226,11 +222,12 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
 
                                     compound.setBoolean("requireOnlySeven", true);
+                                try {
 
                                     addrToBytes(gateTile.getDialedAddress(), compound, "dialedAddress");
                                     addrToBytes(((StargateUniverseBaseTile) gateTile).addressToDial, compound, "toDialAddress");
                                     compound.setInteger("gateStatus", gateTile.getStargateState().id);
-                                try {
+
                                     for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet()) {
 
                                         StargatePos stargatePos = entry.getValue();
@@ -300,7 +297,9 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                             if(compound.hasKey(mode.tagPosName)){
                                 long targetPosOld = compound.getLong(mode.tagPosName);
                                 if(targetPosOld != targetPos.toLong()){
-                                    AunisSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_CONNECTED);
+                                    if (entity instanceof EntityPlayer) {
+                                        AunisSoundHelper.playSoundEventClientSide(entity.getEntityWorld(), entity.getPosition(), SoundEventEnum.UNIVERSE_DIALER_CONNECTED);
+                                    }
                                 }
                             }
                             break;
@@ -315,38 +314,13 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
         }
     }
 
-    public static NBTTagCompound addrToBytes(StargateAddress address, NBTTagCompound compound, String baseName){
-        if(compound == null || address == null || baseName == null) return compound;
+    private static void addrToBytes(StargateAddress address, NBTTagCompound compound, String baseName){
+        if(compound == null || address == null || baseName == null) return;
         compound.setByte(baseName + "_addressLength", (byte) address.getSize());
         compound.setByte(baseName + "_symbolType", (byte) address.getSymbolType().id);
         for(int i=0; i < address.getSize(); i++){
             compound.setByte(baseName + "_" + i, (byte) address.get(i).getId());
         }
-        return compound;
-    }
-
-    public static StargateAddressDynamic addrFromBytes(NBTTagCompound compound, String baseName){
-        if(compound == null || baseName == null) return null;
-        SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf((int) compound.getByte(baseName + "_symbolType"));
-        StargateAddressDynamic newAddress = new StargateAddressDynamic(symbolType);
-        int addressLength = compound.getByte(baseName + "_addressLength");
-        for(int i=0; i < addressLength; i++){
-            int symbolId = (int) compound.getByte(baseName + "_" + i);
-            switch(symbolType){
-                case MILKYWAY:
-                    newAddress.addSymbol(SymbolMilkyWayEnum.valueOf(symbolId));
-                    break;
-                case PEGASUS:
-                    newAddress.addSymbol(SymbolPegasusEnum.valueOf(symbolId));
-                    break;
-                case UNIVERSE:
-                    newAddress.addSymbol(SymbolUniverseEnum.valueOf(symbolId));
-                    break;
-                default:
-                    break;
-            }
-        }
-        return newAddress;
     }
 
     @Override
@@ -385,7 +359,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                         case IDLE:
                             int maxSymbols = SymbolUniverseEnum.getMaxSymbolsDisplay(selectedCompound.getBoolean("hasUpgrade"));
                             gateTile.dial(new StargateAddress(selectedCompound), maxSymbols, mode == UniverseDialerMode.NEARBY);
-                            AunisSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_START_DIAL);
+                            AunisSoundHelper.playSoundEventClientSide(player.getEntityWorld(), player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_START_DIAL);
                             break;
 
                         case ENGAGED_INITIATING:

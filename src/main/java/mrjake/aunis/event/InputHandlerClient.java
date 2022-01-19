@@ -159,6 +159,7 @@ public class InputHandlerClient {
 
 				// ---------------------------------------------
 				if (action != null) {
+					AunisSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_MODE_CHANGE);
 					event.setCanceled(true);
 					AunisPacketHandler.INSTANCE.sendToServer(new UniverseDialerActionPacketToServer(action, hand, next));
 				}
@@ -233,6 +234,7 @@ public class InputHandlerClient {
 			
 			// ---------------------------------------------
 			if (action != null) {
+				AunisSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_MODE_CHANGE);
 				AunisPacketHandler.INSTANCE.sendToServer(new UniverseDialerActionPacketToServer(action, hand, next));
 			}
 		}
