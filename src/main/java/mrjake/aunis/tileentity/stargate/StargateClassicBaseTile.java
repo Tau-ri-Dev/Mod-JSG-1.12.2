@@ -401,7 +401,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     } else if ((randomIncomingEntities <= 0 && randomIncomingState >= (waitOpen + wait)) || stargateState != EnumStargateState.ENGAGED) {
                         resetRandomIncoming();
                         closeGate(StargateClosedReasonEnum.AUTOCLOSE);
-                        clearDHDSymbols();
+
+                        if(this instanceof StargatePegasusBaseTile) ((StargatePegasusBaseTile) this).clearDHDSymbols();
+                        if(this instanceof StargateMilkyWayBaseTile) ((StargateMilkyWayBaseTile) this).clearDHDSymbols();
                     }
                 } else resetRandomIncoming();
             }
@@ -905,7 +907,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         if(moveOnly && targetSymbol instanceof SymbolUniverseEnum && !targetSymbol.equals(G37)) {
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 0));
-            doIncomingAnimation(10);
+            doIncomingAnimation(10, true);
         }
         else if(targetSymbol instanceof SymbolUniverseEnum && targetSymbol.equals(G37)){
             spinDirection = spinDirection.opposite();
@@ -913,7 +915,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             float distance = 360;
 
             int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
-            doIncomingAnimation(duration);
+            doIncomingAnimation(duration, true);
 
             Aunis.logger.debug("addSymbolToAddressManual: " + "current:" + currentRingSymbol + ", " + "target:" + targetSymbol + ", " + "direction:" + spinDirection + ", " + "distance:" + distance + ", " + "duration:" + duration + ", " + "moveOnly:" + moveOnly);
 
@@ -948,7 +950,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             }
 
             int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
-            doIncomingAnimation(duration);
+            doIncomingAnimation(duration, true);
 
             Aunis.logger.debug("addSymbolToAddressManual: " + "current:" + currentRingSymbol + ", " + "target:" + targetSymbol + ", " + "direction:" + spinDirection + ", " + "distance:" + distance + ", " + "duration:" + duration + ", " + "moveOnly:" + moveOnly);
 

@@ -1,8 +1,6 @@
 package mrjake.aunis.tileentity.stargate;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.api.event.StargateChevronEngagedEvent;
-import mrjake.aunis.api.event.StargateDialFailEvent;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateDimensionConfig;
@@ -13,7 +11,6 @@ import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.ChevronEnum;
 import mrjake.aunis.renderer.stargate.StargateAbstractRendererState;
-import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.renderer.stargate.StargatePegasusRendererState;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.sound.SoundPositionedEnum;
@@ -24,7 +21,7 @@ import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargatePegasusMergeHelper;
 import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.state.*;
-import mrjake.aunis.state.dialhomedevice.DHDActivateButtonPegasusState;
+import mrjake.aunis.state.dialhomedevice.DHDActivateButtonState;
 import mrjake.aunis.state.stargate.StargateBiomeOverrideState;
 import mrjake.aunis.state.stargate.StargateRendererActionState;
 import mrjake.aunis.state.stargate.StargateRendererActionState.EnumGateAction;
@@ -36,7 +33,6 @@ import mrjake.aunis.util.ILinkable;
 import mrjake.aunis.util.LinkingHelper;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -93,14 +89,6 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   // Stargate connection
 
   @Override
-  public void closeGate(StargateClosedReasonEnum reason) {
-    super.closeGate(reason);
-    if (isLinkedAndDHDOperational()) {
-      getLinkedDHD(world).clearSymbols();
-    }
-  }
-
-  @Override
   public void openGate(StargatePos targetGatePos, boolean isInitiating) {
     super.openGate(targetGatePos, isInitiating);
 
@@ -118,11 +106,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     }
   }
 
-  @Override
   public void clearDHDSymbols(){
-    if (isLinkedAndDHDOperational()) {
-      getLinkedDHD(world).clearSymbols();
-    }
+    if (isLinkedAndDHDOperational()) getLinkedDHD(world).clearSymbols();
   }
 
   // ------------------------------------------------------------------------
@@ -178,6 +163,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     }
 
     prepareGateToConnect(dialedAddressSize, 400);
+    markDirty();
   }
 
   public void incomingWormhole(int dialedAddressSize, int time) {
@@ -187,6 +173,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       getLinkedDHD(world).clearSymbols();
     }
     prepareGateToConnect(dialedAddressSize, time);
+    markDirty();
   }
 
 
@@ -194,6 +181,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     // --- do spin animation ---
     if(stargateState == EnumStargateState.DIALING_COMPUTER) abortDialingSequence(1);
     this.stargateState = EnumStargateState.INCOMING;
+    markDirty();
 
     boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
 
@@ -510,7 +498,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         return new StargatePegasusRendererState();
 
       case DHD_ACTIVATE_BUTTON:
-        return new DHDActivateButtonPegasusState();
+        return new DHDActivateButtonState();
 
       case GUI_UPDATE:
         return new StargateContainerGuiUpdate();
@@ -546,8 +534,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
             break;
 
           case CHEVRON_ACTIVATE:
-            getRendererStateClient().spinHelper.setIsSpinning(false);
-            if(stargateState != EnumStargateState.INCOMING){
+            if(((StargateRendererActionState) state).chevronCount <= 9) {
+              getRendererStateClient().spinHelper.setIsSpinning(false);
               ChevronEnum chevron = gateActionState.modifyFinal ? ChevronEnum.getFinal() : getRendererStateClient().chevronTextureList.getNextChevron();
               getRendererStateClient().lockChevron(getRendererStateClient().spinHelper.getTargetSymbol().getId(), chevron);
             }
@@ -617,7 +605,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       if (distance <= 20) distance += 36;
 
       int duration = (int) (distance);
-      doIncomingAnimation(duration);
+      doIncomingAnimation(duration, true);
 
       //Aunis.logger.debug("addSymbolToAddressManual: " + "current:" + currentRingSymbol + ", " + "target:" + targetSymbol + ", " + "direction:" + spinDirection + ", " + "distance:" + distance + ", " + "duration:" + duration + ", " + "moveOnly:" + moveOnly);
 
@@ -629,8 +617,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       spinStartTime = world.getTotalWorldTime();
 
       ringSpinContext = context;
-      if (context != null)
-        sendSignal(context, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), stargateWillLock(targetRingSymbol), targetSymbol.getEnglishName()});
+      sendSignal(context, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), stargateWillLock(targetRingSymbol), targetSymbol.getEnglishName()});
 
     }
     else{
@@ -643,7 +630,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
       sendSignal(null, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), isFinalActive, targetSymbol.getEnglishName()});
       addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10));
-      doIncomingAnimation(10);
+      doIncomingAnimation(10, false);
     }
     markDirty();
   }
@@ -658,7 +645,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
     if (moveOnly) {
       addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 0));
-      doIncomingAnimation(0);
+      doIncomingAnimation(10, true);
     } else {
       spinDirection = spinDirection.opposite();
 
@@ -679,7 +666,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       if (distance <= 20) distance += 36;
 
       int duration = (int) (distance);
-      doIncomingAnimation(duration);
+      doIncomingAnimation(duration, true);
 
       Aunis.logger.debug("addSymbolToAddressManual: " + "current:" + currentRingSymbol + ", " + "target:" + targetSymbol + ", " + "direction:" + spinDirection + ", " + "distance:" + distance + ", " + "duration:" + duration + ", " + "moveOnly:" + moveOnly);
 

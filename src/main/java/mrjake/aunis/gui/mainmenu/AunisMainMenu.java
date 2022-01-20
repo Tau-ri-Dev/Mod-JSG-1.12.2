@@ -18,8 +18,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.client.event.sound.PlaySoundEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -30,7 +28,6 @@ import java.util.List;
 import java.util.Random;
 
 import static mrjake.aunis.gui.mainmenu.GetUpdate.getTextFromGithub;
-import static mrjake.aunis.sound.AunisSoundHelperClient.stopAllSounds;
 
 @SideOnly(Side.CLIENT)
 public class AunisMainMenu extends GuiMainMenu {
@@ -59,7 +56,6 @@ public class AunisMainMenu extends GuiMainMenu {
     protected boolean chevronSound1 = false;
     protected boolean chevronSound2 = false;
     protected boolean chevronSound3 = false;
-    protected boolean playingSounds = false;
     protected BiomeOverlayEnum[] overlays = {
             BiomeOverlayEnum.AGED,
             BiomeOverlayEnum.FROST,
@@ -72,6 +68,7 @@ public class AunisMainMenu extends GuiMainMenu {
     protected float screenCenterWidth = ((float) width) / 2f;
     protected List<GuiButton> aunisButtonList = new ArrayList<>();
     protected List<GuiButton> versionButtons = new ArrayList<>();
+    protected List<GuiButton> anyButton = new ArrayList<>();
     protected static final ResourceLocation BACKGROUND_TEXTURE = AunisConfig.mainMenuConfig.disableAunisMainMenu ? null : new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");
     protected static ResourceLocation EVENT_HORIZON_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/event_horizon.jpg");
 
@@ -562,8 +559,6 @@ public class AunisMainMenu extends GuiMainMenu {
             drawString(fontRenderer, "Event horizon state: " + kawooshState, 0, 0, 0xffffff);
             GlStateManager.translate(0, 10, 0);
             drawString(fontRenderer, "Next event: " + nextEvent, 0, 0, 0xffffff);
-            GlStateManager.translate(0, 10, 0);
-            drawString(fontRenderer, "Playing sounds: " + playingSounds, 0, 0, 0xffffff);
             GlStateManager.disableTexture2D();
             GlStateManager.popMatrix();
         }

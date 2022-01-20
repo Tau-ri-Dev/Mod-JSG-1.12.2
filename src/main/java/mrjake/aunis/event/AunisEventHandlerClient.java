@@ -5,6 +5,7 @@ import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.mainmenu.AunisMainMenu;
+import mrjake.aunis.gui.mainmenu.AunisMainMenuOnLoad;
 import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundPositionedEnum;
 import net.minecraft.block.Block;
@@ -69,9 +70,10 @@ public class AunisEventHandlerClient {
   @SubscribeEvent
   public static void onGuiOpen(GuiOpenEvent event) {
     if (!AunisConfig.mainMenuConfig.disableAunisMainMenu) {
-      if (!event.isCanceled() && event.getGui() instanceof GuiMainMenu && !(event.getGui() instanceof AunisMainMenu)) {
+      if (!event.isCanceled() && event.getGui() instanceof GuiMainMenu && !(event.getGui() instanceof AunisMainMenu) && !(event.getGui() instanceof AunisMainMenuOnLoad)) {
         event.setCanceled(true);
-        Minecraft.getMinecraft().displayGuiScreen(new AunisMainMenu());
+        //Minecraft.getMinecraft().displayGuiScreen(new AunisMainMenu());
+        Minecraft.getMinecraft().displayGuiScreen(new AunisMainMenuOnLoad());
       }
     }
   }

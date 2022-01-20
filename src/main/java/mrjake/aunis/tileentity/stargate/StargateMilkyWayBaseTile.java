@@ -14,7 +14,6 @@ import mrjake.aunis.sound.StargateSoundEventEnum;
 import mrjake.aunis.sound.StargateSoundPositionedEnum;
 import mrjake.aunis.stargate.EnumScheduledTask;
 import mrjake.aunis.stargate.EnumStargateState;
-import mrjake.aunis.stargate.StargateClosedReasonEnum;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
 import mrjake.aunis.stargate.network.*;
@@ -22,10 +21,8 @@ import mrjake.aunis.state.stargate.StargateRendererActionState;
 import mrjake.aunis.state.stargate.StargateRendererActionState.EnumGateAction;
 import mrjake.aunis.state.State;
 import mrjake.aunis.state.StateTypeEnum;
-import mrjake.aunis.state.stargate.StargateSpinState;
-import mrjake.aunis.tileentity.BeamerTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
-import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile.DHDUpgradeEnum;
+import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile.DHDUpgradeEnum;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import mrjake.aunis.util.ILinkable;
@@ -79,14 +76,6 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     // Stargate connection
 
     @Override
-    public void closeGate(StargateClosedReasonEnum reason) {
-        super.closeGate(reason);
-        if (isLinkedAndDHDOperational()) {
-            getLinkedDHD(world).clearSymbols();
-        }
-    }
-
-    @Override
     public void openGate(StargatePos targetGatePos, boolean isInitiating) {
         super.openGate(targetGatePos, isInitiating);
 
@@ -102,11 +91,8 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         }
     }
 
-    @Override
     public void clearDHDSymbols(){
-        if (isLinkedAndDHDOperational()) {
-            getLinkedDHD(world).clearSymbols();
-        }
+        if (isLinkedAndDHDOperational()) getLinkedDHD(world).clearSymbols();
     }
 
     // ------------------------------------------------------------------------
@@ -123,8 +109,10 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     }
 
     public void addSymbolToAddressDHD(SymbolMilkyWayEnum symbol) {
-        addSymbolToAddress(symbol);
         stargateState = EnumStargateState.DIALING;
+        markDirty();
+        addSymbolToAddress(symbol);
+        doIncomingAnimation(10, false);
 
         if (stargateWillLock(symbol)) {
             isFinalActive = true;

@@ -31,8 +31,8 @@ public class UniverseEntryChangeGui extends AbstractEntryChangeGui {
 		super(hand, compound);
 	}
 	
-	protected GuiButton ocButton;
-	protected GuiButton abortButton;
+	protected GuiButton ocButton = null;
+	protected GuiButton abortButton = null;
 	@Override
 	public void initGui() {
 		super.initGui();
@@ -54,12 +54,16 @@ public class UniverseEntryChangeGui extends AbstractEntryChangeGui {
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		ocButton.x = dispx+guiWidth+3;
-		ocButton.y = dispy+guiHeight+3;
+		if(ocButton != null){
+			ocButton.x = dispx+guiWidth+3;
+			ocButton.y = dispy+guiHeight+3;
+		}
 
-		abortButton.visible = mainCompound.hasKey("linkedGate");
-		abortButton.x = dispx-AbstractEntryChangeGui.PADDING+2;
-		abortButton.y = dispy+guiHeight+3;
+		if(abortButton != null) {
+			abortButton.visible = mainCompound.hasKey("linkedGate");
+			abortButton.x = dispx - AbstractEntryChangeGui.PADDING + 2;
+			abortButton.y = dispy + guiHeight + 3;
+		}
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}

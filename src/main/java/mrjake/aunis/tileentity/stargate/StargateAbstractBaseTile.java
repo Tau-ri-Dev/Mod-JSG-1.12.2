@@ -21,7 +21,6 @@ import mrjake.aunis.particle.ParticleWhiteSmoke;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateAbstractRendererState;
 import mrjake.aunis.renderer.stargate.StargateAbstractRendererState.StargateAbstractRendererStateBuilder;
-import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.sound.*;
 import mrjake.aunis.stargate.*;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
@@ -492,9 +491,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      */
     protected void addSymbolToAddress(SymbolInterface symbol) {
         if (!canAddSymbol(symbol)) throw new IllegalStateException("Cannot add that symbol");
-        boolean byComputer = (this.stargateState == EnumStargateState.DIALING_COMPUTER);
-        if((this instanceof StargatePegasusBaseTile || this instanceof StargateUniverseBaseTile) && this.stargateState == EnumStargateState.DIALING)
-            byComputer = true;
         dialedAddress.addSymbol(symbol);
         StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
         dialAddr_backup.clear();
@@ -505,9 +501,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
                 if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate && !network.getStargate(dialedAddress).getTileEntity().stargateState.incoming()) {
                     connectingToGate = true;
-                    if(!byComputer)
-                        // todo(Mine): fix milkyway DHD does not trigger this:
-                        doIncomingAnimation(0);
                 }
                 else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
                     network.getStargate(dialedAddress).getTileEntity().disconnectGate(true);
@@ -520,13 +513,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         }
     }
 
-    protected void doIncomingAnimation(int time){
+    protected void doIncomingAnimation(int time, boolean byComputer){
         if(!connectingToGate) return;
         connectingToGate = false;
-        boolean byComputer = (this.stargateState == EnumStargateState.DIALING_COMPUTER);
-        if((this instanceof StargateUniverseBaseTile || this instanceof StargatePegasusBaseTile)
-                && (this.stargateState == EnumStargateState.DIALING || this.stargateState == EnumStargateState.IDLE))
-            byComputer = true;
         StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
         dialAddr_backup.clear();
         dialAddr_backup.addAll(dialedAddress);
@@ -820,10 +809,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     }
 
-    public void clearDHDSymbols(){
-
-    }
-
     @Override
     public void update() {
         // Scheduled tasks
@@ -999,7 +984,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             if (AunisConfig.openLimitConfig.maxOpenedWhat.equals("closeGate")){
                 //attemptClose(StargateClosedReasonEnum.TIMELIMIT);
                 attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
-                clearDHDSymbols();
+                if(this instanceof StargatePegasusBaseTile) ((StargatePegasusBaseTile) this).clearDHDSymbols();
+                if(this instanceof StargateMilkyWayBaseTile) ((StargateMilkyWayBaseTile) this).clearDHDSymbols();
                 resetLimitSeconds();
             }
             else
