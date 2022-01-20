@@ -63,11 +63,11 @@ public abstract class AbstractEntry {
 		
 		int bId = 0;
 		upButton = new ArrowButton(bId++, 0, 0, ArrowButton.ArrowType.UP)
-				.setFgColor(GuiUtils.getColorCode('a', true))
+				.setFgColor(GuiUtils.getColorCode('f', true))
 				.setActionCallback(() -> action(EntryActionEnum.MOVE_UP));
 		
 		downButton = new ArrowButton(bId++, 0, 0, ArrowButton.ArrowType.DOWN)
-				.setFgColor(GuiUtils.getColorCode('c', true))
+				.setFgColor(GuiUtils.getColorCode('f', true))
 				.setActionCallback(() -> action(EntryActionEnum.MOVE_DOWN));
 		
 		removeButton = new ArrowButton(bId++, 0, 0, ArrowButton.ArrowType.CROSS)
@@ -103,6 +103,19 @@ public abstract class AbstractEntry {
 			btn.y = dy;
 			btn.drawButton(mc, mouseX, mouseY, partialTicks);
 			
+			dx += 25;
+		}
+	}
+
+	public void setLocation(int dx, int dy){
+		for (GuiTextField tf : textFields) {
+			tf.x = dx;
+			tf.y = dy;
+			dx += tf.width + 10;
+		}
+		for (GuiButton btn : buttons) {
+			btn.x = dx;
+			btn.y = dy;
 			dx += 25;
 		}
 	}

@@ -2,12 +2,16 @@ package mrjake.aunis.gui.entry;
 
 import mrjake.aunis.gui.base.BetterButton;
 import mrjake.aunis.packet.gui.entry.EntryActionEnum;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,10 +34,11 @@ public abstract class AbstractEntryChangeGui extends GuiScreen {
 	protected List<Section> sections = new ArrayList<>();
 	
 	protected int dispx;
-	protected int dispy;
 	protected int guiWidth;
 	protected int guiHeight;
-	
+
+	protected int scrolledHeight = 0;
+
 	protected boolean firstRun = true;
 	
 	public AbstractEntryChangeGui(EnumHand hand, NBTTagCompound compound) {
@@ -64,53 +69,40 @@ public abstract class AbstractEntryChangeGui extends GuiScreen {
 			calculateGuiHeight();
 		}
 				
-		dispx = PADDING + (width-guiWidth)/2;
-		dispy = PADDING + (height-guiHeight)/2;
+		dispx = (width-guiWidth)/2;
 	}
 	
 	protected void calculateGuiHeight() {
 		guiHeight = 14;
 		for (AbstractEntry entry : entries)
 			guiHeight += entry.getHeight() + getEntryBottomMargin(); // Margin
-		
+
 		guiHeight -= getEntryBottomMargin(); // Last margin unnecessary
+		if(guiHeight > (height - 14)) guiHeight = height-14;
 	}
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		drawGradientRect(dispx-PADDING, dispy-PADDING, dispx+guiWidth+PADDING, dispy+guiHeight+PADDING, -0x3FEFEFF0, -0x2FEFEFF0);
-		super.drawScreen(mouseX, mouseY, partialTicks);
-		
-		int x = dispx;
-		for (Section section : sections) {
-			section.render(fontRenderer, x, dispy);
-			x += section.getWidth() + 10;
-		}
-		
-		int y = dispy+14;
+
+		drawGradientRect(dispx-PADDING, PADDING, dispx+PADDING+guiWidth, height-PADDING, -0x3FEFEFF0, -0x2FEFEFF0);
+
+		int y = PADDING+25 + scrolledHeight;
 		for (AbstractEntry entry : entries) {
-			entry.renderAt(dispx, y, mouseX, mouseY, partialTicks);
+			if(y > PADDING+2 && (y+entry.getHeight()+getEntryBottomMargin()) < height-PADDING)
+				entry.renderAt(dispx, y, mouseX, mouseY, partialTicks);
+			else
+				entry.setLocation(dispx, y);
 			y += entry.getHeight() + getEntryBottomMargin(); // 6;
 		}
-		
-		// Debug UI layout
-		// Sections
-//		int colorId = 0;
-//		x = dispx;
-//		for (Section section : sections) {
-//			drawRect(x, dispy, x+section.getWidth(), dispy+guiHeight, 0x80000000 | (0xFF << 8*(colorId%3)));
-//			x += section.getWidth()+10;
-//			colorId++;
-//		}
-		
-		// Entries
-//		int colorId = 0;
-//		y = dispy+14;
-//		for (AbstractEntry entry : entries) {
-//			drawRect(dispx, y, dispx+guiWidth, y+entry.getHeight(), 0x80000000 | (0xFF << 8*(colorId%3)));
-//			y += entry.getHeight() + getEntryBottomMargin();
-//			colorId += 1;
-//		}
+
+		drawGradientRect(dispx-PADDING, PADDING, dispx+PADDING+guiWidth, PADDING+20, -0x3FEFEFF0, -0x2FEFEFF0);
+		drawGradientRect(dispx-PADDING, height-PADDING-20-6, dispx+PADDING+guiWidth, height-PADDING, -0x3FEFEFF0, -0x2FEFEFF0);
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		int x = dispx;
+		for (Section section : sections) {
+			section.render(fontRenderer, x, PADDING+5);
+			x += section.getWidth() + 10;
+		}
 	}
 	
 	@Override
@@ -124,11 +116,37 @@ public abstract class AbstractEntryChangeGui extends GuiScreen {
 			}
 		}
 	}
+
+
+	@Override
+	public void handleMouseInput() throws IOException {
+		super.handleMouseInput();
+		int i2 = Mouse.getEventDWheel();
+
+		if (i2 != 0) {
+			if (i2 > 0) {
+				i2 = 1;
+			} else {
+				i2 = -1;
+			}
+
+			if(entries.size() < 1) return;
+
+			int entryHeightComplete = 0;
+			for(AbstractEntry entry : entries)
+				entryHeightComplete += entry.getHeight() + getEntryBottomMargin();
+
+			if(scrolledHeight >= 0 && i2 == 1) return;
+			if(scrolledHeight-(3*(entries.get(0).getHeight())) <= -1*entryHeightComplete && i2 == -1) return;
+
+			scrolledHeight += (float) (i2 * 15 / 2);
+		}
+	}
 	
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
-		
+
 		for (AbstractEntry entry : entries) {
 			if (entry.mouseClicked(mouseX, mouseY, mouseButton)) {
 				// Click performed some action

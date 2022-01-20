@@ -44,9 +44,9 @@ public class NotebookEntryChangeGui extends AbstractEntryChangeGui {
 		sections.add(new Section(100, "item.aunis.gui.name"));
 		sections.add(new Section(NotebookEntry.BUTTON_COUNT*25 - 5, ""));
 	}
-	
+
 	@Override
 	protected int getEntryBottomMargin() {
-		return 1; // 5
+		return 2;
 	}
 }

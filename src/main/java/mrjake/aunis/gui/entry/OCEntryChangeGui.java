@@ -45,12 +45,15 @@ public class OCEntryChangeGui extends AbstractEntryChangeGui implements OCUpdata
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		backButton.x = dispx-AbstractEntryChangeGui.PADDING+2;
-		backButton.y = dispy+guiHeight+3;
-		
-		addButton.x = dispx+guiWidth+3;
-		addButton.y = dispy+guiHeight+3;
-		
+		if(addButton != null){
+			addButton.x = dispx+guiWidth+3;
+			addButton.y = height-AbstractEntryChangeGui.PADDING-3-20;
+		}
+		if(backButton != null) {
+			backButton.x = dispx-AbstractEntryChangeGui.PADDING + 2;
+			backButton.y = height-AbstractEntryChangeGui.PADDING-3-20;
+		}
+
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 	
@@ -92,9 +95,9 @@ public class OCEntryChangeGui extends AbstractEntryChangeGui implements OCUpdata
 		}
 
 	}
-	
+
 	@Override
 	protected int getEntryBottomMargin() {
-		return 1;
+		return 2;
 	}
 }
