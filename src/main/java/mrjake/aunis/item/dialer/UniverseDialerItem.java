@@ -359,7 +359,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                         case IDLE:
                             int maxSymbols = SymbolUniverseEnum.getMaxSymbolsDisplay(selectedCompound.getBoolean("hasUpgrade"));
                             gateTile.dial(new StargateAddress(selectedCompound), maxSymbols, mode == UniverseDialerMode.NEARBY);
-                            AunisSoundHelper.playSoundEventClientSide(player.getEntityWorld(), player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_START_DIAL);
+                            AunisSoundHelper.playSoundEventClientSide(world, player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_START_DIAL);
                             break;
 
                         case ENGAGED_INITIATING:
