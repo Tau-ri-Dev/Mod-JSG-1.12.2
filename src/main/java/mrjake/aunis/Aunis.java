@@ -18,6 +18,7 @@ import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.proxy.IProxy;
 import mrjake.aunis.sound.AunisSoundCategory;
+import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.worldgen.AunisWorldGen;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.datafix.FixTypes;
@@ -39,7 +40,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-@Mod( modid = Aunis.ModID, name = Aunis.Name, version = Aunis.Version, acceptedMinecraftVersions = Aunis.MCVersion, dependencies = "after:cofhcore@[4.6.0,);after:opencomputers" )
+@Mod( modid = Aunis.ModID, name = Aunis.Name, version = Aunis.Version, acceptedMinecraftVersions = Aunis.MCVersion, dependencies = "after:cofhcore@[4.6.0,);after:opencomputers")
 public class Aunis {	
     public static final String ModID = "aunis";
     public static final String Name = "Aunis";
@@ -89,11 +90,10 @@ public class Aunis {
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog(); // This is the recommended way of getting a logger
 
-        if(AunisConfig.avConfig.enableCustomSoundCategory)
-            AUNIS_SOUNDS = AunisSoundCategory.add("AUNIS_SOUNDS");
-        else
-            AUNIS_SOUNDS = SoundCategory.BLOCKS;
-        
+        // todo(Mine): fix this shitty shit
+        //AUNIS_SOUNDS = AunisSoundCategory.add("AUNIS_SOUNDS");
+        AUNIS_SOUNDS = SoundCategory.BLOCKS;
+
         AunisPacketHandler.registerPackets();
         if (Loader.isModLoaded("tconstruct") && AunisConfig.integrationsConfig.tConstructIntegration) {
             TConstructIntegration.initFluids();
@@ -182,4 +182,8 @@ public class Aunis {
 	public static void info(String string) {
 		logger.info(string);
 	}
+
+    public static void warn(String string) {
+        logger.warn(string);
+    }
 }

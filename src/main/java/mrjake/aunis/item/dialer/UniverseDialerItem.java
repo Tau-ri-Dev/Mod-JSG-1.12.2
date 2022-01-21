@@ -80,7 +80,6 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
     }
 
     public UniverseDialerItem() {
-        //TODO(Mine): Fix here something that crash server on preinit
         setRegistryName(new ResourceLocation(Aunis.ModID, ITEM_NAME));
         setUnlocalizedName(Aunis.ModID + "." + ITEM_NAME);
         setHasSubtypes(true);

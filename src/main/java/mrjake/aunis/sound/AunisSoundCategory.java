@@ -1,6 +1,7 @@
 package mrjake.aunis.sound;
 
 import com.google.common.collect.Maps;
+import mrjake.aunis.Aunis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.SoundCategory;
@@ -22,6 +23,7 @@ public class AunisSoundCategory {
     private static final String SRG_soundLevels = "field_186714_aM";
     private static final String SRG_SOUND_CATEGORIES = "field_187961_k";
     private static Map<SoundCategory, Float> soundLevels;
+    private static Map<SoundCategory, Float> SOUND_LEVELS;
     private static final AunisSoundCategory instance = new AunisSoundCategory();
 
     private AunisSoundCategory() {}
@@ -34,14 +36,29 @@ public class AunisSoundCategory {
 
         String constantName = name.toUpperCase().replace(" ", "");
         String referenceName = constantName.toLowerCase();
-        SoundCategory soundCategory = EnumHelper.addEnum(SoundCategory.class , constantName, new Class[]{String.class}, new Object[]{referenceName});
-        SOUND_CATEGORIES = ObfuscationReflectionHelper.getPrivateValue(SoundCategory.class, SoundCategory.VOICE ,"SOUND_CATEGORIES", SRG_SOUND_CATEGORIES);
+        SoundCategory soundCategory = EnumHelper.addEnum(SoundCategory.class, constantName, new Class[]{String.class}, new Object[]{referenceName});
+        SOUND_CATEGORIES = ObfuscationReflectionHelper.getPrivateValue(SoundCategory.class, SoundCategory.BLOCKS, "SOUND_CATEGORIES", SRG_SOUND_CATEGORIES);
+
         if (SOUND_CATEGORIES.containsKey(referenceName))
             throw new Error("Clash in Sound Category name pools! Cannot insert " + constantName);
-        SOUND_CATEGORIES.put(referenceName, soundCategory);
-        if (FMLLaunchHandler.side() == Side.CLIENT) setSoundLevels();
 
-        return soundCategory;
+        SOUND_CATEGORIES.put(referenceName, soundCategory);
+        if(!SOUND_CATEGORIES.containsKey(referenceName)){
+            Aunis.warn("Aunis sound category did not load properly, forcing into Blocks category - 2");
+            return SoundCategory.BLOCKS;
+        }
+
+        try {
+            if (FMLLaunchHandler.side() == Side.CLIENT){
+                setSoundLevels();
+                SOUND_LEVELS.get(soundCategory);
+            }
+            return soundCategory;
+        }
+        catch(Exception e){
+            Aunis.warn("Aunis sound category did not load properly, forcing into Blocks category - 1");
+            return SoundCategory.BLOCKS;
+        }
     }
 
     /** Game sound level options settings only exist on the client side */
@@ -52,5 +69,6 @@ public class AunisSoundCategory {
         soundLevels = Maps.newEnumMap(SoundCategory.class);
         /** Replace the map in the GameSettings.class */
         ObfuscationReflectionHelper.setPrivateValue(GameSettings.class, Minecraft.getMinecraft().gameSettings, soundLevels, "soundLevels", SRG_soundLevels);
+        SOUND_LEVELS = ObfuscationReflectionHelper.getPrivateValue(GameSettings.class, Minecraft.getMinecraft().gameSettings, "soundLevels", SRG_soundLevels);
     }
 }
