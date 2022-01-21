@@ -89,7 +89,10 @@ public class Aunis {
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog(); // This is the recommended way of getting a logger
 
-        AUNIS_SOUNDS = AunisSoundCategory.add("AUNIS_SOUNDS");
+        if(AunisConfig.avConfig.enableCustomSoundCategory)
+            AUNIS_SOUNDS = AunisSoundCategory.add("AUNIS_SOUNDS");
+        else
+            AUNIS_SOUNDS = SoundCategory.BLOCKS;
         
         AunisPacketHandler.registerPackets();
         if (Loader.isModLoaded("tconstruct") && AunisConfig.integrationsConfig.tConstructIntegration) {

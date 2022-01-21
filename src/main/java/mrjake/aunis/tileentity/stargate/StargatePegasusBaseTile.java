@@ -525,6 +525,9 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
           case CHEVRON_CLOSE:
             getRendererStateClient().closeChevron(world.getTotalWorldTime());
             break;
+          case CLEAR_CHEVRONS:
+            getRendererStateClient().clearChevrons(world.getTotalWorldTime());
+            return;
           case ACTIVATE_GLYPH:
             int slot = ((StargateRendererActionState) state).chevronCount;
             slot = 36 - (slot - 9);
@@ -534,8 +537,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
             break;
 
           case CHEVRON_ACTIVATE:
+            getRendererStateClient().spinHelper.setIsSpinning(false);
             if(((StargateRendererActionState) state).chevronCount <= 9) {
-              getRendererStateClient().spinHelper.setIsSpinning(false);
               ChevronEnum chevron = gateActionState.modifyFinal ? ChevronEnum.getFinal() : getRendererStateClient().chevronTextureList.getNextChevron();
               getRendererStateClient().lockChevron(getRendererStateClient().spinHelper.getTargetSymbol().getId(), chevron);
             }
@@ -732,8 +735,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         break;
 
       case STARGATE_CHEVRON_LIGHT_UP:
-        if (stargateWillLock(targetRingSymbol)) sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, 0, true);
-        else sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, 0, false);
+        sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, 0, stargateWillLock(targetRingSymbol));
 
         updateChevronLight(dialedAddress.size(), isFinalActive);
 

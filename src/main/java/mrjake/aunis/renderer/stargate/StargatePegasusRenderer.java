@@ -40,19 +40,21 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         }
 
 
-        for (int i = 0; i < GLYPHS_COUNT; i++) {
-            if (!rendererState.slotToGlyphMap.containsKey(i)) {
+        for (int i = 0; i < GLYPHS_COUNT + 2; i++) { // +2 for incoming bug
+            if (!rendererState.slotToGlyphMap.containsKey(i) && i < GLYPHS_COUNT) { // here is fixed
                 // Don't show the faded out glyphs when the gate is dialing.
                 if (!rendererState.spinHelper.getIsSpinning() && rendererState.slotToGlyphMap.size() == 0) {
                     renderGlyph(i, i, true);
                 }
-                else if(!rendererState.spinHelper.getIsSpinning() && rendererState.slotToGlyphMap.containsKey(i)){
+                /*else if(!rendererState.spinHelper.getIsSpinning() && rendererState.slotToGlyphMap.containsKey(i)){
                     renderGlyph(i, i, true);
-                }
+                }*/
                 continue;
             }
+            else if (!rendererState.slotToGlyphMap.containsKey(i) && i >= GLYPHS_COUNT)
+                continue;
 
-            renderGlyph(rendererState.slotToGlyphMap.get(i), i, false);
+            renderGlyph(rendererState.slotToGlyphMap.get(i), i, false); // for incoming and locked chevrons
         }
 
 

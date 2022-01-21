@@ -202,8 +202,6 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                         i[0]++;
                     }
                     else if(!stargateState.idle()){
-                        stargateState = EnumStargateState.INCOMING;
-                        markDirty();
                         addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 10));
                         timer.cancel();
                     }
