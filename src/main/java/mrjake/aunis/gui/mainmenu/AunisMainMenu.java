@@ -27,7 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static mrjake.aunis.gui.mainmenu.GetUpdate.getTextFromGithub;
+import static mrjake.aunis.gui.mainmenu.GetUpdate.checkForUpdate;
+import static mrjake.aunis.gui.mainmenu.GetUpdate.getSiteContent;
 
 @SideOnly(Side.CLIENT)
 public class AunisMainMenu extends GuiMainMenu {
@@ -72,7 +73,7 @@ public class AunisMainMenu extends GuiMainMenu {
     protected static final ResourceLocation BACKGROUND_TEXTURE = AunisConfig.mainMenuConfig.disableAunisMainMenu ? null : new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");
     protected static ResourceLocation EVENT_HORIZON_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/event_horizon.jpg");
 
-    protected static final String LATEST = getTextFromGithub("https://amazingworlds.eu/curseapi/1.12.2/?t=name").split("-")[2];
+    protected static final String LATEST = checkForUpdate(VERSION);
     protected static int showVersionAlert = 0;
     protected String nextEvent = "------";
 
@@ -425,7 +426,7 @@ public class AunisMainMenu extends GuiMainMenu {
         if (renderButtonsAndStuff) {
             if (renderButtonsAlpha < 1.0f && showVersionAlert != 1) renderButtonsAlpha += 0.05f;
 
-            if (!VERSION.equals(LATEST) && AunisConfig.enableAutoUpdater) {
+            if (!LATEST.equals("false") && AunisConfig.enableAutoUpdater) {
                 versionInfo += " - Latest build: " + LATEST;
                 if (showVersionAlert != 2) showVersionAlert = 1;
             }
@@ -679,7 +680,7 @@ public class AunisMainMenu extends GuiMainMenu {
                 try {
                     Class<?> oclass = Class.forName("java.awt.Desktop");
                     Object object = oclass.getMethod("getDesktop").invoke((Object) null);
-                    oclass.getMethod("browse", URI.class).invoke(object, new URI("https://www.curseforge.com/minecraft/mc-mods/aunis-resurrection"));
+                    oclass.getMethod("browse", URI.class).invoke(object, new URI(getSiteContent("https://amazingworlds.eu/curseapi/1.12.2/?t=url")));
                 } catch (Exception e) {
                     Aunis.logger.debug("Couldn't open link", e);
                 }

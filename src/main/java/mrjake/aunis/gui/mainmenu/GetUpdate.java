@@ -13,9 +13,33 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Integer.parseInt;
+
 public class GetUpdate {
 
-    public static String getTextFromGithub(String link) {
+    public static String checkForUpdate(String currentVersion){
+        String gotVersion = getSiteContent("https://amazingworlds.eu/curseapi/1.12.2/?t=name").split("-")[2];
+        if(gotVersion.equals("Error was occurred while updating Aunis!")) return gotVersion;
+
+        String[] currentVersionSplit = currentVersion.split("\\.");
+        String[] gotVersionSplit = gotVersion.split("\\.");
+        try {
+            for (int i = 0; i < 4; i++) {
+                if (gotVersionSplit.length < i + 1 || currentVersionSplit.length < i + 1)
+                    continue;
+
+                if (parseInt(gotVersionSplit[i]) > parseInt(currentVersionSplit[i]))
+                    return gotVersion;
+            }
+        }
+        catch(Exception ignored){}
+
+
+        return "false"; // must return string, because if true -> returns version
+    }
+
+
+    public static String getSiteContent(String link) {
         URL Url = null;
         try {
             Url = new URL(link);
