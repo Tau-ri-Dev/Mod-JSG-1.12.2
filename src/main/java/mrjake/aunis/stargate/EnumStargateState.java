@@ -51,6 +51,10 @@ public enum EnumStargateState {
 	public boolean dialingDHD() {
 		return this == DIALING;
 	}
+
+	public boolean unstable() {
+		return this == UNSTABLE;
+	}
 	
 	private static Map<Integer, EnumStargateState> idMap = new HashMap<>();
 	static {

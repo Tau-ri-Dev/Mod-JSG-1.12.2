@@ -531,7 +531,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
                 sendRenderingUpdate(EnumGateAction.CHEVRON_OPEN, 0, false);
 
-                if(stargateState.incoming()){
+                if(stargateState.incoming() || stargateState.unstable()){
                     addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN_SECOND, 7));
                     return;
                 }
@@ -555,7 +555,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 break;
 
             case STARGATE_CHEVRON_LIGHT_UP:
-                if(stargateState.incoming()) {
+                if(stargateState.incoming() || stargateState.unstable()) {
                     sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, 0, true);
                     addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_CLOSE, 10));
                     return;
