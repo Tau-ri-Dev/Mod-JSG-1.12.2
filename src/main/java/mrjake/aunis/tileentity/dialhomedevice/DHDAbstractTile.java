@@ -306,7 +306,9 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
 
     public static final int BIOME_OVERRIDE_SLOT = 5;
 
-    private final ItemStackHandler itemStackHandler = new AunisItemStackHandler(6) {
+    private DHDAbstractTile instance = this;
+
+    protected final ItemStackHandler itemStackHandler = new AunisItemStackHandler(6) {
 
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
@@ -314,7 +316,10 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
 
             switch (slot) {
                 case 0:
-                    return item == AunisItems.CRYSTAL_CONTROL_DHD;
+                    if(instance instanceof DHDMilkyWayTile)
+                        return item == AunisItems.CRYSTAL_CONTROL_DHD;
+                    if(instance instanceof DHDPegasusTile)
+                        return item == AunisItems.CRYSTAL_CONTROL_PEGASUS_DHD;
 
                 case 1:
                 case 2:
@@ -479,19 +484,6 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
         }
 
         fluidHandler.readFromNBT(compound.getCompoundTag("fluidHandler"));
-
-        if (compound.hasKey("inventory")) {
-            NBTTagCompound inventoryTag = compound.getCompoundTag("inventory");
-            NBTTagList tagList = inventoryTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-
-            if (tagList.tagCount() > 0) {
-                itemStackHandler.setStackInSlot(0, new ItemStack(AunisItems.CRYSTAL_CONTROL_DHD));
-
-                int energy = tagList.getCompoundTagAt(0).getCompoundTag("ForgeCaps").getCompoundTag("Parent").getInteger("energy");
-                int fluidAmount = energy / AunisConfig.dhdConfig.energyPerNaquadah;
-                fluidHandler.fillInternal(new FluidStack(AunisFluids.moltenNaquadahRefined, fluidAmount), true);
-            }
-        }
 
         if (node != null && compound.hasKey("node")) node.load(compound.getCompoundTag("node"));
     }

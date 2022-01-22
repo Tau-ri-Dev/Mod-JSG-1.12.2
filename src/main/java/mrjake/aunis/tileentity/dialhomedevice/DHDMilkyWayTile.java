@@ -2,6 +2,9 @@ package mrjake.aunis.tileentity.dialhomedevice;
 
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
+import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.fluid.AunisFluids;
+import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.dialhomedevice.DHDMilkyWayRendererState;
 import mrjake.aunis.sound.AunisSoundHelper;
@@ -14,8 +17,13 @@ import mrjake.aunis.state.stargate.StargateBiomeOverrideState;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
 import mrjake.aunis.util.LinkingHelper;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.EnumSet;
 
@@ -155,6 +163,25 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
       default:
         super.setState(stateType, state);
     }
+  }
+
+  @Override
+  public void readFromNBT(NBTTagCompound compound) {
+
+    if (compound.hasKey("inventory")) {
+      NBTTagCompound inventoryTag = compound.getCompoundTag("inventory");
+      NBTTagList tagList = inventoryTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+
+      if (tagList.tagCount() > 0) {
+        itemStackHandler.setStackInSlot(0, new ItemStack(AunisItems.CRYSTAL_CONTROL_DHD));
+
+        int energy = tagList.getCompoundTagAt(0).getCompoundTag("ForgeCaps").getCompoundTag("Parent").getInteger("energy");
+        int fluidAmount = energy / AunisConfig.dhdConfig.energyPerNaquadah;
+        fluidHandler.fillInternal(new FluidStack(AunisFluids.moltenNaquadahRefined, fluidAmount), true);
+      }
+    }
+
+    super.readFromNBT(compound);
   }
 
 }
