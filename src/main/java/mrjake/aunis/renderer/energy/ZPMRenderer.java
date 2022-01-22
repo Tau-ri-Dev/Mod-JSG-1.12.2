@@ -31,17 +31,6 @@ public class ZPMRenderer extends TileEntitySpecialRenderer<ZPMTile> {
             GlStateManager.scale(scale, scale, scale);
             GlStateManager.translate(14.5, 7.1, 14.5);
 
-            /* //Used only in ZPMHub
-            int powerLevel = Math.round((float) (te.getPowerLevel()/2));
-            int powerLevel = 0;
-
-            if(powerLevel > 4){
-                powerLevel = 4;
-            }
-            if(powerLevel < 0){
-                powerLevel = 0;
-            }*/
-
             int powerLevel = 0;
 
             rendererDispatcher.renderEngine.bindTexture(new ResourceLocation(Aunis.ModID, "textures/tesr/zpm/item/zpm_" + powerLevel + ".png"));

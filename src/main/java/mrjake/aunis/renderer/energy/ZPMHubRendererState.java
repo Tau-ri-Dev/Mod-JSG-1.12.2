@@ -9,15 +9,12 @@ public class ZPMHubRendererState extends State {
 
     public ZPMHubRendererState() {}
 
-    public ZPMHubRendererState(int zpmsActive) {
-        this.zpmsActive = zpmsActive;
-    }
-
-    public ZPMHubRendererState initClient(BlockPos pos, float horizontalRotation) {
+    public ZPMHubRendererState initClient(BlockPos pos, long tick, boolean isPutting, int zpmsCount, int zpmAnimated) {
         this.pos = pos;
-        this.horizontalRotation = horizontalRotation;
-
-        // todo(Mine) register and save zpms state
+        this.animationStart = tick;
+        this.isPutting = isPutting;
+        this.zpmsCount = zpmsCount;
+        this.zpmAnimated = zpmAnimated;
 
         return this;
     }
@@ -27,11 +24,14 @@ public class ZPMHubRendererState extends State {
     // Not saved
     //private final Map<Integer, Integer> ZMP_STATE_MAP = new HashMap<>(3);
     public BlockPos pos;
-    public float horizontalRotation;
 
     // zpmsActive
     // Saved
     public int zpmsActive;
+    public long animationStart;
+    public boolean isPutting;
+    public int zpmsCount;
+    public int zpmAnimated;
 
     public BiomeOverlayEnum getBiomeOverlay() {
         return BiomeOverlayEnum.NORMAL;
@@ -39,9 +39,17 @@ public class ZPMHubRendererState extends State {
 
     public void toBytes(ByteBuf buf) {
         buf.writeInt(zpmsActive);
+        buf.writeLong(animationStart);
+        buf.writeBoolean(isPutting);
+        buf.writeInt(zpmsCount);
+        buf.writeInt(zpmAnimated);
     }
 
     public void fromBytes(ByteBuf buf) {
         zpmsActive = buf.readInt();
+        animationStart = buf.readLong();
+        isPutting = buf.readBoolean();
+        zpmsCount = buf.readInt();
+        zpmAnimated = buf.readInt();
     }
 }

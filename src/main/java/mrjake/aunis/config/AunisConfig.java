@@ -594,26 +594,8 @@ public class AunisConfig {
     }
 
     public static class DevConfig {
-        @Name("ZPMHub zpms size")
-        public double zpmsSize = 0.035;
-        @Name("ZPMHub zpms location X")
-        public double[] zpmHubZpmsX = {
-                1.0,
-                1.0,
-                1.0,
-        };
-        @Name("ZPMHub zpms location Y")
-        public double[] zpmHubZpmsY = {
-                1.0,
-                1.0,
-                1.0,
-        };
-        @Name("ZPMHub zpms location Z")
-        public double[] zpmHubZpmsZ = {
-                1.0,
-                1.0,
-                1.0,
-        };
+        @Name("ignored")
+        public double ignored = 0;
     }
 
     public static void resetCache() {

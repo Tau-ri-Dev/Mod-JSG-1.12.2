@@ -2,18 +2,20 @@ package mrjake.aunis.renderer.energy;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
-import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.loader.model.ModelLoader;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.tileentity.energy.ZPMHubTile;
-import mrjake.aunis.tileentity.energy.ZPMTile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 
 public class ZPMHubRenderer extends TileEntitySpecialRenderer<ZPMHubTile> {
+
+    public static final long ANIMATION_LENGTH = (5 * 20);
+    private static final double Y_MAX = 21.0;
+    private static final double Y_MIN = 16.5;
 
 
     @Override
@@ -33,14 +35,51 @@ public class ZPMHubRenderer extends TileEntitySpecialRenderer<ZPMHubTile> {
 
             ElementEnum.ZPM_HUB.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
 
-            // TODO(Mine): do this shitty shit
-            for(int i = 0; i < 3; i++) {
-                if(AunisConfig.devConfig.zpmHubZpmsX.length >= i+1) {
-                    double zx = AunisConfig.devConfig.zpmHubZpmsX[i];
-                    double zy = AunisConfig.devConfig.zpmHubZpmsY[i];
-                    double zz = AunisConfig.devConfig.zpmHubZpmsZ[i];
-                    renderZPM(x, y, z, zx, zy, zz, i);
+            // animation
+            long animationStart = rendererState.animationStart;
+            boolean isPutting = rendererState.isPutting;
+            int zpmAnimated = rendererState.zpmAnimated;
+
+            long animationStage = (long) partialTicks - animationStart;
+
+            int zpmsCount = rendererState.zpmsCount;
+            for(int i = 0; i < zpmsCount; i++) {
+                double zy = te.isZPMDown(i+1) ? Y_MIN: Y_MAX;
+
+                if(zpmAnimated != 0 && zpmAnimated == i+1){
+                    double calculated = ((Y_MAX - Y_MIN)*((float) animationStage/ANIMATION_LENGTH));
+                    if(isPutting){
+                        if(animationStage/ANIMATION_LENGTH <= 1)
+                            zy = Y_MAX - calculated;
+                        else {
+                            zy = Y_MIN;
+                        }
+                    }
+                    else{
+                        if(animationStage/ANIMATION_LENGTH <= 1)
+                            zy = Y_MIN + calculated;
+                        else
+                            zy = Y_MAX;
+                    }
                 }
+
+                double zx = 0;
+                double zz = 0;
+                switch (i){
+                    case 0:
+                        zx = 0.5;
+                        zz = -9.25;
+                        break;
+                    case 1:
+                        zx = -10.2;
+                        zz = 9.53;
+                        break;
+                    case 2:
+                        zx = 11.2;
+                        zz = 9.53;
+                        break;
+                }
+                renderZPM(x, y, z, zx, zy, zz, i);
             }
 
             GlStateManager.popMatrix();
@@ -50,8 +89,6 @@ public class ZPMHubRenderer extends TileEntitySpecialRenderer<ZPMHubTile> {
     public void renderZPM(double x, double y, double z, double xx, double xy, double xz, int powerLevel) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
-        double scale = AunisConfig.devConfig.zpmsSize;
-        GlStateManager.scale(scale, scale, scale);
         GlStateManager.translate(xx, xy, xz);
         if(powerLevel > 4){
             powerLevel = 4;
