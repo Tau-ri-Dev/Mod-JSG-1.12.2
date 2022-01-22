@@ -9,38 +9,35 @@ public class ZPMRendererState extends State {
 
     public ZPMRendererState() {}
 
-    public ZPMRendererState(int charge) {
-        this.charge = charge;
+    public ZPMRendererState(int powerLevel) {
+        this.powerLevel = powerLevel;
     }
 
     public ZPMRendererState initClient(BlockPos pos, int powerLevel) {
         this.pos = pos;
-        this.charge = powerLevel;
-
-        // todo(Mine) register and save zpms state
-
+        this.powerLevel = powerLevel;
         return this;
     }
 
 
     // Global
     // Not saved
-    //private final Map<Integer, Integer> ZMP_STATE_MAP = new HashMap<>(3);
     public BlockPos pos;
 
-    // zpmsActive
     // Saved
-    public int charge;
+    public int powerLevel;
 
     public BiomeOverlayEnum getBiomeOverlay() {
         return BiomeOverlayEnum.NORMAL;
     }
 
+    @Override
     public void toBytes(ByteBuf buf) {
-        buf.writeInt(charge);
+        buf.writeInt(powerLevel);
     }
 
+    @Override
     public void fromBytes(ByteBuf buf) {
-        charge = buf.readInt();
+        powerLevel = buf.readInt();
     }
 }

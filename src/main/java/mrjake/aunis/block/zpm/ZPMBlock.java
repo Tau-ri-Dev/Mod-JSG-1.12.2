@@ -3,8 +3,8 @@ package mrjake.aunis.block.zpm;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.gui.GuiIdEnum;
+import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
 import mrjake.aunis.stargate.power.StargateItemEnergyStorage;
-import mrjake.aunis.stargate.power.ZPMEnergyStorage;
 import mrjake.aunis.tileentity.energy.ZPMTile;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.block.Block;
@@ -42,7 +42,7 @@ public class ZPMBlock extends Block {
         setUnlocalizedName(Aunis.ModID + "." + BLOCK_NAME);
 
         setSoundType(SoundType.METAL);
-        //setCreativeTab(Aunis.aunisEnergyCreativeTab);
+        setCreativeTab(Aunis.aunisEnergyCreativeTab);
 
         setDefaultState(blockState.getBaseState()
                 .withProperty(AunisProps.FACING_HORIZONTAL, EnumFacing.NORTH));
@@ -97,14 +97,14 @@ public class ZPMBlock extends Block {
 
         IEnergyStorage energyStorage = stack.getCapability(CapabilityEnergy.ENERGY, null);
 
-        ZPMEnergyStorage capacitorEnergyStorage = (ZPMEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
+        StargateAbstractEnergyStorage capacitorEnergyStorage = (StargateAbstractEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
         capacitorEnergyStorage.setEnergyStored(energyStorage.getEnergyStored());
     }
 
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        ZPMEnergyStorage capacitorEnergyStorage = (ZPMEnergyStorage) ((ZPMTile) world.getTileEntity(pos)).getCapability(CapabilityEnergy.ENERGY, null);
+        StargateAbstractEnergyStorage capacitorEnergyStorage = (StargateAbstractEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
 
         ItemStack stack = new ItemStack(this);
         ((StargateItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null)).setEnergyStored(capacitorEnergyStorage.getEnergyStored());
@@ -162,12 +162,12 @@ public class ZPMBlock extends Block {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return new AunisAxisAlignedBB(0.25, 0, 0.25, 0.75, 1, 0.75);
+        return new AunisAxisAlignedBB(0.35, 0, 0.35, 0.65, 0.5, 0.65);
     }
 
     @Nullable
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return new AunisAxisAlignedBB(0.25, 0, 0.25, 0.75, 1, 0.75);
+        return new AunisAxisAlignedBB(0.35, 0, 0.35, 0.65, 0.5, 0.65);
     }
 }

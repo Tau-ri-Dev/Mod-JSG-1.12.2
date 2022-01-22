@@ -40,6 +40,9 @@ public class AunisConfig {
     @Name("Debug options")
     public static DebugConfig debugConfig = new DebugConfig();
 
+    @Name("Developer options")
+    public static DevConfig devConfig = new DevConfig();
+
     @Name("Mysterious Page options")
     public static MysteriousConfig mysteriousConfig = new MysteriousConfig();
 
@@ -496,9 +499,6 @@ public class AunisConfig {
         @RangeDouble(min = 0, max = 1)
         public float volume = 1;
 
-        @Name("Enable Custom Sounds Category")
-        public boolean enableCustomSoundCategory = true;
-
         @Name("Notebook Page offset")
         @Comment({
                 "Greater values render the Page more to the center of the screen, smaller render it closer to the borders.",
@@ -590,6 +590,29 @@ public class AunisConfig {
         public String[] entitiesToSpawn = {
                 "minecraft:zombie",
                 "minecraft:skeleton"
+        };
+    }
+
+    public static class DevConfig {
+        @Name("ZPMHub zpms size")
+        public double zpmsSize = 0.035;
+        @Name("ZPMHub zpms location X")
+        public double[] zpmHubZpmsX = {
+                1.0,
+                1.0,
+                1.0,
+        };
+        @Name("ZPMHub zpms location Y")
+        public double[] zpmHubZpmsY = {
+                1.0,
+                1.0,
+                1.0,
+        };
+        @Name("ZPMHub zpms location Z")
+        public double[] zpmHubZpmsZ = {
+                1.0,
+                1.0,
+                1.0,
         };
     }
 

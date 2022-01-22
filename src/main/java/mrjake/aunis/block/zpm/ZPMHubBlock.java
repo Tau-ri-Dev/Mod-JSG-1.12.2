@@ -38,7 +38,7 @@ public class ZPMHubBlock extends Block {
         setUnlocalizedName(Aunis.ModID + "." + blockName);
 
         setSoundType(SoundType.STONE);
-        //setCreativeTab(Aunis.aunisEnergyCreativeTab);
+        setCreativeTab(Aunis.aunisEnergyCreativeTab);
 
         setLightOpacity(0);
 

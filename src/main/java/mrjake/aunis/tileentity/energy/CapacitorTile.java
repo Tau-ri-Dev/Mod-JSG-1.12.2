@@ -23,13 +23,28 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
 	
 	// ------------------------------------------------------------------------
 	// Loading & ticking
-	
-	protected TargetPoint targetPoint;
-	protected int powerLevel;
-	protected int lastPowerLevel;
-	
+
+	private TargetPoint targetPoint;
+	private int powerLevel;
+	private int lastPowerLevel;
+
+	public TargetPoint getTargetPoint() {
+		return targetPoint;
+	}
+
 	public int getPowerLevel() {
 		return powerLevel;
+	}
+
+	public void setPowerLevel(int pl) {
+		powerLevel = pl;
+	}
+	public void setLastPowerLevel(int pl) {
+		lastPowerLevel = pl;
+	}
+
+	public int getLastPowerLevel() {
+		return lastPowerLevel;
 	}
 
 	public StargateAbstractEnergyStorage getEnergyStorage(){
@@ -45,51 +60,51 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
 			AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_UPDATE));
 		}
 	}
-	
+
 	@Override
 	public void update() {
 		if (!world.isRemote) {
 			for (EnumFacing facing : EnumFacing.VALUES) {
 				TileEntity tile = world.getTileEntity(pos.offset(facing));
-				
+
 				if (tile != null && tile.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
 					int extracted = energyStorage.extractEnergy(AunisConfig.powerConfig.stargateMaxEnergyTransfer, true);
 					extracted = tile.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).receiveEnergy(extracted, false);
-					
+
 					energyStorage.extractEnergy(extracted, false);
 				}
 			}
-			
+
 			powerLevel = Math.round(energyStorage.getEnergyStored() / (float)energyStorage.getMaxEnergyStored() * 10);
 			if (powerLevel != lastPowerLevel) {
 				AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE)), targetPoint);
-				
+
 				lastPowerLevel = powerLevel;
 			}
-			
+
 			energyTransferedLastTick = energyStorage.getEnergyStored() - energyStoredLastTick;
 			energyStoredLastTick = energyStorage.getEnergyStored();
 		}
 	}
-	
-	
+
+
 	// ------------------------------------------------------------------------
 	// NBT
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setTag("energyStorage", energyStorage.serializeNBT());
-				
+		compound.setTag("energyStorage", getEnergyStorage().serializeNBT());
+
 		return super.writeToNBT(compound);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
-		energyStorage.deserializeNBT(compound.getCompoundTag("energyStorage"));
-		
+		getEnergyStorage().deserializeNBT(compound.getCompoundTag("energyStorage"));
+
 		super.readFromNBT(compound);
 	}
-	
+
 	
 	// -----------------------------------------------------------------------------
 	// Power system
@@ -108,7 +123,7 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
 			markDirty();
 		}
 	};
-	
+
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		return (capability == CapabilityEnergy.ENERGY) || super.hasCapability(capability, facing);
@@ -117,7 +132,7 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == CapabilityEnergy.ENERGY) {
-			return CapabilityEnergy.ENERGY.cast(energyStorage);
+			return CapabilityEnergy.ENERGY.cast(getEnergyStorage());
 		}
 		
 		return super.getCapability(capability, facing);

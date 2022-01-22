@@ -19,7 +19,7 @@ public class GetUpdate {
 
     public static String checkForUpdate(String currentVersion){
         String gotVersion = getSiteContent("https://amazingworlds.eu/curseapi/1.12.2/?t=name").split("-")[2];
-        if(gotVersion.equals("Error was occurred while updating Aunis!")) return gotVersion;
+        if(gotVersion.equals("Error was occurred while updating Aunis!")) return "false";
 
         String[] currentVersionSplit = currentVersion.split("\\.");
         String[] gotVersionSplit = gotVersion.split("\\.");

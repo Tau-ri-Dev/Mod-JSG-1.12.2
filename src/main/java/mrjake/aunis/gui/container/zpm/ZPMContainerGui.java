@@ -2,7 +2,7 @@ package mrjake.aunis.gui.container.zpm;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.stargate.power.ZPMEnergyStorage;
+import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -39,7 +39,7 @@ public class ZPMContainerGui extends GuiContainer {
         mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-        ZPMEnergyStorage energyStorage = (ZPMEnergyStorage) container.zpmTile.getCapability(CapabilityEnergy.ENERGY, null);
+        StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.zpmTile.getCapability(CapabilityEnergy.ENERGY, null);
 
         int width = Math.round((energyStorage.getEnergyStored()/((float) AunisConfig.powerConfig.zpmEnergyStorage) * 156));
         drawGradientRect(guiLeft+10, guiTop+61, guiLeft+10+width, guiTop+61+6, 0xffcc2828, 0xff731616);
@@ -50,7 +50,7 @@ public class ZPMContainerGui extends GuiContainer {
         fontRenderer.drawString(I18n.format("gui.zpm.name"), 7, 6, 4210752);
         fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 
-        ZPMEnergyStorage energyStorage = (ZPMEnergyStorage) container.zpmTile.getCapability(CapabilityEnergy.ENERGY, null);
+        StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.zpmTile.getCapability(CapabilityEnergy.ENERGY, null);
 
         int energyStored = energyStorage.getEnergyStored();
         int maxEnergyStored = energyStorage.getMaxEnergyStored();
