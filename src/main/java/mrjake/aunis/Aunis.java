@@ -47,7 +47,7 @@ public class Aunis {
     // I didn't manage to make it work
     //public static final String Version = "${version}"; // It works only in final builds.
     public static final String Version = "@VERSION@";
-    public static final int DATA_VERSION = 7;
+    public static final int DATA_VERSION = 8;
 
     //public static final String MCVersion = "${mcversion}";
     public static final String MCVersion = "@MCVERSION@";
