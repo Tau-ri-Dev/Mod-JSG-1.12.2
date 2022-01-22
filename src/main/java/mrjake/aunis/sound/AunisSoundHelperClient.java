@@ -36,8 +36,12 @@ public class AunisSoundHelperClient {
 		SoundHandler soundHandler = Minecraft.getMinecraft().getSoundHandler();
 		
 		if (play) {
-			if (!soundHandler.isSoundPlaying(soundRecord))
-				soundHandler.playSound(soundRecord);
+			if (!soundHandler.isSoundPlaying(soundRecord)) {
+				try {
+					soundHandler.playSound(soundRecord);
+				}
+				catch (Exception ignored) {}
+			}
 		}
 		
 		else
