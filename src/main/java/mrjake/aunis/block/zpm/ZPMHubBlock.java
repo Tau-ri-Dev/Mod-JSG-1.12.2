@@ -2,6 +2,7 @@ package mrjake.aunis.block.zpm;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.tileentity.energy.ZPMHubTile;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.block.Block;
@@ -37,7 +38,7 @@ public class ZPMHubBlock extends Block {
         setRegistryName(Aunis.ModID + ":" + blockName);
         setUnlocalizedName(Aunis.ModID + "." + blockName);
 
-        setSoundType(SoundType.STONE);
+        setSoundType(SoundType.METAL);
         setCreativeTab(Aunis.aunisEnergyCreativeTab);
 
         setLightOpacity(0);
@@ -93,7 +94,9 @@ public class ZPMHubBlock extends Block {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        //todo(Mine): check if slot is empty or fill -> place zpm into it
+        if (!player.isSneaking()) {
+            player.openGui(Aunis.instance, GuiIdEnum.GUI_ZPMHUB.id, world, pos.getX(), pos.getY(), pos.getZ());
+        }
         return false;
     }
 

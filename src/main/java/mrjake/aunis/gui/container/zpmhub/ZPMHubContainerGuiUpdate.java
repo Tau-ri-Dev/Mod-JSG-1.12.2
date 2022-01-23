@@ -7,32 +7,20 @@ import mrjake.aunis.tileentity.util.ReactorStateEnum;
 public class ZPMHubContainerGuiUpdate extends State {
 	public ZPMHubContainerGuiUpdate() {}
 
-	public int fluidAmount;
-	public int tankCapacity;
-	public ReactorStateEnum reactorState;
-	public boolean isLinked;
+	public int zpmsCount;
 
-	public ZPMHubContainerGuiUpdate(int fluidAmount, int tankCapacity, ReactorStateEnum reactorState, boolean isLinked) {
-		this.fluidAmount = fluidAmount;
-		this.tankCapacity = tankCapacity;
-		this.reactorState = reactorState;
-		this.isLinked = isLinked;
+	public ZPMHubContainerGuiUpdate(int zpmsCount) {
+		this.zpmsCount = zpmsCount;
 	}
 	
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(fluidAmount);
-		buf.writeInt(tankCapacity);
-		buf.writeShort(reactorState.getKey());
-		buf.writeBoolean(isLinked);
+		buf.writeInt(zpmsCount);
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		fluidAmount = buf.readInt();
-		tankCapacity = buf.readInt();
-		reactorState = ReactorStateEnum.valueOf(buf.readShort());
-		isLinked = buf.readBoolean();
+		zpmsCount = buf.readInt();
 	}
 
 }

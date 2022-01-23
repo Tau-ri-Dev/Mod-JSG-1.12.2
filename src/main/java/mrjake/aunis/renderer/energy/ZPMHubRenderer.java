@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class ZPMHubRenderer extends TileEntitySpecialRenderer<ZPMHubTile> {
 
-    public static final long ANIMATION_LENGTH = (5 * 20);
+    public static final long ANIMATION_LENGTH = 20;
     private static final double Y_MAX = 21.0;
     private static final double Y_MIN = 16.5;
 
@@ -40,28 +40,38 @@ public class ZPMHubRenderer extends TileEntitySpecialRenderer<ZPMHubTile> {
             boolean isPutting = rendererState.isPutting;
             int zpmAnimated = rendererState.zpmAnimated;
 
-            long animationStage = (long) partialTicks - animationStart;
+            long animationStage = te.getWorld().getTotalWorldTime() - animationStart;
 
             int zpmsCount = rendererState.zpmsCount;
+            if(!isPutting && zpmAnimated != 0) zpmsCount++;
             for(int i = 0; i < zpmsCount; i++) {
-                double zy = te.isZPMDown(i+1) ? Y_MIN: Y_MAX;
+                double zy = Y_MIN;
 
-                if(zpmAnimated != 0 && zpmAnimated == i+1){
+                if(zpmAnimated != 0){
                     double calculated = ((Y_MAX - Y_MIN)*((float) animationStage/ANIMATION_LENGTH));
-                    if(isPutting){
-                        if(animationStage/ANIMATION_LENGTH <= 1)
+                    if(isPutting && zpmAnimated == i+1){
+                        // putting zpm down
+                        if(animationStage == 0) te.initZPMSound(true);
+                        if(animationStage/ANIMATION_LENGTH <= 1 && (Y_MAX - calculated) > Y_MIN)
                             zy = Y_MAX - calculated;
                         else {
                             zy = Y_MIN;
+                            te.setZPMStatus(zpmAnimated-1, true);
                         }
                     }
-                    else{
-                        if(animationStage/ANIMATION_LENGTH <= 1)
+                    else if(!isPutting && i == zpmsCount-1){
+                        // putting zpm up
+                        if(animationStage == 0) te.initZPMSound(false);
+                        if(animationStage/ANIMATION_LENGTH <= 1 && (Y_MIN + calculated) < Y_MAX)
                             zy = Y_MIN + calculated;
-                        else
+                        else {
                             zy = Y_MAX;
+                            te.setZPMStatus(zpmAnimated - 1, false);
+                        }
                     }
                 }
+
+                int powerLevel = (zy == Y_MIN) ? (Math.round(te.getEnergyLevelOfZPM(i)/2)) : 0;
 
                 double zx = 0;
                 double zz = 0;
@@ -79,7 +89,7 @@ public class ZPMHubRenderer extends TileEntitySpecialRenderer<ZPMHubTile> {
                         zz = 9.53;
                         break;
                 }
-                renderZPM(x, y, z, zx, zy, zz, i);
+                renderZPM(x, y, z, zx, zy, zz, powerLevel);
             }
 
             GlStateManager.popMatrix();

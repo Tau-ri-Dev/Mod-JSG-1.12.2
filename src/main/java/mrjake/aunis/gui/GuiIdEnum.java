@@ -10,10 +10,10 @@ public enum GuiIdEnum {
 	GUI_BEAMER(3),
 	GUI_PEGASUS_DHD(4),
 
-	GUI_ZPM(5)
+	GUI_ZPM(5),
+	GUI_ZPMHUB(6)
 	;
-	
-	public int id;
+    public int id;
 	
 	GuiIdEnum(int id) {
 		this.id = id;

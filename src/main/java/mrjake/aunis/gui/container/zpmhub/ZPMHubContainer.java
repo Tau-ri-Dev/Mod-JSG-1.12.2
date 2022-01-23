@@ -2,6 +2,7 @@ package mrjake.aunis.gui.container.zpmhub;
 
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.gui.container.DHDContainerGuiUpdate;
+import mrjake.aunis.gui.container.zpm.ZPMContainerGuiUpdate;
 import mrjake.aunis.gui.util.ContainerHelper;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
@@ -21,9 +22,11 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
+import java.util.ArrayList;
+
 public class ZPMHubContainer extends Container {
 	protected ZPMHubTile zpmHubTile;
-	protected SlotItemHandler[] zpmSlots;
+	protected ArrayList<SlotItemHandler> zpmSlots = new ArrayList<SlotItemHandler>(3);
 	protected int zpmsLastCount = 0;
 
 	private BlockPos pos;
@@ -33,10 +36,10 @@ public class ZPMHubContainer extends Container {
 		zpmHubTile = (ZPMHubTile) world.getTileEntity(pos);
 		IItemHandler itemHandler = zpmHubTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		
-		// Crystal slot (index 0)
+		// ZPM Slots 0-2 (3 slots)
 		for(int i = 0; i < 3; i++) {
-			zpmSlots[i] = new SlotItemHandler(itemHandler, 0, 55 + (i*20), 35);
-			addSlotToContainer(zpmSlots[i]);
+			zpmSlots.add(new SlotItemHandler(itemHandler, i, 49 + (i*26), 35));
+			addSlotToContainer(zpmSlots.get(i));
 		}
 		
 		for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 86))
@@ -64,10 +67,10 @@ public class ZPMHubContainer extends Container {
         else {
         	if (stack.getItem() == Item.getItemFromBlock(AunisBlocks.ZPM)) {
 				for(int i = 0; i < 3; i++) {
-					if (!zpmSlots[i].getHasStack()) {
+					if (!zpmSlots.get(i).getHasStack()) {
 						ItemStack stack1 = stack.copy();
 						stack1.setCount(1);
-						zpmSlots[i].putStack(stack1);
+						zpmSlots.get(i).putStack(stack1);
 
 						stack.shrink(1);
 
@@ -85,15 +88,16 @@ public class ZPMHubContainer extends Container {
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		// todo(Mine): this
-/*
-		if (tankLastAmount != tankNaquadah.getFluidAmount() || lastReactorState != dhdMilkyWayTile.getReactorState() || lastLinked != dhdMilkyWayTile.isLinked()) {
-			for (IContainerListener listener : listeners) {
-				if (listener instanceof EntityPlayerMP) {
-					AunisPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(pos, StateTypeEnum.GUI_UPDATE, new DHDContainerGuiUpdate(tankNaquadah.getFluidAmount(), tankNaquadah.getCapacity(), dhdMilkyWayTile.getReactorState(), dhdMilkyWayTile.isLinked())), (EntityPlayerMP) listener);
-				}
+		int zpmsCount = 0;
+		for(int i = 0; i < 3; i++){
+			if(!zpmSlots.get(i).getStack().isEmpty())
+				zpmsCount++;
+		}
+		for (IContainerListener listener : listeners) {
+			if (listener instanceof EntityPlayerMP) {
+				AunisPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(pos, StateTypeEnum.GUI_UPDATE, new ZPMHubContainerGuiUpdate(zpmsCount)), ((EntityPlayerMP) listener));
 			}
-			tankLastAmount = tankNaquadah.getFluidAmount();
-		}*/
+		}
+		this.zpmsLastCount = zpmsCount;
 	}
 }
