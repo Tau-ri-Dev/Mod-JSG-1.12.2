@@ -566,7 +566,8 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 	 * @return {@link BlockPos} of the beamer block or {@code null} if no beamer found
 	 */
 	@Nullable
-	private BlockPos findTargetBeamerPos(StargatePos targetGatePos) {		
+	private BlockPos findTargetBeamerPos(StargatePos targetGatePos) {
+		if(targetGatePos == null) return null;
 		World targetWorld = targetGatePos.getWorld();
 		EnumFacing targetFacing = targetWorld.getBlockState(targetGatePos.gatePos).getValue(AunisProps.FACING_HORIZONTAL);		
 		Rotation rotation = FacingToRotation.get(targetFacing);
