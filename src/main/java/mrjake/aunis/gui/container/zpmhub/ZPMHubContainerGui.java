@@ -74,6 +74,10 @@ public class ZPMHubContainerGui extends GuiContainer {
 				GlStateManager.disableBlend();
 			}
 		}
+
+		for (int i=container.zpmHubTile.getZpmsCount(); i<3; i++)
+			drawModalRectWithCustomSizedTexture(guiLeft+10+(((xSize-20)/3)*i), guiTop+61, 0, 168, ((xSize-20)/3), 6, 256, 256);
+
 		int width = Math.round((energyStored/((float) AunisConfig.powerConfig.zpmEnergyStorage*3) * 156));
 		drawGradientRect(guiLeft+10, guiTop+61, guiLeft+10+width, guiTop+61+6, 0xffcc2828, 0xff731616);
 		
@@ -83,9 +87,7 @@ public class ZPMHubContainerGui extends GuiContainer {
 		
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		String fusion = I18n.format("gui.zpmhub.zpms");
-		fontRenderer.drawString(fusion, 168-fontRenderer.getStringWidth(fusion)+2, 6, 4210752);
-		//fontRenderer.drawString(I18n.format("gui.upgrades"), 7, 6, 4210752);
+		fontRenderer.drawString(I18n.format("gui.zpmhub.name"), 7, 6, 4210752);
         fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 
 		int energyStored = 0;
@@ -95,9 +97,11 @@ public class ZPMHubContainerGui extends GuiContainer {
 				energyStored += container.zpmHubTile.getEnergyInZPM(i+1);
 			}
 		}
-		int maxEnergyStored = AunisConfig.powerConfig.zpmEnergyStorage*3;
+		int maxEnergyStored = AunisConfig.powerConfig.zpmEnergyStorage * container.zpmHubTile.getZpmsCount();
 
-		String energyPercent = String.format("%.2f", energyStored/(float)maxEnergyStored * 100) + " %";
+		float percent = energyStored/(float)maxEnergyStored * 100;
+		if(energyStored == 0) percent = 0;
+		String energyPercent = String.format("%.2f", percent) + " %";
 		fontRenderer.drawString(energyPercent, 170-fontRenderer.getStringWidth(energyPercent), 71, 4210752);
 
 		int transferred = container.zpmHubTile.getEnergyTransferedLastTick();

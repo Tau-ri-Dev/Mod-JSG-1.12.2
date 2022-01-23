@@ -57,7 +57,7 @@ public class ZPMHubContainer extends Container {
 		
 		// Transfering from ZPMHub to player's inventory
         if (index < 3) {
-        	if (!mergeItemStack(stack, 2, inventorySlots.size(), false)) {
+        	if (!mergeItemStack(stack, 3, inventorySlots.size(), false)) {
         		return ItemStack.EMPTY;
         	}
         	

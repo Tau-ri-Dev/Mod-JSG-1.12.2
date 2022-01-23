@@ -141,7 +141,7 @@ jar {
                 "Specification-Vendor"    : "Aunis: Resurrection",
                 "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
-                "Implementation-Version"  : "@VERSION@",
+                "Implementation-Version"  : "${version}",
                 "Implementation-Vendor"   : "Aunis: Resurrection",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])

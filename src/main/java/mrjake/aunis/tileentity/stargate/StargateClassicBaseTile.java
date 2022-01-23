@@ -579,7 +579,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         compound.setLong("spinStartTime", spinStartTime);
         compound.setInteger("currentRingSymbol", currentRingSymbol.getId());
         compound.setInteger("targetRingSymbol", targetRingSymbol.getId());
-        compound.setInteger("spinDirectiposílon", spinDirection.id);
+        compound.setInteger("spinDirection", spinDirection.id);
 
         NBTTagList linkedBeamersTagList = new NBTTagList();
         for (BlockPos vect : linkedBeamers)

@@ -69,6 +69,9 @@ tile.aunis.stargate_pegasus_base_block.name=Stargate Base (Pegasus)
 tile.aunis.stargate_pegasus_ring_block.name=Stargate Ring (Pegasus)
 tile.aunis.stargate_pegasus_chevron_block.name=Stargate Chevron (Pegasus)
 
+tile.aunis.zpm.name=Zero Point Module (ZPM)
+tile.aunis.zpmhub_block.name=ZPM Hub
+
 item.aunis.crystal_fragment.name=Crystal Seed
 item.aunis.crystal_blank.name=Blank Crystal
 item.aunis.crystal_blue.name=Teleportation Crystal

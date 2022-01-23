@@ -334,7 +334,7 @@ public class AunisConfig {
 
         @Name("ZPM Capacity")
         @RangeInt(min = 0, max = 1000000000)
-        public int zpmEnergyStorage = 100000000;
+        public int zpmEnergyStorage = 200000000;
     }
 
     public static class RingsConfig {
@@ -594,8 +594,18 @@ public class AunisConfig {
     }
 
     public static class DevConfig {
-        @Name("ignored")
-        public double ignored = 0;
+        @Name("ZPMHub zpms location X")
+        public double[] zpmHubZpmsX = {
+                1.0,
+                1.0,
+                1.0,
+        };
+        @Name("ZPMHub zpms location Z")
+        public double[] zpmHubZpmsZ = {
+                1.0,
+                1.0,
+                1.0,
+        };
     }
 
     public static void resetCache() {

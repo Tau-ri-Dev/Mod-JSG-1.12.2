@@ -4,7 +4,9 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.tileentity.energy.ZPMHubTile;
+import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
 import mrjake.aunis.util.AunisAxisAlignedBB;
+import mrjake.aunis.util.ItemHandlerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -25,6 +27,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
 
@@ -94,21 +97,37 @@ public class ZPMHubBlock extends Block {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ZPMHubTile tile = (ZPMHubTile) world.getTileEntity(pos);
+        if(tile == null) return !player.isSneaking();
         if (!player.isSneaking()) {
-            player.openGui(Aunis.instance, GuiIdEnum.GUI_ZPMHUB.id, world, pos.getX(), pos.getY(), pos.getZ());
+            if (!tile.tryInsertZPM(player, hand)) {
+                player.openGui(Aunis.instance, GuiIdEnum.GUI_ZPMHUB.id, world, pos.getX(), pos.getY(), pos.getZ());
+            }
         }
-        return false;
+        else {
+            if (!tile.tryGetZPM(player, hand)) {
+                player.openGui(Aunis.instance, GuiIdEnum.GUI_ZPMHUB.id, world, pos.getX(), pos.getY(), pos.getZ());
+            }
+        }
+        return !player.isSneaking();
     }
 
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        // todo(Mine): drop inserted zpms
+        ZPMHubTile tile = (ZPMHubTile) world.getTileEntity(pos);
+
+        if (!world.isRemote && tile != null)
+            ItemHandlerHelper.dropInventoryItems(world, pos, tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null));
         super.breakBlock(world, pos, state);
     }
 
     private int getPower(IBlockAccess world, BlockPos pos) {
-        // todo(Mine): return power by counting zpms
-        return 0;
+        ZPMHubTile tile = (ZPMHubTile) world.getTileEntity(pos);
+        if(tile == null) return 0;
+        int level = 0;
+        for(int i = 0; i < 3; i++)
+            level += tile.getEnergyLevelOfZPM(i);
+        return level;
     }
 
     @Override
