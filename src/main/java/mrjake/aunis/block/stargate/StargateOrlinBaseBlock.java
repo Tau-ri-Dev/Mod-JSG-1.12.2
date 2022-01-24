@@ -25,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -37,6 +38,14 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 	public StargateOrlinBaseBlock() {
 		super("stargate_orlin_base_block");
 		setResistance(16.0f);
+	}
+
+	// -----------------------------------
+	// Explosions
+
+	@Override
+	public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn) {
+		worldIn.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 5, true, true).doExplosionA();
 	}
 	
 	@Override

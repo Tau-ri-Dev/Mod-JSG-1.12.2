@@ -18,7 +18,7 @@ public final class StargateUniverseMemberBlock extends StargateClassicMemberBloc
 	
 	public StargateUniverseMemberBlock() {
 		super(BLOCK_NAME);
-		setResistance(20.0f);
+		setResistance(40.0f);
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -19,6 +20,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -40,8 +42,16 @@ public abstract class StargateAbstractBaseBlock extends Block {
 
     setLightOpacity(0);
     setHardness(3.0f);
-    setResistance(20.0f);
+    setResistance(60.0f);
     setHarvestLevel("pickaxe", 3);
+  }
+
+  // -----------------------------------
+  // Explosions
+
+  @Override
+  public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn) {
+    worldIn.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 30, true, true).doExplosionA();
   }
 
 

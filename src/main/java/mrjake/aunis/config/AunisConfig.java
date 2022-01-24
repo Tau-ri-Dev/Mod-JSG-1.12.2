@@ -333,7 +333,7 @@ public class AunisConfig {
         public int universeCapacitors = 0;
 
         @Name("ZPM Capacity")
-        @RangeInt(min = 0, max = 2147483647)
+        @RangeInt(min = 0)
         public int zpmEnergyStorage = 2000000000;
     }
 

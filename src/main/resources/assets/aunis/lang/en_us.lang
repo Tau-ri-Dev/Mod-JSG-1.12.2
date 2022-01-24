@@ -83,7 +83,9 @@ item.aunis.crystal_blue_pegasus.name=Pegasus Crystal
 
 item.aunis.circuit_control_base.name=Control Circuit Base 
 item.aunis.circuit_control_naquadah.name=Naquadah Control Circuit 
-item.aunis.circuit_control_crystal.name=Crystal Control Circuit 
+item.aunis.circuit_control_crystal.name=Crystal Control Circuit
+
+item.aunis.circuit_control_zpm.name=ZPM Control Circuit
 
 item.aunis.dhd_brb.name=Bright Red Button (BRB)
 item.aunis.dhd_bbb.name=Bright Blue Button (BBB)
@@ -92,6 +94,9 @@ item.aunis.stargate_ring_fragment.name=Stargate Ring Fragment
 item.aunis.universe_ring_fragment.name=Universe Ring Fragment
 item.aunis.holder_crystal.name=Crystal Holder
 item.aunis.holder_crystal_pegasus.name=Crystal Holder (Pegasus)
+item.aunis.holder_zpm.name=ZPM Holder
+
+item.aunis.connector_zpm.name=ZPM Connector
 
 item.aunis.page_notebook.name=Notebook Page
 item.aunis.page_mysterious.name=Mysterious Page
@@ -337,6 +342,9 @@ gui.stargate.capacitors=Capacitors
 gui.stargate.energyBuffer=Energy buffer
 
 gui.capacitor.name=Capacitor Bank
+
+gui.zpmhub.name=ZPM Hub Interface
+gui.zpm.name=ZPM Interface
 
 tile.aunis.beamer_block.name=Beamer Block
 item.aunis.beamer_crystal_power.name=Beamer Power Crystal

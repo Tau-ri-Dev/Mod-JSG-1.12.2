@@ -36,7 +36,7 @@ public class ZPMHubContainerGui extends GuiContainer {
 	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_zpmhub.png");
 
 	private ZPMHubContainer container;
-	private int lastEnergyStored = 0;
+	private long lastEnergyStored = 0;
 
 	public ZPMHubContainerGui(ZPMHubContainer container) {
 		super(container);
@@ -64,7 +64,7 @@ public class ZPMHubContainerGui extends GuiContainer {
 		mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-		int energyStored = 0;
+		long energyStored = 0;
         
 		// Zpm slots background
 		for(int i = 0; i < 3; i++) {
@@ -91,22 +91,24 @@ public class ZPMHubContainerGui extends GuiContainer {
 		fontRenderer.drawString(I18n.format("gui.zpmhub.name"), 7, 6, 4210752);
         fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 
-		int energyStored = 0;
+		long energyStored = 0;
 		// Zpm slots background
 		for(int i = 0; i < 3; i++) {
 			if (container.zpmSlots.get(i).getHasStack()) {
 				energyStored += container.zpmHubTile.getEnergyInZPM(i+1);
 			}
 		}
-		int maxEnergyStored = AunisConfig.powerConfig.zpmEnergyStorage * container.zpmHubTile.getZpmsCount();
+		long maxEnergyStored = ((long) AunisConfig.powerConfig.zpmEnergyStorage) * container.zpmHubTile.getZpmsCount();
 
 		float percent = energyStored/(float)maxEnergyStored * 100;
 		if(energyStored == 0) percent = 0;
 		String energyPercent = String.format("%.2f", percent) + " %";
 		fontRenderer.drawString(energyPercent, 170-fontRenderer.getStringWidth(energyPercent), 71, 4210752);
 
-		int transferred = energyStored - lastEnergyStored;
-		lastEnergyStored = energyStored;
+		//long transferred = energyStored - lastEnergyStored;
+		//lastEnergyStored = energyStored;
+
+		long transferred = container.energyTransferedLastTick;
 
 		TextFormatting transferredFormatting = TextFormatting.GRAY;
 

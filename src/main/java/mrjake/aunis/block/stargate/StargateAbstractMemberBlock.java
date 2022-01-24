@@ -17,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -34,11 +35,19 @@ public abstract class StargateAbstractMemberBlock extends Block {
         setCreativeTab(Aunis.aunisGatesCreativeTab);
 
         setHardness(3.0f);
-        setResistance(20.0f);
+        setResistance(60.0f);
         setHarvestLevel("pickaxe", 3);
     }
 
     protected abstract StargateAbstractMergeHelper getMergeHelper();
+
+    // -----------------------------------
+    // Explosions
+
+    @Override
+    public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn) {
+        worldIn.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 20, true, true).doExplosionA();
+    }
 
 
     // --------------------------------------------------------------------------------------

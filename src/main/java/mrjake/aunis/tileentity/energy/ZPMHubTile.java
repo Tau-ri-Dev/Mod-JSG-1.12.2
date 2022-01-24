@@ -169,7 +169,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         this.zpmStates.set(zpm-1, state);
     }
 
-    public float getEnergyLevelOfZPM(int zpm){
+    public int getEnergyLevelOfZPM(int zpm){
         ItemStack zpmStack = this.itemStackHandler.getStackInSlot(zpm);
 
         for(int i = 0; i < 3; i++){
@@ -181,12 +181,11 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
 
         int energyStored = Objects.requireNonNull(zpmStack.getCapability(CapabilityEnergy.ENERGY, null)).getEnergyStored();
         int maxEnergyStored = AunisConfig.powerConfig.zpmEnergyStorage;
-        if(energyStored < 1) energyStored = lastZPMPowerLevel.get(zpm);
-        else lastZPMPowerLevel.set(zpm, energyStored);
-        return Math.round((energyStored/(float)maxEnergyStored * 10)/2);
+        lastZPMPowerLevel.set(zpm, Math.round(((energyStored/(float)maxEnergyStored * 10)/2)));
+        return Math.round(((energyStored/(float)maxEnergyStored * 10)/2));
     }
 
-    public int getEnergyInZPM(int zpm){
+    public long getEnergyInZPM(int zpm){
         ItemStack zpmStack = this.itemStackHandler.getStackInSlot(zpm-1);
         if(zpmStack.isEmpty())
             return 0;
@@ -301,6 +300,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
 
             // power system draw
             for (EnumFacing facing : EnumFacing.VALUES) {
+                if(facing == EnumFacing.UP) continue; // prevents from getting energy from top of the zpmhub
                 TileEntity tile = world.getTileEntity(pos.offset(facing));
 
                 if (tile != null && tile.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
@@ -323,7 +323,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                 }
             }
 
-            int energyStored = 0;
+            long energyStored = 0;
             for(int i = 0; i < 3; i++){
                 if(lastZPMPowerLevel.size() < i+1)
                     lastZPMPowerLevel.add(0);
@@ -427,10 +427,10 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     // -----------------------------------------------------------------------------
     // Power system
 
-    protected int energyStoredLastTick = 0;
-    protected int energyTransferedLastTick = 0;
+    protected long energyStoredLastTick = 0;
+    protected long energyTransferedLastTick = 0;
 
-    public int getEnergyTransferedLastTick() {
+    public long getEnergyTransferedLastTick() {
         return energyTransferedLastTick;
     }
 
@@ -523,6 +523,9 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
             }
         }
         if (node != null && compound.hasKey("node")) node.load(compound.getCompoundTag("node"));
+
+        for(int i = 0; i < zpmsCount; i++)
+            initAnimation(true, zpmsCount, i);
 
         markDirty();
 
@@ -622,6 +625,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     }
 
     // METHODS
+    // todo(Mine): add support for OC
     /*
 
     @Optional.Method(modid = "opencomputers")

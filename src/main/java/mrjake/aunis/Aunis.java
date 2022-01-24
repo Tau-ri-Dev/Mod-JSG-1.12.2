@@ -47,7 +47,7 @@ public class Aunis {
     // I didn't manage to make it work
     //public static final String Version = "${version}"; // It works only in final builds.
     public static final String Version = "@VERSION@";
-    public static final int DATA_VERSION = 7;
+    public static final int DATA_VERSION = 10;
 
     //public static final String MCVersion = "${mcversion}";
     public static final String MCVersion = "@MCVERSION@";
@@ -96,8 +96,10 @@ public class Aunis {
 
         AunisPacketHandler.registerPackets();
         if (Loader.isModLoaded("tconstruct") && AunisConfig.integrationsConfig.tConstructIntegration) {
+            Aunis.info("TConstruct found and connection is enabled... Connecting...");
             TConstructIntegration.initFluids();
             AunisFluids.registerFluids(TConstructIntegration.fluids);
+            Aunis.info("Successfully connected into TConstruct!");
         }
         AunisFluids.registerFluids();
 
@@ -112,8 +114,11 @@ public class Aunis {
     	GameRegistry.registerWorldGenerator(new AunisWorldGen(), 0);
 
     	// ThermalExpansion recipes
-    	if(Loader.isModLoaded("thermalexpansion"))
-    	    ThermalIntegration.registerRecipes();
+    	if(Loader.isModLoaded("thermalexpansion")) {
+            Aunis.info("Thermal Expansion found... Connecting...");
+            ThermalIntegration.registerRecipes();
+            Aunis.info("Successfully connected into Thermal Expansion!");
+        }
 
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new AunisGuiHandler());
     	ItemEndpointCapability.register();
@@ -138,8 +143,11 @@ public class Aunis {
     	// OpenComputers
     	
     	try {
-	    	if (Loader.isModLoaded("opencomputers"))
-	    		ocWrapper = (OCWrapperInterface) Class.forName(OC_WRAPPER_LOADED).newInstance();
+	    	if (Loader.isModLoaded("opencomputers")) {
+                Aunis.info("OpenComputers found... Connecting...");
+                ocWrapper = (OCWrapperInterface) Class.forName(OC_WRAPPER_LOADED).newInstance();
+                Aunis.info("Successfully connected into OpenComputers!");
+            }
 	    	else
 	    		ocWrapper = (OCWrapperInterface) Class.forName(OC_WRAPPER_NOT_LOADED).newInstance();
     	}

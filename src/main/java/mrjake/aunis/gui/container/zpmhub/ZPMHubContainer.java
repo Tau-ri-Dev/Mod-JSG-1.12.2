@@ -29,6 +29,8 @@ public class ZPMHubContainer extends Container {
 	protected ArrayList<SlotItemHandler> zpmSlots = new ArrayList<SlotItemHandler>(3);
 	protected int zpmsLastCount = 0;
 
+	protected long energyTransferedLastTick;
+
 	private BlockPos pos;
 
 	public ZPMHubContainer(IInventory playerInventory, World world, int x, int y, int z) {
@@ -93,12 +95,13 @@ public class ZPMHubContainer extends Container {
 			if(!zpmSlots.get(i).getStack().isEmpty())
 				zpmsCount++;
 		}
-		int energyTransferedLastTick = zpmHubTile.getEnergyTransferedLastTick();
+		long energyTransferedLastTick = zpmHubTile.getEnergyTransferedLastTick();
 		for (IContainerListener listener : listeners) {
 			if (listener instanceof EntityPlayerMP) {
 				AunisPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(pos, StateTypeEnum.GUI_UPDATE, new ZPMHubContainerGuiUpdate(zpmsCount, energyTransferedLastTick)), ((EntityPlayerMP) listener));
 			}
 		}
+		this.energyTransferedLastTick = energyTransferedLastTick;
 		this.zpmsLastCount = zpmsCount;
 	}
 }

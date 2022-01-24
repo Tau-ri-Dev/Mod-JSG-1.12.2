@@ -1,0 +1,19 @@
+{
+    "pools": [
+        {
+            "name": "main",
+            "rolls": 3,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "aunis:zpm",
+                    "weight": 50
+                },
+                {
+                    "type": "empty",
+                    "weight": 50
+                }
+            ]
+        }
+    ]
+}

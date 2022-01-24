@@ -11,7 +11,7 @@ public final class StargateUniverseBaseBlock extends StargateClassicBaseBlock {
 	
 	public StargateUniverseBaseBlock() {
 		super(BLOCK_NAME);
-		setResistance(20.0f);
+		setResistance(40.0f);
 	}
 
 	@Override

@@ -79,6 +79,7 @@ public class AunisItems {
     public static final Item CRYSTAL_YELLOW = ItemHelper.createGenericItem("crystal_yellow", aunisItemsCreativeTab);
     public static final Item CRYSTAL_WHITE = ItemHelper.createGenericItem("crystal_white", aunisItemsCreativeTab);
 
+
     public static final Item CIRCUIT_CONTROL_BASE = ItemHelper.createGenericItem("circuit_control_base", aunisItemsCreativeTab);
     public static final Item CIRCUIT_CONTROL_CRYSTAL = ItemHelper.createGenericItem("circuit_control_crystal", aunisItemsCreativeTab);
     public static final Item CIRCUIT_CONTROL_NAQUADAH = ItemHelper.createGenericItem("circuit_control_naquadah", aunisItemsCreativeTab);
@@ -88,6 +89,10 @@ public class AunisItems {
     public static final Item TR_RING_FRAGMENT = ItemHelper.createGenericItem("transportrings_ring_fragment", aunisItemsCreativeTab);
     public static final Item HOLDER_CRYSTAL = ItemHelper.createGenericItem("holder_crystal", aunisItemsCreativeTab);
     public static final Item HOLDER_CRYSTAL_PEGASUS = ItemHelper.createGenericItem("holder_crystal_pegasus", aunisItemsCreativeTab);
+
+    public static final Item HOLDER_ZPM = ItemHelper.createGenericItem("holder_zpm", aunisItemsCreativeTab);
+    public static final Item CIRCUIT_CONTROL_ZPM = ItemHelper.createGenericItem("circuit_control_zpm", aunisItemsCreativeTab);
+    public static final Item CONNECTOR_ZPM = ItemHelper.createGenericItem("connector_zpm", aunisItemsCreativeTab);
 
     public static final Item DHD_BRB = ItemHelper.createGenericItem("dhd_brb", aunisItemsCreativeTab);
     public static final Item DHD_BBB = ItemHelper.createGenericItem("dhd_bbb", aunisItemsCreativeTab);
@@ -142,11 +147,17 @@ public class AunisItems {
             CIRCUIT_CONTROL_CRYSTAL,
             CIRCUIT_CONTROL_NAQUADAH,
 
+            CIRCUIT_CONTROL_ZPM,
+            CONNECTOR_ZPM,
+
             STARGATE_RING_FRAGMENT,
             UNIVERSE_RING_FRAGMENT,
             TR_RING_FRAGMENT,
+
             HOLDER_CRYSTAL,
             HOLDER_CRYSTAL_PEGASUS,
+
+            HOLDER_ZPM,
 
             DHD_BRB,
             DHD_BBB,
