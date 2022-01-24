@@ -45,7 +45,8 @@ public class ZPMHubRenderer extends TileEntitySpecialRenderer<ZPMHubTile> {
             long animationStage = te.getWorld().getTotalWorldTime() - animationStart;
 
             for(int i = 0; i < 3; i++) {
-                if(te.itemStackHandler.getStackInSlot(i).isEmpty() && zpmAnimated != i+1) continue;
+                if(te.lastZPMPower.size() < i+1) te.lastZPMPower.add(-1);
+                if(te.itemStackHandler.getStackInSlot(i).isEmpty() && zpmAnimated != i+1 && !te.getZPMIsDown(i) && te.lastZPMPower.get(i) == -1) continue;
                 double zy = Y_MIN;
                 // todo(Mine): add support for OC
                 //if(te.getZPMState(i+1) == EnumZPMState.UP) zy = Y_MAX;
@@ -75,7 +76,7 @@ public class ZPMHubRenderer extends TileEntitySpecialRenderer<ZPMHubTile> {
                 }
 
                 //int powerLevel = (zy == Y_MIN) ? (Math.round(te.getEnergyLevelOfZPM(i)/2)) : 0;
-                int powerLevel = te.getEnergyLevelOfZPM(i);
+                int powerLevel = te.lastZPMPowerLevel.get(i);
                 boolean isActive = (zy == Y_MIN);
 
                 double zx = 0;
