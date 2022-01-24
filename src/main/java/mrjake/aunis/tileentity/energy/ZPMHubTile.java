@@ -257,6 +257,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     public void onLoad() {
         if (!world.isRemote) {
             targetPoint = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
+            sendState(StateTypeEnum.RENDERER_STATE);
         } else {
             AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
         }
@@ -274,13 +275,12 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                 zpmIsDown.add(true);
         }
         if (!world.isRemote) {
+            sendState(StateTypeEnum.RENDERER_STATE);
             if (!addedToNetwork) {
                 addedToNetwork = true;
                 Aunis.ocWrapper.joinWirelessNetwork(this);
                 Aunis.ocWrapper.joinOrCreateNetwork(this);
-                // Aunis.info(pos + ": Stargate joined OC network");
             }
-            AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
             if (!lastPos.equals(pos)) {
                 lastPos = pos;
             }
@@ -336,16 +336,19 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
 
             markDirty();
         }
+        else
+            AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
     }
 
 
     // -----------------------------------------------------------------------------
     // States
 
-    protected void sendState(StateTypeEnum type, State state) {
+    protected void sendState(StateTypeEnum type) {
         if (world.isRemote) return;
 
         if (targetPoint != null) {
+            State state = getState(type);
             AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, type, state), targetPoint);
         } else {
             Aunis.logger.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
@@ -356,9 +359,10 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     public State getState(StateTypeEnum stateType) {
         switch (stateType) {
             case RENDERER_STATE:
+                //return new ZPMHubRendererState(pos, animationStart, isPutting, zpmsCount, zpmAnimated, energyTransferedLastTick);
                 return new ZPMHubRendererState();
             case GUI_UPDATE:
-                return new ZPMHubContainerGuiUpdate(zpmsCount);
+                return new ZPMHubContainerGuiUpdate(zpmsCount, energyTransferedLastTick);
 
             default:
                 throw new UnsupportedOperationException("EnumStateType." + stateType.name() + " not implemented on " + this.getClass().getName());
@@ -382,12 +386,13 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     public void setState(StateTypeEnum stateType, State state) {
         switch (stateType) {
             case RENDERER_STATE:
-                rendererStateClient = ((ZPMHubRendererState) state).initClient(pos, animationStart, isPutting, zpmsCount, zpmAnimated);
+                rendererStateClient = ((ZPMHubRendererState) state).initClient(pos, animationStart, isPutting, zpmsCount, zpmAnimated, energyTransferedLastTick);
             case GUI_UPDATE:
                 if(!(state instanceof ZPMHubContainerGuiUpdate))
                     break;
                 ZPMHubContainerGuiUpdate guiUpdate = (ZPMHubContainerGuiUpdate) state;
                 zpmsCount = guiUpdate.zpmsCount;
+                //energyTransferedLastTick = guiUpdate.energyTransferedLastTick;
                 markDirty();
                 break;
 
@@ -617,6 +622,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     }
 
     // METHODS
+    /*
 
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function() -- ZPM gone up")
@@ -628,6 +634,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                     initAnimation(false, zpmsCount, i);
                 }
             }
+            markDirty();
             return new Object[]{true, "zpmhub_zpm_up"};
         }catch(Exception e){
             return new Object[]{false, "zpmhub_fail", "Cannot parse argument:" + e};
@@ -643,9 +650,11 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                     initAnimation(false, zpmsCount, i);
                 }
             }
+            markDirty();
             return new Object[]{true, "zpmhub_zpm_down"};
         }catch(Exception e){
             return new Object[]{false, "zpmhub_fail", "Cannot parse argument:" + e};
         }
     }
+     */
 }

@@ -75,7 +75,7 @@ public class ZPMHubRenderer extends TileEntitySpecialRenderer<ZPMHubTile> {
 
                 //int powerLevel = (zy == Y_MIN) ? (Math.round(te.getEnergyLevelOfZPM(i)/2)) : 0;
                 int powerLevel = Math.round(te.getEnergyLevelOfZPM(i)/2);
-                boolean isActive = (zy == Y_MIN && te.getEnergyTransferedLastTick() != 0);
+                boolean isActive = (zy == Y_MIN && rendererState.energyTransferedLastTick != 0);
 
                 double zx = 0;
                 double zz = 0;

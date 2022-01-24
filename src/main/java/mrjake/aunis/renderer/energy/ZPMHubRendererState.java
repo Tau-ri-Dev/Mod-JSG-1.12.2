@@ -9,12 +9,22 @@ public class ZPMHubRendererState extends State {
 
     public ZPMHubRendererState() {}
 
-    public ZPMHubRendererState initClient(BlockPos pos, long tick, boolean isPutting, int zpmsCount, int zpmAnimated) {
+    public ZPMHubRendererState(BlockPos pos, long tick, boolean isPutting, int zpmsCount, int zpmAnimated, int energyTransferedLastTick) {
         this.pos = pos;
         this.animationStart = tick;
         this.isPutting = isPutting;
         this.zpmsCount = zpmsCount;
         this.zpmAnimated = zpmAnimated;
+        this.energyTransferedLastTick = energyTransferedLastTick;
+    }
+
+    public ZPMHubRendererState initClient(BlockPos pos, long tick, boolean isPutting, int zpmsCount, int zpmAnimated, int energyTransferedLastTick) {
+        this.pos = pos;
+        this.animationStart = tick;
+        this.isPutting = isPutting;
+        this.zpmsCount = zpmsCount;
+        this.zpmAnimated = zpmAnimated;
+        this.energyTransferedLastTick = energyTransferedLastTick;
 
         return this;
     }
@@ -32,6 +42,7 @@ public class ZPMHubRendererState extends State {
     public boolean isPutting;
     public int zpmsCount;
     public int zpmAnimated;
+    public int energyTransferedLastTick;
 
     public BiomeOverlayEnum getBiomeOverlay() {
         return BiomeOverlayEnum.NORMAL;
@@ -43,6 +54,7 @@ public class ZPMHubRendererState extends State {
         buf.writeBoolean(isPutting);
         buf.writeInt(zpmsCount);
         buf.writeInt(zpmAnimated);
+        buf.writeInt(energyTransferedLastTick);
     }
 
     public void fromBytes(ByteBuf buf) {
@@ -51,5 +63,6 @@ public class ZPMHubRendererState extends State {
         isPutting = buf.readBoolean();
         zpmsCount = buf.readInt();
         zpmAnimated = buf.readInt();
+        energyTransferedLastTick = buf.readInt();
     }
 }

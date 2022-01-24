@@ -27,8 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static mrjake.aunis.gui.mainmenu.GetUpdate.checkForUpdate;
-import static mrjake.aunis.gui.mainmenu.GetUpdate.getSiteContent;
+import static mrjake.aunis.gui.mainmenu.GetUpdate.*;
 
 @SideOnly(Side.CLIENT)
 public class AunisMainMenu extends GuiMainMenu {
@@ -69,6 +68,7 @@ public class AunisMainMenu extends GuiMainMenu {
     protected float screenCenterWidth = ((float) width) / 2f;
     protected List<GuiButton> aunisButtonList = new ArrayList<>();
     protected List<GuiButton> versionButtons = new ArrayList<>();
+    protected List<GuiButton> afterDownloadButtons = new ArrayList<>();
     protected List<GuiButton> anyButton = new ArrayList<>();
     protected static final ResourceLocation BACKGROUND_TEXTURE = AunisConfig.mainMenuConfig.disableAunisMainMenu ? null : new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");
     protected static ResourceLocation EVENT_HORIZON_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/event_horizon.jpg");
@@ -86,6 +86,10 @@ public class AunisMainMenu extends GuiMainMenu {
     protected int clickedButton = 0;
     static StargateRendererStatic.InnerCircle innerCircle = new StargateRendererStatic.InnerCircle();
     static List<StargateRendererStatic.QuadStrip> quadStrips = new ArrayList<StargateRendererStatic.QuadStrip>();
+
+
+    // DOWNLOADING FILE
+    protected double percentDownloaded = 0.0;
 
     /**
      * ------------------------------------------
@@ -314,11 +318,21 @@ public class AunisMainMenu extends GuiMainMenu {
         }
     }
 
+    public void checkDownloaded(){
+        if(showVersionAlert != 4) return;
+        percentDownloaded = getPercents();
+        if(percentDownloaded < 0) percentDownloaded = 0;
+        if(percentDownloaded > 100) percentDownloaded = 100;
+    }
+
     // RENDER MAIN MENU
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.screenCenterHeight = (((float) height) / 2f);
         this.screenCenterWidth = ((float) width) / 2f;
+
+        checkDownloaded();
+
         // ------------------------------
         // ANIMATIONS AND SOUNDS
 
@@ -426,9 +440,9 @@ public class AunisMainMenu extends GuiMainMenu {
         if (renderButtonsAndStuff) {
             if (renderButtonsAlpha < 1.0f && showVersionAlert != 1) renderButtonsAlpha += 0.05f;
 
-            if (!LATEST.equals("false") && AunisConfig.enableAutoUpdater) {
+            if (!LATEST.equals("false") && !LATEST.equals(ERROR_STRING) && AunisConfig.enableAutoUpdater) {
                 versionInfo += " - Latest build: " + LATEST;
-                if (showVersionAlert != 2) showVersionAlert = 1;
+                if (showVersionAlert != 2 && showVersionAlert != 4) showVersionAlert = 1;
             }
 
             GlStateManager.pushMatrix();
@@ -498,17 +512,7 @@ public class AunisMainMenu extends GuiMainMenu {
                 GlStateManager.translate(screenCenterWidth, screenCenterHeight - 60, 0);
                 GlStateManager.scale(1.5, 1.5, 1.5);
 
-                if (LATEST.equals("Error was occurred while updating Aunis!")) {
-                    drawCenteredString(fontRenderer, "Could not connect to Aunis network! (github)", 0, 0, 0xffffff);
-                    GlStateManager.popMatrix();
-
-                    GlStateManager.pushMatrix();
-                    GlStateManager.scale(1.0, 1.0, 1.0);
-                    GlStateManager.translate(screenCenterWidth, screenCenterHeight - 40, 0);
-                    drawCenteredString(fontRenderer, "We can not check for updates,", 0, 0, 0xffffff);
-                    GlStateManager.translate(0, 10, 0);
-                    drawCenteredString(fontRenderer, "because your connection to network is bad :(", 0, 0, 0xffffff);
-                } else {
+                if (!LATEST.equals(ERROR_STRING)){
                     drawCenteredString(fontRenderer, "You are using out of date version of Aunis mod.", 0, 0, 0xffffff);
                     GlStateManager.popMatrix();
 
@@ -520,12 +524,83 @@ public class AunisMainMenu extends GuiMainMenu {
                     drawCenteredString(fontRenderer, "your mod in your mods folder.", 0, 0, 0xffffff);
                 }
 
+
                 GlStateManager.popMatrix();
 
                 GlStateManager.popMatrix();
 
                 for (GuiButton guiButton : this.versionButtons) {
                     ((AunisGuiButton) guiButton).drawButton(this.mc, mouseX, mouseY, partialTicks);
+                }
+
+                GlStateManager.popMatrix();
+            }
+
+            // ------------------------------
+            // DRAWING DOWNLOADING ALERT
+
+            if (showVersionAlert == 4) {
+                if(percentDownloaded >= 100) {
+                    GlStateManager.pushMatrix();
+
+                    GlStateManager.pushMatrix();
+                    frame(0, 0, width, height, 3, 0xFF181A1F, 0xFF272B33);
+                    GlStateManager.popMatrix();
+
+                    GlStateManager.pushMatrix();
+
+                    GlStateManager.pushMatrix();
+                    GlStateManager.translate(screenCenterWidth, screenCenterHeight - 60, 0);
+                    GlStateManager.scale(1.5, 1.5, 1.5);
+
+                    drawCenteredString(fontRenderer, "Downloading Aunis", 0, 0, 0xffffff);
+                    GlStateManager.popMatrix();
+
+                    GlStateManager.pushMatrix();
+                    GlStateManager.scale(1.0, 1.0, 1.0);
+                    GlStateManager.translate(screenCenterWidth, screenCenterHeight - 40, 0);
+                    drawCenteredString(fontRenderer, "Downloading completed", 0, 0, 0xffffff);
+                    GlStateManager.translate(0, 20, 0);
+                    drawCenteredString(fontRenderer, "Please restart minecraft:", 0, 0, 0xffffff);
+
+                    GlStateManager.popMatrix();
+
+                    GlStateManager.popMatrix();
+
+                    for (GuiButton guiButton : this.afterDownloadButtons) {
+                        ((AunisGuiButton) guiButton).drawButton(this.mc, mouseX, mouseY, partialTicks);
+                    }
+                }
+                else{
+                    GlStateManager.pushMatrix();
+
+                    GlStateManager.pushMatrix();
+                    frame(0, 0, width, height, 3, 0xFF181A1F, 0xFF272B33);
+                    GlStateManager.popMatrix();
+
+                    GlStateManager.pushMatrix();
+
+                    GlStateManager.pushMatrix();
+                    GlStateManager.translate(screenCenterWidth, screenCenterHeight - 60, 0);
+                    GlStateManager.scale(1.5, 1.5, 1.5);
+
+                    drawCenteredString(fontRenderer, "Downloading Aunis", 0, 0, 0xffffff);
+                    GlStateManager.popMatrix();
+
+                    GlStateManager.pushMatrix();
+                    GlStateManager.scale(1.0, 1.0, 1.0);
+                    GlStateManager.translate(screenCenterWidth, screenCenterHeight - 40, 0);
+                    drawCenteredString(fontRenderer, "Please do not quit minecraft", 0, 0, 0xffffff);
+                    GlStateManager.translate(0, 10, 0);
+                    drawCenteredString(fontRenderer, "before Aunis installs.", 0, 0, 0xffffff);
+                    GlStateManager.translate(0, 10, 0);
+                    drawCenteredString(fontRenderer, "This process take usually about 5 minutes...", 0, 0, 0xffffff);
+                    GlStateManager.translate(0, 20, 0);
+                    drawCenteredString(fontRenderer, "Downloaded: " + percentDownloaded + "%", 0, 0, 0xffffff);
+
+                    GlStateManager.popMatrix();
+
+                    GlStateManager.popMatrix();
                 }
 
                 GlStateManager.popMatrix();
@@ -584,6 +659,9 @@ public class AunisMainMenu extends GuiMainMenu {
         this.versionButtons.clear();
         this.versionButtons.add(new AunisGuiButton(21, width / 2 - 100, height - 75, 98, 20, "OK"));
         this.versionButtons.add(new AunisGuiButton(22, width / 2 + 2, height - 75, 98, 20, "Download"));
+
+        this.afterDownloadButtons.clear();
+        this.afterDownloadButtons.add(new AunisGuiButton(23, width / 2 - 50, height - 75, 100, 20, I18n.format("menu.quit")));
 
         this.aunisButtonList.clear();
         int j = this.height / 4 + 48;
@@ -677,14 +755,22 @@ public class AunisMainMenu extends GuiMainMenu {
                 break;
             // open download link
             case 22:
+                if(updateMod(VERSION, "-alpha")){
+                    Aunis.warn("Updating Aunis automatically...");
+                    showVersionAlert = 4;
+                    break;
+                }
+                Aunis.warn("Could not update Aunis automatically! Opening website...");
                 try {
                     Class<?> oclass = Class.forName("java.awt.Desktop");
                     Object object = oclass.getMethod("getDesktop").invoke((Object) null);
-                    oclass.getMethod("browse", URI.class).invoke(object, new URI(getSiteContent("https://amazingworlds.eu/curseapi/1.12.2/?t=url")));
+                    oclass.getMethod("browse", URI.class).invoke(object, new URI(getSiteContent(GET_DOWNLOAD_URL)));
                 } catch (Exception e) {
                     Aunis.logger.debug("Couldn't open link", e);
                 }
                 break;
+            case 23:
+                this.mc.shutdown();
             // change overlay
             case 61:
                 overlay = getNextBiomeOverlay(true, true);
@@ -701,7 +787,7 @@ public class AunisMainMenu extends GuiMainMenu {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         if (mouseButton == 0 && renderButtonsAndStuff) {
-            if (showVersionAlert != 1) {
+            if (showVersionAlert != 1 && showVersionAlert != 4) {
                 for (int i = 0; i < this.aunisButtonList.size(); ++i) {
                     GuiButton guibutton = this.aunisButtonList.get(i);
 
@@ -732,6 +818,23 @@ public class AunisMainMenu extends GuiMainMenu {
                         this.actionPerformed(guibutton);
                         if (this.equals(this.mc.currentScreen))
                             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.getButton(), this.versionButtons));
+                    }
+                }
+            }
+            if (showVersionAlert == 4 && percentDownloaded >= 100) {
+                for (int i = 0; i < this.afterDownloadButtons.size(); ++i) {
+                    GuiButton guibutton = this.afterDownloadButtons.get(i);
+
+                    if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
+                        net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre event = new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, this.afterDownloadButtons);
+                        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
+                            break;
+                        guibutton = event.getButton();
+                        this.selectedButton = guibutton;
+                        guibutton.playPressSound(this.mc.getSoundHandler());
+                        this.actionPerformed(guibutton);
+                        if (this.equals(this.mc.currentScreen))
+                            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.getButton(), this.afterDownloadButtons));
                     }
                 }
             }

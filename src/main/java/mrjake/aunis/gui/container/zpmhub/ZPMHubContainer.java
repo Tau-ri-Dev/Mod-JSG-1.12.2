@@ -93,9 +93,10 @@ public class ZPMHubContainer extends Container {
 			if(!zpmSlots.get(i).getStack().isEmpty())
 				zpmsCount++;
 		}
+		int energyTransferedLastTick = zpmHubTile.getEnergyTransferedLastTick();
 		for (IContainerListener listener : listeners) {
 			if (listener instanceof EntityPlayerMP) {
-				AunisPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(pos, StateTypeEnum.GUI_UPDATE, new ZPMHubContainerGuiUpdate(zpmsCount)), ((EntityPlayerMP) listener));
+				AunisPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(pos, StateTypeEnum.GUI_UPDATE, new ZPMHubContainerGuiUpdate(zpmsCount, energyTransferedLastTick)), ((EntityPlayerMP) listener));
 			}
 		}
 		this.zpmsLastCount = zpmsCount;

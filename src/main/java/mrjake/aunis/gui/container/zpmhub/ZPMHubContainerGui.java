@@ -36,6 +36,7 @@ public class ZPMHubContainerGui extends GuiContainer {
 	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_zpmhub.png");
 
 	private ZPMHubContainer container;
+	private int lastEnergyStored = 0;
 
 	public ZPMHubContainerGui(ZPMHubContainer container) {
 		super(container);
@@ -104,7 +105,9 @@ public class ZPMHubContainerGui extends GuiContainer {
 		String energyPercent = String.format("%.2f", percent) + " %";
 		fontRenderer.drawString(energyPercent, 170-fontRenderer.getStringWidth(energyPercent), 71, 4210752);
 
-		int transferred = container.zpmHubTile.getEnergyTransferedLastTick();
+		int transferred = energyStored - lastEnergyStored;
+		lastEnergyStored = energyStored;
+
 		TextFormatting transferredFormatting = TextFormatting.GRAY;
 
 		if (transferred > 0)

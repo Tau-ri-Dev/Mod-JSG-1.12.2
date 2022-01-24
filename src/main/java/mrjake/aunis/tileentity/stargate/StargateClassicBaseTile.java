@@ -284,7 +284,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             }
 
             Random rand = new Random();
-            if(AunisConfig.randomIncoming.enableRandomIncoming) {
+            if(AunisConfig.randomIncoming.enableRandomIncoming && world.isAreaLoaded(pos, 10)) {
                 if (world.getTotalWorldTime() % 200 == 0) { // every 10 seconds
                     int chanceToRandom = rand.nextInt(1000);
 

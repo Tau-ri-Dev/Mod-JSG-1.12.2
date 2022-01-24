@@ -333,8 +333,8 @@ public class AunisConfig {
         public int universeCapacitors = 0;
 
         @Name("ZPM Capacity")
-        @RangeInt(min = 0, max = 1000000000)
-        public int zpmEnergyStorage = 200000000;
+        @RangeInt(min = 0, max = 2147483647)
+        public int zpmEnergyStorage = 2000000000;
     }
 
     public static class RingsConfig {
