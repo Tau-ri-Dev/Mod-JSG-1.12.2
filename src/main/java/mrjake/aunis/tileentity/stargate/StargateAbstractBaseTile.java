@@ -375,6 +375,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     protected boolean checkAddressLength(StargateAddressDynamic address, StargatePos targetGatePosition) {
+        if(targetGatePosition == null) return false;
         boolean localDial = world.provider.getDimension() == targetGatePosition.dimensionID || StargateDimensionConfig.isGroupEqual(world.provider.getDimensionType(), DimensionManager.getProviderType(targetGatePosition.dimensionID));
 
         // TODO Optimize this, prevent dimension from loading only to check the SymbolType...

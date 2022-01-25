@@ -17,6 +17,7 @@ public final class AunisCommands {
           new CommandStargateLinkDHD(),
           new CommandDebug(),
           new CommandFix(),
+          new CommandFixNether(),
           new CommandGenerateIncoming()
   );
 

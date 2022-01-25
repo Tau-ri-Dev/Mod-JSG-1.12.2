@@ -54,13 +54,14 @@ import java.util.stream.IntStream;
 // todo: fix update renderer state when game loads (from nbts)
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
-public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProvider, StateProviderInterface, Environment, WirelessEndpoint {
+public class ZPMHubTile_zaloha extends TileEntity implements ITickable, ICapabilityProvider, StateProviderInterface, Environment, WirelessEndpoint {
 
     private long animationStart;
     private boolean isPutting = false;
     private int zpmsCount = 0;
     public int zpmAnimated = 0;
 
+    private ArrayList<Boolean> zpmIsDown = new ArrayList<Boolean>(3);
     //private ArrayList<EnumZPMState> zpmStates = new ArrayList<EnumZPMState>(3);
     public ArrayList<Integer> lastZPMPowerLevel = new ArrayList<Integer>(3);
     public ArrayList<Integer> lastZPMPower = new ArrayList<Integer>(3);
@@ -101,18 +102,13 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                     int zpmsCount = 0;
                     for(int i = 0; i < 3; i++){
                         if(lastZPMPowerLevel.size() < i+1)
-                            lastZPMPowerLevel.add(0);
-                        if(lastZPMPower.size() < i+1)
                             lastZPMPower.add(-1);
-
                         if(!getStackInSlot(i).isEmpty()) {
                             zpmsCount++;
                             lastZPMPowerLevel.set(i, this.getStackInSlot(i).getCapability(CapabilityEnergy.ENERGY, null).getEnergyStored());
                         }
-                        else {
-                            lastZPMPowerLevel.set(i, 0);
-                            lastZPMPower.set(i, -1);
-                        }
+                        else
+                            lastZPMPowerLevel.set(i, -1);
                     }
                     if(getZpmsCount() != zpmsCount)
                         initAnimation(putting, zpmsCount, slot);
@@ -161,6 +157,30 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         return this.zpmsCount;
     }
 
+    public boolean getZPMIsDown(int zpm){
+        for(int i = 0; i < 3; i++) {
+            if (zpmIsDown.size() < i+1)
+                zpmIsDown.add(false);
+        }
+        return zpmIsDown.get(zpm);
+    }
+
+    /*public EnumZPMState getZPMState(int zpm){
+        for(int i = 0; i < 3; i++) {
+            if (zpmStates.size() < i + 1)
+                zpmStates.add(EnumZPMState.DOWN);
+        }
+        return this.zpmStates.get(zpm-1);
+    }
+
+    public void setZPMState(int zpm, EnumZPMState state){
+        for(int i = 0; i < 3; i++) {
+            if (zpmStates.size() < i + 1)
+                zpmStates.add(EnumZPMState.DOWN);
+        }
+        this.zpmStates.set(zpm-1, state);
+    }*/
+
     public int getEnergyLevelOfZPM(int zpm){
         ItemStack zpmStack = this.itemStackHandler.getStackInSlot(zpm);
 
@@ -202,11 +222,13 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     }
 
     public void setZPMStatus(int slot, boolean down){
-
-        if(!down)
-            lastZPMPower.set(slot, -1);
+        this.zpmIsDown.set(slot, down);
+        /*if(down)
+            setZPMState(slot+1, EnumZPMState.DOWN);
         else
-            lastZPMPower.set(slot, (int) getEnergyInZPM(slot+1));
+            setZPMState(slot+1, EnumZPMState.UP);
+         */
+
         zpmAnimated = 0;
         if(down && Objects.requireNonNull(itemStackHandler.getStackInSlot(slot).getCapability(CapabilityEnergy.ENERGY, null)).getEnergyStored() > 0)
                 AunisSoundHelper.playPositionedSound(world, pos, SoundPositionedEnum.ZPMHUB_ZPM_ACTIVATED, true);
@@ -247,6 +269,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     public void onLoad() {
         if (!world.isRemote) {
             targetPoint = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
+            sendState(StateTypeEnum.RENDERER_STATE);
         } else {
             AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
         }
@@ -258,19 +281,13 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
 
     @Override
     public void update() {
-
-        if(lastZPMPowerLevel.size() < 3){
+        if(zpmIsDown.size() < 1){
             // init zpmdown list
-            for(int i = 0; i < (3 - lastZPMPowerLevel.size()); i++)
-                lastZPMPowerLevel.add(0);
+            for(int i = 0; i < 3; i++)
+                zpmIsDown.add(false);
         }
-        if(lastZPMPower.size() < 3){
-            // init zpmdown list
-            for(int i = 0; i < (3 - lastZPMPower.size()); i++)
-                lastZPMPower.add(-1);
-        }
-
         if (!world.isRemote) {
+            sendState(StateTypeEnum.RENDERER_STATE);
             if (!addedToNetwork) {
                 addedToNetwork = true;
                 Aunis.ocWrapper.joinWirelessNetwork(this);
@@ -303,9 +320,13 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
 
                     for(int i = 0; i < 3; i++){
                         ItemStack zpmStack = itemStackHandler.getStackInSlot(i);
-                        if(lastZPMPower.size() < i+1)
-                            lastZPMPower.add(-1);
-                        if(zpmStack.isEmpty())
+                        if(zpmIsDown.size() < i+1)
+                            zpmIsDown.add(false);
+                        /*if(zpmStates.size() < i+1)
+                            zpmStates.add(EnumZPMState.DOWN);
+                        */
+                        //if(zpmStack.isEmpty() || !this.zpmIsDown.get(i) || this.zpmStates.get(i) != EnumZPMState.DOWN)
+                        if(zpmStack.isEmpty() || !this.zpmIsDown.get(i))
                             // zpm not found -> skip extract process
                             continue;
 
@@ -322,9 +343,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                     lastZPMPowerLevel.add(0);
 
                 if(itemStackHandler.getStackInSlot(i).isEmpty()) continue;
-                int energyStoredTemp = Objects.requireNonNull(itemStackHandler.getStackInSlot(i).getCapability(CapabilityEnergy.ENERGY, null)).getEnergyStored();
-                lastZPMPower.set(i, energyStoredTemp);
-                energyStored += energyStoredTemp;
+                energyStored += Objects.requireNonNull(itemStackHandler.getStackInSlot(i).getCapability(CapabilityEnergy.ENERGY, null)).getEnergyStored();
             }
             energyTransferedLastTick = energyStored - energyStoredLastTick;
             energyStoredLastTick = energyStored;
@@ -332,7 +351,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
             markDirty();
         }
         else
-            AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_UPDATE));
+            AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
     }
 
 
@@ -354,7 +373,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     public State getState(StateTypeEnum stateType) {
         switch (stateType) {
             case RENDERER_STATE:
-            case RENDERER_UPDATE:
+                //return new ZPMHubRendererState(pos, animationStart, isPutting, zpmsCount, zpmAnimated, energyTransferedLastTick);
                 return new ZPMHubRendererState();
             case GUI_UPDATE:
                 return new ZPMHubContainerGuiUpdate(zpmsCount, energyTransferedLastTick);
@@ -368,7 +387,6 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     public State createState(StateTypeEnum stateType) {
         switch (stateType) {
             case RENDERER_STATE:
-            case RENDERER_UPDATE:
                 return new ZPMHubRendererState();
             case GUI_UPDATE:
                 return new ZPMHubContainerGuiUpdate();
@@ -383,26 +401,18 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         switch (stateType) {
             case RENDERER_STATE:
                 rendererStateClient = ((ZPMHubRendererState) state).initClient(pos, animationStart, isPutting, zpmsCount, zpmAnimated, energyTransferedLastTick);
-            case RENDERER_UPDATE:
-                if(getRendererStateClient() == null) rendererStateClient = ((ZPMHubRendererState) state).initClient(pos, animationStart, isPutting, zpmsCount, zpmAnimated, energyTransferedLastTick);
-                else rendererStateClient = getRendererStateClient();
-                rendererStateClient.energyTransferedLastTick = energyTransferedLastTick;
-                rendererStateClient.isPutting = isPutting;
-                rendererStateClient.zpmsCount = zpmsCount;
-                rendererStateClient.animationStart = animationStart;
-                rendererStateClient.zpmAnimated = zpmAnimated;
             case GUI_UPDATE:
                 if(!(state instanceof ZPMHubContainerGuiUpdate))
                     break;
                 ZPMHubContainerGuiUpdate guiUpdate = (ZPMHubContainerGuiUpdate) state;
                 zpmsCount = guiUpdate.zpmsCount;
+                //energyTransferedLastTick = guiUpdate.energyTransferedLastTick;
                 markDirty();
                 break;
 
             default:
                 throw new UnsupportedOperationException("EnumStateType." + stateType.name() + " not implemented on " + this.getClass().getName());
         }
-        markDirty();
     }
 
     // -----------------------------------------------------------------------------
@@ -458,12 +468,27 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         compound.setInteger("zpmsCount", zpmsCount);
         compound.setBoolean("isPutting", isPutting);
 
-        for(int i = 0; i < 3; i++){
-            if(lastZPMPower.size() < i+1) lastZPMPower.add(-1);
-            if(lastZPMPowerLevel.size() < i+1) lastZPMPowerLevel.add(-1);
+        compound.setByte("zpmMapSize", (byte) zpmIsDown.size());
+        for(int i = 0; i < zpmIsDown.size(); i++) {
+            compound.setBoolean("zpmMapZpm_" + i+1, zpmIsDown.get(i));
+        }
 
-            compound.setInteger("zpmPower_" + i, lastZPMPower.get(i));
-            compound.setInteger("zpmLevel_" + i, lastZPMPowerLevel.get(i));
+        /*compound.setByte("zpmMapSize2", (byte) zpmStates.size());
+        for(int i = 0; i < zpmStates.size(); i++) {
+            compound.setInteger("zpmMapZpmState_" + i+1, zpmStates.get(i).id);
+        }*/
+
+        for(int i = 0; i < 3; i++) {
+            if(lastZPMPowerLevel.size() < i+1)
+                compound.setInteger("zpmMapZpmLevel_" + i+1, -1);
+            else
+                compound.setInteger("zpmMapZpmLevel_" + i+1, lastZPMPowerLevel.get(i));
+
+
+            if(itemStackHandler.getStackInSlot(i).isEmpty() || lastZPMPower.size() < i+1)
+                compound.setInteger("zpmMapPower_" + i+1, -1);
+            else
+                compound.setInteger("zpmMapPower_" + i+1, lastZPMPower.get(i));
         }
 
         if (node != null) {
@@ -484,13 +509,51 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         zpmsCount = compound.getInteger("zpmsCount");
         isPutting = compound.getBoolean("isPutting");
 
-        lastZPMPower.clear();
-        lastZPMPowerLevel.clear();
-
-        for(int i = 0; i < 3; i++){
-            lastZPMPower.add(compound.getInteger("zpmPower_" + i));
-            lastZPMPowerLevel.add(compound.getInteger("zpmLevel_" + i));
+        int zpmMapSize = (int) compound.getByte("zpmMapSize");
+        if(zpmIsDown.size() < 1){
+            for (int i = 0; i < zpmMapSize; i++) {
+                zpmIsDown.add(compound.getBoolean("zpmMapZpm_" + i + 1));
+            }
         }
+        else {
+            for (int i = 0; i < zpmMapSize; i++) {
+                zpmIsDown.set(i, compound.getBoolean("zpmMapZpm_" + i + 1));
+            }
+        }
+
+       /* int zpmMapSize2 = (int) compound.getByte("zpmMapSize2");
+        if(zpmStates.size() < 1){
+            for (int i = 0; i < zpmMapSize2; i++) {
+                zpmStates.add(EnumZPMState.getValue((byte) compound.getInteger("zpmMapZpmState_" + i + 1)));
+            }
+        }
+        else {
+            for (int i = 0; i < zpmMapSize2; i++) {
+                zpmStates.set(i, EnumZPMState.getValue((byte) compound.getInteger("zpmMapZpmState_" + i + 1)));
+            }
+        }*/
+
+
+        for (int i = 0; i < 3; i++) {
+            if(lastZPMPowerLevel.size() < i+1)
+                lastZPMPowerLevel.add(compound.getInteger("zpmMapZpmLevel_" + i + 1));
+            else
+                lastZPMPowerLevel.set(i, compound.getInteger("zpmMapZpmLevel_" + i + 1));
+
+
+            if(lastZPMPower.size() < i+1)
+                lastZPMPower.add(compound.getInteger("zpmMapPower_" + i + 1));
+            else
+                lastZPMPower.set(i, compound.getInteger("zpmMapPower_" + i + 1));
+
+            if(lastZPMPower.get(i) != -1){
+                itemStackHandler.setStackInSlot(i, new ItemStack(Item.getItemFromBlock(AunisBlocks.ZPM)));
+                ((StargateItemEnergyStorage) Objects.requireNonNull(itemStackHandler.getStackInSlot(i).getCapability(CapabilityEnergy.ENERGY, null))).setEnergyStored(lastZPMPower.get(i));
+            }
+        }
+
+
+
 
         if (node != null && compound.hasKey("node")) node.load(compound.getCompoundTag("node"));
 
