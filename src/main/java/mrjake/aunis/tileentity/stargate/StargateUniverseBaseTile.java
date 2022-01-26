@@ -141,7 +141,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
   public void prepareGateToConnect(int dialedAddressSize, int time){
     time = time * dialedAddressSize;
-    int period = time - 60;
+    int period = time - 2000;
+    if(period < 0) period = 0;
     this.stargateState = EnumStargateState.INCOMING;
     sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 9, true);
     // do spin animation

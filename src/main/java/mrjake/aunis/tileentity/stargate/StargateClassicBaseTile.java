@@ -136,7 +136,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         isFinalActive = false;
 
-        if(stargateState != EnumStargateState.INCOMING){
+        if(stargateState != EnumStargateState.INCOMING && !isIncoming){
             updateChevronLight(0, false);
             sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, dialedAddress.size(), isFinalActive);
         }
@@ -166,7 +166,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             if(lastSpinFinished != null && scheduledTasks.contains(lastSpinFinished))
                 removeTask(lastSpinFinished);
             failGate();
-            disconnectGate();
+            if(!isIncoming) disconnectGate();
             if (type == 2 && this instanceof StargateUniverseBaseTile) {
                 addSymbolToAddressManual(G37, null);
                 playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);

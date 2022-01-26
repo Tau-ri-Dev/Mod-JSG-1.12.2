@@ -511,6 +511,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 }
                 else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
                     network.getStargate(dialedAddress).getTileEntity().disconnectGate(true);
+                    network.getStargate(dialedAddress).getTileEntity().stargateState = EnumStargateState.IDLE;
+                    network.getStargate(dialedAddress).getTileEntity().markDirty();
                     //addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, stargateState.dialingComputer() ? 83 : 53));
                 }
 
@@ -550,6 +552,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             }
             else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
                 network.getStargate(dialedAddress).getTileEntity().disconnectGate(true);
+                network.getStargate(dialedAddress).getTileEntity().stargateState = EnumStargateState.IDLE;
+                network.getStargate(dialedAddress).getTileEntity().markDirty();
                 //addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, stargateState.dialingComputer() ? 83 : 53));
             }
 

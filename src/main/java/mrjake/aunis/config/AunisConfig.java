@@ -97,6 +97,19 @@ public class AunisConfig {
         })
         public boolean fasterMWGateDial = false;
 
+        @Name("Milky/Uni gate speed factor")
+        @Comment({
+                "Speed factor of Milkyway and Universe gare"
+        })
+        @RangeDouble(min = 1.65f, max = 3)
+        public float classicGateSpinSpeed = 1.8f;
+
+        @Name("Enable opening last chevron while dialing with dhd")
+        @Comment({
+                "Enable opening last chevron while dialing milkyway gate with dhd"
+        })
+        public boolean dhdLastOpen = true;
+
         @Name("Disable animated Event Horizon")
         @Comment({
                 "Changing this option will require you to reload resources manually.",
@@ -317,7 +330,10 @@ public class AunisConfig {
         @RangeInt(min = 0)
         public int keepAliveBlockToEnergyRatioPerTick = 2;
 
-        @Name("Stargate instability threshold (seconds of energy left before gate becomes unstable)")
+        @Name("Stargate instability threshold")
+        @Comment({
+                "Seconds of energy left before gate becomes unstable",
+        })
         @RangeInt(min = 1)
         public int instabilitySeconds = 20;
 
