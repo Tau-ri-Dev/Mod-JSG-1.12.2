@@ -33,15 +33,19 @@ import mrjake.aunis.util.ILinkable;
 import mrjake.aunis.util.LinkingHelper;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.*;
+
+import static mrjake.aunis.state.stargate.StargateRendererActionState.EnumGateAction.OPEN_GATE;
 
 public class StargatePegasusBaseTile extends StargateClassicBaseTile implements ILinkable {
   @Override
@@ -201,19 +205,27 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
               int chevron = z / 4;
               int[] pattern = {1, 2, 3, 7, 8, 4, 5, 6, 9}; // pattern of chevrons
 
-              if(chevron < 9) {
-                if(pattern[chevron-1] < dialedAddressSize && !stargateState.idle()) {
-                  sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, (pattern[chevron - 1] + 9), false);
-                  playSoundEvent(StargateSoundEventEnum.INCOMING);
+              if(!stargateState.idle() && isIncoming) {
+                if (chevron < 9) {
+                  if (pattern[chevron - 1] < dialedAddressSize) {
+                    sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, (pattern[chevron - 1] + 9), false);
+                    playSoundEvent(StargateSoundEventEnum.INCOMING);
+                  }
+                }
+                else{
+                  sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, 0, true);
+                  playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
+                  playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
+                  timer.cancel();
                 }
               }
-              else if(!stargateState.idle()){
-                sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, 0, true);
-                playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
-                playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
-              }
               else{
-                sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 0, false);
+                isIncoming = false;
+                stargateState = EnumStargateState.IDLE;
+                addTask( new ScheduledTask(EnumScheduledTask.STARGATE_CLEAR_CHEVRONS, 10));
+                //sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 0, false);
+                playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
+                markDirty();
                 timer.cancel();
               }
             }
@@ -228,6 +240,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     } else {
       sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddressSize, false);
       playSoundEvent(StargateSoundEventEnum.INCOMING);
+      isIncoming = false;
+      markDirty();
     }
   }
 
@@ -397,6 +411,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   private BlockPos lastPos = BlockPos.ORIGIN;
 
   protected List<SymbolPegasusEnum> toDialSymbols = new ArrayList<SymbolPegasusEnum>();
+  protected EntityPlayer lastSender;
 
   public void resetToDialSymbols() {
     toDialSymbols.clear();
@@ -574,15 +589,29 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     return new int[]{9, 5, 1, 33, 29, 25, 21, 17, 13}[chevron.rotationIndex];
   }
 
+  public void addSymbolToAddressDHD(SymbolInterface targetSymbol, EntityPlayer sender) {
+    toDialSymbols.add((SymbolPegasusEnum) targetSymbol);
+    lastSender = sender;
+    markDirty();
+    if (isLinkedAndDHDOperational()) {
+      getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) targetSymbol);
+    }
+  }
+
   public void addSymbolToAddressDHD(SymbolInterface targetSymbol) {
     toDialSymbols.add((SymbolPegasusEnum) targetSymbol);
-
     if (isLinkedAndDHDOperational()) {
       getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) targetSymbol);
     }
   }
 
   public void addSymbolToAddressByList(SymbolInterface targetSymbol) {
+    if(((SymbolPegasusEnum) targetSymbol).brb()) {
+      StargateOpenResult openResult = attemptOpenAndFail();
+      if (openResult == StargateOpenResult.NOT_ENOUGH_POWER && lastSender != null)
+        lastSender.sendStatusMessage(new TextComponentTranslation("tile.aunis.stargatebase_block.not_enough_power"), true);
+      return;
+    }
     if(AunisConfig.dhdConfig.animatePegDHDDial) {
 
       Object context = null;
@@ -770,6 +799,9 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
          */
 
         break;
+
+      case STARGATE_CLEAR_CHEVRONS:
+        sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 0, false);
 
       default:
         break;

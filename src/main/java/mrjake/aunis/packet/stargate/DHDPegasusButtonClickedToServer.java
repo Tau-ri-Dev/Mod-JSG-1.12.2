@@ -75,18 +75,12 @@ public class DHDPegasusButtonClickedToServer extends PositionedPacket {
 					} else if ((gateState.idle() || gateState.dialing()) && !gateState.dialingComputer()) {
 						// Gate is idle, some glyph was pressed
 
-						if (message.symbol.brb()) {
-							// BRB pressed on idling gate, attempt to open
-
-							StargateOpenResult openResult = gateTile.attemptOpenAndFail();
-
-							if (openResult == StargateOpenResult.NOT_ENOUGH_POWER) {
-								player.sendStatusMessage(new TextComponentTranslation("tile.aunis.stargatebase_block.not_enough_power"), true);
-							}
-						} else if (gateTile.canAddSymbol(message.symbol)) {
+						if (message.symbol.brb())
+							gateTile.addSymbolToAddressDHD(message.symbol, player);
+						else if (gateTile.canAddSymbol(message.symbol)) {
 							// Not BRB, some other glyph pressed on idling gate, we can add this symbol now
 							//gateTile.addSymbolToAddressManual(message.symbol, null);
-							gateTile.addSymbolToAddressDHD(message.symbol);
+							gateTile.addSymbolToAddressDHD(message.symbol, player);
 						}
 					}
 

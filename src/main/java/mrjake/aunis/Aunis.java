@@ -114,7 +114,7 @@ public class Aunis {
     	GameRegistry.registerWorldGenerator(new AunisWorldGen(), 0);
 
     	// ThermalExpansion recipes
-    	if(Loader.isModLoaded("thermalexpansion")) {
+    	if(Loader.isModLoaded("thermalexpansion") && AunisConfig.integrationsConfig.tExpansionIntegration) {
             Aunis.info("Thermal Expansion found... Connecting...");
             ThermalIntegration.registerRecipes();
             Aunis.info("Successfully connected into Thermal Expansion!");
@@ -143,7 +143,7 @@ public class Aunis {
     	// OpenComputers
     	
     	try {
-	    	if (Loader.isModLoaded("opencomputers")) {
+	    	if (Loader.isModLoaded("opencomputers") && AunisConfig.integrationsConfig.ocIntegration) {
                 Aunis.info("OpenComputers found... Connecting...");
                 ocWrapper = (OCWrapperInterface) Class.forName(OC_WRAPPER_LOADED).newInstance();
                 Aunis.info("Successfully connected into OpenComputers!");

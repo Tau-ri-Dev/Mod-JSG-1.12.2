@@ -15,11 +15,11 @@ import mrjake.aunis.renderer.energy.ZPMHubRendererState;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundPositionedEnum;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
-import mrjake.aunis.stargate.power.StargateItemEnergyStorage;
 import mrjake.aunis.state.State;
 import mrjake.aunis.state.StateProviderInterface;
 import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.util.AunisItemStackHandler;
+import mrjake.aunis.zpm.EnumZPMState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -45,14 +45,6 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-
-
-
-//TODO(Mine): TODO LIST COMPLEX:
-//
-// todo: open computers shit
-// todo: fix update renderer state when game loads (from nbts)
-
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
 public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProvider, StateProviderInterface, Environment, WirelessEndpoint {
 
@@ -61,7 +53,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     private int zpmsCount = 0;
     public int zpmAnimated = 0;
 
-    //private ArrayList<EnumZPMState> zpmStates = new ArrayList<EnumZPMState>(3);
+    private ArrayList<EnumZPMState> zpmStates = new ArrayList<EnumZPMState>(3);
     public ArrayList<Integer> lastZPMPowerLevel = new ArrayList<Integer>(3);
     public ArrayList<Integer> lastZPMPower = new ArrayList<Integer>(3);
 
@@ -110,7 +102,6 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                             lastZPMPowerLevel.set(i, this.getStackInSlot(i).getCapability(CapabilityEnergy.ENERGY, null).getEnergyStored());
                         }
                         else {
-                            lastZPMPowerLevel.set(i, 0);
                             lastZPMPower.set(i, -1);
                         }
                     }
@@ -382,15 +373,19 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     public void setState(StateTypeEnum stateType, State state) {
         switch (stateType) {
             case RENDERER_STATE:
-                rendererStateClient = ((ZPMHubRendererState) state).initClient(pos, animationStart, isPutting, zpmsCount, zpmAnimated, energyTransferedLastTick);
+                rendererStateClient = ((ZPMHubRendererState) state).initClient(pos, animationStart, isPutting, zpmsCount, zpmAnimated, energyTransferedLastTick, lastZPMPowerLevel, lastZPMPower);
+                break;
             case RENDERER_UPDATE:
-                if(getRendererStateClient() == null) rendererStateClient = ((ZPMHubRendererState) state).initClient(pos, animationStart, isPutting, zpmsCount, zpmAnimated, energyTransferedLastTick);
+                if(getRendererStateClient() == null) rendererStateClient = ((ZPMHubRendererState) state).initClient(pos, animationStart, isPutting, zpmsCount, zpmAnimated, energyTransferedLastTick, lastZPMPowerLevel, lastZPMPower);
                 else rendererStateClient = getRendererStateClient();
                 rendererStateClient.energyTransferedLastTick = energyTransferedLastTick;
                 rendererStateClient.isPutting = isPutting;
                 rendererStateClient.zpmsCount = zpmsCount;
                 rendererStateClient.animationStart = animationStart;
                 rendererStateClient.zpmAnimated = zpmAnimated;
+                rendererStateClient.lastZPMPowerLevel = lastZPMPowerLevel;
+                rendererStateClient.lastZPMPower = lastZPMPower;
+                break;
             case GUI_UPDATE:
                 if(!(state instanceof ZPMHubContainerGuiUpdate))
                     break;

@@ -89,7 +89,7 @@ public class AunisConfig {
         @Comment({
                 "Change this to true, if you want to use 8 chevrons between pegasus and milkyway gates"
         })
-        public boolean pegAndMilkUseEightChevrons = false;
+        public boolean pegAndMilkUseEightChevrons = true;
 
         @Name("Faster MilkyWay gate computer dial")
         @Comment({
@@ -438,7 +438,7 @@ public class AunisConfig {
                 "(in seconds (2280 = 38 minutes))"
         })
         @RangeInt(min = 5, max = 3000)
-        public int maxOpenedSeconds = 2280;
+        public int maxOpenedSeconds = 240;
 
         @Name("What happens after the open time reach this time")
         @Comment({
@@ -510,6 +510,9 @@ public class AunisConfig {
 
     public static class WorldGenConfig {
         @Name("Enable Naquadah ore generation")
+        @Comment({
+                "Do you want to spawn naquadah ores in the Nether?",
+        })
         public boolean naquadahEnable = true;
 
         @Name("Naquadah vein size")
@@ -519,6 +522,9 @@ public class AunisConfig {
         public int naquadahMaxVeinInChunk = 16;
 
         @Name("Enable Trinium ore generation")
+        @Comment({
+                "Do you want to spawn trinium ores in the End?",
+        })
         public boolean triniumEnabled = true;
 
         @Name("Trinium vein size")
@@ -528,6 +534,9 @@ public class AunisConfig {
         public int triniumMaxVeinInChunk = 4;
 
         @Name("Enable Titanium ore generation")
+        @Comment({
+                "Do you want to spawn naquadah ores in the Overworld?",
+        })
         public boolean titaniumEnable = true;
 
         @Name("Titanium vein size")
@@ -539,21 +548,36 @@ public class AunisConfig {
 
     public static class MainMenuConfig {
         @Name("Disable Aunis main menu - WARNING: Requires reloading")
+        @Comment({
+                "Disables showing custom main menu",
+        })
         public boolean disableAunisMainMenu = false;
 
         @Name("Disable custom positions of buttons")
+        @Comment({
+                "Disables custom positions of buttons in main menu",
+        })
         public boolean disablePosButtons = false;
 
         @Name("Enable debug mode")
         public boolean debugMode = false;
 
         @Name("Enable event horizon in mainmenu")
+        @Comment({
+                "Do you want gate activation when starting game?",
+        })
         public boolean enableEventHorizon = true;
 
         @Name("Enable changing gate overlay")
+        @Comment({
+                "Enable/disable random gate overlays in main menu",
+        })
         public boolean changingGateOverlay = true;
 
         @Name("Enable gate rotation")
+        @Comment({
+                "Should ring of gate be static in main menu?",
+        })
         public boolean gateRotation = true;
 
         @Name("Play music in main menu")
@@ -562,14 +586,20 @@ public class AunisConfig {
 
     public static class IntegrationsConfig {
         @Name("Enable Tinkers' Construct integration")
-        public boolean tConstructIntegration = false;
+        public boolean tConstructIntegration = true;
+
+        @Name("Enable Open Computers integration")
+        public boolean ocIntegration = true;
+
+        @Name("Enable Thermal Expansion integration")
+        public boolean tExpansionIntegration = true;
     }
 
     public static class RandomIncomingConfig {
 
         @Name("Enable random incoming wormholes")
         @Comment({
-                "Enable random incoming wormholes"
+                "Enable random incoming wormholes generator"
         })
         public boolean enableRandomIncoming = true;
 
@@ -594,18 +624,6 @@ public class AunisConfig {
     }
 
     public static class DevConfig {
-        @Name("ZPMHub zpms location X")
-        public double[] zpmHubZpmsX = {
-                1.0,
-                1.0,
-                1.0,
-        };
-        @Name("ZPMHub zpms location Z")
-        public double[] zpmHubZpmsZ = {
-                1.0,
-                1.0,
-                1.0,
-        };
     }
 
     public static void resetCache() {

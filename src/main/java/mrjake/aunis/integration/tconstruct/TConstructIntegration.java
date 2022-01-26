@@ -22,7 +22,6 @@ public class TConstructIntegration {
     public static void initFluids() {
         List<MoltenMaterial> fluidList = new ArrayList<>();
         fluidList.add(new MoltenMaterial("trinium_molten", "Trinium", true));
-        // todo fix texture
         fluidList.add(new MoltenMaterial("titanium_molten", "Titanium", true, 1843758));
 
 

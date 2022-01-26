@@ -185,7 +185,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
     public void prepareGateToConnect(int dialedAddressSize, int period) {
         if(stargateState == EnumStargateState.DIALING_COMPUTER) abortDialingSequence(1);
-        period -= (80/dialedAddressSize);
+        period -= (1000/dialedAddressSize);
         this.stargateState = EnumStargateState.INCOMING;
         markDirty();
 
@@ -196,16 +196,19 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 public void run() {
-                    if (i[0] < dialedAddressSize && !stargateState.idle()) {
-                        playSoundEvent(StargateSoundEventEnum.INCOMING);
-                        sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, i[0] + 9, false);
-                        i[0]++;
-                    }
-                    else if(!stargateState.idle()){
-                        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 10));
-                        timer.cancel();
+                    if(!stargateState.idle()) {
+                        if (i[0] < dialedAddressSize && isIncoming) {
+                            playSoundEvent(StargateSoundEventEnum.INCOMING);
+                            sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, i[0] + 9, false);
+                            i[0]++;
+                        } else {
+                            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 1));
+                            timer.cancel();
+                        }
                     }
                     else{
+                        stargateState = EnumStargateState.IDLE;
+                        markDirty();
                         sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 0, false);
                         timer.cancel();
                     }
@@ -214,6 +217,8 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         } else {
             sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddressSize, false);
             playSoundEvent(StargateSoundEventEnum.INCOMING);
+            isIncoming = false;
+            markDirty();
         }
     }
 

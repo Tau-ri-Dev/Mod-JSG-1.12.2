@@ -181,7 +181,7 @@ public class AunisMainMenuOnLoad extends AunisMainMenu {
         GlStateManager.enableTexture2D();
         GlStateManager.translate(screenCenterWidth, screenCenterHeight + 100, 0);
         GlStateManager.scale(1.5f, 1.5f, 1.5f);
-        drawCenteredString(fontRenderer, "Click here to continue...", 0, 0, 0xa4a4a4);
+        drawCenteredString(fontRenderer, "Press any button to continue...", 0, 0, 0xa4a4a4);
         GlStateManager.disableTexture2D();
         GlStateManager.popMatrix();
 

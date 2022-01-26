@@ -141,6 +141,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
   public void prepareGateToConnect(int dialedAddressSize, int time){
     time = time * dialedAddressSize;
+    int period = time - 60;
     this.stargateState = EnumStargateState.INCOMING;
     sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 9, true);
     // do spin animation
@@ -151,12 +152,17 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     if(((time/1000)*20)+40 >= StargateClassicSpinHelper.getAnimationDuration(360)){
       timer.schedule(new TimerTask() {
         public void run() {
-          if (irisMode == EnumIrisMode.AUTO && isOpened()) {
+          if (irisMode == EnumIrisMode.AUTO && isOpened() && isIncoming) {
             toggleIris();
+            isIncoming = false;
+          }
+          if(!isIncoming){
+            stargateState = EnumStargateState.IDLE;
+            markDirty();
           }
           timer.cancel();
         }
-      }, time, 100);
+      }, period, 100);
 
       addSymbolToAddressManual(SymbolUniverseEnum.G37, null);
 
@@ -169,15 +175,19 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
       timer.schedule(new TimerTask() {
         public void run() {
-          if (irisMode == EnumIrisMode.AUTO && isOpened()) {
-            toggleIris();
+          if (isIncoming){
+            if (irisMode == EnumIrisMode.AUTO && isOpened()) {
+              toggleIris();
+            }
+            sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
+            sendSignal(null, "stargate_incoming_wormhole", new Object[]{dialedAddressSize});
+            playSoundEvent(StargateSoundEventEnum.INCOMING);
           }
-          sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
-          sendSignal(null, "stargate_incoming_wormhole", new Object[]{dialedAddressSize});
-          playSoundEvent(StargateSoundEventEnum.INCOMING);
+          isIncoming = false;
+          markDirty();
           timer.cancel();
         }
-      }, time, 100);
+      }, period, 100);
 
     }
   }

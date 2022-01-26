@@ -40,7 +40,8 @@ public enum EnumScheduledTask {
   STARGATE_GIVE_PAGE(25, -1),
   STARGATE_DIAL_NEXT(26, -1),
   BEAMER_TOGGLE_SOUND(27, -1),
-  STARGATE_DIAL_FINISHED(28, -1);
+  STARGATE_DIAL_FINISHED(28, -1),
+  STARGATE_CLEAR_CHEVRONS(29, 10);
 
     public int id;
   public int waitTicks;
