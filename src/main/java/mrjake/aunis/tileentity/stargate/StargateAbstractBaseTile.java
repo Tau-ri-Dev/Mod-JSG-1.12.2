@@ -388,6 +388,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     public void attemptClose(StargateClosedReasonEnum reason) {
+        if(reason == null) return;
         if ((new StargateClosingEvent(this, targetGatePos.getTileEntity(), isInitiating, reason).post() || new StargateClosingEvent(targetGatePos.getTileEntity(), this, !isInitiating, reason).post()) && reason.equals(StargateClosedReasonEnum.REQUESTED))
             return;
 
@@ -656,6 +657,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         targetGatePos = null;
         connectedToGate = false;
         connectingToGate = false;
+        isIncoming = false;
 
         markDirty();
     }
@@ -887,7 +889,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 int energyStored = getEnergyStorage().getEnergyStored();
 
                 // Max Open Time
-                targetGatePos.getTileEntity().addTimeLimitSecond();
+                if(targetGatePos.getTileEntity() != null) targetGatePos.getTileEntity().addTimeLimitSecond();
                 int morePower = doTimeLimitFunc();
                 energySecondsToClose = energyStored / (float) (keepAliveEnergyPerTick + morePower + shieldKeepAlive) / 20f;
 

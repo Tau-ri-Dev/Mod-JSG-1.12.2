@@ -646,6 +646,8 @@ public class AunisConfig {
     }
 
     public static class DevConfig {
+        @Name("Fast uni dial")
+        public boolean fastUniDial = false;
     }
 
     public static void resetCache() {

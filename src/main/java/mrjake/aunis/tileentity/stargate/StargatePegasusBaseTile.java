@@ -421,7 +421,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     if (!world.isRemote) {
 
       if ((toDialSymbols.size() > 0) && (world.getTotalWorldTime() % 2 == 0) && stargateState.idle()) {
-        if (canAddSymbolInternal(toDialSymbols.get(0))){
+        if (canAddSymbolInternal(toDialSymbols.get(0)) || toDialSymbols.get(0) == SymbolPegasusEnum.BRB){
 
           SymbolPegasusEnum next = null;
           boolean continueDialing = false;

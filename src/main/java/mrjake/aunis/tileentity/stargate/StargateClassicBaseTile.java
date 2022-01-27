@@ -856,13 +856,14 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 break;
 
             case STARGATE_SPIN_FINISHED:
-                isSpinning = false;
-                currentRingSymbol = targetRingSymbol;
-
-                if(!(this instanceof StargatePegasusBaseTile))
-                    playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
-                else if(!((StargatePegasusBaseTile) this).continueDialing)
-                    playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
+                if(!(this instanceof StargateUniverseBaseTile && ((StargateUniverseBaseTile) this).isFastDialing)) {
+                    isSpinning = false;
+                    currentRingSymbol = targetRingSymbol;
+                    if (!(this instanceof StargatePegasusBaseTile))
+                        playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
+                    else if (!((StargatePegasusBaseTile) this).continueDialing)
+                        playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
+                }
 
                 playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
 

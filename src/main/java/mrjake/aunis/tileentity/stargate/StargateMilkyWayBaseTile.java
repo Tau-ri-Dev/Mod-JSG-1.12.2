@@ -541,7 +541,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
                 sendRenderingUpdate(EnumGateAction.CHEVRON_OPEN, 0, false);
 
-                if(stargateState.incoming() || stargateState.unstable() || stargateState.dialingDHD()){
+                if(stargateState.incoming() || stargateState.unstable() || stargateState.dialingDHD() || isIncoming){
                     addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN_SECOND, 7));
                     return;
                 }
@@ -565,7 +565,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 break;
 
             case STARGATE_CHEVRON_LIGHT_UP:
-                if(stargateState.incoming() || stargateState.unstable() || stargateState.dialingDHD()) {
+                if(stargateState.incoming() || stargateState.unstable() || stargateState.dialingDHD() || isIncoming) {
                     sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, 0, true);
                     addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_CLOSE, 10));
                     return;
@@ -582,7 +582,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 break;
 
             case STARGATE_CHEVRON_CLOSE:
-                if(stargateState.incoming()) {
+                if(stargateState.incoming() || isIncoming) {
                     playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
                     sendRenderingUpdate(EnumGateAction.CHEVRON_CLOSE, 0, false);
                     return;

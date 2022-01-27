@@ -24,11 +24,9 @@ import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
+import static mrjake.aunis.stargate.network.SymbolUniverseEnum.G37;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
 public class StargateUniverseBaseTile extends StargateClassicBaseTile {
@@ -37,13 +35,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
   public void setUpCooldown(){
     actionsCooldown = 60;
-  }
-
-  @Override
-  public void update(){
-    if(actionsCooldown > 0)
-      actionsCooldown--;
-    super.update();
   }
 
 
@@ -60,14 +51,19 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
   private int maxSymbols;
   private boolean abortDialing;
   private boolean dialingNearby = false;
+  private double entryDelay = 0;
+  public boolean isFastDialing = false;
 
   public void dial(StargateAddress stargateAddress, int glyphsToDial, boolean nearby) {
     if(actionsCooldown > 1) return;
     setUpCooldown();
-    addressToDial = stargateAddress;
+    addAddressToDial(stargateAddress);
+
+    /*addressToDial = stargateAddress;
     addressPosition = 0;
     maxSymbols = glyphsToDial;
     abortDialing = false;
+    isFastDialing = false;
     dialingNearby = nearby;
 
     stargateState = EnumStargateState.DIALING;
@@ -78,6 +74,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     updateChevronLight(9, true);
 
     markDirty();
+    */
   }
 
   public void abort(boolean force) {
@@ -85,6 +82,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     setUpCooldown();
     //abortDialingSequence(1);
     abortDialing = true;
+    entryDelay = 0;
+    isFastDialing = false;
     markDirty();
   }
 
@@ -95,6 +94,9 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
   @Override
   public void failGate() {
     super.failGate();
+    entryDelay = 0;
+    isFastDialing = false;
+    markDirty();
 
     if (targetRingSymbol != TOP_CHEVRON)
       addSymbolToAddressManual(TOP_CHEVRON, null);
@@ -103,10 +105,13 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
   @Override
   protected void disconnectGate() {
     super.disconnectGate();
+    entryDelay = 0;
+    isFastDialing = false;
 
     /*if (targetRingSymbol != TOP_CHEVRON)
       addSymbolToAddressManual(TOP_CHEVRON, null);*/
     addSymbolToAddressManual(TOP_CHEVRON, null);
+    markDirty();
   }
 
   @Override
@@ -114,7 +119,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     if (context != null) stargateState = EnumStargateState.DIALING_COMPUTER;
     else stargateState = EnumStargateState.DIALING;
 
-    if (stargateState.dialingComputer() && dialedAddress.size() == 0 && !targetSymbol.equals(SymbolUniverseEnum.G37)) {
+    if (stargateState.dialingComputer() && dialedAddress.size() == 0 && !targetSymbol.equals(G37)) {
       AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_UNIVERSE_DIAL_START);
       sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
 
@@ -123,6 +128,59 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
       addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 35, taskData));
       ringSpinContext = context;
     } else super.addSymbolToAddressManual(targetSymbol, context);
+  }
+
+  @Override
+  public void update(){
+    if(actionsCooldown > 0)
+      actionsCooldown--;
+    super.update();
+  }
+
+  public void addSymbolToAddressFast(SymbolInterface symbol) {
+    targetRingSymbol = symbol;
+    int delay = (int) ((entryDelay-20 > 10) ? Math.round(entryDelay-20) : Math.round(entryDelay));
+    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, delay));
+    markDirty();
+  }
+
+  // todo(Mine): something here starts loop and ends after gate stops spinning
+  public void addAddressToDial(StargateAddress address) {
+    addressToDial = address;
+    StargateAddressDynamic addressV2 = new StargateAddressDynamic(SymbolTypeEnum.UNIVERSE);
+    addressV2.clear();
+    addressV2.addAll(address);
+    if(!canDialAddress(addressV2)){
+      AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_UNIVERSE_DIAL_FAILED);
+      addressToDial = null;
+      markDirty();
+      return;
+    }
+    addressPosition = 0;
+    maxSymbols = addressToDial.getSize();
+    abortDialing = false;
+    dialingNearby = false;
+    isFastDialing = true;
+    stargateState = EnumStargateState.DIALING_COMPUTER;
+
+    if (dialedAddress.size() == 0) {
+      AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_UNIVERSE_DIAL_START);
+      sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
+      super.addSymbolToAddressManual(G37, null);
+      int duration = StargateClassicSpinHelper.getAnimationDuration(360);
+      entryDelay = ((double) duration/maxSymbols) - 40;
+      addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 15, null));
+      ringSpinContext = null;
+      StargateAbstractBaseTile targetTile = Objects.requireNonNull(network.getStargate(address)).getTileEntity();
+      if(targetTile != null){
+        targetTile.isIncoming = true;
+        targetTile.markDirty();
+        targetTile.incomingWormhole(maxSymbols, (int) Math.round(entryDelay));
+      }
+
+    }
+
+    markDirty();
   }
 
   @Override
@@ -165,7 +223,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
         }
       }, period, 100);
 
-      addSymbolToAddressManual(SymbolUniverseEnum.G37, null);
+      addSymbolToAddressManual(G37, null);
 
       sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
       sendSignal(null, "stargate_incoming_wormhole", new Object[]{dialedAddressSize});
@@ -230,8 +288,10 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
       case STARGATE_DIAL_NEXT:
         if (customData != null && customData.hasKey("symbolToDial"))
           super.addSymbolToAddressManual(getSymbolType().valueOfSymbol(customData.getInteger("symbolToDial")), ringSpinContext);
-        else
+        else if (!isFastDialing)
           addSymbolToAddressManual(addressPosition >= maxSymbols ? getSymbolType().getOrigin() : addressToDial.get(addressPosition), null);
+        else if (isFastDialing)
+          addSymbolToAddressFast(addressPosition >= maxSymbols ? getSymbolType().getOrigin() : addressToDial.get(addressPosition));
 
         addressPosition++;
 
@@ -239,26 +299,35 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
       case STARGATE_SPIN_FINISHED:
         if (targetRingSymbol != TOP_CHEVRON) {
-          if (canAddSymbol(targetRingSymbol) && !abortDialing) {
-            addSymbolToAddress(targetRingSymbol);
-            activateSymbolServer(targetRingSymbol);
+          if(targetRingSymbol != G37) {
+            if (canAddSymbol(targetRingSymbol) && !abortDialing) {
+              addSymbolToAddress(targetRingSymbol);
+              activateSymbolServer(targetRingSymbol);
 
-            if (stargateState.dialingComputer()) {
-              stargateState = EnumStargateState.IDLE;
-              addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_FINISHED, 10));
-            } else {
-
-              if (!stargateWillLock(targetRingSymbol))
-                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 14));
-              else {
-                attemptOpenAndFail();
+              if (stargateState.dialingComputer() && !isFastDialing) {
+                stargateState = EnumStargateState.IDLE;
+                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_FINISHED, 10));
+              } else {
+                if (!stargateWillLock(targetRingSymbol)) {
+                  if(isFastDialing) addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_FINISHED, 5));
+                  addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, isFastDialing ? 2 : 14));
+                }
+                else {
+                  if(isFastDialing)
+                    currentRingSymbol = TOP_CHEVRON;
+                  isFastDialing = false;
+                  if(!dialedAddress.contains(SymbolUniverseEnum.G17))
+                    this.dialedAddress.addSymbol(SymbolUniverseEnum.G17);
+                  markDirty();
+                  attemptOpenAndFail();
+                }
               }
-            }
-          } else {
-            dialingFailed(abortDialing ? StargateOpenResult.ABORTED : StargateOpenResult.ADDRESS_MALFORMED);
+            } else {
+              dialingFailed(abortDialing ? StargateOpenResult.ABORTED : StargateOpenResult.ADDRESS_MALFORMED);
 
-            stargateState = EnumStargateState.IDLE;
-            abortDialing = false;
+              stargateState = EnumStargateState.IDLE;
+              abortDialing = false;
+            }
           }
         }
         else if(abortDialing){
