@@ -143,18 +143,6 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       if (activateSymbol) getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) symbol);
     }
 
-    if (symbol.origin() && dialedAddress.size() >= 6 && dialedAddress.equals(StargateNetwork.EARTH_ADDRESS) && !network.isStargateInNetwork(StargateNetwork.EARTH_ADDRESS)) {
-      if (StargateDimensionConfig.netherOverworld8thSymbol()) {
-        if (dialedAddress.size() == 7 && dialedAddress.getLast() == SymbolPegasusEnum.SUBIDO) {
-          dialedAddress.clear();
-          dialedAddress.addAll(network.getLastActivatedOrlins().subList(0, 7));
-        }
-      } else {
-        dialedAddress.clear();
-        dialedAddress.addAll(network.getLastActivatedOrlins().subList(0, 6));
-      }
-    }
-
     super.addSymbolToAddress(symbol);
   }
 
@@ -424,14 +412,34 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     return !((dialedAddress.size()) >= getMaxChevrons());
   }
 
+  protected boolean continueDialing = false;
+
   @Override
   public void update() {
     super.update();
 
     if (!world.isRemote) {
 
-      if ((toDialSymbols.size() > 0) && (world.getTotalWorldTime() % 5 == 0) && stargateState.idle()) {
-        if (canAddSymbolInternal(toDialSymbols.get(0))) addSymbolToAddressByList(toDialSymbols.get(0));
+      if ((toDialSymbols.size() > 0) && (world.getTotalWorldTime() % 2 == 0) && stargateState.idle()) {
+        if (canAddSymbolInternal(toDialSymbols.get(0))){
+
+          SymbolPegasusEnum next = null;
+          boolean continueDialing = false;
+
+          for (SymbolPegasusEnum toDialSymbol : toDialSymbols) {
+            if (toDialSymbol != toDialSymbols.get(0) && toDialSymbol != SymbolPegasusEnum.BRB) {
+              next = toDialSymbol;
+              break;
+            }
+          }
+
+          if(next != null && toDialSymbols.size() > 1 && AunisConfig.stargateConfig.pegasContinueDial) continueDialing = true;
+
+          this.continueDialing = continueDialing;
+          markDirty();
+
+          addSymbolToAddressByList(toDialSymbols.get(0));
+        }
         if(toDialSymbols.size() > 0) toDialSymbols.remove(0);
       }
     }

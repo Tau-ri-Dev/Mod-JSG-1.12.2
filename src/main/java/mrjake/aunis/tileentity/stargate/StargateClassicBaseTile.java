@@ -67,6 +67,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.CapabilityItemHandler;
+import scala.reflect.internal.Trees;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -858,7 +859,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 isSpinning = false;
                 currentRingSymbol = targetRingSymbol;
 
-                playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
+                if(!(this instanceof StargatePegasusBaseTile))
+                    playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
+                else if(!((StargatePegasusBaseTile) this).continueDialing)
+                    playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
+
                 playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
 
                 markDirty();

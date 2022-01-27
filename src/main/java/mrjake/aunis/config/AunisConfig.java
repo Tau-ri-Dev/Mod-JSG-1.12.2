@@ -110,6 +110,12 @@ public class AunisConfig {
         })
         public boolean dhdLastOpen = true;
 
+        @Name("Continuing dial on pegasus gate DHD")
+        @Comment({
+                "Enable continuing dial on pegasus DHD"
+        })
+        public boolean pegasContinueDial = true;
+
         @Name("Disable animated Event Horizon")
         @Comment({
                 "Changing this option will require you to reload resources manually.",
