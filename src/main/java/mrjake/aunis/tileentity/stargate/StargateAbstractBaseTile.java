@@ -497,9 +497,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      *
      * @param symbol Currently added symbol.
      */
-    protected void addSymbolToAddress(SymbolInterface symbol) {
+    protected void addSymbolToAddress(SymbolInterface symbol, boolean addSymbol) {
         if (!canAddSymbol(symbol)) throw new IllegalStateException("Cannot add that symbol");
-        dialedAddress.addSymbol(symbol);
+        if(addSymbol) dialedAddress.addSymbol(symbol);
         StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
         dialAddr_backup.clear();
         dialAddr_backup.addAll(dialedAddress);
@@ -507,20 +507,27 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             if(dialedAddress.size() >= 6) {
                 dialedAddress.addOrigin();
 
-                if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate && !network.getStargate(dialedAddress).getTileEntity().stargateState.incoming()) {
+                if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate && !Objects.requireNonNull(network.getStargate(dialedAddress)).getTileEntity().stargateState.incoming()) {
                     connectingToGate = true;
                 }
                 else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
-                    network.getStargate(dialedAddress).getTileEntity().disconnectGate(true);
-                    network.getStargate(dialedAddress).getTileEntity().stargateState = EnumStargateState.IDLE;
-                    network.getStargate(dialedAddress).getTileEntity().markDirty();
-                    //addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, stargateState.dialingComputer() ? 83 : 53));
+                    StargateAbstractBaseTile targetTile = Objects.requireNonNull(network.getStargate(dialedAddress)).getTileEntity();
+                    if(targetTile != null) {
+                        targetTile.disconnectGate(true);
+                        targetTile.stargateState = EnumStargateState.IDLE;
+                        targetTile.markDirty();
+                    }
                 }
 
                 dialedAddress.clear();
                 dialedAddress.addAll(dialAddr_backup);
             }
         }
+        markDirty();
+    }
+
+    protected void addSymbolToAddress(SymbolInterface symbol){
+        addSymbolToAddress(symbol, true);
     }
 
     protected void doIncomingAnimation(int time, boolean byComputer){

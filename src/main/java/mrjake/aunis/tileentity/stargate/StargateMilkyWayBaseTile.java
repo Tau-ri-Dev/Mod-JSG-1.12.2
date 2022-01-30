@@ -1,5 +1,6 @@
 package mrjake.aunis.tileentity.stargate;
 
+import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateDimensionConfig;
@@ -136,23 +137,44 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
     @Override
     public void addSymbolToAddress(SymbolInterface symbol) {
-        if (symbol.origin() && dialedAddress.size() >= 6 && dialedAddress.equals(StargateNetwork.EARTH_ADDRESS) && !network.isStargateInNetwork(StargateNetwork.EARTH_ADDRESS)) {
-            if (StargateDimensionConfig.netherOverworld8thSymbol()) {
-                if (dialedAddress.size() == 7 && dialedAddress.getLast() == SymbolMilkyWayEnum.SERPENSCAPUT) {
-                    dialedAddress.clear();
-                    dialedAddress.addAll(network.getLastActivatedOrlins().subList(0, 7));
-                }
-            } else {
-                dialedAddress.clear();
-                dialedAddress.addAll(network.getLastActivatedOrlins().subList(0, 6));
-            }
-        }
+        StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
+        dialAddr_backup.clear();
+        dialAddr_backup.addAll(dialedAddress);
+        dialedAddress.addSymbol(symbol);
 
-        super.addSymbolToAddress(symbol);
+        boolean isEarth = tryDialEarth(dialedAddress) || tryDialEarth(dialAddr_backup);
+        if(isEarth) {
+            super.addSymbolToAddress(symbol, false);
+        }
+        else {
+            dialedAddress.clear();
+            dialedAddress.addAll(dialAddr_backup);
+            super.addSymbolToAddress(symbol);
+        }
 
         if (isLinkedAndDHDOperational()) {
             getLinkedDHD(world).activateSymbol((SymbolMilkyWayEnum) symbol);
         }
+    }
+
+    public boolean tryDialEarth(StargateAddressDynamic dialedAddress){
+
+        if (dialedAddress.size() >= 6 && dialedAddress.equalsV2(StargateNetwork.EARTH_ADDRESS) && !network.isStargateInNetwork(StargateNetwork.EARTH_ADDRESS)) {
+            if (StargateDimensionConfig.netherOverworld8thSymbol()) {
+                if (dialedAddress.size() == 7 && dialedAddress.getLast() == SymbolMilkyWayEnum.SERPENSCAPUT) {
+                    dialedAddress.clear();
+                    dialedAddress.addAll(network.getLastActivatedOrlins().subList(0, 7));
+                    markDirty();
+                    return true;
+                }
+            } else {
+                dialedAddress.clear();
+                dialedAddress.addAll(network.getLastActivatedOrlins().subList(0, 6));
+                markDirty();
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

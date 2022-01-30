@@ -45,8 +45,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static mrjake.aunis.state.stargate.StargateRendererActionState.EnumGateAction.OPEN_GATE;
-
 public class StargatePegasusBaseTile extends StargateClassicBaseTile implements ILinkable {
   @Override
   public StargateSizeEnum getStargateSize() {

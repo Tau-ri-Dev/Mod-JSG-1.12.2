@@ -21,7 +21,7 @@ public class StargateClassicSpinHelper implements ISpinHelper {
 
   }
 
-  public static final float A_ANGLE_PER_TICK = AunisConfig.stargateConfig.classicGateSpinSpeed;
+  public static float A_ANGLE_PER_TICK = AunisConfig.stargateConfig.classicGateSpinSpeed;
   public static final float U_SPEEDUP_TIME = 35;
   public static final float S_STOP_TIME = 25;
 

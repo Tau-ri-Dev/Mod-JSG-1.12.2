@@ -76,6 +76,7 @@ import java.util.*;
 import static mrjake.aunis.item.AunisItems.UPGRADE_IRIS;
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.PHYSICAL_IRIS_ANIMATION_LENGTH;
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.SHIELD_IRIS_ANIMATION_LENGTH;
+import static mrjake.aunis.stargate.StargateClassicSpinHelper.A_ANGLE_PER_TICK;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.G37;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
@@ -267,6 +268,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
          * Stargate Random Incoming Generator (RIG)
          */
         if(!world.isRemote) {
+
+            if(A_ANGLE_PER_TICK != AunisConfig.stargateConfig.classicGateSpinSpeed)
+                A_ANGLE_PER_TICK = AunisConfig.stargateConfig.classicGateSpinSpeed;
 
             // Load entities
             String[] entityListString = AunisConfig.randomIncoming.entitiesToSpawn;
@@ -856,14 +860,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 break;
 
             case STARGATE_SPIN_FINISHED:
-                if(!(this instanceof StargateUniverseBaseTile && ((StargateUniverseBaseTile) this).isFastDialing)) {
-                    isSpinning = false;
-                    currentRingSymbol = targetRingSymbol;
-                    if (!(this instanceof StargatePegasusBaseTile))
-                        playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
-                    else if (!((StargatePegasusBaseTile) this).continueDialing)
-                        playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
-                }
+                isSpinning = false;
+                currentRingSymbol = targetRingSymbol;
+                if (!(this instanceof StargatePegasusBaseTile))
+                    playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
+                else if (!((StargatePegasusBaseTile) this).continueDialing)
+                    playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
 
                 playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
 

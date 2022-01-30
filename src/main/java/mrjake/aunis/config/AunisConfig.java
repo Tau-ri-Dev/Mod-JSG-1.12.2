@@ -99,7 +99,7 @@ public class AunisConfig {
 
         @Name("Milky/Uni gate speed factor")
         @Comment({
-                "Speed factor of Milkyway and Universe gare"
+                "Speed factor of Milkyway and Universe gate"
         })
         @RangeDouble(min = 1.65f, max = 3)
         public float classicGateSpinSpeed = 1.8f;

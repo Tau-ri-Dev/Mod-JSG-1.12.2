@@ -2,6 +2,7 @@ package mrjake.aunis.stargate;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.Aunis;
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.util.math.*;
@@ -19,7 +20,7 @@ public class StargatePegasusSpinHelper implements ISpinHelper {
 
   }
 
-  public static final float A_ANGLE_PER_TICK = 5;
+  public static float A_ANGLE_PER_TICK = 5;
   public static final float U_SPEEDUP_TIME = 0;
   public static final float S_STOP_TIME = 0;
 

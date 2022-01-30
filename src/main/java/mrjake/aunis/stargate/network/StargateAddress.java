@@ -185,4 +185,15 @@ public class StargateAddress implements INBTSerializable<NBTTagCompound> {
 			return false;
 		return true;
 	}
+
+	public boolean equalsV2(StargateAddressDynamic address) {
+		for(int i = 0; i < address.getSize(); i++){
+			if(this.address.size() >= i+1){
+				if(this.address.get(i) != address.get(i))
+					return false;
+			}
+			else return false;
+		}
+		return true;
+	}
 }

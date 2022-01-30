@@ -80,7 +80,7 @@ public class StargateNetwork extends WorldSavedData {
   // ---------------------------------------------------------------------------------------------------------
   // Nether gate
 
-  public static final StargateAddressDynamic EARTH_ADDRESS = new StargateAddressDynamic(SymbolTypeEnum.MILKYWAY);
+  public static StargateAddressDynamic EARTH_ADDRESS = new StargateAddressDynamic(SymbolTypeEnum.MILKYWAY);
 
   static {
     EARTH_ADDRESS.addSymbol(SymbolMilkyWayEnum.AURIGA);

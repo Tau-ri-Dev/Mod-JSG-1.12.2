@@ -117,10 +117,9 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 	
 	@Override
 	public void openGate(StargatePos targetGatePos, boolean isInitiating) {
-		super.openGate(targetGatePos, isInitiating);
-		
 		if (world.provider.getDimensionType() == DimensionType.OVERWORLD)
 			StargateNetwork.get(world).setLastActivatedOrlins(gateAddressMap.get(SymbolTypeEnum.MILKYWAY));
+		super.openGate(targetGatePos, isInitiating);
 	}
 	
 	@Override
@@ -203,7 +202,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 		
 		if ((isPowered && !power) || (!isPowered && power)) {
 			isPowered = power;
-						
+
 			if (isPowered && stargateState.idle() && !isBroken()) {
 				switch (checkAddressAndEnergy(dialedAddress)) {
 					case OK:
