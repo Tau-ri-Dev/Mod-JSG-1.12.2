@@ -604,7 +604,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 break;
 
             case STARGATE_CHEVRON_CLOSE:
-                if(stargateState.incoming() || isIncoming) {
+                if(stargateState.incoming() || stargateState.dialingDHD() || isIncoming) {
                     playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
                     sendRenderingUpdate(EnumGateAction.CHEVRON_CLOSE, 0, false);
                     return;
