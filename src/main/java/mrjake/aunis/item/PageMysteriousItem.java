@@ -42,7 +42,7 @@ public class PageMysteriousItem extends Item {
 			GeneratedStargate stargate = StargateGenerator.generateStargate(world);
 			
 			if (stargate != null) {
-				NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(stargate.address, false, stargate.path);
+				NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(stargate.address, stargate.hasUpgrade, stargate.path);
 				
 				ItemStack stack = new ItemStack(AunisItems.PAGE_NOTEBOOK_ITEM, 1, 1);
 				stack.setTagCompound(compound);

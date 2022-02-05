@@ -3,7 +3,9 @@ package mrjake.aunis.util;
 import li.cil.oc.api.event.RackMountableRenderEvent.TileEntity;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
+import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
 import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
+import mrjake.aunis.tileentity.stargate.StargatePegasusBaseTile;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -19,7 +21,7 @@ public class LinkingHelper {
    * @param world        World instance.
    * @param startPos     Starting position.
    * @param radius       Radius. Subtracted and added to the startPos.
-   * @param targetBlock. Searched block instance. Must provide {@link TileEntity} and {@link TileEntity} should implement {@link ILinkable}.
+   * @param targetBlock  Searched block instance. Must provide {@link TileEntity} and {@link TileEntity} should implement {@link ILinkable}.
    *
    * @return Found block's {@link BlockPos}. Null if not found.
    */
@@ -67,6 +69,17 @@ public class LinkingHelper {
     if (dhdMilkyWayTile != null) {
       int linkId = getLinkId();
       dhdMilkyWayTile.setLinkedGate(gatePos, linkId);
+      gateTile.setLinkedDHD(dhdPos, linkId);
+    }
+  }
+
+  public static void updateLinkedPegasusGate(World world, BlockPos gatePos, BlockPos dhdPos) {
+    StargatePegasusBaseTile gateTile = (StargatePegasusBaseTile) world.getTileEntity(gatePos);
+    DHDPegasusTile dhdTile = (DHDPegasusTile) world.getTileEntity(dhdPos);
+
+    if (dhdTile != null) {
+      int linkId = getLinkId();
+      dhdTile.setLinkedGate(gatePos, linkId);
       gateTile.setLinkedDHD(dhdPos, linkId);
     }
   }

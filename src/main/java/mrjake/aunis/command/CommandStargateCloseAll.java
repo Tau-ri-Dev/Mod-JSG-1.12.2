@@ -112,13 +112,14 @@ public class CommandStargateCloseAll extends CommandBase {
 							
 			StargateAbstractBaseTile gateTile = stargatePos.getTileEntity();
 			
-			if (gateTile != null) {					
-				if (gateTile.getStargateState().initiating() || (force && gateTile.getStargateState().engaged())) {
-					gateTile.attemptClose(StargateClosedReasonEnum.COMMAND);
-					closed++;
+			if (gateTile != null) {
+				if(!gateTile.resetRandomIncoming()) {
+					if (gateTile.getStargateState().initiating() || (force && gateTile.getStargateState().engaged())) {
+						gateTile.attemptClose(StargateClosedReasonEnum.COMMAND);
+						closed++;
+					}
 				}
-				else if(gateTile.resetRandomIncoming())
-					closed++;
+				else closed++;
 			}
 			
 			else {
