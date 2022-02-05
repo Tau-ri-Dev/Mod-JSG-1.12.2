@@ -497,9 +497,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      *
      * @param symbol Currently added symbol.
      */
-    protected void addSymbolToAddress(SymbolInterface symbol, boolean addSymbol) {
+    // todo: fix something on mw gate
+    protected void addSymbolToAddress(SymbolInterface symbol, int addSymbol) {
         if (!canAddSymbol(symbol)) throw new IllegalStateException("Cannot add that symbol");
-        if(addSymbol) dialedAddress.addSymbol(symbol);
+        if(addSymbol == 1) dialedAddress.addSymbol(symbol);
         StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
         dialAddr_backup.clear();
         dialAddr_backup.addAll(dialedAddress);
@@ -527,7 +528,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     protected void addSymbolToAddress(SymbolInterface symbol){
-        addSymbolToAddress(symbol, true);
+        addSymbolToAddress(symbol, 1);
     }
 
     protected void doIncomingAnimation(int time, boolean byComputer){

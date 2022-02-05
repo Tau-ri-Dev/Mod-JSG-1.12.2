@@ -43,6 +43,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static mrjake.aunis.stargate.StargateClassicSpinHelper.A_ANGLE_PER_TICK;
+
 public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements ILinkable {
     @Override
     public StargateSizeEnum getStargateSize() {
@@ -142,9 +144,9 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         dialAddr_backup.addAll(dialedAddress);
         dialedAddress.addSymbol(symbol);
 
-        boolean isEarth = tryDialEarth(dialedAddress) || tryDialEarth(dialAddr_backup);
+        boolean isEarth = tryDialEarth();
         if(isEarth) {
-            super.addSymbolToAddress(symbol, false);
+            super.addSymbolToAddress(symbol, 0);
         }
         else {
             dialedAddress.clear();
@@ -157,7 +159,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         }
     }
 
-    public boolean tryDialEarth(StargateAddressDynamic dialedAddress){
+    public boolean tryDialEarth(){
 
         if (dialedAddress.size() >= 6 && dialedAddress.equalsV2(StargateNetwork.EARTH_ADDRESS) && !network.isStargateInNetwork(StargateNetwork.EARTH_ADDRESS)) {
             if (StargateDimensionConfig.netherOverworld8thSymbol()) {
@@ -431,6 +433,11 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         super.update();
 
         if (!world.isRemote) {
+
+            // config ring speed factor
+            if(A_ANGLE_PER_TICK != AunisConfig.stargateConfig.classicGateSpinSpeed)
+                A_ANGLE_PER_TICK = AunisConfig.stargateConfig.classicGateSpinSpeed;
+
             if (!lastPos.equals(pos)) {
                 lastPos = pos;
 
@@ -607,6 +614,9 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 if(stargateState.incoming() || stargateState.dialingDHD() || isIncoming) {
                     playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
                     sendRenderingUpdate(EnumGateAction.CHEVRON_CLOSE, 0, false);
+                    if(stargateState.dialingDHD())
+                        stargateState = EnumStargateState.IDLE;
+                    markDirty();
                     return;
                 }
 

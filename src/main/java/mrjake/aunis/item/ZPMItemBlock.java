@@ -52,6 +52,9 @@ public class ZPMItemBlock extends ItemBlock {
 		
 		String energyPercent = String.format("%.2f", energyStorage.getEnergyStored()/(float)AunisConfig.powerConfig.zpmEnergyStorage * 100) + " %";
 		tooltip.add(energyPercent);
+
+		String alert = "Work in progress item!";
+		tooltip.add(alert);
 	}
 	
 	@Override

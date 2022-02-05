@@ -269,9 +269,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
          */
         if(!world.isRemote) {
 
-            if(A_ANGLE_PER_TICK != AunisConfig.stargateConfig.classicGateSpinSpeed)
-                A_ANGLE_PER_TICK = AunisConfig.stargateConfig.classicGateSpinSpeed;
-
             // Load entities
             String[] entityListString = AunisConfig.randomIncoming.entitiesToSpawn;
             List<Entity> entityList = new ArrayList<Entity>();

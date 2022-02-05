@@ -2,6 +2,7 @@ package mrjake.aunis.block.zpm;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.tileentity.energy.ZPMHubTile;
 import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
@@ -14,6 +15,7 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -27,9 +29,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class ZPMHubBlock extends Block {
 
@@ -42,7 +47,7 @@ public class ZPMHubBlock extends Block {
         setUnlocalizedName(Aunis.ModID + "." + blockName);
 
         setSoundType(SoundType.METAL);
-        setCreativeTab(Aunis.aunisEnergyCreativeTab);
+        //setCreativeTab(Aunis.aunisEnergyCreativeTab);
 
         setLightOpacity(0);
 
@@ -93,6 +98,12 @@ public class ZPMHubBlock extends Block {
             int facing = MathHelper.floor((double) ((placer.rotationYaw) * 16.0F / 360.0F) + 0.5D) & 0x0F;
             world.setBlockState(pos, state.withProperty(AunisProps.ROTATION_HORIZONTAL, facing), 3);
         }
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {
+        String alert = "Work in progress item!";
+        tooltip.add(alert);
     }
 
     @Override
