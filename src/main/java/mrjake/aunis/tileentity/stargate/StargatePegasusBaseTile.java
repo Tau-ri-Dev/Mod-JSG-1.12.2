@@ -596,12 +596,12 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   }
 
   public void addSymbolToAddressDHD(SymbolInterface targetSymbol, EntityPlayer sender) {
+    if (isLinkedAndDHDOperational() && (targetSymbol != SymbolPegasusEnum.BRB) || toDialSymbols.size() > 0) {
+      getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) targetSymbol);
+    }
     toDialSymbols.add((SymbolPegasusEnum) targetSymbol);
     lastSender = sender;
     markDirty();
-    if (isLinkedAndDHDOperational()) {
-      getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) targetSymbol);
-    }
   }
 
   public void addSymbolToAddressDHD(SymbolInterface targetSymbol) {

@@ -3,9 +3,7 @@ package mrjake.aunis.item.notebook;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.renderer.AunisFontRenderer;
 import mrjake.aunis.item.renderer.ItemRenderHelper;
-import mrjake.aunis.stargate.network.StargateAddress;
-import mrjake.aunis.stargate.network.SymbolInterface;
-import mrjake.aunis.stargate.network.SymbolTypeEnum;
+import mrjake.aunis.stargate.network.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -13,6 +11,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+
+import java.util.Objects;
 
 public class PageRenderer {
 	
@@ -30,20 +30,6 @@ public class PageRenderer {
 		GL11.glTexCoord2f(0, 0); GL11.glVertex3f(0.04f + x, 0.79f - y + h, 0.011f);
 		
 	    GL11.glEnd();
-	    
-	    // Render shadow
-// 		GlStateManager.color(0, 0, 0, 0.2f);
-//	    GL11.glBegin(GL11.GL_QUADS);
-//		
-//		x += symbol.getSymbolType() == SymbolTypeEnum.PEGASUS ?  0.008f : 0.01f;
-//		y += symbol.getSymbolType() == SymbolTypeEnum.PEGASUS ?  0.008f : 0.01f;
-//		
-//		GL11.glTexCoord2f(0, 1); GL11.glVertex3f(0.04f + x, 0.79f - y, 0.01f);
-//		GL11.glTexCoord2f(1, 1); GL11.glVertex3f(0.04f + x + w, 0.79f - y, 0.01f);
-//		GL11.glTexCoord2f(1, 0); GL11.glVertex3f(0.04f + x + w, 0.79f - y + h, 0.01f); // 0.2
-//		GL11.glTexCoord2f(0, 0); GL11.glVertex3f(0.04f + x, 0.79f - y + h, 0.01f);
-//		
-//	    GL11.glEnd();
 	}
 	
 	public static void renderByCompound(TransformType lastTransform, NBTTagCompound compound) {	
@@ -59,7 +45,6 @@ public class PageRenderer {
 		
 		else {
 			boolean mainhand = lastTransform == TransformType.FIRST_PERSON_RIGHT_HAND;
-//			Aunis.info("mainhand: " + AunisItems.PAGE_NOTEBOOK_ITEM.getLastTransform());
 			EnumHandSide handSide = mainhand ? EnumHandSide.RIGHT : EnumHandSide.LEFT;
 			
 			GlStateManager.pushMatrix();
@@ -88,25 +73,28 @@ public class PageRenderer {
 		int maxSymbols = symbolType.getMaxSymbolsDisplay(compound.getBoolean("hasUpgrade"));
 		
 		for (int i=0; i<maxSymbols; i++) {
+			float x = 0.21f*(i%3);
+			float y = 0.20f*(i/3) + 0.14f;
+
 			if (symbolType == SymbolTypeEnum.UNIVERSE) {
-				float x = 0.10f*(i%6);
-				float y = 0.20f*(i/6) + 0.18f;
-				
+				y = 0.20f*(i/3) + 0.18f;
+				x += 0.04f;
 				renderSymbol(x, y, 0.095f, 0.2f, stargateAddress.get(i));
 			}
-			
 			else {
-				float x = 0.21f*(i%3);
-				float y = 0.20f*(i/3) + 0.14f;
-				
 				renderSymbol(x, y, 0.2f, 0.2f, stargateAddress.get(i));
 			}
 		}
-		
-//		if (symbolType == SymbolTypeEnum.UNIVERSE)
-//			renderSymbol(0.26f, 0.74f, 0.095f, 0.2f, symbolType.getOrigin());
-//		else
-//			renderSymbol(0.21f, 0.74f, 0.2f, 0.2f, symbolType.getOrigin());
+
+		float x = 0.10f * 2;
+		float y = 0.20f*(3) + 0.14f;
+		float w = 0.2f;
+		if (symbolType == SymbolTypeEnum.UNIVERSE) {
+			w = 0.095f;
+			x = 0.10f * 2.5f;
+		}
+
+		renderSymbol(x, y, w, 0.2f, Objects.requireNonNull(symbolType.getOrigin()));
 		
 		String name = PageNotebookItem.getNameFromCompound(compound);
 		

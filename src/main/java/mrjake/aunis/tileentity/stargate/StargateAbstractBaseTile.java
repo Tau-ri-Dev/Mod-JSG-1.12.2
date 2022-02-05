@@ -148,7 +148,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         if (stargateState.initiating()) {
             attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
-        } else if (stargateState.engaged()) {
+        } else if (stargateState.engaged() && targetGatePos != null) {
             targetGatePos.getTileEntity().attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
         }
 
