@@ -616,6 +616,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       StargateOpenResult openResult = attemptOpenAndFail();
       if (openResult == StargateOpenResult.NOT_ENOUGH_POWER && lastSender != null)
         lastSender.sendStatusMessage(new TextComponentTranslation("tile.aunis.stargatebase_block.not_enough_power"), true);
+      if(openResult == StargateOpenResult.ADDRESS_MALFORMED)
+        Aunis.devInfo("Seš piča blbá123");
       return;
     }
     if(AunisConfig.dhdConfig.animatePegDHDDial) {
@@ -752,12 +754,15 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         if (canAddSymbol(targetRingSymbol)) {
           if(stargateState == EnumStargateState.DIALING_COMPUTER) addSymbolToAddress(targetRingSymbol, true);
           else addSymbolToAddress(targetRingSymbol, false);
+          addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN_SECOND, 0));
 
+          /*
           if (stargateWillLock(targetRingSymbol)) {
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN_SECOND, 0));
             if (!checkAddressAndEnergy(dialedAddress).ok())
               addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_FAIL, 60));
           } else addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN_SECOND, 0));
+          */
         } else addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_FAIL, 60));
 
         break;

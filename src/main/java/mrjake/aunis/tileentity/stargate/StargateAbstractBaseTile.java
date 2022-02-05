@@ -265,6 +265,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public StargateOpenResult attemptOpenAndFail() {
         ResultTargetValid resultTarget = attemptOpenDialed();
         if(resultTarget == null){
+            Aunis.devInfo("Seš piča blbá");
             return StargateOpenResult.ADDRESS_MALFORMED;
         }
 
@@ -1311,6 +1312,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(tPos, StateTypeEnum.FLASH_STATE, new StargateFlashState(isCurrentlyUnstable)), new TargetPoint(targetGatePos.dimensionID, tPos.getX(), tPos.getY(), tPos.getZ(), 512));
         }
     }
+
+    // Linking (sg generator)
+    public abstract void setLinkedDHD(BlockPos dhdPos, int linkId);
 
 
     // ------------------------------------------------------------------------

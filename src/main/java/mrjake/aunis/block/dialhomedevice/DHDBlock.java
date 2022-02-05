@@ -151,7 +151,7 @@ public class DHDBlock extends Block {
     StargateAbstractBaseTile gateTile = dhdMilkyWayTile.getLinkedGate(world);
 
     if (gateTile == null) {
-      Aunis.logger.error("gateTile was null while getting power for DHD. Did you use Mysterious Page? ;)");
+      //Aunis.logger.error("gateTile was null while getting power for DHD. Did you use Mysterious Page? ;)");
       return 0;
     }
 

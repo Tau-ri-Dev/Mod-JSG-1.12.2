@@ -6,12 +6,11 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateSizeEnum;
 import mrjake.aunis.fluid.AunisFluids;
 import mrjake.aunis.item.AunisItems;
-import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
-import mrjake.aunis.stargate.merging.StargatePegasusMergeHelper;
 import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
-import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
-import mrjake.aunis.tileentity.stargate.StargatePegasusBaseTile;
+import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
+import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
+import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.util.LinkingHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -35,6 +34,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 import java.util.Map;
 import java.util.Random;
+
 
 /**
  * TODO Unify this and {@link StargateGeneratorNether} (replace this)
@@ -75,10 +75,11 @@ public class StargateGenerator {
 			case EAST:  rotation = Rotation.NONE; break;
 			default:    rotation = Rotation.NONE; break;
 		}
-		int chance = new Random().nextInt(100);
-		if(chance < 50)
-			return generateStargateDesertMW(worldToSpawn, pos, facing, rotation);
-		return generateStargateDesertPG(worldToSpawn, pos, facing, rotation);
+		/*boolean pegasusGate = new Random().nextInt(100) < 50; // 50% chance
+		return generateStargateDesert(worldToSpawn, pos, facing, rotation, pegasusGate);*/
+		//todo(Mine): Fix peg gate not recognized as gate
+		return generateStargateDesert(worldToSpawn, pos, facing, rotation, false);
+
 	}
 
 	private static final int SG_SIZE_X = 12;
@@ -163,7 +164,7 @@ public class StargateGenerator {
 		return maxFacing;
 	}
 
-	private static GeneratedStargate generateStargateDesertMW(World world, BlockPos pos, EnumFacing facing, Rotation rotation) {
+	private static GeneratedStargate generateStargateDesert(World world, BlockPos pos, EnumFacing facing, Rotation rotation, boolean pegasusGate) {
 		WorldServer worldServer = (WorldServer) world;
 		MinecraftServer server = world.getMinecraftServer();
 
@@ -172,6 +173,7 @@ public class StargateGenerator {
 
 		String templateName = "sg_";
 		templateName += desert ? "desert" : "plains";
+		if(pegasusGate) templateName += "_pg";
 		templateName += AunisConfig.stargateSize == StargateSizeEnum.LARGE ? "_large" : "_small";
 
 		TemplateManager templateManager = worldServer.getStructureTemplateManager();
@@ -195,7 +197,7 @@ public class StargateGenerator {
 
 					world.getTileEntity(gatePos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(4, new ItemStack(AunisBlocks.CAPACITOR_BLOCK), false);
 
-					StargateMilkyWayMergeHelper.INSTANCE.updateMembersBasePos(world, gatePos, facing);
+					((StargateAbstractBaseTile) world.getTileEntity(gatePos)).getMergeHelper().updateMembersBasePos(world, gatePos, facing);
 
 					world.setBlockToAir(dataPos);
 					world.setBlockToAir(dataPos.down()); // save block
@@ -211,8 +213,13 @@ public class StargateGenerator {
 					else {
 						int fluid = AunisConfig.powerConfig.stargateEnergyStorage / AunisConfig.dhdConfig.energyPerNaquadah;
 
-						world.getTileEntity(dhdPos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(0, new ItemStack(AunisItems.CRYSTAL_CONTROL_DHD), false);
-						((FluidTank) world.getTileEntity(dhdPos).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)).fillInternal(new FluidStack(AunisFluids.moltenNaquadahRefined, fluid), true);
+						DHDAbstractTile dhdTile = (DHDAbstractTile) world.getTileEntity(dhdPos);
+
+						ItemStack crystal = new ItemStack(pegasusGate ? AunisItems.CRYSTAL_CONTROL_PEGASUS_DHD : AunisItems.CRYSTAL_CONTROL_DHD);
+
+						dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(0, crystal, false);
+						if(pegasusGate) dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(1, new ItemStack(AunisItems.CRYSTAL_GLYPH_DHD), false);
+						((FluidTank) dhdTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)).fillInternal(new FluidStack(AunisFluids.moltenNaquadahRefined, fluid), true);
 					}
 
 					world.setBlockToAir(dataPos);
@@ -220,78 +227,11 @@ public class StargateGenerator {
 			}
 
 			LinkingHelper.updateLinkedGate(world, gatePos, dhdPos);
-			StargateMilkyWayBaseTile gateTile = (StargateMilkyWayBaseTile) world.getTileEntity(gatePos);
+			StargateClassicBaseTile gateTile = (StargateClassicBaseTile) world.getTileEntity(gatePos);
+			gateTile.refresh();
+			gateTile.markDirty();
 
-			return new GeneratedStargate(gateTile.getStargateAddress(SymbolTypeEnum.MILKYWAY), biome.getRegistryName().getResourcePath(), false);
-		}
-
-		else {
-			Aunis.logger.error("template null");
-		}
-
-		return null;
-	}
-
-	private static GeneratedStargate generateStargateDesertPG(World world, BlockPos pos, EnumFacing facing, Rotation rotation) {
-		WorldServer worldServer = (WorldServer) world;
-		MinecraftServer server = world.getMinecraftServer();
-
-		Biome biome = world.getBiome(pos);
-		boolean desert = biome.getRegistryName().getResourcePath().contains("desert");
-
-		String templateName = "sg_";
-		templateName += desert ? "desert_pg" : "plains_pg";
-		templateName += AunisConfig.stargateSize == StargateSizeEnum.LARGE ? "_large" : "_small";
-
-		TemplateManager templateManager = worldServer.getStructureTemplateManager();
-		Template template = templateManager.getTemplate(server, new ResourceLocation(Aunis.ModID, templateName));
-
-		if (template != null) {
-			Random rand = new Random();
-
-			PlacementSettings settings = new PlacementSettings().setIgnoreStructureBlock(false).setRotation(rotation);
-			template.addBlocksToWorld(world, pos, settings);
-
-			Map<BlockPos, String> datablocks = template.getDataBlocks(pos, settings);
-			BlockPos gatePos = null;
-			BlockPos dhdPos = null;
-
-			for (BlockPos dataPos : datablocks.keySet()) {
-				String name = datablocks.get(dataPos);
-
-				if (name.equals("base")) {
-					gatePos = dataPos.add(0, -3, 0);
-
-					world.getTileEntity(gatePos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(4, new ItemStack(AunisBlocks.CAPACITOR_BLOCK), false);
-
-					StargatePegasusMergeHelper.INSTANCE.updateMembersBasePos(world, gatePos, facing);
-
-					world.setBlockToAir(dataPos);
-					world.setBlockToAir(dataPos.down()); // save block
-				}
-
-				else if (name.equals("dhd")) {
-					dhdPos = dataPos.down();
-
-					if (rand.nextFloat() < AunisConfig.mysteriousConfig.despawnDhdChance) {
-						world.setBlockToAir(dhdPos);
-					}
-
-					else {
-						int fluid = AunisConfig.powerConfig.stargateEnergyStorage / AunisConfig.dhdConfig.energyPerNaquadah;
-
-						world.getTileEntity(dhdPos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(0, new ItemStack(AunisItems.CRYSTAL_CONTROL_PEGASUS_DHD), false);
-						((FluidTank) world.getTileEntity(dhdPos).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)).fillInternal(new FluidStack(AunisFluids.moltenNaquadahRefined, fluid), true);
-					}
-
-					world.setBlockToAir(dataPos);
-				}
-			}
-
-			LinkingHelper.updateLinkedPegasusGate(world, gatePos, dhdPos);
-			StargatePegasusBaseTile gateTile = (StargatePegasusBaseTile) world.getTileEntity(gatePos);
-
-			return new GeneratedStargate(gateTile.getStargateAddress(SymbolTypeEnum.MILKYWAY), biome.getRegistryName().getResourcePath(), true);
+			return new GeneratedStargate(gateTile.getStargateAddress(SymbolTypeEnum.MILKYWAY), biome.getRegistryName().getResourcePath(), pegasusGate);
 		}
 
 		else {

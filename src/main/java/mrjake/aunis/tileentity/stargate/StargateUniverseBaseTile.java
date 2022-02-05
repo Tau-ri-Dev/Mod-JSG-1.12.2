@@ -33,6 +33,8 @@ import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
 public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
+  public void setLinkedDHD(BlockPos dhdPos, int linkId) {}
+
   private long actionsCooldown = 0; //ticks
 
   public void setUpCooldown(){

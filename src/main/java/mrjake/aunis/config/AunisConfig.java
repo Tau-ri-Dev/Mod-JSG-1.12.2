@@ -110,9 +110,9 @@ public class AunisConfig {
         })
         public boolean dhdLastOpen = true;
 
-        @Name("Continuing dial on pegasus gate DHD")
+        @Name("Smooth dialing on pegasus gate DHD")
         @Comment({
-                "Enable continuing dial on pegasus DHD"
+                "Enable smooth dialing on pegasus DHD"
         })
         public boolean pegasContinueDial = true;
 
@@ -646,8 +646,8 @@ public class AunisConfig {
     }
 
     public static class DevConfig {
-        @Name("Fast uni dial")
-        public boolean fastUniDial = false;
+        @Name("Show developer messages")
+        public boolean showDevMessages = false;
     }
 
     public static void resetCache() {

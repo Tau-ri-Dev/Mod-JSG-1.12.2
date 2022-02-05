@@ -2,8 +2,11 @@ package mrjake.aunis.util;
 
 import li.cil.oc.api.event.RackMountableRenderEvent.TileEntity;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
+import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
+import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
 import mrjake.aunis.tileentity.stargate.StargatePegasusBaseTile;
 import net.minecraft.block.Block;
@@ -63,19 +66,8 @@ public class LinkingHelper {
   }
 
   public static void updateLinkedGate(World world, BlockPos gatePos, BlockPos dhdPos) {
-    StargateMilkyWayBaseTile gateTile = (StargateMilkyWayBaseTile) world.getTileEntity(gatePos);
-    DHDMilkyWayTile dhdMilkyWayTile = (DHDMilkyWayTile) world.getTileEntity(dhdPos);
-
-    if (dhdMilkyWayTile != null) {
-      int linkId = getLinkId();
-      dhdMilkyWayTile.setLinkedGate(gatePos, linkId);
-      gateTile.setLinkedDHD(dhdPos, linkId);
-    }
-  }
-
-  public static void updateLinkedPegasusGate(World world, BlockPos gatePos, BlockPos dhdPos) {
-    StargatePegasusBaseTile gateTile = (StargatePegasusBaseTile) world.getTileEntity(gatePos);
-    DHDPegasusTile dhdTile = (DHDPegasusTile) world.getTileEntity(dhdPos);
+    StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(gatePos);
+    DHDAbstractTile dhdTile = (DHDAbstractTile) world.getTileEntity(dhdPos);
 
     if (dhdTile != null) {
       int linkId = getLinkId();
