@@ -17,8 +17,6 @@ import mrjake.aunis.integration.tconstruct.TConstructIntegration;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.proxy.IProxy;
-import mrjake.aunis.sound.AunisSoundCategory;
-import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.worldgen.AunisWorldGen;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.datafix.FixTypes;
@@ -193,5 +191,9 @@ public class Aunis {
 
     public static void warn(String string) {
         logger.warn(string);
+    }
+
+    public static void error(String string){
+	    logger.error(string);
     }
 }

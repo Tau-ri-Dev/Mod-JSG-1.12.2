@@ -205,31 +205,8 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 		if ((isPowered && !power) || (!isPowered && power)) {
 			isPowered = power;
 
-			if (isPowered && stargateState.idle() && !isBroken()) {
-				switch (checkAddressAndEnergy(dialedAddress)) {
-					case OK:
-						stargateState = EnumStargateState.DIALING;
-						
-						startSparks();
-						AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_ORLIN_DIAL);
-						
-						addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ORLIN_OPEN));
-						break;
-						
-					case ADDRESS_MALFORMED:
-						Aunis.logger.error("Orlin's gate: wrong dialed address");
-						break;
-						
-					case NOT_ENOUGH_POWER:
-						Aunis.logger.info("Orlin's gate: Not enough power");
-						break;
-						
-					case ABORTED:
-					case ABORTED_BY_EVENT:
-					case CALLER_HUNG_UP:
-						break;
-				}
-			}
+			if (isPowered && stargateState.idle() && !isBroken())
+				beginOpening();
 			
 			else if (!isPowered && stargateState.initiating()) {
 				attemptClose(StargateClosedReasonEnum.REQUESTED);
@@ -237,6 +214,34 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 			
 			markDirty();
 		}
+	}
+
+	public boolean beginOpening(){
+		if(isBroken()) return false;
+		switch (checkAddressAndEnergy(dialedAddress)) {
+			case OK:
+				stargateState = EnumStargateState.DIALING;
+
+				startSparks();
+				AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_ORLIN_DIAL);
+
+				addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ORLIN_OPEN));
+				return true;
+
+			case ADDRESS_MALFORMED:
+				Aunis.error("Orlin's gate: wrong dialed address");
+				break;
+
+			case NOT_ENOUGH_POWER:
+				Aunis.info("Orlin's gate: Not enough power");
+				break;
+
+			case ABORTED:
+			case ABORTED_BY_EVENT:
+			case CALLER_HUNG_UP:
+				break;
+		}
+		return false;
 	}
 	
 	
@@ -447,5 +452,38 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 	@Callback
 	public Object[] getGateType(Context context, Arguments args) {
 		return new Object[] {isMerged() ? "ORLIN" : null};
+	}
+
+	@Optional.Method(modid = "opencomputers")
+	@Callback(doc = "function() -- Tries to open the gate")
+	public Object[] engageGate(Context context, Arguments args) {
+		if (!isMerged()) return new Object[]{null, "stargate_failure_not_merged", "Stargate is not merged"};
+
+		if (stargateState.idle()) {
+			if(!isBroken()) {
+				beginOpening();
+				return new Object[]{null, "stargate_engage"};
+			}
+			else{
+				return new Object[]{null, "stargate_failure_opening", "Stargate is broken"};
+			}
+		} else {
+			return new Object[]{null, "stargate_failure_busy", "Stargate is busy", stargateState.toString()};
+		}
+	}
+
+	@Optional.Method(modid = "opencomputers")
+	@Callback(doc = "function() -- Tries to close the gate")
+	public Object[] disengageGate(Context context, Arguments args) {
+		if (!isMerged()) return new Object[]{null, "stargate_failure_not_merged", "Stargate is not merged"};
+
+		if (stargateState.engaged()) {
+			if (getStargateState().initiating()) {
+				attemptClose(StargateClosedReasonEnum.REQUESTED);
+				return new Object[]{"stargate_disengage"};
+			} else return new Object[]{null, "stargate_failure_wrong_end", "Unable to close the gate on this end"};
+		} else {
+			return new Object[]{null, "stargate_failure_not_open", "The gate is closed"};
+		}
 	}
 }
