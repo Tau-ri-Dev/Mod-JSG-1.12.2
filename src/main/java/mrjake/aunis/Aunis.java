@@ -194,8 +194,4 @@ public class Aunis {
     public static void warn(String string) {
         logger.warn(string);
     }
-
-    public static void devInfo(String string){
-	    if(AunisConfig.devConfig.showDevMessages) logger.info(string);
-    }
 }

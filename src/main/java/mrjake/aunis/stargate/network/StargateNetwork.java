@@ -55,7 +55,8 @@ public class StargateNetwork extends WorldSavedData {
 
   @Nullable
   public StargatePos getStargate(StargateAddress address) {
-    if (address == null) return null;
+    if (address == null)
+      return null;
 
     return getMapFromAddress(address).get(address);
   }

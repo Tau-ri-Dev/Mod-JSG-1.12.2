@@ -648,6 +648,9 @@ public class AunisConfig {
     public static class DevConfig {
         @Name("Show developer messages")
         public boolean showDevMessages = false;
+
+        @Name("Enable peg gates with myst pages")
+        public boolean pegGatesMyst = false;
     }
 
     public static void resetCache() {

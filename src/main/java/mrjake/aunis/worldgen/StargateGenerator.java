@@ -7,6 +7,7 @@ import mrjake.aunis.config.StargateSizeEnum;
 import mrjake.aunis.fluid.AunisFluids;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.stargate.network.StargateAddress;
+import mrjake.aunis.stargate.network.StargatePos;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
@@ -75,10 +76,8 @@ public class StargateGenerator {
 			case EAST:  rotation = Rotation.NONE; break;
 			default:    rotation = Rotation.NONE; break;
 		}
-		/*boolean pegasusGate = new Random().nextInt(100) < 50; // 50% chance
-		return generateStargateDesert(worldToSpawn, pos, facing, rotation, pegasusGate);*/
-		//todo(Mine): Fix peg gate not recognized as gate
-		return generateStargateDesert(worldToSpawn, pos, facing, rotation, false);
+		boolean pegasusGate = new Random().nextInt(100) < 50 && AunisConfig.devConfig.pegGatesMyst; // 50% chance && config
+		return generateStargateDesert(worldToSpawn, pos, facing, rotation, pegasusGate);
 
 	}
 
@@ -231,7 +230,12 @@ public class StargateGenerator {
 			gateTile.refresh();
 			gateTile.markDirty();
 
-			return new GeneratedStargate(gateTile.getStargateAddress(SymbolTypeEnum.MILKYWAY), biome.getRegistryName().getResourcePath(), pegasusGate);
+			StargateAddress address = gateTile.getStargateAddress(SymbolTypeEnum.MILKYWAY);
+
+			if(address != null && !gateTile.getNetwork().isStargateInNetwork(address))
+				gateTile.getNetwork().addStargate(address, new StargatePos(world.provider.getDimensionType().getId(), gatePos, address));
+
+			return new GeneratedStargate(address, biome.getRegistryName().getResourcePath(), pegasusGate);
 		}
 
 		else {

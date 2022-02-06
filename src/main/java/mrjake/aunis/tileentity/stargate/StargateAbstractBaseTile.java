@@ -71,6 +71,10 @@ import java.util.*;
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
 public abstract class StargateAbstractBaseTile extends TileEntity implements StateProviderInterface, ITickable, ICapabilityProvider, ScheduledTaskExecutorInterface, Environment, WirelessEndpoint, PreparableInterface {
 
+    public StargateNetwork getNetwork(){
+        return network;
+    }
+
     // ------------------------------------------------------------------------
     // Stargate state
 
@@ -265,7 +269,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public StargateOpenResult attemptOpenAndFail() {
         ResultTargetValid resultTarget = attemptOpenDialed();
         if(resultTarget == null){
-            Aunis.devInfo("Seš piča blbá");
             return StargateOpenResult.ADDRESS_MALFORMED;
         }
 
@@ -324,14 +327,17 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * @return {@code True} if the address parameter is valid and the dialed gate can be reached, {@code false} otherwise.
      */
     protected StargateOpenResult checkAddress(StargateAddressDynamic address) {
-        if (!address.validate()) return StargateOpenResult.ADDRESS_MALFORMED;
+        if (!address.validate()){
+            return StargateOpenResult.ADDRESS_MALFORMED;
+        }
 
         if (!canDialAddress(address)) return StargateOpenResult.ADDRESS_MALFORMED;
 
         StargateAbstractBaseTile targetTile = network.getStargate(address).getTileEntity();
 
-        if (!targetTile.canAcceptConnectionFrom(gatePosMap.get(getSymbolType())))
+        if (!targetTile.canAcceptConnectionFrom(gatePosMap.get(getSymbolType()))) {
             return StargateOpenResult.ADDRESS_MALFORMED;
+        }
 
         return StargateOpenResult.OK;
     }
@@ -364,17 +370,24 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected boolean canDialAddress(StargateAddressDynamic address) {
         StargatePos targetGatePos = network.getStargate(address);
 
-        if (targetGatePos == null) return false;
+        if (targetGatePos == null){
+            return false;
+        }
 
-        if (targetGatePos.equals(gatePosMap.get(getSymbolType()))) return false;
+        if (targetGatePos.equals(gatePosMap.get(getSymbolType()))){
+            return false;
+        }
 
-        if (checkAddressLength(address, targetGatePos)) return false;
+        if (checkAddressLength(address, targetGatePos)){
+            return false;
+        }
 
         int additional = address.size() - 7;
 
         if (additional > 0) {
-            if (!address.getAdditional().subList(0, additional).equals(targetGatePos.additionalSymbols.subList(0, additional)))
+            if (!address.getAdditional().subList(0, additional).equals(targetGatePos.additionalSymbols.subList(0, additional))) {
                 return false;
+            }
         }
 
         return true;
