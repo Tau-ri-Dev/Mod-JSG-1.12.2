@@ -144,6 +144,7 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
         break;
 
       case DHD_ACTIVATE_BUTTON:
+        if(state == null) break;
         DHDActivateButtonState activateState = (DHDActivateButtonState) state;
 
         if (activateState.clearAll) getRendererStateClient().clearSymbols(world.getTotalWorldTime());

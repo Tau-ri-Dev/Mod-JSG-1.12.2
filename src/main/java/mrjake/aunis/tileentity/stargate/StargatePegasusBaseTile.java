@@ -554,6 +554,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
             slot = 36 - (slot - 9);
             if(slot > 36) slot -= 36;
             if(slot < 0) slot += 36;
+            if(getRendererStateClient() == null) break;
             getRendererStateClient().setGlyphAtSlot(slot, slot);
             break;
 

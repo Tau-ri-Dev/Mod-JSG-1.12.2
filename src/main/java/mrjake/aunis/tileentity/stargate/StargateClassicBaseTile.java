@@ -110,7 +110,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     protected void engageGate() {
         super.engageGate();
         for (BlockPos beamerPos : linkedBeamers) {
-            ((BeamerTile) world.getTileEntity(beamerPos)).gateEngaged(targetGatePos);
+            if(world.getTileEntity(beamerPos) == null)
+                removeLinkedBeamer(beamerPos);
+            else
+                ((BeamerTile) Objects.requireNonNull(world.getTileEntity(beamerPos))).gateEngaged(targetGatePos);
         }
     }
 
@@ -118,7 +121,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void closeGate(StargateClosedReasonEnum reason) {
         super.closeGate(reason);
         for (BlockPos beamerPos : linkedBeamers) {
-            ((BeamerTile) world.getTileEntity(beamerPos)).gateClosed();
+            if(world.getTileEntity(beamerPos) == null)
+                removeLinkedBeamer(beamerPos);
+            else
+                ((BeamerTile) Objects.requireNonNull(world.getTileEntity(beamerPos))).gateClosed();
         }
     }
 
@@ -213,8 +219,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         ItemHandlerHelper.dropInventoryItems(world, pos, itemStackHandler);
 
         for (BlockPos beamerPos : linkedBeamers) {
-            BeamerTile beamerTile = (BeamerTile) world.getTileEntity(beamerPos);
-            beamerTile.setLinkedGate(null, null);
+            if(world.getTileEntity(beamerPos) == null)
+                removeLinkedBeamer(beamerPos);
+            else {
+                BeamerTile beamerTile = (BeamerTile) world.getTileEntity(beamerPos);
+                beamerTile.setLinkedGate(null, null);
+            }
         }
 
         linkedBeamers.clear();
@@ -293,7 +303,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     //if chance && stargate state is idle or dialing by DHD and RANDOM INCOMING IS NOT ACTIVATED YET
                     if (chanceToRandom <= AunisConfig.randomIncoming.chance) {
                         int entities = rand.nextInt(25);
-                        int delay = rand.nextInt(100);
+                        int delay = rand.nextInt(200);
                         if(delay < 80) delay = 80;
                         if(entities < 3) entities = 3;
 
@@ -557,8 +567,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         boolean beamerActive = false;
 
         for (BlockPos beamerPos : linkedBeamers) {
-            BeamerTile beamerTile = (BeamerTile) world.getTileEntity(beamerPos);
-            beamerActive = beamerTile.isActive();
+            if(world.getTileEntity(beamerPos) == null)
+                removeLinkedBeamer(beamerPos);
+            else {
+                BeamerTile beamerTile = (BeamerTile) world.getTileEntity(beamerPos);
+                beamerActive = beamerTile.isActive();
+            }
 
             if (beamerActive) break;
         }
@@ -1466,7 +1480,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     private void updateBeamers() {
         if (stargateState.engaged()) {
             for (BlockPos beamerPos : linkedBeamers) {
-                ((BeamerTile) world.getTileEntity(beamerPos)).gateEngaged(targetGatePos);
+                if(world.getTileEntity(beamerPos) == null)
+                    removeLinkedBeamer(beamerPos);
+                else
+                    ((BeamerTile) Objects.requireNonNull(world.getTileEntity(beamerPos))).gateEngaged(targetGatePos);
             }
         }
 
