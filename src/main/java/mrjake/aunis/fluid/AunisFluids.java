@@ -1,12 +1,7 @@
 package mrjake.aunis.fluid;
 
-import mrjake.aunis.Aunis;
-import mrjake.aunis.integration.tconstruct.MoltenMaterial;
-import mrjake.aunis.integration.tconstruct.TConstructIntegration;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.HashMap;
@@ -14,30 +9,44 @@ import java.util.Map;
 
 public class AunisFluids {
 
-	public static MoltenFluid moltenSiliconBlack = new MoltenFluid("silicon_molten_black");
-	public static MoltenFluid moltenSiliconRed = new MoltenFluid("silicon_molten_red");
-	public static MoltenFluid moltenSiliconBlue = new MoltenFluid("silicon_molten_blue");
-	public static MoltenFluid moltenSiliconEnder = new MoltenFluid("silicon_molten_ender");
-	public static MoltenFluid moltenSiliconYellow = new MoltenFluid("silicon_molten_yellow");
-	public static MoltenFluid moltenSiliconWhite = new MoltenFluid("silicon_molten_white");
+	public static MoltenFluid moltenSiliconBlack = new MoltenFluid(
+			"silicon_molten_black"
+	);
+	public static MoltenFluid moltenSiliconRed = new MoltenFluid(
+			"silicon_molten_red"
+	);
+	public static MoltenFluid moltenSiliconBlue = new MoltenFluid(
+			"silicon_molten_blue"
+	);
+	public static MoltenFluid moltenSiliconEnder = new MoltenFluid(
+			"silicon_molten_ender"
+	);
+	public static MoltenFluid moltenSiliconYellow = new MoltenFluid(
+			"silicon_molten_yellow"
+	);
+	public static MoltenFluid moltenSiliconWhite = new MoltenFluid(
+			"silicon_molten_white"
+	);
 
-	public static MoltenFluid moltenNaquadahRaw = new MoltenFluid("naquadah_molten_raw");
-	public static MoltenFluid moltenNaquadahRefined = new MoltenFluid("naquadah_molten_refined");
-	public static MoltenFluid moltenNaquadahAlloy = new MoltenFluid("naquadah_molten_alloy");
+	public static MoltenFluid moltenNaquadahRaw = new MoltenFluid(
+			"naquadah_molten_raw"
+	);
+	public static MoltenMaterial moltenNaquadahRefined = new MoltenMaterial(
+			"naquadah_molten_refined",
+			"NaquadahRaw"
+	);
+	public static MoltenMaterial moltenNaquadahAlloy = new MoltenMaterial(
+			"naquadah_molten_alloy",
+			"NaquadahRefined"
+	);
 
 	public static MoltenMaterial moltenTitanium = new MoltenMaterial(
 			"titanium_molten",
-			"Titanium",
-			1000,
-			new ResourceLocation(Aunis.ModID, "fluids/titanium_molten_still"),
-			new ResourceLocation(Aunis.ModID, "fluids/titanium_molten_flow")
+			"Titanium"
 	);
 	public static MoltenMaterial moltenTrinium = new MoltenMaterial(
 			"trinium_molten",
-			"Trinium",
-			1000,
-			new ResourceLocation(Aunis.ModID, "fluids/trinium_molten_still"),
-			new ResourceLocation(Aunis.ModID, "fluids/trinium_molten_flow")
+			"Trinium"
 	);
 
 	private static Fluid[] fluids = {

@@ -1,14 +1,12 @@
-package mrjake.aunis.integration.tconstruct;
+package mrjake.aunis.integration;
 
 import mrjake.aunis.fluid.AunisFluids;
-import net.minecraft.block.Block;
+import mrjake.aunis.fluid.MoltenMaterial;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +23,9 @@ public class TConstructIntegration {
         fluidList.add(AunisFluids.moltenTitanium);
         fluidList.add(AunisFluids.moltenTrinium);
 
+        fluidList.add(AunisFluids.moltenNaquadahRefined);
+        fluidList.add(AunisFluids.moltenNaquadahAlloy);
+
         fluids = fluidList.toArray(new Fluid[0]);
         for (MoltenMaterial mm:fluidList){
             NBTTagCompound tag = new NBTTagCompound();
@@ -35,6 +36,7 @@ public class TConstructIntegration {
 
             FMLInterModComms.sendMessage("tconstruct", "integrateSmeltery", tag);
         }
+
     }
 
     public static Fluid[] fluids = null;

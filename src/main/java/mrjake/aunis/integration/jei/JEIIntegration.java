@@ -20,20 +20,22 @@ public final class JEIIntegration implements IModPlugin {
 
     @Override
     public void register(IModRegistry registry) {
-        // Hide invisible block in JEI
-      registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(AunisBlocks.INVISIBLE_BLOCK, 1, OreDictionary.WILDCARD_VALUE));
-      // Hide Notebook from JEI
-      registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(AunisItems.NOTEBOOK_ITEM, 1));
+        // Hide invisible blocks in JEI
+        registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(AunisBlocks.INVISIBLE_BLOCK, 1, OreDictionary.WILDCARD_VALUE));
+        registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(AunisBlocks.IRIS_BLOCK, 1, OreDictionary.WILDCARD_VALUE));
 
-      // Tab handling
-      registry.addAdvancedGuiHandlers(new JEIAdvancedGuiHandler());
+        // Hide Notebook from JEI
+        registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(AunisItems.NOTEBOOK_ITEM, 1));
 
-      List<IRecipeWrapper> recipes = new ArrayList<>();
-      recipes.addAll(JEINotebookRecipe.genAll());
-      recipes.add(new JEIUniverseDialerCloneRecipe());
-      recipes.add(new JEINotebookCloneRecipe());
-      recipes.add(new JEIUniverseDialerRepairRecipe());
-      registry.addRecipes(recipes, VanillaRecipeCategoryUid.CRAFTING);
+        // Tab handling
+        // registry.addAdvancedGuiHandlers(new JEIAdvancedGuiHandler());
+
+        List<IRecipeWrapper> recipes = new ArrayList<>();
+        recipes.addAll(JEINotebookRecipe.genAll());
+        recipes.add(new JEIUniverseDialerCloneRecipe());
+        recipes.add(new JEINotebookCloneRecipe());
+        recipes.add(new JEIUniverseDialerRepairRecipe());
+        registry.addRecipes(recipes, VanillaRecipeCategoryUid.CRAFTING);
     }
 
 //    @Override

@@ -13,11 +13,16 @@ import mrjake.aunis.fluid.AunisFluids;
 import mrjake.aunis.gui.base.AunisGuiHandler;
 import mrjake.aunis.integration.OCWrapperInterface;
 import mrjake.aunis.integration.ThermalIntegration;
-import mrjake.aunis.integration.tconstruct.TConstructIntegration;
+import mrjake.aunis.integration.TConstructIntegration;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.proxy.IProxy;
 import mrjake.aunis.worldgen.AunisWorldGen;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -37,9 +42,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.Objects;
-
-import static net.minecraft.client.Minecraft.getMinecraft;
+import java.util.Locale;
 
 @Mod( modid = Aunis.ModID, name = Aunis.Name, version = Aunis.Version, acceptedMinecraftVersions = Aunis.MCVersion, dependencies = "after:cofhcore@[4.6.0,);after:opencomputers")
 public class Aunis {	
@@ -99,12 +102,7 @@ public class Aunis {
         AunisPacketHandler.registerPackets();
         Aunis.info("Successfully registered Packets!");
         AunisFluids.registerFluids();
-        if (Loader.isModLoaded("tconstruct") && AunisConfig.integrationsConfig.tConstructIntegration) {
-            Aunis.info("TConstruct found and connection is enabled... Connecting...");
-            TConstructIntegration.initFluids();
-            //AunisFluids.registerFluids(TConstructIntegration.fluids); // not needed - done in AunisFluids
-            Aunis.info("Successfully connected into TConstruct!");
-        }
+        registerOreDictionary();
         Aunis.info("Successfully registered Fluids!");
 
         
@@ -126,24 +124,16 @@ public class Aunis {
             Aunis.info("Successfully connected into Thermal Expansion!");
         }
 
+        // Tinkers Construct
+        if (Loader.isModLoaded("tconstruct") && AunisConfig.integrationsConfig.tConstructIntegration) {
+            Aunis.info("TConstruct found and connection is enabled... Connecting...");
+            TConstructIntegration.initFluids();
+            Aunis.info("Successfully connected into TConstruct!");
+        }
+
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new AunisGuiHandler());
     	ItemEndpointCapability.register();
 		ForgeChunkManager.setForcedChunkLoadingCallback(Aunis.instance, ChunkLoadingCallback.INSTANCE);
-
-        OreDictionary.registerOre("oreNaquadah", AunisBlocks.ORE_NAQUADAH_BLOCK);
-        OreDictionary.registerOre("oreNaquadah", AunisBlocks.ORE_NAQUADAH_BLOCK_STONE);
-        OreDictionary.registerOre("gemNaquadah", AunisItems.NAQUADAH_SHARD);
-        OreDictionary.registerOre("ingotNaquadah", AunisItems.NAQUADAH_ALLOY_RAW);
-        OreDictionary.registerOre("ingotNaquadahRefined", AunisItems.NAQUADAH_ALLOY);
-        OreDictionary.registerOre("blockNaquadahRefined", AunisBlocks.NAQUADAH_BLOCK);
-        OreDictionary.registerOre("blockNaquadahRaw", AunisBlocks.NAQUADAH_BLOCK_RAW);
-
-        OreDictionary.registerOre("oreTrinium", AunisBlocks.ORE_TRINIUM_BLOCK);
-        OreDictionary.registerOre("oreTitanium", AunisBlocks.ORE_TITANIUM_BLOCK);
-        OreDictionary.registerOre("ingotTrinium", AunisItems.TRINIUM_INGOT);
-        OreDictionary.registerOre("ingotTitanium", AunisItems.TITANIUM_INGOT);
-        OreDictionary.registerOre("blockTrinium", AunisBlocks.TRINIUM_BLOCK);
-        OreDictionary.registerOre("blockTitanium", AunisBlocks.TITANIUM_BLOCK);
         Aunis.info("Successfully registered OreDictionary!");
 
     	// ----------------------------------------------------------------------------------------------------------------
@@ -174,6 +164,31 @@ public class Aunis {
         StargateSizeEnum.init();
         Aunis.info("Successfully registered Stargate sizes!");
     	proxy.init(event);
+    }
+
+    // register ores
+    public void registerOreDictionary(){
+        regODOre("oreNaquadahRaw", AunisBlocks.ORE_NAQUADAH_BLOCK);
+        regODOre("oreNaquadahRaw", AunisBlocks.ORE_NAQUADAH_BLOCK_STONE);
+        regODOre("gemNaquadahRaw", AunisItems.NAQUADAH_SHARD);
+        regODOre("ingotNaquadahRaw", AunisItems.NAQUADAH_ALLOY_RAW);
+        regODOre("ingotNaquadahRefined", AunisItems.NAQUADAH_ALLOY);
+        regODOre("blockNaquadahRefined", AunisBlocks.NAQUADAH_BLOCK);
+        regODOre("blockNaquadahRaw", AunisBlocks.NAQUADAH_BLOCK_RAW);
+
+        regODOre("oreTrinium", AunisBlocks.ORE_TRINIUM_BLOCK);
+        regODOre("oreTitanium", AunisBlocks.ORE_TITANIUM_BLOCK);
+        regODOre("ingotTrinium", AunisItems.TRINIUM_INGOT);
+        regODOre("ingotTitanium", AunisItems.TITANIUM_INGOT);
+        regODOre("blockTrinium", AunisBlocks.TRINIUM_BLOCK);
+        regODOre("blockTitanium", AunisBlocks.TITANIUM_BLOCK);
+    }
+
+    public void regODOre(String name, Item ore){
+        OreDictionary.registerOre(name, ore);
+    }
+    public void regODOre(String name, Block ore){
+        OreDictionary.registerOre(name, ore);
     }
  
     @EventHandler

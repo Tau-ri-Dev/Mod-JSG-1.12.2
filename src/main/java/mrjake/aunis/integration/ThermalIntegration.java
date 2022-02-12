@@ -44,10 +44,10 @@ public class ThermalIntegration {
 		ThermalExpansionHelper.addCrucibleRecipe(2500, new ItemStack(AunisItems.NAQUADAH_ALLOY), new FluidStack(AunisFluids.moltenNaquadahAlloy, 1000));
 
 		// Titanium / trinium
-		ThermalExpansionHelper.addCrucibleRecipe(2500, new ItemStack(AunisItems.TITANIUM_INGOT), new FluidStack(AunisFluids.moltenTitanium, 1000));
-		ThermalExpansionHelper.addCrucibleRecipe(2500, new ItemStack(AunisItems.TRINIUM_INGOT), new FluidStack(AunisFluids.moltenTrinium, 1000));
-		ThermalExpansionHelper.addCrucibleRecipe(2500, new ItemStack(AunisBlocks.ORE_TITANIUM_BLOCK), new FluidStack(AunisFluids.moltenTitanium, 750));
-		ThermalExpansionHelper.addCrucibleRecipe(2500, new ItemStack(AunisBlocks.ORE_TRINIUM_BLOCK), new FluidStack(AunisFluids.moltenTrinium, 750));
+		ThermalExpansionHelper.addCrucibleRecipe(2500, new ItemStack(AunisItems.TITANIUM_INGOT), new FluidStack(AunisFluids.moltenTitanium, 144));
+		ThermalExpansionHelper.addCrucibleRecipe(2500, new ItemStack(AunisItems.TRINIUM_INGOT), new FluidStack(AunisFluids.moltenTrinium, 144));
+		ThermalExpansionHelper.addCrucibleRecipe(2500, new ItemStack(AunisBlocks.ORE_TITANIUM_BLOCK), new FluidStack(AunisFluids.moltenTitanium, 144));
+		ThermalExpansionHelper.addCrucibleRecipe(2500, new ItemStack(AunisBlocks.ORE_TRINIUM_BLOCK), new FluidStack(AunisFluids.moltenTrinium, 144));
 
 		// Circuits
 		ThermalExpansionHelper.addTransposerFill(10000, new ItemStack(AunisItems.CIRCUIT_CONTROL_BASE), new ItemStack(AunisItems.CIRCUIT_CONTROL_CRYSTAL), new FluidStack(AunisFluids.moltenSiliconWhite, 1000), false);
