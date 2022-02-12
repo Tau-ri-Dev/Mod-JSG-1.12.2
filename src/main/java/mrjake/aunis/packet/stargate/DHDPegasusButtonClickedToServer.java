@@ -21,10 +21,17 @@ public class DHDPegasusButtonClickedToServer extends PositionedPacket {
 	public DHDPegasusButtonClickedToServer() {}
 
 	public SymbolPegasusEnum symbol;
+	public boolean force;
 
 	public DHDPegasusButtonClickedToServer(BlockPos pos, SymbolPegasusEnum symbol) {
 		super(pos);
 		this.symbol = symbol;
+	}
+
+	public DHDPegasusButtonClickedToServer(BlockPos pos, SymbolPegasusEnum symbol, boolean force) {
+		super(pos);
+		this.symbol = symbol;
+		this.force = force;
 	}
 
 	@Override
@@ -32,12 +39,14 @@ public class DHDPegasusButtonClickedToServer extends PositionedPacket {
 		super.toBytes(buf);
 
 		buf.writeInt(symbol.id);
+		buf.writeBoolean(force);
 	}
 
 	public void fromBytes(ByteBuf buf) {
 		super.fromBytes(buf);
 
 		symbol = SymbolPegasusEnum.valueOf(buf.readInt());
+		force = buf.readBoolean();
 	}
 	
 	
@@ -72,7 +81,13 @@ public class DHDPegasusButtonClickedToServer extends PositionedPacket {
 							gateTile.attemptClose(StargateClosedReasonEnum.REQUESTED);
 						else
 							player.sendStatusMessage(new TextComponentTranslation("tile.aunis.dhd_block.incoming_wormhole_warn"), true);
-					} else if ((gateState.idle() || gateState.dialing()) && !gateState.dialingComputer()) {
+					}
+					else if(message.force && message.symbol.brb()){
+						StargateOpenResult openResult = gateTile.attemptOpenAndFail();
+						if (openResult == StargateOpenResult.NOT_ENOUGH_POWER)
+							player.sendStatusMessage(new TextComponentTranslation("tile.aunis.stargatebase_block.not_enough_power"), true);
+					}
+					else if ((gateState.idle() || gateState.dialing()) && !gateState.dialingComputer()) {
 						// Gate is idle, some glyph was pressed
 
 						if (message.symbol.brb())

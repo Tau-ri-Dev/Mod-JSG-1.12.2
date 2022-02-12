@@ -962,9 +962,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     distance += 360;
                     plusRounds += 1;
                 }
-                if (distance < 270 && this instanceof StargateMilkyWayBaseTile && targetRingSymbol == SymbolMilkyWayEnum.getOrigin()) {
-                    distance += 360;
-                    plusRounds += 1;
+                if (distance < 270) {
+                    if(this instanceof StargateMilkyWayBaseTile && targetRingSymbol == SymbolMilkyWayEnum.getOrigin()) {
+                        distance += 360;
+                        plusRounds += 1;
+                    }
+                    if(this instanceof StargateUniverseBaseTile && targetRingSymbol == SymbolUniverseEnum.getOrigin()) {
+                        distance += 360;
+                        plusRounds += 1;
+                    }
                 }
             }
             else if (distance > 180) {

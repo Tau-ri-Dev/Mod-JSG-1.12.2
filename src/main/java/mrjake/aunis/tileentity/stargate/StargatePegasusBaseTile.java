@@ -595,8 +595,19 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     return new int[]{9, 5, 1, 33, 29, 25, 21, 17, 13}[chevron.rotationIndex];
   }
 
+  @Override
+  public StargateOpenResult attemptOpenAndFail() {
+    if(stargateState != EnumStargateState.INCOMING)
+      playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
+
+    continueDialing = false;
+    markDirty();
+
+    return super.attemptOpenAndFail();
+  }
+
   public void addSymbolToAddressDHD(SymbolInterface targetSymbol, EntityPlayer sender) {
-    if (isLinkedAndDHDOperational() && (targetSymbol != SymbolPegasusEnum.BRB) || toDialSymbols.size() > 0) {
+    if (isLinkedAndDHDOperational() && (targetSymbol != SymbolPegasusEnum.BRB|| toDialSymbols.size() > 0)) {
       getLinkedDHD(world).activateSymbol((SymbolPegasusEnum) targetSymbol);
     }
     toDialSymbols.add((SymbolPegasusEnum) targetSymbol);
@@ -755,14 +766,6 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
           if(stargateState == EnumStargateState.DIALING_COMPUTER) addSymbolToAddress(targetRingSymbol, true);
           else addSymbolToAddress(targetRingSymbol, false);
           addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN_SECOND, 0));
-
-          /*
-          if (stargateWillLock(targetRingSymbol)) {
-            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN_SECOND, 0));
-            if (!checkAddressAndEnergy(dialedAddress).ok())
-              addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_FAIL, 60));
-          } else addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN_SECOND, 0));
-          */
         } else addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_FAIL, 60));
 
         break;

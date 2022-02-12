@@ -96,12 +96,19 @@ public class RaycasterDHD extends Raycaster {
 
 	
 	private int button;
+	private boolean isSneaking = false;
+	private boolean wasBrb = false;
 	
-	public boolean onActivated(World world, BlockPos pos, EntityPlayer player, EnumHand hand) {		
+	public boolean onActivated(World world, BlockPos pos, EntityPlayer player, EnumHand hand, boolean isSneaking) {
 		float rotation = world.getBlockState(pos).getValue(AunisProps.ROTATION_HORIZONTAL) * -22.5f;
 		button = -1;
-		
-		return super.onActivated(world, pos, player, rotation, hand);
+		this.isSneaking = isSneaking;
+
+		boolean returned;
+		returned = super.onActivated(world, pos, player, rotation, hand);
+		if(isSneaking)
+			returned = wasBrb;
+		return returned;
 	}
 	
 	private static final Vector3f TRANSLATION = new Vector3f(0.5f, 0, 0.5f); 
@@ -143,15 +150,24 @@ public class RaycasterDHD extends Raycaster {
 			World world = player.getEntityWorld();
 			if (world.isRemote) {
 				boolean pegasusDHD = world.getTileEntity(pos) instanceof DHDPegasusTile;
-				if (!pegasusDHD)
-					AunisPacketHandler.INSTANCE.sendToServer(new DHDButtonClickedToServer(pos, SymbolMilkyWayEnum.valueOf(button)));
+				if (!pegasusDHD) {
+					SymbolMilkyWayEnum symbol = SymbolMilkyWayEnum.valueOf(button);
+					if(!isSneaking)
+						AunisPacketHandler.INSTANCE.sendToServer(new DHDButtonClickedToServer(pos, symbol));
+				}
 				else {
 					SymbolPegasusEnum symbol = SymbolPegasusEnum.valueOf(button);
-					if (symbol == SymbolPegasusEnum.UNKNOW1 || symbol == SymbolPegasusEnum.UNKNOW2)
-						player.sendStatusMessage(
-								new TextComponentTranslation("tile.aunis.dhd_pegasus_block.unknown_buttons"),
-								true);
-					else AunisPacketHandler.INSTANCE.sendToServer(new DHDPegasusButtonClickedToServer(pos, symbol));
+					if(!isSneaking) {
+						if (symbol == SymbolPegasusEnum.UNKNOW1 || symbol == SymbolPegasusEnum.UNKNOW2)
+							player.sendStatusMessage(
+									new TextComponentTranslation("tile.aunis.dhd_pegasus_block.unknown_buttons"),
+									true);
+						else AunisPacketHandler.INSTANCE.sendToServer(new DHDPegasusButtonClickedToServer(pos, symbol));
+					}
+					else if(symbol.brb()) {
+						wasBrb = true;
+						AunisPacketHandler.INSTANCE.sendToServer(new DHDPegasusButtonClickedToServer(pos, symbol, true));
+					}
 				}
 			}
 			return true;

@@ -45,7 +45,7 @@ public class AunisEventHandler {
 		EntityPlayer player = event.getEntityPlayer();
 		World world = player.getEntityWorld();
 
-		if (!player.isSneaking() && !player.isSpectator()) {
+		if (!player.isSpectator()) {
 			BlockPos pos = player.getPosition();
 			EnumFacing playerFacing = player.getHorizontalFacing(); //EnumFacing.getDirectionFromEntityLiving(pos, player).getOpposite()
 
@@ -62,9 +62,9 @@ public class AunisEventHandler {
 				 * cancels the event. A packet is sent to the server by onActivated
 				 * only on main hand click.
 				 */
-				if ((block == AunisBlocks.DHD_BLOCK || block == AunisBlocks.DHD_PEGASUS_BLOCK) && RaycasterDHD.INSTANCE.onActivated(world, activatedBlock, player, event.getHand())) {
+				if ((block == AunisBlocks.DHD_BLOCK || block == AunisBlocks.DHD_PEGASUS_BLOCK)) {
 
-					if (event.isCancelable()) {
+					if (event.isCancelable() && RaycasterDHD.INSTANCE.onActivated(world, activatedBlock, player, event.getHand(), player.isSneaking())) {
 						event.setCanceled(true);
 					}
 				}
