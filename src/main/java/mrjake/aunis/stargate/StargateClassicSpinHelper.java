@@ -35,6 +35,8 @@ public class StargateClassicSpinHelper implements ISpinHelper {
   private SymbolInterface targetSymbol;
   private float targetRotationOffset;
 
+  public int plusRounds;
+
   public boolean getIsSpinning() {
     return isSpinning;
   }
@@ -119,24 +121,24 @@ public class StargateClassicSpinHelper implements ISpinHelper {
    */
   private Map<MathRange, MathFunction> phases = new HashMap<MathRange, MathFunction>(3);
 
-  public StargateClassicSpinHelper(SymbolTypeEnum symbolType, SymbolInterface currentSymbol, EnumSpinDirection spinDirection, boolean isSpinning, SymbolInterface targetRingSymbol, long spinStartTime) {
+  public StargateClassicSpinHelper(SymbolTypeEnum symbolType, SymbolInterface currentSymbol, EnumSpinDirection spinDirection, boolean isSpinning, SymbolInterface targetRingSymbol, long spinStartTime, int plusRounds) {
     this.symbolType = symbolType;
     this.currentSymbol = currentSymbol;
     this.direction = spinDirection;
     this.isSpinning = isSpinning;
     this.targetSymbol = targetRingSymbol;
     this.spinStartTime = spinStartTime;
+    this.plusRounds = plusRounds;
   }
 
-  public void initRotation(long totalWorldTime, SymbolInterface targetSymbol, EnumSpinDirection direction, float startOffset) {
+  public void initRotation(long totalWorldTime, SymbolInterface targetSymbol, EnumSpinDirection direction, float startOffset, int plusRounds) {
     float distance = direction.getDistance(currentSymbol, targetSymbol);
+    distance += (360*plusRounds);
+
     if(targetSymbol == SymbolUniverseEnum.G37) {
       distance = 360;
       targetSymbol = SymbolUniverseEnum.TOP_CHEVRON;
     }
-
-    if(distance == 0 && !(targetSymbol instanceof SymbolUniverseEnum))
-      distance += 360;
 
     float x0 = getx0(distance);
     this.targetRotationOffset = getTargetRotation(x0);
@@ -199,6 +201,8 @@ public class StargateClassicSpinHelper implements ISpinHelper {
 
     buf.writeLong(spinStartTime);
     buf.writeInt(targetSymbol.getId());
+
+    buf.writeInt(plusRounds);
   }
 
   public void fromBytes(ByteBuf buf) {
@@ -211,8 +215,10 @@ public class StargateClassicSpinHelper implements ISpinHelper {
     spinStartTime = buf.readLong();
     targetSymbol = symbolType.valueOfSymbol(buf.readInt());
 
+    plusRounds = buf.readInt();
+
     if (isSpinning) {
-      initRotation(spinStartTime, targetSymbol, direction, 0);
+      initRotation(spinStartTime, targetSymbol, direction, 0, plusRounds);
     }
   }
 }

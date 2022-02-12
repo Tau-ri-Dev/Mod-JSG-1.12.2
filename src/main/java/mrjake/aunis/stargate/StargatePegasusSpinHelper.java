@@ -114,7 +114,7 @@ public class StargatePegasusSpinHelper implements ISpinHelper {
    */
   private Map<MathRange, MathFunction> phases = new HashMap<MathRange, MathFunction>(3);
 
-  public StargatePegasusSpinHelper(SymbolTypeEnum symbolType, SymbolInterface currentSymbol, EnumSpinDirection spinDirection, boolean isSpinning, SymbolInterface targetRingSymbol, long spinStartTime) {
+  public StargatePegasusSpinHelper(SymbolTypeEnum symbolType, SymbolInterface currentSymbol, EnumSpinDirection spinDirection, boolean isSpinning, SymbolInterface targetRingSymbol, long spinStartTime, int plusRounds) {
     this.symbolType = symbolType;
     this.currentSymbol = currentSymbol;
     this.direction = spinDirection;
@@ -123,7 +123,7 @@ public class StargatePegasusSpinHelper implements ISpinHelper {
     this.spinStartTime = spinStartTime;
   }
 
-  public void initRotation(long totalWorldTime, SymbolInterface targetSymbol, EnumSpinDirection direction, float startOffset) {
+  public void initRotation(long totalWorldTime, SymbolInterface targetSymbol, EnumSpinDirection direction, float startOffset, int plusRounds) {
     this.targetSymbol = targetSymbol;
     this.direction = direction;
     this.spinStartTime = totalWorldTime;
@@ -168,7 +168,7 @@ public class StargatePegasusSpinHelper implements ISpinHelper {
     targetSymbol = symbolType.valueOfSymbol(buf.readInt());
 
     if (isSpinning) {
-      initRotation(spinStartTime, targetSymbol, direction, 0);
+      initRotation(spinStartTime, targetSymbol, direction, 0, 0);
     }
   }
 }

@@ -920,6 +920,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 // Max Open Time
                 if(targetGatePos.getTileEntity() != null) targetGatePos.getTileEntity().addTimeLimitSecond();
                 int morePower = doTimeLimitFunc();
+                if(dialedAddress.size() == 9) morePower += keepAliveEnergyPerTick*0.75; // add energy draw when is 9 symbol address engaged
                 energySecondsToClose = energyStored / (float) (keepAliveEnergyPerTick + morePower + shieldKeepAlive) / 20f;
 
                 if (energySecondsToClose >= 1) {

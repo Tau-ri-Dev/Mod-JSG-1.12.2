@@ -82,6 +82,7 @@ public class StargateMilkyWayRendererState extends StargateClassicRendererState 
 			setIrisCode(superBuilder.irisCode);
 			setIrisMode(superBuilder.irisMode);
 			setIrisAnimation(superBuilder.irisAnimation);
+			setPlusRounds(superBuilder.plusRounds);
 		}
 		
 		public StargateMilkyWayRendererStateBuilder setStargateSize(StargateSizeEnum stargateSize) {

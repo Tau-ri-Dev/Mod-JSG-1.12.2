@@ -12,11 +12,13 @@ public class StargateSpinState extends State {
 	public SymbolInterface targetSymbol;
 	public EnumSpinDirection direction;
 	public boolean setOnly;
+	public int plusRounds;
 	
-	public StargateSpinState(SymbolInterface targetSymbol, EnumSpinDirection direction, boolean setOnly) {
+	public StargateSpinState(SymbolInterface targetSymbol, EnumSpinDirection direction, boolean setOnly, int plusRounds) {
 		this.targetSymbol = targetSymbol;
 		this.direction = direction;
 		this.setOnly = setOnly;
+		this.plusRounds = plusRounds;
 	}
 
 	@Override
@@ -25,6 +27,7 @@ public class StargateSpinState extends State {
 		buf.writeInt(targetSymbol.getId());
 		buf.writeInt(direction.id);
 		buf.writeBoolean(setOnly);
+		buf.writeInt(plusRounds);
 	}
 	
 	@Override
@@ -33,5 +36,6 @@ public class StargateSpinState extends State {
 		targetSymbol = symbolType.valueOfSymbol(buf.readInt());
 		direction = EnumSpinDirection.valueOf(buf.readInt());
 		setOnly = buf.readBoolean();
+		plusRounds = buf.readInt();
 	}
 }

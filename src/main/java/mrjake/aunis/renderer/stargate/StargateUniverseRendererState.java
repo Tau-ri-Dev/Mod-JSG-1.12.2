@@ -126,6 +126,7 @@ public class StargateUniverseRendererState extends StargateClassicRendererState 
 			setIrisState(superBuilder.irisState);
 			setIrisType(superBuilder.irisType);
 			setIrisAnimation(superBuilder.irisAnimation);
+			setPlusRounds(superBuilder.plusRounds);
 		}
 		
 		public StargateUniverseRendererStateBuilder setDialedAddress(StargateAddressDynamic dialedAddress) {

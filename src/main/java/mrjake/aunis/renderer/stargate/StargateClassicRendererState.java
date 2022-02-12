@@ -17,7 +17,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     super(builder);
 
     this.chevronTextureList = new ChevronTextureList(getChevronTextureBase(), builder.activeChevrons, builder.isFinalActive);
-    this.spinHelper = new StargateClassicSpinHelper(builder.symbolType, builder.currentRingSymbol, builder.spinDirection, builder.isSpinning, builder.targetRingSymbol, builder.spinStartTime);
+    this.spinHelper = new StargateClassicSpinHelper(builder.symbolType, builder.currentRingSymbol, builder.spinDirection, builder.isSpinning, builder.targetRingSymbol, builder.spinStartTime, builder.plusRounds);
     this.biomeOverride = builder.biomeOverride;
     this.irisState = builder.irisState;
     this.irisType = builder.irisType;
@@ -139,6 +139,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     protected boolean isSpinning;
     protected SymbolInterface targetRingSymbol;
     protected long spinStartTime;
+    protected int plusRounds;
 
     // Biome override
     public BiomeOverlayEnum biomeOverride;
@@ -221,6 +222,11 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
 
     public StargateClassicRendererStateBuilder setIrisAnimation(long irisAnimation) {
       this.irisAnimation = irisAnimation;
+      return this;
+    }
+
+    public StargateClassicRendererStateBuilder setPlusRounds(int rounds){
+      this.plusRounds = rounds;
       return this;
     }
   }

@@ -15,7 +15,7 @@ public interface ISpinHelper {
 
   SymbolInterface getTargetSymbol();
 
-  void initRotation(long totalWorldTime, SymbolInterface targetSymbol, EnumSpinDirection direction, float startOffset);
+  void initRotation(long totalWorldTime, SymbolInterface targetSymbol, EnumSpinDirection direction, float startOffset, int plusRounds);
 
   float apply(double tick);
 

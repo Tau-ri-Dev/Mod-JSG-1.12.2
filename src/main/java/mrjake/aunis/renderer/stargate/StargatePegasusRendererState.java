@@ -18,7 +18,7 @@ public class StargatePegasusRendererState extends StargateClassicRendererState {
   private StargatePegasusRendererState(StargatePegasusRendererStateBuilder builder) {
     super(builder);
     this.stargateSize = builder.stargateSize;
-    this.spinHelper = new StargatePegasusSpinHelper(builder.symbolType, builder.currentRingSymbol, builder.spinDirection, builder.isSpinning, builder.targetRingSymbol, builder.spinStartTime);
+    this.spinHelper = new StargatePegasusSpinHelper(builder.symbolType, builder.currentRingSymbol, builder.spinDirection, builder.isSpinning, builder.targetRingSymbol, builder.spinStartTime, 0);
   }
 
   public Map<Integer, Integer> slotToGlyphMap = new HashMap<Integer, Integer>();
@@ -128,6 +128,7 @@ public class StargatePegasusRendererState extends StargateClassicRendererState {
       setIrisState(superBuilder.irisState);
       setIrisType(superBuilder.irisType);
       setIrisAnimation(superBuilder.irisAnimation);
+      setPlusRounds(0);
     }
 
     public StargatePegasusRendererStateBuilder setStargateSize(StargateSizeEnum stargateSize) {
