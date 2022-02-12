@@ -37,6 +37,9 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.Objects;
+
+import static net.minecraft.client.Minecraft.getMinecraft;
 
 @Mod( modid = Aunis.ModID, name = Aunis.Name, version = Aunis.Version, acceptedMinecraftVersions = Aunis.MCVersion, dependencies = "after:cofhcore@[4.6.0,);after:opencomputers")
 public class Aunis {	
@@ -83,23 +86,26 @@ public class Aunis {
     static {
     	FluidRegistry.enableUniversalBucket();
     }
-        	
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog(); // This is the recommended way of getting a logger
+        Aunis.info("Started loading Aunis mod!");
 
         // todo(Mine): fix this shitty shit
         //AUNIS_SOUNDS = AunisSoundCategory.add("AUNIS_SOUNDS");
         AUNIS_SOUNDS = SoundCategory.BLOCKS;
 
         AunisPacketHandler.registerPackets();
+        Aunis.info("Successfully registered Packets!");
+        AunisFluids.registerFluids();
         if (Loader.isModLoaded("tconstruct") && AunisConfig.integrationsConfig.tConstructIntegration) {
             Aunis.info("TConstruct found and connection is enabled... Connecting...");
             TConstructIntegration.initFluids();
-            AunisFluids.registerFluids(TConstructIntegration.fluids);
+            //AunisFluids.registerFluids(TConstructIntegration.fluids); // not needed - done in AunisFluids
             Aunis.info("Successfully connected into TConstruct!");
         }
-        AunisFluids.registerFluids();
+        Aunis.info("Successfully registered Fluids!");
 
         
     	StargateDimensionConfig.load(event.getModConfigurationDirectory());
@@ -110,10 +116,12 @@ public class Aunis {
     @EventHandler
     public void init(FMLInitializationEvent event) {
     	GameRegistry.registerWorldGenerator(new AunisWorldGen(), 0);
+        Aunis.info("Successfully registered World Generation!");
 
     	// ThermalExpansion recipes
     	if(Loader.isModLoaded("thermalexpansion") && AunisConfig.integrationsConfig.tExpansionIntegration) {
             Aunis.info("Thermal Expansion found... Connecting...");
+
             ThermalIntegration.registerRecipes();
             Aunis.info("Successfully connected into Thermal Expansion!");
         }
@@ -136,6 +144,7 @@ public class Aunis {
         OreDictionary.registerOre("ingotTitanium", AunisItems.TITANIUM_INGOT);
         OreDictionary.registerOre("blockTrinium", AunisBlocks.TRINIUM_BLOCK);
         OreDictionary.registerOre("blockTitanium", AunisBlocks.TITANIUM_BLOCK);
+        Aunis.info("Successfully registered OreDictionary!");
 
     	// ----------------------------------------------------------------------------------------------------------------
     	// OpenComputers
@@ -163,22 +172,26 @@ public class Aunis {
 		modFixs.registerFix(FixTypes.BLOCK_ENTITY, new TileNamesFixer());
 
         StargateSizeEnum.init();
+        Aunis.info("Successfully registered Stargate sizes!");
     	proxy.init(event);
     }
  
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) throws IOException {    	
     	proxy.postInit(event);
+        Aunis.info("Aunis loaded!");
     }
     
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
     	AunisCommands.registerCommands(event);
+        Aunis.info("Successfully registered Commands!");
     }
     
     @EventHandler
     public void serverStarted(FMLServerStartedEvent event) throws IOException {    	
     	StargateDimensionConfig.update();
+        Aunis.info("Server started!");
     }
 
     /**

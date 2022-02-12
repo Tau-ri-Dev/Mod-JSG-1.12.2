@@ -1,5 +1,6 @@
 package mrjake.aunis.integration.tconstruct;
 
+import mrjake.aunis.fluid.AunisFluids;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.RegistryEvent;
@@ -21,10 +22,8 @@ public class TConstructIntegration {
     @Optional.Method(modid = "tconstruct")
     public static void initFluids() {
         List<MoltenMaterial> fluidList = new ArrayList<>();
-        fluidList.add(new MoltenMaterial("trinium_molten", "Trinium", true));
-        fluidList.add(new MoltenMaterial("titanium_molten", "Titanium", true, 1843758));
-
-
+        fluidList.add(AunisFluids.moltenTitanium);
+        fluidList.add(AunisFluids.moltenTrinium);
 
         fluids = fluidList.toArray(new Fluid[0]);
         for (MoltenMaterial mm:fluidList){

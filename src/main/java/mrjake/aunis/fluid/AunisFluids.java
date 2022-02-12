@@ -3,6 +3,7 @@ package mrjake.aunis.fluid;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.integration.tconstruct.MoltenMaterial;
 import mrjake.aunis.integration.tconstruct.TConstructIntegration;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Loader;
@@ -24,8 +25,20 @@ public class AunisFluids {
 	public static MoltenFluid moltenNaquadahRefined = new MoltenFluid("naquadah_molten_refined");
 	public static MoltenFluid moltenNaquadahAlloy = new MoltenFluid("naquadah_molten_alloy");
 
-	public static MoltenFluid moltenTitanium = new MoltenFluid("titanium_molten");
-	public static MoltenFluid moltenTrinium = new MoltenFluid("trinium_molten");
+	public static MoltenMaterial moltenTitanium = new MoltenMaterial(
+			"titanium_molten",
+			"Titanium",
+			1000,
+			new ResourceLocation(Aunis.ModID, "fluids/titanium_molten_still"),
+			new ResourceLocation(Aunis.ModID, "fluids/titanium_molten_flow")
+	);
+	public static MoltenMaterial moltenTrinium = new MoltenMaterial(
+			"trinium_molten",
+			"Trinium",
+			1000,
+			new ResourceLocation(Aunis.ModID, "fluids/trinium_molten_still"),
+			new ResourceLocation(Aunis.ModID, "fluids/trinium_molten_flow")
+	);
 
 	private static Fluid[] fluids = {
 			moltenSiliconBlack,

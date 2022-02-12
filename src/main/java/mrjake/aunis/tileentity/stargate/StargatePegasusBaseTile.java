@@ -372,9 +372,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       case INCOMING:
         return SoundEventEnum.GATE_PEGASUS_INCOMING;
       case CHEVRON_OPEN:
-        return SoundEventEnum.GATE_PEGASUS_CHEVRON_OPEN;
       case CHEVRON_SHUT:
-        return SoundEventEnum.GATE_PEGASUS_CHEVRON_SHUT;
+        return SoundEventEnum.GATE_PEGASUS_CHEVRON_OPEN;
     }
 
     return null;

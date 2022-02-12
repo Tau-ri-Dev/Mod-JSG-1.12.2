@@ -1,14 +1,7 @@
 package mrjake.aunis.integration.tconstruct;
 
-import mrjake.aunis.fluid.MoltenFluid;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.Mod;
-
-/**
- * @author matousss
- */
 
 
 public class MoltenMaterial extends Fluid {
@@ -35,6 +28,17 @@ public class MoltenMaterial extends Fluid {
         setLuminosity(4);
         ORE_DICT = oreDict;
         TOOL_FORGE = toolForge;
+        COLOR = super.color;
+    }
+
+    public MoltenMaterial(String name, String oreDict, int temp, ResourceLocation still, ResourceLocation flowing) {
+        super(name, still, flowing);
+        setDensity(2000);
+        setViscosity(6000);
+        setTemperature(temp);
+        setLuminosity(4);
+        ORE_DICT = oreDict;
+        TOOL_FORGE = true;
         COLOR = super.color;
     }
 
