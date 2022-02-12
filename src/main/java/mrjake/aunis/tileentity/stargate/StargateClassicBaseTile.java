@@ -110,9 +110,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     protected void engageGate() {
         super.engageGate();
         for (BlockPos beamerPos : linkedBeamers) {
-            if(world.getTileEntity(beamerPos) == null)
-                removeLinkedBeamer(beamerPos);
-            else
+            if(world.getTileEntity(beamerPos) != null)
                 ((BeamerTile) Objects.requireNonNull(world.getTileEntity(beamerPos))).gateEngaged(targetGatePos);
         }
     }
@@ -121,9 +119,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void closeGate(StargateClosedReasonEnum reason) {
         super.closeGate(reason);
         for (BlockPos beamerPos : linkedBeamers) {
-            if(world.getTileEntity(beamerPos) == null)
-                removeLinkedBeamer(beamerPos);
-            else
+            if(world.getTileEntity(beamerPos) != null)
                 ((BeamerTile) Objects.requireNonNull(world.getTileEntity(beamerPos))).gateClosed();
         }
     }
@@ -219,9 +215,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         ItemHandlerHelper.dropInventoryItems(world, pos, itemStackHandler);
 
         for (BlockPos beamerPos : linkedBeamers) {
-            if(world.getTileEntity(beamerPos) == null)
-                removeLinkedBeamer(beamerPos);
-            else {
+            if(world.getTileEntity(beamerPos) != null){
                 BeamerTile beamerTile = (BeamerTile) world.getTileEntity(beamerPos);
                 beamerTile.setLinkedGate(null, null);
             }
@@ -287,7 +281,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 if(entityTemporallyList.length < 2) continue; // prevents from Ticking block entity null pointer
                 String entityStringNew =
                         (
-                                (entityTemporallyList[0] == "minecraft")
+                                (entityTemporallyList[0].equals("minecraft"))
                                         ? entityTemporallyList[1]
                                         : entityTemporallyList[0] + ":" + entityTemporallyList[1]
                         );
@@ -567,9 +561,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         boolean beamerActive = false;
 
         for (BlockPos beamerPos : linkedBeamers) {
-            if(world.getTileEntity(beamerPos) == null)
-                removeLinkedBeamer(beamerPos);
-            else {
+            if(world.getTileEntity(beamerPos) != null){
                 BeamerTile beamerTile = (BeamerTile) world.getTileEntity(beamerPos);
                 beamerActive = beamerTile.isActive();
             }
@@ -1480,9 +1472,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     private void updateBeamers() {
         if (stargateState.engaged()) {
             for (BlockPos beamerPos : linkedBeamers) {
-                if(world.getTileEntity(beamerPos) == null)
-                    removeLinkedBeamer(beamerPos);
-                else
+                if(world.getTileEntity(beamerPos) != null)
                     ((BeamerTile) Objects.requireNonNull(world.getTileEntity(beamerPos))).gateEngaged(targetGatePos);
             }
         }
