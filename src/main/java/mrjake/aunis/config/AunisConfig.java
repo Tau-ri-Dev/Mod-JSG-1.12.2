@@ -517,6 +517,9 @@ public class AunisConfig {
         @RangeDouble(min = 0, max = 1)
         public double glyphTransparency = 0.75;
 
+        @Name("Enable hint when dialing with notebook page")
+        public boolean enablePageHint = true;
+
         @Name("Aunis volume")
         @RangeDouble(min = 0, max = 1)
         public float volume = 1;

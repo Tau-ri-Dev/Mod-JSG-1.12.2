@@ -113,10 +113,10 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
             break;
         }
 
-        return new DHDMilkyWayRendererState(address, brbActive, determineBiomeOverride());
+        return new DHDMilkyWayRendererState(address, brbActive, determineBiomeOverride(), gateTile.connectedToGate);
       }
 
-      return new DHDMilkyWayRendererState(address, false, determineBiomeOverride());
+      return new DHDMilkyWayRendererState(address, false, determineBiomeOverride(), false);
     }
     throw new UnsupportedOperationException("EnumStateType." + stateType.name() + " not implemented on " + this.getClass().getName());
   }
@@ -131,16 +131,26 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
 
   @Override
   public void setState(StateTypeEnum stateType, State state) {
+
+    boolean connected = false;
+    if (isLinked()) {
+      StargateAbstractBaseTile gateTile = getLinkedGate(world);
+      if(gateTile != null)
+        connected = gateTile.connectedToGate;
+    }
+
     switch (stateType) {
       case RENDERER_STATE:
         float horizontalRotation = world.getBlockState(pos).getValue(AunisProps.ROTATION_HORIZONTAL) * -22.5f;
-        rendererStateClient = ((DHDMilkyWayRendererState) state).initClient(pos, horizontalRotation, BiomeOverlayEnum.updateBiomeOverlay(world, pos, SUPPORTED_OVERLAYS));
+        rendererStateClient = ((DHDMilkyWayRendererState) state).initClient(pos, horizontalRotation, BiomeOverlayEnum.updateBiomeOverlay(world, pos, SUPPORTED_OVERLAYS), connected);
 
         break;
 
       case DHD_ACTIVATE_BUTTON:
         if(state == null) break;
         DHDActivateButtonState activateState = (DHDActivateButtonState) state;
+
+        ((DHDAbstractRendererState) getRendererStateClient()).setIsConnected(connected);
 
         if (activateState.clearAll) ((DHDMilkyWayRendererState) getRendererStateClient()).clearSymbols(world.getTotalWorldTime());
         else  ((DHDMilkyWayRendererState) getRendererStateClient()).activateSymbol(world.getTotalWorldTime(), SymbolMilkyWayEnum.valueOf(activateState.symbol));

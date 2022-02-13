@@ -210,8 +210,6 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     }
 
     // incoming animation
-
-
     public void prepareGateToConnect(int dialedAddressSize, int period) {
         if(stargateState == EnumStargateState.DIALING_COMPUTER) abortDialingSequence(1);
         period -= (1000/dialedAddressSize);

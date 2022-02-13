@@ -49,7 +49,7 @@ import java.util.Random;
 
 public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 
-	public void setLinkedDHD(BlockPos dhdPos, int linkId) {}
+	public void setLinkedDHD(BlockPos dhdPos, int linkId){}
 		
 	// ------------------------------------------------------------------------
 	// Stargate state

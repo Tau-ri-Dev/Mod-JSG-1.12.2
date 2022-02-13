@@ -114,10 +114,10 @@ public class DHDPegasusTile extends DHDAbstractTile {
                         break;
                 }
 
-                return new DHDPegasusRendererState(address, brbActive, determineBiomeOverride());
+                return new DHDPegasusRendererState(address, brbActive, determineBiomeOverride(), gateTile.connectedToGate);
             }
 
-            return new DHDPegasusRendererState(address, false, determineBiomeOverride());
+            return new DHDPegasusRendererState(address, false, determineBiomeOverride(), false);
         }
         throw new UnsupportedOperationException("EnumStateType." + stateType.name() + " not implemented on " + this.getClass().getName());
     }
@@ -132,16 +132,26 @@ public class DHDPegasusTile extends DHDAbstractTile {
 
     @Override
     public void setState(StateTypeEnum stateType, State state) {
+
+        boolean connected = false;
+        if (isLinked()) {
+            StargateAbstractBaseTile gateTile = getLinkedGate(world);
+            if(gateTile != null)
+                connected = gateTile.connectedToGate;
+        }
+
         switch (stateType) {
             case RENDERER_STATE:
                 float horizontalRotation = world.getBlockState(pos).getValue(AunisProps.ROTATION_HORIZONTAL) * -22.5f;
-                rendererStateClient = ((DHDPegasusRendererState) state).initClient(pos, horizontalRotation, BiomeOverlayEnum.updateBiomeOverlay(world, pos, SUPPORTED_OVERLAYS));
+                rendererStateClient = ((DHDPegasusRendererState) state).initClient(pos, horizontalRotation, BiomeOverlayEnum.updateBiomeOverlay(world, pos, SUPPORTED_OVERLAYS), connected);
 
                 break;
 
             case DHD_ACTIVATE_BUTTON:
                 if(state == null) break;
                 DHDActivateButtonState activateState = (DHDActivateButtonState) state;
+
+                ((DHDAbstractRendererState) getRendererStateClient()).setIsConnected(connected);
 
                 if (activateState.clearAll) ((DHDPegasusRendererState) getRendererStateClient()).clearSymbols(world.getTotalWorldTime());
                 else ((DHDPegasusRendererState) getRendererStateClient()).activateSymbol(world.getTotalWorldTime(), SymbolPegasusEnum.valueOf(activateState.symbol));

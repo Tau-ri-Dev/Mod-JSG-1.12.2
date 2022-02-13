@@ -196,4 +196,12 @@ public class StargateAddress implements INBTSerializable<NBTTagCompound> {
 		}
 		return true;
 	}
+
+	public boolean contains(SymbolInterface symbol){
+		for(SymbolInterface s : address){
+			if(s.equals(symbol))
+				return true;
+		}
+		return false;
+	}
 }

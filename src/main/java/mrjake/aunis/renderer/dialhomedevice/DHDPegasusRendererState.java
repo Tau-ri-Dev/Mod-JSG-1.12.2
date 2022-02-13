@@ -5,9 +5,7 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.renderer.activation.Activation;
 import mrjake.aunis.renderer.activation.DHDPegasusActivation;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
-import mrjake.aunis.stargate.network.StargateAddressDynamic;
-import mrjake.aunis.stargate.network.SymbolPegasusEnum;
-import mrjake.aunis.stargate.network.SymbolTypeEnum;
+import mrjake.aunis.stargate.network.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -45,12 +43,12 @@ public class DHDPegasusRendererState extends DHDAbstractRendererState {
 		}
 	}
 
-	public DHDPegasusRendererState(StargateAddressDynamic addressDialed, boolean brbActive, BiomeOverlayEnum biomeOverride) {
-		super(addressDialed, brbActive, biomeOverride);
+	public DHDPegasusRendererState(StargateAddressDynamic addressDialed, boolean brbActive, BiomeOverlayEnum biomeOverride, boolean stargateIsConnected) {
+		super(addressDialed, brbActive, biomeOverride, stargateIsConnected);
 	}
 
-	public DHDPegasusRendererState initClient(BlockPos pos, float horizontalRotation, BiomeOverlayEnum biomeOverlay) {
-		super.initClient(pos, horizontalRotation, biomeOverlay);
+	public DHDPegasusRendererState initClient(BlockPos pos, float horizontalRotation, BiomeOverlayEnum biomeOverlay, boolean stargateIsConnected) {
+		super.initClient(pos, horizontalRotation, biomeOverlay, stargateIsConnected);
 
 		for (SymbolPegasusEnum symbol : SymbolPegasusEnum.values()) {
 			if (symbol.brb())
@@ -97,6 +95,22 @@ public class DHDPegasusRendererState extends DHDAbstractRendererState {
 			return container.BRB_RESOURCE_MAP.get(BUTTON_STATE_MAP.get(symbol));
 
 		return container.SYMBOL_RESOURCE_MAP.get(BUTTON_STATE_MAP.get(symbol));
+	}
+
+	@Override
+	public boolean isButtonActive(SymbolInterface symbol){
+		return BUTTON_STATE_MAP.get((SymbolPegasusEnum) symbol) == 5;
+	}
+
+	@Override
+	public int getActivatedButtons() {
+		int count = 0;
+		SymbolInterface origin = SymbolPegasusEnum.getOrigin();
+		for(int state : BUTTON_STATE_MAP.values()){
+			if(state > 0) count++;
+		}
+		if(BUTTON_STATE_MAP.get((SymbolPegasusEnum) origin) > 0) count--;
+		return count;
 	}
 
 	public void fromBytes(ByteBuf buf) {

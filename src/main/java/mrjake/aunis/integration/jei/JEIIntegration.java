@@ -28,7 +28,7 @@ public final class JEIIntegration implements IModPlugin {
         registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(AunisItems.NOTEBOOK_ITEM, 1));
 
         // Tab handling
-        // registry.addAdvancedGuiHandlers(new JEIAdvancedGuiHandler());
+        registry.addAdvancedGuiHandlers(new JEIAdvancedGuiHandler());
 
         List<IRecipeWrapper> recipes = new ArrayList<>();
         recipes.addAll(JEINotebookRecipe.genAll());

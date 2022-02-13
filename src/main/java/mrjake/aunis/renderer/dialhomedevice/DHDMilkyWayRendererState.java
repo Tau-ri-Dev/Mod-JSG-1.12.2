@@ -6,6 +6,7 @@ import mrjake.aunis.renderer.activation.Activation;
 import mrjake.aunis.renderer.activation.DHDActivation;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.stargate.network.StargateAddressDynamic;
+import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import net.minecraft.util.ResourceLocation;
@@ -45,12 +46,12 @@ public class DHDMilkyWayRendererState extends DHDAbstractRendererState {
 		}
 	}
 	
-	public DHDMilkyWayRendererState(StargateAddressDynamic addressDialed, boolean brbActive, BiomeOverlayEnum biomeOverride) {
-		super(addressDialed, brbActive, biomeOverride);
+	public DHDMilkyWayRendererState(StargateAddressDynamic addressDialed, boolean brbActive, BiomeOverlayEnum biomeOverride, boolean stargateIsConnected) {
+		super(addressDialed, brbActive, biomeOverride, stargateIsConnected);
 	}
 	
-	public DHDMilkyWayRendererState initClient(BlockPos pos, float horizontalRotation, BiomeOverlayEnum biomeOverlay) {
-		super.initClient(pos, horizontalRotation, biomeOverlay);
+	public DHDMilkyWayRendererState initClient(BlockPos pos, float horizontalRotation, BiomeOverlayEnum biomeOverlay, boolean stargateIsConnected) {
+		super.initClient(pos, horizontalRotation, biomeOverlay, stargateIsConnected);
 		
 		for (SymbolMilkyWayEnum symbol : SymbolMilkyWayEnum.values()) {			
 			if (symbol.brb())
@@ -70,7 +71,7 @@ public class DHDMilkyWayRendererState extends DHDAbstractRendererState {
 	private boolean isSymbolActiveClientSide(SymbolMilkyWayEnum symbol) {
 		return BUTTON_STATE_MAP.get(symbol) != 0;
 	}
-	
+
 	public void clearSymbols(long totalWorldTime) {
 		for (SymbolMilkyWayEnum symbol : SymbolMilkyWayEnum.values()) {
 			if (isSymbolActiveClientSide(symbol)) {
@@ -97,6 +98,22 @@ public class DHDMilkyWayRendererState extends DHDAbstractRendererState {
 			return container.BRB_RESOURCE_MAP.get(BUTTON_STATE_MAP.get(symbol));
 
 		return container.SYMBOL_RESOURCE_MAP.get(BUTTON_STATE_MAP.get(symbol));
+	}
+
+	@Override
+	public boolean isButtonActive(SymbolInterface symbol){
+		return BUTTON_STATE_MAP.get((SymbolMilkyWayEnum) symbol) == 5;
+	}
+
+	@Override
+	public int getActivatedButtons() {
+		int count = 0;
+		SymbolInterface origin = SymbolMilkyWayEnum.getOrigin();
+		for(int state : BUTTON_STATE_MAP.values()){
+			if(state > 0) count++;
+		}
+		if(BUTTON_STATE_MAP.get((SymbolMilkyWayEnum) origin) > 0) count--;
+		return count;
 	}
 
 	public void fromBytes(ByteBuf buf) {

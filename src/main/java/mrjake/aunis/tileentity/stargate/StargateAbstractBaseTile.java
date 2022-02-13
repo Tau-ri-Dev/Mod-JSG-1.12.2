@@ -438,7 +438,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected Map<SymbolTypeEnum, StargatePos> gatePosMap = new HashMap<>(3);
     protected StargateAddressDynamic dialedAddress = new StargateAddressDynamic(getSymbolType());
     protected StargatePos targetGatePos;
-    protected boolean connectedToGate = false;
+    public boolean connectedToGate = false;
     protected boolean connectingToGate = false;
     protected boolean isIncoming = false;
 
@@ -563,6 +563,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 int size = dialedAddress.size();
 
                 connectedToGate = true;
+                markDirty();
                 int period = 400;
                 if(byComputer){
                     time += 20; // add 20 ticks to time
