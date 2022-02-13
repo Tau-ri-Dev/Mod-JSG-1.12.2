@@ -23,6 +23,9 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import static mrjake.aunis.block.AunisBlocks.INVISIBLE_BLOCK;
+import static mrjake.aunis.block.AunisBlocks.IRIS_BLOCK;
+
 @EventBusSubscriber
 public class AunisEventHandler {
 
@@ -88,8 +91,10 @@ public class AunisEventHandler {
 		}
 	}
 
+	@SubscribeEvent
 	public static void onBlockPlace(BlockEvent.PlaceEvent event) {
-		if (event.getWorld().getBlockState(event.getPos()).getBlock() == AunisBlocks.IRIS_BLOCK) {
+		Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
+		if (IRIS_BLOCK.equals(block) || INVISIBLE_BLOCK.equals(block)) {
 			event.setCanceled(true);
 		}
 	}

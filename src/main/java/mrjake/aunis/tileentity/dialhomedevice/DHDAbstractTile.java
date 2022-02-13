@@ -15,6 +15,7 @@ import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.packet.StateUpdateRequestToServer;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
+import mrjake.aunis.renderer.dialhomedevice.DHDAbstractRendererState;
 import mrjake.aunis.stargate.StargateClosedReasonEnum;
 import mrjake.aunis.stargate.StargateOpenResult;
 import mrjake.aunis.stargate.network.*;
@@ -62,6 +63,12 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     private BlockPos linkedGate = null;
 
     private int linkId = -1;
+
+    protected DHDAbstractRendererState rendererStateClient;
+
+    public DHDAbstractRendererState getRendererStateClient() {
+        return rendererStateClient;
+    }
 
     @Override
     public void rotate(Rotation rotation) {

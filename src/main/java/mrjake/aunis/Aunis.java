@@ -19,10 +19,7 @@ import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.proxy.IProxy;
 import mrjake.aunis.worldgen.AunisWorldGen;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -41,8 +38,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
 
 @Mod( modid = Aunis.ModID, name = Aunis.Name, version = Aunis.Version, acceptedMinecraftVersions = Aunis.MCVersion, dependencies = "after:cofhcore@[4.6.0,);after:opencomputers")
 public class Aunis {	
@@ -80,8 +77,8 @@ public class Aunis {
     private static final String OC_WRAPPER_LOADED = "mrjake.aunis.integration.OCWrapperLoaded";
     private static final String OC_WRAPPER_NOT_LOADED = "mrjake.aunis.integration.OCWrapperNotLoaded";
 
-    private static final String IC2_WRAPPER_LOADED = "mrjake.aunis.integration.IC2WrapperLoaded";
-    private static final String IC2_WRAPPER_NOT_LOADED = "mrjake.aunis.integration.IC2WrapperNotLoaded";
+    //private static final String IC2_WRAPPER_LOADED = "mrjake.aunis.integration.IC2WrapperLoaded";
+    //private static final String IC2_WRAPPER_NOT_LOADED = "mrjake.aunis.integration.IC2WrapperNotLoaded";
     
     public static OCWrapperInterface ocWrapper;
     
@@ -93,7 +90,8 @@ public class Aunis {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog(); // This is the recommended way of getting a logger
-        Aunis.info("Started loading Aunis mod!");
+        File source = event.getSourceFile();
+        Aunis.info("Started loading Aunis mod in " + source.getAbsolutePath());
 
         // todo(Mine): fix this shitty shit
         //AUNIS_SOUNDS = AunisSoundCategory.add("AUNIS_SOUNDS");
@@ -101,11 +99,17 @@ public class Aunis {
 
         AunisPacketHandler.registerPackets();
         Aunis.info("Successfully registered Packets!");
+
         AunisFluids.registerFluids();
-        registerOreDictionary();
         Aunis.info("Successfully registered Fluids!");
 
-        
+        // Tinkers Construct
+        if (Loader.isModLoaded("tconstruct") && AunisConfig.integrationsConfig.tConstructIntegration) {
+            Aunis.info("TConstruct found and connection is enabled... Connecting...");
+            TConstructIntegration.initFluids();
+            Aunis.info("Successfully connected into TConstruct!");
+        }
+
     	StargateDimensionConfig.load(event.getModConfigurationDirectory());
     	
         proxy.preInit(event);
@@ -118,22 +122,16 @@ public class Aunis {
 
     	// ThermalExpansion recipes
     	if(Loader.isModLoaded("thermalexpansion") && AunisConfig.integrationsConfig.tExpansionIntegration) {
-            Aunis.info("Thermal Expansion found... Connecting...");
+            Aunis.info("Thermal Expansion found and connection is enabled... Connecting...");
 
             ThermalIntegration.registerRecipes();
             Aunis.info("Successfully connected into Thermal Expansion!");
         }
 
-        // Tinkers Construct
-        if (Loader.isModLoaded("tconstruct") && AunisConfig.integrationsConfig.tConstructIntegration) {
-            Aunis.info("TConstruct found and connection is enabled... Connecting...");
-            TConstructIntegration.initFluids();
-            Aunis.info("Successfully connected into TConstruct!");
-        }
-
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new AunisGuiHandler());
     	ItemEndpointCapability.register();
 		ForgeChunkManager.setForcedChunkLoadingCallback(Aunis.instance, ChunkLoadingCallback.INSTANCE);
+        registerOreDictionary();
         Aunis.info("Successfully registered OreDictionary!");
 
     	// ----------------------------------------------------------------------------------------------------------------
@@ -141,7 +139,7 @@ public class Aunis {
     	
     	try {
 	    	if (Loader.isModLoaded("opencomputers") && AunisConfig.integrationsConfig.ocIntegration) {
-                Aunis.info("OpenComputers found... Connecting...");
+                Aunis.info("OpenComputers found and connection is enabled... Connecting...");
                 ocWrapper = (OCWrapperInterface) Class.forName(OC_WRAPPER_LOADED).newInstance();
                 Aunis.info("Successfully connected into OpenComputers!");
             }

@@ -8,7 +8,6 @@ import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.stargate.network.StargateAddressDynamic;
 import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
-import mrjake.aunis.state.State;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -18,11 +17,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DHDMilkyWayRendererState extends State {
+public class DHDMilkyWayRendererState extends DHDAbstractRendererState {
 	public DHDMilkyWayRendererState() {}
 	
 	private static final String SYMBOL_TEXTURE_BASE = "textures/tesr/milkyway/symbol";
 	private static final String BRB_TEXTURE_BASE = "textures/tesr/milkyway/brb";
+	private static final String SYMBOL_TEXTURE_END = "jpg";
+	private static final String BRB_TEXTURE_END = "jpg";
 	
 	private static final Map<BiomeOverlayEnum, TextureContainer> BIOME_TEXTURE_MAP = new HashMap<>();
 	
@@ -36,8 +37,8 @@ public class DHDMilkyWayRendererState extends State {
 			TextureContainer container = new TextureContainer();
 			
 			for (int i=0; i<=5; i++) {
-				container.SYMBOL_RESOURCE_MAP.put(i, new ResourceLocation(Aunis.ModID, SYMBOL_TEXTURE_BASE + i + biomeOverlay.suffix + ".jpg"));
-				container.BRB_RESOURCE_MAP.put(i, new ResourceLocation(Aunis.ModID, BRB_TEXTURE_BASE + i + biomeOverlay.suffix + ".jpg"));
+				container.SYMBOL_RESOURCE_MAP.put(i, new ResourceLocation(Aunis.ModID, SYMBOL_TEXTURE_BASE + i + biomeOverlay.suffix + "." + SYMBOL_TEXTURE_END));
+				container.BRB_RESOURCE_MAP.put(i, new ResourceLocation(Aunis.ModID, BRB_TEXTURE_BASE + i + biomeOverlay.suffix + "." + BRB_TEXTURE_END));
 			}
 			
 			BIOME_TEXTURE_MAP.put(biomeOverlay, container);
@@ -45,15 +46,11 @@ public class DHDMilkyWayRendererState extends State {
 	}
 	
 	public DHDMilkyWayRendererState(StargateAddressDynamic addressDialed, boolean brbActive, BiomeOverlayEnum biomeOverride) {
-		this.addressDialed = addressDialed;
-		this.brbActive = brbActive;
-		this.biomeOverride = biomeOverride;
+		super(addressDialed, brbActive, biomeOverride);
 	}
 	
 	public DHDMilkyWayRendererState initClient(BlockPos pos, float horizontalRotation, BiomeOverlayEnum biomeOverlay) {
-		this.pos = pos;
-		this.horizontalRotation = horizontalRotation;
-		this.biomeOverlay = biomeOverlay;
+		super.initClient(pos, horizontalRotation, biomeOverlay);
 		
 		for (SymbolMilkyWayEnum symbol : SymbolMilkyWayEnum.values()) {			
 			if (symbol.brb())
@@ -65,35 +62,10 @@ public class DHDMilkyWayRendererState extends State {
 		return this;
 	}
 	
-	
-	// Global
-	// Not saved
-	public BlockPos pos;
-	public float horizontalRotation;
-	private BiomeOverlayEnum biomeOverlay;
-	
 	// Symbols
 	// Not saved
 	private final Map<SymbolMilkyWayEnum, Integer> BUTTON_STATE_MAP = new HashMap<>(38);
 	public List<Activation<SymbolMilkyWayEnum>> activationList = new ArrayList<>();
-	// Saved
-	public StargateAddressDynamic addressDialed;
-	public boolean brbActive;
-	
-	// Biome Override
-	// Saved
-	public BiomeOverlayEnum biomeOverride;
-	
-	public BiomeOverlayEnum getBiomeOverlay() {
-		if (biomeOverride != null)
-			return biomeOverride;
-		
-		return biomeOverlay;
-	}
-	
-	public void setBiomeOverlay(BiomeOverlayEnum biomeOverlay) {
-		this.biomeOverlay = biomeOverlay;
-	}
 	
 	private boolean isSymbolActiveClientSide(SymbolMilkyWayEnum symbol) {
 		return BUTTON_STATE_MAP.get(symbol) != 0;
@@ -110,7 +82,8 @@ public class DHDMilkyWayRendererState extends State {
 	public void activateSymbol(long totalWorldTime, SymbolMilkyWayEnum symbol) {
 		activationList.add(new DHDActivation(symbol, totalWorldTime, false));
 	}
-	
+
+	@Override
 	public void iterate(World world, double partialTicks) {
 		Activation.iterate(activationList, world.getTotalWorldTime(), partialTicks, (index, stage) -> {
 			BUTTON_STATE_MAP.put(index, Math.round(stage));
@@ -125,29 +98,9 @@ public class DHDMilkyWayRendererState extends State {
 
 		return container.SYMBOL_RESOURCE_MAP.get(BUTTON_STATE_MAP.get(symbol));
 	}
-	
-	
-	public void toBytes(ByteBuf buf) {
-		addressDialed.toBytes(buf);
-		buf.writeBoolean(brbActive);
-		
-		if (biomeOverride != null) {
-			buf.writeBoolean(true);
-			buf.writeInt(biomeOverride.ordinal());
-		}
-		
-		else {
-			buf.writeBoolean(false);
-		}
-	}
 
 	public void fromBytes(ByteBuf buf) {
 		addressDialed = new StargateAddressDynamic(SymbolTypeEnum.MILKYWAY);		
-		addressDialed.fromBytes(buf);
-		brbActive = buf.readBoolean();
-		
-		if (buf.readBoolean()) {
-			biomeOverride = BiomeOverlayEnum.values()[buf.readInt()];
-		}
+		super.fromBytes(buf);
 	}
 }

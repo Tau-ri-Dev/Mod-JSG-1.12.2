@@ -6,6 +6,7 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.fluid.AunisFluids;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
+import mrjake.aunis.renderer.dialhomedevice.DHDAbstractRendererState;
 import mrjake.aunis.renderer.dialhomedevice.DHDMilkyWayRendererState;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
@@ -34,12 +35,6 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
   @Override
   public EnumSet<BiomeOverlayEnum> getSupportedOverlays() {
     return SUPPORTED_OVERLAYS;
-  }
-
-  private DHDMilkyWayRendererState rendererStateClient;
-
-  public DHDMilkyWayRendererState getRendererStateClient() {
-    return rendererStateClient;
   }
 
   @Override
@@ -147,8 +142,8 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
         if(state == null) break;
         DHDActivateButtonState activateState = (DHDActivateButtonState) state;
 
-        if (activateState.clearAll) getRendererStateClient().clearSymbols(world.getTotalWorldTime());
-        else getRendererStateClient().activateSymbol(world.getTotalWorldTime(), SymbolMilkyWayEnum.valueOf(activateState.symbol));
+        if (activateState.clearAll) ((DHDMilkyWayRendererState) getRendererStateClient()).clearSymbols(world.getTotalWorldTime());
+        else  ((DHDMilkyWayRendererState) getRendererStateClient()).activateSymbol(world.getTotalWorldTime(), SymbolMilkyWayEnum.valueOf(activateState.symbol));
 
         break;
 

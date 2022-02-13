@@ -6,6 +6,8 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.fluid.AunisFluids;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
+import mrjake.aunis.renderer.dialhomedevice.DHDAbstractRendererState;
+import mrjake.aunis.renderer.dialhomedevice.DHDMilkyWayRendererState;
 import mrjake.aunis.renderer.dialhomedevice.DHDPegasusRendererState;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
@@ -34,12 +36,6 @@ public class DHDPegasusTile extends DHDAbstractTile {
     @Override
     public EnumSet<BiomeOverlayEnum> getSupportedOverlays() {
         return SUPPORTED_OVERLAYS;
-    }
-
-    private DHDPegasusRendererState rendererStateClient;
-
-    public DHDPegasusRendererState getRendererStateClient() {
-        return rendererStateClient;
     }
 
     @Override
@@ -147,8 +143,8 @@ public class DHDPegasusTile extends DHDAbstractTile {
                 if(state == null) break;
                 DHDActivateButtonState activateState = (DHDActivateButtonState) state;
 
-                if (activateState.clearAll) getRendererStateClient().clearSymbols(world.getTotalWorldTime());
-                else getRendererStateClient().activateSymbol(world.getTotalWorldTime(), SymbolPegasusEnum.valueOf(activateState.symbol));
+                if (activateState.clearAll) ((DHDPegasusRendererState) getRendererStateClient()).clearSymbols(world.getTotalWorldTime());
+                else ((DHDPegasusRendererState) getRendererStateClient()).activateSymbol(world.getTotalWorldTime(), SymbolPegasusEnum.valueOf(activateState.symbol));
 
                 break;
 
