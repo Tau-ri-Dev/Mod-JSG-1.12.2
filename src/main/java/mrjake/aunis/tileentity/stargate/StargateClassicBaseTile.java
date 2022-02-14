@@ -67,7 +67,6 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.CapabilityItemHandler;
-import scala.reflect.internal.Trees;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -76,7 +75,6 @@ import java.util.*;
 import static mrjake.aunis.item.AunisItems.UPGRADE_IRIS;
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.PHYSICAL_IRIS_ANIMATION_LENGTH;
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.SHIELD_IRIS_ANIMATION_LENGTH;
-import static mrjake.aunis.stargate.StargateClassicSpinHelper.A_ANGLE_PER_TICK;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.G37;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
@@ -682,6 +680,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (codeSender != null && !world.isRemote) {
             compound.setTag("codeSender", codeSender.serializeNBT());
         }
+
+        compound.setInteger("incomingLastChevronLightUp", incomingLastChevronLightUp);
+        compound.setInteger("incomingPeriod", incomingPeriod);
+        compound.setInteger("incomingAddressSize", incomingAddressSize);
         return super.writeToNBT(compound);
     }
 
@@ -712,6 +714,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             NBTTagCompound nbt = compound.getCompoundTag("codeSender");
             codeSender = codeSenderFromNBT(nbt);
         }
+
+        incomingPeriod = compound.getInteger("incomingPeriod");
+        incomingLastChevronLightUp = compound.getInteger("incomingLastChevronLightUp");
+        incomingAddressSize = compound.getInteger("incomingAddressSize");
+
         super.readFromNBT(compound);
     }
 
