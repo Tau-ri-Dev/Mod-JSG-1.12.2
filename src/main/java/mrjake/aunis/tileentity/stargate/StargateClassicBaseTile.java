@@ -1070,11 +1070,17 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     public void spinRing(int rounds) {
         targetRingSymbol = currentRingSymbol;
-        spinDirection = spinDirection.opposite();
+        spinDirection = EnumSpinDirection.CLOCKWISE;
         stargateState = EnumStargateState.DIALING_COMPUTER;
         if(this instanceof StargateUniverseBaseTile) {
             sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
             AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_UNIVERSE_DIAL_START);
+        }
+        if(rounds == 0)
+            rounds = 1;
+        if(rounds < 0) {
+            spinDirection = EnumSpinDirection.COUNTER_CLOCKWISE;
+            rounds *= -1;
         }
 
         float distance = 360* rounds;
