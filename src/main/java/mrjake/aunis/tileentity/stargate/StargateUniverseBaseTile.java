@@ -1,5 +1,6 @@
 package mrjake.aunis.tileentity.stargate;
 
+import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateSizeEnum;
 import mrjake.aunis.packet.AunisPacketHandler;
@@ -105,9 +106,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
   @Override
   protected void disconnectGate() {
     super.disconnectGate();
-
-    /*if (targetRingSymbol != TOP_CHEVRON)
-      addSymbolToAddressManual(TOP_CHEVRON, null);*/
     addSymbolToAddressManual(TOP_CHEVRON, null);
   }
 
@@ -129,70 +127,55 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
   @Override
   public void incomingWormhole(int dialedAddressSize){
-    prepareGateToConnect(dialedAddressSize, 10);
+    startIncomingAnimation(dialedAddressSize, 10);
 
     super.incomingWormhole(9);
   }
 
   @Override
   public void incomingWormhole(int dialedAddressSize, int time){
-    prepareGateToConnect(dialedAddressSize, time);
+    time = time * dialedAddressSize;
+    int period = time - 2000;
+    if(period < 0) period = 0;
+    startIncomingAnimation(dialedAddressSize, period);
 
     super.incomingWormhole(9, false);
   }
 
-  public void prepareGateToConnect(int dialedAddressSize, int time){
-    time = time * dialedAddressSize;
-    int period = time - 2000;
-    if(period < 0) period = 0;
-    this.stargateState = EnumStargateState.INCOMING;
-    sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 9, true);
-    // do spin animation
+  @Override
+  public void startIncomingAnimation(int addressSize, int period){
+    super.startIncomingAnimation(addressSize, period);
+    this.lightUpChevronByIncoming(!AunisConfig.stargateConfig.allowIncomingAnimations);
+  }
 
-    final int[] i = {1};
-    Timer timer = new Timer();
+  @Override
+  public void lightUpChevronByIncoming(boolean disableAnimation){
+    super.lightUpChevronByIncoming(disableAnimation);
+    if(incomingPeriod == -1) return;
 
-    if(((time/1000)*20)+40 >= StargateClassicSpinHelper.getAnimationDuration(360)){
-      timer.schedule(new TimerTask() {
-        public void run() {
-          if (irisMode == EnumIrisMode.AUTO && isOpened() && isIncoming) {
-            toggleIris();
-            isIncoming = false;
-          }
-          if(!isIncoming){
-            stargateState = EnumStargateState.IDLE;
-            markDirty();
-          }
-          timer.cancel();
-        }
-      }, period, 100);
-
+    if((incomingPeriod >= (StargateClassicSpinHelper.getAnimationDuration(360) - 40)) && !disableAnimation) {
       addSymbolToAddressManual(SymbolUniverseEnum.G37, null);
 
       sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
-      sendSignal(null, "stargate_incoming_wormhole", new Object[]{dialedAddressSize});
+      sendSignal(null, "stargate_incoming_wormhole", new Object[]{incomingAddressSize});
       playSoundEvent(StargateSoundEventEnum.INCOMING);
-
+      resetIncomingAnimation();
+      if (incomingLastChevronLightUp >= incomingAddressSize)
+        isIncoming = false;
     }
-    else {
-
-      timer.schedule(new TimerTask() {
-        public void run() {
-          if (isIncoming){
-            if (irisMode == EnumIrisMode.AUTO && isOpened()) {
-              toggleIris();
-            }
-            sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
-            sendSignal(null, "stargate_incoming_wormhole", new Object[]{dialedAddressSize});
-            playSoundEvent(StargateSoundEventEnum.INCOMING);
-          }
-          isIncoming = false;
-          markDirty();
-          timer.cancel();
-        }
-      }, period, 100);
-
+    else{
+      if (incomingLastChevronLightUp > 1) {
+        stargateState = EnumStargateState.INCOMING;
+        sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
+        sendSignal(null, "stargate_incoming_wormhole", new Object[]{incomingAddressSize});
+        playSoundEvent(StargateSoundEventEnum.INCOMING);
+        isIncoming = false;
+        resetIncomingAnimation();
+      }
+      else if(isIncoming)
+        stargateState = EnumStargateState.INCOMING;
     }
+    markDirty();
   }
 
   @Override
@@ -228,6 +211,9 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
   @Override
   public void executeTask(EnumScheduledTask scheduledTask, NBTTagCompound customData) {
+    boolean onlySpin = false;
+    if(customData != null && customData.hasKey("onlySpin"))
+      onlySpin = customData.getBoolean("onlySpin");
     switch (scheduledTask) {
       case STARGATE_DIAL_NEXT:
         if (customData != null && customData.hasKey("symbolToDial"))
@@ -240,6 +226,12 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
         break;
 
       case STARGATE_SPIN_FINISHED:
+        if(onlySpin){
+          stargateState = EnumStargateState.IDLE;
+          sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 9, true);
+          markDirty();
+          break;
+        }
         if (targetRingSymbol != TOP_CHEVRON) {
           if (canAddSymbol(targetRingSymbol) && !abortDialing) {
             addSymbolToAddress(targetRingSymbol);

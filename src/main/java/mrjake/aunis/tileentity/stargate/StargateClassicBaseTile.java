@@ -197,9 +197,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public void onGateBroken() {
-//        if (StargateNetwork.get(world).getNetherGate().equals(this.getStargateAddress(SymbolTypeEnum.MILKYWAY))) {
-//            StargateNetwork.get(world).setNetherGate(null);
-//        }
         super.onGateBroken();
         updateChevronLight(0, false);
         if (irisType != EnumIrisType.NULL && irisState == EnumIrisState.CLOSED) {
@@ -262,10 +259,83 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     protected abstract boolean onGateMergeRequested();
 
     private BlockPos lastPos = BlockPos.ORIGIN;
-    boolean isFacingFixed = false;
+
+    /*
+     * Stargate Incoming Animations Helper
+     */
+
+    protected int incomingAddressSize = -1;
+    protected int incomingPeriod = -1;
+    protected int incomingLastChevronLightUp = -1;
+
+    /**
+     * Begin incoming animation
+     *
+     * @param addressSize - how many chevrons should light up
+     * @param period - period in milliseconds
+     */
+    public void startIncomingAnimation(int addressSize, int period){
+
+        double ticks = (double) (period*20)/1000;
+        incomingPeriod = (int) Math.round(ticks);
+        incomingAddressSize = addressSize;
+        incomingLastChevronLightUp = 0;
+        stargateState = EnumStargateState.INCOMING;
+        sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 9, true);
+        if(stargateState == EnumStargateState.DIALING_COMPUTER)
+            abortDialingSequence(1);
+
+        markDirty();
+    }
+
+    /**
+     * Reset incoming animation state
+     */
+    public void resetIncomingAnimation(){
+        incomingAddressSize = -1;
+        incomingPeriod = -1;
+        incomingLastChevronLightUp = -1;
+        markDirty();
+    }
+
+    /**
+     * Try to light up chevron/symbol
+     */
+    public void lightUpChevronByIncoming(boolean disableAnimation){
+        if(!isIncoming) {
+            if(incomingPeriod != -1) stargateState = EnumStargateState.IDLE;
+            sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 9, true);
+            resetIncomingAnimation();
+            markDirty();
+            return;
+        }
+
+        if(stargateState.idle()){
+            stargateState = EnumStargateState.IDLE;
+            markDirty();
+            sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 0, false);
+            resetIncomingAnimation();
+            return;
+        }
+        incomingLastChevronLightUp++;
+    };
+
+    /**
+     * Try to run {@link #lightUpChevronByIncoming(boolean disableAnimation)}
+     */
+    public void tryRunIncoming(long ticks){
+        if(incomingPeriod == 0) incomingPeriod = 1;
+        if(incomingPeriod != -1 && ticks % incomingPeriod == 0)
+            lightUpChevronByIncoming(!AunisConfig.stargateConfig.allowIncomingAnimations);
+    }
+
 
     @Override
     public void update() {
+
+        // Stargate Incoming Animations Timer
+        if(!world.isRemote)
+            tryRunIncoming(world.getTotalWorldTime());
 
         /*
          * =========================================================================
@@ -962,7 +1032,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     distance += 360;
                     plusRounds += 1;
                 }
-                if (distance < 270) {
+                if (distance < 270 && AunisConfig.stargateConfig.allowIncomingAnimations) {
                     if(this instanceof StargateMilkyWayBaseTile && targetRingSymbol == SymbolMilkyWayEnum.getOrigin()) {
                         distance += 360;
                         plusRounds += 1;
@@ -996,6 +1066,37 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
             markDirty();
         }
+    }
+
+    public void spinRing(int rounds) {
+        targetRingSymbol = currentRingSymbol;
+        spinDirection = spinDirection.opposite();
+        stargateState = EnumStargateState.DIALING_COMPUTER;
+        if(this instanceof StargateUniverseBaseTile) {
+            sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
+            AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_UNIVERSE_DIAL_START);
+        }
+
+        float distance = 360* rounds;
+
+        NBTTagCompound compound = new NBTTagCompound();
+        compound.setBoolean("onlySpin", true);
+
+        int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
+        doIncomingAnimation(duration, true);
+
+        AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, rounds)), targetPoint);
+        lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 5, compound);
+        addTask(lastSpinFinished);
+        playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
+
+        isSpinning = true;
+        spinStartTime = world.getTotalWorldTime();
+
+        ringSpinContext = null;
+        sendSignal(null, "stargate_spin_start", new Object[]{dialedAddress.size(), false, targetRingSymbol.getEnglishName()});
+
+        markDirty();
     }
 
     // -----------------------------------------------------------------------------
@@ -1657,6 +1758,24 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             } else return new Object[]{null, "stargate_failure_wrong_end", "Unable to close the gate on this end"};
         } else {
             return new Object[]{null, "stargate_failure_not_open", "The gate is closed"};
+        }
+    }
+
+    @Optional.Method(modid = "opencomputers")
+    @Callback(doc = "function() -- Tries to spin gate")
+    public Object[] spinGate(Context context, Arguments args) {
+        if (!isMerged()) return new Object[]{null, "stargate_failure_not_merged", "Stargate is not merged"};
+
+        if(this instanceof StargatePegasusBaseTile) return new Object[]{null, "stargate_not_supported", "Stargate type is not supported"};
+
+        if (stargateState.idle()) {
+            int rounds = 1;
+            if(args.isInteger(0))
+                rounds = args.checkInteger(0);
+            spinRing(rounds);
+            return new Object[]{null, "stargate_spin"};
+        } else {
+            return new Object[]{null, "stargate_failure_not_idle", "The gate is idle"};
         }
     }
 

@@ -15,6 +15,7 @@ import mrjake.aunis.sound.StargateSoundEventEnum;
 import mrjake.aunis.sound.StargateSoundPositionedEnum;
 import mrjake.aunis.stargate.EnumScheduledTask;
 import mrjake.aunis.stargate.EnumStargateState;
+import mrjake.aunis.stargate.StargateClassicSpinHelper;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
 import mrjake.aunis.stargate.network.*;
@@ -194,7 +195,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
             getLinkedDHD(world).clearSymbols();
         }
 
-        prepareGateToConnect(dialedAddressSize, 400);
+        startIncomingAnimation(dialedAddressSize, 400);
         markDirty();
     }
 
@@ -205,48 +206,50 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         if (isLinkedAndDHDOperational()) {
             getLinkedDHD(world).clearSymbols();
         }
-        prepareGateToConnect(dialedAddressSize, time);
+        startIncomingAnimation(dialedAddressSize, time);
         markDirty();
     }
 
-    // incoming animation
-    public void prepareGateToConnect(int dialedAddressSize, int period) {
-        if(stargateState == EnumStargateState.DIALING_COMPUTER) abortDialingSequence(1);
-        period -= (1000/dialedAddressSize);
-        this.stargateState = EnumStargateState.INCOMING;
+    @Override
+    public void startIncomingAnimation(int addressSize, int period){
+        super.startIncomingAnimation(addressSize, period);
+        incomingPeriod -= (int) Math.round((double) 20/addressSize);
         markDirty();
+    }
 
-        boolean allowIncomingAnimation = AunisConfig.stargateConfig.allowIncomingAnimations;
-        if (allowIncomingAnimation) {
-            sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 0, false);
-            final int[] i = {1};
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                public void run() {
-                    if(!stargateState.idle()) {
-                        if (i[0] < dialedAddressSize && isIncoming) {
-                            playSoundEvent(StargateSoundEventEnum.INCOMING);
-                            sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, i[0] + 9, false);
-                            i[0]++;
-                        } else {
-                            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 1));
-                            timer.cancel();
-                        }
-                    }
-                    else{
-                        stargateState = EnumStargateState.IDLE;
-                        markDirty();
-                        sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 0, false);
-                        timer.cancel();
-                    }
+    @Override
+    public void lightUpChevronByIncoming(boolean disableAnimation){
+        super.lightUpChevronByIncoming(disableAnimation);
+        if(incomingPeriod == -1) return;
+
+        if(!disableAnimation) {
+            if (!stargateState.idle()) {
+                if (incomingLastChevronLightUp < incomingAddressSize) {
+                    playSoundEvent(StargateSoundEventEnum.INCOMING);
+                    sendRenderingUpdate(EnumGateAction.CHEVRON_ACTIVATE, incomingLastChevronLightUp + 9, false);
+                } else {
+                    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 1));
+                    resetIncomingAnimation();
+                    markDirty();
+                    return;
                 }
-            }, 0, period);
-        } else {
-            sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddressSize, false);
+            } else {
+                stargateState = EnumStargateState.IDLE;
+                markDirty();
+                sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 0, false);
+                resetIncomingAnimation();
+                markDirty();
+                return;
+            }
+        }
+        else{
+            sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, incomingAddressSize, false);
             playSoundEvent(StargateSoundEventEnum.INCOMING);
             isIncoming = false;
+            resetIncomingAnimation();
             markDirty();
         }
+        markDirty();
     }
 
 
@@ -548,6 +551,9 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
     @Override
     public void executeTask(EnumScheduledTask scheduledTask, NBTTagCompound customData) {
+        boolean onlySpin = false;
+        if(customData != null && customData.hasKey("onlySpin"))
+            onlySpin = customData.getBoolean("onlySpin");
         switch (scheduledTask) {
             case STARGATE_ACTIVATE_CHEVRON:
                 stargateState = EnumStargateState.IDLE;
@@ -560,7 +566,12 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 break;
 
             case STARGATE_SPIN_FINISHED:
-                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 7));
+                if(!onlySpin)
+                    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 7));
+                else
+                    stargateState = EnumStargateState.IDLE;
+
+                markDirty();
 
                 break;
 

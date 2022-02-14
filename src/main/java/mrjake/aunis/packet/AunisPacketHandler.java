@@ -42,7 +42,8 @@ public class AunisPacketHandler {
 	
 	private static int id = 0;
 	
-	public static void registerPackets() {		
+	public static void registerPackets() {
+		// serverside packets
 		INSTANCE.registerMessage(DHDButtonClickedServerHandler.class, DHDButtonClickedToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(DHDPegasusButtonClickedToServer.DHDPegasusButtonClickedServerHandler.class, DHDPegasusButtonClickedToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(MotionServerHandler.class, StargateMotionToServer.class, id, Side.SERVER); id++;
@@ -63,7 +64,7 @@ public class AunisPacketHandler {
 		INSTANCE.registerMessage(OCActionServerHandler.class, OCActionToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(SaveIrisCodeToServerHandler.class, SaveIrisCodeToServer.class, id, Side.SERVER); id++;
 
-		
+		// clientside packets
 		INSTANCE.registerMessage(RetrieveMotionClientHandler.class, StargateMotionToClient.class, id, Side.CLIENT); id++;
 		INSTANCE.registerMessage(StartPlayerFadeOutToClientHandler.class, StartPlayerFadeOutToClient.class, id, Side.CLIENT); id++;
 		INSTANCE.registerMessage(StateUpdateClientHandler.class, StateUpdatePacketToClient.class, id, Side.CLIENT); id++;

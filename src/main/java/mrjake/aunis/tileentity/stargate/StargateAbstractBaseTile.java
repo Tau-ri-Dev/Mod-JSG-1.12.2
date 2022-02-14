@@ -845,6 +845,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         if(this instanceof StargateUniverseBaseTile && !((stargateState.idle() || (stargateState.dialing() && !stargateState.dialingComputer())) && !randomIncomingIsActive)) return;
         else if(!((stargateState.idle() || stargateState.dialing()) && !randomIncomingIsActive)) return;
 
+        if(stargateState.incoming()) return;
+
         this.randomIncomingEntities = entities;
         this.randomIncomingAddrSize = addressSize;
         this.randomIncomingOpenDelay = delay;
@@ -852,21 +854,14 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         this.randomIncomingIsActive = true;
     }
 
-    public boolean resetRandomIncoming(){
-        boolean returning = false;
-        if(randomIncomingIsActive) returning = true;
-
+    public void resetRandomIncoming(){
         this.randomIncomingIsActive = false;
         this.randomIncomingEntities = 0;
         this.randomIncomingState = 0;
         this.randomIncomingAddrSize = 7;
         this.randomIncomingOpenDelay = 0;
-
-        return returning;
     }
-
     public void activateDHDSymbolBRB(){
-
     }
 
     @Override
