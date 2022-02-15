@@ -156,12 +156,11 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     if((incomingPeriod >= (StargateClassicSpinHelper.getAnimationDuration(270))) && !disableAnimation) {
       addSymbolToAddressManual(SymbolUniverseEnum.G37, null);
 
-      sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
+      addTask(new ScheduledTask(EnumScheduledTask.LIGHT_UP_CHEVRONS, 5));
       sendSignal(null, "stargate_incoming_wormhole", new Object[]{incomingAddressSize});
       playSoundEvent(StargateSoundEventEnum.INCOMING);
       resetIncomingAnimation();
-      if (incomingLastChevronLightUp >= incomingAddressSize)
-        isIncoming = false;
+      isIncoming = false;
     }
     else{
       if (incomingLastChevronLightUp > 1) {
@@ -215,6 +214,9 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     if(customData != null && customData.hasKey("onlySpin"))
       onlySpin = customData.getBoolean("onlySpin");
     switch (scheduledTask) {
+      case LIGHT_UP_CHEVRONS:
+        sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
+        break;
       case STARGATE_DIAL_NEXT:
         if (customData != null && customData.hasKey("symbolToDial"))
           super.addSymbolToAddressManual(getSymbolType().valueOfSymbol(customData.getInteger("symbolToDial")), ringSpinContext);

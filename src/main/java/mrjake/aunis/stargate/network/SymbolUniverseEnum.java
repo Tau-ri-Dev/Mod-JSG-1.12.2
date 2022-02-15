@@ -1,6 +1,7 @@
 package mrjake.aunis.stargate.network;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.model.ModelLoader;
 import net.minecraft.util.ResourceLocation;
 
@@ -151,6 +152,9 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 	}
 	
 	public static int getMinimalSymbolCountTo(SymbolTypeEnum symbolType, boolean localDial) {
+		if(AunisConfig.stargateConfig.useStrictSevenSymbolsUniGate)
+			localDial = true;
+
 		switch (symbolType) {
 			case MILKYWAY:
 			case PEGASUS:

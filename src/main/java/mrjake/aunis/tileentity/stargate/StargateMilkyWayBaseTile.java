@@ -39,10 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 import static mrjake.aunis.stargate.StargateClassicSpinHelper.A_ANGLE_PER_TICK;
 
@@ -214,6 +211,14 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     public void startIncomingAnimation(int addressSize, int period){
         super.startIncomingAnimation(addressSize, period);
         incomingPeriod -= (int) Math.round((double) 20/addressSize);
+
+        // spin ring
+        int rounds = 1;
+        int chance = new Random().nextInt(100);
+        if(chance <= 50)
+            rounds *= -1;
+        spinRing(rounds, false, true, incomingPeriod*addressSize);
+
         markDirty();
     }
 

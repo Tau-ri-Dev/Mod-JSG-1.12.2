@@ -91,6 +91,12 @@ public class AunisConfig {
         })
         public boolean pegAndMilkUseEightChevrons = true;
 
+        @Name("Need only 7 symbols between Uni gates")
+        @Comment({
+                "If u want to dial UNI-UNI only with seven symbols (interdimensional for example), set this to true"
+        })
+        public boolean useStrictSevenSymbolsUniGate = false;
+
         @Name("Faster MilkyWay gate computer dial")
         @Comment({
                 "Speed up dialing with computer on MW gate"
