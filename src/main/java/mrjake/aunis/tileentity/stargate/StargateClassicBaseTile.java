@@ -171,7 +171,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             if(!isIncoming) disconnectGate();
             if (type == 2 && this instanceof StargateUniverseBaseTile) {
                 addSymbolToAddressManual(G37, null);
-                playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
+                addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, 5));
             }
             markDirty();
             if (type == 1) abortDialingSequence(2);
@@ -978,6 +978,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
                 break;
 
+            case GATE_RING_ROLL:
+                playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
+                break;
+
             default:
                 super.executeTask(scheduledTask, customData);
         }
@@ -995,6 +999,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     protected Object ringSpinContext;
 
     public void addSymbolToAddressManual(SymbolInterface targetSymbol, @Nullable Object context) {
+        int soundSpinWait = 5;
+        if(this instanceof StargateUniverseBaseTile)
+            soundSpinWait = 10;
         targetRingSymbol = targetSymbol;
 
         boolean moveOnly = targetRingSymbol == currentRingSymbol;
@@ -1016,7 +1023,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, 0)), targetPoint);
             lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 5);
             addTask(lastSpinFinished);
-            playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
+            addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, soundSpinWait));
+            playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL_START, true);
 
             targetRingSymbol = TOP_CHEVRON;
 
@@ -1063,7 +1071,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, plusRounds)), targetPoint);
             lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 5);
             addTask(lastSpinFinished);
-            playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
+            addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, soundSpinWait));
+            playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL_START, true);
 
             isSpinning = true;
             spinStartTime = world.getTotalWorldTime();
@@ -1102,7 +1111,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, rounds)), targetPoint);
         lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 5, compound);
         addTask(lastSpinFinished);
-        playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
+        addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, 5));
+        playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL_START, true);
 
         isSpinning = true;
         spinStartTime = world.getTotalWorldTime();
@@ -1789,7 +1799,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             spinRing(rounds);
             return new Object[]{null, "stargate_spin"};
         } else {
-            return new Object[]{null, "stargate_failure_not_idle", "The gate is idle"};
+            return new Object[]{null, "stargate_failure_not_idle", "The gate is not idle"};
         }
     }
 

@@ -8,11 +8,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum SoundPositionedEnum {
-  MILKYWAY_RING_ROLL(0, "gate_milkyway_ring_roll", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
-  WORMHOLE_LOOP(1, "wormhole_loop", AunisSoundHelper.AUNIS_SOUND_CATEGORY, true),
-  UNIVERSE_RING_ROLL(2, "gate_universe_roll", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
+
+  // gate ring sounds
+  MILKYWAY_RING_ROLL(0, "gate_milkyway_ring_roll", AunisSoundHelper.AUNIS_SOUND_CATEGORY, true),
+  MILKYWAY_RING_ROLL_START(14, "gate_milkyway_ring_roll_start", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
+
+  UNIVERSE_RING_ROLL(2, "gate_universe_roll", AunisSoundHelper.AUNIS_SOUND_CATEGORY, true),
+  UNIVERSE_RING_ROLL_START(15, "gate_universe_roll_start", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
+
+  PEGASUS_RING_ROLL(4, "gate_pegasus_ring_roll", AunisSoundHelper.AUNIS_SOUND_CATEGORY, true),
+  PEGASUS_RING_ROLL_START(16, "gate_pegasus_ring_roll_start", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
+
+  // loops
   BEAMER_LOOP(3, "beamer_loop", AunisSoundHelper.AUNIS_SOUND_CATEGORY, true),
-  PEGASUS_RING_ROLL(4, "gate_pegasus_ring_roll", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
+  WORMHOLE_LOOP(1, "wormhole_loop", AunisSoundHelper.AUNIS_SOUND_CATEGORY, true),
 
   // main menu
   MAINMENU_RING_ROLL(5, "mainmenu_ring_roll", AunisSoundHelper.AUNIS_SOUND_CATEGORY, true),

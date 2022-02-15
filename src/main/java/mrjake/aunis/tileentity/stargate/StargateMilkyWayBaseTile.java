@@ -383,6 +383,8 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         switch (soundEnum) {
             case GATE_RING_ROLL:
                 return SoundPositionedEnum.MILKYWAY_RING_ROLL;
+            case GATE_RING_ROLL_START:
+                return SoundPositionedEnum.MILKYWAY_RING_ROLL_START;
         }
 
         return null;

@@ -181,8 +181,10 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     if(!disableAnimation){
       int z = incomingLastChevronLightUp;
 
-      if(z == 1)
-        playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
+      if(z == 1) {
+        addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, 15));
+        playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL_START, true);
+      }
 
       if(z % 4 == 0 && z > 0){
         int chevron = z / 4;
@@ -351,6 +353,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     switch (soundEnum) {
       case GATE_RING_ROLL:
         return SoundPositionedEnum.PEGASUS_RING_ROLL;
+      case GATE_RING_ROLL_START:
+        return SoundPositionedEnum.PEGASUS_RING_ROLL_START;
     }
 
     return null;
@@ -659,7 +663,12 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, 0)), targetPoint);
       lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 1);
       addTask(lastSpinFinished);
-      playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
+      if(!continueDialing){
+        addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, 15));
+        playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL_START, true);
+      }
+      else
+        playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
 
       isSpinning = true;
       spinStartTime = world.getTotalWorldTime();
@@ -721,7 +730,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, 0)), targetPoint);
       lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 1);
       addTask(lastSpinFinished);
-      playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
+      addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, 15));
+      playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL_START, true);
 
       isSpinning = true;
       spinStartTime = world.getTotalWorldTime();

@@ -153,7 +153,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     super.lightUpChevronByIncoming(disableAnimation);
     if(incomingPeriod == -1) return;
 
-    if((incomingPeriod >= (StargateClassicSpinHelper.getAnimationDuration(360) - 40)) && !disableAnimation) {
+    if((incomingPeriod >= (StargateClassicSpinHelper.getAnimationDuration(270))) && !disableAnimation) {
       addSymbolToAddressManual(SymbolUniverseEnum.G37, null);
 
       sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
@@ -420,6 +420,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     switch (soundEnum) {
       case GATE_RING_ROLL:
         return SoundPositionedEnum.UNIVERSE_RING_ROLL;
+      case GATE_RING_ROLL_START:
+        return SoundPositionedEnum.UNIVERSE_RING_ROLL_START;
     }
 
     return null;
