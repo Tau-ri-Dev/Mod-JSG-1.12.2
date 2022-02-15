@@ -333,16 +333,18 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void setState(StateTypeEnum stateType, State state) {
-		switch (stateType) {
-			case SPARK_STATE:
-				StargateOrlinSparkState sparkState = (StargateOrlinSparkState) state;
-				getRendererStateClient().sparkFrom(sparkState.sparkIndex, sparkState.spartStart);
-				
-				break;
-				
-			default:
-				super.setState(stateType, state);
-				break;
+		if(getRendererStateClient() != null) {
+			switch (stateType) {
+				case SPARK_STATE:
+					StargateOrlinSparkState sparkState = (StargateOrlinSparkState) state;
+					getRendererStateClient().sparkFrom(sparkState.sparkIndex, sparkState.spartStart);
+
+					break;
+
+				default:
+					super.setState(stateType, state);
+					break;
+			}
 		}
 	}
 	

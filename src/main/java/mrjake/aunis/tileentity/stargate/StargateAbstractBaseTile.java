@@ -1382,6 +1382,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 break;
 
             case RENDERER_UPDATE:
+                if(getRendererStateClient() == null) break;
                 switch (((StargateRendererActionState) state).action) {
                     case OPEN_GATE:
                         getRendererStateClient().horizonSegments = 0;

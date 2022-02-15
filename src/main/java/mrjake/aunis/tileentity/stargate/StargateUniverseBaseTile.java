@@ -301,31 +301,33 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
   @Override
   public void setState(StateTypeEnum stateType, State state) {
-    switch (stateType) {
-      case STARGATE_UNIVERSE_ACTIVATE_SYMBOL:
-        StargateUniverseSymbolState symbolState = (StargateUniverseSymbolState) state;
+    if(getRendererStateClient() != null) {
+      switch (stateType) {
+        case STARGATE_UNIVERSE_ACTIVATE_SYMBOL:
+          StargateUniverseSymbolState symbolState = (StargateUniverseSymbolState) state;
 
-        if (symbolState.dimAll) getRendererStateClient().clearSymbols(world.getTotalWorldTime());
-        else getRendererStateClient().activateSymbol(world.getTotalWorldTime(), symbolState.symbol);
+          if (symbolState.dimAll) getRendererStateClient().clearSymbols(world.getTotalWorldTime());
+          else getRendererStateClient().activateSymbol(world.getTotalWorldTime(), symbolState.symbol);
 
-        break;
+          break;
 
-      case RENDERER_UPDATE:
-        StargateRendererActionState gateActionState = (StargateRendererActionState) state;
+        case RENDERER_UPDATE:
+          StargateRendererActionState gateActionState = (StargateRendererActionState) state;
 
-        switch (gateActionState.action) {
-          case CLEAR_CHEVRONS:
-            getRendererStateClient().clearSymbols(world.getTotalWorldTime());
-            break;
+          switch (gateActionState.action) {
+            case CLEAR_CHEVRONS:
+              getRendererStateClient().clearSymbols(world.getTotalWorldTime());
+              break;
 
-          default:
-            break;
-        }
+            default:
+              break;
+          }
 
-        break;
+          break;
 
-      default:
-        break;
+        default:
+          break;
+      }
     }
 
     super.setState(stateType, state);

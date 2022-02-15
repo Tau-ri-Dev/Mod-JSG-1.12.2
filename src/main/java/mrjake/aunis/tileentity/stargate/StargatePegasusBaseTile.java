@@ -530,53 +530,55 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
   @Override
   @SideOnly(Side.CLIENT)
   public void setState(StateTypeEnum stateType, State state) {
-    switch (stateType) {
-      case RENDERER_UPDATE:
-        StargateRendererActionState gateActionState = (StargateRendererActionState) state;
-        switch (gateActionState.action) {
-          case CHEVRON_OPEN:
-            getRendererStateClient().openChevron(world.getTotalWorldTime());
-            break;
+    if(getRendererStateClient() != null) {
+      switch (stateType) {
+        case RENDERER_UPDATE:
+          StargateRendererActionState gateActionState = (StargateRendererActionState) state;
+          switch (gateActionState.action) {
+            case CHEVRON_OPEN:
+              getRendererStateClient().openChevron(world.getTotalWorldTime());
+              break;
 
-          case CHEVRON_CLOSE:
-            getRendererStateClient().closeChevron(world.getTotalWorldTime());
-            break;
-          case CLEAR_CHEVRONS:
-            getRendererStateClient().clearChevrons(world.getTotalWorldTime());
-            return;
-          case ACTIVATE_GLYPH:
-            int slot = ((StargateRendererActionState) state).chevronCount;
-            slot = 36 - (slot - 9);
-            if(slot > 36) slot -= 36;
-            if(slot < 0) slot += 36;
-            if(getRendererStateClient() == null) break;
-            getRendererStateClient().setGlyphAtSlot(slot, slot);
-            break;
+            case CHEVRON_CLOSE:
+              getRendererStateClient().closeChevron(world.getTotalWorldTime());
+              break;
+            case CLEAR_CHEVRONS:
+              getRendererStateClient().clearChevrons(world.getTotalWorldTime());
+              return;
+            case ACTIVATE_GLYPH:
+              int slot = ((StargateRendererActionState) state).chevronCount;
+              slot = 36 - (slot - 9);
+              if (slot > 36) slot -= 36;
+              if (slot < 0) slot += 36;
+              if (getRendererStateClient() == null) break;
+              getRendererStateClient().setGlyphAtSlot(slot, slot);
+              break;
 
-          case CHEVRON_ACTIVATE:
-            getRendererStateClient().spinHelper.setIsSpinning(false);
-            if(((StargateRendererActionState) state).chevronCount <= 9) {
-              ChevronEnum chevron = gateActionState.modifyFinal ? ChevronEnum.getFinal() : getRendererStateClient().chevronTextureList.getNextChevron();
-              getRendererStateClient().lockChevron(getRendererStateClient().spinHelper.getTargetSymbol().getId(), chevron);
-            }
+            case CHEVRON_ACTIVATE:
+              getRendererStateClient().spinHelper.setIsSpinning(false);
+              if (((StargateRendererActionState) state).chevronCount <= 9) {
+                ChevronEnum chevron = gateActionState.modifyFinal ? ChevronEnum.getFinal() : getRendererStateClient().chevronTextureList.getNextChevron();
+                getRendererStateClient().lockChevron(getRendererStateClient().spinHelper.getTargetSymbol().getId(), chevron);
+              }
 
-            break;
+              break;
 
-          default:
-            break;
-        }
+            default:
+              break;
+          }
 
-        break;
+          break;
 
-      case SPIN_STATE:
-        if (getRendererStateClient().chevronTextureList.getNextChevron().rotationIndex == 1) {
-          getRendererStateClient().slotToGlyphMap.clear();
-        }
+        case SPIN_STATE:
+          if (getRendererStateClient().chevronTextureList.getNextChevron().rotationIndex == 1) {
+            getRendererStateClient().slotToGlyphMap.clear();
+          }
 
-        break;
+          break;
 
-      default:
-        break;
+        default:
+          break;
+      }
     }
 
     super.setState(stateType, state);

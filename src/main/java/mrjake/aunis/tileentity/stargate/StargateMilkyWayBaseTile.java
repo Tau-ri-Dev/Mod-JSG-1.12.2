@@ -519,27 +519,29 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     @Override
     @SideOnly(Side.CLIENT)
     public void setState(StateTypeEnum stateType, State state) {
-        switch (stateType) {
-            case RENDERER_UPDATE:
-                StargateRendererActionState gateActionState = (StargateRendererActionState) state;
+        if(getRendererStateClient() != null) {
+            switch (stateType) {
+                case RENDERER_UPDATE:
+                    StargateRendererActionState gateActionState = (StargateRendererActionState) state;
 
-                switch (gateActionState.action) {
-                    case CHEVRON_OPEN:
-                        getRendererStateClient().openChevron(world.getTotalWorldTime());
-                        break;
+                    switch (gateActionState.action) {
+                        case CHEVRON_OPEN:
+                            getRendererStateClient().openChevron(world.getTotalWorldTime());
+                            break;
 
-                    case CHEVRON_CLOSE:
-                        getRendererStateClient().closeChevron(world.getTotalWorldTime());
-                        break;
-                    case OPEN_GATE:
-                    default:
-                        break;
-                }
+                        case CHEVRON_CLOSE:
+                            getRendererStateClient().closeChevron(world.getTotalWorldTime());
+                            break;
+                        case OPEN_GATE:
+                        default:
+                            break;
+                    }
 
-                break;
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+            }
         }
 
         super.setState(stateType, state);

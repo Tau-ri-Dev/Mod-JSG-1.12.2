@@ -4,6 +4,7 @@ import com.sun.scenario.effect.impl.Renderer;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.item.notebook.NotebookItem;
 import mrjake.aunis.item.renderer.AunisFontRenderer;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.loader.model.ModelLoader;
@@ -69,13 +70,19 @@ public abstract class DHDAbstractRenderer extends TileEntitySpecialRenderer<DHDA
   protected void setColorByAddress(DHDAbstractTile te, DHDAbstractRendererState rendererState, NBTTagCompound compound, SymbolTypeEnum symbolType, SymbolInterface symbol){
     GlStateManager.color(1, 1, 1, 1);
     if(compound != null && AunisConfig.avConfig.enablePageHint){
+
+      // if item is notebook item
+      if(compound.hasKey("addressList"))
+        compound = NotebookItem.getSelectedPageFromCompound(compound);
+
+
       if(!compound.hasKey("symbolType")) return;
       if(!compound.hasKey("address")) return;
       SymbolTypeEnum st = SymbolTypeEnum.valueOf(compound.getInteger("symbolType"));
       int maxSymbols = symbolType.getMaxSymbolsDisplay(compound.getBoolean("hasUpgrade"));
       StargateAddress stargateAddress = new StargateAddress(compound.getCompoundTag("address"));
-      // check address type && button is not activated
 
+      // check address type && button is not activated
       if(st == symbolType && !rendererState.isButtonActive(symbol) && !rendererState.isButtonActive(st.getOrigin())){
 
         int activatedButtons = rendererState.getActivatedButtons();

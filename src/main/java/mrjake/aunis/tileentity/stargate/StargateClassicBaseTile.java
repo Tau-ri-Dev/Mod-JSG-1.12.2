@@ -835,7 +835,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void setState(StateTypeEnum stateType, State state) {
         switch (stateType) {
             case RENDERER_UPDATE:
-                if (getRendererStateClient() == null) return;
+                if (getRendererStateClient() == null) break;
                 StargateRendererActionState gateActionState = (StargateRendererActionState) state;
 
                 switch (gateActionState.action) {
@@ -896,6 +896,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 break;
 
             case SPIN_STATE:
+                if(getRendererStateClient() == null) break;
                 StargateSpinState spinState = (StargateSpinState) state;
                 if (spinState.setOnly) {
                     getRendererStateClient().spinHelper.setIsSpinning(false);
