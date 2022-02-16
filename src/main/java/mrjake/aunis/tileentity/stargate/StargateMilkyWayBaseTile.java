@@ -213,11 +213,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         incomingPeriod -= (int) Math.round((double) 20/addressSize);
 
         // spin ring
-        int rounds = 1;
-        int chance = new Random().nextInt(100);
-        if(chance <= 50)
-            rounds *= -1;
-        spinRing(rounds, false, true, incomingPeriod*addressSize);
+        spinRing(1, false, true, incomingPeriod*addressSize);
 
         markDirty();
     }
@@ -577,7 +573,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
             case STARGATE_SPIN_FINISHED:
                 if(!onlySpin)
                     addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 7));
-                else
+                else if(stargateState.dialingComputer())
                     stargateState = EnumStargateState.IDLE;
 
                 markDirty();

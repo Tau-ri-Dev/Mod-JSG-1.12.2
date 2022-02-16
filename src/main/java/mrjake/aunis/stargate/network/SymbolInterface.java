@@ -1,15 +1,16 @@
 package mrjake.aunis.stargate.network;
 
+import mrjake.aunis.stargate.EnumSpinDirection;
 import net.minecraft.util.ResourceLocation;
 
 public interface SymbolInterface {
 
-	public abstract boolean origin();
-	public abstract float getAngle();
-	public abstract int getAngleIndex();
-	public abstract int getId();
-	public abstract String getEnglishName();
-	public abstract ResourceLocation getIconResource();
-	public abstract String localize();
-	public abstract SymbolTypeEnum getSymbolType();
+	boolean origin();
+	float getAngle();
+	int getAngleIndex();
+	int getId();
+	String getEnglishName();
+	ResourceLocation getIconResource();
+	String localize();
+	SymbolTypeEnum getSymbolType();
 }

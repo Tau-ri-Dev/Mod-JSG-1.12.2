@@ -3,12 +3,15 @@ package mrjake.aunis.stargate.network;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.model.ModelLoader;
+import mrjake.aunis.stargate.EnumSpinDirection;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import static mrjake.aunis.stargate.EnumSpinDirection.COUNTER_CLOCKWISE;
 
 public enum SymbolPegasusEnum implements SymbolInterface {
   ROEHI(37, "Roehi", "37.obj", 11),
@@ -118,6 +121,10 @@ public enum SymbolPegasusEnum implements SymbolInterface {
   @Override
   public SymbolTypeEnum getSymbolType() {
     return SymbolTypeEnum.PEGASUS;
+  }
+
+  public static SymbolInterface getSymbolByAngle(float angle, EnumSpinDirection direction){
+    return getOrigin();
   }
 
   // ------------------------------------------------------------

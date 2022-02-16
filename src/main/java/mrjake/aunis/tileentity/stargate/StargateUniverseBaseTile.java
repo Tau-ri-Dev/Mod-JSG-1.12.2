@@ -228,7 +228,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
         break;
 
       case STARGATE_SPIN_FINISHED:
-        if(onlySpin){
+        if(onlySpin && stargateState.dialingComputer()){
           stargateState = EnumStargateState.IDLE;
           sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 9, true);
           markDirty();

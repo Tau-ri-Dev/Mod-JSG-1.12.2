@@ -113,7 +113,9 @@ public class StargateClassicSpinHelper implements ISpinHelper {
   }
 
   public static float getAnimationDistance(int duration) {
-    return (duration*A_ANGLE_PER_TICK)+(U_SPEEDUP_TIME*A_ANGLE_PER_TICK)+(S_STOP_TIME*A_ANGLE_PER_TICK);
+    float distance = (duration*A_ANGLE_PER_TICK)-(U_SPEEDUP_TIME*A_ANGLE_PER_TICK)-(S_STOP_TIME*A_ANGLE_PER_TICK);
+    if(distance < 15) distance = 15;
+    return distance;
   }
 
   /**

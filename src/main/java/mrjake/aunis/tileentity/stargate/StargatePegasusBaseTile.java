@@ -31,6 +31,7 @@ import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import mrjake.aunis.util.ILinkable;
 import mrjake.aunis.util.LinkingHelper;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -430,7 +431,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
             }
           }
 
-          if(next != null && toDialSymbols.size() > 1 && AunisConfig.stargateConfig.pegasContinueDial) continueDialing = true;
+          //if(next != null && toDialSymbols.size() > 1 && toDialSymbols.get(0) != SymbolPegasusEnum.BRB && AunisConfig.stargateConfig.pegasContinueDial)
+          //  continueDialing = true;
 
           this.continueDialing = continueDialing;
           markDirty();
@@ -667,8 +669,6 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, 15));
         playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL_START, true);
       }
-      else
-        playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
 
       isSpinning = true;
       spinStartTime = world.getTotalWorldTime();
@@ -776,6 +776,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
       case STARGATE_CHEVRON_OPEN:
         playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
+        if(!continueDialing)
+          playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
         sendRenderingUpdate(EnumGateAction.CHEVRON_OPEN, 0, false);
 
         if (canAddSymbol(targetRingSymbol)) {

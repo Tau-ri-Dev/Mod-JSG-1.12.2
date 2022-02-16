@@ -116,11 +116,13 @@ public class AunisConfig {
         })
         public boolean dhdLastOpen = true;
 
+        /* todo(Mine): Fix sounds on peg gate
         @Name("Smooth dialing on pegasus gate DHD")
         @Comment({
                 "Enable smooth dialing on pegasus DHD"
         })
         public boolean pegasContinueDial = true;
+        */
 
         @Name("Disable animated Event Horizon")
         @Comment({

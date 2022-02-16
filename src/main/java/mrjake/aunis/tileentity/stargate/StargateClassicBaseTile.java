@@ -108,7 +108,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     protected void engageGate() {
         super.engageGate();
         for (BlockPos beamerPos : linkedBeamers) {
-            if(world.getTileEntity(beamerPos) != null)
+            if (world.getTileEntity(beamerPos) != null)
                 ((BeamerTile) Objects.requireNonNull(world.getTileEntity(beamerPos))).gateEngaged(targetGatePos);
         }
     }
@@ -117,7 +117,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void closeGate(StargateClosedReasonEnum reason) {
         super.closeGate(reason);
         for (BlockPos beamerPos : linkedBeamers) {
-            if(world.getTileEntity(beamerPos) != null)
+            if (world.getTileEntity(beamerPos) != null)
                 ((BeamerTile) Objects.requireNonNull(world.getTileEntity(beamerPos))).gateClosed();
         }
     }
@@ -140,7 +140,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         isFinalActive = false;
 
-        if(stargateState != EnumStargateState.INCOMING && !isIncoming){
+        if (stargateState != EnumStargateState.INCOMING && !isIncoming) {
             updateChevronLight(0, false);
             sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, dialedAddress.size(), isFinalActive);
         }
@@ -156,9 +156,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     public void abortDialingSequence(int type) {
         //todo(Mine): Fix aborting on uni gates and remove this if statement
-        if(stargateState.incoming()) return;
-        if(isIncoming) return;
-        if(this instanceof StargateUniverseBaseTile){
+        if (stargateState.incoming()) return;
+        if (isIncoming) return;
+        if (this instanceof StargateUniverseBaseTile) {
             ((StargateUniverseBaseTile) this).abort(true);
             return;
         }
@@ -170,10 +170,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             addFailedTaskAndPlaySound();
             playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
             // remove last spinning finished task
-            if(lastSpinFinished != null && scheduledTasks.contains(lastSpinFinished))
+            if (lastSpinFinished != null && scheduledTasks.contains(lastSpinFinished))
                 removeTask(lastSpinFinished);
             failGate();
-            if(!isIncoming) disconnectGate();
+            if (!isIncoming) disconnectGate();
             if (type == 2 && this instanceof StargateUniverseBaseTile) {
                 addSymbolToAddressManual(G37, null);
                 addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, 5));
@@ -215,7 +215,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         ItemHandlerHelper.dropInventoryItems(world, pos, itemStackHandler);
 
         for (BlockPos beamerPos : linkedBeamers) {
-            if(world.getTileEntity(beamerPos) != null){
+            if (world.getTileEntity(beamerPos) != null) {
                 BeamerTile beamerTile = (BeamerTile) world.getTileEntity(beamerPos);
                 beamerTile.setLinkedGate(null, null);
             }
@@ -275,17 +275,18 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
      * Begin incoming animation
      *
      * @param addressSize - how many chevrons should light up
-     * @param period - period in milliseconds
+     * @param period      - period in milliseconds
      */
-    public void startIncomingAnimation(int addressSize, int period){
+    public void startIncomingAnimation(int addressSize, int period) {
 
-        double ticks = (double) (period*20)/1000;
+        double ticks = (double) (period * 20) / 1000;
         incomingPeriod = (int) Math.round(ticks);
         incomingAddressSize = addressSize;
         incomingLastChevronLightUp = 0;
         stargateState = EnumStargateState.INCOMING;
+        isIncoming = true;
         sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 9, true);
-        if(stargateState == EnumStargateState.DIALING_COMPUTER)
+        if (stargateState == EnumStargateState.DIALING_COMPUTER)
             abortDialingSequence(1);
 
         markDirty();
@@ -294,7 +295,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     /**
      * Reset incoming animation state
      */
-    public void resetIncomingAnimation(){
+    public void resetIncomingAnimation() {
         incomingAddressSize = -1;
         incomingPeriod = -1;
         incomingLastChevronLightUp = -1;
@@ -304,16 +305,16 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     /**
      * Try to light up chevron/symbol
      */
-    public void lightUpChevronByIncoming(boolean disableAnimation){
-        if(!isIncoming) {
-            if(incomingPeriod != -1) stargateState = EnumStargateState.IDLE;
+    public void lightUpChevronByIncoming(boolean disableAnimation) {
+        if (!isIncoming) {
+            if (incomingPeriod != -1) stargateState = EnumStargateState.IDLE;
             sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 9, true);
             resetIncomingAnimation();
             markDirty();
             return;
         }
 
-        if(stargateState.idle()){
+        if (stargateState.idle()) {
             stargateState = EnumStargateState.IDLE;
             markDirty();
             sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 0, false);
@@ -321,14 +322,16 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             return;
         }
         incomingLastChevronLightUp++;
-    };
+    }
+
+    ;
 
     /**
      * Try to run {@link #lightUpChevronByIncoming(boolean disableAnimation)}
      */
-    public void tryRunIncoming(long ticks){
-        if(incomingPeriod == 0) incomingPeriod = 1;
-        if(incomingPeriod != -1 && ticks % incomingPeriod == 0)
+    public void tryRunIncoming(long ticks) {
+        if (incomingPeriod == 0) incomingPeriod = 1;
+        if (incomingPeriod != -1 && ticks % incomingPeriod == 0)
             lightUpChevronByIncoming(!AunisConfig.stargateConfig.allowIncomingAnimations);
     }
 
@@ -337,21 +340,21 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void update() {
 
         // Stargate Incoming Animations Timer
-        if(!world.isRemote)
+        if (!world.isRemote)
             tryRunIncoming(world.getTotalWorldTime());
 
         /*
          * =========================================================================
          * Stargate Random Incoming Generator (RIG)
          */
-        if(!world.isRemote) {
+        if (!world.isRemote) {
 
             // Load entities
             String[] entityListString = AunisConfig.randomIncoming.entitiesToSpawn;
             List<Entity> entityList = new ArrayList<Entity>();
-            for(String entityString : entityListString){
+            for (String entityString : entityListString) {
                 String[] entityTemporallyList = entityString.split(":");
-                if(entityTemporallyList.length < 2) continue; // prevents from Ticking block entity null pointer
+                if (entityTemporallyList.length < 2) continue; // prevents from Ticking block entity null pointer
                 String entityStringNew =
                         (
                                 (entityTemporallyList[0].equals("minecraft"))
@@ -363,7 +366,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             }
 
             Random rand = new Random();
-            if(AunisConfig.randomIncoming.enableRandomIncoming && world.isAreaLoaded(pos, 10)) {
+            if (AunisConfig.randomIncoming.enableRandomIncoming && world.isAreaLoaded(pos, 10)) {
                 if (world.getTotalWorldTime() % 200 == 0) { // every 10 seconds
                     int chanceToRandom = rand.nextInt(1000);
 
@@ -371,12 +374,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     if (chanceToRandom <= AunisConfig.randomIncoming.chance) {
                         int entities = rand.nextInt(25);
                         int delay = rand.nextInt(200);
-                        if(this instanceof StargateUniverseBaseTile) {
+                        if (this instanceof StargateUniverseBaseTile) {
                             delay = rand.nextInt(300);
-                            if(delay < 120) delay = 120;
+                            if (delay < 120) delay = 120;
                         }
-                        if(delay < 80) delay = 80;
-                        if(entities < 3) entities = 3;
+                        if (delay < 80) delay = 80;
+                        if (entities < 3) entities = 3;
 
                         generateIncoming(entities, 7, delay); // execute
                     }
@@ -387,7 +390,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
                 int wait = 4 * 20;
                 int waitOpen = randomIncomingOpenDelay + 20;
-                if(waitOpen < 80) waitOpen = 80;
+                if (waitOpen < 80) waitOpen = 80;
 
                 if (isMerged()) {
                     if (randomIncomingState == 0) { // incoming wormhole
@@ -396,7 +399,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         stargateState = EnumStargateState.INCOMING;
                         isIncoming = true;
                         markDirty();
-                        if(AunisConfig.stargateConfig.allowIncomingAnimations) this.incomingWormhole(randomIncomingAddrSize, period);
+                        if (AunisConfig.stargateConfig.allowIncomingAnimations)
+                            this.incomingWormhole(randomIncomingAddrSize, period);
                         else this.incomingWormhole(randomIncomingAddrSize);
                         this.sendSignal(null, "stargate_incoming_wormhole", new Object[]{randomIncomingAddrSize});
                         this.failGate();
@@ -439,9 +443,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                             Entity mobEntity = new EntityZombie(world);
 
                             int entitiesLength = entityList.size();
-                            if(entitiesLength > 0) {
+                            if (entitiesLength > 0) {
                                 int randomEntity = rand.nextInt(entitiesLength);
-                                if(entityList.get(randomEntity) != null)
+                                if (entityList.get(randomEntity) != null)
                                     mobEntity = entityList.get(randomEntity);
                             }
                             mobEntity.setLocationAndAngles(posX, posY, posZ, 0, 0);
@@ -487,8 +491,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         resetRandomIncoming();
                         closeGate(StargateClosedReasonEnum.AUTOCLOSE);
 
-                        if(this instanceof StargatePegasusBaseTile) ((StargatePegasusBaseTile) this).clearDHDSymbols();
-                        if(this instanceof StargateMilkyWayBaseTile) ((StargateMilkyWayBaseTile) this).clearDHDSymbols();
+                        if (this instanceof StargatePegasusBaseTile) ((StargatePegasusBaseTile) this).clearDHDSymbols();
+                        if (this instanceof StargateMilkyWayBaseTile)
+                            ((StargateMilkyWayBaseTile) this).clearDHDSymbols();
                     }
                 } else resetRandomIncoming();
             }
@@ -638,7 +643,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         boolean beamerActive = false;
 
         for (BlockPos beamerPos : linkedBeamers) {
-            if(world.getTileEntity(beamerPos) != null){
+            if (world.getTileEntity(beamerPos) != null) {
                 BeamerTile beamerTile = (BeamerTile) world.getTileEntity(beamerPos);
                 beamerActive = beamerTile.isActive();
             }
@@ -847,7 +852,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     case CHEVRON_ACTIVATE:
                         if (gateActionState.modifyFinal)
                             getRendererStateClient().chevronTextureList.activateFinalChevron(world.getTotalWorldTime());
-                        else getRendererStateClient().chevronTextureList.activateNextChevron(world.getTotalWorldTime(), gateActionState.chevronCount);
+                        else
+                            getRendererStateClient().chevronTextureList.activateNextChevron(world.getTotalWorldTime(), gateActionState.chevronCount);
 
                         break;
 
@@ -901,7 +907,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 break;
 
             case SPIN_STATE:
-                if(getRendererStateClient() == null) break;
+                if (getRendererStateClient() == null) break;
                 StargateSpinState spinState = (StargateSpinState) state;
                 if (spinState.setOnly) {
                     getRendererStateClient().spinHelper.setIsSpinning(false);
@@ -1005,7 +1011,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     public void addSymbolToAddressManual(SymbolInterface targetSymbol, @Nullable Object context) {
         int soundSpinWait = 5;
-        if(this instanceof StargateUniverseBaseTile)
+        if (this instanceof StargateUniverseBaseTile)
             soundSpinWait = 10;
         targetRingSymbol = targetSymbol;
 
@@ -1013,11 +1019,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         int plusRounds = 0;
 
 
-        if(moveOnly && targetSymbol instanceof SymbolUniverseEnum && !targetSymbol.equals(G37)) {
+        if (moveOnly && targetSymbol instanceof SymbolUniverseEnum && !targetSymbol.equals(G37)) {
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 0));
             doIncomingAnimation(10, true);
-        }
-        else if(targetSymbol instanceof SymbolUniverseEnum && targetSymbol.equals(G37)){
+        } else if (targetSymbol instanceof SymbolUniverseEnum && targetSymbol.equals(G37)) {
             spinDirection = spinDirection.opposite();
 
             float distance = 360;
@@ -1038,8 +1043,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
             ringSpinContext = null;
             markDirty();
-        }
-        else {
+        } else {
             spinDirection = spinDirection.opposite();
 
             float distance = spinDirection.getDistance(currentRingSymbol, targetRingSymbol);
@@ -1048,23 +1052,22 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 plusRounds += 1;
             }
 
-            if(!AunisConfig.stargateConfig.fasterMWGateDial) {
+            if (!AunisConfig.stargateConfig.fasterMWGateDial) {
                 if (distance < 90) {
                     distance += 360;
                     plusRounds += 1;
                 }
                 if (distance < 270 && AunisConfig.stargateConfig.allowIncomingAnimations) {
-                    if(this instanceof StargateMilkyWayBaseTile && targetRingSymbol == SymbolMilkyWayEnum.getOrigin()) {
+                    if (this instanceof StargateMilkyWayBaseTile && targetRingSymbol == SymbolMilkyWayEnum.getOrigin()) {
                         distance += 360;
                         plusRounds += 1;
                     }
-                    if(this instanceof StargateUniverseBaseTile && targetRingSymbol == SymbolUniverseEnum.getOrigin()) {
+                    if (this instanceof StargateUniverseBaseTile && targetRingSymbol == SymbolUniverseEnum.getOrigin()) {
                         distance += 360;
                         plusRounds += 1;
                     }
                 }
-            }
-            else if (distance > 180) {
+            } else if (distance > 180) {
                 spinDirection = spinDirection.opposite();
                 distance = spinDirection.getDistance(currentRingSymbol, targetRingSymbol);
                 plusRounds = 0;
@@ -1101,44 +1104,55 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void spinRing(int rounds, boolean changeState, boolean findNearest, int time) {
         targetRingSymbol = currentRingSymbol;
         spinDirection = EnumSpinDirection.CLOCKWISE;
-        if(changeState) stargateState = EnumStargateState.DIALING_COMPUTER;
-        if(this instanceof StargateUniverseBaseTile) {
+        if (changeState) stargateState = EnumStargateState.DIALING_COMPUTER;
+        if (this instanceof StargateUniverseBaseTile) {
             sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
             AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_UNIVERSE_DIAL_START);
         }
-        if(rounds == 0)
+        if (rounds == 0)
             rounds = 1;
-        if(rounds < 0) {
+        if (rounds < 0) {
             spinDirection = EnumSpinDirection.COUNTER_CLOCKWISE;
             rounds *= -1;
         }
 
-        float distance = 360* rounds;
+        float distance = 360 * rounds;
 
-        if(findNearest){
+        if (findNearest) { // spinRing() was called by incoming wormhole -> do animation
             rounds = 0;
             float angle = StargateClassicSpinHelper.getAnimationDistance(time);
-            Aunis.info(angle + " kkt jsi!!!!");
-            float nearestAngle = SymbolMilkyWayEnum.getAngleOfNearest(angle, spinDirection);
-            Aunis.info(nearestAngle + " kkt jsi2!!!!");
-            targetRingSymbol = SymbolMilkyWayEnum.getSymbolByAngle(nearestAngle, spinDirection);
-            Aunis.info(targetRingSymbol.getEnglishName() + " kkt jsi3!!!!");
+            Aunis.info(angle + " angle1");
+            angle += 360 - currentRingSymbol.getAngle();
+            if (angle >= 360) {
+                rounds = (int) Math.floor(angle / 360);
+                angle = angle - (rounds * 360);
+            }
+            Aunis.info(angle + " angle2");
+
+            float anglePerGlyph = getSymbolType().getAnglePerGlyph();
+            float nearestAngle = Math.round(angle / anglePerGlyph) * anglePerGlyph;
+            Aunis.info(nearestAngle + " angle3");
+            targetRingSymbol = getSymbolType().getSymbolByAngle(nearestAngle, spinDirection);
+            spinDirection = spinDirection.opposite();
             distance = spinDirection.getDistance(currentRingSymbol, targetRingSymbol);
-            Aunis.info(distance + " kkt jsi4!!!!");
+            Aunis.info(distance + " distance1");
+            distance += 360 * rounds;
+            Aunis.info(distance + " distance2");
         }
 
+
+        // set to renderer that its not normal spinning and the chevron will not lock
         NBTTagCompound compound = new NBTTagCompound();
         compound.setBoolean("onlySpin", true);
 
         int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
 
-        if(time > 0)
-            duration = time;
-
         AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, rounds)), targetPoint);
-        if(stargateState.incoming())
+        if (stargateState.incoming()) {
+            stargateState = EnumStargateState.INCOMING;
+            markDirty();
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 5, compound));
-        else {
+        } else {
             lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 5, compound);
             addTask(lastSpinFinished);
         }
@@ -1511,8 +1525,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
 
-
-
     private void setIrisBlocks(boolean set) {
         IBlockState invBlockState = AunisBlocks.IRIS_BLOCK.getDefaultState();
         if (set) invBlockState = AunisBlocks.IRIS_BLOCK.getStateFromMeta(getFacing().getHorizontalIndex());
@@ -1643,7 +1655,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     private void updateBeamers() {
         if (stargateState.engaged()) {
             for (BlockPos beamerPos : linkedBeamers) {
-                if(world.getTileEntity(beamerPos) != null)
+                if (world.getTileEntity(beamerPos) != null)
                     ((BeamerTile) Objects.requireNonNull(world.getTileEntity(beamerPos))).gateEngaged(targetGatePos);
             }
         }
@@ -1663,10 +1675,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             int minutes = ((int) Math.floor(openedSeconds / 60));
             int seconds = ((int) (openedSeconds - (60 * minutes)));
             String secondsString = ((seconds < 10) ? "0" + seconds : "" + seconds);
-            if(openedSeconds > 0) return new Object[]{true, "stargate_time", "" + minutes, "" + secondsString};
-            return new Object[] {false, "stargate_not_connected"};
+            if (openedSeconds > 0) return new Object[]{true, "stargate_time", "" + minutes, "" + secondsString};
+            return new Object[]{false, "stargate_not_connected"};
         }
-        return new Object[] {false, "stargate_not_connected"};
+        return new Object[]{false, "stargate_not_connected"};
     }
 
     @Optional.Method(modid = "opencomputers")
@@ -1711,7 +1723,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Callback(doc = "function(message:string) -- Sends message to last person, who sent code for iris")
     public Object[] sendMessageToIncoming(Context context, Arguments args) {
         if (!isMerged()) return new Object[]{null, "stargate_failure_not_merged", "Stargate is not merged"};
-        if (!stargateState.engaged()) return new Object[]{null, "stargate_failure_not_engaged", "Stargate is not engaged"};
+        if (!stargateState.engaged())
+            return new Object[]{null, "stargate_failure_not_engaged", "Stargate is not engaged"};
         if (!args.isString(0)) return new Object[]{false, "wrong_argument_type"};
 
         if (codeSender != null && codeSender.canReceiveMessage()) {
@@ -1821,19 +1834,23 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public Object[] spinGate(Context context, Arguments args) {
         if (!isMerged()) return new Object[]{null, "stargate_failure_not_merged", "Stargate is not merged"};
 
-        if(this instanceof StargatePegasusBaseTile) return new Object[]{null, "stargate_not_supported", "Stargate type is not supported"};
+        if (this instanceof StargatePegasusBaseTile)
+            return new Object[]{null, "stargate_not_supported", "Stargate type is not supported"};
 
         if (stargateState.idle()) {
-            int rounds = 1;
-            if(args.isInteger(0))
-                rounds = args.checkInteger(0);
-            if(args.isInteger(1)){
-                int time = args.checkInteger(1);
-                spinRing(rounds, time);
-                return new Object[]{null, "stargate_spin"};
+            int time = 0;
+            if (args.isInteger(0)) {
+                time = args.checkInteger(0);
+                int rounds = 1;
+                if (time < 0)
+                    rounds = -1;
+                if (time != 0) {
+                    spinRing(rounds, true, true, time);
+                    return new Object[]{null, "stargate_spin"};
+                }
+                return new Object[]{null, "stargate_failure_wrong_usage", "Time is 0"};
             }
-            spinRing(rounds);
-            return new Object[]{null, "stargate_spin"};
+            return new Object[]{null, "stargate_failure_wrong_usage", "Missing first argument (time in ticks)"};
         } else {
             return new Object[]{null, "stargate_failure_not_idle", "The gate is not idle"};
         }

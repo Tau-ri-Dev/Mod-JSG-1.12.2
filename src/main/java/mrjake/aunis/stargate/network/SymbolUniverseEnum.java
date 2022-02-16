@@ -3,12 +3,16 @@ package mrjake.aunis.stargate.network;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.model.ModelLoader;
+import mrjake.aunis.stargate.EnumSpinDirection;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import static mrjake.aunis.stargate.EnumSpinDirection.CLOCKWISE;
+import static mrjake.aunis.stargate.EnumSpinDirection.COUNTER_CLOCKWISE;
 
 public enum SymbolUniverseEnum implements SymbolInterface {
 	TOP_CHEVRON(0, null),
@@ -123,6 +127,18 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 	
 	public static float getAnglePerGlyph() {
 		return ANGLE_PER_SECTION;
+	}
+
+	public static SymbolInterface getSymbolByAngle(float angle, EnumSpinDirection direction){
+		if(direction == CLOCKWISE)
+			angle = 360 - angle;
+
+		for(SymbolUniverseEnum symbol : values()){
+			if(symbol.angle == angle)
+				return symbol;
+		}
+		return getOrigin();
+
 	}
 	
 	// ------------------------------------------------------------

@@ -127,48 +127,38 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
 	public SymbolTypeEnum getSymbolType() {
 		return SymbolTypeEnum.MILKYWAY;
 	}
-	
-	// ------------------------------------------------------------
-	// Static
-
-	public static float getAngleByIndexAngIndex(int index, EnumSpinDirection direction){
+/*
+	@Override
+	public float getAngleByAngIndex(int index){
 		if(index < 0) index = 0;
 		if(index > 38) index = 38;
 		for(SymbolMilkyWayEnum symbol : values()){
 			if(symbol.angleIndex == index) {
-				if(direction == COUNTER_CLOCKWISE)
-					return symbol.angle;
-				else if(direction == CLOCKWISE)
-					return 360 - symbol.angle;
+				return 360 - symbol.angle;
 			}
 		}
 		return 0;
 	}
-
-	public static SymbolMilkyWayEnum getSymbolByAngle(float angle, EnumSpinDirection direction){
-		if(direction == COUNTER_CLOCKWISE)
+*/
+	public static SymbolInterface getSymbolByAngle(float angle, EnumSpinDirection direction){
+		if(direction == CLOCKWISE)
 			angle = 360 - angle;
 
 		for(SymbolMilkyWayEnum symbol : values()){
 			if(symbol.angle == angle)
 				return symbol;
 		}
-		return (SymbolMilkyWayEnum) getOrigin();
 
+		return getOrigin();
 	}
+/*
+	@Override
+	public float getAngleOfNearest(float angle){
 
-	public static float getAngleOfNearest(float angle, EnumSpinDirection direction){
-
-		if(angle <= getAngleByIndexAngIndex(0, direction)) // first element
-			return getAngleByIndexAngIndex(0, direction);
-
-		Aunis.info("Tak seš uplnej debil???");
-
-		if(angle >= getAngleByIndexAngIndex(38, direction)) // last element
-			return getAngleByIndexAngIndex(38, direction);
-
-		Aunis.info("Tak seš uplnej debil2???");
-
+		if(angle <= getAngleByAngIndex(0)) // first element
+			return getAngleByAngIndex(0);
+		if(angle >= getAngleByAngIndex(38)) // last element
+			return getAngleByAngIndex(38);
 
 		int start = 0;
 		int end = 38 - 1;
@@ -178,21 +168,23 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
 		while(end - start != 1){
 
 			mid = (start + end) / 2;
-			if(angle == getAngleByIndexAngIndex(mid, direction))
-				return getAngleByIndexAngIndex(mid, direction);
-			if(angle < getAngleByIndexAngIndex(mid, direction))
+			if(angle == getAngleByAngIndex(mid))
+				return getAngleByAngIndex(mid);
+			if(angle < getAngleByAngIndex(mid))
 				end = mid;
-			if(angle > getAngleByIndexAngIndex(mid, direction))
+			if(angle > getAngleByAngIndex(mid))
 				start = mid;
 
 			loops++;
-			if(loops > 38)
+			if(loops > 250)
 				break;
 		}
-		return angle;
+		return getAngleByAngIndex(mid);
 	}
-
-	// -------------------
+ */
+	
+	// ------------------------------------------------------------
+	// Static
 	
 	public static SymbolMilkyWayEnum getRandomSymbol(Random random) {
 		int id = 0;

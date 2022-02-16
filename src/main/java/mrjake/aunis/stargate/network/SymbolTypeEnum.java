@@ -1,5 +1,6 @@
 package mrjake.aunis.stargate.network;
 
+import mrjake.aunis.stargate.EnumSpinDirection;
 import mrjake.aunis.util.EnumKeyInterface;
 import mrjake.aunis.util.EnumKeyMap;
 
@@ -164,6 +165,21 @@ public enum SymbolTypeEnum implements EnumKeyInterface<Integer> {
     }
 
     return 0;
+  }
+
+  public SymbolInterface getSymbolByAngle(float angle, EnumSpinDirection direction) {
+    switch (this) {
+      case MILKYWAY:
+        return SymbolMilkyWayEnum.getSymbolByAngle(angle, direction);
+
+      case PEGASUS:
+        return SymbolPegasusEnum.getSymbolByAngle(angle, direction);
+
+      case UNIVERSE:
+        return SymbolUniverseEnum.getSymbolByAngle(angle, direction);
+    }
+
+    return null;
   }
 
 
