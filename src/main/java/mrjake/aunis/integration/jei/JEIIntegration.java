@@ -5,7 +5,10 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
+import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
+import mrjake.aunis.crafting.thermalreplace.CrystalRedRecipe;
+import mrjake.aunis.crafting.thermalreplace.ThermalAbstractRecipe;
 import mrjake.aunis.item.AunisItems;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -15,6 +18,12 @@ import java.util.List;
 
 @JEIPlugin
 public final class JEIIntegration implements IModPlugin {
+
+    public static final CrystalRedRecipe CRYSTAL_RED_RECIPE = new CrystalRedRecipe();
+
+    public static final ThermalAbstractRecipe[] RECIPES = {
+            CRYSTAL_RED_RECIPE
+    };
 
     public JEIIntegration(){}
 
@@ -35,15 +44,11 @@ public final class JEIIntegration implements IModPlugin {
         recipes.add(new JEIUniverseDialerCloneRecipe());
         recipes.add(new JEINotebookCloneRecipe());
         recipes.add(new JEIUniverseDialerRepairRecipe());
+
+        for(ThermalAbstractRecipe recipe : RECIPES){
+            recipes.add(new JEIThermalRecipes(recipe.OUTPUT_ITEM, recipe.PATTERN_LIST));
+        }
+
         registry.addRecipes(recipes, VanillaRecipeCategoryUid.CRAFTING);
     }
-
-//    @Override
-//    public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
-//        // Show mysterious pages with all possible generators
-//        subtypeRegistry.registerSubtypeInterpreter(AunisItems.PAGE_MYSTERIOUS_ITEM,
-//                stack -> stack.hasTagCompound() && stack.getTagCompound().hasKey("generator", Constants.NBT.TAG_STRING) ?
-//                        stack.getTagCompound().getString("generator") :
-//                        ISubtypeRegistry.ISubtypeInterpreter.NONE);
-//    }
 }

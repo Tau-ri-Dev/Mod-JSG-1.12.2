@@ -1121,23 +1121,18 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (findNearest) { // spinRing() was called by incoming wormhole -> do animation
             rounds = 0;
             float angle = StargateClassicSpinHelper.getAnimationDistance(time);
-            Aunis.info(angle + " angle1");
             angle += 360 - currentRingSymbol.getAngle();
             if (angle >= 360) {
                 rounds = (int) Math.floor(angle / 360);
                 angle = angle - (rounds * 360);
             }
-            Aunis.info(angle + " angle2");
 
             float anglePerGlyph = getSymbolType().getAnglePerGlyph();
             float nearestAngle = Math.round(angle / anglePerGlyph) * anglePerGlyph;
-            Aunis.info(nearestAngle + " angle3");
             targetRingSymbol = getSymbolType().getSymbolByAngle(nearestAngle, spinDirection);
             spinDirection = spinDirection.opposite();
             distance = spinDirection.getDistance(currentRingSymbol, targetRingSymbol);
-            Aunis.info(distance + " distance1");
             distance += 360 * rounds;
-            Aunis.info(distance + " distance2");
         }
 
 
