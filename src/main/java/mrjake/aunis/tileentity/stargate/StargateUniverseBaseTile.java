@@ -145,7 +145,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
   @Override
   public void startIncomingAnimation(int addressSize, int period){
     super.startIncomingAnimation(addressSize, period);
-    this.lightUpChevronByIncoming(!AunisConfig.stargateConfig.allowIncomingAnimations);
+    this.lightUpChevronByIncoming(!AunisConfig.dialingConfig.allowIncomingAnimations);
   }
 
   @Override

@@ -332,7 +332,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void tryRunIncoming(long ticks) {
         if (incomingPeriod == 0) incomingPeriod = 1;
         if (incomingPeriod != -1 && ticks % incomingPeriod == 0)
-            lightUpChevronByIncoming(!AunisConfig.stargateConfig.allowIncomingAnimations);
+            lightUpChevronByIncoming(!AunisConfig.dialingConfig.allowIncomingAnimations);
     }
 
 
@@ -399,7 +399,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         stargateState = EnumStargateState.INCOMING;
                         isIncoming = true;
                         markDirty();
-                        if (AunisConfig.stargateConfig.allowIncomingAnimations)
+                        if (AunisConfig.dialingConfig.allowIncomingAnimations)
                             this.incomingWormhole(randomIncomingAddrSize, period);
                         else this.incomingWormhole(randomIncomingAddrSize);
                         this.sendSignal(null, "stargate_incoming_wormhole", new Object[]{randomIncomingAddrSize});
@@ -701,7 +701,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void readFromNBT(NBTTagCompound compound) {
         itemStackHandler.deserializeNBT(compound.getCompoundTag("itemHandler"));
 
-        if (compound.getBoolean("hasUpgrade")) {
+        if (compound.getBoolean("hasUpgrade")) { // todo(global): can be deleted probably? (used by old version)
             itemStackHandler.setStackInSlot(0, new ItemStack(AunisItems.CRYSTAL_GLYPH_STARGATE));
         }
 
@@ -1052,12 +1052,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 plusRounds += 1;
             }
 
-            if (!AunisConfig.stargateConfig.fasterMWGateDial) {
+            if (!AunisConfig.dialingConfig.fasterMWGateDial) {
                 if (distance < 90) {
                     distance += 360;
                     plusRounds += 1;
                 }
-                if (distance < 270 && AunisConfig.stargateConfig.allowIncomingAnimations) {
+                if (distance < 270 && AunisConfig.dialingConfig.allowIncomingAnimations) {
                     if (this instanceof StargateMilkyWayBaseTile && targetRingSymbol == SymbolMilkyWayEnum.getOrigin()) {
                         distance += 360;
                         plusRounds += 1;
@@ -1148,6 +1148,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
 
         AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, rounds)), targetPoint);
+        if(findNearest)
+            duration -= 40;
         if (stargateState.incoming()) {
             stargateState = EnumStargateState.INCOMING;
             markDirty();

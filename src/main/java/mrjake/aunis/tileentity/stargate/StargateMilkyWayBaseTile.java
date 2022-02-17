@@ -437,11 +437,6 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         super.update();
 
         if (!world.isRemote) {
-
-            // config ring speed factor
-            if(A_ANGLE_PER_TICK != AunisConfig.stargateConfig.classicGateSpinSpeed)
-                A_ANGLE_PER_TICK = AunisConfig.stargateConfig.classicGateSpinSpeed;
-
             if (!lastPos.equals(pos)) {
                 lastPos = pos;
 

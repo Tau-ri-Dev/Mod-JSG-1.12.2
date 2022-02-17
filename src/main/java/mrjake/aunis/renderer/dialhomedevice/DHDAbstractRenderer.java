@@ -69,7 +69,7 @@ public abstract class DHDAbstractRenderer extends TileEntitySpecialRenderer<DHDA
 
   protected void setColorByAddress(DHDAbstractTile te, DHDAbstractRendererState rendererState, NBTTagCompound compound, SymbolTypeEnum symbolType, SymbolInterface symbol){
     GlStateManager.color(1, 1, 1, 1);
-    if(compound != null && AunisConfig.avConfig.enablePageHint){
+    if(compound != null && AunisConfig.notebookOptions.enablePageHint){
 
       // if item is notebook item
       if(compound.hasKey("addressList"))

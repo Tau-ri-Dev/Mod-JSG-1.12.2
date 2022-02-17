@@ -19,7 +19,7 @@ public class PageRenderer {
 	public static void renderSymbol(float x, float y, float w, float h, SymbolInterface symbol) {
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableBlend();
-		GlStateManager.color(0, 0, 0, (float) AunisConfig.avConfig.glyphTransparency);
+		GlStateManager.color(0, 0, 0, (float) AunisConfig.notebookOptions.glyphTransparency);
 		
 		Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource());		
 		GL11.glBegin(GL11.GL_QUADS);
@@ -54,7 +54,7 @@ public class PageRenderer {
 			ItemRenderHelper.renderArmFirstPersonSide(0, handSide, 0, null);
 		    GlStateManager.popMatrix();
 		    
-		    float narrow = AunisConfig.avConfig.pageNarrowing;
+		    float narrow = AunisConfig.notebookOptions.pageNarrowing;
 		    GlStateManager.translate(mainhand ? 0.5f-narrow : -0.25f+narrow, 0.2f, 0);
 		}
 		

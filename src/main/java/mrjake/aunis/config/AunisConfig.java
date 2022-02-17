@@ -25,6 +25,9 @@ public class AunisConfig {
     @Name("Stargate config options")
     public static StargateConfig stargateConfig = new StargateConfig();
 
+    @Name("Dialing/Incoming options")
+    public static DialingConfig dialingConfig = new DialingConfig();
+
     @Name("Iris/shield config options")
     public static IrisConfig irisConfig = new IrisConfig();
 
@@ -46,6 +49,9 @@ public class AunisConfig {
     @Name("Mysterious Page options")
     public static MysteriousConfig mysteriousConfig = new MysteriousConfig();
 
+    @Name("Notebook Pages options")
+    public static NoteBookOptions notebookOptions = new NoteBookOptions();
+
     @Name("AutoClose options")
     public static AutoCloseConfig autoCloseConfig = new AutoCloseConfig();
 
@@ -54,9 +60,6 @@ public class AunisConfig {
 
     @Name("Beamer options")
     public static BeamerConfig beamerConfig = new BeamerConfig();
-
-    @Name("Recipe options")
-    public static RecipeConfig recipeConfig = new RecipeConfig();
 
     @Name("Audio/Video")
     public static AudioVideoConfig avConfig = new AudioVideoConfig();
@@ -85,44 +88,11 @@ public class AunisConfig {
         @Name("Universe dialer nearby radius")
         public int universeGateNearbyReach = 1024;
 
-        @Name("Use 8 chevrons between MW and PG gates")
-        @Comment({
-                "Change this to true, if you want to use 8 chevrons between pegasus and milkyway gates"
-        })
-        public boolean pegAndMilkUseEightChevrons = true;
-
-        @Name("Need only 7 symbols between Uni gates")
-        @Comment({
-                "If u want to dial UNI-UNI only with seven symbols (interdimensional for example), set this to true"
-        })
-        public boolean useStrictSevenSymbolsUniGate = false;
-
-        @Name("Faster MilkyWay gate computer dial")
-        @Comment({
-                "Speed up dialing with computer on MW gate"
-        })
-        public boolean fasterMWGateDial = false;
-
-        @Name("Milky/Uni gate speed factor")
-        @Comment({
-                "Speed factor of Milkyway and Universe gate"
-        })
-        @RangeDouble(min = 1.65f, max = 3)
-        public float classicGateSpinSpeed = 1.8f;
-
         @Name("Enable opening last chevron while dialing with dhd")
         @Comment({
                 "Enable opening last chevron while dialing milkyway gate with dhd"
         })
         public boolean dhdLastOpen = true;
-
-        /* todo(Mine): Fix sounds on peg gate
-        @Name("Smooth dialing on pegasus gate DHD")
-        @Comment({
-                "Enable smooth dialing on pegasus DHD"
-        })
-        public boolean pegasContinueDial = true;
-        */
 
         @Name("Disable animated Event Horizon")
         @Comment({
@@ -137,22 +107,6 @@ public class AunisConfig {
                 "Set to negative value to disable."
         })
         public float frostyTemperatureThreshold = 0.1f;
-
-        @Name("Allow incoming animations")
-        @Comment({
-                "If the incoming animations of gates generate issues, set it to false",
-        })
-        public boolean allowIncomingAnimations = true;
-
-        @Name("Connect to dialing gate")
-        @Comment({
-                "If target gate is dialing and this option is set to true,",
-                "the target gate stop dialing and open incoming wormhole.",
-                "If this is set to false and the dialed gate dialing address,",
-                "the connection will not established.",
-                "If it cause issues, set it to false.",
-        })
-        public boolean allowConnectToDialing = true;
 
         // ---------------------------------------------------------------------------------------
         // Kawoosh blocks
@@ -279,6 +233,44 @@ public class AunisConfig {
 
     }
 
+    public static class DialingConfig {
+
+        @Name("Allow incoming animations")
+        @Comment({
+                "If the incoming animations of gates generate issues, set it to false",
+        })
+        public boolean allowIncomingAnimations = true;
+
+        @Name("Connect to dialing gate")
+        @Comment({
+                "If target gate is dialing and this option is set to true,",
+                "the target gate stop dialing and open incoming wormhole.",
+                "If this is set to false and the dialed gate dialing address,",
+                "the connection will not established.",
+                "If it cause issues, set it to false.",
+        })
+        public boolean allowConnectToDialing = true;
+
+        @Name("Use 8 chevrons between MW and PG gates")
+        @Comment({
+                "Change this to true, if you want to use 8 chevrons between pegasus and milkyway gates"
+        })
+        public boolean pegAndMilkUseEightChevrons = true;
+
+        @Name("Need only 7 symbols between Uni gates")
+        @Comment({
+                "If u want to dial UNI-UNI only with seven symbols (interdimensional for example), set this to true"
+        })
+        public boolean useStrictSevenSymbolsUniGate = false;
+
+        @Name("Faster MilkyWay gate computer dial")
+        @Comment({
+                "Speed up dialing with computer on MW gate"
+        })
+        public boolean fasterMWGateDial = false;
+
+    }
+
     public static class IrisConfig {
         @Name("Iris kills at destination")
         @Comment("If set to 'false' player get killed by iris on entering event horizon")
@@ -385,15 +377,15 @@ public class AunisConfig {
         @RangeInt(min = 1)
         public int rangeFlat = 10;
 
+        @Name("DHD range's radius vertical")
+        @RangeInt(min = 1)
+        public int rangeVertical = 5;
+
         @Name("Pegasus DHD do dial animation")
         @Comment({
                 "Disable this, to disable animation when dial gate with DHD (pegasus)"
         })
         public boolean animatePegDHDDial = true;
-
-        @Name("DHD range's radius vertical")
-        @RangeInt(min = 1)
-        public int rangeVertical = 5;
 
         @Name("DHD's max fluid capacity")
         @RangeInt(min = 1)
@@ -411,9 +403,11 @@ public class AunisConfig {
         })
         public int powerGenerationMultiplier = 1;
 
+        @Name("Cold fusion reactor activation energy level")
         @RangeDouble(min = 0, max = 1)
         public double activationLevel = 0.4;
 
+        @Name("Cold fusion reactor deactivation energy level")
         @RangeDouble(min = 0, max = 1)
         public double deactivationLevel = 0.98;
     }
@@ -431,7 +425,7 @@ public class AunisConfig {
         @Name("Render invisible blocks")
         public boolean renderInvisibleBlocks = false;
 
-        @Name("Show loading texture in log")
+        @Name("Show loading textures in log")
         public boolean logTexturesLoading = false;
     }
 
@@ -451,6 +445,24 @@ public class AunisConfig {
         @Name("Mysterious page cooldown")
         @RangeInt(min = 0)
         public int pageCooldown = 40;
+    }
+
+    public static class NoteBookOptions {
+
+        @Name("Notebook page Glyph transparency")
+        @RangeDouble(min = 0, max = 1)
+        public double glyphTransparency = 0.75;
+
+        @Name("Enable hint when dialing on DHDs with notebook page")
+        public boolean enablePageHint = true;
+
+        @Name("Notebook Page offset")
+        @Comment({
+                "Greater values render the Page more to the center of the screen, smaller render it closer to the borders.",
+                "0 - for standard 16:9 (default),",
+                "0.2 - for 4:3.",
+        })
+        public float pageNarrowing = 0;
     }
 
     public static class AutoCloseConfig {
@@ -516,29 +528,10 @@ public class AunisConfig {
         public int signalIntervalTicks = 20;
     }
 
-    public static class RecipeConfig {
-
-    }
-
     public static class AudioVideoConfig {
-        @Name("Notebook page Glyph transparency")
-        @RangeDouble(min = 0, max = 1)
-        public double glyphTransparency = 0.75;
-
-        @Name("Enable hint when dialing with notebook page")
-        public boolean enablePageHint = true;
-
         @Name("Aunis volume")
         @RangeDouble(min = 0, max = 1)
         public float volume = 1;
-
-        @Name("Notebook Page offset")
-        @Comment({
-                "Greater values render the Page more to the center of the screen, smaller render it closer to the borders.",
-                "0 - for standard 16:9 (default),",
-                "0.2 - for 4:3.",
-        })
-        public float pageNarrowing = 0;
     }
 
     public static class WorldGenConfig {

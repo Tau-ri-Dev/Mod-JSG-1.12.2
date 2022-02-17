@@ -153,7 +153,7 @@ public enum SymbolPegasusEnum implements SymbolInterface {
 
   public static int getMinimalSymbolCountTo(SymbolTypeEnum symbolType, boolean localDial) {
 
-    boolean eightChevrons = AunisConfig.stargateConfig.pegAndMilkUseEightChevrons;
+    boolean eightChevrons = AunisConfig.dialingConfig.pegAndMilkUseEightChevrons;
 
     switch (symbolType) {
       case MILKYWAY:

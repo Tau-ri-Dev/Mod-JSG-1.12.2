@@ -174,7 +174,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     public boolean canAcceptConnectionFrom(StargatePos targetGatePos) {
-        boolean allowConnectToDialing = AunisConfig.stargateConfig.allowConnectToDialing;
+        boolean allowConnectToDialing = AunisConfig.dialingConfig.allowConnectToDialing;
 
         if (allowConnectToDialing) {
             if (isMerged) {
@@ -572,7 +572,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 StargateAbstractBaseTile targetGateTile = network.getStargate(dialedAddress).getTileEntity();
                 targetGateTile.isIncoming = true;
                 targetGateTile.markDirty();
-                if(AunisConfig.stargateConfig.allowIncomingAnimations) targetGateTile.incomingWormhole(size, period);
+                if(AunisConfig.dialingConfig.allowIncomingAnimations) targetGateTile.incomingWormhole(size, period);
                 else targetGateTile.incomingWormhole(size);
                 targetGateTile.sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
                 targetGateTile.stargateState = EnumStargateState.INCOMING;
