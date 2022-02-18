@@ -12,10 +12,10 @@ import java.util.HashMap;
 public abstract class ThermalAbstractRecipe extends Impl<IRecipe> implements IRecipe {
 
     // CONFIGURATION
-    public int MINIMAL_SLOTS = 0;
-    public int MAXIMAL_SLOTS = 0;
-    public String NAME = null;
-    public ItemStack OUTPUT_ITEM = null;
+    public int MINIMAL_SLOTS;
+    public int MAXIMAL_SLOTS;
+    public String NAME;
+    public ItemStack OUTPUT_ITEM;
 
     // items / patterns
     public HashMap<ItemStack, int[]> PATTERN_LIST;
@@ -28,10 +28,6 @@ public abstract class ThermalAbstractRecipe extends Impl<IRecipe> implements IRe
         MAXIMAL_SLOTS = maxSlots;
         OUTPUT_ITEM = outItem;
         setRegistryName(NAME);
-    }
-
-    public HashMap<ItemStack, int[]> getPatternList(){
-        return PATTERN_LIST;
     }
 
     public void setPatterns(HashMap<ItemStack, int[]> patternList){
@@ -62,8 +58,9 @@ public abstract class ThermalAbstractRecipe extends Impl<IRecipe> implements IRe
             boolean found = false;
             for (ItemStack key : PATTERN_LIST.keySet()) {
                 Item itemKey = key.getItem();
+                int meta = key.getMetadata();
                 int[] slots = PATTERN_LIST.get(key);
-                if (itemKey == item && slots[i] == 1) {
+                if (itemKey == item && (meta == stack.getMetadata() || meta == -1) && slots[i] == 1) {
                     found = true;
                     break;
                 }

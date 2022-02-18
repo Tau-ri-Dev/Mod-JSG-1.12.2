@@ -1,7 +1,12 @@
 package mrjake.aunis.crafting;
 
+import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
-import mrjake.aunis.crafting.thermalreplace.CrystalRedRecipe;
+import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.crafting.thermalreplace.circuits.CircuitCrystalRecipe;
+import mrjake.aunis.crafting.thermalreplace.circuits.CircuitNaquadahRecipe;
+import mrjake.aunis.crafting.thermalreplace.circuits.CircuitZpmRecipe;
+import mrjake.aunis.crafting.thermalreplace.crystals.*;
 import mrjake.aunis.crafting.thermalreplace.ThermalAbstractRecipe;
 import mrjake.aunis.item.AunisItems;
 import net.minecraft.item.ItemStack;
@@ -14,11 +19,56 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @EventBusSubscriber
 public class AunisRecipeHandler {
 
-	public static final CrystalRedRecipe CRYSTAL_RED_RECIPE = new CrystalRedRecipe();
+	/**
+	 * Crystals
+	 */
+	public static final CrystalRedRecipe CRYSTAL_RED = new CrystalRedRecipe();
+	public static final CrystalEnderRecipe CRYSTAL_ENDER = new CrystalEnderRecipe();
+	public static final CrystalBlueRecipe CRYSTAL_BLUE = new CrystalBlueRecipe();
+	public static final CrystalYellowRecipe CRYSTAL_YELLOW = new CrystalYellowRecipe();
+	public static final CrystalWhiteRecipe CRYSTAL_WHITE = new CrystalWhiteRecipe();
 
-	public static final ThermalAbstractRecipe[] RECIPES = {
-			CRYSTAL_RED_RECIPE
+	/**
+	 * Crystal seed
+	 */
+	public static final CrystalSeedRecipe CRYSTAL_SEED = new CrystalSeedRecipe();
+
+	/**
+	 * Circuits
+	 */
+	public static final CircuitCrystalRecipe CIRCUIT_CONTROL_CRYSTAL = new CircuitCrystalRecipe();
+	public static final CircuitNaquadahRecipe CIRCUIT_CONTROL_NAQUADAH = new CircuitNaquadahRecipe();
+	public static final CircuitZpmRecipe CIRCUIT_CONTROL_ZPM = new CircuitZpmRecipe();
+
+	public static ThermalAbstractRecipe[] RECIPES = {
+			// Crystals
+			CRYSTAL_RED,
+			CRYSTAL_ENDER,
+			CRYSTAL_BLUE,
+			CRYSTAL_YELLOW,
+			CRYSTAL_WHITE,
+
+			// Seed
+			CRYSTAL_SEED,
+
+			// Circuits
+			CIRCUIT_CONTROL_CRYSTAL,
+			CIRCUIT_CONTROL_NAQUADAH,
+			CIRCUIT_CONTROL_ZPM,
 	};
+
+	static {
+		convertRecipes();
+	}
+
+	// Yes, dumb, i know.
+	public static void convertRecipes(){
+		if(AunisConfig.recipesConfig.bypassThermal)
+			return; // load recipes
+		else if(AunisConfig.recipesConfig.convertThermal && !Aunis.isThermalLoaded)
+			return; // load recipes
+		RECIPES = new ThermalAbstractRecipe[]{};
+	}
 
 	@SubscribeEvent
 	public static void onRecipeRegister(Register<IRecipe> event) {

@@ -76,6 +76,9 @@ public class AunisConfig {
     @Name("Random incoming config")
     public static RandomIncomingConfig randomIncoming = new RandomIncomingConfig();
 
+    @Name("Recipes options")
+    public static RecipesConfig recipesConfig = new RecipesConfig();
+
     public static class StargateConfig {
         @Name("Orlin's gate max open count")
         @RangeInt(min = 0)
@@ -652,6 +655,24 @@ public class AunisConfig {
     public static class DevConfig {
         @Name("Enable peg gates with myst pages")
         public boolean pegGatesMyst = false;
+    }
+
+    public static class RecipesConfig {
+
+        @Name("Convert thermal recipes to normal ones")
+        @Comment({
+                "When Thermal expansion is not loaded, then",
+                "register convert Thermal recipes into",
+                "normal ones."
+        })
+        public boolean convertThermal = true;
+
+        @Name("Allow bypass thermal recipes")
+        @Comment({
+                "Even when thermal expansion is loaded, register",
+                "converted recipes."
+        })
+        public boolean bypassThermal = false;
     }
 
     public static void resetCache() {

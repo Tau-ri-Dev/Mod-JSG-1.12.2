@@ -76,13 +76,14 @@ public class Aunis {
     
     private static final String OC_WRAPPER_LOADED = "mrjake.aunis.integration.OCWrapperLoaded";
     private static final String OC_WRAPPER_NOT_LOADED = "mrjake.aunis.integration.OCWrapperNotLoaded";
-
-    //private static final String IC2_WRAPPER_LOADED = "mrjake.aunis.integration.IC2WrapperLoaded";
-    //private static final String IC2_WRAPPER_NOT_LOADED = "mrjake.aunis.integration.IC2WrapperNotLoaded";
     
     public static OCWrapperInterface ocWrapper;
     
 	// ------------------------------------------------------------------------
+
+    // Thermal Expansion recipes convert
+    public static boolean isThermalLoaded = false;
+
     static {
     	FluidRegistry.enableUniversalBucket();
     }
@@ -92,6 +93,7 @@ public class Aunis {
         logger = event.getModLog(); // This is the recommended way of getting a logger
         File source = event.getSourceFile();
         Aunis.info("Started loading Aunis mod in " + source.getAbsolutePath());
+        Aunis.info("Loading version " + Version);
 
         // todo(Mine): fix this shitty shit
         //AUNIS_SOUNDS = AunisSoundCategory.add("AUNIS_SOUNDS");
@@ -125,6 +127,7 @@ public class Aunis {
             Aunis.info("Thermal Expansion found and connection is enabled... Connecting...");
 
             ThermalIntegration.registerRecipes();
+            isThermalLoaded = true;
             Aunis.info("Successfully connected into Thermal Expansion!");
         }
 
