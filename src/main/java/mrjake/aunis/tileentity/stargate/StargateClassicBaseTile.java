@@ -75,6 +75,8 @@ import java.util.*;
 import static mrjake.aunis.item.AunisItems.UPGRADE_IRIS;
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.PHYSICAL_IRIS_ANIMATION_LENGTH;
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.SHIELD_IRIS_ANIMATION_LENGTH;
+import static mrjake.aunis.stargate.EnumSpinDirection.CLOCKWISE;
+import static mrjake.aunis.stargate.EnumSpinDirection.COUNTER_CLOCKWISE;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.G37;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
@@ -1006,7 +1008,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     protected long spinStartTime;
     protected SymbolInterface currentRingSymbol = getSymbolType().getTopSymbol();
     protected SymbolInterface targetRingSymbol = getSymbolType().getTopSymbol();
-    protected EnumSpinDirection spinDirection = EnumSpinDirection.COUNTER_CLOCKWISE;
+    protected EnumSpinDirection spinDirection = COUNTER_CLOCKWISE;
     protected Object ringSpinContext;
 
     public void addSymbolToAddressManual(SymbolInterface targetSymbol, @Nullable Object context) {
@@ -1093,17 +1095,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     }
 
-    public void spinRing(int rounds) {
-        spinRing(rounds, true, false, 0);
-    }
-
-    public void spinRing(int rounds, int time) {
-        spinRing(rounds, true, true, time);
-    }
-
     public void spinRing(int rounds, boolean changeState, boolean findNearest, int time) {
+        if(time < 0) time *= -1;
         targetRingSymbol = currentRingSymbol;
-        spinDirection = EnumSpinDirection.CLOCKWISE;
+        spinDirection = CLOCKWISE;
         if (changeState) stargateState = EnumStargateState.DIALING_COMPUTER;
         if (this instanceof StargateUniverseBaseTile) {
             sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
@@ -1112,26 +1107,44 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (rounds == 0)
             rounds = 1;
         if (rounds < 0) {
-            spinDirection = EnumSpinDirection.COUNTER_CLOCKWISE;
+            spinDirection = COUNTER_CLOCKWISE;
             rounds *= -1;
         }
 
         float distance = 360 * rounds;
-
         if (findNearest) { // spinRing() was called by incoming wormhole -> do animation
             rounds = 0;
+            float currentAngle = currentRingSymbol.getAngle();
+            //if(currentAngle == 360) currentAngle = 0;
             float angle = StargateClassicSpinHelper.getAnimationDistance(time);
-            angle += 360 - currentRingSymbol.getAngle();
-            if (angle >= 360) {
+            if(angle > 360){
                 rounds = (int) Math.floor(angle / 360);
                 angle = angle - (rounds * 360);
             }
+            Aunis.info("a1: " + angle + ", ca1: " + currentAngle);
+            float finalAngle = currentAngle;
+            if(spinDirection == CLOCKWISE)
+                finalAngle = angle + currentAngle;
+            else
+                finalAngle = currentAngle - angle;
+            Aunis.info("a2: " + finalAngle);
 
-            float anglePerGlyph = getSymbolType().getAnglePerGlyph();
-            float nearestAngle = Math.round(angle / anglePerGlyph) * anglePerGlyph;
-            targetRingSymbol = getSymbolType().getSymbolByAngle(nearestAngle, spinDirection);
-            spinDirection = spinDirection.opposite();
+            if(finalAngle > 360)
+                finalAngle -= 360;
+            else if(finalAngle < 0)
+                finalAngle += 360;
+            Aunis.info("a3: " + finalAngle);
+
+            // CALCULATE NEAREST GLYPH
+            if(finalAngle < 15)
+                finalAngle += 15;
+            Aunis.info("a4: " + finalAngle);
+            float nearestAngle = 0; // = Math.round(finalAngle / anglePerGlyph) * anglePerGlyph;
+            nearestAngle = getSymbolType().getAngleOfNearest(finalAngle);
+            Aunis.info("n: " + nearestAngle);
+            targetRingSymbol = getSymbolType().getSymbolByAngle(nearestAngle);
             distance = spinDirection.getDistance(currentRingSymbol, targetRingSymbol);
+            Aunis.info("s: " + targetRingSymbol.getEnglishName());
             distance += 360 * rounds;
         }
 
@@ -1143,8 +1156,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
 
         AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, rounds)), targetPoint);
-        if(findNearest)
-            duration -= 40;
         if (stargateState.incoming()) {
             stargateState = EnumStargateState.INCOMING;
             markDirty();

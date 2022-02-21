@@ -123,7 +123,7 @@ public enum SymbolPegasusEnum implements SymbolInterface {
     return SymbolTypeEnum.PEGASUS;
   }
 
-  public static SymbolInterface getSymbolByAngle(float angle, EnumSpinDirection direction){
+  public static SymbolInterface getSymbolByAngle(float angle){
     return getOrigin();
   }
 

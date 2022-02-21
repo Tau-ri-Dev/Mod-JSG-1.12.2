@@ -167,19 +167,34 @@ public enum SymbolTypeEnum implements EnumKeyInterface<Integer> {
     return 0;
   }
 
-  public SymbolInterface getSymbolByAngle(float angle, EnumSpinDirection direction) {
+  public SymbolInterface getSymbolByAngle(float angle) {
     switch (this) {
       case MILKYWAY:
-        return SymbolMilkyWayEnum.getSymbolByAngle(angle, direction);
+        return SymbolMilkyWayEnum.getSymbolByAngle(angle);
 
       case PEGASUS:
-        return SymbolPegasusEnum.getSymbolByAngle(angle, direction);
+        return SymbolPegasusEnum.getSymbolByAngle(angle);
 
       case UNIVERSE:
-        return SymbolUniverseEnum.getSymbolByAngle(angle, direction);
+        return SymbolUniverseEnum.getSymbolByAngle(angle);
     }
 
     return null;
+  }
+
+  public float getAngleOfNearest(float angle) {
+    switch (this) {
+      case MILKYWAY:
+        return SymbolMilkyWayEnum.getAngleOfNearest(angle);
+
+      case PEGASUS:
+        return 0; //SymbolPegasusEnum.getAngleOfNearest(angle);
+
+      case UNIVERSE:
+        return 0; //SymbolUniverseEnum.getAngleOfNearest(angle);
+    }
+
+    return 0;
   }
 
 

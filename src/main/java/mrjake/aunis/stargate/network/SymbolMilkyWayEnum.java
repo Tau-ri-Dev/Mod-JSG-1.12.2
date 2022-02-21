@@ -127,61 +127,59 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
 	public SymbolTypeEnum getSymbolType() {
 		return SymbolTypeEnum.MILKYWAY;
 	}
-/*
-	@Override
-	public float getAngleByAngIndex(int index){
-		if(index < 0) index = 0;
-		if(index > 38) index = 38;
-		for(SymbolMilkyWayEnum symbol : values()){
-			if(symbol.angleIndex == index) {
-				return 360 - symbol.angle;
-			}
-		}
-		return 0;
-	}
-*/
-	public static SymbolInterface getSymbolByAngle(float angle, EnumSpinDirection direction){
-		if(direction == CLOCKWISE)
-			angle = 360 - angle;
+
+	public static SymbolInterface getSymbolByAngle(float angle){
 
 		for(SymbolMilkyWayEnum symbol : values()){
 			if(symbol.angle == angle)
 				return symbol;
 		}
+		for(SymbolMilkyWayEnum symbol : values()){
+			if(symbol.angle == 360 - angle)
+				return symbol;
+		}
 
 		return getOrigin();
 	}
-/*
-	@Override
-	public float getAngleOfNearest(float angle){
 
+	public static float getAngleOfNearest(float angle){
+		/*
 		if(angle <= getAngleByAngIndex(0)) // first element
 			return getAngleByAngIndex(0);
 		if(angle >= getAngleByAngIndex(38)) // last element
 			return getAngleByAngIndex(38);
-
-		int start = 0;
-		int end = 38 - 1;
-		int mid = 0;
+		 */
+		int end = 38;
+		int current = 0;
 
 		int loops = 0;
-		while(end - start != 1){
+		while(current < end){
 
-			mid = (start + end) / 2;
-			if(angle == getAngleByAngIndex(mid))
-				return getAngleByAngIndex(mid);
-			if(angle < getAngleByAngIndex(mid))
-				end = mid;
-			if(angle > getAngleByAngIndex(mid))
-				start = mid;
+			if(angle < getAngleByAngIndex(current) && angle > getAngleByAngIndex(current+1)){
+				Aunis.info("L2 - nice: " + getAngleByAngIndex(current));
+				return getAngleByAngIndex(current);
+			}
+			current++;
 
 			loops++;
-			if(loops > 250)
+			if(loops > 250){
+				Aunis.info("L1 - out of loops: " + getAngleByAngIndex(current));
 				break;
+			}
 		}
-		return getAngleByAngIndex(mid);
+		Aunis.info("L0 - null: " + getAngleByAngIndex(current));
+		return getAngleByAngIndex(current);
 	}
- */
+	public static float getAngleByAngIndex(int index){
+		if(index < 0) index = 0;
+		if(index > 38) index = 38;
+		for(SymbolMilkyWayEnum symbol : values()){
+			if(symbol.angleIndex == index) {
+				return symbol.angle;
+			}
+		}
+		return 0;
+	}
 	
 	// ------------------------------------------------------------
 	// Static

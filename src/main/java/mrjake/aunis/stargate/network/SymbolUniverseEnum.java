@@ -129,12 +129,14 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 		return ANGLE_PER_SECTION;
 	}
 
-	public static SymbolInterface getSymbolByAngle(float angle, EnumSpinDirection direction){
-		if(direction == CLOCKWISE)
-			angle = 360 - angle;
+	public static SymbolInterface getSymbolByAngle(float angle){
 
 		for(SymbolUniverseEnum symbol : values()){
 			if(symbol.angle == angle)
+				return symbol;
+		}
+		for(SymbolUniverseEnum symbol : values()){
+			if(symbol.angle == 360-angle)
 				return symbol;
 		}
 		return getOrigin();

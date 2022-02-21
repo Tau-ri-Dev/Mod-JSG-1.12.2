@@ -93,7 +93,7 @@ public class Aunis {
         logger = event.getModLog(); // This is the recommended way of getting a logger
         File source = event.getSourceFile();
         Aunis.info("Started loading Aunis mod in " + source.getAbsolutePath());
-        Aunis.info("Loading version " + Version);
+        Aunis.info("Loading Aunis version " + Version);
 
         // todo(Mine): fix this shitty shit
         //AUNIS_SOUNDS = AunisSoundCategory.add("AUNIS_SOUNDS");
@@ -112,6 +112,15 @@ public class Aunis {
             Aunis.info("Successfully connected into TConstruct!");
         }
 
+        // ThermalExpansion
+        if(Loader.isModLoaded("thermalexpansion") && AunisConfig.integrationsConfig.tExpansionIntegration) {
+            Aunis.info("Thermal Expansion found and connection is enabled... Connecting...");
+
+            ThermalIntegration.registerRecipes();
+            isThermalLoaded = true;
+            Aunis.info("Successfully connected into Thermal Expansion!");
+        }
+
     	StargateDimensionConfig.load(event.getModConfigurationDirectory());
     	
         proxy.preInit(event);
@@ -121,15 +130,6 @@ public class Aunis {
     public void init(FMLInitializationEvent event) {
     	GameRegistry.registerWorldGenerator(new AunisWorldGen(), 0);
         Aunis.info("Successfully registered World Generation!");
-
-    	// ThermalExpansion recipes
-    	if(Loader.isModLoaded("thermalexpansion") && AunisConfig.integrationsConfig.tExpansionIntegration) {
-            Aunis.info("Thermal Expansion found and connection is enabled... Connecting...");
-
-            ThermalIntegration.registerRecipes();
-            isThermalLoaded = true;
-            Aunis.info("Successfully connected into Thermal Expansion!");
-        }
 
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new AunisGuiHandler());
     	ItemEndpointCapability.register();

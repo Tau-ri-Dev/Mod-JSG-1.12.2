@@ -43,6 +43,7 @@ public class JEIThermalRecipes implements IRecipeWrapper {
     }
 
     public static List<JEIThermalRecipes> genAll() {
+        if(AunisRecipeHandler.RECIPES == null) return null;
         List<JEIThermalRecipes> list = new ArrayList<>();
         for (ThermalAbstractRecipe recipe : AunisRecipeHandler.RECIPES) {
             list.add(new JEIThermalRecipes(recipe.OUTPUT_ITEM, recipe.PATTERN_LIST));

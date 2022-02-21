@@ -6,12 +6,15 @@ import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mrjake.aunis.block.AunisBlocks;
+import mrjake.aunis.crafting.AunisRecipeHandler;
 import mrjake.aunis.item.AunisItems;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static mrjake.aunis.crafting.AunisRecipeHandler.convertRecipes;
 
 @JEIPlugin
 public final class JEIIntegration implements IModPlugin {
@@ -34,7 +37,9 @@ public final class JEIIntegration implements IModPlugin {
         recipes.add(new JEIUniverseDialerCloneRecipe());
         recipes.add(new JEINotebookCloneRecipe());
         recipes.add(new JEIUniverseDialerRepairRecipe());
-        recipes.addAll(JEIThermalRecipes.genAll());
+        List<JEIThermalRecipes> thermalRecipes = JEIThermalRecipes.genAll();
+        if(convertRecipes())
+            recipes.addAll(thermalRecipes);
 
         registry.addRecipes(recipes, VanillaRecipeCategoryUid.CRAFTING);
     }

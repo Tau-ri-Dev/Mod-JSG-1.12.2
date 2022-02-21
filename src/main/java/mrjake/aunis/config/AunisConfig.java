@@ -655,6 +655,9 @@ public class AunisConfig {
     public static class DevConfig {
         @Name("Enable peg gates with myst pages")
         public boolean pegGatesMyst = false;
+
+        @Name("test")
+        public boolean test = true;
     }
 
     public static class RecipesConfig {
@@ -663,14 +666,16 @@ public class AunisConfig {
         @Comment({
                 "When Thermal expansion is not loaded, then",
                 "register convert Thermal recipes into",
-                "normal ones."
+                "normal ones.",
+                "WARNING! - Requires reloading!"
         })
         public boolean convertThermal = true;
 
         @Name("Allow bypass thermal recipes")
         @Comment({
                 "Even when thermal expansion is loaded, register",
-                "converted recipes."
+                "converted recipes.",
+                "WARNING! - Requires reloading!"
         })
         public boolean bypassThermal = false;
     }

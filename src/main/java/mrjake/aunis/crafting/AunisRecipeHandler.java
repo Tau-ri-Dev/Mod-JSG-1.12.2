@@ -57,17 +57,12 @@ public class AunisRecipeHandler {
 			CIRCUIT_CONTROL_ZPM,
 	};
 
-	static {
-		convertRecipes();
-	}
-
-	// Yes, dumb, i know.
-	public static void convertRecipes(){
+	public static boolean convertRecipes(){
 		if(AunisConfig.recipesConfig.bypassThermal)
-			return; // load recipes
+			return true; // load recipes
 		else if(AunisConfig.recipesConfig.convertThermal && !Aunis.isThermalLoaded)
-			return; // load recipes
-		RECIPES = new ThermalAbstractRecipe[]{};
+			return true; // load recipes
+		return false;
 	}
 
 	@SubscribeEvent
@@ -82,10 +77,11 @@ public class AunisRecipeHandler {
 		event.getRegistry().register(new NotebookPageCloneRecipe());
 		event.getRegistry().register(new UniverseDialerCloneRecipe());
 		event.getRegistry().register(new UniverseDialerRepairRecipe());
-
 		// thermal recipes
-		for(ThermalAbstractRecipe recipe : RECIPES){
-			event.getRegistry().register(recipe);
+		if(convertRecipes()) {
+			for (ThermalAbstractRecipe recipe : RECIPES) {
+				event.getRegistry().register(recipe);
+			}
 		}
 	}
 }
