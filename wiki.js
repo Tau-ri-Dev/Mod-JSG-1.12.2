@@ -14,6 +14,9 @@ var en = {
 		csMark:"",
 		enMark:"✔",
 		frMark:"",
+
+		logout:"Log out",
+		dashboard:"Dashboard",
 	},
 	_footer:{
 		main:"The Aunis mod",
@@ -23,6 +26,7 @@ var en = {
 		other_projects:"Other projects:",
 	},
 	_groups:{
+		g_founder:"Founder",
 		g_helper:"Helper",
 		g_developer:"Developer",
 		g_discordadmin:"Discord Admin",
@@ -43,6 +47,13 @@ var en = {
 		page_subtitle:"Forbidden",
 
 		main:"No permissions to view this directory!",
+	},
+	changelog:{
+		doc_title:"Changelog",
+		page_title:"Changes",
+		page_subtitle:"Changelog",
+
+		version:"Latest version: "
 	},
 
 	home:{
@@ -92,9 +103,19 @@ var en = {
 
 		// alerts nand states
 		wrongCode:'Wrong code',
+		wrongLogin:'Wrong login',
 		loggedSuccess:'Successfully logged in',
 		missingCaptcha:'Please, fill the recaptcha',
 		unknownError:'Unknown error!',
 		missingParameter:'Please, fill all the form inputs',
+	},
+	dashboard:{
+		doc_title:"Dashboard",
+		page_title:"Dashboard",
+		page_subtitle:"Account administration",
+	},
+	dashboard_nav:{
+		settings:"Settings",
+		informations:"Informations",
 	},
 }
