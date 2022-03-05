@@ -71,7 +71,7 @@ var en = {
 		`,
 		how:"How Aunis works?",
 		how_desc:`
-			<li>Aunis can teleport you with their stargates anywhere in the world, and even to other dimensions!</li>
+			<li>Aunis can teleport you with its stargates anywhere in the world, and even to other dimensions!</li>
 			<li>Transport rings work in short distances, something like an elevator.</li>
 			<li>Detailed tutorial can be found here:</li>
 		`,
