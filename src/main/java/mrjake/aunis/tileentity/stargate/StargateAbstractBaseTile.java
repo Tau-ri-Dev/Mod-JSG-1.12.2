@@ -475,7 +475,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected boolean stargateWillLock(SymbolInterface symbol) {
         if (dialedAddress.size() == getMaxChevrons()) return true;
 
-        if (dialedAddress.size() >= 7 && symbol.origin()) return true;
+        if (dialedAddress.size() >= 6 && symbol.origin()) return true;
 
         return false;
     }
