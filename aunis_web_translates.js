@@ -37,6 +37,10 @@ var cs = {
 		g_rescreator:"Tvůrce modelů",
 		g_tester:"Prealpha Tester",
 	},
+	_alerts:{
+		ok:"Potvrdit",
+		cancel:"Zrušit",
+	},
 	_servers:{
 		online:"Status: ",
 		players:"Hráči: ",
@@ -83,9 +87,9 @@ var cs = {
 		how_desc:`
 			<li>Aunis Vás pomocí hvězdné brány dokáže dopravit kdekoliv na světě, a i dokonce do jiných dimenzí!</li>
 			<li>transportní kruhy fungují na malé vzdálenosti, něco jako výtah.</li>
-			<li>Podrobný tutoriál naleznete zde:</li>
+			<li>Podrobný návod naleznete zde:</li>
 		`,
-		how_btn:'Otevřít tutoriál',
+		how_btn:'Otevřít návod',
 
 		donate:"Donate",
 		donate_desc:`
@@ -186,6 +190,39 @@ var cs = {
 		page_title:"AunisWorlds",
 		page_subtitle:"Druhý oficiální server Aunisu",
 	},
+	wiki:{
+		doc_title:"Wikipedie",
+		page_title:"Wikipedie",
+		page_subtitle:"Informace a návody",
+
+		back_btn:"Zpět",
+		not_found:"Zde není nic k zobrazení 😔 (Možná zkuste anglickou verzi)",
+		add_item:"Přidat položku",
+
+		empty_form:"Některá pole nejsou vyplněna!",
+		saved:"Uloženo!",
+		added:"Přidáno!",
+
+		// forms
+		card_add_item:"Přidat položku",
+		card_add_item_id:"Textové ID (např. stargates)",
+		card_add_item_title:"Nadpis",
+		card_add_item_icon:"Ikonka",
+		card_add_item_text:"Popis",
+		card_add_item_content:"Obsah",
+
+		card_edit_item:"Upravit položku",
+		card_edit_id:"ID",
+		card_edit_item_id:"Textové ID",
+		card_edit_item_title:"Nadpis",
+		card_edit_item_icon:"Ikonka",
+		card_edit_item_text:"Popis",
+		card_edit_item_content:"Obsah",
+
+		card_del_item:"Smazat položku",
+		card_del_id:"ID",
+		card_del_item_title:"Nadpis",
+	},
 }
 
 // ENGLISH TRANSLATIONS
@@ -224,6 +261,17 @@ var en = {
 		g_translator:"Translator",
 		g_rescreator:"Resources Creator",
 		g_tester:"Prealpha tester",
+	},
+	_alerts:{
+		ok:"Submit",
+		cancel:"Cancel",
+	},
+	_servers:{
+		online:"Status: ",
+		players:"Players: ",
+
+		state_online:"Online",
+		state_offline:"Offline",
 	},
 	404:{
 		doc_title:"404",
@@ -338,6 +386,50 @@ var en = {
 		informations:"Informations",
 		perms:"Permissions settings",
 	},
+
+	auniscraft:{
+		doc_title:"AunisCraft 2.0",
+		page_title:"AunisCraft 2.0",
+		page_subtitle:"The official server of Aunis",
+	},
+	aunisworlds:{
+		doc_title:"AunisWorlds",
+		page_title:"AunisWorlds",
+		page_subtitle:"The second official server of Aunis",
+	},
+	wiki:{
+		doc_title:"Wikipedia",
+		page_title:"Wikipedia",
+		page_subtitle:"Informations and tutorials",
+
+		back_btn:"Back",
+		not_found:"There is nothing to display 😔",
+		add_item:"Add item",
+
+		empty_form:"Something is not filled!",
+		saved:"Saved!",
+		added:"Added!",
+
+		// forms
+		card_add_item:"Add item",
+		card_add_item_id:"Text ID (for example: stargates)",
+		card_add_item_title:"Title",
+		card_add_item_icon:"Icon",
+		card_add_item_text:"Description",
+		card_add_item_content:"Text",
+
+		card_edit_item:"Edit item",
+		card_edit_id:"ID",
+		card_edit_item_id:"Text ID",
+		card_edit_item_title:"Title",
+		card_edit_item_icon:"Icon",
+		card_edit_item_text:"Description",
+		card_edit_item_content:"Text",
+
+		card_del_item:"Delete item",
+		card_del_id:"ID",
+		card_del_item_title:"Title",
+	},
 }
 
 // FRENCH TRANSLATES
@@ -376,6 +468,17 @@ var fr = {
 		g_translator:"Traducteur",
 		g_rescreator:"Créateur de ressources",
 		g_tester:"Prealpha tester",
+	},
+	_alerts:{
+		ok:"Submit",
+		cancel:"Cancel",
+	},
+	_servers:{
+		online:"Status: ",
+		players:"Players: ",
+
+		state_online:"Online",
+		state_offline:"Offline",
 	},
 	404:{
 		doc_title:"404",
@@ -489,6 +592,50 @@ var fr = {
 		settings:"Settings",
 		informations:"Informations",
 		perms:"Permissions settings",
+	},
+
+	auniscraft:{
+		doc_title:"AunisCraft 2.0",
+		page_title:"AunisCraft 2.0",
+		page_subtitle:"The official server of Aunis",
+	},
+	aunisworlds:{
+		doc_title:"AunisWorlds",
+		page_title:"AunisWorlds",
+		page_subtitle:"The second official server of Aunis",
+	},
+	wiki:{
+		doc_title:"Wikipedia",
+		page_title:"Wikipedia",
+		page_subtitle:"Informations and tutorials",
+
+		back_btn:"Back",
+		not_found:"There is nothing to display 😔 (You can try English version)",
+		add_item:"Add item",
+
+		empty_form:"Something is not filled!",
+		saved:"Saved!",
+		added:"Added!",
+
+		// forms
+		card_add_item:"Add item",
+		card_add_item_id:"Text ID (for example: stargates)",
+		card_add_item_title:"Title",
+		card_add_item_icon:"Icon",
+		card_add_item_text:"Description",
+		card_add_item_content:"Text",
+
+		card_edit_item:"Edit item",
+		card_edit_id:"ID",
+		card_edit_item_id:"Text ID",
+		card_edit_item_title:"Title",
+		card_edit_item_icon:"Icon",
+		card_edit_item_text:"Description",
+		card_edit_item_content:"Text",
+
+		card_del_item:"Delete item",
+		card_del_id:"ID",
+		card_del_item_title:"Title",
 	},
 }
 	let translates = {};
