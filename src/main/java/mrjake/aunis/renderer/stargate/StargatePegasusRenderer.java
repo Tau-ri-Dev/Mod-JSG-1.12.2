@@ -3,6 +3,7 @@ package mrjake.aunis.renderer.stargate;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.loader.texture.Texture;
 import mrjake.aunis.loader.texture.TextureLoader;
+import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.stargate.network.SymbolPegasusEnum;
 import mrjake.aunis.util.math.NumberUtils;
 import net.minecraft.client.Minecraft;
@@ -79,7 +80,8 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
         // GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
 
-        ElementEnum.PEGASUS_RING.bindTextureAndRender(rendererState.getBiomeOverlay());
+        if(ElementEnum.PEGASUS_RING.modelResource != null && ElementEnum.PEGASUS_RING.biomeTextureResourceMap != null && ElementEnum.PEGASUS_RING.biomeTextureResourceMap.get(rendererState.getBiomeOverlay()) != null)
+            ElementEnum.PEGASUS_RING.bindTextureAndRender(rendererState.getBiomeOverlay());
 
         GlStateManager.popMatrix();
     }
