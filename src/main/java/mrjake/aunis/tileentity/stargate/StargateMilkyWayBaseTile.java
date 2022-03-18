@@ -159,7 +159,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
     public boolean tryDialEarth(){
 
-        if (dialedAddress.size() >= 6 && dialedAddress.equalsV2(StargateNetwork.EARTH_ADDRESS) && !network.isStargateInNetwork(StargateNetwork.EARTH_ADDRESS)) {
+        if (dialedAddress.size() >= 6 && dialedAddress.equalsV2(StargateNetwork.EARTH_ADDRESS, 6) && !network.isStargateInNetwork(StargateNetwork.EARTH_ADDRESS)) {
             if (StargateDimensionConfig.netherOverworld8thSymbol()) {
                 if (dialedAddress.size() == 7 && dialedAddress.getLast() == SymbolMilkyWayEnum.SERPENSCAPUT) {
                     dialedAddress.clear();
