@@ -9,20 +9,13 @@ import org.apache.commons.io.FileUtils;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static java.lang.Integer.parseInt;
-import static org.apache.commons.io.FileUtils.copyURLToFile;
-import static org.apache.commons.io.FileUtils.deleteQuietly;
 
 public class GetUpdate {
 

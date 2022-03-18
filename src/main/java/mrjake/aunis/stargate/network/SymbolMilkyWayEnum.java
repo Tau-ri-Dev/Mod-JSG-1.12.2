@@ -143,12 +143,6 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
 	}
 
 	public static float getAngleOfNearest(float angle){
-		/*
-		if(angle <= getAngleByAngIndex(0)) // first element
-			return getAngleByAngIndex(0);
-		if(angle >= getAngleByAngIndex(38)) // last element
-			return getAngleByAngIndex(38);
-		 */
 		int end = 38;
 		int current = 0;
 

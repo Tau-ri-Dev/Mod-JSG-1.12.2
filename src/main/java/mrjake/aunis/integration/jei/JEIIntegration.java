@@ -38,7 +38,7 @@ public final class JEIIntegration implements IModPlugin {
         recipes.add(new JEINotebookCloneRecipe());
         recipes.add(new JEIUniverseDialerRepairRecipe());
         List<JEIThermalRecipes> thermalRecipes = JEIThermalRecipes.genAll();
-        if(convertRecipes())
+        if(convertRecipes() && thermalRecipes != null)
             recipes.addAll(thermalRecipes);
 
         registry.addRecipes(recipes, VanillaRecipeCategoryUid.CRAFTING);

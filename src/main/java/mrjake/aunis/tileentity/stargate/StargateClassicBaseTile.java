@@ -1095,8 +1095,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     }
 
+    // todo: optimize this
     public void spinRing(int rounds, boolean changeState, boolean findNearest, int time) {
         if(time < 0) time *= -1;
+        time -= 20; // time to lock the last chevron
         targetRingSymbol = currentRingSymbol;
         spinDirection = CLOCKWISE;
         if (changeState) stargateState = EnumStargateState.DIALING_COMPUTER;
@@ -1115,28 +1117,25 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (findNearest) { // spinRing() was called by incoming wormhole -> do animation
             rounds = 0;
             float currentAngle = currentRingSymbol.getAngle();
-            //if(currentAngle == 360) currentAngle = 0;
             float angle = StargateClassicSpinHelper.getAnimationDistance(time);
             if(angle > 360){
                 rounds = (int) Math.floor(angle / 360);
                 angle = angle - (rounds * 360);
             }
             Aunis.info("a1: " + angle + ", ca1: " + currentAngle);
-            float finalAngle = currentAngle;
+            float finalAngle = currentAngle - angle;
             if(spinDirection == CLOCKWISE)
                 finalAngle = angle + currentAngle;
-            else
-                finalAngle = currentAngle - angle;
             Aunis.info("a2: " + finalAngle);
 
             if(finalAngle > 360)
                 finalAngle -= 360;
             else if(finalAngle < 0)
                 finalAngle += 360;
-            Aunis.info("a3: " + finalAngle);
+            Aunis.info("a3: " + finalAngle + " + " + rounds + " rounds");
 
             // CALCULATE NEAREST GLYPH
-            if(finalAngle < 15)
+            if(finalAngle < 15 && rounds == 0)
                 finalAngle += 15;
             Aunis.info("a4: " + finalAngle);
             float nearestAngle = 0; // = Math.round(finalAngle / anglePerGlyph) * anglePerGlyph;
@@ -1838,11 +1837,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     @Optional.Method(modid = "opencomputers")
-    @Callback(doc = "function() -- Tries to spin gate")
+    @Callback(doc = "function() -- Tries to spin mw gate")
     public Object[] spinGate(Context context, Arguments args) {
         if (!isMerged()) return new Object[]{null, "stargate_failure_not_merged", "Stargate is not merged"};
 
-        if (this instanceof StargatePegasusBaseTile)
+        if (!(this instanceof StargateMilkyWayBaseTile))
             return new Object[]{null, "stargate_not_supported", "Stargate type is not supported"};
 
         if (stargateState.idle()) {

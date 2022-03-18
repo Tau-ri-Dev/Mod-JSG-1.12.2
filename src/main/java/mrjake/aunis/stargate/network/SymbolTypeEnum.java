@@ -191,7 +191,7 @@ public enum SymbolTypeEnum implements EnumKeyInterface<Integer> {
         return 0; //SymbolPegasusEnum.getAngleOfNearest(angle);
 
       case UNIVERSE:
-        return 0; //SymbolUniverseEnum.getAngleOfNearest(angle);
+        return SymbolUniverseEnum.getAngleOfNearest(angle);
     }
 
     return 0;

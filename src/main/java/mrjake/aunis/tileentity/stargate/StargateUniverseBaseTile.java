@@ -27,8 +27,6 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 

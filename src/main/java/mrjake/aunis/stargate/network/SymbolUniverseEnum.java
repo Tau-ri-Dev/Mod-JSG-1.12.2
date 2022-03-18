@@ -142,6 +142,39 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 		return getOrigin();
 
 	}
+
+	public static float getAngleOfNearest(float angle){
+		int end = 38;
+		int current = 0;
+
+		int loops = 0;
+		while(current < end){
+
+			if(angle < getAngleByAngIndex(current) && angle > getAngleByAngIndex(current+1)){
+				Aunis.info("L2 - nice: " + getAngleByAngIndex(current));
+				return getAngleByAngIndex(current);
+			}
+			current++;
+
+			loops++;
+			if(loops > 250){
+				Aunis.info("L1 - out of loops: " + getAngleByAngIndex(current));
+				break;
+			}
+		}
+		Aunis.info("L0 - null: " + getAngleByAngIndex(current));
+		return getAngleByAngIndex(current);
+	}
+	public static float getAngleByAngIndex(int index){
+		if(index < 0) index = 0;
+		if(index > 38) index = 38;
+		for(SymbolUniverseEnum symbol : values()){
+			if(symbol.angleIndex == index) {
+				return symbol.angle;
+			}
+		}
+		return 0;
+	}
 	
 	// ------------------------------------------------------------
 	// Static

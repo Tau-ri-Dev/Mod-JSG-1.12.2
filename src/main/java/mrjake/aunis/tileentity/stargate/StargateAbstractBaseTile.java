@@ -602,21 +602,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      */
     public void incomingWormhole(int dialedAddressSize) {
         dialedAddress.clear();
-
         sendSignal(null, "stargate_incoming_wormhole", new Object[]{dialedAddressSize});
-
-        final int[] i = {1};
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            public void run() {
-                if (i[0] <= 2) {
-                    sendSignal(null, "stargate_incoming_wormhole", new Object[]{dialedAddressSize});
-                    i[0]++;
-                } else {
-                    timer.cancel();
-                }
-            }
-        }, 1000, 500);
     }
 
     public void incomingWormhole(int dialedAddressSize, int time) {

@@ -112,15 +112,6 @@ public class Aunis {
             Aunis.info("Successfully connected into TConstruct!");
         }
 
-        // ThermalExpansion
-        if(Loader.isModLoaded("thermalexpansion") && AunisConfig.integrationsConfig.tExpansionIntegration) {
-            Aunis.info("Thermal Expansion found and connection is enabled... Connecting...");
-
-            ThermalIntegration.registerRecipes();
-            isThermalLoaded = true;
-            Aunis.info("Successfully connected into Thermal Expansion!");
-        }
-
     	StargateDimensionConfig.load(event.getModConfigurationDirectory());
     	
         proxy.preInit(event);
@@ -136,6 +127,17 @@ public class Aunis {
 		ForgeChunkManager.setForcedChunkLoadingCallback(Aunis.instance, ChunkLoadingCallback.INSTANCE);
         registerOreDictionary();
         Aunis.info("Successfully registered OreDictionary!");
+
+
+        // todo: test this
+        // ThermalExpansion
+        if(Loader.isModLoaded("thermalexpansion") && AunisConfig.integrationsConfig.tExpansionIntegration) {
+            Aunis.info("Thermal Expansion found and connection is enabled... Connecting...");
+
+            ThermalIntegration.registerRecipes();
+            isThermalLoaded = true;
+            Aunis.info("Successfully connected into Thermal Expansion!");
+        }
 
     	// ----------------------------------------------------------------------------------------------------------------
     	// OpenComputers
