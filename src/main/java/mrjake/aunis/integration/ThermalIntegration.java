@@ -55,7 +55,7 @@ public class ThermalIntegration {
 		// Circuits
 		ThermalExpansionHelper.addTransposerFill(defaultEnergy*5, new ItemStack(AunisItems.CIRCUIT_CONTROL_BASE), new ItemStack(AunisItems.CIRCUIT_CONTROL_CRYSTAL), new FluidStack(AunisFluids.moltenSiliconWhite, oneIngot), false);
 		ThermalExpansionHelper.addTransposerFill(defaultEnergy*5, new ItemStack(AunisItems.CIRCUIT_CONTROL_BASE), new ItemStack(AunisItems.CIRCUIT_CONTROL_NAQUADAH), new FluidStack(AunisFluids.moltenNaquadahAlloy, oneIngot), false);
-		ThermalExpansionHelper.addTransposerFill(defaultEnergy*5, new ItemStack(AunisItems.CIRCUIT_CONTROL_BASE), new ItemStack(AunisItems.CIRCUIT_CONTROL_ZPM), new FluidStack(AunisFluids.moltenTitanium, oneIngot), false);
+		//ThermalExpansionHelper.addTransposerFill(defaultEnergy*5, new ItemStack(AunisItems.CIRCUIT_CONTROL_BASE), new ItemStack(AunisItems.CIRCUIT_CONTROL_ZPM), new FluidStack(AunisFluids.moltenTitanium, oneIngot), false);
 
 		// Capacitor
 		ThermalExpansionHelper.addTransposerFill(defaultEnergy*15, new ItemStack(AunisBlocks.CAPACITOR_BLOCK_EMPTY), new ItemStack(AunisBlocks.CAPACITOR_BLOCK), new FluidStack(AunisFluids.moltenSiliconRed, (oneIngot * 8)), false);

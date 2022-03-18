@@ -3,11 +3,14 @@ package mrjake.aunis.crafting;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.crafting.thermalreplace.blocks.BlockCapacitor;
 import mrjake.aunis.crafting.thermalreplace.circuits.CircuitCrystalRecipe;
 import mrjake.aunis.crafting.thermalreplace.circuits.CircuitNaquadahRecipe;
 import mrjake.aunis.crafting.thermalreplace.circuits.CircuitZpmRecipe;
 import mrjake.aunis.crafting.thermalreplace.crystals.*;
 import mrjake.aunis.crafting.thermalreplace.ThermalAbstractRecipe;
+import mrjake.aunis.crafting.thermalreplace.ingots.IngotNaquadahAlloy;
+import mrjake.aunis.crafting.thermalreplace.ingots.IngotNaquadahAlloyRafinered;
 import mrjake.aunis.item.AunisItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -38,9 +41,21 @@ public class AunisRecipeHandler {
 	 */
 	public static final CircuitCrystalRecipe CIRCUIT_CONTROL_CRYSTAL = new CircuitCrystalRecipe();
 	public static final CircuitNaquadahRecipe CIRCUIT_CONTROL_NAQUADAH = new CircuitNaquadahRecipe();
-	public static final CircuitZpmRecipe CIRCUIT_CONTROL_ZPM = new CircuitZpmRecipe();
+	//public static final CircuitZpmRecipe CIRCUIT_CONTROL_ZPM = new CircuitZpmRecipe();
+
+	/**
+	 * Ingots
+	 */
+	public static final IngotNaquadahAlloy INGOT_NAQUADAH_ALLOY = new IngotNaquadahAlloy();
+	public static final IngotNaquadahAlloyRafinered INGOT_NAQUADAH_ALLOY_RAFINERED = new IngotNaquadahAlloyRafinered();
+
+	/**
+	 * Blocks
+	 */
+	public static final BlockCapacitor BLOCK_CAPACITOR = new BlockCapacitor();
 
 	public static ThermalAbstractRecipe[] RECIPES = {
+
 			// Crystals
 			CRYSTAL_RED,
 			CRYSTAL_ENDER,
@@ -54,14 +69,26 @@ public class AunisRecipeHandler {
 			// Circuits
 			CIRCUIT_CONTROL_CRYSTAL,
 			CIRCUIT_CONTROL_NAQUADAH,
-			CIRCUIT_CONTROL_ZPM,
+			//CIRCUIT_CONTROL_ZPM,
+
+			// Ingots
+			INGOT_NAQUADAH_ALLOY,
+			INGOT_NAQUADAH_ALLOY_RAFINERED,
+
+			// Blocks
+			BLOCK_CAPACITOR
+
 	};
 
 	public static boolean convertRecipes(){
-		if(AunisConfig.recipesConfig.bypassThermal)
+		if(AunisConfig.recipesConfig.bypassThermal) {
+			Aunis.info("Bypassing thermal expansion recipes...");
 			return true; // load recipes
-		else if(AunisConfig.recipesConfig.convertThermal && !Aunis.isThermalLoaded)
+		}
+		else if(AunisConfig.recipesConfig.convertThermal && !Aunis.isThermalLoaded) {
+			Aunis.info("Thermal expansion is not loaded. Creating secondary crafting recipes...");
 			return true; // load recipes
+		}
 		return false;
 	}
 

@@ -90,9 +90,9 @@ public class AunisItems {
     public static final Item HOLDER_CRYSTAL = ItemHelper.createGenericItem("holder_crystal", aunisItemsCreativeTab);
     public static final Item HOLDER_CRYSTAL_PEGASUS = ItemHelper.createGenericItem("holder_crystal_pegasus", aunisItemsCreativeTab);
 
-    public static final Item HOLDER_ZPM = ItemHelper.createGenericItem("holder_zpm", aunisItemsCreativeTab);
-    public static final Item CIRCUIT_CONTROL_ZPM = ItemHelper.createGenericItem("circuit_control_zpm", aunisItemsCreativeTab);
-    public static final Item CONNECTOR_ZPM = ItemHelper.createGenericItem("connector_zpm", aunisItemsCreativeTab);
+    //public static final Item HOLDER_ZPM = ItemHelper.createGenericItem("holder_zpm", aunisItemsCreativeTab);
+    //public static final Item CIRCUIT_CONTROL_ZPM = ItemHelper.createGenericItem("circuit_control_zpm", aunisItemsCreativeTab);
+    //public static final Item CONNECTOR_ZPM = ItemHelper.createGenericItem("connector_zpm", aunisItemsCreativeTab);
 
     public static final Item DHD_BRB = ItemHelper.createGenericItem("dhd_brb", aunisItemsCreativeTab);
     public static final Item DHD_BBB = ItemHelper.createGenericItem("dhd_bbb", aunisItemsCreativeTab);
@@ -147,8 +147,8 @@ public class AunisItems {
             CIRCUIT_CONTROL_CRYSTAL,
             CIRCUIT_CONTROL_NAQUADAH,
 
-            CIRCUIT_CONTROL_ZPM,
-            CONNECTOR_ZPM,
+            //CIRCUIT_CONTROL_ZPM,
+            //CONNECTOR_ZPM,
 
             STARGATE_RING_FRAGMENT,
             UNIVERSE_RING_FRAGMENT,
@@ -157,7 +157,7 @@ public class AunisItems {
             HOLDER_CRYSTAL,
             HOLDER_CRYSTAL_PEGASUS,
 
-            HOLDER_ZPM,
+            //HOLDER_ZPM,
 
             DHD_BRB,
             DHD_BBB,

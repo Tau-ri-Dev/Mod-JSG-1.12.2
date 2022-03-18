@@ -147,22 +147,19 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
 		int current = 0;
 
 		int loops = 0;
+		int temp = end;
 		while(current < end){
+			temp = end - current;
 
-			if(angle < getAngleByAngIndex(current) && angle > getAngleByAngIndex(current+1)){
-				Aunis.info("L2 - nice: " + getAngleByAngIndex(current));
-				return getAngleByAngIndex(current);
-			}
+			if((angle < getAngleByAngIndex(temp) && angle < getAngleByAngIndex(temp-1)) || angle == getAngleByAngIndex(temp))
+				return getAngleByAngIndex(temp);
 			current++;
 
 			loops++;
-			if(loops > 250){
-				Aunis.info("L1 - out of loops: " + getAngleByAngIndex(current));
+			if(loops > 250)
 				break;
-			}
 		}
-		Aunis.info("L0 - null: " + getAngleByAngIndex(current));
-		return getAngleByAngIndex(current);
+		return getAngleByAngIndex(temp);
 	}
 	public static float getAngleByAngIndex(int index){
 		if(index < 0) index = 0;

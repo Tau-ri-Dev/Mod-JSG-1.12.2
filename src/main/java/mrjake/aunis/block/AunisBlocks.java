@@ -106,7 +106,9 @@ public class AunisBlocks {
 
     TRANSPORT_RINGS_BLOCK, TR_CONTROLLER_BLOCK, INVISIBLE_BLOCK, IRIS_BLOCK,
 
-    CAPACITOR_BLOCK_EMPTY, BEAMER_BLOCK, ZPM_HUB
+    CAPACITOR_BLOCK_EMPTY, BEAMER_BLOCK
+
+          //, ZPM_HUB
 
 
   };
@@ -120,7 +122,7 @@ public class AunisBlocks {
     registry.register(STARGATE_UNIVERSE_MEMBER_BLOCK);
     registry.register(STARGATE_PEGASUS_MEMBER_BLOCK);
     registry.register(CAPACITOR_BLOCK);
-    registry.register(ZPM);
+    //registry.register(ZPM);
 
     GameRegistry.registerTileEntity(StargateMilkyWayBaseTile.class, AunisBlocks.STARGATE_MILKY_WAY_BASE_BLOCK.getRegistryName());
     GameRegistry.registerTileEntity(StargateUniverseBaseTile.class, AunisBlocks.STARGATE_UNIVERSE_BASE_BLOCK.getRegistryName());
@@ -138,8 +140,8 @@ public class AunisBlocks {
     GameRegistry.registerTileEntity(CapacitorTile.class, AunisBlocks.CAPACITOR_BLOCK.getRegistryName());
     GameRegistry.registerTileEntity(BeamerTile.class, AunisBlocks.BEAMER_BLOCK.getRegistryName());
 
-    GameRegistry.registerTileEntity(ZPMHubTile.class, AunisBlocks.ZPM_HUB.getRegistryName());
-    GameRegistry.registerTileEntity(ZPMTile.class, AunisBlocks.ZPM.getRegistryName());
+    //GameRegistry.registerTileEntity(ZPMHubTile.class, AunisBlocks.ZPM_HUB.getRegistryName());
+    //GameRegistry.registerTileEntity(ZPMTile.class, AunisBlocks.ZPM.getRegistryName());
   }
 
   @SubscribeEvent
@@ -153,7 +155,7 @@ public class AunisBlocks {
     registry.register(new StargateUniverseMemberItemBlock(STARGATE_UNIVERSE_MEMBER_BLOCK));
     registry.register(new StargatePegasusMemberItemBlock(STARGATE_PEGASUS_MEMBER_BLOCK));
     registry.register(new CapacitorItemBlock(CAPACITOR_BLOCK));
-    registry.register(new ZPMItemBlock(ZPM));
+    //registry.register(new ZPMItemBlock(ZPM));
   }
 
   @SubscribeEvent
@@ -170,7 +172,7 @@ public class AunisBlocks {
     ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(STARGATE_PEGASUS_MEMBER_BLOCK), STARGATE_PEGASUS_MEMBER_BLOCK.CHEVRON_META, new ModelResourceLocation("aunis:stargate_pegasus_chevron_block"));
 
     ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(CAPACITOR_BLOCK), 0, new ModelResourceLocation(CAPACITOR_BLOCK.getRegistryName(), "inventory"));
-    ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ZPM), 0, new ModelResourceLocation(ZPM.getRegistryName(), "inventory"));
+    //ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ZPM), 0, new ModelResourceLocation(ZPM.getRegistryName(), "inventory"));
   }
 
   @Nullable

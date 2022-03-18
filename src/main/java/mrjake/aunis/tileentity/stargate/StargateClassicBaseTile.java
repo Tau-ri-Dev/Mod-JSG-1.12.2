@@ -1095,7 +1095,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     }
 
-    // todo: optimize this
     public void spinRing(int rounds, boolean changeState, boolean findNearest, int time) {
         if(time < 0) time *= -1;
         time -= 20; // time to lock the last chevron
@@ -1122,28 +1121,21 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 rounds = (int) Math.floor(angle / 360);
                 angle = angle - (rounds * 360);
             }
-            Aunis.info("a1: " + angle + ", ca1: " + currentAngle);
             float finalAngle = currentAngle - angle;
             if(spinDirection == CLOCKWISE)
                 finalAngle = angle + currentAngle;
-            Aunis.info("a2: " + finalAngle);
 
             if(finalAngle > 360)
                 finalAngle -= 360;
             else if(finalAngle < 0)
                 finalAngle += 360;
-            Aunis.info("a3: " + finalAngle + " + " + rounds + " rounds");
 
             // CALCULATE NEAREST GLYPH
             if(finalAngle < 15 && rounds == 0)
                 finalAngle += 15;
-            Aunis.info("a4: " + finalAngle);
-            float nearestAngle = 0; // = Math.round(finalAngle / anglePerGlyph) * anglePerGlyph;
-            nearestAngle = getSymbolType().getAngleOfNearest(finalAngle);
-            Aunis.info("n: " + nearestAngle);
+            float nearestAngle = getSymbolType().getAngleOfNearest(finalAngle);
             targetRingSymbol = getSymbolType().getSymbolByAngle(nearestAngle);
             distance = spinDirection.getDistance(currentRingSymbol, targetRingSymbol);
-            Aunis.info("s: " + targetRingSymbol.getEnglishName());
             distance += 360 * rounds;
         }
 

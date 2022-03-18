@@ -136,6 +136,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     int period = time - 2000;
     if(period < 0) period = 0;
     startIncomingAnimation(dialedAddressSize, period);
+    //todo: fix this shit
+    //spinRing(1, false, true, period);
 
     super.incomingWormhole(9, false);
   }
