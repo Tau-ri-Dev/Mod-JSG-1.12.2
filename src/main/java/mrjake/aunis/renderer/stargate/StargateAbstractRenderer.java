@@ -146,25 +146,24 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         }
     }
 
-    protected static final ResourceLocation EV_HORIZON_NORMAL_TEXTURE_ANIMATED = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_animated.jpg");
-    protected static final ResourceLocation EV_HORIZON_KAWOOSH_TEXTURE_ANIMATED = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_animated_kawoosh.jpg");
-    protected static final ResourceLocation EV_HORIZON_DESATURATED_KAWOOSH_TEXTURE_ANIMATED = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_animated_kawoosh_unstable.jpg");
-    protected static final ResourceLocation EV_HORIZON_DESATURATED_TEXTURE_ANIMATED = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_animated_unstable.jpg");
+    protected static final String EV_HORIZON_NORMAL_TEXTURE_ANIMATED = "textures/tesr/event_horizon_animated.jpg";
+    protected static final String EV_HORIZON_KAWOOSH_TEXTURE_ANIMATED = "textures/tesr/event_horizon_animated_kawoosh.jpg";
+    protected static final String EV_HORIZON_DESATURATED_KAWOOSH_TEXTURE_ANIMATED = "textures/tesr/event_horizon_animated_kawoosh_unstable.jpg";
+    protected static final String EV_HORIZON_DESATURATED_TEXTURE_ANIMATED = "textures/tesr/event_horizon_animated_unstable.jpg";
 
-    protected static final ResourceLocation EV_HORIZON_NORMAL_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon.jpg");
-    protected static final ResourceLocation EV_HORIZON_DESATURATED_KAWOOSH_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_kawoosh_unstable.jpg");
-    protected static final ResourceLocation EV_HORIZON_KAWOOSH_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_kawoosh.jpg");
-    protected static final ResourceLocation EV_HORIZON_DESATURATED_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/tesr/event_horizon_unstable.jpg");
+    protected static final String EV_HORIZON_NORMAL_TEXTURE = "textures/tesr/event_horizon.jpg";
+    protected static final String EV_HORIZON_DESATURATED_TEXTURE = "textures/tesr/event_horizon_unstable.jpg";
 
     protected ResourceLocation getEventHorizonTextureResource(StargateAbstractRendererState rendererState) {
         return getEventHorizonTextureResource(rendererState, false);
     }
 
     protected ResourceLocation getEventHorizonTextureResource(StargateAbstractRendererState rendererState, boolean kawoosh) {
-        if (AunisConfig.stargateConfig.disableAnimatedEventHorizon)
-            return (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE : (kawoosh ? EV_HORIZON_KAWOOSH_TEXTURE : EV_HORIZON_NORMAL_TEXTURE));
+        String texture = (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE_ANIMATED : (kawoosh ? EV_HORIZON_KAWOOSH_TEXTURE_ANIMATED : EV_HORIZON_NORMAL_TEXTURE_ANIMATED));
+        if (AunisConfig.stargateConfig.disableAnimatedEventHorizon || !TextureLoader.isTextureLoaded(new ResourceLocation(Aunis.ModID, texture)))
+            texture = (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE : EV_HORIZON_NORMAL_TEXTURE);
 
-        return (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE_ANIMATED : (kawoosh ? EV_HORIZON_KAWOOSH_TEXTURE_ANIMATED : EV_HORIZON_NORMAL_TEXTURE_ANIMATED));
+        return new ResourceLocation(Aunis.ModID, texture);
     }
 
     protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
