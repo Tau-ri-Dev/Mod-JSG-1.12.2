@@ -46,13 +46,9 @@ public class StargateGenerator {
 
 	public static GeneratedStargate generateStargate(World world) {
 		Random rand = new Random();
-
-//		boolean nether = rand.nextFloat() < AunisConfig.mysteriousConfig.netherChance;
 		BlockPos pos;
 		int tries = 0;
-
 		WorldServer worldToSpawn = world.getMinecraftServer().getWorld(0);
-
 		do {
 			int x = (int) (AunisConfig.mysteriousConfig.minOverworldCoords + (rand.nextFloat() * (AunisConfig.mysteriousConfig.maxOverworldCoords - AunisConfig.mysteriousConfig.minOverworldCoords))) * (rand.nextBoolean() ? -1 : 1);
 			int z = (int) (AunisConfig.mysteriousConfig.minOverworldCoords + (rand.nextFloat() * (AunisConfig.mysteriousConfig.maxOverworldCoords - AunisConfig.mysteriousConfig.minOverworldCoords))) * (rand.nextBoolean() ? -1 : 1);
@@ -60,11 +56,45 @@ public class StargateGenerator {
 			pos = StargateGenerator.checkForPlace(worldToSpawn, x/16, z/16);
 			tries++;
 		} while (pos == null && tries < 100);
-
 		if (tries == 100) {
-			Aunis.logger.debug("StargateGenerator: Failed to find place");
+			Aunis.logger.debug("StargateGenerator: Failed to find place - normal gate");
 			return null;
 		}
+		if (pos == null) {
+			Aunis.logger.debug("StargateGenerator: Pos is null - normal gate");
+			return null;
+		}
+		return generateStargate(world, pos.getX(), pos.getZ());
+	}
+
+	public static GeneratedStargate generateStargateNear(World world, int x, int z) {
+		Random rand = new Random();
+		BlockPos pos;
+		int tries = 0;
+		WorldServer worldToSpawn = world.getMinecraftServer().getWorld(0);
+		int fx;
+		int fz;
+		do {
+			fx = (int) (x + rand.nextFloat()) * (rand.nextBoolean() ? -1 : 1);
+			fz = (int) (z + rand.nextFloat()) * (rand.nextBoolean() ? -1 : 1);
+
+			pos = StargateGenerator.checkForPlace(worldToSpawn, fx/16, fz/16);
+			tries++;
+		} while (pos == null && tries < 100);
+		if (tries == 100) {
+			Aunis.logger.debug("StargateGenerator: Failed to find place - near gate");
+			return null;
+		}
+		if (pos == null) {
+			Aunis.logger.debug("StargateGenerator: Pos is null - near gate");
+			return null;
+		}
+		return generateStargate(world, fx, fz);
+	}
+
+	public static GeneratedStargate generateStargate(World world, int x, int z) {
+		WorldServer worldToSpawn = world.getMinecraftServer().getWorld(0);
+		BlockPos pos = StargateGenerator.checkForPlace(worldToSpawn, x/16, z/16);
 
 		EnumFacing facing = findOptimalRotation(worldToSpawn, pos);
 		Rotation rotation;
@@ -73,7 +103,6 @@ public class StargateGenerator {
 			case SOUTH: rotation = Rotation.CLOCKWISE_90; break;
 			case WEST:  rotation = Rotation.CLOCKWISE_180; break;
 			case NORTH: rotation = Rotation.COUNTERCLOCKWISE_90; break;
-			case EAST:  rotation = Rotation.NONE; break;
 			default:    rotation = Rotation.NONE; break;
 		}
 		boolean pegasusGate = new Random().nextInt(100) < 50 && AunisConfig.devConfig.pegGatesMyst; // 50% chance && config

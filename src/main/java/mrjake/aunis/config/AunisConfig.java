@@ -573,6 +573,25 @@ public class AunisConfig {
 
         @Name("Titanium max veins in chunk")
         public int titaniumMaxVeinInChunk = 8;
+
+        @Name("Chance of generating gate in overworld")
+        @RangeInt(min = 0, max = 100)
+        @Comment({
+                "Set this to 0 to disable generation of gates in overworld."
+        })
+        public int chanceOfGateWorld = 1;
+        @Name("Chance of generating gate in nether")
+        @RangeInt(min = 0, max = 100)
+        @Comment({
+                "Set this to 0 to disable generation of gates in nether."
+        })
+        public int chanceOfGateNether = 1;
+        /*@Name("Chance of generating gate in overworld")
+        @RangeInt(min = 0, max = 100)
+        @Comment({
+                "Set this to 0 to disable generation of gates in overworld."
+        })
+        public int chanceOfGateEnd = 1;*/
     }
 
     public static class MainMenuConfig {

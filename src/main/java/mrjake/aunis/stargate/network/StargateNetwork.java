@@ -90,6 +90,7 @@ public class StargateNetwork extends WorldSavedData {
     EARTH_ADDRESS.addSymbol(SymbolMilkyWayEnum.CANCER);
     EARTH_ADDRESS.addSymbol(SymbolMilkyWayEnum.SCUTUM);
     EARTH_ADDRESS.addSymbol(SymbolMilkyWayEnum.ERIDANUS);
+    EARTH_ADDRESS.addSymbol(SymbolMilkyWayEnum.SERPENSCAPUT);
   }
 
   private StargateAddress netherGateAddress;

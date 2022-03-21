@@ -31,6 +31,7 @@ import mrjake.aunis.state.State;
 import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.AunisAxisAlignedBB;
+import mrjake.aunis.worldgen.StargateGeneratorNether;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,10 +43,7 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 
@@ -143,8 +141,16 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 	
 	public void updateNetherAddress() {
 		dialedAddress.clear();
+		if(!network.isStargateInNetwork(network.getNetherGate()) || network.getStargate(network.getNetherGate()) == null){
+			if(!world.isRemote && world.provider.getDimensionType() == DimensionType.OVERWORLD) {
+				network.setNetherGate(StargateGeneratorNether.place(Objects.requireNonNull(world.getMinecraftServer()).getWorld(DimensionType.NETHER.getId()), new BlockPos(pos.getX() / 8, 32, pos.getZ() / 8)));
+				Aunis.info("Orlin gate requested building of new nether gate... Build started...");
+			}
+		}
+
 		dialedAddress.addAll(network.getNetherGate().subList(0, StargateDimensionConfig.netherOverworld8thSymbol() ? 7 : 6));
 		dialedAddress.addSymbol(SymbolMilkyWayEnum.ORIGIN);
+		markDirty();
 		
 		Aunis.logger.debug("Orlin's dialed address: " + dialedAddress);
 	}
@@ -164,8 +170,6 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 	public BlockPos getGateCenterPos() {
 		return pos.offset(EnumFacing.UP, 1);
 	}
-	
-	public long animStart;
 	
 	@Override
 	public void update() {
@@ -217,6 +221,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 	}
 
 	public boolean beginOpening(){
+		updateNetherAddress();
 		if(isBroken()) return false;
 		switch (checkAddressAndEnergy(dialedAddress)) {
 			case OK:
@@ -229,11 +234,16 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 				return true;
 
 			case ADDRESS_MALFORMED:
-				Aunis.error("Orlin's gate: wrong dialed address");
+				if(!world.isRemote && world.provider.getDimensionType() == DimensionType.OVERWORLD) {
+					network.setNetherGate(StargateGeneratorNether.place(Objects.requireNonNull(world.getMinecraftServer()).getWorld(DimensionType.NETHER.getId()), new BlockPos(pos.getX() / 8, 32, pos.getZ() / 8)));
+					Aunis.info("Orlin gate requested building of new nether gate... Build started...");
+				}
+				beginOpening();
+				//Aunis.error("Orlin's gate: wrong dialed address");
 				break;
 
 			case NOT_ENOUGH_POWER:
-				Aunis.info("Orlin's gate: Not enough power");
+				//Aunis.info("Orlin's gate: Not enough power");
 				break;
 
 			case ABORTED:

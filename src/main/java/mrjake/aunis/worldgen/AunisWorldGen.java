@@ -7,6 +7,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -29,6 +30,8 @@ public class AunisWorldGen implements IWorldGenerator {
 							AunisConfig.worldgenConfig.naquadahVeinSize,
 							AunisConfig.worldgenConfig.naquadahMaxVeinInChunk, 0, 128,
 							BlockMatcher.forBlock(Blocks.NETHERRACK), world, rand, chunkX, chunkZ);
+					if(AunisConfig.worldgenConfig.chanceOfGateNether != 0 && new Random().nextInt(10000) == AunisConfig.worldgenConfig.chanceOfGateNether)
+						StargateGeneratorNether.place(world.getMinecraftServer().getWorld(DimensionType.NETHER.getId()), new BlockPos(chunkX/8, 32, chunkZ/8));
 				}
 				break;
 			case OVERWORLD:
@@ -37,6 +40,8 @@ public class AunisWorldGen implements IWorldGenerator {
 							AunisConfig.worldgenConfig.titaniumVeinSize,
 							AunisConfig.worldgenConfig.titaniumMaxVeinInChunk, 0, 25,
 							BlockMatcher.forBlock(Blocks.STONE), world, rand, chunkX, chunkZ);
+					if(AunisConfig.worldgenConfig.chanceOfGateWorld != 0 && new Random().nextInt(10000) == AunisConfig.worldgenConfig.chanceOfGateWorld)
+						StargateGenerator.generateStargateNear(world, chunkX, chunkZ);
 				}
 				break;
 			case THE_END:
@@ -45,6 +50,8 @@ public class AunisWorldGen implements IWorldGenerator {
 							AunisConfig.worldgenConfig.triniumVeinSize,
 							AunisConfig.worldgenConfig.triniumMaxVeinInChunk, 0, 128,
 							BlockMatcher.forBlock(Blocks.END_STONE), world, rand, chunkX, chunkZ);
+					//if(AunisConfig.worldgenConfig.chanceOfGateEnd != 0 && world.getTotalWorldTime() % 20*100000/(AunisConfig.worldgenConfig.chanceOfGateEnd) == 0)
+					//	StargateGenerator.generateEndStargate(world);
 				}
 				break;
 			default:

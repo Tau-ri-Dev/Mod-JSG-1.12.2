@@ -158,10 +158,9 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     }
 
     public boolean tryDialEarth(){
-
-        if (dialedAddress.size() >= 6 && dialedAddress.equalsV2(StargateNetwork.EARTH_ADDRESS, 6) && !network.isStargateInNetwork(StargateNetwork.EARTH_ADDRESS)) {
+        if (dialedAddress.size() >= 6 && dialedAddress.equalsV2(StargateNetwork.EARTH_ADDRESS, 6) && !network.isStargateInNetwork(dialedAddress)) {
             if (StargateDimensionConfig.netherOverworld8thSymbol()) {
-                if (dialedAddress.size() == 7 && dialedAddress.getLast() == SymbolMilkyWayEnum.SERPENSCAPUT) {
+                if (dialedAddress.size() == 7 && dialedAddress.equalsV2(StargateNetwork.EARTH_ADDRESS, 7)) {
                     dialedAddress.clear();
                     dialedAddress.addAll(network.getLastActivatedOrlins().subList(0, 7));
                     markDirty();
@@ -259,7 +258,6 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
     @Override
     public void onGateBroken() {
-        if(this.getStargateAddress(SymbolTypeEnum.MILKYWAY) == network.getNetherGate()) network.deleteNetherGate();
         super.onGateBroken();
 
         if (isLinked()) {

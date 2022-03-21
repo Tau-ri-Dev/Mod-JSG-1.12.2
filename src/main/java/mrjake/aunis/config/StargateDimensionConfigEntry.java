@@ -23,6 +23,14 @@ public class StargateDimensionConfigEntry {
 		
 		if (other.group == null)
 			return false;
+
+		String[] groups = group.split(",");
+		String[] otherGroups = other.group.split(",");
+		for(int i = 0; i < groups.length; i++){
+			if(otherGroups.length < i) break;
+			if(otherGroups[i].equals(groups[i]))
+				return true;
+		}
 		
 		return group.equals(other.group);
 	}
