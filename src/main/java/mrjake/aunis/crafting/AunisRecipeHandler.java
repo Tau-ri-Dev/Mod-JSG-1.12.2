@@ -4,9 +4,10 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.crafting.thermalreplace.blocks.BlockCapacitor;
+import mrjake.aunis.crafting.thermalreplace.blocks.BlockOrlinBase;
+import mrjake.aunis.crafting.thermalreplace.blocks.BlockOrlinRing;
 import mrjake.aunis.crafting.thermalreplace.circuits.CircuitCrystalRecipe;
 import mrjake.aunis.crafting.thermalreplace.circuits.CircuitNaquadahRecipe;
-import mrjake.aunis.crafting.thermalreplace.circuits.CircuitZpmRecipe;
 import mrjake.aunis.crafting.thermalreplace.crystals.*;
 import mrjake.aunis.crafting.thermalreplace.ThermalAbstractRecipe;
 import mrjake.aunis.crafting.thermalreplace.ingots.IngotNaquadahAlloy;
@@ -53,6 +54,8 @@ public class AunisRecipeHandler {
 	 * Blocks
 	 */
 	public static final BlockCapacitor BLOCK_CAPACITOR = new BlockCapacitor();
+	public static final BlockOrlinBase BLOCK_ORLIN_BASE = new BlockOrlinBase();
+	public static final BlockOrlinRing BLOCK_ORLIN_RING = new BlockOrlinRing();
 
 	public static ThermalAbstractRecipe[] RECIPES = {
 
@@ -76,7 +79,9 @@ public class AunisRecipeHandler {
 			INGOT_NAQUADAH_ALLOY_RAFINERED,
 
 			// Blocks
-			BLOCK_CAPACITOR
+			BLOCK_CAPACITOR,
+			BLOCK_ORLIN_BASE,
+			BLOCK_ORLIN_RING
 
 	};
 

@@ -1,6 +1,5 @@
 package mrjake.aunis.tileentity.stargate;
 
-import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateDimensionConfig;
@@ -15,7 +14,6 @@ import mrjake.aunis.sound.StargateSoundEventEnum;
 import mrjake.aunis.sound.StargateSoundPositionedEnum;
 import mrjake.aunis.stargate.EnumScheduledTask;
 import mrjake.aunis.stargate.EnumStargateState;
-import mrjake.aunis.stargate.StargateClassicSpinHelper;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
 import mrjake.aunis.stargate.network.*;
@@ -41,7 +39,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static mrjake.aunis.stargate.StargateClassicSpinHelper.A_ANGLE_PER_TICK;
 
 public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements ILinkable {
     @Override

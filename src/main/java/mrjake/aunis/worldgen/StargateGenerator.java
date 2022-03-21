@@ -49,9 +49,11 @@ public class StargateGenerator {
 		BlockPos pos;
 		int tries = 0;
 		WorldServer worldToSpawn = world.getMinecraftServer().getWorld(0);
+		int x;
+		int z;
 		do {
-			int x = (int) (AunisConfig.mysteriousConfig.minOverworldCoords + (rand.nextFloat() * (AunisConfig.mysteriousConfig.maxOverworldCoords - AunisConfig.mysteriousConfig.minOverworldCoords))) * (rand.nextBoolean() ? -1 : 1);
-			int z = (int) (AunisConfig.mysteriousConfig.minOverworldCoords + (rand.nextFloat() * (AunisConfig.mysteriousConfig.maxOverworldCoords - AunisConfig.mysteriousConfig.minOverworldCoords))) * (rand.nextBoolean() ? -1 : 1);
+			x = (int) (AunisConfig.mysteriousConfig.minOverworldCoords + (rand.nextFloat() * (AunisConfig.mysteriousConfig.maxOverworldCoords - AunisConfig.mysteriousConfig.minOverworldCoords))) * (rand.nextBoolean() ? -1 : 1);
+			z = (int) (AunisConfig.mysteriousConfig.minOverworldCoords + (rand.nextFloat() * (AunisConfig.mysteriousConfig.maxOverworldCoords - AunisConfig.mysteriousConfig.minOverworldCoords))) * (rand.nextBoolean() ? -1 : 1);
 
 			pos = StargateGenerator.checkForPlace(worldToSpawn, x/16, z/16);
 			tries++;
@@ -64,7 +66,7 @@ public class StargateGenerator {
 			Aunis.logger.debug("StargateGenerator: Pos is null - normal gate");
 			return null;
 		}
-		return generateStargate(world, pos.getX(), pos.getZ());
+		return generateStargate(world, x, z);
 	}
 
 	public static GeneratedStargate generateStargateNear(World world, int x, int z) {
