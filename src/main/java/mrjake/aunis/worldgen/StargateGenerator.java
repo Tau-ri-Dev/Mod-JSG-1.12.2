@@ -66,7 +66,7 @@ public class StargateGenerator {
 			Aunis.logger.debug("StargateGenerator: Pos is null - normal gate");
 			return null;
 		}
-		return generateStargate(world, x, z);
+		return generateStargate(world, pos);
 	}
 
 	public static GeneratedStargate generateStargateNear(World world, int x, int z) {
@@ -91,12 +91,11 @@ public class StargateGenerator {
 			Aunis.logger.debug("StargateGenerator: Pos is null - near gate");
 			return null;
 		}
-		return generateStargate(world, fx, fz);
+		return generateStargate(world, pos);
 	}
 
-	public static GeneratedStargate generateStargate(World world, int x, int z) {
+	public static GeneratedStargate generateStargate(World world, BlockPos pos) {
 		WorldServer worldToSpawn = world.getMinecraftServer().getWorld(0);
-		BlockPos pos = StargateGenerator.checkForPlace(worldToSpawn, x/16, z/16);
 
 		EnumFacing facing = findOptimalRotation(worldToSpawn, pos);
 		Rotation rotation;
