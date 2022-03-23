@@ -1,5 +1,6 @@
 package mrjake.aunis.gui.mainmenu;
 
+import mrjake.aunis.Aunis;
 import mrjake.aunis.sound.StargateSoundEventEnum;
 import mrjake.aunis.stargate.EnumScheduledTask;
 import mrjake.aunis.state.stargate.StargateRendererActionState;
@@ -21,9 +22,11 @@ public class GetUpdate {
 
     public static final String ERROR_STRING = "Error was occurred while updating Aunis!";
 
-    public static final String GET_NAME_URL = "https://amazingworlds.eu/curseapi/1.12.2/?t=name";
-    public static final String GET_DOWNLOAD_URL = "https://amazingworlds.eu/curseapi/1.12.2/?t=url";
-    public static final String GET_SIZE_URL = "https://amazingworlds.eu/curseapi/1.12.2/?t=size";
+    public static final String URL_BASE = "https://api.aunis.cz/?api=curseforge&version=" + Aunis.MCVersion;
+
+    public static final String GET_NAME_URL = URL_BASE + "&t=name";
+    public static final String GET_DOWNLOAD_URL = URL_BASE + "?t=url";
+    public static final String GET_SIZE_URL = URL_BASE + "?t=size";
 
     public static final String MINECRAFT_ROOT = System.getenv("APPDATA") + "/.minecraft/mods/1.12.2/";
 
