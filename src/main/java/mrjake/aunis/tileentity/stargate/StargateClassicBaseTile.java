@@ -400,6 +400,18 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         int period = (((waitOpen) / 20) * 1000) / randomIncomingAddrSize;
                         stargateState = EnumStargateState.INCOMING;
                         isIncoming = true;
+                        if(connectedToGate){
+                            StargateAbstractBaseTile tGate;
+                            if(!dialedAddress.contains(getSymbolType().getOrigin()))
+                                dialedAddress.addOrigin();
+                            tGate = Objects.requireNonNull(network.getStargate(dialedAddress)).getTileEntity();
+                            if(tGate != null){
+                                tGate.stargateState = EnumStargateState.IDLE;
+                                tGate.markDirty();
+                            }
+                            connectedToGate = false;
+                            connectingToGate = false;
+                        }
                         markDirty();
                         if (AunisConfig.dialingConfig.allowIncomingAnimations)
                             this.incomingWormhole(randomIncomingAddrSize, period);

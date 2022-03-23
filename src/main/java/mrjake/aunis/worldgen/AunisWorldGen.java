@@ -14,25 +14,29 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
+import java.util.Objects;
 import java.util.Random;
 
 /**
  * Class handling WorldGen for The AUNIS Mod
  */
 public class AunisWorldGen implements IWorldGenerator {
+
+	private static final Random random = new Random();
 	
 	@Override
 	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		switch(world.provider.getDimensionType()) {
+			// todo(Mine): Fix gate generator (error in console, but working)
 			case NETHER:
 				if (AunisConfig.worldgenConfig.naquadahEnable) {
 					runGenerator(AunisBlocks.ORE_NAQUADAH_BLOCK.getDefaultState(),
 							AunisConfig.worldgenConfig.naquadahVeinSize,
 							AunisConfig.worldgenConfig.naquadahMaxVeinInChunk, 0, 128,
 							BlockMatcher.forBlock(Blocks.NETHERRACK), world, rand, chunkX, chunkZ);
-					if(AunisConfig.worldgenConfig.chanceOfGateNether != 0 && new Random().nextInt(10000) == AunisConfig.worldgenConfig.chanceOfGateNether)
-						StargateGeneratorNether.place(world.getMinecraftServer().getWorld(DimensionType.NETHER.getId()), new BlockPos(chunkX/8, 32, chunkZ/8));
 				}
+				if(AunisConfig.worldgenConfig.chanceOfGateNether != 0 && random.nextInt(1000) < AunisConfig.worldgenConfig.chanceOfGateNether)
+					StargateGeneratorNether.place(Objects.requireNonNull(world.getMinecraftServer()).getWorld(DimensionType.NETHER.getId()), new BlockPos(chunkX/8, 32, chunkZ/8));
 				break;
 			case OVERWORLD:
 				if (AunisConfig.worldgenConfig.titaniumEnable) {
@@ -40,9 +44,9 @@ public class AunisWorldGen implements IWorldGenerator {
 							AunisConfig.worldgenConfig.titaniumVeinSize,
 							AunisConfig.worldgenConfig.titaniumMaxVeinInChunk, 0, 25,
 							BlockMatcher.forBlock(Blocks.STONE), world, rand, chunkX, chunkZ);
-					if(AunisConfig.worldgenConfig.chanceOfGateWorld != 0 && new Random().nextInt(10000) == AunisConfig.worldgenConfig.chanceOfGateWorld)
-						StargateGenerator.generateStargateNear(world, chunkX, chunkZ);
 				}
+				if(AunisConfig.worldgenConfig.chanceOfGateWorld != 0 && random.nextInt(1000) < AunisConfig.worldgenConfig.chanceOfGateWorld)
+					StargateGenerator.generateStargateNear(world, chunkX, chunkZ);
 				break;
 			case THE_END:
 				if (AunisConfig.worldgenConfig.triniumEnabled) {
@@ -50,9 +54,9 @@ public class AunisWorldGen implements IWorldGenerator {
 							AunisConfig.worldgenConfig.triniumVeinSize,
 							AunisConfig.worldgenConfig.triniumMaxVeinInChunk, 0, 128,
 							BlockMatcher.forBlock(Blocks.END_STONE), world, rand, chunkX, chunkZ);
-					//if(AunisConfig.worldgenConfig.chanceOfGateEnd != 0 && world.getTotalWorldTime() % 20*100000/(AunisConfig.worldgenConfig.chanceOfGateEnd) == 0)
-					//	StargateGenerator.generateEndStargate(world);
 				}
+				//if(AunisConfig.worldgenConfig.chanceOfGateEnd != 0 && random.nextInt(1000) < AunisConfig.worldgenConfig.chanceOfGateEnd)
+				//	StargateGenerator.generateStargateNearEnd(world, chunkX, chunkZ);
 				break;
 			default:
 				break;
