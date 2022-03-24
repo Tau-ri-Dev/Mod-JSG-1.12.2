@@ -130,7 +130,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 		StargateOrlinMergeHelper.INSTANCE.incrementMembersOpenCount(world, pos, facing);
 		
 		if (isBroken()) {
-			addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAILED_SOUND, 5));
+			addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ORLIN_BROKE_SOUND, 5));
 		}
 	}
 	
@@ -220,9 +220,13 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 		}
 	}
 
-	public boolean beginOpening(){
+	public void beginOpening(){
+		if (world.provider.getDimensionType() != DimensionType.OVERWORLD){
+			AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_ORLIN_FAIL);
+			return;
+		}
 		updateNetherAddress();
-		if(isBroken()) return false;
+		if(isBroken()) return;
 		switch (checkAddressAndEnergy(dialedAddress)) {
 			case OK:
 				stargateState = EnumStargateState.DIALING;
@@ -231,7 +235,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 				AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_ORLIN_DIAL);
 
 				addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ORLIN_OPEN));
-				return true;
+				return;
 
 			case ADDRESS_MALFORMED:
 				if(!world.isRemote && world.provider.getDimensionType() == DimensionType.OVERWORLD) {
@@ -251,7 +255,6 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 			case CALLER_HUNG_UP:
 				break;
 		}
-		return false;
 	}
 	
 	
@@ -320,7 +323,8 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 		switch (soundEnum) {
 			case OPEN: return SoundEventEnum.GATE_MILKYWAY_OPEN;
 			case CLOSE: return SoundEventEnum.GATE_MILKYWAY_CLOSE;
-			case DIAL_FAILED: return SoundEventEnum.GATE_MILKYWAY_DIAL_FAILED;
+			case DIAL_FAILED: return SoundEventEnum.GATE_ORLIN_FAIL;
+			case GATE_BROKE: return SoundEventEnum.GATE_ORLIN_BROKE;
 			default: return null;
 		}
 	}
@@ -399,6 +403,11 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 			case STARGATE_FAILED_SOUND:
 				playSoundEvent(StargateSoundEventEnum.DIAL_FAILED);
 				
+				break;
+
+			case STARGATE_ORLIN_BROKE_SOUND:
+				playSoundEvent(StargateSoundEventEnum.GATE_BROKE);
+
 				break;
 				
 			default:

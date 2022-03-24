@@ -243,6 +243,20 @@
       "aunis:gate/orlin/gate_orlin_dial"
     ]
   },
+  "gate_orlin_dial_fail": {
+    "category": "ambient",
+    "subtitle": "aunis.subtitle.gate_orlin_dial_fail",
+    "sounds": [
+      "aunis:gate/orlin/gate_orlin_dial_fail"
+    ]
+  },
+  "gate_orlin_broke": {
+    "category": "ambient",
+    "subtitle": "aunis.subtitle.gate_orlin_broke",
+    "sounds": [
+      "aunis:gate/orlin/gate_orlin_broke"
+    ]
+  },
   "gate_universe_dial_start": {
     "category": "ambient",
     "subtitle": "aunis.subtitle.gate_universe_dial_start",
