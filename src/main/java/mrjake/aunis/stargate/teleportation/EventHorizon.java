@@ -145,7 +145,9 @@ public class EventHorizon {
 
                 if (packet.getEntity() instanceof IProjectile) {
                     Entity projectile = packet.getEntity();
-                    projectile.setVelocity(0, 0, 0);
+                    projectile.motionX = 0;
+                    projectile.motionY = 0;
+                    projectile.motionZ = 0;
                     projectile.setDead();
 
 
