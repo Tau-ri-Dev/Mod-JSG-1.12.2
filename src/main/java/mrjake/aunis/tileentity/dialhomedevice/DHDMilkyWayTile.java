@@ -56,7 +56,7 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
     SymbolMilkyWayEnum symbol = SymbolMilkyWayEnum.valueOf(symbolInt.getId());
 
     // When using OC to dial, don't play sound of the DHD button press
-    if (!gateTile.getStargateState().dialingComputer()) {
+    if (!gateTile.getStargateState().dialingComputer() || AunisConfig.dhdConfig.computerDialSound) {
 
       if (symbol.brb()) AunisSoundHelper.playSoundEvent(world, pos, SoundEventEnum.DHD_MILKYWAY_PRESS_BRB);
       else AunisSoundHelper.playSoundEvent(world, pos, SoundEventEnum.DHD_MILKYWAY_PRESS);

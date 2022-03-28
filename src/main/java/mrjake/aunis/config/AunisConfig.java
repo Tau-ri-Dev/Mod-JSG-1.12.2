@@ -277,9 +277,9 @@ public class AunisConfig {
         })
         public boolean useStrictSevenSymbolsUniGate = false;
 
-        @Name("Faster MilkyWay gate computer dial")
+        @Name("Faster MilkyWay and Universe gates computer dial")
         @Comment({
-                "Speed up dialing with computer on MW gate"
+                "Speed up dialing with computer on MW and UNI gates"
         })
         public boolean fasterMWGateDial = false;
 
@@ -400,6 +400,9 @@ public class AunisConfig {
                 "Disable this, to disable animation when dial gate with DHD (pegasus)"
         })
         public boolean animatePegDHDDial = true;
+
+        @Name("Enable press sound when dialing with computer")
+        public boolean computerDialSound = true;
 
         @Name("DHD's max fluid capacity")
         @RangeInt(min = 1)
