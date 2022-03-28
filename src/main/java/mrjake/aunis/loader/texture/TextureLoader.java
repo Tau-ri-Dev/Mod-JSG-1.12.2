@@ -51,7 +51,7 @@ public class TextureLoader {
 			texturePath = texturePath.replaceFirst("assets/aunis/", "");
 			progressBar.step(texturePath.replaceFirst("textures/", ""));
 			
-			if (AunisConfig.stargateConfig.disableAnimatedEventHorizon){
+			if (AunisConfig.horizonConfig.disableAnimatedEventHorizon){
 				switch (texturePath){
 					case "textures/tesr/event_horizon_animated_unstable.jpg":
 					case "textures/tesr/event_horizon_animated.jpg":

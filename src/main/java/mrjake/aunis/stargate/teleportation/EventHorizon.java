@@ -75,23 +75,23 @@ public class EventHorizon {
      */
     private Map<Integer, Integer> timeoutMap = new HashMap<>();
 
-    public void scheduleTeleportation(StargatePos targetGate) {
-        if (world.getTileEntity(pos) instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) world.getTileEntity(pos)).isClosed())
-            return;
+    public void scheduleTeleportation(StargatePos targetGate, boolean teleport) {
+        if(targetGate == null) return;
+        boolean closedIris = false;
+        if (world.getTileEntity(pos) instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) world.getTileEntity(pos)).isClosed()) {
+            teleport = false;
+            closedIris = true;
+        }
         List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, globalBox);
 
-//		Aunis.info(globalBox + ": " + entities + ", map: " + scheduledTeleportMap);
-
-//		if (!timeoutMap.isEmpty())
-//			Aunis.info("timeoutMap: " + timeoutMap);
-
-        for (int entityId : timeoutMap.keySet())
-            timeoutMap.put(entityId, timeoutMap.get(entityId) - 1);
-        timeoutMap.entrySet().removeIf(entry -> entry.getValue() < 0);
+        if(teleport) {
+            for (int entityId : timeoutMap.keySet())
+                timeoutMap.put(entityId, timeoutMap.get(entityId) - 1);
+            timeoutMap.entrySet().removeIf(entry -> entry.getValue() < 0);
+        }
 
         for (Entity entity : entities) {
             int entityId = entity.getEntityId();
-
             if (!scheduledTeleportMap.containsKey(entityId) && !timeoutMap.containsKey(entityId) && !entity.isRiding()) {
                 EnumFacing sourceFacing = world.getBlockState(pos).getValue(AunisProps.FACING_HORIZONTAL);
                 EnumFacing targetFacing = targetGate.getBlockState().getValue(AunisProps.FACING_HORIZONTAL);
@@ -99,13 +99,14 @@ public class EventHorizon {
                 float rotation = (float) Math.toRadians(EnumFacing.fromAngle(targetFacing.getHorizontalAngle() - sourceFacing.getHorizontalAngle()).getOpposite().getHorizontalAngle());
                 TeleportPacket packet = new TeleportPacket(entity, pos, targetGate, rotation);
 
-                if (entity instanceof EntityPlayerMP) {
+                if (teleport && entity instanceof EntityPlayerMP) {
                     scheduledTeleportMap.put(entityId, packet);
                     AunisPacketHandler.INSTANCE.sendTo(new StargateMotionToClient(pos), (EntityPlayerMP) entity);
                 } else {
                     Vector2f motion = new Vector2f((float) entity.motionX, (float) entity.motionZ);
+                    boolean front = TeleportHelper.frontSide(sourceFacing, motion);
 
-                    if (TeleportHelper.frontSide(sourceFacing, motion)) {
+                    if (!closedIris && teleport && front) {
 
                         for (Entity passenger : entity.getPassengers())
                             timeoutMap.put(passenger.getEntityId(), 40);
@@ -113,12 +114,10 @@ public class EventHorizon {
 
                         scheduledTeleportMap.put(entityId, packet.setMotion(motion));
                         teleportEntity(entityId);
-                    }
-					/*else {
-						//entity.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_HORIZON, 20);
-						// TODO Back side killing
-						// Make custom message appear
-					}*/
+                    } else if(!closedIris && !teleport && front && AunisConfig.horizonConfig.wrongSideKilling)
+                        wrongSideKill(entity);
+                    //if(!front && AunisConfig.horizonConfig.backSideKilling)
+                    //    wrongSideKill(entity);
                 }
             }
         }
@@ -126,6 +125,14 @@ public class EventHorizon {
 
     private void irisKill(Entity e) {
         e.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_IRIS_CREATIVE, Float.MAX_VALUE);
+    }
+
+    public void horizonKill(Entity e) {
+        e.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_HORIZON, Float.MAX_VALUE);
+    }
+
+    public void wrongSideKill(Entity e){
+        e.attackEntityFrom(AunisDamageSources.DAMAGE_WRONG_SIDE, Float.MAX_VALUE);
     }
 
     public void teleportEntity(int entityId) {

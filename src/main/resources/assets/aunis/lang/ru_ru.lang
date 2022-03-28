@@ -171,6 +171,7 @@ commands.sggenincoming.notstargate=Targeted block is not a Stargate Base
 
 death.attack.eventHorizon=%s был кремирован Нестабильной червоточиной
 death.attack.irisDeath=%s поцеловал Диафрагму
+death.attack.wrongSide=%s entered wrong side of gate
 
 
 # Milkyway Glyphs

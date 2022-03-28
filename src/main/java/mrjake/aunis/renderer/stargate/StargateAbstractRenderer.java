@@ -160,7 +160,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
     protected ResourceLocation getEventHorizonTextureResource(StargateAbstractRendererState rendererState, boolean kawoosh) {
         String texture = (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE_ANIMATED : (kawoosh ? EV_HORIZON_KAWOOSH_TEXTURE_ANIMATED : EV_HORIZON_NORMAL_TEXTURE_ANIMATED));
-        if (AunisConfig.stargateConfig.disableAnimatedEventHorizon || !TextureLoader.isTextureLoaded(new ResourceLocation(Aunis.ModID, texture)))
+        if (AunisConfig.horizonConfig.disableAnimatedEventHorizon || !TextureLoader.isTextureLoaded(new ResourceLocation(Aunis.ModID, texture)))
             texture = (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE : EV_HORIZON_NORMAL_TEXTURE);
 
         return new ResourceLocation(Aunis.ModID, texture);

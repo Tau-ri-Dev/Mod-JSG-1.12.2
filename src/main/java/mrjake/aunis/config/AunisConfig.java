@@ -25,6 +25,9 @@ public class AunisConfig {
     @Name("Stargate config options")
     public static StargateConfig stargateConfig = new StargateConfig();
 
+    @Name("Event horizon config options")
+    public static HorizonConfig horizonConfig = new HorizonConfig();
+
     @Name("Dialing/Incoming options")
     public static DialingConfig dialingConfig = new DialingConfig();
 
@@ -96,13 +99,6 @@ public class AunisConfig {
                 "Enable opening last chevron while dialing milkyway gate with dhd"
         })
         public boolean dhdLastOpen = true;
-
-        @Name("Disable animated Event Horizon")
-        @Comment({
-                "Changing this option will require you to reload resources manually.",
-                "Just press F3+Q once in-game."
-        })
-        public boolean disableAnimatedEventHorizon = false;
 
         @Name("Temperature threshold for frosty overlay")
         @Comment({
@@ -234,6 +230,21 @@ public class AunisConfig {
             return cachedBiomeOverrideBlocksReverse;
         }
 
+    }
+
+    public static class HorizonConfig {
+        @Name("Disable animated Event Horizon")
+        @Comment({
+                "Changing this option will require you to reload resources manually.",
+                "Just press F3+Q once in-game."
+        })
+        public boolean disableAnimatedEventHorizon = false;
+
+        @Name("Enable wrong side killing")
+        public boolean wrongSideKilling = true;
+
+        //@Name("Enable back side killing")
+        //public boolean backSideKilling = false;
     }
 
     public static class DialingConfig {

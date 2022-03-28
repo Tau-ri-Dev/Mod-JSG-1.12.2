@@ -171,6 +171,7 @@ commands.sggenincoming.notstargate=Targeted block is not a Stargate Base
 
 death.attack.eventHorizon=%s fue vaporizado por el Kawoosh
 death.attack.irisDeath=%s se estampó contra el Iris
+death.attack.wrongSide=%s entered wrong side of gate
 
 
 # Milkyway Glyphs

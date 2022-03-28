@@ -171,6 +171,7 @@ commands.sggenincoming.notstargate=Targeted block is not a Stargate Base
 
 death.attack.eventHorizon=%s 被虫洞视界打成分子级别，湮灭在了空气中
 death.attack.irisDeath=%s was given a iris cremation
+death.attack.wrongSide=%s entered wrong side of gate
 
 
 # Milkyway Glyphs

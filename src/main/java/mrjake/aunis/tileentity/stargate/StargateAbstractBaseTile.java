@@ -881,7 +881,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
             // Event horizon teleportation
             if (stargateState.initiating()) {
-                eventHorizon.scheduleTeleportation(targetGatePos);
+                eventHorizon.scheduleTeleportation(targetGatePos, true);
+            }
+            else if(stargateState.engaged()){
+                eventHorizon.scheduleTeleportation(targetGatePos, false);
             }
 
             // Autoclose
@@ -992,7 +995,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
             // Kill them
             for (Entity entity : entities) {
-                entity.attackEntityFrom(AunisDamageSources.DAMAGE_EVENT_HORIZON, Float.MAX_VALUE);
+                eventHorizon.horizonKill(entity);
                 AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.STARGATE_VAPORIZE_BLOCK_PARTICLES, new StargateVaporizeBlockParticlesRequest(entity.getPosition())), targetPoint);
             }
 

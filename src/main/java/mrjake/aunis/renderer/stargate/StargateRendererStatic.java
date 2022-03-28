@@ -92,7 +92,7 @@ public class StargateRendererStatic {
 			render(tick, white, alpha, mul, (byte) 0);
 		}
 		public void render(float tick, boolean white, Float alpha, float mul, byte animationOverride) {
-			boolean animated = !AunisConfig.stargateConfig.disableAnimatedEventHorizon;
+			boolean animated = !AunisConfig.horizonConfig.disableAnimatedEventHorizon;
 			if (animationOverride == -1) animated = false;
 			if (animationOverride == 1) animated = true;
 
@@ -216,7 +216,7 @@ public class StargateRendererStatic {
 		}
 		
 		public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul, boolean reversed, boolean red, byte animationOverride) {
-			boolean animate = !AunisConfig.stargateConfig.disableAnimatedEventHorizon;
+			boolean animate = !AunisConfig.horizonConfig.disableAnimatedEventHorizon;
 			if (animationOverride == -1) animate = false;
 			if (animationOverride == 1) animate = true;
 

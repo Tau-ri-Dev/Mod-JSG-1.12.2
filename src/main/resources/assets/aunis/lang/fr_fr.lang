@@ -171,6 +171,7 @@ commands.sggenincoming.notstargate=Targeted block is not a Stargate Base
 
 death.attack.eventHorizon=%s a reçu une crémation kawoosh
 death.attack.irisDeath=%s was given a iris cremation
+death.attack.wrongSide=%s entered wrong side of gate
 
 
 # Milkyway Glyphs

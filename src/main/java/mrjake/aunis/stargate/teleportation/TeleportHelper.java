@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumFacing.AxisDirection;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -114,6 +115,8 @@ public class TeleportHelper {
 			pos = new Vec3d(tPos.getX() + 0.5, tPos.getY() + 0.5, tPos.getZ() + 0.5);
 		else
 			pos = getPosition(entity, sourceTile.getGateCenterPos(), targetTile.getGateCenterPos(), rotation, targetTile.getFacing().getAxis()==Axis.Z ? ~flipAxis : flipAxis);
+
+		pos = plusOneBlock(targetTile.getFacing() ,pos);
 		
 		final float yawRotated = getRotation(entity.isBeingRidden() ? entity.getControllingPassenger() : entity, rotation, flipAxis);
 		boolean isPlayer = entity instanceof EntityPlayerMP;
@@ -154,6 +157,28 @@ public class TeleportHelper {
 			for (Entity passenger : passengers) {
 				passenger.startRiding(entity);
 			}
+		}
+	}
+
+	/**
+	 * Push player one block forward on teleport.
+	 * - debug for backside killing
+	 * @param gateRotation rotation of target gate
+	 * @param pos position of teleported player -> after teleport
+	 * @return Vec3d
+	 */
+	public static Vec3d plusOneBlock(EnumFacing gateRotation, Vec3d pos){
+		float k = 0.5f;
+
+		switch (gateRotation) {
+			case NORTH:
+				return new Vec3d(pos.x, pos.y, pos.z-k);
+			case WEST:
+				return new Vec3d(pos.x-k, pos.y, pos.z);
+			case EAST:
+				return new Vec3d(pos.x+k, pos.y, pos.z);
+			default:
+				return new Vec3d(pos.x, pos.y, pos.z+k);
 		}
 	}
 	
