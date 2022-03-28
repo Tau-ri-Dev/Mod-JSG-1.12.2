@@ -689,8 +689,8 @@ public class AunisConfig {
         @Name("Enable peg gates with myst pages")
         public boolean pegGatesMyst = false;
 
-        @Name("test")
-        public boolean test = true;
+        @Name("enableFastDial")
+        public boolean enableFastDial = true;
     }
 
     public static class RecipesConfig {
