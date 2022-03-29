@@ -684,12 +684,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
             // disengage target gate
             if(connectedToGate) {
-                if (this instanceof StargateUniverseBaseTile)
-                    dialedAddress.addSymbol(SymbolUniverseEnum.getOrigin());
-                if (this instanceof StargatePegasusBaseTile)
-                    dialedAddress.addSymbol(SymbolPegasusEnum.getOrigin());
-                if (this instanceof StargateMilkyWayBaseTile)
-                    dialedAddress.addSymbol(SymbolMilkyWayEnum.getOrigin());
+                if (this instanceof StargateClassicBaseTile)
+                    dialedAddress.addSymbol(getSymbolType().getOrigin());
 
                 Objects.requireNonNull(network.getStargate(dialedAddress)).getTileEntity().disconnectGate();
             }
