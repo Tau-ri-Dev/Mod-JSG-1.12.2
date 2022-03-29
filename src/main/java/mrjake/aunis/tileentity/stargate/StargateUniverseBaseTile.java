@@ -44,6 +44,39 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
   public void update(){
     if(actionsCooldown > 0)
       actionsCooldown--;
+    if(fastDialing){
+      if(addressPosition > maxSymbols)
+        fastDialing = false;
+      else if(world.getTotalWorldTime() % fastDialPeriod == 0){
+        /*if(addressPosition == -1) {
+          // Todo(Mine): fix spinning of this
+          //spinRing(1, false, true, (fastDialPeriod * maxSymbols - 25));
+          //addressPosition++;
+        }*/
+        if(addressPosition != -1){
+          if(fastDialing && stargateState.dialingDHD()){
+            SymbolInterface symbolToEngage = getNextSymbol();
+            if (canAddSymbol(symbolToEngage) && !abortDialing) {
+              addSymbolToAddress(symbolToEngage);
+              activateSymbolServer(symbolToEngage);
+              if (stargateWillLock(symbolToEngage)){
+                //targetRingSymbol = symbolToEngage;
+                fastDialing = false;
+                attemptOpenAndFail();
+              }
+              else
+                addressPosition++;
+            } else {
+              dialingFailed(abortDialing ? StargateOpenResult.ABORTED : StargateOpenResult.ADDRESS_MALFORMED);
+              stargateState = EnumStargateState.IDLE;
+              abortDialing = false;
+              fastDialing = false;
+            }
+            markDirty();
+          }
+        }
+      }
+    }
     super.update();
   }
 
@@ -64,8 +97,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
   // Fast dialing
   private boolean fastDialing = false;
-  private static final int fastDialPeriod = 40; // ticks
-  private SymbolInterface fastDialSymbol;
+  private static final int fastDialPeriod = 20; // ticks
 
   public void dial(StargateAddress stargateAddress, int glyphsToDial, boolean nearby) {
     if(AunisConfig.devConfig.enableFastDial){
@@ -94,17 +126,15 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     if(actionsCooldown > 1) return;
     setUpCooldown();
     addressToDial = stargateAddress;
-    addressPosition = -1;
+    //addressPosition = -1;
+    addressPosition = 0;
     maxSymbols = glyphsToDial;
     abortDialing = false;
     dialingNearby = nearby;
-
     stargateState = EnumStargateState.DIALING;
-
     fastDialing = true;
 
     AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_UNIVERSE_DIAL_START);
-    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, fastDialPeriod + 20));
     sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
     updateChevronLight(9, true);
 
@@ -258,59 +288,12 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
         break;
 
       case STARGATE_SPIN_FINISHED:
-        if(fastDialing){
-          if(addressPosition == -1){
-            spinRing(1, false, true, (fastDialPeriod*maxSymbols - 25));
-            addressPosition++;
-            markDirty();
-          }
-
-          SymbolInterface symbolToEngage = getNextSymbol();
-          if ((targetRingSymbol != TOP_CHEVRON)) {
-            if (canAddSymbol(symbolToEngage) && !abortDialing) {
-              addSymbolToAddress(symbolToEngage);
-              activateSymbolServer(symbolToEngage);
-
-              if (stargateState.dialingComputer())
-                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_FINISHED, 10));
-
-              if (!stargateWillLock(symbolToEngage)){
-                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, fastDialPeriod));
-                addressPosition++;
-              }
-              else {
-                targetRingSymbol = symbolToEngage;
-                fastDialing = false;
-                attemptOpenAndFail();
-              }
-            } else {
-              dialingFailed(abortDialing ? StargateOpenResult.ABORTED : StargateOpenResult.ADDRESS_MALFORMED);
-
-              stargateState = EnumStargateState.IDLE;
-              abortDialing = false;
-              fastDialing = false;
-            }
-          }
-          else if(abortDialing){
-              dialingFailed(StargateOpenResult.ABORTED);
-
-              stargateState = EnumStargateState.IDLE;
-              abortDialing = false;
-            fastDialing = false;
-            }
-          else{
-            stargateState = EnumStargateState.IDLE;
-            fastDialing = false;
-          }
-
-          markDirty();
-          break;
-        }
+        if(fastDialing)
+          return;
 
         if(onlySpin && stargateState.dialingComputer()){
           stargateState = EnumStargateState.IDLE;
           sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 9, true);
-          fastDialing = false;
           markDirty();
           break;
         }

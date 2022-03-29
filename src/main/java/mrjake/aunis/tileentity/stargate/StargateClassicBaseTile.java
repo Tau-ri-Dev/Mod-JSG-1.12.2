@@ -952,6 +952,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public void executeTask(EnumScheduledTask scheduledTask, NBTTagCompound customData) {
+        boolean fastDial = false;
+        if(customData != null && customData.hasKey("fastDial"))
+            fastDial = customData.getBoolean("fastDial");
         switch (scheduledTask) {
             case STARGATE_HORIZON_LIGHT_BLOCK:
                 if (irisType == EnumIrisType.NULL || !isClosed()) {
@@ -970,6 +973,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 break;
 
             case STARGATE_SPIN_FINISHED:
+                if(fastDial) break;
                 isSpinning = false;
                 currentRingSymbol = targetRingSymbol;
                 if (!(this instanceof StargatePegasusBaseTile))
@@ -1108,12 +1112,16 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public void spinRing(int rounds, boolean changeState, boolean findNearest, int time) {
+        spinRing(rounds, changeState, findNearest, time, false);
+    }
+
+    public void spinRing(int rounds, boolean changeState, boolean findNearest, int time, boolean isFastDialing) {
         if(time < 0) time *= -1;
         time -= 20; // time to lock the last chevron
         targetRingSymbol = currentRingSymbol;
         spinDirection = CLOCKWISE;
         if (changeState) stargateState = EnumStargateState.DIALING_COMPUTER;
-        if (this instanceof StargateUniverseBaseTile) {
+        if (this instanceof StargateUniverseBaseTile && !isFastDialing) {
             sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
             AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_UNIVERSE_DIAL_START);
         }

@@ -45,7 +45,9 @@ public enum EnumScheduledTask {
   STARGATE_CLEAR_CHEVRONS(29, 10),
 
   GATE_RING_ROLL(30, -1),
-  LIGHT_UP_CHEVRONS(31, -1);
+  LIGHT_UP_CHEVRONS(31, -1),
+
+  STARGATE_FAST_DIAL_SPIN_FINISHED(32, -1);
 
     public int id;
   public int waitTicks;
