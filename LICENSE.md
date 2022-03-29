@@ -1,6 +1,6 @@
 # AUNIS License
-> Version 1.0, May 2019
-> Copyright (C) 2019 MrJake222
+> Version 1.0, May 2022
+> Copyright (C) 2022 MrJake222
 
 1. You are ***allowed*** to:
 	* Look around the code and figure out what I did (feel free to ask about certain solutions, on [*Discord*](https://discord.gg/UzuhJQ4) for example).
