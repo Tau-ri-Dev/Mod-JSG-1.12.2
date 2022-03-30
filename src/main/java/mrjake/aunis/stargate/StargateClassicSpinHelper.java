@@ -137,11 +137,6 @@ public class StargateClassicSpinHelper implements ISpinHelper {
     float distance = direction.getDistance(currentSymbol, targetSymbol);
     distance += (360*plusRounds);
 
-    if(targetSymbol == SymbolUniverseEnum.G37) {
-      distance = 360;
-      targetSymbol = SymbolUniverseEnum.TOP_CHEVRON;
-    }
-
     float x0 = getx0(distance);
     this.targetRotationOffset = getTargetRotation(x0);
 

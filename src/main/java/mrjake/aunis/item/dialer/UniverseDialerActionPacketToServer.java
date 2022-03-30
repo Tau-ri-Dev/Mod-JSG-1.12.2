@@ -95,7 +95,7 @@ public class UniverseDialerActionPacketToServer implements IMessage {
 								StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(pos);
 								
 								if (gateTile.getStargateState() == EnumStargateState.DIALING) {
-									gateTile.abort();
+									gateTile.abortDialingSequence();
 									player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.aborting"), true);
 								}
 								

@@ -5,552 +5,525 @@ import mrjake.aunis.config.StargateSizeEnum;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
-import mrjake.aunis.renderer.stargate.StargateClassicRendererState.StargateClassicRendererStateBuilder;
+import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.renderer.stargate.StargateUniverseRendererState;
-import mrjake.aunis.renderer.stargate.StargateUniverseRendererState.StargateUniverseRendererStateBuilder;
 import mrjake.aunis.sound.*;
-import mrjake.aunis.stargate.*;
+import mrjake.aunis.stargate.EnumScheduledTask;
+import mrjake.aunis.stargate.EnumStargateState;
+import mrjake.aunis.stargate.StargateOpenResult;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargateUniverseMergeHelper;
 import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.stargate.power.StargateEnergyRequired;
-import mrjake.aunis.state.stargate.StargateRendererActionState;
-import mrjake.aunis.state.stargate.StargateRendererActionState.EnumGateAction;
-import mrjake.aunis.state.stargate.StargateUniverseSymbolState;
 import mrjake.aunis.state.State;
 import mrjake.aunis.state.StateTypeEnum;
+import mrjake.aunis.state.stargate.StargateRendererActionState;
+import mrjake.aunis.state.stargate.StargateSpinState;
+import mrjake.aunis.state.stargate.StargateUniverseSymbolState;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.List;
 
-import static mrjake.aunis.stargate.network.SymbolUniverseEnum.G1;
+import static mrjake.aunis.stargate.EnumStargateState.DIALING;
+import static mrjake.aunis.stargate.EnumStargateState.FAILING;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
 public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
-  public void setLinkedDHD(BlockPos dhdPos, int linkId) {}
+    private static final StargateSizeEnum defaultStargateSize = StargateSizeEnum.SMALL;
+    private static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.AGED);
 
-  private long actionsCooldown = 0; //ticks
+    private StargateAddress addressToDial;
+    private int symbolsToDialCount;
+    private int addressPosition;
 
-  public void setUpCooldown(){
-    actionsCooldown = 60;
-  }
+    private boolean abortingDialing = false;
 
-  @Override
-  public void update(){
-    if(actionsCooldown > 0)
-      actionsCooldown--;
-    if(fastDialing){
-      if(addressPosition > maxSymbols)
-        fastDialing = false;
-      else if(world.getTotalWorldTime() % fastDialPeriod == 0){
-        /*if(addressPosition == -1) {
-          // Todo(Mine): fix spinning of this
-          //spinRing(1, false, true, (fastDialPeriod * maxSymbols - 25));
-          //addressPosition++;
-        }*/
-        if(addressPosition != -1){
-          if(fastDialing && stargateState.dialingDHD()){
-            SymbolInterface symbolToEngage = getNextSymbol();
-            if (canAddSymbol(symbolToEngage) && !abortDialing) {
-              addSymbolToAddress(symbolToEngage);
-              activateSymbolServer(symbolToEngage);
-              if (stargateWillLock(symbolToEngage)){
-                //targetRingSymbol = symbolToEngage;
-                fastDialing = false;
-                attemptOpenAndFail();
-              }
-              else
-                addressPosition++;
-            } else {
-              dialingFailed(abortDialing ? StargateOpenResult.ABORTED : StargateOpenResult.ADDRESS_MALFORMED);
-              stargateState = EnumStargateState.IDLE;
-              abortDialing = false;
-              fastDialing = false;
+    private boolean isFastDialing = false;
+    private static final int fastDialingPeriod = 20; //ticks (1 symbol per this)
+
+
+    // --------------------------------------------------------------------------------
+    // Updating
+
+    @Override
+    public void update(){
+        super.update();
+        if(!world.isRemote){
+            if(isFastDialing){
+                if(world.getTotalWorldTime() % fastDialingPeriod == 0){
+
+                }
             }
-            markDirty();
-          }
         }
-      }
     }
-    super.update();
-  }
 
+    // --------------------------------------------------------------------------------
+    // Dialing
 
-  @Override
-  public StargateSizeEnum getStargateSize() {
-    return StargateSizeEnum.SMALL;
-  }
-
-  // --------------------------------------------------------------------------------
-  // Dialing
-
-  public StargateAddress addressToDial;
-  private int addressPosition;
-  private int maxSymbols;
-  private boolean abortDialing;
-  private boolean dialingNearby = false;
-
-  // Fast dialing
-  private boolean fastDialing = false;
-  private static final int fastDialPeriod = 20; // ticks
-
-  public void dial(StargateAddress stargateAddress, int glyphsToDial, boolean nearby) {
-    if(AunisConfig.devConfig.enableFastDial){
-      dialFast(stargateAddress, glyphsToDial, nearby);
-      return;
+    public StargateAddress getAddressToDial() {
+        return addressToDial;
     }
-    if(actionsCooldown > 1) return;
-    setUpCooldown();
-    addressToDial = stargateAddress;
-    addressPosition = 0;
-    maxSymbols = glyphsToDial;
-    abortDialing = false;
-    dialingNearby = nearby;
 
-    stargateState = EnumStargateState.DIALING;
+    /**
+     * Dial the address using DIALER
+     *
+     * @param address     - address to dial
+     * @param symbolCount - symbols to engage
+     */
+    public void dialAddress(StargateAddress address, int symbolCount) {
+        if (!stargateState.idle()) return;
 
-    AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_UNIVERSE_DIAL_START);
-    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 35));
-    sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
-    updateChevronLight(9, true);
-
-    markDirty();
-  }
-
-  public void dialFast(StargateAddress stargateAddress, int glyphsToDial, boolean nearby) {
-    if(actionsCooldown > 1) return;
-    setUpCooldown();
-    addressToDial = stargateAddress;
-    //addressPosition = -1;
-    addressPosition = 0;
-    maxSymbols = glyphsToDial;
-    abortDialing = false;
-    dialingNearby = nearby;
-    stargateState = EnumStargateState.DIALING;
-    fastDialing = true;
-
-    AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_UNIVERSE_DIAL_START);
-    sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
-    updateChevronLight(9, true);
-
-    markDirty();
-  }
-
-  public void abort(boolean force) {
-    if(actionsCooldown > 1 && !force) return;
-    setUpCooldown();
-    //abortDialingSequence(1);
-    abortDialing = true;
-    markDirty();
-  }
-
-  public void abort() {
-    abort(true);
-  }
-
-  @Override
-  public void failGate() {
-    super.failGate();
-
-    if (targetRingSymbol != TOP_CHEVRON)
-      addSymbolToAddressManual(TOP_CHEVRON, null);
-  }
-
-  @Override
-  protected void disconnectGate() {
-    super.disconnectGate();
-    addSymbolToAddressManual(TOP_CHEVRON, null);
-  }
-
-  @Override
-  public void addSymbolToAddressManual(SymbolInterface targetSymbol, Object context) {
-    if (context != null) stargateState = EnumStargateState.DIALING_COMPUTER;
-    else stargateState = EnumStargateState.DIALING;
-
-    if (stargateState.dialingComputer() && dialedAddress.size() == 0 && !targetSymbol.equals(SymbolUniverseEnum.G37)) {
-      AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_UNIVERSE_DIAL_START);
-      sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
-
-      NBTTagCompound taskData = new NBTTagCompound();
-      taskData.setInteger("symbolToDial", targetSymbol.getId());
-      addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 35, taskData));
-      ringSpinContext = context;
-    } else super.addSymbolToAddressManual(targetSymbol, context);
-  }
-
-  @Override
-  public void incomingWormhole(int dialedAddressSize){
-    startIncomingAnimation(dialedAddressSize, 10);
-
-    super.incomingWormhole(9);
-  }
-
-  @Override
-  public void incomingWormhole(int dialedAddressSize, int time){
-    time = time * dialedAddressSize;
-    int period = time - 2000;
-    if(period < 0) period = 0;
-    startIncomingAnimation(dialedAddressSize, period);
-    //todo: fix this shit
-    //spinRing(1, false, true, period);
-
-    super.incomingWormhole(9, false);
-  }
-
-  @Override
-  public void startIncomingAnimation(int addressSize, int period){
-    super.startIncomingAnimation(addressSize, period);
-    this.lightUpChevronByIncoming(!AunisConfig.dialingConfig.allowIncomingAnimations);
-  }
-
-  @Override
-  public void lightUpChevronByIncoming(boolean disableAnimation){
-    super.lightUpChevronByIncoming(disableAnimation);
-    if(incomingPeriod == -1) return;
-
-    if((incomingPeriod >= (StargateClassicSpinHelper.getAnimationDuration(270))) && !disableAnimation) {
-      addSymbolToAddressManual(SymbolUniverseEnum.G37, null);
-
-      addTask(new ScheduledTask(EnumScheduledTask.LIGHT_UP_CHEVRONS, 5));
-      sendSignal(null, "stargate_incoming_wormhole", new Object[]{incomingAddressSize});
-      playSoundEvent(StargateSoundEventEnum.INCOMING);
-      resetIncomingAnimation();
-      isIncoming = false;
-    }
-    else{
-      if (incomingLastChevronLightUp > 1) {
-        stargateState = EnumStargateState.INCOMING;
-        sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
-        sendSignal(null, "stargate_incoming_wormhole", new Object[]{incomingAddressSize});
-        playSoundEvent(StargateSoundEventEnum.INCOMING);
-        isIncoming = false;
-        resetIncomingAnimation();
-      }
-      else if(isIncoming)
-        stargateState = EnumStargateState.INCOMING;
-    }
-    markDirty();
-  }
-
-  @Override
-  protected boolean onGateMergeRequested() {
-    return StargateUniverseMergeHelper.INSTANCE.checkBlocks(world, pos, facing);
-  }
-
-  @Override
-  protected void addFailedTaskAndPlaySound() {
-    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, 20));
-    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAILED_SOUND, 20));
-  }
-
-  @Override
-  protected int getMaxChevrons() {
-    return 9;
-  }
-
-  @Override
-  protected int getOpenSoundDelay() {
-    return super.getOpenSoundDelay() + 10;
-  }
-
-  public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.AGED);
-
-  @Override
-  public EnumSet<BiomeOverlayEnum> getSupportedOverlays() {
-    return SUPPORTED_OVERLAYS;
-  }
-
-  // --------------------------------------------------------------------------------
-  // Scheduled tasks
-
-  @Override
-  public void executeTask(EnumScheduledTask scheduledTask, NBTTagCompound customData) {
-    boolean onlySpin = false;
-    if(customData != null && customData.hasKey("onlySpin"))
-      onlySpin = customData.getBoolean("onlySpin");
-    switch (scheduledTask) {
-      case LIGHT_UP_CHEVRONS:
-        sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
-        break;
-      case STARGATE_DIAL_NEXT:
-        if (customData != null && customData.hasKey("symbolToDial"))
-          super.addSymbolToAddressManual(getSymbolType().valueOfSymbol(customData.getInteger("symbolToDial")), ringSpinContext);
-        else
-          addSymbolToAddressManual(addressPosition >= maxSymbols ? getSymbolType().getOrigin() : addressToDial.get(addressPosition), null);
-
+        this.addressToDial = address;
+        this.symbolsToDialCount = symbolCount;
+        this.addressPosition = 0;
+        stargateState = DIALING;
+        AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_UNIVERSE_DIAL_START);
+        sendRenderingUpdate(StargateRendererActionState.EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
+        targetRingSymbol = getNextSymbol(false);
+        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 35, null));
         addressPosition++;
-
-        break;
-
-      case STARGATE_SPIN_FINISHED:
-        if(fastDialing)
-          return;
-
-        if(onlySpin && stargateState.dialingComputer()){
-          stargateState = EnumStargateState.IDLE;
-          sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 9, true);
-          markDirty();
-          break;
-        }
-        if ((targetRingSymbol != TOP_CHEVRON)) {
-          if (canAddSymbol(targetRingSymbol) && !abortDialing) {
-            addSymbolToAddress(targetRingSymbol);
-            activateSymbolServer(targetRingSymbol);
-
-            if (stargateState.dialingComputer()) {
-              stargateState = EnumStargateState.IDLE;
-              addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_FINISHED, 10));
-            } else {
-
-              if (!stargateWillLock(targetRingSymbol)){
-                  addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 14));
-              }
-              else {
-                attemptOpenAndFail();
-              }
-            }
-          } else {
-            dialingFailed(abortDialing ? StargateOpenResult.ABORTED : StargateOpenResult.ADDRESS_MALFORMED);
-
-            stargateState = EnumStargateState.IDLE;
-            abortDialing = false;
-          }
-        }
-        else if(abortDialing){
-          dialingFailed(StargateOpenResult.ABORTED);
-
-          stargateState = EnumStargateState.IDLE;
-          abortDialing = false;
-        }
-        else{
-          stargateState = EnumStargateState.IDLE;
-        }
-
+        ringSpinContext = null;
         markDirty();
-        break;
-
-      case STARGATE_FAILED_SOUND:
-        playSoundEvent(StargateSoundEventEnum.DIAL_FAILED);
-        fastDialing = false;
-        markDirty();
-        break;
-
-      case STARGATE_DIAL_FINISHED:
-        sendSignal(ringSpinContext, "stargate_spin_chevron_engaged", new Object[]{dialedAddress.size(), stargateWillLock(targetRingSymbol), targetRingSymbol.getEnglishName()});
-        break;
-
-      default:
-        break;
     }
 
-    super.executeTask(scheduledTask, customData);
-  }
-
-  private SymbolInterface getNextSymbol(){
-    return (addressPosition >= maxSymbols ? getSymbolType().getOrigin() : addressToDial.get(addressPosition));
-  }
-
-  private void activateSymbolServer(SymbolInterface symbol) {
-    AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.STARGATE_UNIVERSE_ACTIVATE_SYMBOL, new StargateUniverseSymbolState((SymbolUniverseEnum) symbol, false)), targetPoint);
-  }
-
-  // --------------------------------------------------------------------------------
-  // States
-
-  @Override
-  public State createState(StateTypeEnum stateType) {
-    switch (stateType) {
-      case STARGATE_UNIVERSE_ACTIVATE_SYMBOL:
-        return new StargateUniverseSymbolState();
-
-      default:
-        return super.createState(stateType);
+    /**
+     * get next symbol from addressToDial
+     *
+     * @param addOne - should add 1 to addressPosition?
+     * @return SymbolInterface
+     */
+    public SymbolInterface getNextSymbol(boolean addOne) {
+        if (addOne) addressPosition++;
+        markDirty();
+        if (addressPosition >= symbolsToDialCount)
+            return getSymbolType().getOrigin(); // return origin when symbols is last one
+        return addressToDial.get(addressPosition);
     }
-  }
 
-  @Override
-  public void setState(StateTypeEnum stateType, State state) {
-    if(getRendererStateClient() != null) {
-      switch (stateType) {
-        case STARGATE_UNIVERSE_ACTIVATE_SYMBOL:
-          StargateUniverseSymbolState symbolState = (StargateUniverseSymbolState) state;
+    /**
+     * abort dialing
+     */
+    @Override
+    public boolean abortDialingSequence() {
+        if (stargateState.incoming()) return false;
+        if (isIncoming) return false;
+        if (stargateState.dialingComputer() || stargateState.idle() || stargateState.dialing()) {
+            abortingDialing = true;
+            currentRingSymbol = targetRingSymbol;
+            markDirty();
+            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_RESET, 5, null));
+            spinStartTime = world.getTotalWorldTime() + 3000;
+            isSpinning = false;
+            AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, true, 0)), targetPoint);
+            addFailedTaskAndPlaySound();
+            playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
+            // remove last spinning finished task
+            if (lastSpinFinished != null && scheduledTasks.contains(lastSpinFinished))
+                removeTask(lastSpinFinished);
+            if (!isIncoming) disconnectGate();
+            stargateState = FAILING;
+            markDirty();
+            return true;
+        }
+        return false;
+    }
 
-          if (symbolState.dimAll) getRendererStateClient().clearSymbols(world.getTotalWorldTime());
-          else getRendererStateClient().activateSymbol(world.getTotalWorldTime(), symbolState.symbol);
+    /**
+     * fail the gate
+     */
+    @Override
+    public void failGate() {
+        super.failGate();
+        if (!abortingDialing && targetRingSymbol != TOP_CHEVRON)
+            addSymbolToAddressManual(TOP_CHEVRON, null);
+    }
 
-          break;
+    /**
+     * disconnect gate
+     */
+    @Override
+    protected void disconnectGate() {
+        super.disconnectGate();
+        if(!abortingDialing)
+            addSymbolToAddressManual(TOP_CHEVRON, null);
+    }
 
-        case RENDERER_UPDATE:
-          StargateRendererActionState gateActionState = (StargateRendererActionState) state;
+    /**
+     * Add symbol by spinning the gate
+     * @param targetSymbol - symbol to dial
+     * @param context - null if dialing with dialer
+     */
+    @Override
+    public void addSymbolToAddressManual(SymbolInterface targetSymbol, Object context) {
+        if(targetSymbol != getSymbolType().getTopSymbol()) {
+            if (context != null) stargateState = EnumStargateState.DIALING_COMPUTER;
+            else stargateState = DIALING;
+        }
 
-          switch (gateActionState.action) {
-            case CLEAR_CHEVRONS:
-              getRendererStateClient().clearSymbols(world.getTotalWorldTime());
-              break;
+        if (dialedAddress.size() == 0 && targetSymbol != TOP_CHEVRON && stargateState.dialingComputer()) {
+            AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_UNIVERSE_DIAL_START);
+            sendRenderingUpdate(StargateRendererActionState.EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
+            targetRingSymbol = targetSymbol;
+            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 35, null));
+            ringSpinContext = context;
+        } else super.addSymbolToAddressManual(targetSymbol, context);
+
+        if(targetSymbol == getSymbolType().getTopSymbol())
+            stargateState = FAILING;
+        markDirty();
+    }
+
+    /**
+     * get energy required to dial specific address
+     * @param targetGatePos - position of target gate
+     * @return energy
+     */
+    @Override
+    protected StargateEnergyRequired getEnergyRequiredToDial(StargatePos targetGatePos) {
+        return super.getEnergyRequiredToDial(targetGatePos).mul(AunisConfig.powerConfig.stargateUniverseEnergyMul);
+    }
+
+    @Override
+    public SymbolTypeEnum getSymbolType() {
+        return SymbolTypeEnum.UNIVERSE;
+    }
+
+    @Override
+    protected int getMaxChevrons() {
+        return 9;
+    }
+
+    @Override
+    protected int getOpenSoundDelay() {
+        return super.getOpenSoundDelay() + 10;
+    }
+
+    private void activateSymbolServer(SymbolInterface symbol) {
+        AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.STARGATE_UNIVERSE_ACTIVATE_SYMBOL, new StargateUniverseSymbolState((SymbolUniverseEnum) symbol, false)), targetPoint);
+    }
+
+    @Override
+    protected void addSymbolToAddress(SymbolInterface symbol) {
+        activateSymbolServer(symbol);
+        if(isFastDialing)
+            playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
+        super.addSymbolToAddress(symbol);
+    }
+
+    // --------------------------------------------------------------------------------
+    // Scheduled tasks
+
+    @Override
+    public void executeTask(EnumScheduledTask scheduledTask, NBTTagCompound customData) {
+        boolean onlySpin = false;
+        if (customData != null && customData.hasKey("onlySpin"))
+            onlySpin = customData.getBoolean("onlySpin");
+        switch (scheduledTask) {
+            case LIGHT_UP_CHEVRONS:
+                sendRenderingUpdate(StargateRendererActionState.EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
+                break;
+            case STARGATE_DIAL_NEXT:
+                if (stargateState.dialingComputer() && targetRingSymbol != getSymbolType().getTopSymbol())
+                    super.addSymbolToAddressManual(targetRingSymbol, ringSpinContext);
+                else if (targetRingSymbol != getSymbolType().getTopSymbol())
+                    addSymbolToAddressManual(getNextSymbol(true), null);
+                break;
+            case STARGATE_RESET:
+                addSymbolToAddressManual(getSymbolType().getTopSymbol(), null);
+                abortingDialing = false;
+                break;
+
+            case STARGATE_SPIN_FINISHED:
+                if (onlySpin && stargateState.dialingComputer()) {
+                    stargateState = EnumStargateState.IDLE;
+                    sendRenderingUpdate(StargateRendererActionState.EnumGateAction.CLEAR_CHEVRONS, 9, true);
+                    markDirty();
+                    break;
+                }
+                if ((targetRingSymbol != TOP_CHEVRON)) {
+                    if (canAddSymbol(targetRingSymbol)) {
+                        addSymbolToAddress(targetRingSymbol);
+
+                        if (stargateState.dialingComputer()) {
+                            if(!abortingDialing) stargateState = EnumStargateState.IDLE;
+                            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_FINISHED, 10));
+                        } else {
+                            if (!stargateWillLock(targetRingSymbol))
+                                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 14));
+                            else
+                                attemptOpenAndFail();
+                        }
+                    } else {
+                        dialingFailed(StargateOpenResult.ADDRESS_MALFORMED);
+                        stargateState = EnumStargateState.IDLE;
+                    }
+                } else {
+                    dialingFailed(StargateOpenResult.ABORTED);
+                    stargateState = EnumStargateState.IDLE;
+                    abortingDialing = false;
+                }
+                markDirty();
+                break;
+
+            case STARGATE_FAILED_SOUND:
+                playSoundEvent(StargateSoundEventEnum.DIAL_FAILED);
+                markDirty();
+                break;
+
+            case STARGATE_DIAL_FINISHED:
+                sendSignal(ringSpinContext, "stargate_spin_chevron_engaged", new Object[]{dialedAddress.size(), stargateWillLock(targetRingSymbol), targetRingSymbol.getEnglishName()});
+                break;
 
             default:
-              break;
-          }
-
-          break;
-
-        default:
-          break;
-      }
+                break;
+        }
+        markDirty();
+        super.executeTask(scheduledTask, customData);
     }
 
-    super.setState(stateType, state);
-  }
+    // --------------------------------------------------------------------------------
+    // States
 
-  // --------------------------------------------------------------------------------
-  // NBT
+    @Override
+    public State createState(StateTypeEnum stateType) {
+        switch (stateType) {
+            case STARGATE_UNIVERSE_ACTIVATE_SYMBOL:
+                return new StargateUniverseSymbolState();
 
-  @Override
-  public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-    compound.setInteger("addressPosition", addressPosition);
-
-    if (addressToDial != null) compound.setTag("addressToDial", addressToDial.serializeNBT());
-
-    compound.setInteger("maxSymbols", maxSymbols);
-    compound.setBoolean("abortDialing", abortDialing);
-    compound.setBoolean("dialingNearby", dialingNearby);
-
-    compound.setLong("actionsCooldown", actionsCooldown);
-
-    return super.writeToNBT(compound);
-  }
-
-  @Override
-  public void readFromNBT(NBTTagCompound compound) {
-    super.readFromNBT(compound);
-
-    addressPosition = compound.getInteger("addressPosition");
-    addressToDial = new StargateAddress(compound.getCompoundTag("addressToDial"));
-    maxSymbols = compound.getInteger("maxSymbols");
-    abortDialing = compound.getBoolean("abortDialing");
-    dialingNearby = compound.getBoolean("dialingNearby");
-
-    actionsCooldown = compound.getLong("actionsCooldown");
-  }
-
-
-  // --------------------------------------------------------------------------------
-  // Stargate Network
-
-  @Override
-  public SymbolTypeEnum getSymbolType() {
-    return SymbolTypeEnum.UNIVERSE;
-  }
-
-  @Override
-  protected StargateEnergyRequired getEnergyRequiredToDial(StargatePos targetGatePos) {
-    return super.getEnergyRequiredToDial(targetGatePos).mul(AunisConfig.powerConfig.stargateUniverseEnergyMul);
-  }
-
-  @Override
-  protected boolean checkAddressLength(StargateAddressDynamic address, StargatePos targetGatePosition) {
-    return super.checkAddressLength(address, targetGatePosition);
-  }
-
-  // --------------------------------------------------------------------------------
-  // Teleportation
-
-  @Override
-  protected AunisAxisAlignedBB getHorizonTeleportBox(boolean server) {
-    return StargateSizeEnum.SMALL.teleportBox;
-  }
-
-  @Override
-  public BlockPos getGateCenterPos() {
-    return pos.up(4);
-  }
-
-  @Override
-  protected AunisAxisAlignedBB getHorizonKillingBox(boolean server) {
-    return StargateSizeEnum.SMALL.killingBox;
-  }
-
-  @Override
-  protected int getHorizonSegmentCount(boolean server) {
-    return StargateSizeEnum.SMALL.horizonSegmentCount;
-  }
-
-  @Override
-  protected List<AunisAxisAlignedBB> getGateVaporizingBoxes(boolean server) {
-    return StargateSizeEnum.SMALL.gateVaporizingBoxes;
-  }
-
-
-  // --------------------------------------------------------------------------------
-  // Sounds
-
-  @Override
-  protected SoundPositionedEnum getPositionedSound(StargateSoundPositionedEnum soundEnum) {
-    switch (soundEnum) {
-      case GATE_RING_ROLL:
-        return SoundPositionedEnum.UNIVERSE_RING_ROLL;
-      case GATE_RING_ROLL_START:
-        return SoundPositionedEnum.UNIVERSE_RING_ROLL_START;
+            default:
+                return super.createState(stateType);
+        }
     }
 
-    return null;
-  }
+    @Override
+    public void setState(StateTypeEnum stateType, State state) {
+        if (getRendererStateClient() != null) {
+            switch (stateType) {
+                case STARGATE_UNIVERSE_ACTIVATE_SYMBOL:
+                    StargateUniverseSymbolState symbolState = (StargateUniverseSymbolState) state;
 
-  @Override
-  protected SoundEventEnum getSoundEvent(StargateSoundEventEnum soundEnum) {
-    switch (soundEnum) {
-      case OPEN:
-        return SoundEventEnum.GATE_UNIVERSE_OPEN;
-      case CLOSE:
-        return SoundEventEnum.GATE_UNIVERSE_CLOSE;
-      case DIAL_FAILED:
-        return SoundEventEnum.GATE_UNIVERSE_DIAL_FAILED;
-      case INCOMING:
-        return SoundEventEnum.GATE_UNIVERSE_DIAL_START;
-      case CHEVRON_OPEN:
-        return SoundEventEnum.GATE_MILKYWAY_CHEVRON_OPEN;
-      case CHEVRON_SHUT:
-        return targetRingSymbol == TOP_CHEVRON ? SoundEventEnum.GATE_UNIVERSE_CHEVRON_TOP_LOCK : SoundEventEnum.GATE_UNIVERSE_CHEVRON_LOCK;
+                    if (symbolState.dimAll) getRendererStateClient().clearSymbols(world.getTotalWorldTime());
+                    else getRendererStateClient().activateSymbol(world.getTotalWorldTime(), symbolState.symbol);
+
+                    break;
+
+                case RENDERER_UPDATE:
+                    StargateRendererActionState gateActionState = (StargateRendererActionState) state;
+
+                    switch (gateActionState.action) {
+                        case CLEAR_CHEVRONS:
+                            getRendererStateClient().clearSymbols(world.getTotalWorldTime());
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        super.setState(stateType, state);
     }
 
-    return null;
-  }
+    // --------------------------------------------------------------------------------
+    // Incoming animation
+
+    @Override
+    public void incomingWormhole(int dialedAddressSize) {
+        startIncomingAnimation(dialedAddressSize, 10);
+        super.incomingWormhole(9);
+    }
+
+    @Override
+    public void incomingWormhole(int dialedAddressSize, int time) {
+        time = time * dialedAddressSize;
+        int period = time - 2000;
+        if (period < 0) period = 0;
+        startIncomingAnimation(dialedAddressSize, period);
+        super.incomingWormhole(9, false);
+    }
+
+    @Override
+    public void startIncomingAnimation(int addressSize, int period) {
+        super.startIncomingAnimation(addressSize, period);
+        this.lightUpChevronByIncoming(!AunisConfig.dialingConfig.allowIncomingAnimations);
+    }
+
+    @Override
+    public void lightUpChevronByIncoming(boolean disableAnimation) {
+        super.lightUpChevronByIncoming(disableAnimation);
+        if (incomingPeriod == -1) return;
+        if (incomingPeriod >= 25) { //(StargateClassicSpinHelper.getAnimationDuration(270))) && !disableAnimation) {
+            //addSymbolToAddressManual(SymbolUniverseEnum.G37, null);
+            spinRing(1, false, true, incomingPeriod);
+            addTask(new ScheduledTask(EnumScheduledTask.LIGHT_UP_CHEVRONS, 5));
+            sendSignal(null, "stargate_incoming_wormhole", new Object[]{incomingAddressSize});
+            playSoundEvent(StargateSoundEventEnum.INCOMING);
+            resetIncomingAnimation();
+            isIncoming = false;
+        } else {
+            if (incomingLastChevronLightUp > 1) {
+                stargateState = EnumStargateState.INCOMING;
+                sendRenderingUpdate(StargateRendererActionState.EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
+                sendSignal(null, "stargate_incoming_wormhole", new Object[]{incomingAddressSize});
+                playSoundEvent(StargateSoundEventEnum.INCOMING);
+                isIncoming = false;
+                resetIncomingAnimation();
+            } else if (isIncoming)
+                stargateState = EnumStargateState.INCOMING;
+        }
+        markDirty();
+    }
+
+    // --------------------------------------------------------------------------------
+    // Overlays
+
+    @Override
+    public EnumSet<BiomeOverlayEnum> getSupportedOverlays() {
+        return SUPPORTED_OVERLAYS;
+    }
+
+    // --------------------------------------------------------------------------------
+    // Sounds
+
+    @Nullable
+    @Override
+    protected SoundPositionedEnum getPositionedSound(StargateSoundPositionedEnum soundEnum) {
+        switch (soundEnum) {
+            case GATE_RING_ROLL:
+                return SoundPositionedEnum.UNIVERSE_RING_ROLL;
+            case GATE_RING_ROLL_START:
+                return SoundPositionedEnum.UNIVERSE_RING_ROLL_START;
+        }
+
+        return null;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEventEnum getSoundEvent(StargateSoundEventEnum soundEnum) {
+        switch (soundEnum) {
+            case OPEN:
+                return SoundEventEnum.GATE_UNIVERSE_OPEN;
+            case CLOSE:
+                return SoundEventEnum.GATE_UNIVERSE_CLOSE;
+            case DIAL_FAILED:
+                return SoundEventEnum.GATE_UNIVERSE_DIAL_FAILED;
+            case INCOMING:
+                return SoundEventEnum.GATE_UNIVERSE_DIAL_START;
+            case CHEVRON_SHUT:
+                return targetRingSymbol == TOP_CHEVRON ? SoundEventEnum.GATE_UNIVERSE_CHEVRON_TOP_LOCK : SoundEventEnum.GATE_UNIVERSE_CHEVRON_LOCK;
+        }
+
+        return null;
+    }
+
+    // --------------------------------------------------------------------------------
+    // Teleportation
+
+    @Override
+    protected AunisAxisAlignedBB getHorizonTeleportBox(boolean server) {
+        return defaultStargateSize.teleportBox;
+    }
+
+    @Override
+    public BlockPos getGateCenterPos() {
+        return pos.up(4);
+    }
+
+    @Override
+    protected AunisAxisAlignedBB getHorizonKillingBox(boolean server) {
+        return defaultStargateSize.killingBox;
+    }
+
+    @Override
+    protected int getHorizonSegmentCount(boolean server) {
+        return defaultStargateSize.horizonSegmentCount;
+    }
+
+    @Override
+    protected List<AunisAxisAlignedBB> getGateVaporizingBoxes(boolean server) {
+        return defaultStargateSize.gateVaporizingBoxes;
+    }
+
+    // --------------------------------------------------------------------------------
+    // Merging
+
+    @Override
+    public StargateAbstractMergeHelper getMergeHelper() {
+        return StargateUniverseMergeHelper.INSTANCE;
+    }
+
+    @Override
+    protected boolean onGateMergeRequested() {
+        return StargateUniverseMergeHelper.INSTANCE.checkBlocks(world, pos, facing);
+    }
+
+    @Override
+    public void setLinkedDHD(BlockPos dhdPos, int linkId) {}
+
+    @Nonnull
+    @Override
+    protected StargateSizeEnum getStargateSize() {
+        return defaultStargateSize;
+    }
 
 
-  // --------------------------------------------------------------------------------
-  // Merging
+    // --------------------------------------------------------------------------------
+    // Renderer states
 
-  @Override
-  public StargateAbstractMergeHelper getMergeHelper() {
-    return StargateUniverseMergeHelper.INSTANCE;
-  }
+    @Override
+    protected StargateClassicRendererState.StargateClassicRendererStateBuilder getRendererStateServer() {
+        return new StargateUniverseRendererState.StargateUniverseRendererStateBuilder(super.getRendererStateServer())
+                .setDialedAddress((stargateState.initiating() || stargateState.dialing()) ? dialedAddress : new StargateAddressDynamic(getSymbolType()))
+                .setActiveChevrons(stargateState.idle() ? 0 : 9);
+    }
+
+    @Override
+    protected StargateUniverseRendererState createRendererStateClient() {
+        return new StargateUniverseRendererState();
+    }
+
+    @Override
+    public StargateUniverseRendererState getRendererStateClient() {
+        return (StargateUniverseRendererState) super.getRendererStateClient();
+    }
+
+    @Override
+    public int getSupportedCapacitors() {
+        return AunisConfig.powerConfig.universeCapacitors;
+    }
 
 
-  // --------------------------------------------------------------------------------
-  // Renderer states
+    // --------------------------------------------------------------------------------
+    // NBTs
 
-  @Override
-  protected StargateClassicRendererStateBuilder getRendererStateServer() {
-    return new StargateUniverseRendererStateBuilder(super.getRendererStateServer()).setDialedAddress((stargateState.initiating() || stargateState.dialing()) ? dialedAddress : new StargateAddressDynamic(getSymbolType())).setActiveChevrons(stargateState.idle() ? 0 : 9);
-  }
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        if (addressToDial != null) compound.setTag("addressToDial", addressToDial.serializeNBT());
+        compound.setInteger("symbolsToDialCount", symbolsToDialCount);
+        compound.setInteger("addressPosition", addressPosition);
 
-  @Override
-  protected StargateUniverseRendererState createRendererStateClient() {
-    return new StargateUniverseRendererState();
-  }
+        return super.writeToNBT(compound);
+    }
 
-  @Override
-  public StargateUniverseRendererState getRendererStateClient() {
-    return (StargateUniverseRendererState) super.getRendererStateClient();
-  }
+    @Override
+    public void readFromNBT(NBTTagCompound compound) {
+        super.readFromNBT(compound);
 
-  @Override
-  public int getSupportedCapacitors() {
-    return AunisConfig.powerConfig.universeCapacitors;
-  }
+        addressToDial = new StargateAddress(compound.getCompoundTag("addressToDial"));
+        addressPosition = compound.getInteger("addressPosition");
+        symbolsToDialCount = compound.getInteger("symbolsToDialCount");
+    }
 }

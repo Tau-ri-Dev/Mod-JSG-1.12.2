@@ -51,9 +51,7 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 	G33(33, "33.obj"),
 	G34(34, "34.obj"),
 	G35(35, "35.obj"),
-	G36(36, "36.obj"),
-
-	G37(37, "36.obj");
+	G36(36, "36.obj");
 	
 	
 	public static final int ANGLE_PER_SECTION = 8;
@@ -164,7 +162,7 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 	}
 	public static float getAngleByAngIndex(int index){
 		if(index < 0) index = 0;
-		if(index > 38) index = 38;
+		if(index > 36) index = 36;
 		for(SymbolUniverseEnum symbol : values()){
 			if(symbol.angleIndex == index) {
 				return symbol.angle;
@@ -180,7 +178,7 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 		int id = 0;
 		do { 
 			id = random.nextInt(36) + 1;
-		} while (id == getOrigin().getId() || id == G37.getId());
+		} while (id == getOrigin().getId());
 		
 		return valueOf(id);
 	}

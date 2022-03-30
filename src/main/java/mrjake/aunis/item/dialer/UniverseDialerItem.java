@@ -224,7 +224,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                 try {
 
                                     addrToBytes(gateTile.getDialedAddress(), compound, "dialedAddress");
-                                    addrToBytes(((StargateUniverseBaseTile) gateTile).addressToDial, compound, "toDialAddress");
+                                    addrToBytes(((StargateUniverseBaseTile) gateTile).getAddressToDial(), compound, "toDialAddress");
                                     compound.setInteger("gateStatus", gateTile.getStargateState().id);
 
                                     for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet()) {
@@ -357,7 +357,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                     switch (gateTile.getStargateState()) {
                         case IDLE:
                             int maxSymbols = SymbolUniverseEnum.getMaxSymbolsDisplay(selectedCompound.getBoolean("hasUpgrade"));
-                            gateTile.dial(new StargateAddress(selectedCompound), maxSymbols, mode == UniverseDialerMode.NEARBY);
+                            gateTile.dialAddress(new StargateAddress(selectedCompound), maxSymbols);
                             AunisSoundHelper.playSoundEventClientSide(world, player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_START_DIAL);
                             break;
 
@@ -371,7 +371,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                         default:
                             if (gateTile.getStargateState() == EnumStargateState.DIALING) {
-                                gateTile.abort();
+                                gateTile.abortDialingSequence();
                                 player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.aborting"), true);
                                 break;
                             }

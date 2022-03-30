@@ -77,7 +77,6 @@ import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.PHYSICAL_IR
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.SHIELD_IRIS_ANIMATION_LENGTH;
 import static mrjake.aunis.stargate.EnumSpinDirection.CLOCKWISE;
 import static mrjake.aunis.stargate.EnumSpinDirection.COUNTER_CLOCKWISE;
-import static mrjake.aunis.stargate.network.SymbolUniverseEnum.G37;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
 /**
@@ -156,15 +155,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         this.isFinalActive = true;
     }
 
-    public void abortDialingSequence(int type) {
-        //todo(Mine): Fix aborting on uni gates and remove this if statement
-        if (stargateState.incoming()) return;
-        if (isIncoming) return;
-        if (this instanceof StargateUniverseBaseTile) {
-            ((StargateUniverseBaseTile) this).abort(true);
-            return;
-        }
-
+    public boolean abortDialingSequence() {
+        if (stargateState.incoming()) return false;
+        if (isIncoming) return false;
         if (stargateState.dialingComputer() || stargateState.idle() || stargateState.dialing()) {
             spinStartTime = world.getTotalWorldTime() + 3000;
             isSpinning = false;
@@ -176,13 +169,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 removeTask(lastSpinFinished);
             failGate();
             if (!isIncoming) disconnectGate();
-            if (type == 2 && this instanceof StargateUniverseBaseTile) {
-                addSymbolToAddressManual(G37, null);
-                addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, 5));
-            }
             markDirty();
-            if (type == 1) abortDialingSequence(2);
+            return true;
         }
+        return false;
     }
 
 
@@ -289,7 +279,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         isIncoming = true;
         sendRenderingUpdate(EnumGateAction.CLEAR_CHEVRONS, 9, true);
         if (stargateState == EnumStargateState.DIALING_COMPUTER)
-            abortDialingSequence(1);
+            abortDialingSequence();
 
         markDirty();
     }
@@ -1036,79 +1026,47 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         boolean moveOnly = targetRingSymbol == currentRingSymbol;
         int plusRounds = 0;
 
+        spinDirection = spinDirection.opposite();
+        float distance = spinDirection.getDistance(currentRingSymbol, targetRingSymbol);
+        if (moveOnly) {
+            distance = 360;
+            plusRounds += 1;
+        }
 
-        if (moveOnly && targetSymbol instanceof SymbolUniverseEnum && !targetSymbol.equals(G37)) {
-            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 0));
-            doIncomingAnimation(10, true);
-        } else if (targetSymbol instanceof SymbolUniverseEnum && targetSymbol.equals(G37)) {
-            spinDirection = spinDirection.opposite();
-
-            float distance = 360;
-
-            int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
-            doIncomingAnimation(duration, true);
-
-            AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, 0)), targetPoint);
-            lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 5);
-            addTask(lastSpinFinished);
-            addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, soundSpinWait));
-            playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL_START, true);
-
-            targetRingSymbol = TOP_CHEVRON;
-
-            isSpinning = true;
-            spinStartTime = world.getTotalWorldTime();
-
-            ringSpinContext = null;
-            markDirty();
-        } else {
-            spinDirection = spinDirection.opposite();
-
-            float distance = spinDirection.getDistance(currentRingSymbol, targetRingSymbol);
-            if (moveOnly) {
-                distance = 360;
+        if (!AunisConfig.dialingConfig.fasterMWGateDial && targetRingSymbol != SymbolUniverseEnum.getTopSymbol()) {
+            if (distance < 90) {
+                distance += 360;
                 plusRounds += 1;
             }
-
-            if (!AunisConfig.dialingConfig.fasterMWGateDial) {
-                if (distance < 90) {
+            if (distance < 270 && AunisConfig.dialingConfig.allowIncomingAnimations) {
+                if (targetRingSymbol == targetRingSymbol.getSymbolType().getOrigin()) {
                     distance += 360;
                     plusRounds += 1;
                 }
-                if (distance < 270 && AunisConfig.dialingConfig.allowIncomingAnimations) {
-                    if (this instanceof StargateMilkyWayBaseTile && targetRingSymbol == SymbolMilkyWayEnum.getOrigin()) {
-                        distance += 360;
-                        plusRounds += 1;
-                    }
-                    if (this instanceof StargateUniverseBaseTile && targetRingSymbol == SymbolUniverseEnum.getOrigin()) {
-                        distance += 360;
-                        plusRounds += 1;
-                    }
-                }
-            } else if (distance > 180) {
-                spinDirection = spinDirection.opposite();
-                distance = spinDirection.getDistance(currentRingSymbol, targetRingSymbol);
-                plusRounds = 0;
             }
-
-            int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
-            doIncomingAnimation(duration, true);
-
-            AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, plusRounds)), targetPoint);
-            lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 5);
-            addTask(lastSpinFinished);
-            addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, soundSpinWait));
-            playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL_START, true);
-
-            isSpinning = true;
-            spinStartTime = world.getTotalWorldTime();
-
-            ringSpinContext = context;
-            if (context != null)
-                sendSignal(context, "stargate_spin_start", new Object[]{dialedAddress.size(), stargateWillLock(targetRingSymbol), targetSymbol.getEnglishName()});
-
-            markDirty();
+        } else if (distance > 180) {
+            spinDirection = spinDirection.opposite();
+            distance = spinDirection.getDistance(currentRingSymbol, targetRingSymbol);
+            plusRounds = 0;
         }
+
+        int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
+        doIncomingAnimation(duration, true);
+
+        AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, plusRounds)), targetPoint);
+        lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 5);
+        addTask(lastSpinFinished);
+        addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, soundSpinWait));
+        playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL_START, true);
+
+        isSpinning = true;
+        spinStartTime = world.getTotalWorldTime();
+
+        ringSpinContext = context;
+        if (context != null)
+            sendSignal(context, "stargate_spin_start", new Object[]{dialedAddress.size(), stargateWillLock(targetRingSymbol), targetSymbol.getEnglishName()});
+
+        markDirty();
     }
 
     public void spinRing(int rounds, boolean changeState, boolean findNearest, int time) {
@@ -1574,7 +1532,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     @Nonnull
-    abstract StargateSizeEnum getStargateSize();
+    protected abstract StargateSizeEnum getStargateSize();
 
     // -----------------------------------------------------------
 
@@ -1807,7 +1765,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (!isMerged()) return new Object[]{null, "stargate_failure_not_merged", "Stargate is not merged"};
 
         if (stargateState.dialingComputer() || stargateState.idle()) {
-            abortDialingSequence(1);
+            abortDialingSequence();
             markDirty();
             return new Object[]{null, "stargate_aborting", "Aborting dialing"};
         }

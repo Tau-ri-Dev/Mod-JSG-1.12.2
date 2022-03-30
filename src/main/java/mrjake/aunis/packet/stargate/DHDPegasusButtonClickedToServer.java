@@ -83,7 +83,7 @@ public class DHDPegasusButtonClickedToServer extends PositionedPacket {
 							player.sendStatusMessage(new TextComponentTranslation("tile.aunis.dhd_block.incoming_wormhole_warn"), true);
 					}
 					else if(message.force && message.symbol.brb()){
-						gateTile.abortDialingSequence(1);
+						gateTile.abortDialingSequence();
 					}
 					else if ((gateState.idle() || gateState.dialing()) && !gateState.dialingComputer()) {
 						// Gate is idle, some glyph was pressed
