@@ -658,6 +658,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return !beamerActive && super.shouldAutoclose();
     }
 
+    @Override
+    protected boolean canAddSymbolInternal(SymbolInterface symbol) {
+        if(isFinalActive) return false;
+        return super.canAddSymbolInternal(symbol);
+    }
+
     // ------------------------------------------------------------------------
     // NBT
 
