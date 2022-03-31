@@ -35,6 +35,8 @@ public class AunisMainMenu extends GuiMainMenu {
     // ------------------------------------------
     // DEFINE VARIABLES
 
+    protected static final String WIKI_URL = "https://aunis.cz/wiki/";
+
     // ---------------------------------------------------
     // VERSION
     protected static final String VERSION = Aunis.Version.replace("1.12.2-", "");
@@ -744,7 +746,7 @@ public class AunisMainMenu extends GuiMainMenu {
                 try {
                     Class<?> oclass = Class.forName("java.awt.Desktop");
                     Object object = oclass.getMethod("getDesktop").invoke((Object) null);
-                    oclass.getMethod("browse", URI.class).invoke(object, new URI("https://github.com/MineDragonCZ/Aunis1/wiki"));
+                    oclass.getMethod("browse", URI.class).invoke(object, new URI(WIKI_URL));
                 } catch (Exception e) {
                     Aunis.logger.debug("Couldn't open link", e);
                 }

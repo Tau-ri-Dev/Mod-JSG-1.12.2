@@ -109,6 +109,30 @@ public class UniverseDialerActionPacketToServer implements IMessage {
 							}
 							
 							break;
+
+						case SET_FAST_DIAL:
+							if (compound.hasKey("linkedGate")) {
+								BlockPos pos = BlockPos.fromLong(compound.getLong("linkedGate"));
+								StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(pos);
+								if(gateTile == null) break;
+								if (gateTile.getStargateState().idle()) {
+									gateTile.setFastDial(!gateTile.getFastDialState());
+									if(gateTile.getFastDialState())
+										player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.fast_dail_true"), true);
+									else
+										player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.fast_dail_false"), true);
+								}
+
+								else {
+									player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.gate_busy"), true);
+								}
+							}
+
+							else {
+								player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.not_linked"), true);
+							}
+
+							break;
 					}
 				}
 			});

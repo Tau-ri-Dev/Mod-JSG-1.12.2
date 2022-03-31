@@ -24,7 +24,7 @@ public class NotebookEntry extends AbstractAddressEntry {
 		for (int i=0; i<maxSymbols; i++) {
 			SymbolInterface symbol = stargateAddress.get(i);	
 			
-			renderSymbol(x, dy, size, size, symbol);
+			renderSymbol(x, dy, size, size, mouseX, mouseY, symbol);
 			x += size;
 		}
 		

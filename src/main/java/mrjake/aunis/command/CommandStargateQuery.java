@@ -78,7 +78,7 @@ public class CommandStargateQuery extends CommandBase {
 					idCheck = Integer.valueOf(args[i].substring(3));
 				}
 				
-				else if (args[i].toLowerCase().startsWith("givepage")) {
+				else if (args[i].toLowerCase().startsWith("givepage=")) {
 					if (args[i].length() > 8) {
 						// quantity given
 						try {

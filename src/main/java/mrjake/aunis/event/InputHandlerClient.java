@@ -325,7 +325,7 @@ public class InputHandlerClient {
 		
 		hand = getHand(AunisItems.UNIVERSE_DIALER);
 		if (hand != null) {
-			Minecraft.getMinecraft().displayGuiScreen(new UniverseEntryChangeGui(hand, player.getHeldItem(hand).getTagCompound()));
+			Minecraft.getMinecraft().displayGuiScreen(new UniverseEntryChangeGui(hand, player.getHeldItem(hand).getTagCompound(), player.world));
 			return;
 		}
 

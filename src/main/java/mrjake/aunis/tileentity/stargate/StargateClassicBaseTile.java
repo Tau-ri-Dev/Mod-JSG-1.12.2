@@ -77,7 +77,6 @@ import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.PHYSICAL_IR
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.SHIELD_IRIS_ANIMATION_LENGTH;
 import static mrjake.aunis.stargate.EnumSpinDirection.CLOCKWISE;
 import static mrjake.aunis.stargate.EnumSpinDirection.COUNTER_CLOCKWISE;
-import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
 /**
  * This class wraps common behavior for the fully-functional Stargates i.e.
@@ -1076,19 +1075,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public void spinRing(int rounds, boolean changeState, boolean findNearest, int time) {
-        spinRing(rounds, changeState, findNearest, time, false);
-    }
-
-    public void spinRing(int rounds, boolean changeState, boolean findNearest, int time, boolean isFastDialing) {
         if(time < 0) time *= -1;
         time -= 20; // time to lock the last chevron
         targetRingSymbol = currentRingSymbol;
         spinDirection = CLOCKWISE;
         if (changeState) stargateState = EnumStargateState.DIALING_COMPUTER;
-        if (this instanceof StargateUniverseBaseTile && !isFastDialing) {
-            sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
-            AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.GATE_UNIVERSE_DIAL_START);
-        }
         if (rounds == 0)
             rounds = 1;
         if (rounds < 0) {

@@ -13,12 +13,19 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import static mrjake.aunis.gui.element.GuiHelper.isPointInRegion;
+import static net.minecraftforge.fml.client.config.GuiUtils.drawHoveringText;
 
 public abstract class AbstractEntry {
 	
@@ -175,7 +182,7 @@ public abstract class AbstractEntry {
 	protected abstract int getMaxNameLength();
 	protected abstract EntryDataTypeEnum getEntryDataType();
 	
-	protected static void renderSymbol(int x, int y, int sizeX, int sizeY, SymbolInterface symbol) {
+	protected static void renderSymbol(int x, int y, int sizeX, int sizeY, int mouseX, int mouseY, SymbolInterface symbol) {
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableBlend();
 		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
@@ -184,6 +191,10 @@ public abstract class AbstractEntry {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource());		
 
 		Gui.drawScaledCustomSizeModalRect(x, y, 0, 0, 256, 256, sizeX, sizeY, 256, 256);
+		if (isPointInRegion(x, y, sizeX, sizeY, mouseX, mouseY)) {
+			List<String> text = Collections.singletonList(symbol.getEnglishName());
+			drawHoveringText(text, mouseX+12, mouseY,  Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, 10, Minecraft.getMinecraft().fontRenderer);
+		}
 		
 		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
 	}

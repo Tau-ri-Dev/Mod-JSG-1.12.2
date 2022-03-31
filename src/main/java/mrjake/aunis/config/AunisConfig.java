@@ -283,6 +283,9 @@ public class AunisConfig {
         })
         public boolean fasterMWGateDial = false;
 
+        @Name("Enable switching between fast dialing")
+        public boolean enableFastDialing = true;
+
     }
 
     public static class IrisConfig {
@@ -588,7 +591,7 @@ public class AunisConfig {
         @Name("Titanium max veins in chunk")
         public int titaniumMaxVeinInChunk = 8;
 
-        @Name("Chance of generating gate in overworld")
+        /*@Name("Chance of generating gate in overworld")
         @RangeInt(min = 0, max = 100)
         @Comment({
                 "Set this to 0 to disable generation of gates in overworld."
@@ -600,7 +603,7 @@ public class AunisConfig {
                 "Set this to 0 to disable generation of gates in nether."
         })
         public int chanceOfGateNether = 1;
-        /*@Name("Chance of generating gate in overworld")
+        @Name("Chance of generating gate in overworld")
         @RangeInt(min = 0, max = 100)
         @Comment({
                 "Set this to 0 to disable generation of gates in overworld."
@@ -688,9 +691,6 @@ public class AunisConfig {
     public static class DevConfig {
         @Name("Enable peg gates with myst pages")
         public boolean pegGatesMyst = false;
-
-        @Name("enableFastDial")
-        public boolean enableFastDial = true;
     }
 
     public static class RecipesConfig {

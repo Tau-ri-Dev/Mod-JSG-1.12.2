@@ -29,7 +29,7 @@ public class UniverseEntry extends AbstractAddressEntry {
 		for (int i=0; i<maxSymbols; i++) {
 			SymbolInterface symbol = stargateAddress.get(i);	
 			
-			renderSymbol(x, dy, width, height, symbol);
+			renderSymbol(x, dy, width, height, mouseX, mouseY, symbol);
 			x += xSpacing;
 		}
 		

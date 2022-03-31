@@ -1,6 +1,7 @@
 package mrjake.aunis.gui.entry;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.base.BetterButton;
 import mrjake.aunis.gui.util.ArrowButton;
 import mrjake.aunis.item.dialer.UniverseDialerActionEnum;
@@ -10,12 +11,15 @@ import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.stargate.network.SymbolUniverseEnum;
+import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.client.config.GuiUtils;
 
@@ -27,12 +31,16 @@ import net.minecraftforge.fml.client.config.GuiUtils;
  */
 public class UniverseEntryChangeGui extends AbstractEntryChangeGui {
 
-	public UniverseEntryChangeGui(EnumHand hand, NBTTagCompound compound) {
+	private World world;
+
+	public UniverseEntryChangeGui(EnumHand hand, NBTTagCompound compound, World world) {
 		super(hand, compound);
+		this.world = world;
 	}
 	
 	protected GuiButton ocButton = null;
 	protected GuiButton abortButton = null;
+	protected GuiButton toggleFastDial = null;
 	@Override
 	public void initGui() {
 		super.initGui();
@@ -50,6 +58,12 @@ public class UniverseEntryChangeGui extends AbstractEntryChangeGui {
 				.setActionCallback(() -> AunisPacketHandler.INSTANCE.sendToServer(new UniverseDialerActionPacketToServer(UniverseDialerActionEnum.ABORT, hand, false)));
 		
 		buttonList.add(abortButton);
+
+		toggleFastDial = new BetterButton(101, 0, 0, 100, 20, new TextComponentTranslation("item.aunis.universe_dialer.toggle_fast_dial").getFormattedText())
+				.setFgColor(GuiUtils.getColorCode('f', true))
+				.setActionCallback(() -> AunisPacketHandler.INSTANCE.sendToServer(new UniverseDialerActionPacketToServer(UniverseDialerActionEnum.SET_FAST_DIAL, hand, false)));
+
+		buttonList.add(toggleFastDial);
 	}
 	
 	@Override
@@ -63,6 +77,12 @@ public class UniverseEntryChangeGui extends AbstractEntryChangeGui {
 			abortButton.visible = mainCompound.hasKey("linkedGate");
 			abortButton.x = dispx-AbstractEntryChangeGui.PADDING + 2;
 			abortButton.y = height-AbstractEntryChangeGui.PADDING-3-20;
+		}
+
+		if(toggleFastDial != null) {
+			toggleFastDial.visible = mainCompound.hasKey("linkedGate") && mainCompound.getBoolean("serverSideEnabledFastDial");
+			toggleFastDial.x = dispx-AbstractEntryChangeGui.PADDING + 2 + 55;
+			toggleFastDial.y = height-AbstractEntryChangeGui.PADDING-3-20;
 		}
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
