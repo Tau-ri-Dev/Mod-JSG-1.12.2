@@ -2,20 +2,21 @@ package mrjake.aunis.gui.entry;
 
 import mrjake.aunis.gui.base.BetterButton;
 import mrjake.aunis.packet.gui.entry.EntryActionEnum;
-import net.minecraft.client.Minecraft;
+import mrjake.aunis.stargate.network.StargateAddress;
+import mrjake.aunis.stargate.network.SymbolInterface;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static mrjake.aunis.gui.element.GuiHelper.isPointInRegion;
 
 /**
  * Class handles universal screen shown when editing Notebook or Universe Dialer
@@ -92,7 +93,7 @@ public abstract class AbstractEntryChangeGui extends GuiScreen {
 				entry.renderAt(dispx, y, mouseX, mouseY, partialTicks);
 			else
 				entry.setLocation(dispx, y);
-			y += entry.getHeight() + getEntryBottomMargin(); // 6;
+			y += entry.getHeight() + getEntryBottomMargin();
 		}
 
 		drawGradientRect(dispx-PADDING, PADDING, dispx+PADDING+guiWidth, PADDING+20, -0x3FEFEFF0, -0x2FEFEFF0);
@@ -213,10 +214,10 @@ public abstract class AbstractEntryChangeGui extends GuiScreen {
 			case MOVE_DOWN:
 				entriesSwitchPlaces(index, index+1);
 				break;
-				
+
 			case REMOVE:
 				entries.remove(index);
-				
+
 				if (entries.size() == 0) {
 					// Close gui
 					this.mc.displayGuiScreen((GuiScreen)null);
@@ -224,16 +225,16 @@ public abstract class AbstractEntryChangeGui extends GuiScreen {
 		                this.mc.setIngameFocus();
 		            }
 				}
-				
+
 				// Synchronize indexes
 				for (int i=index; i<entries.size(); i++) {
 					entries.get(i).index = i;
 				}
-				
+
 				calculateGuiHeight();
 				break;
 				
-			case RENAME:
+			default:
 				break;
 		}
 	}

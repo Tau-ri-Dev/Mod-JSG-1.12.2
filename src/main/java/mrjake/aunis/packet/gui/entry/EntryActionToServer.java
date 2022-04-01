@@ -5,12 +5,17 @@ import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.dialer.UniverseDialerItem;
 import mrjake.aunis.item.dialer.UniverseDialerMode;
 import mrjake.aunis.item.notebook.NotebookItem;
+import mrjake.aunis.stargate.network.StargateAddress;
+import mrjake.aunis.stargate.network.SymbolUniverseEnum;
+import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -126,6 +131,21 @@ public class EntryActionToServer implements IMessage {
 							if (mode == UniverseDialerMode.MEMORY)
 								compound.setByte("selected", (byte) Math.min(message.index, list.tagCount()-1));
 							
+							break;
+
+						case DIAL:
+							UniverseDialerMode mod = UniverseDialerMode.valueOf(compound.getByte("mode"));
+							BlockPos linkedPos = BlockPos.fromLong(compound.getLong(mod.tagPosName));
+							NBTTagList tagList = compound.getTagList(mod.tagListName, NBT.TAG_COMPOUND);
+							NBTTagCompound selectedCompound = tagList.getCompoundTagAt(message.index);
+							int maxSymbols = SymbolUniverseEnum.getMaxSymbolsDisplay(selectedCompound.getBoolean("hasUpgrade"));
+
+							StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
+							if(gateTile == null) break;
+
+							gateTile.dialAddress(new StargateAddress(selectedCompound), maxSymbols);
+							player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.dial_start"), true);
+
 							break;
 					}
 				}

@@ -18,4 +18,8 @@ public abstract class AbstractAddressEntry extends AbstractEntry {
 		this.stargateAddress = addr;
 		this.maxSymbols = maxSymbols;
 	}
+
+	public SymbolTypeEnum getSymbolType() { return symbolType; }
+	public int getMaxSymbols() { return maxSymbols; }
+	public StargateAddress getStargateAddress() { return stargateAddress; }
 }

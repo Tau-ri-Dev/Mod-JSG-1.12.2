@@ -4,5 +4,6 @@ public enum EntryActionEnum {
 	RENAME,
 	MOVE_UP,
 	MOVE_DOWN,
-	REMOVE;
+	REMOVE,
+	DIAL
 }

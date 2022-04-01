@@ -29,7 +29,7 @@ import net.minecraftforge.fml.client.config.GuiUtils;
  * 
  * @author MrJake222
  */
-public class UniverseEntryChangeGui extends AbstractEntryChangeGui {
+public class UniverseEntryChangeGui extends AbstractAddressEntryChangeGui {
 
 	private World world;
 
@@ -119,4 +119,7 @@ public class UniverseEntryChangeGui extends AbstractEntryChangeGui {
 	protected int getEntryBottomMargin() {
 		return 2;
 	}
+
+	@Override
+	public int getAddressWidth(){ return UniverseEntry.ADDRESS_WIDTH; }
 }

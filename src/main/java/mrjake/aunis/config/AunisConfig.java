@@ -405,7 +405,7 @@ public class AunisConfig {
         public boolean animatePegDHDDial = true;
 
         @Name("Enable press sound when dialing with computer")
-        public boolean computerDialSound = true;
+        public boolean computerDialSound = false;
 
         @Name("DHD's max fluid capacity")
         @RangeInt(min = 1)

@@ -15,7 +15,7 @@ import net.minecraftforge.common.util.Constants.NBT;
  * @author MrJake222
  * 
  */
-public class NotebookEntryChangeGui extends AbstractEntryChangeGui {
+public class NotebookEntryChangeGui extends AbstractAddressEntryChangeGui {
 
 	public NotebookEntryChangeGui(EnumHand hand, NBTTagCompound compound) {
 		super(hand, compound);
@@ -49,4 +49,7 @@ public class NotebookEntryChangeGui extends AbstractEntryChangeGui {
 	protected int getEntryBottomMargin() {
 		return 2;
 	}
+
+	@Override
+	public int getAddressWidth(){ return NotebookEntry.ADDRESS_WIDTH; }
 }

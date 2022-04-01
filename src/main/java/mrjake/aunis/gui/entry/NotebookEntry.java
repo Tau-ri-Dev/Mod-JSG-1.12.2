@@ -27,7 +27,6 @@ public class NotebookEntry extends AbstractAddressEntry {
 			renderSymbol(x, dy, size, size, mouseX, mouseY, symbol);
 			x += size;
 		}
-		
 		super.renderAt(dx+ADDRESS_WIDTH+10, dy, mouseX, mouseY, partialTicks);
 	}
 	

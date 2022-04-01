@@ -19,10 +19,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static mrjake.aunis.gui.element.GuiHelper.isPointInRegion;
 import static net.minecraftforge.fml.client.config.GuiUtils.drawHoveringText;
@@ -44,7 +41,10 @@ public abstract class AbstractEntry {
 	
 	protected List<BetterButton> buttons = new ArrayList<>();
 	protected List<GuiTextField> textFields = new ArrayList<>();
-	
+
+	public int entryX;
+	public int entryY;
+
 	public AbstractEntry(Minecraft mc, int index, int maxIndex, EnumHand hand, String name, ActionListener actionListener) {
 		this.mc = mc;
 		this.index = index;
@@ -87,6 +87,8 @@ public abstract class AbstractEntry {
 	}
 	
 	public void renderAt(int dx, int dy, int mouseX, int mouseY, float partialTicks) {
+		entryX = dx;
+		entryY = dy;
 //		dy += getButtonOffset();
 		
 		// Fields		
@@ -177,12 +179,12 @@ public abstract class AbstractEntry {
 		}
 	}
 	
-	protected abstract int getHeight();	
+	protected abstract int getHeight();
 //	protected abstract int getButtonOffset();
 	protected abstract int getMaxNameLength();
 	protected abstract EntryDataTypeEnum getEntryDataType();
 	
-	protected static void renderSymbol(int x, int y, int sizeX, int sizeY, int mouseX, int mouseY, SymbolInterface symbol) {
+	protected void renderSymbol(int x, int y, int sizeX, int sizeY, int mouseX, int mouseY, SymbolInterface symbol) {
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableBlend();
 		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
@@ -191,10 +193,6 @@ public abstract class AbstractEntry {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource());		
 
 		Gui.drawScaledCustomSizeModalRect(x, y, 0, 0, 256, 256, sizeX, sizeY, 256, 256);
-		if (isPointInRegion(x, y, sizeX, sizeY, mouseX, mouseY)) {
-			List<String> text = Collections.singletonList(symbol.getEnglishName());
-			drawHoveringText(text, mouseX+12, mouseY,  Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, 10, Minecraft.getMinecraft().fontRenderer);
-		}
 		
 		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
 	}

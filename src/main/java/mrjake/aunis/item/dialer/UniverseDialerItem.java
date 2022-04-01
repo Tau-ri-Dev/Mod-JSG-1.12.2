@@ -20,6 +20,7 @@ import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import mrjake.aunis.transportrings.TransportRings;
 import mrjake.aunis.util.EnumKeyInterface;
 import mrjake.aunis.util.EnumKeyMap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -358,7 +359,8 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                         case IDLE:
                             int maxSymbols = SymbolUniverseEnum.getMaxSymbolsDisplay(selectedCompound.getBoolean("hasUpgrade"));
                             gateTile.dialAddress(new StargateAddress(selectedCompound), maxSymbols);
-                            AunisSoundHelper.playSoundEventClientSide(world, player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_START_DIAL);
+                            AunisSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_START_DIAL);
+                            player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.dial_start"), true);
                             break;
 
                         case ENGAGED_INITIATING:
@@ -371,9 +373,10 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                         default:
                             if (gateTile.getStargateState() == EnumStargateState.DIALING) {
-                                gateTile.abortDialingSequence();
-                                player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.aborting"), true);
-                                break;
+                                if(gateTile.abortDialingSequence()) {
+                                    player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.aborting"), true);
+                                    break;
+                                }
                             }
                             player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.gate_busy"), true);
                             break;
