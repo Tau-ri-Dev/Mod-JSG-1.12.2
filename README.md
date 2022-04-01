@@ -15,4 +15,4 @@ Checkout our official website: [Aunis.cz](https://aunis.cz)
 
 This is site of fork, original mod can be found: *https://github.com/MrJake222/AUNIS*
 ***
-This site is an official continuation of the originál mod.
+This site is an official continuation of the original mod.
