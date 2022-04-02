@@ -1,6 +1,5 @@
 package mrjake.aunis.sound;
 
-import mrjake.aunis.config.AunisConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound.AttenuationType;
 import net.minecraft.client.audio.PositionedSoundRecord;

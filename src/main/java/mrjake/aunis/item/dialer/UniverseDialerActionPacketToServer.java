@@ -93,10 +93,10 @@ public class UniverseDialerActionPacketToServer implements IMessage {
 							if (compound.hasKey("linkedGate")) {
 								BlockPos pos = BlockPos.fromLong(compound.getLong("linkedGate"));
 								StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(pos);
-								
+								if(gateTile == null) break;
 								if (gateTile.getStargateState() == EnumStargateState.DIALING) {
-									gateTile.abortDialingSequence();
-									player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.aborting"), true);
+									if(gateTile.abortDialingSequence())
+										player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.aborting"), true);
 								}
 								
 								else {

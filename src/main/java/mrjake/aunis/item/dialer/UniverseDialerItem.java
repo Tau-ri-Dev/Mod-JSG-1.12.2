@@ -359,7 +359,6 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                         case IDLE:
                             int maxSymbols = SymbolUniverseEnum.getMaxSymbolsDisplay(selectedCompound.getBoolean("hasUpgrade"));
                             gateTile.dialAddress(new StargateAddress(selectedCompound), maxSymbols);
-                            AunisSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_START_DIAL);
                             player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.dial_start"), true);
                             break;
 

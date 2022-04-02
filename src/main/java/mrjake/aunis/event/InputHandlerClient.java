@@ -10,24 +10,37 @@ import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.dialer.UniverseDialerActionEnum;
 import mrjake.aunis.item.dialer.UniverseDialerActionPacketToServer;
 import mrjake.aunis.item.dialer.UniverseDialerItem;
+import mrjake.aunis.item.dialer.UniverseDialerMode;
 import mrjake.aunis.item.gdo.GDOActionEnum;
 import mrjake.aunis.item.gdo.GDOActionPacketToServer;
 import mrjake.aunis.item.gdo.GDOMode;
 import mrjake.aunis.item.notebook.NotebookActionEnum;
 import mrjake.aunis.item.notebook.NotebookActionPacketToServer;
+import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.sound.SoundPositionedEnum;
+import mrjake.aunis.stargate.EnumStargateState;
+import mrjake.aunis.stargate.StargateClosedReasonEnum;
+import mrjake.aunis.stargate.network.StargateAddress;
+import mrjake.aunis.stargate.network.SymbolUniverseEnum;
+import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
+import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
+import mrjake.aunis.transportrings.TransportRings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -120,8 +133,6 @@ public class InputHandlerClient {
 	@SubscribeEvent
 	public static void onMouseEvent(MouseEvent event) {
 
-
-
 		if (event.getDwheel() == 0) {
 			if (checkForItem(AunisItems.GDO)) {
 				// opening code input gui
@@ -130,6 +141,36 @@ public class InputHandlerClient {
 					if (itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey("linkedGate")
 							&& GDOMode.valueOf(itemStack.getTagCompound().getByte("mode")) == GDOMode.CODE_SENDER) {
 						Minecraft.getMinecraft().displayGuiScreen(new GuiSendCode(getHand(AunisItems.GDO)));
+					}
+				}
+
+			}
+			if (checkForItem(AunisItems.UNIVERSE_DIALER)) {
+				EnumHand hand = getHand(AunisItems.UNIVERSE_DIALER);
+				if (Minecraft.getMinecraft().player.getHeldItem(hand).getItemDamage() != UniverseDialerItem.UniverseDialerVariants.BROKEN.meta) {
+					// universe dial start sound
+					if (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()) {
+						ItemStack itemStack = getItemStack(Minecraft.getMinecraft().player, AunisItems.UNIVERSE_DIALER);
+						if(itemStack == null) return;
+						NBTTagCompound compound = itemStack.getTagCompound();
+						if(compound == null) return;
+						UniverseDialerMode mode = UniverseDialerMode.valueOf(compound.getByte("mode"));
+						int selected = compound.getByte("selected");
+						NBTTagList tagList = compound.getTagList(mode.tagListName, Constants.NBT.TAG_COMPOUND);
+						if (selected >= tagList.tagCount()) return;
+						switch (mode) {
+							case MEMORY:
+							case NEARBY:
+								AunisSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_START_DIAL);
+								break;
+
+							/*case RINGS:
+								break;
+
+							case OC:
+								break;
+							 */
+						}
 					}
 				}
 

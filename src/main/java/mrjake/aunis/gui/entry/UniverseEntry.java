@@ -1,5 +1,6 @@
 package mrjake.aunis.gui.entry;
 
+import mrjake.aunis.gui.base.BetterButton;
 import mrjake.aunis.gui.util.ArrowButton;
 import mrjake.aunis.packet.gui.entry.EntryActionEnum;
 import mrjake.aunis.packet.gui.entry.EntryDataTypeEnum;
@@ -15,13 +16,15 @@ public class UniverseEntry extends AbstractAddressEntry {
     public static final int ADDRESS_WIDTH = 80;
     public static final int BUTTON_COUNT = 4;
 
+    public BetterButton dialButton;
+
     public UniverseEntry(Minecraft mc, int index, int maxIndex, EnumHand hand, String name, ActionListener reloadListener, SymbolTypeEnum type, StargateAddress addr, int maxSymbols) {
         super(mc, index, maxIndex, hand, name, reloadListener, type, addr, maxSymbols);
 
-        removeButton = new ArrowButton(150, 0, 0, ArrowButton.ArrowType.RIGHT)
+        dialButton = new ArrowButton(150, 0, 0, ArrowButton.ArrowType.RIGHT)
                 .setFgColor(GuiUtils.getColorCode('a', true))
                 .setActionCallback(() -> action(EntryActionEnum.DIAL));
-        buttons.add(removeButton);
+        buttons.add(dialButton);
     }
 
 

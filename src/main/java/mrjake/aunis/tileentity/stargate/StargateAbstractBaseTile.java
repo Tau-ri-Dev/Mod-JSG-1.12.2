@@ -14,6 +14,7 @@ import mrjake.aunis.block.dialhomedevice.DHDBlock;
 import mrjake.aunis.chunkloader.ChunkManager;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.StargateDimensionConfig;
+import mrjake.aunis.gui.element.TabBiomeOverlay;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.packet.StateUpdateRequestToServer;
@@ -149,6 +150,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     protected void onGateBroken() {
         world.setBlockToAir(getGateCenterPos());
+        resetTargetIncomingAnimation();
 
         if (stargateState.initiating()) {
             attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
@@ -440,6 +442,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected StargatePos targetGatePos;
     public boolean connectedToGate = false;
     protected boolean connectingToGate = false;
+    protected StargatePos connectedToGatePos;
     protected boolean isIncoming = false;
 
     @Nullable
@@ -516,7 +519,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      *
      * @param symbol Currently added symbol.
      */
-    // todo: fix something on mw gate
     protected void addSymbolToAddress(SymbolInterface symbol, int addSymbol) {
         if (!canAddSymbol(symbol)) throw new IllegalStateException("Cannot add that symbol");
         if(addSymbol == 1) dialedAddress.addSymbol(symbol);
@@ -550,6 +552,19 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         addSymbolToAddress(symbol, 1);
     }
 
+    protected void resetTargetIncomingAnimation() {
+        if(connectedToGatePos != null){
+            StargateAbstractBaseTile targetGateTile = connectedToGatePos.getTileEntity();
+            targetGateTile.disconnectGate(true);
+            targetGateTile.stargateState = EnumStargateState.IDLE;
+            targetGateTile.markDirty();
+            connectedToGatePos = null;
+            connectedToGate = false;
+            connectingToGate = false;
+            markDirty();
+        }
+    }
+
     protected void doIncomingAnimation(int time, boolean byComputer){
         if(!connectingToGate) return;
         connectingToGate = false;
@@ -559,17 +574,21 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         if(dialedAddress.size() >= 6) {
             dialedAddress.addOrigin();
 
+            StargatePos targetGatePos = network.getStargate(dialedAddress);
+            if(targetGatePos == null) return;
+            StargateAbstractBaseTile targetGateTile = targetGatePos.getTileEntity();
+            if(targetGateTile == null) return;
             if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate) {
                 int size = dialedAddress.size();
 
                 connectedToGate = true;
+                connectedToGatePos = targetGatePos;
                 markDirty();
                 int period = 400;
                 if(byComputer){
                     time += 20; // add 20 ticks to time
                     period = ((time / 20) * 1000) / size;
                 }
-                StargateAbstractBaseTile targetGateTile = network.getStargate(dialedAddress).getTileEntity();
                 targetGateTile.isIncoming = true;
                 targetGateTile.markDirty();
                 if(AunisConfig.dialingConfig.allowIncomingAnimations) targetGateTile.incomingWormhole(size, period);
@@ -580,10 +599,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 targetGateTile.failGate();
             }
             else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
-                network.getStargate(dialedAddress).getTileEntity().disconnectGate(true);
-                network.getStargate(dialedAddress).getTileEntity().stargateState = EnumStargateState.IDLE;
-                network.getStargate(dialedAddress).getTileEntity().markDirty();
-                //addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, stargateState.dialingComputer() ? 83 : 53));
+                targetGateTile.disconnectGate(true);
+                targetGateTile.stargateState = EnumStargateState.IDLE;
+                targetGateTile.markDirty();
+                connectedToGatePos = null;
+                markDirty();
             }
 
             dialedAddress.clear();
@@ -671,6 +691,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         targetGatePos = null;
         connectedToGate = false;
         connectingToGate = false;
+        connectedToGatePos = null;
         isIncoming = false;
 
         markDirty();
@@ -1630,6 +1651,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         compound.setTag("dialedAddress", dialedAddress.serializeNBT());
 
         if (targetGatePos != null) compound.setTag("targetGatePos", targetGatePos.serializeNBT());
+        if (connectedToGatePos != null) compound.setTag("connectedToGatePos", connectedToGatePos.serializeNBT());
+
+        compound.setBoolean("connectingToGate", connectingToGate);
+        compound.setBoolean("connectedToGate", connectedToGate);
 
         compound.setBoolean("isMerged", isMerged);
         compound.setTag("autoCloseManager", getAutoCloseManager().serializeNBT());
@@ -1666,6 +1691,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         if (compound.hasKey("targetGatePos"))
             targetGatePos = new StargatePos(getSymbolType(), compound.getCompoundTag("targetGatePos"));
+        if (compound.hasKey("connectedToGatePos"))
+            connectedToGatePos = new StargatePos(getSymbolType(), compound.getCompoundTag("connectedToGatePos"));
+
+        connectingToGate = compound.getBoolean("connectingToGate");
+        connectedToGate = compound.getBoolean("connectedToGate");
 
         isMerged = compound.getBoolean("isMerged");
         getAutoCloseManager().deserializeNBT(compound.getCompoundTag("autoCloseManager"));

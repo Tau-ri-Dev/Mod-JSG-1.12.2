@@ -136,6 +136,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Override
     protected void failGate() {
         super.failGate();
+        resetTargetIncomingAnimation();
         playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
 
         isFinalActive = false;
@@ -169,6 +170,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             failGate();
             if (!isIncoming) disconnectGate();
             markDirty();
+            resetTargetIncomingAnimation();
             return true;
         }
         return false;
@@ -948,8 +950,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Override
     public void executeTask(EnumScheduledTask scheduledTask, NBTTagCompound customData) {
         boolean fastDial = false;
-        if(customData != null && customData.hasKey("fastDial"))
-            fastDial = customData.getBoolean("fastDial");
+        boolean onlySpin = false;
+        if(customData != null) {
+            if (customData.hasKey("fastDial"))
+                fastDial = customData.getBoolean("fastDial");
+            if(customData.hasKey("onlySpin"))
+                onlySpin = customData.getBoolean("onlySpin");
+        }
         switch (scheduledTask) {
             case STARGATE_HORIZON_LIGHT_BLOCK:
                 if (irisType == EnumIrisType.NULL || !isClosed()) {
@@ -977,6 +984,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
 
                 playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
+                playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL_START, false);
 
                 markDirty();
                 break;
@@ -1003,7 +1011,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 break;
 
             case GATE_RING_ROLL:
-                playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
+                if(!stargateState.idle() || onlySpin)
+                    playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, true);
                 break;
 
             default:

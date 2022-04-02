@@ -110,6 +110,8 @@ public class EntryActionToServer implements IMessage {
 				
 				else if (message.dataType.universe()) {
 					NBTTagList list = compound.getTagList(UniverseDialerMode.MEMORY.tagListName, NBT.TAG_COMPOUND);
+					BlockPos linkedPos = BlockPos.fromLong(compound.getLong(UniverseDialerMode.MEMORY.tagPosName));
+					NBTTagCompound selectedCompound = list.getCompoundTagAt(message.index);
 					
 					switch (message.action) {
 						case RENAME:
@@ -134,17 +136,12 @@ public class EntryActionToServer implements IMessage {
 							break;
 
 						case DIAL:
-							UniverseDialerMode mod = UniverseDialerMode.valueOf(compound.getByte("mode"));
-							BlockPos linkedPos = BlockPos.fromLong(compound.getLong(mod.tagPosName));
-							NBTTagList tagList = compound.getTagList(mod.tagListName, NBT.TAG_COMPOUND);
-							NBTTagCompound selectedCompound = tagList.getCompoundTagAt(message.index);
 							int maxSymbols = SymbolUniverseEnum.getMaxSymbolsDisplay(selectedCompound.getBoolean("hasUpgrade"));
-
 							StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
 							if(gateTile == null) break;
 
-							gateTile.dialAddress(new StargateAddress(selectedCompound), maxSymbols);
-							player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.dial_start"), true);
+							if(gateTile.dialAddress(new StargateAddress(selectedCompound), maxSymbols))
+								player.sendStatusMessage(new TextComponentTranslation("item.aunis.universe_dialer.dial_start"), true);
 
 							break;
 					}
