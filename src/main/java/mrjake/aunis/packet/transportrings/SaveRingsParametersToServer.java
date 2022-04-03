@@ -22,12 +22,14 @@ public class SaveRingsParametersToServer extends PositionedPacket {
 	
 	int address;
 	String name;
+	int distance;
 	
-	public SaveRingsParametersToServer(BlockPos pos, int address, String name) {
+	public SaveRingsParametersToServer(BlockPos pos, int address, String name, int distance) {
 		super(pos);
 		
 		this.address = address;
 		this.name = name;
+		this.distance = distance;
 	}
 
 	@Override
@@ -37,6 +39,7 @@ public class SaveRingsParametersToServer extends PositionedPacket {
 		buf.writeInt(address);
 		buf.writeInt(name.length());
 		buf.writeCharSequence(name, StandardCharsets.UTF_8);
+		buf.writeInt(distance);
 	}
 	
 	@Override
@@ -46,6 +49,7 @@ public class SaveRingsParametersToServer extends PositionedPacket {
 		address = buf.readInt();
 		int len = buf.readInt();
 		name = buf.readCharSequence(len, StandardCharsets.UTF_8).toString();
+		distance = buf.readInt();
 	}
 	
 	
@@ -58,7 +62,7 @@ public class SaveRingsParametersToServer extends PositionedPacket {
 			
 			world.addScheduledTask(() -> {
 				TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(message.pos);
-				if (ringsTile.setRingsParams(message.address, message.name) == ParamsSetResult.DUPLICATE_ADDRESS)
+				if (ringsTile.setRingsParams(message.address, message.name, message.distance) == ParamsSetResult.DUPLICATE_ADDRESS)
 					player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_block.duplicate_address"), true);
 			
 				AunisPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(message.pos, StateTypeEnum.GUI_STATE, ringsTile.getState(StateTypeEnum.GUI_STATE)), player);

@@ -94,12 +94,6 @@ public class AunisConfig {
         @Name("Universe dialer nearby radius")
         public int universeGateNearbyReach = 1024;
 
-        @Name("Enable opening last chevron while dialing with dhd")
-        @Comment({
-                "Enable opening last chevron while dialing milkyway gate with dhd"
-        })
-        public boolean dhdLastOpen = true;
-
         @Name("Temperature threshold for frosty overlay")
         @Comment({
                 "Below this biome temperature the gate will receive frosty texture.",
@@ -233,18 +227,16 @@ public class AunisConfig {
     }
 
     public static class HorizonConfig {
-        @Name("Disable animated Event Horizon")
+        @Name("Disable animated Event Horizon - WARNING: Requires reloading")
+        @RequiresMcRestart
         @Comment({
                 "Changing this option will require you to reload resources manually.",
-                "Just press F3+Q once in-game."
+                "Just restart your game"
         })
         public boolean disableAnimatedEventHorizon = false;
 
         @Name("Enable wrong side killing")
         public boolean wrongSideKilling = true;
-
-        //@Name("Enable back side killing")
-        //public boolean backSideKilling = false;
     }
 
     public static class DialingConfig {
@@ -285,6 +277,12 @@ public class AunisConfig {
 
         @Name("Enable switching between fast dialing")
         public boolean enableFastDialing = true;
+
+        @Name("Enable opening last chevron while dialing with dhd")
+        @Comment({
+                "Enable opening last chevron while dialing milkyway gate with dhd"
+        })
+        public boolean dhdLastOpen = true;
 
     }
 
@@ -613,6 +611,7 @@ public class AunisConfig {
 
     public static class MainMenuConfig {
         @Name("Disable Aunis main menu - WARNING: Requires reloading")
+        @RequiresMcRestart
         @Comment({
                 "Disables showing custom main menu",
         })
@@ -691,6 +690,9 @@ public class AunisConfig {
     public static class DevConfig {
         @Name("Enable peg gates with myst pages")
         public boolean pegGatesMyst = false;
+
+        @Name("Rings")
+        public double test = 0.1;
     }
 
     public static class RecipesConfig {

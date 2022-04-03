@@ -35,18 +35,25 @@ public class RingsGUI extends AunisGuiBase {
 	
 	private GuiTextField addressTextField;
 	private GuiTextField nameTextField;
-	
+	private GuiTextField distanceTextField;
+
 	private AunisGuiButton saveButton;
 	
 	@Override
 	public void initGui() {	
 		super.initGui();
-		
-		addressTextField = createTextField(50, 20, 1, state.isInGrid() ? "" + state.getAddress() : "");
+		int y = 20;
+		addressTextField = createTextField(50, y, 1, state.isInGrid() ? "" + state.getAddress() : "");
 		textFields.add(addressTextField);
+		y += 15;
 		
-		nameTextField = createTextField(50, 35, 16, state.getName());
+		nameTextField = createTextField(50, y, 16, state.getName());
 		textFields.add(nameTextField);
+		y += 15;
+
+		distanceTextField = createTextField(50, y, 3, state.getDistance() + "");
+		textFields.add(distanceTextField);
+		y += 15;
 		
 		saveButton = new AunisGuiButton(id++, getBottomRightInside(false)-90, getBottomRightInside(true)-20, 90, 20, Aunis.proxy.localize("tile.aunis.transportrings_block.rings_save"));
 		buttonList.add(saveButton);
@@ -60,6 +67,7 @@ public class RingsGUI extends AunisGuiBase {
 		mouseY -= getTopLeftAbsolute(true);
 		
 		GlStateManager.pushMatrix();
+		setBackGroundSize(width/3, height-100);
 		translateToCenter();
 		drawBackground();
 
@@ -74,29 +82,19 @@ public class RingsGUI extends AunisGuiBase {
 		
 		drawString(Aunis.proxy.localize("tile.aunis.transportrings_block.rings_address") + ": ", 0, 20, 0x00AA00);
 		drawString(Aunis.proxy.localize("tile.aunis.transportrings_block.rings_name") + ": ", 0, 35, 0x00AAAA);
-//		this.addressTextField.drawTextBox();
+		drawString(Aunis.proxy.localize("tile.aunis.transportrings_block.rings_distance") + ": ", 0, 50, 0xF9801D);
 		
 		for (GuiTextField tf : textFields)
 			drawTextBox(tf);
 		
-		int y = 50;
+		int y = 65;
 		for (TransportRings rings : state.getRings()) {			
 			drawString(""+rings.getAddress(), 60, y, 0x00AA00);
 			drawString(rings.getName(), 70, y, 0x00AAAA);
 			
 			y += 12;
-//			drawString(rings.getName(), len, 40+i*10, textColor);
 		}
-		
-//		addressTextField.setText(String.valueOf(state.getAddress()));
-		
-		// ------------------------------------------------------------------------------
-//		int x = frameThickness+padding;
-//		drawRect(x, x, x+fontRenderer.getStringWidth("123"), x+10, 0xaaffffff);
-		
-		
 		super.drawScreen(mouseX, mouseY, partialTicks);
-		
 		GlStateManager.popMatrix();
 		
 		
@@ -108,11 +106,25 @@ public class RingsGUI extends AunisGuiBase {
 			EntityPlayer player = Minecraft.getMinecraft().player;
 			
 			try {
-				int address = Integer.valueOf(addressTextField.getText());
+				int address = Integer.parseInt(addressTextField.getText());
 				String name = nameTextField.getText();
 				
 				if (address > 0 && address <= 6) {
-					AunisPacketHandler.INSTANCE.sendToServer(new SaveRingsParametersToServer(pos, address, name));
+					try {
+						int distance = Integer.parseInt(distanceTextField.getText());
+
+						if (distance >= -40 && distance <= 40) {
+							AunisPacketHandler.INSTANCE.sendToServer(new SaveRingsParametersToServer(pos, address, name, distance));
+						}
+
+						else {
+							player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_block.wrong_distance"), true);
+						}
+					}
+
+					catch (NumberFormatException e) {
+						player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_block.wrong_distance"), true);
+					}
 				}
 				
 				else {

@@ -30,6 +30,7 @@ import mrjake.aunis.tileentity.stargate.StargatePegasusBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
+import mrjake.aunis.tileentity.transportrings.TransportRingsOriTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.block.statemap.StateMap;
@@ -83,6 +84,7 @@ public class ProxyClient implements IProxy {
     ClientRegistry.bindTileEntitySpecialRenderer(DHDPegasusTile.class, new DHDPegasusRenderer());
 
     ClientRegistry.bindTileEntitySpecialRenderer(TransportRingsAncientTile.class, new SpecialRenderer());
+    ClientRegistry.bindTileEntitySpecialRenderer(TransportRingsOriTile.class, new SpecialRenderer());
     ClientRegistry.bindTileEntitySpecialRenderer(TRControllerGoauldTile.class, new SpecialRenderer());
 
     ClientRegistry.bindTileEntitySpecialRenderer(BeamerTile.class, new BeamerRenderer());

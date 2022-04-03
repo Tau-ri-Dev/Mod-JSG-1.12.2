@@ -114,7 +114,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
         if (stargateWillLock(symbol)) {
             isFinalActive = true;
-            if(AunisConfig.stargateConfig.dhdLastOpen)
+            if(AunisConfig.dialingConfig.dhdLastOpen)
                 addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 5));
             else
                 addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10));

@@ -16,15 +16,15 @@ import java.util.List;
 public abstract class TransportRingsAbstractRenderer implements RendererInterface {
 
 	public static final int RING_COUNT = 5; 
-	public static final int INTERVAL_UPRISING = 5; 
+	public static final int INTERVAL_UPRISING = 5;
 	public static final int INTERVAL_FALLING = 5;
 	
-	public static final double ANIMATION_SPEED_DIVISOR = 2.7; 
-	
-	private World world;
-	private AunisAxisAlignedBB localTeleportBox;
-	private List<Ring> rings;
-		
+	public static final double ANIMATION_SPEED_DIVISOR = 2.7;
+
+	protected World world;
+	protected AunisAxisAlignedBB localTeleportBox;
+	protected List<Ring> rings;
+
 	public TransportRingsAbstractRenderer(World world, BlockPos pos, AunisAxisAlignedBB localTeleportBox) {
 		this.world = world;
 		this.localTeleportBox = localTeleportBox;
@@ -38,9 +38,13 @@ public abstract class TransportRingsAbstractRenderer implements RendererInterfac
 	
 	// --------------------------------------------------------------------------
 	private int currentRing;
-	private int lastRingAnimated;	
-	private long lastTick;	
-		
+	private int lastRingAnimated;
+	private long lastTick;
+	private int ringsDistance;
+
+	public abstract void renderRings(float partialTicks, int distance);
+	public abstract void rescaleRings();
+
 	@Override
 	public void render(double x, double y, double z, float partialTicks) {		
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 15 * 16, 15 * 16);
@@ -52,9 +56,9 @@ public abstract class TransportRingsAbstractRenderer implements RendererInterfac
 		
 		GlStateManager.translate(0.50, 0.63271/2 + 1.35, 0.50);
 		GlStateManager.scale(0.5, 0.5, 0.5);
-		
-		for (Ring ring : rings)
-			ring.render(partialTicks, BiomeOverlayEnum.NORMAL); // Rings appear from underground, no frost/moss here.
+		rescaleRings();
+
+		renderRings(partialTicks, ringsDistance);
 		
 		GlStateManager.popMatrix();
 		
@@ -142,14 +146,17 @@ public abstract class TransportRingsAbstractRenderer implements RendererInterfac
 		}
 	}
 	
-	public void animationStart(long animationStart) {	
+	public void animationStart(long animationStart, int distance) {
 		lastTick = -1;
 		currentRing = 0;
 		lastRingAnimated = -1;
+		ringsDistance = distance;
+		localTeleportBox = new AunisAxisAlignedBB(-1, ringsDistance, -1, 2, ringsDistance + 2.5, 2);
 		
 		state.animationStart = animationStart;
 		state.ringsUprising = true;
 		state.isAnimationActive = true;
+		state.ringsDistance = distance;
 	}
 
 	TransportRingsRendererState state = new TransportRingsRendererState();

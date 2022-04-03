@@ -13,6 +13,7 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.RingsGUI;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
+import mrjake.aunis.packet.StateUpdateRequestToServer;
 import mrjake.aunis.packet.transportrings.StartPlayerFadeOutToClient;
 import mrjake.aunis.renderer.transportrings.TransportRingsAbstractRenderer;
 import mrjake.aunis.sound.AunisSoundHelper;
@@ -60,7 +61,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     // ---------------------------------------------------------------------------------
     // Ticking and loading
 
-    protected static final AunisAxisAlignedBB LOCAL_TELEPORT_BOX = new AunisAxisAlignedBB(-1, 2, -1, 2, 4.5, 2);
+    protected AunisAxisAlignedBB LOCAL_TELEPORT_BOX = new AunisAxisAlignedBB(-1, 2, -1, 2, 4.5, 2);
+    private List<BlockPos> invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, 2, 2), new BlockPos(1, 2, 2), new BlockPos(2, 2, 1));
     protected AunisAxisAlignedBB globalTeleportBox;
     protected List<Entity> teleportList = new ArrayList<>();
     protected BlockPos lastPos = BlockPos.ORIGIN;
@@ -73,6 +75,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 lastPos = pos;
 
                 getRings().setPos(pos);
+                updateRingsDistance();
                 setRingsParams(getRings().getAddress(), getRings().getName());
                 updateLinkStatus();
 
@@ -83,7 +86,34 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     @Override
     public void onLoad() {
+        if (world.isRemote) {
+            renderer = getNewRenderer();
+            AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
+        }
+        if (!world.isRemote) {
+            setBarrierBlocks(false, false);
+
+            globalTeleportBox = LOCAL_TELEPORT_BOX.offset(pos);
+        }
         Aunis.ocWrapper.joinOrCreateNetwork(this);
+    }
+
+    // ---------------------------------------------------------------------------------
+    // Adjustable distance
+
+    public int ringsDistance = 2;
+
+    public void setNewRingsDistance(int newRingsDistance) {
+        getRings().setRingsDistance(newRingsDistance);
+        updateRingsDistance();
+    }
+
+    public void updateRingsDistance(){
+        ringsDistance = getRings().getRingsDistance();
+        LOCAL_TELEPORT_BOX = new AunisAxisAlignedBB(-1, ringsDistance, -1, 2, ringsDistance + 2.5, 2);
+        invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, 2 + ringsDistance, 2), new BlockPos(1, 2 + ringsDistance, 2), new BlockPos(2, 2 + ringsDistance, 1));
+        globalTeleportBox = LOCAL_TELEPORT_BOX.offset(pos);
+        markDirty();
     }
 
 
@@ -131,11 +161,15 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             case RINGS_TELEPORT:
                 BlockPos teleportVector = targetRingsPos.subtract(pos);
 
+                TransportRingsAbstractTile targetTile = ((TransportRingsAbstractTile) world.getTileEntity(targetRingsPos));
+                if(targetTile == null) break;
+                int targetRingsHeight = targetTile.getRings().getRingsDistance();
+
                 for (Entity entity : teleportList) {
                     if (!excludedEntities.contains(entity)) {
                         BlockPos ePos = entity.getPosition().add(teleportVector);
-
-                        entity.setPositionAndUpdate(ePos.getX(), ePos.getY(), ePos.getZ());
+                        double y = ePos.getY() + targetRingsHeight - 2.5;
+                        entity.setPositionAndUpdate(ePos.getX(), y, ePos.getZ());
                     }
                 }
 
@@ -197,9 +231,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         rendererState.animationStart = world.getTotalWorldTime();
         rendererState.ringsUprising = true;
         rendererState.isAnimationActive = true;
+        rendererState.ringsDistance = getRings().getRingsDistance();
 
         NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
-        AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RINGS_START_ANIMATION, new TransportRingsStartAnimationRequest(rendererState.animationStart)), point);
+        AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RINGS_START_ANIMATION, new TransportRingsStartAnimationRequest(rendererState.animationStart, rendererState.ringsDistance)), point);
     }
 
     /**
@@ -244,8 +279,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             return TransportResult.NO_SUCH_ADDRESS;
         }
     }
-
-    private static final List<BlockPos> invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, 2, 2), new BlockPos(1, 2, 2), new BlockPos(2, 2, 1));
 
     private boolean checkIfObstructed() {
         if (AunisConfig.ringsConfig.ignoreObstructionCheck) return false;
@@ -371,6 +404,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         }
     }
 
+    public ParamsSetResult setRingsParams(int address, String name, int distance) {
+        setNewRingsDistance(distance);
+        return setRingsParams(address, name);
+    }
+
     public ParamsSetResult setRingsParams(int address, String name) {
         int x = pos.getX();
         int z = pos.getZ();
@@ -389,7 +427,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 ringsTilesInRange.add(newRingsTile);
                 int newRingsAddress = newRingsTile.getClonedRings(pos).getAddress();
                 // if nearby rings has same address or has in range rings with that address
-                if (newRingsAddress != -1 && (newRingsAddress == address || newRingsTile.ringsMap.containsKey(address))) {
+                if ((newRingsAddress != -1 && (newRingsAddress == address || newRingsTile.ringsMap.containsKey(address))) && address != getRings().getAddress()) {
                     return ParamsSetResult.DUPLICATE_ADDRESS;
                 }
             }
@@ -399,6 +437,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         getRings().setAddress(address);
         getRings().setName(name);
+        getRings().setRingsDistance(ringsDistance);
 
         for (TransportRingsAbstractTile newRingsTile : ringsTilesInRange) {
             this.addRings(newRingsTile);
@@ -449,6 +488,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         compound.setLong("targetRingsPos", targetRingsPos.toLong());
         compound.setBoolean("busy", isBusy());
+        compound.setInteger("ringsDistance", ringsDistance);
 
         if (node != null) {
             NBTTagCompound nodeCompound = new NBTTagCompound();
@@ -509,6 +549,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         if (node != null && compound.hasKey("node")) node.load(compound.getCompoundTag("node"));
 
         setBusy(compound.getBoolean("busy"));
+        ringsDistance = compound.getInteger("ringsDistance");
         initiating = compound.getBoolean("initiating");
 
         super.readFromNBT(compound);
@@ -562,7 +603,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
             case RINGS_START_ANIMATION:
                 AunisSoundHelper.playSoundEventClientSide(world, pos.up(3), SoundEventEnum.RINGS_TRANSPORT);
-                renderer.animationStart(((TransportRingsStartAnimationRequest) state).animationStart);
+                renderer.animationStart(((TransportRingsStartAnimationRequest) state).animationStart, ((TransportRingsStartAnimationRequest) state).ringsDistance);
                 break;
 
             case GUI_STATE:
@@ -603,6 +644,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     public RendererInterface getRenderer() {
         return renderer;
     }
+
+    public abstract TransportRingsAbstractRenderer getNewRenderer();
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {

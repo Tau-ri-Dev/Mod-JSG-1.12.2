@@ -62,6 +62,19 @@ public class TransportRings {
   }
 
   /**
+   * Distance of rings from the base block
+   */
+  private int ringsDistance = 2;
+
+  public int getRingsDistance() {
+    return ringsDistance;
+  }
+
+  public void setRingsDistance(int dist) {
+    ringsDistance = dist;
+  }
+
+  /**
    * Defines if the object is a clone
    */
   private boolean isClone;
@@ -156,6 +169,8 @@ public class TransportRings {
 
     if (isClone) compound.setDouble("distance", distance);
 
+    compound.setInteger("ringsDistance", ringsDistance);
+
     return compound;
   }
 
@@ -172,6 +187,8 @@ public class TransportRings {
 
       distance = compound.getDouble("distance");
     }
+
+    ringsDistance = compound.getInteger("ringsDistance");
 
     return this;
   }

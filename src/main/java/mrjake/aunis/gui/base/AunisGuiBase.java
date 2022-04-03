@@ -120,6 +120,11 @@ public class AunisGuiBase extends GuiScreen {
 	protected void drawBackground() {
 		frame(0, 0, imageWidth, imageHeight, frameThickness, frameColor, true);
 	}
+
+	protected void setBackGroundSize(int width, int height){
+		imageWidth = width;
+		imageHeight = height;
+	}
 	
 	
 	protected void frame(int x, int y, int w, int h, int thickness, int color, boolean background) {

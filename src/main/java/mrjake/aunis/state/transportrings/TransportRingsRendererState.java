@@ -27,12 +27,15 @@ public class TransportRingsRendererState extends State {
 	 */
 	public boolean ringsUprising;
 
+	public int ringsDistance;
+
 	
 	public TransportRingsRendererState() {
 		this.isAnimationActive = false;
 		
 		this.animationStart = 0;
 		this.ringsUprising = true;
+		this.ringsDistance = 2;
 	}
 	
 	
@@ -41,6 +44,7 @@ public class TransportRingsRendererState extends State {
 		buf.writeBoolean(isAnimationActive);
 		buf.writeLong(animationStart);
 		buf.writeBoolean(ringsUprising);
+		buf.writeInt(ringsDistance);
 	}
 
 	@Override
@@ -48,5 +52,6 @@ public class TransportRingsRendererState extends State {
 		isAnimationActive = buf.readBoolean();
 		animationStart = buf.readLong();
 		ringsUprising = buf.readBoolean();
+		ringsDistance = buf.readInt();
 	}
 }

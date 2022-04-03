@@ -18,6 +18,10 @@ public class AunisAxisAlignedBB extends AxisAlignedBB {
         this((double)pos1.getX(), (double)pos1.getY(), (double)pos1.getZ(), (double)pos2.getX(), (double)pos2.getY(), (double)pos2.getZ());
     }
 
+    public BlockPos getCenterBlockPos(){
+		return new BlockPos(getCenter().x, getCenter().y, getCenter().z);
+	}
+
 	public AunisAxisAlignedBB rotate(int angle) {
 		switch (angle) {
 			case 0:

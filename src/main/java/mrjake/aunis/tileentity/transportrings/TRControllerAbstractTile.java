@@ -7,6 +7,7 @@ import mrjake.aunis.tesr.RendererInterface;
 import mrjake.aunis.tesr.RendererProviderInterface;
 import mrjake.aunis.util.ILinkable;
 import mrjake.aunis.util.LinkingHelper;
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -90,7 +91,12 @@ public abstract class TRControllerAbstractTile extends TileEntity implements ITi
     }
 
     public void updateLinkStatus() {
-        BlockPos closestRings = LinkingHelper.findClosestUnlinked(world, pos, new BlockPos(10, 5, 10), AunisBlocks.TRANSPORT_RINGS_BLOCK, linkId);
+
+        BlockPos closestRings = null;
+        for(Block block : AunisBlocks.RINGS_BLOCKS){
+            if(closestRings != null) break;
+            closestRings = LinkingHelper.findClosestUnlinked(world, pos, new BlockPos(10, 5, 10), block, linkId);
+        }
 
         int linkId = closestRings == null ? -1 : LinkingHelper.getLinkId();
 

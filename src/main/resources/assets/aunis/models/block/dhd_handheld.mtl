@@ -2,27 +2,21 @@
 
 newmtl None
 Kd 1 1 1
-Ks 1 1 1
-Ns 50
-illum 7
 
 newmtl None_dhdFinal1.png
 Kd 1 1 1
-Ks 1 1 1
 Ns 50
 illum 7
 map_Kd aunis:dhd_handheld/dhd512
 
 newmtl None_red256-bright3.png
 Kd 1 1 1
-Ks 1 1 1
 Ns 50
 illum 7
 map_Kd aunis:dhd_handheld/brb128
 
 newmtl None_symbol5.png
 Kd 1 1 1
-Ks 1 1 1
 Ns 50
 illum 7
 map_Kd aunis:dhd_handheld/symbol64
