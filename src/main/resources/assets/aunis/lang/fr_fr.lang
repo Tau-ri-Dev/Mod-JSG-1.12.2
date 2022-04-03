@@ -140,6 +140,7 @@ tile.aunis.transportrings_block.rings_no=Auncun Anneau. %s
 tile.aunis.transportrings_block.rings_not_in_grid=Les anneaux ne sont pas dans la grille
 tile.aunis.transportrings_block.rings_address=Adresse
 tile.aunis.transportrings_block.rings_name=Nom
+tile.aunis.transportrings_block.rings_distance=Distance
 tile.aunis.transportrings_block.rings_save=Sauvegarder
 
 commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim

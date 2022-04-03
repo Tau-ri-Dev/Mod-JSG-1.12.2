@@ -140,6 +140,7 @@ tile.aunis.transportrings_block.rings_no=Ring Nr. %s
 tile.aunis.transportrings_block.rings_not_in_grid=Ringe nicht im Netzwerk
 tile.aunis.transportrings_block.rings_address=Adresse
 tile.aunis.transportrings_block.rings_name=Name
+tile.aunis.transportrings_block.rings_distance=Distance
 tile.aunis.transportrings_block.rings_save=Sichern
 
 commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim

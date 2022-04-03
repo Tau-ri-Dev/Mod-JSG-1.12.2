@@ -13,7 +13,7 @@ import mrjake.aunis.block.ore.TitaniumOreBlock;
 import mrjake.aunis.block.ore.TriniumOreBlock;
 import mrjake.aunis.block.stargate.*;
 import mrjake.aunis.block.transportrings.TRControllerGoauldBlock;
-import mrjake.aunis.block.transportrings.TransportRingsAncientBlock;
+import mrjake.aunis.block.transportrings.TransportRingsGoauldBlock;
 import mrjake.aunis.block.transportrings.TransportRingsOriBlock;
 import mrjake.aunis.block.zpm.ZPMBlock;
 import mrjake.aunis.block.zpm.ZPMHubBlock;
@@ -22,11 +22,9 @@ import mrjake.aunis.tileentity.*;
 import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
 import mrjake.aunis.tileentity.energy.CapacitorTile;
-import mrjake.aunis.tileentity.energy.ZPMHubTile;
-import mrjake.aunis.tileentity.energy.ZPMTile;
 import mrjake.aunis.tileentity.stargate.*;
 import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
-import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
+import mrjake.aunis.tileentity.transportrings.TransportRingsGoauldTile;
 import mrjake.aunis.tileentity.transportrings.TransportRingsOriTile;
 import mrjake.aunis.util.BlockHelpers;
 import net.minecraft.block.Block;
@@ -75,7 +73,7 @@ public class AunisBlocks {
     public static final DHDBlock DHD_BLOCK = new DHDBlock();
     public static final DHDPegasusBlock DHD_PEGASUS_BLOCK = new DHDPegasusBlock();
 
-    public static final TransportRingsAncientBlock TRANSPORT_RINGS_BLOCK = new TransportRingsAncientBlock();
+    public static final TransportRingsGoauldBlock TRANSPORT_RINGS_BLOCK = new TransportRingsGoauldBlock();
     public static final TransportRingsOriBlock TRANSPORT_RINGS_ORI_BLOCK = new TransportRingsOriBlock();
     public static final TRControllerGoauldBlock TR_CONTROLLER_BLOCK = new TRControllerGoauldBlock();
     public static final InvisibleBlock INVISIBLE_BLOCK = new InvisibleBlock();
@@ -104,6 +102,15 @@ public class AunisBlocks {
             TRANSPORT_RINGS_BLOCK,
             TRANSPORT_RINGS_ORI_BLOCK
     };
+
+    public static boolean isRingBlock(Block block){
+        for(Block b : RINGS_BLOCKS){
+            if(block == b) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     private static Block[] blocks = {
@@ -155,7 +162,7 @@ public class AunisBlocks {
         registerTile(StargatePegasusMemberTile.class, AunisBlocks.STARGATE_PEGASUS_MEMBER_BLOCK.getRegistryName());
         registerTile(DHDMilkyWayTile.class, AunisBlocks.DHD_BLOCK.getRegistryName());
         registerTile(DHDPegasusTile.class, AunisBlocks.DHD_PEGASUS_BLOCK.getRegistryName());
-        registerTile(TransportRingsAncientTile.class, AunisBlocks.TRANSPORT_RINGS_BLOCK.getRegistryName());
+        registerTile(TransportRingsGoauldTile.class, AunisBlocks.TRANSPORT_RINGS_BLOCK.getRegistryName());
         registerTile(TransportRingsOriTile.class, AunisBlocks.TRANSPORT_RINGS_ORI_BLOCK.getRegistryName());
         registerTile(TRControllerGoauldTile.class, AunisBlocks.TR_CONTROLLER_BLOCK.getRegistryName());
         registerTile(CapacitorTile.class, AunisBlocks.CAPACITOR_BLOCK.getRegistryName());

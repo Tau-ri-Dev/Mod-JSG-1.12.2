@@ -29,7 +29,7 @@ public class Ring {
 
         this.shouldRender = false;
 
-        this.y = 0;
+        this.y = -1;
         this.index = index;
         this.yMax = index;
     }
@@ -38,7 +38,7 @@ public class Ring {
         if (distance >= 0)
             this.yMax = (distance * 2) - index + 1.5;
         else
-            this.yMax = ((distance * 2) - 2) + index - 1.5;
+            this.yMax = (distance * 2) + index - (1.5 * 2);
         if (shouldRender) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0, y, 0);

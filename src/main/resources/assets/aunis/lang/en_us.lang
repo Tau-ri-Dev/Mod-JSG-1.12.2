@@ -136,7 +136,8 @@ item.aunis.transportrings_ring_fragment.name=Transport rings fragment
 tile.aunis.transportrings_controller_block.name=Transport rings controller
 tile.aunis.transportrings_controller_block.not_linked=Controller not linked
 
-tile.aunis.transportrings_block.name=Transport rings
+tile.aunis.transportrings_block.name=Goauld Transport rings
+tile.aunis.transportrings_ori_block.name=Ori Transport rings
 tile.aunis.transportrings_block.non_existing_address=Unable to reach this address
 tile.aunis.transportrings_block.duplicate_address=Duplicate address
 tile.aunis.transportrings_block.wrong_address=Wrong address, should be 1-6
@@ -148,6 +149,7 @@ tile.aunis.transportrings_block.rings_no=Rings No. %s
 tile.aunis.transportrings_block.rings_not_in_grid=Rings not in grid
 tile.aunis.transportrings_block.rings_address=Address
 tile.aunis.transportrings_block.rings_name=Name
+tile.aunis.transportrings_block.rings_distance=Distance
 tile.aunis.transportrings_block.rings_save=Save
 
 commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim=X] [map=Y] [id=Z]

@@ -66,6 +66,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     protected AunisAxisAlignedBB globalTeleportBox;
     protected List<Entity> teleportList = new ArrayList<>();
     protected BlockPos lastPos = BlockPos.ORIGIN;
+    private AxisAlignedBB renderBoundingBox = TileEntity.INFINITE_EXTENT_AABB;
+
     @Override
     public void update() {
         if (!world.isRemote) {
@@ -111,8 +113,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     public void updateRingsDistance(){
         ringsDistance = getRings().getRingsDistance();
         LOCAL_TELEPORT_BOX = new AunisAxisAlignedBB(-1, ringsDistance, -1, 2, ringsDistance + 2.5, 2);
-        invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, 2 + ringsDistance, 2), new BlockPos(1, 2 + ringsDistance, 2), new BlockPos(2, 2 + ringsDistance, 1));
+        invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, ringsDistance, 2), new BlockPos(1, ringsDistance, 2), new BlockPos(2, ringsDistance, 1));
         globalTeleportBox = LOCAL_TELEPORT_BOX.offset(pos);
+        renderBoundingBox = ringsDistance < 0 ? new AunisAxisAlignedBB(-5.5, 5, -0.5, 5.5, ringsDistance - 15, 0.5) : new AunisAxisAlignedBB(-5.5, -5, -0.5, 5.5, ringsDistance + 15, 0.5);
         markDirty();
     }
 
@@ -168,7 +171,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 for (Entity entity : teleportList) {
                     if (!excludedEntities.contains(entity)) {
                         BlockPos ePos = entity.getPosition().add(teleportVector);
-                        double y = ePos.getY() + targetRingsHeight - 2.5;
+                        double y = targetRingsPos.getY() + targetRingsHeight;
                         entity.setPositionAndUpdate(ePos.getX(), y, ePos.getZ());
                     }
                 }
@@ -421,8 +424,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         List<TransportRingsAbstractTile> ringsTilesInRange = new ArrayList<>();
 
         for (BlockPos newRingsPos : BlockPos.getAllInBoxMutable(new BlockPos(x - radius, y - vertical, z - radius), new BlockPos(x + radius, y + vertical, z + radius))) {
-            if (world.getBlockState(newRingsPos).getBlock() == AunisBlocks.TRANSPORT_RINGS_BLOCK && !pos.equals(newRingsPos)) {
-
+            if (AunisBlocks.isRingBlock(world.getBlockState(newRingsPos).getBlock()) && !pos.equals(newRingsPos)) {
                 TransportRingsAbstractTile newRingsTile = (TransportRingsAbstractTile) world.getTileEntity(newRingsPos);
                 ringsTilesInRange.add(newRingsTile);
                 int newRingsAddress = newRingsTile.getClonedRings(pos).getAddress();
@@ -602,8 +604,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 break;
 
             case RINGS_START_ANIMATION:
-                AunisSoundHelper.playSoundEventClientSide(world, pos.up(3), SoundEventEnum.RINGS_TRANSPORT);
-                renderer.animationStart(((TransportRingsStartAnimationRequest) state).animationStart, ((TransportRingsStartAnimationRequest) state).ringsDistance);
+                int distance = ((TransportRingsStartAnimationRequest) state).ringsDistance;
+                AunisSoundHelper.playSoundEventClientSide(world, (distance > 0 ? pos.up(distance+2) : pos.down((distance*-1) - (distance < -2 ? 2 : 0))), SoundEventEnum.RINGS_TRANSPORT);
+                renderer.animationStart(((TransportRingsStartAnimationRequest) state).animationStart, distance);
                 break;
 
             case GUI_STATE:
@@ -649,7 +652,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        return new AxisAlignedBB(pos.add(-4, 0, -4), pos.add(4, 7, 4));
+        return renderBoundingBox;
     }
 
 

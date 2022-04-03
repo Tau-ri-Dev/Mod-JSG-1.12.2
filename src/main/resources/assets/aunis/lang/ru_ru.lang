@@ -140,6 +140,7 @@ tile.aunis.transportrings_block.rings_no=Кольца No. %s
 tile.aunis.transportrings_block.rings_not_in_grid=Кольца не настроены
 tile.aunis.transportrings_block.rings_address=Адрес
 tile.aunis.transportrings_block.rings_name=Название
+tile.aunis.transportrings_block.rings_distance=Distance
 tile.aunis.transportrings_block.rings_save=Сохранить
 
 commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim

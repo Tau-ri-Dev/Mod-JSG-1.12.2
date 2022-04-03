@@ -140,6 +140,7 @@ tile.aunis.transportrings_block.rings_no=Gyűrű %s
 tile.aunis.transportrings_block.rings_not_in_grid=Gyűrűk nincsenek alakzatban
 tile.aunis.transportrings_block.rings_address=Cím
 tile.aunis.transportrings_block.rings_name=Név
+tile.aunis.transportrings_block.rings_distance=Distance
 tile.aunis.transportrings_block.rings_save=Mentés
 
 commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim=X] [map=Y] [id=Z]

@@ -5,7 +5,6 @@ import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
-import mrjake.aunis.tileentity.transportrings.TransportRingsAncientTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

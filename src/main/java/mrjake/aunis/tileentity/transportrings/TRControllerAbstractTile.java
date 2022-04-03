@@ -95,7 +95,7 @@ public abstract class TRControllerAbstractTile extends TileEntity implements ITi
         BlockPos closestRings = null;
         for(Block block : AunisBlocks.RINGS_BLOCKS){
             if(closestRings != null) break;
-            closestRings = LinkingHelper.findClosestUnlinked(world, pos, new BlockPos(10, 5, 10), block, linkId);
+            closestRings = LinkingHelper.findClosestUnlinked(world, pos, new BlockPos(10, 40, 10), block, linkId);
         }
 
         int linkId = closestRings == null ? -1 : LinkingHelper.getLinkId();

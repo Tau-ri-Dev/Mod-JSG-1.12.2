@@ -140,6 +140,7 @@ tile.aunis.transportrings_block.rings_no=传送环编号 %s
 tile.aunis.transportrings_block.rings_not_in_grid=传送环不在网格中
 tile.aunis.transportrings_block.rings_address=传送环地址
 tile.aunis.transportrings_block.rings_name=传送环名称
+tile.aunis.transportrings_block.rings_distance=Distance
 tile.aunis.transportrings_block.rings_save=保存传送环
 
 commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim

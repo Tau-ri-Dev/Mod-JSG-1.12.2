@@ -8,6 +8,7 @@ import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.renderer.stargate.StargateUniverseRendererState;
 import mrjake.aunis.sound.*;
+import mrjake.aunis.stargate.EnumIrisMode;
 import mrjake.aunis.stargate.EnumScheduledTask;
 import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.stargate.StargateOpenResult;
@@ -423,12 +424,14 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
     @Override
     public void incomingWormhole(int dialedAddressSize) {
+        if(stargateState.incoming()) return;
         startIncomingAnimation(dialedAddressSize, 10);
         super.incomingWormhole(9);
     }
 
     @Override
     public void incomingWormhole(int dialedAddressSize, int time) {
+        if(stargateState.incoming()) return;
         time = time * dialedAddressSize;
         int period = time - 2000;
         if (period < 0) period = 0;
@@ -438,6 +441,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
     @Override
     public void startIncomingAnimation(int addressSize, int period) {
+        if(stargateState.incoming()) return;
         double ticks = (double) (period * 20) / 1000;
         incomingPeriod = (int) Math.round(ticks);
         incomingAddressSize = addressSize;
@@ -463,6 +467,9 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
             playSoundEvent(StargateSoundEventEnum.INCOMING);
             resetIncomingAnimation();
             isIncoming = false;
+            if (irisMode == EnumIrisMode.AUTO && isOpened()) {
+                toggleIris();
+            }
         } else {
             if (incomingLastChevronLightUp > 1) {
                 stargateState = EnumStargateState.INCOMING;
@@ -471,6 +478,9 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
                 playSoundEvent(StargateSoundEventEnum.INCOMING);
                 isIncoming = false;
                 resetIncomingAnimation();
+                if (irisMode == EnumIrisMode.AUTO && isOpened()) {
+                    toggleIris();
+                }
             } else if (isIncoming)
                 stargateState = EnumStargateState.INCOMING;
         }
