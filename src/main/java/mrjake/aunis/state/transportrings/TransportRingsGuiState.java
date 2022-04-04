@@ -1,8 +1,10 @@
 package mrjake.aunis.state.transportrings;
 
 import io.netty.buffer.ByteBuf;
+import mrjake.aunis.Aunis;
 import mrjake.aunis.state.State;
 import mrjake.aunis.transportrings.TransportRings;
+import mrjake.aunis.transportrings.TransportRingsAddress;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -14,8 +16,8 @@ public class TransportRingsGuiState extends State {
 	private boolean inGrid;
 	public boolean isInGrid() { return inGrid; }
 	
-	private int address;
-	public int getAddress() { return address; }
+	private TransportRingsAddress address;
+	public TransportRingsAddress getAddress() { return address; }
 	
 	private String name;
 	public String getName() { return name != null ? name : ""; }
@@ -46,14 +48,14 @@ public class TransportRingsGuiState extends State {
 		buf.writeBoolean(inGrid);
 		
 		if (inGrid) {
-			buf.writeInt(address);
 			buf.writeInt(name.length());
 			buf.writeCharSequence(name, StandardCharsets.UTF_8);
+			address.toBytes(buf);
 			
 			buf.writeInt(ringsList.size());
 			
 			for (TransportRings rings : ringsList) {
-				buf.writeInt(rings.getAddress());
+				rings.getAddress().toBytes(buf);
 				buf.writeInt(rings.getName().length());
 				buf.writeCharSequence(rings.getName(), StandardCharsets.UTF_8);
 			}
@@ -64,20 +66,22 @@ public class TransportRingsGuiState extends State {
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
+		address = new TransportRingsAddress();
 		inGrid = buf.readBoolean();
 		
 		if (inGrid) {
-			address = buf.readInt();
 			int length = buf.readInt();
 			name = buf.readCharSequence(length, StandardCharsets.UTF_8).toString();
-			
+			address.fromBytes(buf);
+
 			int size = buf.readInt();
-			for (int i=0; i<size; i++) {
-				int address = buf.readInt();
-				
+			for (int i = 0; i < size; i++) {
+				TransportRingsAddress address = new TransportRingsAddress();
+				address.fromBytes(buf);
+
 				length = buf.readInt();
 				String name = buf.readCharSequence(length, StandardCharsets.UTF_8).toString();
-				
+
 				ringsList.add(new TransportRings(address, name));
 			}
 

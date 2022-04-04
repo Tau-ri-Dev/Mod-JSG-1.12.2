@@ -31,9 +31,8 @@ public class RingsGUI extends AunisGuiBase {
 		this.state = state;
 	}
 
-	private List<GuiTextField> textFields = new ArrayList<>();
-	
-	private GuiTextField addressTextField;
+	private final List<GuiTextField> textFields = new ArrayList<>();
+
 	private GuiTextField nameTextField;
 	private GuiTextField distanceTextField;
 
@@ -43,7 +42,8 @@ public class RingsGUI extends AunisGuiBase {
 	public void initGui() {	
 		super.initGui();
 		int y = 20;
-		addressTextField = createTextField(50, y, 1, state.isInGrid() ? "" + state.getAddress() : "");
+		GuiTextField addressTextField = createTextField(50, y, 250, state.isInGrid() ? "" + state.getAddress().toString() : "");
+		addressTextField.setEnabled(false);
 		textFields.add(addressTextField);
 		y += 15;
 		
@@ -106,29 +106,21 @@ public class RingsGUI extends AunisGuiBase {
 			EntityPlayer player = Minecraft.getMinecraft().player;
 			
 			try {
-				int address = Integer.parseInt(addressTextField.getText());
 				String name = nameTextField.getText();
-				
-				if (address > 0 && address <= 6) {
-					try {
-						int distance = Integer.parseInt(distanceTextField.getText());
+				try {
+					int distance = Integer.parseInt(distanceTextField.getText());
 
-						if (distance >= -40 && distance <= 40) {
-							AunisPacketHandler.INSTANCE.sendToServer(new SaveRingsParametersToServer(pos, address, name, distance));
-						}
-
-						else {
-							player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_block.wrong_distance"), true);
-						}
+					if (distance >= -40 && distance <= 40) {
+						AunisPacketHandler.INSTANCE.sendToServer(new SaveRingsParametersToServer(pos, name, distance));
 					}
 
-					catch (NumberFormatException e) {
+					else {
 						player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_block.wrong_distance"), true);
 					}
 				}
-				
-				else {
-					player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_block.wrong_address"), true);
+
+				catch (NumberFormatException e) {
+					player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_block.wrong_distance"), true);
 				}
 			}
 			

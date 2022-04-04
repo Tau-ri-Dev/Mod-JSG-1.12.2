@@ -103,8 +103,8 @@ public class AunisBlocks {
             TRANSPORT_RINGS_ORI_BLOCK
     };
 
-    public static boolean isRingBlock(Block block){
-        for(Block b : RINGS_BLOCKS){
+    public static boolean isInBlocksArray(Block block, Block[] array){
+        for(Block b : array){
             if(block == b) {
                 return true;
             }

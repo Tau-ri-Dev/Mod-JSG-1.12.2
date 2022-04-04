@@ -7,6 +7,7 @@ import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
 import mrjake.aunis.transportrings.ParamsSetResult;
+import mrjake.aunis.transportrings.TransportRingsAddress;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -19,15 +20,13 @@ import java.nio.charset.StandardCharsets;
 
 public class SaveRingsParametersToServer extends PositionedPacket {
 	public SaveRingsParametersToServer() {}
-	
-	int address;
+
 	String name;
 	int distance;
 	
-	public SaveRingsParametersToServer(BlockPos pos, int address, String name, int distance) {
+	public SaveRingsParametersToServer(BlockPos pos, String name, int distance) {
 		super(pos);
-		
-		this.address = address;
+
 		this.name = name;
 		this.distance = distance;
 	}
@@ -35,8 +34,7 @@ public class SaveRingsParametersToServer extends PositionedPacket {
 	@Override
 	public void toBytes(ByteBuf buf) {
 		super.toBytes(buf);
-		
-		buf.writeInt(address);
+
 		buf.writeInt(name.length());
 		buf.writeCharSequence(name, StandardCharsets.UTF_8);
 		buf.writeInt(distance);
@@ -46,7 +44,6 @@ public class SaveRingsParametersToServer extends PositionedPacket {
 	public void fromBytes(ByteBuf buf) {
 		super.fromBytes(buf);
 
-		address = buf.readInt();
 		int len = buf.readInt();
 		name = buf.readCharSequence(len, StandardCharsets.UTF_8).toString();
 		distance = buf.readInt();
@@ -62,7 +59,7 @@ public class SaveRingsParametersToServer extends PositionedPacket {
 			
 			world.addScheduledTask(() -> {
 				TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(message.pos);
-				if (ringsTile.setRingsParams(message.address, message.name, message.distance) == ParamsSetResult.DUPLICATE_ADDRESS)
+				if (ringsTile != null && ringsTile.setRingsParams(message.name, message.distance) == ParamsSetResult.DUPLICATE_ADDRESS)
 					player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_block.duplicate_address"), true);
 			
 				AunisPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(message.pos, StateTypeEnum.GUI_STATE, ringsTile.getState(StateTypeEnum.GUI_STATE)), player);

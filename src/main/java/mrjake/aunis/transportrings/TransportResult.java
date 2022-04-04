@@ -11,7 +11,8 @@ public enum TransportResult {
 	BUSY_TARGET(new TextComponentTranslation("tile.aunis.transportrings_block.busy_target")),
 	OBSTRUCTED(new TextComponentTranslation("tile.aunis.transportrings_block.obstructed")),
 	OBSTRUCTED_TARGET(new TextComponentTranslation("tile.aunis.transportrings_block.obstructed_target")),
-	NO_SUCH_ADDRESS(new TextComponentTranslation("tile.aunis.transportrings_block.non_existing_address"));
+	NO_SUCH_ADDRESS(new TextComponentTranslation("tile.aunis.transportrings_block.non_existing_address")),
+	ACTIVATED(null);
 	
 	@Nullable
 	public TextComponentTranslation textComponent;

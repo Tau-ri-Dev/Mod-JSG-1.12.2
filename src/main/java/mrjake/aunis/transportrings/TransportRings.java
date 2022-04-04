@@ -16,13 +16,13 @@ public class TransportRings {
   /**
    * Rings address
    */
-  private int address;
+  private TransportRingsAddress address = new TransportRingsAddress();
 
-  public int getAddress() {
+  public TransportRingsAddress getAddress() {
     return address;
   }
 
-  public void setAddress(int address) {
+  public void setAddress(TransportRingsAddress address) {
     this.address = address;
   }
 
@@ -85,17 +85,17 @@ public class TransportRings {
    *
    * @param pos - mandatory, points to rings base block
    */
-  public TransportRings(BlockPos pos) {
-    this(-1, null, pos, false);
+  public TransportRings(TransportRingsAddress address, BlockPos pos) {
+    this(address, "", pos, false);
   }
 
   /**
    * Used only for menu client-side
    *
-   * @param address
-   * @param name
+   * @param address rings address
+   * @param name name of rings
    */
-  public TransportRings(int address, String name) {
+  public TransportRings(TransportRingsAddress address, String name) {
     this(address, name, new BlockPos(0, 0, 0), false);
   }
 
@@ -111,7 +111,7 @@ public class TransportRings {
   /**
    * Called internally
    */
-  private TransportRings(int address, String name, BlockPos pos, boolean isClone) {
+  private TransportRings(TransportRingsAddress address, String name, BlockPos pos, boolean isClone) {
     this.address = address;
     this.name = name;
     this.pos = pos;
@@ -133,7 +133,8 @@ public class TransportRings {
    * @return should put rings on map
    */
   public boolean isInGrid() {
-    return address != -1;
+    System.out.println(address + " :: " + name);
+    return (address.size() > 3 && name != null && !(name.equals("")) && !(name.equals("[empty]")) && name.length() > 0);
   }
 
   public void setPos(BlockPos pos) {
@@ -161,7 +162,7 @@ public class TransportRings {
   public NBTTagCompound serializeNBT() {
     NBTTagCompound compound = new NBTTagCompound();
 
-    if (address != -1) compound.setInteger("address", address);
+    if (address != null) compound.setTag("addressNew", address.serializeNBT());
 
     if (name != null) compound.setString("name", name);
 
@@ -175,8 +176,8 @@ public class TransportRings {
   }
 
   public TransportRings deserializeNBT(NBTTagCompound compound) {
-    if (compound.hasKey("address")) address = compound.getInteger("address");
-    else address = -1;
+    if (compound.hasKey("address")) address = new TransportRingsAddress(compound.getCompoundTag("addressNew"));
+    else address = new TransportRingsAddress();
 
     if (compound.hasKey("name")) name = compound.getString("name");
 

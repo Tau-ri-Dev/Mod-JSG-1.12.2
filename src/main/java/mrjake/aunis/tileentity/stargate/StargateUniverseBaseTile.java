@@ -47,6 +47,9 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
             BiomeOverlayEnum.AGED
     );
 
+    // incoming
+    private boolean hadIncoming = false;
+
     // dialing
     private StargateAddress addressToDial;
     private int symbolsToDialCount;
@@ -203,6 +206,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
      */
     @Override
     protected void disconnectGate() {
+        hadIncoming = false;
+        markDirty();
         super.disconnectGate();
         if(!abortingDialing)
             addSymbolToAddressManual(TOP_CHEVRON, null);
@@ -424,14 +429,14 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
     @Override
     public void incomingWormhole(int dialedAddressSize) {
-        if(stargateState.incoming()) return;
+        if(stargateState.incoming() || hadIncoming) return;
         startIncomingAnimation(dialedAddressSize, 10);
         super.incomingWormhole(9);
     }
 
     @Override
     public void incomingWormhole(int dialedAddressSize, int time) {
-        if(stargateState.incoming()) return;
+        if(stargateState.incoming() || hadIncoming) return;
         time = time * dialedAddressSize;
         int period = time - 2000;
         if (period < 0) period = 0;
@@ -441,7 +446,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
     @Override
     public void startIncomingAnimation(int addressSize, int period) {
-        if(stargateState.incoming()) return;
         double ticks = (double) (period * 20) / 1000;
         incomingPeriod = (int) Math.round(ticks);
         incomingAddressSize = addressSize;
@@ -457,6 +461,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
     @Override
     public void lightUpChevronByIncoming(boolean disableAnimation) {
+        if(hadIncoming) return;
         super.lightUpChevronByIncoming(disableAnimation);
         if (incomingPeriod == -1) return;
         if (!disableAnimation && incomingLastChevronLightUp == 1){
@@ -467,6 +472,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
             playSoundEvent(StargateSoundEventEnum.INCOMING);
             resetIncomingAnimation();
             isIncoming = false;
+            hadIncoming = true;
             if (irisMode == EnumIrisMode.AUTO && isOpened()) {
                 toggleIris();
             }
@@ -477,6 +483,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
                 sendSignal(null, "stargate_incoming_wormhole", new Object[]{incomingAddressSize});
                 playSoundEvent(StargateSoundEventEnum.INCOMING);
                 isIncoming = false;
+                hadIncoming = true;
                 resetIncomingAnimation();
                 if (irisMode == EnumIrisMode.AUTO && isOpened()) {
                     toggleIris();
@@ -618,6 +625,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
         compound.setInteger("coolDown", coolDown);
         compound.setBoolean("fastDialing", isFastDialing);
         compound.setBoolean("abortingDialing", abortingDialing);
+        compound.setBoolean("hadIncoming", hadIncoming);
 
         return super.writeToNBT(compound);
     }
@@ -632,5 +640,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
         coolDown = compound.getInteger("coolDown");
         isFastDialing = compound.getBoolean("fastDialing");
         abortingDialing = compound.getBoolean("abortingDialing");
+        hadIncoming = compound.getBoolean("hadIncoming");
     }
 }

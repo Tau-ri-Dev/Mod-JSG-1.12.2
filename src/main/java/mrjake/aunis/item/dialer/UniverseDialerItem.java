@@ -1,6 +1,7 @@
 package mrjake.aunis.item.dialer;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
 import mrjake.aunis.config.AunisConfig;
@@ -200,7 +201,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                     if (compound.hasKey(mode.tagPosName)) {
                         BlockPos tilePos = BlockPos.fromLong(compound.getLong(mode.tagPosName));
 
-                        if (!mode.matcher.apply(world.getBlockState(tilePos)) || tilePos.distanceSq(pos) > reachSquared) {
+                        if (!AunisBlocks.isInBlocksArray(world.getBlockState(tilePos).getBlock(), mode.matchBlocks) || tilePos.distanceSq(pos) > reachSquared) {
                             compound.removeTag(mode.tagPosName);
                         }
                     }
@@ -208,7 +209,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                     boolean found = false;
 
                     for (BlockPos targetPos : BlockPos.getAllInBoxMutable(pos.add(-10, -10, -10), pos.add(10, 10, 10))) {
-                        if (mode.matcher.apply(world.getBlockState(targetPos))) {
+                        if (AunisBlocks.isInBlocksArray(world.getBlockState(targetPos).getBlock(), mode.matchBlocks)) {
                             switch (mode) {
                                 case MEMORY:
                                 case NEARBY:

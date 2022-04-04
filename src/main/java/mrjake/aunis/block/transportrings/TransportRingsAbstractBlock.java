@@ -41,7 +41,9 @@ public abstract class TransportRingsAbstractBlock extends Block {
     TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(pos);
 
     if (!world.isRemote) {
-      AunisPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(pos, StateTypeEnum.GUI_STATE, ringsTile.getState(StateTypeEnum.GUI_STATE)), (EntityPlayerMP) player);
+      if (ringsTile != null) {
+        AunisPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(pos, StateTypeEnum.GUI_STATE, ringsTile.getState(StateTypeEnum.GUI_STATE)), (EntityPlayerMP) player);
+      }
     }
 
     return true;
@@ -52,7 +54,9 @@ public abstract class TransportRingsAbstractBlock extends Block {
     TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(pos);
 
     if (!world.isRemote) {
-      ringsTile.updateLinkStatus();
+      if (ringsTile != null) {
+        ringsTile.updateLinkStatus();
+      }
     }
   }
 
@@ -60,9 +64,11 @@ public abstract class TransportRingsAbstractBlock extends Block {
   public void breakBlock(World world, BlockPos pos, IBlockState state) {
     TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(pos);
 
-    if (ringsTile.isLinked()) ringsTile.getLinkedControllerTile(world).setLinkedRings(null, -1);
+    if (ringsTile != null && ringsTile.isLinked()) ringsTile.getLinkedControllerTile(world).setLinkedRings(null, -1);
 
-    ringsTile.removeAllRings();
+    if (ringsTile != null) {
+      ringsTile.removeAllRings();
+    }
   }
 
   // ------------------------------------------------------------------------

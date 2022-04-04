@@ -4,9 +4,9 @@ import io.netty.buffer.ByteBuf;
 import mrjake.aunis.packet.PositionedPacket;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
-import mrjake.aunis.stargate.EnumScheduledTask;
 import mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
+import mrjake.aunis.transportrings.TransportResult;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -18,19 +18,19 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class TRControllerActivatedToServer extends PositionedPacket {
 	public TRControllerActivatedToServer() {}
 	
-	public int address;
+	public int symbol;
 	
-	public TRControllerActivatedToServer(BlockPos pos, int address) {
+	public TRControllerActivatedToServer(BlockPos pos, int symbol) {
 		super(pos);
 		
-		this.address = address;
+		this.symbol = symbol;
 	}
 	
 	@Override
 	public void toBytes(ByteBuf buf) {
 		super.toBytes(buf);
 		
-		buf.writeInt(address);
+		buf.writeInt(symbol);
 	}
 
 	
@@ -38,7 +38,7 @@ public class TRControllerActivatedToServer extends PositionedPacket {
 	public void fromBytes(ByteBuf buf) {
 		super.fromBytes(buf);
 		
-		address = buf.readInt();
+		symbol = buf.readInt();
 	}
 
 	
@@ -51,16 +51,16 @@ public class TRControllerActivatedToServer extends PositionedPacket {
 			
 			world.addScheduledTask(() -> {
 				TRControllerAbstractTile controllerTile = (TRControllerAbstractTile) world.getTileEntity(message.pos);
-				TransportRingsAbstractTile ringsTile = controllerTile.getLinkedRingsTile(world);
-				
-				if (ringsTile != null) {
-					AunisSoundHelper.playSoundEvent(world, message.pos, SoundEventEnum.RINGS_CONTROLLER_BUTTON);
-					
-					ringsTile.attemptTransportTo(message.address, EnumScheduledTask.RINGS_START_ANIMATION.waitTicks).sendMessageIfFailed(player);
+				if(controllerTile != null) {
+					TransportRingsAbstractTile ringsTile = controllerTile.getLinkedRingsTile(world);
+
+					if (ringsTile != null) {
+						AunisSoundHelper.playSoundEvent(world, message.pos, SoundEventEnum.RINGS_CONTROLLER_BUTTON);
+						TransportResult result = ringsTile.addSymbolToAddress(message.symbol-1);
+						result.sendMessageIfFailed(player);
+					} else
+						player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_controller_block.not_linked"), true);
 				}
-				
-				else
-					player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_controller_block.not_linked"), true);
 			});
 			
 			return null;

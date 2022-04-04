@@ -4,15 +4,18 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.util.EnumKeyInterface;
 import mrjake.aunis.util.EnumKeyMap;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
+
 public enum UniverseDialerMode implements EnumKeyInterface<Byte> {	
-	NEARBY(0, "item.aunis.universe_dialer.mode_scan", true, "linkedGate", "nearby", BlockMatcher.forBlock(AunisBlocks.STARGATE_UNIVERSE_BASE_BLOCK)),
-	MEMORY(1, "item.aunis.universe_dialer.mode_saved", true, "linkedGate", "saved", BlockMatcher.forBlock(AunisBlocks.STARGATE_UNIVERSE_BASE_BLOCK)),
-	RINGS(2, "item.aunis.universe_dialer.mode_rings", true, "linkedRings", "rings", BlockMatcher.forBlock(AunisBlocks.TRANSPORT_RINGS_BLOCK)),
+	NEARBY(0, "item.aunis.universe_dialer.mode_scan", true, "linkedGate", "nearby", new Block[]{AunisBlocks.STARGATE_UNIVERSE_BASE_BLOCK}),
+	MEMORY(1, "item.aunis.universe_dialer.mode_saved", true, "linkedGate", "saved", new Block[]{AunisBlocks.STARGATE_UNIVERSE_BASE_BLOCK}),
+	RINGS(2, "item.aunis.universe_dialer.mode_rings", true, "linkedRings", "rings", AunisBlocks.RINGS_BLOCKS),
 	OC(3, "item.aunis.universe_dialer.mode_oc", false, null, "ocmess", null);
 	
 	public final byte id;
@@ -20,15 +23,15 @@ public enum UniverseDialerMode implements EnumKeyInterface<Byte> {
 	public final boolean linkable;
 	public final String tagPosName;
 	public final String tagListName;
-	public final BlockMatcher matcher;
+	public final Block[] matchBlocks;
 
-	private UniverseDialerMode(int id, String translationKey, boolean linkable, String tagPosName, String tagListName, BlockMatcher matcher) {
+	private UniverseDialerMode(int id, String translationKey, boolean linkable, String tagPosName, String tagListName, Block[] matchBlocks) {
 		this.id = (byte) id;
 		this.translationKey = translationKey;
 		this.linkable = linkable;
 		this.tagPosName = tagPosName;
 		this.tagListName = tagListName;
-		this.matcher = matcher;
+		this.matchBlocks = matchBlocks;
 	}
 
 	public UniverseDialerMode next() {
