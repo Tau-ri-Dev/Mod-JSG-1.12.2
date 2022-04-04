@@ -3,10 +3,13 @@ package mrjake.aunis.gui;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.gui.base.AunisGuiButton;
 import mrjake.aunis.gui.base.AunisGuiBase;
+import mrjake.aunis.gui.element.GuiHelper;
+import mrjake.aunis.gui.element.TabAddress;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.transportrings.SaveRingsParametersToServer;
 import mrjake.aunis.state.transportrings.TransportRingsGuiState;
 import mrjake.aunis.transportrings.TransportRings;
+import mrjake.aunis.transportrings.TransportRingsAddress;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
@@ -42,9 +45,9 @@ public class RingsGUI extends AunisGuiBase {
 	public void initGui() {	
 		super.initGui();
 		int y = 20;
-		GuiTextField addressTextField = createTextField(50, y, 250, state.isInGrid() ? "" + state.getAddress().toString() : "");
-		addressTextField.setEnabled(false);
-		textFields.add(addressTextField);
+		//GuiTextField addressTextField = createTextField(50, y, 250, state.isInGrid() ? "" + state.getAddress().toString() : "");
+		//addressTextField.setEnabled(false);
+		//textFields.add(addressTextField);
 		y += 15;
 		
 		nameTextField = createTextField(50, y, 16, state.getName());
@@ -83,14 +86,22 @@ public class RingsGUI extends AunisGuiBase {
 		drawString(Aunis.proxy.localize("tile.aunis.transportrings_block.rings_address") + ": ", 0, 20, 0x00AA00);
 		drawString(Aunis.proxy.localize("tile.aunis.transportrings_block.rings_name") + ": ", 0, 35, 0x00AAAA);
 		drawString(Aunis.proxy.localize("tile.aunis.transportrings_block.rings_distance") + ": ", 0, 50, 0xF9801D);
-		
+
+		int shadow = 2;
+		float color = 1.0f;
+
+		for (int i = 0; i< TransportRingsAddress.MAX_SYMBOLS; i++) {
+			Minecraft.getMinecraft().getTextureManager().bindTexture(state.getAddress().get(i).getIconResource());
+			GuiHelper.drawTexturedRectWithShadow(60 + 25*i, 20, shadow, shadow, 20, 20, color);
+		}
+
 		for (GuiTextField tf : textFields)
 			drawTextBox(tf);
 		
 		int y = 65;
 		for (TransportRings rings : state.getRings()) {			
 			drawString(""+rings.getAddress(), 60, y, 0x00AA00);
-			drawString(rings.getName(), 70, y, 0x00AAAA);
+			drawString(rings.getName(), 40, y, 0x00AAAA);
 			
 			y += 12;
 		}

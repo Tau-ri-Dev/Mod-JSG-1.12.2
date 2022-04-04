@@ -268,8 +268,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             dialedAddress.add(symbol);
             markDirty();
             if(ringsWillLock()){
-                if(!attemptTransportTo(dialedAddress, EnumScheduledTask.RINGS_START_ANIMATION.waitTicks).ok())
+                if(!attemptTransportTo(dialedAddress, EnumScheduledTask.RINGS_START_ANIMATION.waitTicks).ok()) {
                     dialedAddress.clear();
+                    markDirty();
+                }
             }
             return TransportResult.OK;
         }

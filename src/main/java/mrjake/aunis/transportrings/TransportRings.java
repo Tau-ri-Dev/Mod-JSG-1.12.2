@@ -133,7 +133,6 @@ public class TransportRings {
    * @return should put rings on map
    */
   public boolean isInGrid() {
-    System.out.println(address + " :: " + name);
     return (address.size() > 3 && name != null && !(name.equals("")) && !(name.equals("[empty]")) && name.length() > 0);
   }
 
