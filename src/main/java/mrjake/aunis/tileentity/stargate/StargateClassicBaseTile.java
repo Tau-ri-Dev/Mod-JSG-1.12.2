@@ -1063,7 +1063,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
 
         int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
-        doIncomingAnimation(duration, true);
+        doIncomingAnimation(duration, true, targetRingSymbol);
 
         AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, plusRounds)), targetPoint);
         lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 5);

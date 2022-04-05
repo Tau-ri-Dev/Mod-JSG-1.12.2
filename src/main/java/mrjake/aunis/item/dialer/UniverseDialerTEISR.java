@@ -145,8 +145,11 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 								StargateAddressDynamic toDialAddress = addrFromBytes(compound, "toDialAddress");
 
 								int dialed = -1;
-								if(toDialAddress != null && toDialAddress.equals(address))
+								boolean isDialingThisAddr = false;
+								if(toDialAddress != null && toDialAddress.equals(address)) {
 									dialed = 0;
+									isDialingThisAddr = true;
+								}
 
 								if(dialedAddress != null && dialed >= 0)
 									dialed = dialedAddress.getSize();
@@ -166,15 +169,15 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 									String entryName = entryCompound.getString("name");
 									if(dialed > -1)
 										entryName += " (" + dialed + ")";
-									drawStringWithShadow(-0.05f, 0.32f - 0.32f*offset, entryName, active, false, true, dialed > 0, gateStatus);
+									drawStringWithShadow(-0.05f, 0.32f - 0.32f*offset, entryName, active, false, true, dialed >= 0, gateStatus);
 								}
 								else {
 									for (int i=0; i<symbolCount; i++) {
 										boolean engage_s = (i < dialed);
-										renderSymbol(offset, i, address.get(i), active, symbolCount == 8, engage_s, gateStatus);
+										renderSymbol(offset, i, address.get(i), isDialingThisAddr, active, symbolCount == 8, engage_s, gateStatus);
 									}
 
-									renderSymbol(offset, symbolCount, SymbolUniverseEnum.getOrigin(), active, symbolCount == 8, engage_poo, gateStatus);
+									renderSymbol(offset, symbolCount, SymbolUniverseEnum.getOrigin(), isDialingThisAddr, active, symbolCount == 8, engage_poo, gateStatus);
 								}
 								
 								break;
@@ -254,8 +257,8 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 			alpha = 0.3f;
 
 		if(dialing){
-			red = 0.0f;
-			green = 0.5f;
+			red = 0.5f;
+			green = 0.7f;
 			blue = 1f;
 		}
 		if(isEngaged && dialing){
@@ -290,7 +293,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 		GlStateManager.popMatrix();
 	}
 	
-	private static void renderSymbol(int row, int col, SymbolInterface symbol, boolean isActive, boolean is9Chevron, boolean engage, EnumStargateState stargateState) {
+	private static void renderSymbol(int row, int col, SymbolInterface symbol, boolean dialing, boolean isActive, boolean is9Chevron, boolean engage, EnumStargateState stargateState) {
 
 		boolean isEngaged = stargateState.engaged() || stargateState.initiating();
 		boolean isEngagedInitiating = stargateState.initiating();
@@ -318,9 +321,9 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 		if(!isActive || isIncoming || (!isEngagedInitiating && isEngaged))
 			alpha = 0.3f;
 
-		if(!isEngaged && engage){
-			red = 0.0f;
-			green = 0.5f;
+		if(dialing && !isEngaged && !engage){
+			red = 0.5f;
+			green = 0.7f;
 			blue = 1f;
 		}
 		if(isEngaged && engage){

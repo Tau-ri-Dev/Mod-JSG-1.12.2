@@ -663,7 +663,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       if (distance <= 20) distance += 36;
 
       int duration = (int) (distance);
-      doIncomingAnimation(duration, true);
+      doIncomingAnimation(duration, true, targetSymbol);
 
       //Aunis.logger.debug("addSymbolToAddressManual: " + "current:" + currentRingSymbol + ", " + "target:" + targetSymbol + ", " + "direction:" + spinDirection + ", " + "distance:" + distance + ", " + "duration:" + duration + ", " + "moveOnly:" + moveOnly);
 
@@ -728,7 +728,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
       if (distance <= 20) distance += 36;
 
       int duration = (int) (distance);
-      doIncomingAnimation(duration, true);
+      doIncomingAnimation(duration, true, targetRingSymbol);
 
       Aunis.logger.debug("addSymbolToAddressManual: " + "current:" + currentRingSymbol + ", " + "target:" + targetSymbol + ", " + "direction:" + spinDirection + ", " + "distance:" + distance + ", " + "duration:" + duration + ", " + "moveOnly:" + moveOnly);
 

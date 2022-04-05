@@ -105,7 +105,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     public void onBreak(){
         setBarrierBlocks(false, false);
-        Aunis.ocWrapper.leaveWirelessNetwork(this);
     }
 
     // ---------------------------------------------------------------------------------

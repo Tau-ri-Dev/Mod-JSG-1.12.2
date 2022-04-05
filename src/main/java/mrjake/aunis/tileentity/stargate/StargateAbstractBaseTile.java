@@ -565,14 +565,17 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         }
     }
 
-    protected void doIncomingAnimation(int time, boolean byComputer){
+    protected void doIncomingAnimation(int time, boolean byComputer) {
+        doIncomingAnimation(time, byComputer, null);
+    }
+    protected void doIncomingAnimation(int time, boolean byComputer, SymbolInterface symbol){
         if(!connectingToGate) return;
         connectingToGate = false;
         markDirty();
         StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
         dialAddr_backup.clear();
         dialAddr_backup.addAll(dialedAddress);
-        if(dialedAddress.size() >= 6) {
+        if(dialedAddress.size() >= 6 && (symbol == null || symbol.origin())) {
             dialedAddress.addOrigin();
 
             StargatePos targetGatePos = network.getStargate(dialedAddress);

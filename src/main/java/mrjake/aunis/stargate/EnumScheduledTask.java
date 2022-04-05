@@ -48,7 +48,8 @@ public enum EnumScheduledTask {
   LIGHT_UP_CHEVRONS(31, -1),
 
   STARGATE_FAST_DIAL_SPIN_FINISHED(32, -1),
-  STARGATE_RESET(33, 20); // used only for uni gates
+  STARGATE_RESET(33, 20), // used only for uni gates
+  BEGIN_SPIN(34, -1);
 
     public int id;
   public int waitTicks;
