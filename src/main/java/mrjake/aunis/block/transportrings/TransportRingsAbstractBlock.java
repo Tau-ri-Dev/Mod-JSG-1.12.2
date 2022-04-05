@@ -63,12 +63,12 @@ public abstract class TransportRingsAbstractBlock extends Block {
   @Override
   public void breakBlock(World world, BlockPos pos, IBlockState state) {
     TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(pos);
-
-    if (ringsTile != null && ringsTile.isLinked()) ringsTile.getLinkedControllerTile(world).setLinkedRings(null, -1);
-
     if (ringsTile != null) {
+      if(ringsTile.isLinked()) ringsTile.getLinkedControllerTile(world).setLinkedRings(null, -1);
       ringsTile.removeAllRings();
+      ringsTile.onBreak();
     }
+    super.breakBlock(world, pos, state);
   }
 
   // ------------------------------------------------------------------------

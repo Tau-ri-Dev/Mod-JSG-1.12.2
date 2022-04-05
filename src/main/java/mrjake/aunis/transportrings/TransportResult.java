@@ -12,6 +12,7 @@ public enum TransportResult {
 	OBSTRUCTED(new TextComponentTranslation("tile.aunis.transportrings_block.obstructed")),
 	OBSTRUCTED_TARGET(new TextComponentTranslation("tile.aunis.transportrings_block.obstructed_target")),
 	NO_SUCH_ADDRESS(new TextComponentTranslation("tile.aunis.transportrings_block.non_existing_address")),
+	NOT_IN_GRID(new TextComponentTranslation("tile.aunis.transportrings_block.rings_not_in_grid")),
 	ACTIVATED(null);
 	
 	@Nullable

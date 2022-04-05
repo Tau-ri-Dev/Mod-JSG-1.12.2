@@ -208,6 +208,11 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                     boolean found = false;
 
+                    long targetPosOld = 0;
+                    if (compound.hasKey(mode.tagPosName)) {
+                        targetPosOld = compound.getLong(mode.tagPosName);
+                    }
+
                     for (BlockPos targetPos : BlockPos.getAllInBoxMutable(pos.add(-10, -10, -10), pos.add(10, 10, 10))) {
                         if (AunisBlocks.isInBlocksArray(world.getBlockState(targetPos).getBlock(), mode.matchBlocks)) {
                             switch (mode) {
@@ -295,14 +300,8 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                         }
 
                         if (found) {
-                            if (compound.hasKey(mode.tagPosName)) {
-                                long targetPosOld = compound.getLong(mode.tagPosName);
-                                if (targetPosOld != targetPos.toLong()) {
-                                    if (entity instanceof EntityPlayer) {
-                                        AunisSoundHelper.playSoundEventClientSide(entity.getEntityWorld(), entity.getPosition(), SoundEventEnum.UNIVERSE_DIALER_CONNECTED);
-                                    }
-                                }
-                            }
+                            if (targetPosOld != 0 && !(BlockPos.fromLong(targetPosOld).equals(targetPos)))
+                                AunisSoundHelper.playSoundEventClientSide(entity.getEntityWorld(), entity.getPosition(), SoundEventEnum.UNIVERSE_DIALER_CONNECTED);
                             break;
                         }
                     }
@@ -386,7 +385,8 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                 case RINGS:
                     TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(linkedPos);
-                    ringsTile.attemptTransportTo(new TransportRings(selectedCompound).getAddress(), 0).sendMessageIfFailed(player);
+                    if(ringsTile == null) break;
+                    ringsTile.attemptTransportTo(new TransportRings(selectedCompound).getAddress(), 5).sendMessageIfFailed(player);
 
                     break;
 

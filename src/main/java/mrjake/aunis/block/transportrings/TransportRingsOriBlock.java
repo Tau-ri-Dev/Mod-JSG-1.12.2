@@ -7,10 +7,10 @@ import net.minecraft.world.World;
 
 public class TransportRingsOriBlock extends TransportRingsAbstractBlock {
 
-  private static final String blockName = "transportrings_ori_block";
+  private static final String BLOCK_NAME = "transportrings_ori_block";
 
   public TransportRingsOriBlock() {
-    super(blockName);
+    super(BLOCK_NAME);
   }
 
   @Override

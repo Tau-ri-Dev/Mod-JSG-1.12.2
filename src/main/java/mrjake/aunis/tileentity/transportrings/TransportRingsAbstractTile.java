@@ -103,6 +103,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         Aunis.ocWrapper.joinOrCreateNetwork(this);
     }
 
+    public void onBreak(){
+        setBarrierBlocks(false, false);
+        Aunis.ocWrapper.leaveWirelessNetwork(this);
+    }
+
     // ---------------------------------------------------------------------------------
     // Address system
 
@@ -268,10 +273,13 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             dialedAddress.add(symbol);
             markDirty();
             if(ringsWillLock()){
-                if(!attemptTransportTo(dialedAddress, EnumScheduledTask.RINGS_START_ANIMATION.waitTicks).ok()) {
+                TransportResult result = attemptTransportTo(dialedAddress, EnumScheduledTask.RINGS_START_ANIMATION.waitTicks);
+                if(!result.ok()) {
                     dialedAddress.clear();
                     markDirty();
+                    return result;
                 }
+                return TransportResult.OK;
             }
             return TransportResult.OK;
         }
@@ -292,7 +300,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     public boolean ringsWillLock(){
-        return (dialedAddress.size() > MAX_SYMBOLS && dialedAddress.getLast().origin());
+        return (dialedAddress.size() > MAX_SYMBOLS || dialedAddress.getLast().origin());
     }
 
     /**
@@ -302,6 +310,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
      * @param address Target rings address
      */
     public TransportResult attemptTransportTo(TransportRingsAddress address, int waitTime) {
+        if (!getRings().isInGrid()) {
+            return TransportResult.NOT_IN_GRID;
+        }
         if (checkIfObstructed()) {
             return TransportResult.OBSTRUCTED;
         }
@@ -309,12 +320,13 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             return TransportResult.BUSY;
         }
 
-        TransportRingsAddress strippedAddress = address.getLast().origin() ? address.stripOrigin() : address;
+        TransportRingsAddress strippedAddress = (address.getLast().origin()) ? address.stripOrigin() : address;
 
         TransportRings rings = ringsMap.get(strippedAddress.calAddress());
 
         // Binding exists
         if (rings != null) {
+            if(!rings.isInGrid()) return TransportResult.NO_SUCH_ADDRESS;
             BlockPos targetRingsPos = rings.getPos();
             TransportRingsAbstractTile targetRingsTile = (TransportRingsAbstractTile) world.getTileEntity(targetRingsPos);
 
@@ -351,7 +363,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                     Block newBlock = newState.getBlock();
 
                     if (!newBlock.isAir(newState, world, newPos) && !newBlock.isReplaceable(world, newPos)) {
-                        Aunis.logger.info("TransportRings: " + newPos + " obstructed with " + world.getBlockState(newPos));
                         return true;
                     }
                 }
@@ -420,7 +431,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     // Rings network
     protected TransportRings rings;
 
-    protected TransportRings getRings() {
+    public TransportRings getRings() {
         if (rings == null) rings = new TransportRings(generateAndPostAddress(true), pos);
 
         return rings;
@@ -682,7 +693,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     public void updateLinkStatus() {
-        BlockPos closestController = LinkingHelper.findClosestUnlinked(world, pos, new BlockPos(10, 5, 10), AunisBlocks.TR_CONTROLLER_BLOCK, linkId);
+        BlockPos closestController = null;
+        for(Block block : AunisBlocks.RINGS_CONTROLLERS){
+            if(closestController != null) break;
+            closestController = LinkingHelper.findClosestUnlinked(world, pos, new BlockPos(10, 5, 10), block, linkId);
+        }
 
         int linkId = closestController == null ? -1 : LinkingHelper.getLinkId();
 

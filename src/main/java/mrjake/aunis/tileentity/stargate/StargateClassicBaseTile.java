@@ -317,8 +317,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         incomingLastChevronLightUp++;
     }
 
-    ;
-
     /**
      * Try to run {@link #lightUpChevronByIncoming(boolean disableAnimation)}
      */
@@ -1817,7 +1815,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public Object[] spinGate(Context context, Arguments args) {
         if (!isMerged()) return new Object[]{null, "stargate_failure_not_merged", "Stargate is not merged"};
 
-        if (!(this instanceof StargateMilkyWayBaseTile))
+        if ((this instanceof StargatePegasusBaseTile))
             return new Object[]{null, "stargate_not_supported", "Stargate type is not supported"};
 
         if (stargateState.idle()) {

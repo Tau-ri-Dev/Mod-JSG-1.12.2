@@ -148,6 +148,7 @@ tile.aunis.transportrings_block.busy_target=Target rings busy
 tile.aunis.transportrings_block.rings_no=Rings No. %s
 tile.aunis.transportrings_block.rings_not_in_grid=Rings not in grid
 tile.aunis.transportrings_block.rings_address=Address
+tile.aunis.transportrings_block.rings_address_list=Near rings
 tile.aunis.transportrings_block.rings_name=Name
 tile.aunis.transportrings_block.rings_distance=Distance
 tile.aunis.transportrings_block.rings_save=Save

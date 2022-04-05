@@ -288,6 +288,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
                 sendRenderingUpdate(StargateRendererActionState.EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
                 break;
             case STARGATE_DIAL_NEXT:
+                if(stargateState.incoming()) break;
                 if(abortingDialing || stargateState.failing()) break;
                 if(isFastDialing && stargateState.dialingDHD()){
                     if(dialedAddress.size() == 0)
@@ -316,6 +317,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
                 }
                 break;
             case STARGATE_RESET:
+                if(stargateState.incoming()) break;
                 addSymbolToAddressManual(getSymbolType().getTopSymbol(), null);
                 abortingDialing = false;
                 break;
@@ -352,7 +354,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
                         dialingFailed(StargateOpenResult.ADDRESS_MALFORMED);
                         stargateState = EnumStargateState.IDLE;
                     }
-                } else {
+                } else{
                     dialingFailed(StargateOpenResult.ABORTED);
                     stargateState = EnumStargateState.IDLE;
                     abortingDialing = false;

@@ -54,6 +54,7 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
     }
 
     public SymbolTransportRingsEnum getLast(){
+        if(address.size() < 1) return SymbolTransportRingsEnum.getOrigin();
         return address.get(address.size()-1);
     }
 
@@ -135,6 +136,20 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
                 continue;
             }
             stringAddress.append(symbol.getEnglishName()).append(", ");
+        }
+        return stringAddress.toString();
+    }
+
+    public String toShortString() {
+        StringBuilder stringAddress = new StringBuilder();
+        if(address == null || address.size() < 1) return "";
+        for (SymbolTransportRingsEnum symbol : address) {
+            if (symbol == null){
+                stringAddress.append("-, ");
+                continue;
+            }
+            String symbolName = symbol.getEnglishName();
+            stringAddress.append(symbolName.charAt(0)).append(symbolName.charAt(1)).append(", ");
         }
         return stringAddress.toString();
     }

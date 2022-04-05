@@ -174,12 +174,16 @@ public class AunisGuiBase extends GuiScreen {
         
         tf.drawTextBox();
 	}
-	
+
 	protected GuiTextField createTextField(int x, int y, int maxLength, String defaultText) {
+		return createTextField(x, y, getBottomRightInside(false)-(x + getTopLeftInside())-6, maxLength, defaultText);
+	}
+
+	protected GuiTextField createTextField(int x, int y, int width, int maxLength, String defaultText) {
 		int x1 = x + getTopLeftInside();
 		int y1 = y + getTopLeftInside();
 		
-		GuiTextField tf = new GuiTextField(id++, fontRenderer, x1+3, y1-1, getBottomRightInside(false)-x1-6, 10);
+		GuiTextField tf = new GuiTextField(id++, fontRenderer, x1+3, y1-1, width, 10);
 		
 		tf.setMaxStringLength(maxLength);
 		tf.setEnableBackgroundDrawing(false);

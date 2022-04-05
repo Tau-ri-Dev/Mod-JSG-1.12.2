@@ -7,10 +7,10 @@ import net.minecraft.world.World;
 
 public class TransportRingsGoauldBlock extends TransportRingsAbstractBlock {
 
-  private static final String blockName = "transportrings_block";
+  private static final String BLOCK_NAME = "transportrings_block";
 
   public TransportRingsGoauldBlock() {
-    super(blockName);
+    super(BLOCK_NAME);
   }
 
   @Override

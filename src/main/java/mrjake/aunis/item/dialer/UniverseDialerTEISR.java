@@ -181,8 +181,8 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 								
 							case RINGS:
 								TransportRings rings = new TransportRings(entryCompound);
-								drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, rings.getAddress() + ".", active, false);
 								drawStringWithShadow(-0.10f, 0.32f - 0.32f*offset, rings.getName(), active, false);
+								//drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, rings.getAddress().toShortString(), active, false);
 								break;
 								
 							case OC:

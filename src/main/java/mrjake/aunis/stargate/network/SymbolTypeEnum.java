@@ -1,6 +1,5 @@
 package mrjake.aunis.stargate.network;
 
-import mrjake.aunis.stargate.EnumSpinDirection;
 import mrjake.aunis.util.EnumKeyInterface;
 import mrjake.aunis.util.EnumKeyMap;
 
@@ -8,7 +7,9 @@ import java.util.List;
 import java.util.Random;
 
 public enum SymbolTypeEnum implements EnumKeyInterface<Integer> {
-  MILKYWAY(0, 32, 32), PEGASUS(1, 27, 27), UNIVERSE(2, 20, 42);
+  MILKYWAY(0, 32, 32),
+  PEGASUS(1, 27, 27),
+  UNIVERSE(2, 20, 42);
 
   public int id;
   public int iconWidht;

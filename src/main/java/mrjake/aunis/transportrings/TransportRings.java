@@ -161,7 +161,7 @@ public class TransportRings {
   public NBTTagCompound serializeNBT() {
     NBTTagCompound compound = new NBTTagCompound();
 
-    if (address != null) compound.setTag("addressNew", address.serializeNBT());
+    if (address != null) compound.setTag("address", address.serializeNBT());
 
     if (name != null) compound.setString("name", name);
 
@@ -175,7 +175,7 @@ public class TransportRings {
   }
 
   public TransportRings deserializeNBT(NBTTagCompound compound) {
-    if (compound.hasKey("address")) address = new TransportRingsAddress(compound.getCompoundTag("addressNew"));
+    if (compound.hasKey("address")) address = new TransportRingsAddress(compound.getCompoundTag("address"));
     else address = new TransportRingsAddress();
 
     if (compound.hasKey("name")) name = compound.getString("name");

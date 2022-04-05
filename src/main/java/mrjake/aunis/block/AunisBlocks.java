@@ -102,6 +102,12 @@ public class AunisBlocks {
             TRANSPORT_RINGS_BLOCK,
             TRANSPORT_RINGS_ORI_BLOCK
     };
+    /**
+     * Used in {@link mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile#updateLinkStatus()}
+     */
+    public static final Block[] RINGS_CONTROLLERS = {
+            TR_CONTROLLER_BLOCK
+    };
 
     public static boolean isInBlocksArray(Block block, Block[] array){
         for(Block b : array){
