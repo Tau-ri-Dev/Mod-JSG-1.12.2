@@ -43,14 +43,14 @@ public class GetUpdate {
                 if (gotVersionSplit.length < i + 1 || currentVersionSplit.length < i + 1)
                     continue;
 
-                if (parseInt(gotVersionSplit[i]) > parseInt(currentVersionSplit[i]))
-                    return gotVersion;
+                if (parseInt(gotVersionSplit[i]) < parseInt(currentVersionSplit[i]))
+                    return "false"; // must return string, because if true -> returns version
             }
         }
         catch(Exception ignored){}
 
 
-        return "false"; // must return string, because if true -> returns version
+        return gotVersion;
     }
 
     public static boolean updateMod(String currentVersion, String alphaTag){
