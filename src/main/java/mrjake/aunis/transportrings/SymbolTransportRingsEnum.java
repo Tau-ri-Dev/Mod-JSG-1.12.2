@@ -16,7 +16,7 @@ import java.util.Random;
 public enum SymbolTransportRingsEnum implements SymbolInterface {
     ALPHA(0, 0, "Alpha"),
     BETA(1, 1, "Beta"),
-    GAMA(2, 2, "Gamma"),
+    GAMMA(2, 2, "Gamma"),
     DELTA(3, 3, "Delta"),
     OMEGA(4, 4, "Omega"),
     ORIGIN(5, 5, "Origin");

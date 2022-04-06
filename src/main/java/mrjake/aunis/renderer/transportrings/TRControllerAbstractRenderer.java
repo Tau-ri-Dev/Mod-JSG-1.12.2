@@ -1,30 +1,25 @@
 package mrjake.aunis.renderer.transportrings;
 
 import mrjake.aunis.AunisProps;
-import mrjake.aunis.loader.ElementEnum;
+import mrjake.aunis.renderer.dialhomedevice.DHDAbstractRendererState;
 import mrjake.aunis.tesr.RendererInterface;
+import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
 import mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile;
 import mrjake.vector.Vector3f;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 
-public abstract class TRControllerAbstractRenderer implements RendererInterface {
+public abstract class TRControllerAbstractRenderer extends TileEntitySpecialRenderer<TRControllerAbstractTile> {
 
-	private TRControllerAbstractTile controllerTile;
-	private EnumFacing facing;
-	
-	public TRControllerAbstractRenderer(TRControllerAbstractTile controllerTile) {
-		this.controllerTile = controllerTile;
-		
-		IBlockState blockState = controllerTile.getWorld().getBlockState(controllerTile.getPos());
-		facing = blockState.getValue(AunisProps.FACING_HORIZONTAL);
-	}
+	protected TRControllerAbstractTile controllerTile;
+	protected EnumFacing facing;
 
-	private static final Vector3f NORTH_TRANSLATION = new Vector3f(0, 0, 0);
-	private static final Vector3f EAST_TRANSLATION = new Vector3f(1, 0, 0);
-	private static final Vector3f SOUTH_TRANSLATION = new Vector3f(1, 0, 1);
-	private static final Vector3f WEST_TRANSLATION = new Vector3f(0, 0, 1);
+	protected static final Vector3f NORTH_TRANSLATION = new Vector3f(0, 0, 0);
+	protected static final Vector3f EAST_TRANSLATION = new Vector3f(1, 0, 0);
+	protected static final Vector3f SOUTH_TRANSLATION = new Vector3f(1, 0, 1);
+	protected static final Vector3f WEST_TRANSLATION = new Vector3f(0, 0, 1);
 	
 	public static Vector3f getTranslation(EnumFacing facing) {
 		switch (facing) {
@@ -65,7 +60,10 @@ public abstract class TRControllerAbstractRenderer implements RendererInterface 
 	}
 	
 	@Override
-	public void render(double x, double y, double z, float partialTicks) {
+	public void render(TRControllerAbstractTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+		TRControllerAbstractRendererState rendererState = te.getRendererState();
+		IBlockState blockState = te.getWorld().getBlockState(te.getPos());
+		facing = blockState.getValue(AunisProps.FACING_HORIZONTAL);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
 		
@@ -74,10 +72,11 @@ public abstract class TRControllerAbstractRenderer implements RendererInterface 
 		
 		GlStateManager.translate(tr.x, tr.y, tr.z);
 		GlStateManager.rotate(rot, 0, 1, 0);
-		
-		ElementEnum.RINGSCONTROLLER_GOAULD.bindTextureAndRender(controllerTile.getBiomeOverlay());
-		ElementEnum.RINGSCONTROLLER_GOAULD_BUTTONS.bindTextureAndRender(controllerTile.getBiomeOverlay());
+
+		renderController(te, rendererState);
 		
 		GlStateManager.popMatrix();
 	}
+
+	public abstract void renderController(TRControllerAbstractTile te, TRControllerAbstractRendererState rendererState);
 }

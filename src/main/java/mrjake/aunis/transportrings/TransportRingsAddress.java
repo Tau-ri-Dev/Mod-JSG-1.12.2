@@ -2,6 +2,7 @@ package mrjake.aunis.transportrings;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.Aunis;
+import mrjake.aunis.stargate.network.StargateAddress;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 
@@ -47,6 +48,15 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
 
     public void add(SymbolTransportRingsEnum symbol){
         this.address.add(symbol);
+    }
+
+    public void addAll(TransportRingsAddress ringsAddress) {
+        if (address.size()+ringsAddress.address.size() > MAX_SYMBOLS) {
+            Aunis.logger.error("Tried to add symbols to already populated address");
+            return;
+        }
+
+        address.addAll(ringsAddress.address);
     }
 
     public boolean contains(SymbolTransportRingsEnum symbol){

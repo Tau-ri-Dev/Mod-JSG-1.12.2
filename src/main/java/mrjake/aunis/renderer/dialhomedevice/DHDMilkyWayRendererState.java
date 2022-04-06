@@ -65,8 +65,8 @@ public class DHDMilkyWayRendererState extends DHDAbstractRendererState {
 	
 	// Symbols
 	// Not saved
-	private final Map<SymbolMilkyWayEnum, Integer> BUTTON_STATE_MAP = new HashMap<>(38);
-	public List<Activation<SymbolMilkyWayEnum>> activationList = new ArrayList<>();
+	private final Map<SymbolInterface, Integer> BUTTON_STATE_MAP = new HashMap<>(38);
+	public List<Activation<SymbolInterface>> activationList = new ArrayList<>();
 	
 	private boolean isSymbolActiveClientSide(SymbolMilkyWayEnum symbol) {
 		return BUTTON_STATE_MAP.get(symbol) != 0;

@@ -3,7 +3,7 @@ package mrjake.aunis.renderer.dialhomedevice;
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.renderer.activation.Activation;
-import mrjake.aunis.renderer.activation.DHDPegasusActivation;
+import mrjake.aunis.renderer.activation.DHDActivation;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.stargate.network.*;
 import net.minecraft.util.ResourceLocation;
@@ -62,8 +62,8 @@ public class DHDPegasusRendererState extends DHDAbstractRendererState {
 
 	// Symbols
 	// Not saved
-	private final Map<SymbolPegasusEnum, Integer> BUTTON_STATE_MAP = new HashMap<>(38);
-	public List<Activation<SymbolPegasusEnum>> activationList = new ArrayList<>();
+	private final Map<SymbolInterface, Integer> BUTTON_STATE_MAP = new HashMap<>(38);
+	public List<Activation<SymbolInterface>> activationList = new ArrayList<>();
 
 	private boolean isSymbolActiveClientSide(SymbolPegasusEnum symbol) {
 		return BUTTON_STATE_MAP.get(symbol) != 0;
@@ -72,13 +72,13 @@ public class DHDPegasusRendererState extends DHDAbstractRendererState {
 	public void clearSymbols(long totalWorldTime) {
 		for (SymbolPegasusEnum symbol : SymbolPegasusEnum.values()) {
 			if (isSymbolActiveClientSide(symbol)) {
-				activationList.add(new DHDPegasusActivation(symbol, totalWorldTime, true));
+				activationList.add(new DHDActivation(symbol, totalWorldTime, true));
 			}
 		}
 	}
 
 	public void activateSymbol(long totalWorldTime, SymbolPegasusEnum symbol) {
-		activationList.add(new DHDPegasusActivation(symbol, totalWorldTime, false));
+		activationList.add(new DHDActivation(symbol, totalWorldTime, false));
 	}
 
 	@Override

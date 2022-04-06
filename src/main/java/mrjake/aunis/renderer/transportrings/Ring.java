@@ -12,7 +12,6 @@ import net.minecraft.world.World;
 public class Ring {
 
     private World world;
-//	private int index;
 
     private boolean shouldRender;
     private boolean shouldAnimate;
@@ -21,24 +20,29 @@ public class Ring {
 
     private double y;
     private double yMax;
+    private double startY;
     private final int index;
 
     public Ring(World world, int index) {
         this.world = world;
-//		this.index = index;
 
         this.shouldRender = false;
 
-        this.y = -1;
+        this.y = 0;
+        this.startY = 0;
         this.index = index;
         this.yMax = index;
     }
 
     public void render(double partialTicks, ElementEnum type, int distance) {
-        if (distance >= 0)
-            this.yMax = (distance * 2) - index + 1.5;
-        else
-            this.yMax = (distance * 2) + index - (1.5 * 2);
+        if (distance >= 0) {
+            yMax = (distance * 2) - index + 1.5;
+            startY = -2;
+        }
+        else {
+            yMax = (distance * 2) + index - (1.5 * 2);
+            startY = 2;
+        }
         if (shouldRender) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0, y, 0);
@@ -78,6 +82,7 @@ public class Ring {
 
         animationStart = world.getTotalWorldTime();
         shouldAnimate = true;
+        y = startY;
     }
 
     public void setTop() {
@@ -90,5 +95,6 @@ public class Ring {
     public void setDown() {
         shouldAnimate = false;
         shouldRender = false;
+        y = startY;
     }
 }

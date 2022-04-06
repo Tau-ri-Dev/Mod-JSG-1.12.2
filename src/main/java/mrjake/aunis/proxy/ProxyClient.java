@@ -17,6 +17,7 @@ import mrjake.aunis.renderer.energy.ZPMHubRenderer;
 import mrjake.aunis.renderer.SpecialRenderer;
 import mrjake.aunis.renderer.energy.ZPMRenderer;
 import mrjake.aunis.renderer.stargate.*;
+import mrjake.aunis.renderer.transportrings.TRControllerGoauldRenderer;
 import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundPositionedEnum;
 import mrjake.aunis.tileentity.*;
@@ -85,7 +86,7 @@ public class ProxyClient implements IProxy {
 
     ClientRegistry.bindTileEntitySpecialRenderer(TransportRingsGoauldTile.class, new SpecialRenderer());
     ClientRegistry.bindTileEntitySpecialRenderer(TransportRingsOriTile.class, new SpecialRenderer());
-    ClientRegistry.bindTileEntitySpecialRenderer(TRControllerGoauldTile.class, new SpecialRenderer());
+    ClientRegistry.bindTileEntitySpecialRenderer(TRControllerGoauldTile.class, new TRControllerGoauldRenderer());
 
     ClientRegistry.bindTileEntitySpecialRenderer(BeamerTile.class, new BeamerRenderer());
   }

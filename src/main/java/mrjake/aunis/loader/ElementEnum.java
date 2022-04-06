@@ -69,8 +69,8 @@ public enum ElementEnum {
   RING_BLACK("transportrings/rings_ancient.obj", "transportrings/rings_ancient"),
   RING_ORI("transportrings/rings_ori.obj", "transportrings/rings_ori"),
 
-  RINGSCONTROLLER_GOAULD("transportrings/controller/plate_goauld.obj", "transportrings/controller/goauld_panel"),
-  RINGSCONTROLLER_GOAULD_BUTTONS("transportrings/controller/buttons_goauld.obj", "transportrings/controller/goauld_buttons"),
+  RINGSCONTROLLER_GOAULD("transportrings/controller/goauld/plate_goauld.obj", "transportrings/controller/goauld/goauld_panel"),
+  RINGSCONTROLLER_GOAULD_BUTTON("transportrings/controller/goauld/button_goauld.obj", "transportrings/controller/goauld/goauld_button"),
 
   // --------------------------------------------------------------------------------------------
   // ZPM things
@@ -114,7 +114,9 @@ public enum ElementEnum {
 
   public void bindTexture(BiomeOverlayEnum biomeOverlay) {
     ResourceLocation resourceLocation = biomeTextureResourceMap.get(biomeOverlay);
-
+    bindTexture(biomeOverlay, resourceLocation);
+  }
+  public void bindTexture(BiomeOverlayEnum biomeOverlay, ResourceLocation resourceLocation) {
     if (!TextureLoader.isTextureLoaded(resourceLocation)) {
       // Probably doesn't exist
 

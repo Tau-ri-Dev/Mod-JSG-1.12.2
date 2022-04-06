@@ -20,6 +20,7 @@ import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.EnumScheduledTask;
 import mrjake.aunis.state.*;
+import mrjake.aunis.state.dialhomedevice.DHDActivateButtonState;
 import mrjake.aunis.state.transportrings.TransportRingsGuiState;
 import mrjake.aunis.state.transportrings.TransportRingsRendererState;
 import mrjake.aunis.state.transportrings.TransportRingsStartAnimationRequest;
@@ -278,8 +279,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                     markDirty();
                     return result;
                 }
-                return TransportResult.OK;
             }
+            if(getLinkedControllerTile(world) != null)
+                getLinkedControllerTile(world).sendState(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbol));
             return TransportResult.OK;
         }
         dialedAddress.clear();
