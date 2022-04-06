@@ -8,18 +8,18 @@ import mrjake.aunis.transportrings.SymbolTransportRingsEnum;
 import net.minecraft.client.renderer.GlStateManager;
 
 
-public class TRControllerGoauldRenderer extends TRControllerAbstractRenderer{
+public class TRControllerGoauldRenderer extends TRControllerAbstractRenderer {
     @Override
-    public void renderController(TRControllerAbstractTile te, TRControllerAbstractRendererState rendererState){
+    public void renderController(TRControllerAbstractTile te, TRControllerAbstractRendererState rendererState) {
         ElementEnum.RINGSCONTROLLER_GOAULD.bindTextureAndRender(te.getBiomeOverlay());
         int symbolId = 0;
-        for(int y = 0; y < 3; y++){
-            for(int x = 0; x < 2; x++) {
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 2; x++) {
                 GlStateManager.pushMatrix();
-                if(AunisConfig.devConfig.test3)
-                    GlStateManager.translate(x* AunisConfig.devConfig.test1, y*AunisConfig.devConfig.test2, 0);
+                if (AunisConfig.devConfig.test3)
+                    GlStateManager.translate(x * AunisConfig.devConfig.test1, y * AunisConfig.devConfig.test2, 0);
                 else
-                    GlStateManager.translate(0, y*AunisConfig.devConfig.test2, x* AunisConfig.devConfig.test1);
+                    GlStateManager.translate(0, y * -0.1, x * -0.25);
                 ElementEnum button = ElementEnum.RINGSCONTROLLER_GOAULD_BUTTON;
                 rendererDispatcher.renderEngine.bindTexture(((TRControllerGoauldRendererState) rendererState).getButtonTexture(SymbolTransportRingsEnum.valueOf(symbolId), rendererState.getBiomeOverlay()));
                 ModelLoader.getModel(button.modelResource).render();
