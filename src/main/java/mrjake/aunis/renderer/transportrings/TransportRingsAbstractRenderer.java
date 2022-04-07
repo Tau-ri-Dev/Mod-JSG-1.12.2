@@ -56,8 +56,13 @@ public abstract class TransportRingsAbstractRenderer implements RendererInterfac
         GlStateManager.translate(0.50, 0.63271 / 2 + 1.35, 0.50);
         GlStateManager.scale(0.5, 0.5, 0.5);
 
-        renderRings(partialTicks, ringsDistance);
+        int relativeY = -4;
+        if(ringsDistance < 0)
+            relativeY = 2;
 
+        GlStateManager.translate(0, relativeY, 0);
+
+        renderRings(partialTicks, ringsDistance);
         GlStateManager.popMatrix();
 
         // ---------------------------------------------------------------------------

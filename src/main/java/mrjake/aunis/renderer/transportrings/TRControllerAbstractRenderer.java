@@ -1,9 +1,6 @@
 package mrjake.aunis.renderer.transportrings;
 
 import mrjake.aunis.AunisProps;
-import mrjake.aunis.renderer.dialhomedevice.DHDAbstractRendererState;
-import mrjake.aunis.tesr.RendererInterface;
-import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
 import mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile;
 import mrjake.vector.Vector3f;
 import net.minecraft.block.state.IBlockState;
@@ -13,7 +10,6 @@ import net.minecraft.util.EnumFacing;
 
 public abstract class TRControllerAbstractRenderer extends TileEntitySpecialRenderer<TRControllerAbstractTile> {
 
-	protected TRControllerAbstractTile controllerTile;
 	protected EnumFacing facing;
 
 	protected static final Vector3f NORTH_TRANSLATION = new Vector3f(0, 0, 0);
@@ -62,6 +58,8 @@ public abstract class TRControllerAbstractRenderer extends TileEntitySpecialRend
 	@Override
 	public void render(TRControllerAbstractTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		TRControllerAbstractRendererState rendererState = te.getRendererState();
+		if(rendererState == null) return;
+		rendererState.iterate(getWorld(), partialTicks);
 		IBlockState blockState = te.getWorld().getBlockState(te.getPos());
 		facing = blockState.getValue(AunisProps.FACING_HORIZONTAL);
 		GlStateManager.pushMatrix();

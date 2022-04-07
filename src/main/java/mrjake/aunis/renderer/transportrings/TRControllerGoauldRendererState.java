@@ -55,7 +55,7 @@ public class TRControllerGoauldRendererState extends TRControllerAbstractRendere
 		super.initClient(pos, biomeOverlay, rings);
 
 		for (SymbolTransportRingsEnum symbol : SymbolTransportRingsEnum.values()) {
-			BUTTON_STATE_MAP.put(symbol, addressDialed.contains(symbol) ? 5 : 0);
+			BUTTON_STATE_MAP.put(symbol.getId(), addressDialed.contains(symbol) ? 5 : 0);
 		}
 
 		return this;
@@ -63,11 +63,11 @@ public class TRControllerGoauldRendererState extends TRControllerAbstractRendere
 
 	// Symbols
 	// Not saved
-	private final Map<SymbolInterface, Integer> BUTTON_STATE_MAP = new HashMap<>(6);
+	private final Map<Integer, Integer> BUTTON_STATE_MAP = new HashMap<>(6);
 	public List<Activation<SymbolInterface>> activationList = new ArrayList<>();
 
 	private boolean isSymbolActiveClientSide(SymbolTransportRingsEnum symbol) {
-		return BUTTON_STATE_MAP.get(symbol) != 0;
+		return BUTTON_STATE_MAP.get(symbol.getId()) != 0;
 	}
 
 	public void clearSymbols(long totalWorldTime) {
@@ -80,23 +80,24 @@ public class TRControllerGoauldRendererState extends TRControllerAbstractRendere
 
 	public void activateSymbol(long totalWorldTime, SymbolTransportRingsEnum symbol) {
 		activationList.add(new DHDActivation(symbol, totalWorldTime, false));
+		Aunis.info("Activated button 22");
 	}
 
 	@Override
 	public void iterate(World world, double partialTicks) {
 		Activation.iterate(activationList, world.getTotalWorldTime(), partialTicks, (index, stage) -> {
-			BUTTON_STATE_MAP.put(index, Math.round(stage));
+			BUTTON_STATE_MAP.put(index.getId(), Math.round(stage));
 		});
 	}
 
 	public ResourceLocation getButtonTexture(SymbolTransportRingsEnum symbol, BiomeOverlayEnum biomeOverlay) {
 		TRControllerGoauldRendererState.TextureContainer container = BIOME_TEXTURE_MAP.get(biomeOverlay);
-		return container.SYMBOL_RESOURCE_MAP.get(BUTTON_STATE_MAP.get(symbol));
+		return container.SYMBOL_RESOURCE_MAP.get(BUTTON_STATE_MAP.get(symbol.getId()));
 	}
 
 	@Override
 	public boolean isButtonActive(SymbolInterface symbol){
-		return BUTTON_STATE_MAP.get((SymbolTransportRingsEnum) symbol) == 5;
+		return BUTTON_STATE_MAP.get(((SymbolTransportRingsEnum) symbol).getId()) == 5;
 	}
 
 	@Override

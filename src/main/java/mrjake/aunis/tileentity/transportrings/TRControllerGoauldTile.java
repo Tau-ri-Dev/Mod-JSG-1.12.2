@@ -1,5 +1,6 @@
 package mrjake.aunis.tileentity.transportrings;
 
+import mrjake.aunis.Aunis;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.transportrings.TRControllerAbstractRenderer;
 import mrjake.aunis.renderer.transportrings.TRControllerAbstractRendererState;
@@ -63,10 +64,14 @@ public class TRControllerGoauldTile extends TRControllerAbstractTile implements 
 
                 rendererState.setIsConnected(connected);
 
-                if (activateState.clearAll) rendererState.clearSymbols(world.getTotalWorldTime());
-                else
+                if (activateState.clearAll){
+                    rendererState.clearSymbols(world.getTotalWorldTime());
+                    Aunis.info("Cleared buttons");
+                }
+                else {
+                    Aunis.info("Activated button");
                     rendererState.activateSymbol(world.getTotalWorldTime(), SymbolTransportRingsEnum.valueOf(activateState.symbol));
-
+                }
                 break;
 
             default:

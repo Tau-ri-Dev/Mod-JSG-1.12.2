@@ -212,6 +212,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             case RINGS_CLEAR_OUT:
                 setBarrierBlocks(false, false);
                 setBusy(false);
+                dialedAddress.clear();
+                markDirty();
 
                 TransportRingsAbstractTile targetRingsTile = (TransportRingsAbstractTile) world.getTileEntity(targetRingsPos);
                 if (targetRingsTile != null) targetRingsTile.setBusy(false);
@@ -277,15 +279,18 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 if(!result.ok()) {
                     dialedAddress.clear();
                     markDirty();
+                    sendSignal(ocContext, "transportrings_symbol_engage_failed", result.toString());
                     return result;
                 }
             }
             if(getLinkedControllerTile(world) != null)
                 getLinkedControllerTile(world).sendState(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbol));
+            sendSignal(ocContext, "transportrings_symbol_engage", TransportResult.OK.toString());
             return TransportResult.OK;
         }
         dialedAddress.clear();
         markDirty();
+        sendSignal(ocContext, "transportrings_symbol_engage_failed", TransportResult.NO_SUCH_ADDRESS.toString());
         return TransportResult.NO_SUCH_ADDRESS;
     }
 
@@ -830,42 +835,42 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             throw new IllegalArgumentException("bad argument #1 (address out of range, allowed <1..6>)");
 
         return new Object[]{setRingsParams(address, name)};
-    }
+    }*/
 
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getAvailableRings(Context context, Arguments args) {
         if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
 
-        Map<Integer, String> values = new HashMap<>(ringsMap.size());
+        Map<String, String> values = new HashMap<>(ringsMap.size());
 
-        for (Map.Entry<Integer, TransportRings> rings : ringsMap.entrySet())
-            values.put(rings.getKey(), rings.getValue().getName());
+        for (Map.Entry<String, TransportRings> rings : ringsMap.entrySet())
+            values.put(rings.getValue().getAddress().toString(), rings.getValue().getName());
 
         return new Object[]{values};
-    }*/
+    }
 
-    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    /*@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getAvailableRingsAddresses(Context context, Arguments args) {
         if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
 
         return new Object[]{ringsMap.keySet()};
-    }
+    }*/
 
 
-    /*@Optional.Method(modid = "opencomputers")
+    @Optional.Method(modid = "opencomputers")
     @Callback
-    public Object[] attemptTransportTo(Context context, Arguments args) {
+    public Object[] addSymbolToAddress(Context context, Arguments args) {
         if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
 
-        int address = args.checkInteger(0);
+        int symbolId = args.checkInteger(0);
 
-        if (address < 1 || address > 6)
+        if (symbolId < 0)
             throw new IllegalArgumentException("bad argument #1 (address out of range, allowed <1..6>)");
 
         ocContext = context;
 
-        return new Object[]{attemptTransportTo(address, 0)};
-    }*/
+        return new Object[]{addSymbolToAddress(symbolId)};
+    }
 }
