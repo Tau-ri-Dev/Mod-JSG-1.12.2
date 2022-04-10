@@ -10,13 +10,13 @@ import mrjake.aunis.state.State;
 import mrjake.aunis.state.StateProviderInterface;
 import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.state.dialhomedevice.DHDActivateButtonState;
-import mrjake.aunis.transportrings.SymbolTransportRingsEnum;
+import mrjake.aunis.transportrings.SymbolGoauldEnum;
+import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
 import mrjake.aunis.transportrings.TransportRingsAddress;
-import net.minecraft.util.math.BlockPos;
 
 public class TRControllerGoauldTile extends TRControllerAbstractTile implements StateProviderInterface {
 
-    TRControllerGoauldRendererState rendererState = new TRControllerGoauldRendererState(new TransportRingsAddress(), BiomeOverlayEnum.NORMAL, false);
+    TRControllerGoauldRendererState rendererState = new TRControllerGoauldRendererState(new TransportRingsAddress(SymbolTypeTransportRingsEnum.GOAULD), BiomeOverlayEnum.NORMAL, false);
 
     @Override
     public void onLoad() {
@@ -25,6 +25,11 @@ public class TRControllerGoauldTile extends TRControllerAbstractTile implements 
             setBiomeOverlay(BiomeOverlayEnum.updateBiomeOverlay(world, pos, SUPPORTED_OVERLAYS));
         }
         super.onLoad();
+    }
+
+    @Override
+    public SymbolTypeTransportRingsEnum getSymbolType() {
+        return SymbolTypeTransportRingsEnum.GOAULD;
     }
 
     @Override
@@ -41,7 +46,7 @@ public class TRControllerGoauldTile extends TRControllerAbstractTile implements 
                 return new TRControllerGoauldRendererState(tile.dialedAddress, biomeOverlay, tile.isBusy());
             }
 
-            return new TRControllerGoauldRendererState(new TransportRingsAddress(), biomeOverlay, false);
+            return new TRControllerGoauldRendererState(new TransportRingsAddress(getSymbolType()), biomeOverlay, false);
         }
         return super.createState(stateType);
     }
@@ -70,7 +75,7 @@ public class TRControllerGoauldTile extends TRControllerAbstractTile implements 
                 }
                 else {
                     Aunis.info("Activated button");
-                    rendererState.activateSymbol(world.getTotalWorldTime(), SymbolTransportRingsEnum.valueOf(activateState.symbol));
+                    rendererState.activateSymbol(world.getTotalWorldTime(), SymbolGoauldEnum.valueOf(activateState.symbol));
                 }
                 break;
 

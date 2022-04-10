@@ -6,6 +6,7 @@ import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
+import mrjake.aunis.transportrings.SymbolGoauldEnum;
 import mrjake.aunis.transportrings.TransportResult;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
@@ -56,7 +57,7 @@ public class TRControllerActivatedToServer extends PositionedPacket {
 
 					if (ringsTile != null) {
 						AunisSoundHelper.playSoundEvent(world, message.pos, SoundEventEnum.RINGS_CONTROLLER_BUTTON);
-						TransportResult result = ringsTile.addSymbolToAddress(message.symbol-1);
+						TransportResult result = ringsTile.addSymbolToAddress(SymbolGoauldEnum.valueOf(message.symbol-1));
 						result.sendMessageIfFailed(player);
 					} else
 						player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_controller_block.not_linked"), true);

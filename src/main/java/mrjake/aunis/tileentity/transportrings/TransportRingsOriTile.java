@@ -8,4 +8,9 @@ public class TransportRingsOriTile extends TransportRingsAbstractTile {
     public TransportRingsAbstractRenderer getNewRenderer(){
         return new TransportRingsOriRenderer(world, pos, LOCAL_TELEPORT_BOX);
     }
+
+    @Override
+    public int getSupportedCapacitors() {
+        return 3;
+    }
 }

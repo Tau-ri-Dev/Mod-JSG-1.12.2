@@ -8,13 +8,11 @@ import mrjake.aunis.packet.StateUpdateRequestToServer;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.transportrings.TRControllerAbstractRenderer;
 import mrjake.aunis.renderer.transportrings.TRControllerAbstractRendererState;
-import mrjake.aunis.renderer.transportrings.TRControllerGoauldRendererState;
 import mrjake.aunis.state.State;
 import mrjake.aunis.state.StateProviderInterface;
 import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.state.dialhomedevice.DHDActivateButtonState;
-import mrjake.aunis.tesr.RendererInterface;
-import mrjake.aunis.tesr.RendererProviderInterface;
+import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
 import mrjake.aunis.util.ILinkable;
 import mrjake.aunis.util.LinkingHelper;
 import net.minecraft.block.Block;
@@ -45,6 +43,8 @@ public abstract class TRControllerAbstractTile extends TileEntity implements ITi
     public BiomeOverlayEnum getBiomeOverlay() {
         return biomeOverlay;
     }
+
+    public abstract SymbolTypeTransportRingsEnum getSymbolType();
 
     public void setBiomeOverlay(BiomeOverlayEnum biomeOverlay) {
         this.biomeOverlay = biomeOverlay;

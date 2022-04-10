@@ -11,6 +11,7 @@ import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.RingsGUI;
+import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.packet.StateUpdateRequestToServer;
@@ -19,62 +20,164 @@ import mrjake.aunis.renderer.transportrings.TransportRingsAbstractRenderer;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.EnumScheduledTask;
-import mrjake.aunis.state.*;
+import mrjake.aunis.stargate.network.SymbolInterface;
+import mrjake.aunis.stargate.power.StargateClassicEnergyStorage;
+import mrjake.aunis.state.State;
+import mrjake.aunis.state.StateProviderInterface;
+import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.state.dialhomedevice.DHDActivateButtonState;
 import mrjake.aunis.state.transportrings.TransportRingsGuiState;
 import mrjake.aunis.state.transportrings.TransportRingsRendererState;
 import mrjake.aunis.state.transportrings.TransportRingsStartAnimationRequest;
 import mrjake.aunis.tesr.RendererInterface;
 import mrjake.aunis.tesr.RendererProviderInterface;
+import mrjake.aunis.tileentity.util.IUpgradable;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.tileentity.util.ScheduledTaskExecutorInterface;
 import mrjake.aunis.transportrings.*;
-import mrjake.aunis.util.AunisAxisAlignedBB;
-import mrjake.aunis.util.ILinkable;
-import mrjake.aunis.util.LinkingHelper;
+import mrjake.aunis.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 import java.util.*;
 
 import static mrjake.aunis.transportrings.TransportRingsAddress.MAX_SYMBOLS;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
-public abstract class TransportRingsAbstractTile extends TileEntity implements ITickable, RendererProviderInterface, StateProviderInterface, ScheduledTaskExecutorInterface, ILinkable, Environment {
+public abstract class TransportRingsAbstractTile extends TileEntity implements ITickable, RendererProviderInterface, StateProviderInterface, ScheduledTaskExecutorInterface, ILinkable, Environment, IUpgradable {
     public static final int FADE_OUT_TOTAL_TIME = 2 * 20; // 2s
     public static final int TIMEOUT_TELEPORT = FADE_OUT_TOTAL_TIME / 2;
     public static final int TIMEOUT_FADE_OUT = (int) (30 + TransportRingsAbstractRenderer.INTERVAL_UPRISING * TransportRingsAbstractRenderer.RING_COUNT + TransportRingsAbstractRenderer.ANIMATION_SPEED_DIVISOR * Math.PI);
     public static final int RINGS_CLEAR_OUT = (int) (15 + TransportRingsAbstractRenderer.INTERVAL_FALLING * TransportRingsAbstractRenderer.RING_COUNT + TransportRingsAbstractRenderer.ANIMATION_SPEED_DIVISOR * Math.PI);
+    private final StargateClassicEnergyStorage energyStorage = new StargateClassicEnergyStorage() {
+
+        @Override
+        protected void onEnergyChanged() {
+            markDirty();
+        }
+    };
     // ---------------------------------------------------------------------------------
     // Ticking and loading
-
+    public int ringsDistance = 2;
+    public Map<Map<SymbolTypeTransportRingsEnum, TransportRingsAddress>, TransportRings> ringsMap = new HashMap<>();
     protected AunisAxisAlignedBB LOCAL_TELEPORT_BOX = new AunisAxisAlignedBB(-1, 2, -1, 2, 4.5, 2);
-    private List<BlockPos> invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, 2, 2), new BlockPos(1, 2, 2), new BlockPos(2, 2, 1));
     protected AunisAxisAlignedBB globalTeleportBox;
     protected List<Entity> teleportList = new ArrayList<>();
     protected BlockPos lastPos = BlockPos.ORIGIN;
+    // ---------------------------------------------------------------------------------
+    // Teleportation
+    protected BlockPos targetRingsPos = new BlockPos(0, 0, 0);
+    protected List<Entity> excludedEntities = new ArrayList<>();
+    protected Object ocContext;
+    // ---------------------------------------------------------------------------------
+    // Address system
+    protected boolean initiating;
+    // ---------------------------------------------------------------------------------
+    // Adjustable distance
+    // ---------------------------------------------------------------------------------
+    // Rings network
+    protected TransportRings rings;
+    List<ScheduledTask> scheduledTasks = new ArrayList<>();
+    // ---------------------------------------------------------------------------------
+    // Renders
+    TransportRingsAbstractRenderer renderer;
+    // ---------------------------------------------------------------------------------
+    // Scheduled task
+    TransportRingsRendererState rendererState = new TransportRingsRendererState();
+    private List<BlockPos> invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, 2, 2), new BlockPos(1, 2, 2), new BlockPos(2, 2, 1));
     private AxisAlignedBB renderBoundingBox = TileEntity.INFINITE_EXTENT_AABB;
+    /**
+     * True if there is an active transport.
+     */
+    private boolean busy = false;
+    // ---------------------------------------------------------------------------------
+    // Controller
+    private BlockPos linkedController;
+    protected TransportRingsAddress dialedAddress = new TransportRingsAddress(getSymbolType());
+    private int linkId = -1;
+    @SideOnly(Side.CLIENT)
+    private RingsGUI openGui;
+    // ------------------------------------------------------------
+    // Node-related work
+    private Node node = Aunis.ocWrapper.createNode(this, "transportrings");
+    private int currentPowerTier = 1;
+    private final AunisItemStackHandler itemStackHandler = new AunisItemStackHandler(9) {
+
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            Item item = stack.getItem();
+            boolean isItemCapacitor = (item == Item.getItemFromBlock(AunisBlocks.CAPACITOR_BLOCK));
+            switch (slot) {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    return TransportRingsAbstractTile.TransportRingsUpgradeEnum.contains(item) && !hasUpgrade(item);
+
+                case 4:
+                    return isItemCapacitor && getSupportedCapacitors() >= 1;
+                case 5:
+                    return isItemCapacitor && getSupportedCapacitors() >= 2;
+                case 6:
+                    return isItemCapacitor && getSupportedCapacitors() >= 3;
+
+                case 7:
+                case 8:
+                    return item == AunisItems.PAGE_NOTEBOOK_ITEM;
+                default:
+                    return true;
+            }
+        }
+
+        @Override
+        protected int getStackLimit(int slot, ItemStack stack) {
+            return 1;
+        }
+
+        @Override
+        protected void onContentsChanged(int slot) {
+            super.onContentsChanged(slot);
+
+            switch (slot) {
+                case 4:
+                case 5:
+                case 6:
+                    updatePowerTier();
+                    break;
+                default:
+                    break;
+            }
+
+            markDirty();
+        }
+    };
 
     @Override
     public void update() {
         if (!world.isRemote) {
             ScheduledTask.iterate(scheduledTasks, world.getTotalWorldTime());
 
-            if(getRings().getAddress() == null || getRings().getAddress().size() < 4)
+            if (getRings().getAddresses() == null || getRings().getAddresses().size() < SymbolTypeTransportRingsEnum.values().length)
                 generateAddress(true);
 
             if (!lastPos.equals(pos)) {
@@ -82,7 +185,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                 getRings().setPos(pos);
                 updateRingsDistance();
-                setRingsParams(getRings().getAddress(), getRings().getName());
+                setRingsParams(null, null, getRings().getName());
                 updateLinkStatus();
 
                 markDirty();
@@ -104,22 +207,22 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         Aunis.ocWrapper.joinOrCreateNetwork(this);
     }
 
-    public void onBreak(){
+    public void onBreak() {
         setBarrierBlocks(false, false);
     }
 
-    // ---------------------------------------------------------------------------------
-    // Address system
-
-    public TransportRingsAddress generateAndPostAddress(boolean reset) {
+    public Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> generateAndPostAddress(boolean reset) {
         Random random = new Random(pos.hashCode() * 31L + world.provider.getDimension());
         if (reset) {
-            TransportRingsAddress address = new TransportRingsAddress();
-            address.generate(random);
-            return address;
-        }
-        else{
-            return getRings().getAddress();
+            Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> map = new HashMap<>();
+            for (SymbolTypeTransportRingsEnum symbolType : SymbolTypeTransportRingsEnum.values()) {
+                TransportRingsAddress address = new TransportRingsAddress(symbolType);
+                address.generate(random);
+                map.put(symbolType, address);
+            }
+            return map;
+        } else {
+            return getRings().getAddresses();
         }
     }
 
@@ -127,17 +230,12 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         setRingsParams(generateAndPostAddress(reset));
     }
 
-    // ---------------------------------------------------------------------------------
-    // Adjustable distance
-
-    public int ringsDistance = 2;
-
     public void setNewRingsDistance(int newRingsDistance) {
         getRings().setRingsDistance(newRingsDistance);
         updateRingsDistance();
     }
 
-    public void updateRingsDistance(){
+    public void updateRingsDistance() {
         ringsDistance = getRings().getRingsDistance();
         LOCAL_TELEPORT_BOX = new AunisAxisAlignedBB(-1, ringsDistance, -1, 2, ringsDistance + 2.5, 2);
         invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, ringsDistance, 2), new BlockPos(1, ringsDistance, 2), new BlockPos(2, ringsDistance, 1));
@@ -145,12 +243,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         renderBoundingBox = ringsDistance < 0 ? new AunisAxisAlignedBB(-5.5, 5, -0.5, 5.5, ringsDistance - 15, 0.5) : new AunisAxisAlignedBB(-5.5, -5, -0.5, 5.5, ringsDistance + 15, 0.5);
         markDirty();
     }
-
-
-    // ---------------------------------------------------------------------------------
-    // Scheduled task
-
-    List<ScheduledTask> scheduledTasks = new ArrayList<>();
 
     @Override
     public void addTask(ScheduledTask scheduledTask) {
@@ -192,7 +284,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 BlockPos teleportVector = targetRingsPos.subtract(pos);
 
                 TransportRingsAbstractTile targetTile = ((TransportRingsAbstractTile) world.getTileEntity(targetRingsPos));
-                if(targetTile == null) break;
+                if (targetTile == null) break;
                 int targetRingsHeight = targetTile.getRings().getRingsDistance();
 
                 for (Entity entity : teleportList) {
@@ -212,6 +304,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             case RINGS_CLEAR_OUT:
                 setBarrierBlocks(false, false);
                 setBusy(false);
+                if (getLinkedControllerTile(world) != null)
+                    getLinkedControllerTile(world).sendState(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(false));
                 dialedAddress.clear();
                 markDirty();
 
@@ -226,19 +320,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 throw new UnsupportedOperationException("EnumScheduledTask." + scheduledTask.name() + " not implemented on " + this.getClass().getName());
         }
     }
-
-
-    // ---------------------------------------------------------------------------------
-    // Teleportation
-    protected BlockPos targetRingsPos = new BlockPos(0, 0, 0);
-    protected List<Entity> excludedEntities = new ArrayList<>();
-    protected Object ocContext;
-    protected boolean initiating;
-
-    /**
-     * True if there is an active transport.
-     */
-    private boolean busy = false;
 
     public boolean isBusy() {
         return busy;
@@ -269,43 +350,49 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RINGS_START_ANIMATION, new TransportRingsStartAnimationRequest(rendererState.animationStart, rendererState.ringsDistance)), point);
     }
 
-    public TransportResult addSymbolToAddress(int symbolId){
-        SymbolTransportRingsEnum symbol = SymbolTransportRingsEnum.valueOf(symbolId);
-        if(canAddSymbol(symbol)){
+    public TransportResult addSymbolToAddress(SymbolInterface symbol) {
+        if (canAddSymbol(symbol)) {
             dialedAddress.add(symbol);
             markDirty();
-            if(ringsWillLock()){
+            if (ringsWillLock()) {
                 TransportResult result = attemptTransportTo(dialedAddress, EnumScheduledTask.RINGS_START_ANIMATION.waitTicks);
-                if(!result.ok()) {
+                if (!result.ok()) {
                     dialedAddress.clear();
+                    if (getLinkedControllerTile(world) != null)
+                        getLinkedControllerTile(world).sendState(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(false));
                     markDirty();
                     sendSignal(ocContext, "transportrings_symbol_engage_failed", result.toString());
                     return result;
                 }
             }
-            if(getLinkedControllerTile(world) != null)
+            if (getLinkedControllerTile(world) != null)
                 getLinkedControllerTile(world).sendState(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbol));
             sendSignal(ocContext, "transportrings_symbol_engage", TransportResult.OK.toString());
             return TransportResult.OK;
         }
+        if (getLinkedControllerTile(world) != null)
+            getLinkedControllerTile(world).sendState(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(false));
         dialedAddress.clear();
         markDirty();
         sendSignal(ocContext, "transportrings_symbol_engage_failed", TransportResult.NO_SUCH_ADDRESS.toString());
         return TransportResult.NO_SUCH_ADDRESS;
     }
 
-    protected TransportRingsAddress dialedAddress = new TransportRingsAddress();
-
-    public boolean canAddSymbol(SymbolTransportRingsEnum symbol){
-        if(dialedAddress.contains(symbol)) return false;
-        if(dialedAddress.size() > MAX_SYMBOLS){
+    public boolean canAddSymbol(SymbolInterface symbol) {
+        if (dialedAddress.size() > 0) {
+            if (!(dialedAddress.getSymbolType().getOrigin() == symbol.getSymbolType().getOrigin())) {
+                return false;
+            }
+        }
+        if (dialedAddress.contains(symbol)) return false;
+        if (dialedAddress.size() > MAX_SYMBOLS) {
             dialedAddress.clear();
             return false;
         }
         return !isBusy();
     }
 
-    public boolean ringsWillLock(){
+    public boolean ringsWillLock() {
         return (dialedAddress.size() > MAX_SYMBOLS || dialedAddress.getLast().origin());
     }
 
@@ -328,33 +415,37 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         TransportRingsAddress strippedAddress = (address.getLast().origin()) ? address.stripOrigin() : address;
 
-        TransportRings rings = ringsMap.get(strippedAddress.calAddress());
+        boolean found = false;
+        for (TransportRings rings : ringsMap.values()) {
+            // Binding exists
+            if (rings.getAddress(address.getSymbolType()).equalsV2(strippedAddress)) {
+                if (!rings.isInGrid()) return TransportResult.NO_SUCH_ADDRESS;
+                BlockPos targetRingsPos = rings.getPos();
+                TransportRingsAbstractTile targetRingsTile = (TransportRingsAbstractTile) world.getTileEntity(targetRingsPos);
 
-        // Binding exists
-        if (rings != null) {
-            if(!rings.isInGrid()) return TransportResult.NO_SUCH_ADDRESS;
-            BlockPos targetRingsPos = rings.getPos();
-            TransportRingsAbstractTile targetRingsTile = (TransportRingsAbstractTile) world.getTileEntity(targetRingsPos);
+                if (targetRingsTile == null || targetRingsTile.checkIfObstructed()) {
+                    return TransportResult.OBSTRUCTED_TARGET;
+                }
 
-            if (targetRingsTile == null || targetRingsTile.checkIfObstructed()) {
-                return TransportResult.OBSTRUCTED_TARGET;
+                if (targetRingsTile.isBusy()) {
+                    return TransportResult.BUSY_TARGET;
+                }
+
+                this.setBusy(true);
+                targetRingsTile.setBusy(true);
+
+                List<Entity> excludedFromReceivingSite = world.getEntitiesWithinAABB(Entity.class, globalTeleportBox);
+                List<Entity> excludedEntities = targetRingsTile.startAnimationAndTeleport(pos, excludedFromReceivingSite, waitTime, false);
+                startAnimationAndTeleport(targetRingsPos, excludedEntities, waitTime, true);
+
+                found = true;
+                break;
             }
-
-            if (targetRingsTile.isBusy()) {
-                return TransportResult.BUSY_TARGET;
-            }
-
-            this.setBusy(true);
-            targetRingsTile.setBusy(true);
-
-            List<Entity> excludedFromReceivingSite = world.getEntitiesWithinAABB(Entity.class, globalTeleportBox);
-            List<Entity> excludedEntities = targetRingsTile.startAnimationAndTeleport(pos, excludedFromReceivingSite, waitTime, false);
-            startAnimationAndTeleport(targetRingsPos, excludedEntities, waitTime, true);
-
-            return TransportResult.OK;
-        } else {
-            return TransportResult.NO_SUCH_ADDRESS;
         }
+        if (!found)
+            return TransportResult.NO_SUCH_ADDRESS;
+        else
+            return TransportResult.OK;
     }
 
     private boolean checkIfObstructed() {
@@ -390,17 +481,13 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                     if (set) world.setBlockState(newPos, invBlockState, 3);
                     else {
-                        if (world.getBlockState(newPos).getBlock() == AunisBlocks.INVISIBLE_BLOCK) world.setBlockToAir(newPos);
+                        if (world.getBlockState(newPos).getBlock() == AunisBlocks.INVISIBLE_BLOCK)
+                            world.setBlockToAir(newPos);
                     }
                 }
             }
         }
     }
-
-
-    // ---------------------------------------------------------------------------------
-    // Controller
-    private BlockPos linkedController;
 
     public void setLinkedController(BlockPos pos, int linkId) {
         this.linkedController = pos;
@@ -421,21 +508,22 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return (linkedController != null ? ((TRControllerAbstractTile) world.getTileEntity(linkedController)) : null);
     }
 
+    public SymbolTypeTransportRingsEnum getSymbolType() {
+        if (getLinkedControllerTile(world) != null) {
+            return getLinkedControllerTile(world).getSymbolType();
+        }
+        return SymbolTypeTransportRingsEnum.valueOf(0);
+    }
+
     @Override
     public boolean canLinkTo() {
         return !isLinked();
     }
 
-    private int linkId = -1;
-
     @Override
     public int getLinkId() {
         return linkId;
     }
-
-    // ---------------------------------------------------------------------------------
-    // Rings network
-    protected TransportRings rings;
 
     public TransportRings getRings() {
         if (rings == null) rings = new TransportRings(generateAndPostAddress(true), pos);
@@ -447,36 +535,38 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return getRings().cloneWithNewDistance(callerPos);
     }
 
-    public Map<String, TransportRings> ringsMap = new HashMap<>();
-
     public void addRings(TransportRingsAbstractTile caller) {
         TransportRings clonedRings = caller.getClonedRings(this.pos);
 
         if (clonedRings.isInGrid()) {
-            ringsMap.put(clonedRings.getAddress().calAddress(), clonedRings);
+            ringsMap.put(clonedRings.getAddresses(), clonedRings);
 
             markDirty();
         }
     }
 
-    public void removeRingsFromMap(String address) {
-        if (ringsMap.remove(address) != null) markDirty();
+    public void removeRingsFromMap(Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> addressMap) {
+        if (ringsMap.remove(addressMap) != null) markDirty();
     }
 
-    public void removeRings(String address) {
-        TransportRings rings = ringsMap.get(address);
+
+    // ---------------------------------------------------------------------------------
+    // NBT data
+
+    public void removeRings(Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> addressMap) {
+        TransportRings rings = ringsMap.get(addressMap);
         if (rings != null) {
             TileEntity tile = world.getTileEntity(rings.getPos());
             if (tile instanceof TransportRingsAbstractTile) {
-                ((TransportRingsAbstractTile) tile).removeRingsFromMap(getRings().getAddress().calAddress());
+                ((TransportRingsAbstractTile) tile).removeRingsFromMap(getRings().getAddresses());
             }
         }
-        removeRingsFromMap(address);
+        removeRingsFromMap(addressMap);
     }
 
     public void removeAllRings() {
-        for (String address : new ArrayList<>(ringsMap.keySet())) {
-            removeRings(address);
+        for (Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> addressMap : new ArrayList<>(ringsMap.keySet())) {
+            removeRings(addressMap);
         }
     }
 
@@ -484,13 +574,28 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         setNewRingsDistance(distance);
         return setRingsParams(name);
     }
-    public ParamsSetResult setRingsParams(TransportRingsAddress address) {
-        return setRingsParams(address, getRings().getName());
+
+    public ParamsSetResult setRingsParams(SymbolTypeTransportRingsEnum symbolType, TransportRingsAddress address) {
+        return setRingsParams(address, symbolType, getRings().getName());
     }
+
+    public ParamsSetResult setRingsParams(Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> addressMap) {
+        return setRingsParams(null, addressMap, null, getRings().getName());
+    }
+
+
+    // ---------------------------------------------------------------------------------
+    // States
+
     public ParamsSetResult setRingsParams(String name) {
-        return setRingsParams(getRings().getAddress(), name);
+        return setRingsParams(null, null, name);
     }
-    public ParamsSetResult setRingsParams(TransportRingsAddress address, String name) {
+
+    public ParamsSetResult setRingsParams(TransportRingsAddress address, SymbolTypeTransportRingsEnum symbolType, String name) {
+        return setRingsParams(address, null, symbolType, name);
+    }
+
+    public ParamsSetResult setRingsParams(TransportRingsAddress address, Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> addressMap, SymbolTypeTransportRingsEnum symbolType, String name) {
         int x = pos.getX();
         int z = pos.getZ();
 
@@ -508,9 +613,15 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             }
         }
 
-        removeAllRings();
+        Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> addressOld = getRings().getAddresses();
 
-        getRings().setAddress(address);
+        removeAllRings();
+        if (symbolType != null && addressMap == null)
+            getRings().setAddress(symbolType, address);
+        else if (addressMap != null) {
+            getRings().setAddress(addressMap);
+        } else
+            getRings().setAddress(addressOld);
         getRings().setName(name);
         getRings().setRingsDistance(ringsDistance);
 
@@ -522,10 +633,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         markDirty();
         return ParamsSetResult.OK;
     }
-
-
-    // ---------------------------------------------------------------------------------
-    // NBT data
 
     @Override
     protected void setWorldCreate(World worldIn) {
@@ -617,7 +724,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             for (int i = 0; i < len; i++) {
                 TransportRings rings = new TransportRings(compound.getCompoundTag("ringsMap" + i));
 
-                ringsMap.put(rings.getAddress().calAddress(), rings);
+                ringsMap.put(rings.getAddresses(), rings);
             }
         }
 
@@ -629,10 +736,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         super.readFromNBT(compound);
     }
-
-
-    // ---------------------------------------------------------------------------------
-    // States
 
     @Override
     public State getState(StateTypeEnum stateType) {
@@ -665,9 +768,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    private RingsGUI openGui;
-
     @Override
     @SideOnly(Side.CLIENT)
     public void setState(StateTypeEnum stateType, State state) {
@@ -678,7 +778,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
             case RINGS_START_ANIMATION:
                 int distance = ((TransportRingsStartAnimationRequest) state).ringsDistance;
-                AunisSoundHelper.playSoundEventClientSide(world, (distance > 0 ? pos.up(distance+2) : pos.down((distance*-1) - (distance < -2 ? 2 : 0))), SoundEventEnum.RINGS_TRANSPORT);
+                AunisSoundHelper.playSoundEventClientSide(world, (distance > 0 ? pos.up(distance + 2) : pos.down((distance * -1) - (distance < -2 ? 2 : 0))), SoundEventEnum.RINGS_TRANSPORT);
                 renderer.animationStart(((TransportRingsStartAnimationRequest) state).animationStart, distance);
                 break;
 
@@ -700,8 +800,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     public void updateLinkStatus() {
         BlockPos closestController = null;
-        for(Block block : AunisBlocks.RINGS_CONTROLLERS){
-            if(closestController != null) break;
+        for (Block block : AunisBlocks.RINGS_CONTROLLERS) {
+            if (closestController != null) break;
             closestController = LinkingHelper.findClosestUnlinked(world, pos, new BlockPos(10, 5, 10), block, linkId);
         }
 
@@ -715,10 +815,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         setLinkedController(closestController, linkId);
     }
 
-    // ---------------------------------------------------------------------------------
-    // Renders
-    TransportRingsAbstractRenderer renderer;
-    TransportRingsRendererState rendererState = new TransportRingsRendererState();
+
+    // ------------------------------------------------------------------------
+    // OpenComputers
 
     @Override
     public RendererInterface getRenderer() {
@@ -732,10 +831,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return renderBoundingBox;
     }
 
-
-    // ------------------------------------------------------------------------
-    // OpenComputers
-
     @Override
     public void onChunkUnload() {
         if (node != null) node.remove();
@@ -747,10 +842,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         super.invalidate();
     }
-
-    // ------------------------------------------------------------
-    // Node-related work
-    private Node node = Aunis.ocWrapper.createNode(this, "transportrings");
 
     @Override
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
@@ -773,32 +864,16 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     public void onMessage(Message message) {
     }
 
-    public void sendSignal(Object context, String name, Object... params) {
-        Aunis.ocWrapper.sendSignalToReachable(node, (Context) context, name, params);
-    }
-
-    // ------------------------------------------------------------
-    // Methods
-    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
-    @Callback
-    public Object[] isInGrid(Context context, Arguments args) {
-        return new Object[]{rings.isInGrid()};
-    }
-
-    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    /*@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getAddress(Context context, Arguments args) {
         if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
 
         return new Object[]{rings.getAddress()};
-    }
+    }*/
 
-    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
-    @Callback
-    public Object[] getName(Context context, Arguments args) {
-        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
-
-        return new Object[]{rings.getName()};
+    public void sendSignal(Object context, String name, Object... params) {
+        Aunis.ocWrapper.sendSignalToReachable(node, (Context) context, name, params);
     }
 
     /*@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
@@ -814,15 +889,12 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return new Object[]{setRingsParams(address, rings.getName())};
     }*/
 
+    // ------------------------------------------------------------
+    // Methods
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
-    public Object[] setName(Context context, Arguments args) {
-        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
-
-        String name = args.checkString(0);
-        setRingsParams(rings.getAddress(), name);
-
-        return new Object[]{};
+    public Object[] isInGrid(Context context, Arguments args) {
+        return new Object[]{rings.isInGrid()};
     }
 
     /*@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
@@ -839,15 +911,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
-    public Object[] getAvailableRings(Context context, Arguments args) {
+    public Object[] getName(Context context, Arguments args) {
         if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
 
-        Map<String, String> values = new HashMap<>(ringsMap.size());
-
-        for (Map.Entry<String, TransportRings> rings : ringsMap.entrySet())
-            values.put(rings.getValue().getAddress().toString(), rings.getValue().getName());
-
-        return new Object[]{values};
+        return new Object[]{rings.getName()};
     }
 
     /*@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
@@ -858,19 +925,129 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return new Object[]{ringsMap.keySet()};
     }*/
 
+    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    @Callback
+    public Object[] setName(Context context, Arguments args) {
+        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
+
+        String name = args.checkString(0);
+        setRingsParams(null, rings.getAddresses(), null, name);
+
+        return new Object[]{};
+    }
+
+    // -----------------------------------------------------------------------------
+    // Capabilities
+
+    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    @Callback
+    public Object[] getAvailableRings(Context context, Arguments args) {
+        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
+
+        Map<String, String> values = new HashMap<>(ringsMap.size());
+
+        for (TransportRings rings : ringsMap.values()) {
+            for (SymbolTypeTransportRingsEnum symbolType : SymbolTypeTransportRingsEnum.values())
+                values.put(rings.getAddress(symbolType).toString(), rings.getName());
+        }
+
+        return new Object[]{values};
+    }
 
     @Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] addSymbolToAddress(Context context, Arguments args) {
         if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
 
-        int symbolId = args.checkInteger(0);
+        int symbolId = args.checkInteger(1);
+        int symbolType = args.checkInteger(0);
 
         if (symbolId < 0)
-            throw new IllegalArgumentException("bad argument #1 (address out of range, allowed <1..6>)");
+            throw new IllegalArgumentException("bad argument #1 (address out of range, must be higher than -1)");
+
+        if (symbolType < 0 || symbolType > SymbolTypeTransportRingsEnum.values().length)
+            throw new IllegalArgumentException("bad argument #2 (symbolType must be in a range)");
 
         ocContext = context;
 
-        return new Object[]{addSymbolToAddress(symbolId)};
+        return new Object[]{addSymbolToAddress(SymbolTypeTransportRingsEnum.valueOf(symbolType).getSymbol(symbolId))};
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return (capability == CapabilityEnergy.ENERGY) || (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing == null) || super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing == null)
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemStackHandler);
+        if (capability == CapabilityEnergy.ENERGY)
+            return CapabilityEnergy.ENERGY.cast(getEnergyStorage());
+
+        return super.getCapability(capability, facing);
+    }
+
+    // -----------------------------------------------------------------------------
+    // Power system
+
+    public abstract int getSupportedCapacitors();
+
+    protected StargateClassicEnergyStorage getEnergyStorage() {
+        return energyStorage;
+    }
+
+    public int getPowerTier() {
+        return currentPowerTier;
+    }
+
+    private void updatePowerTier() {
+        int powerTier = 1;
+
+        for (int i = 4; i < 7; i++) {
+            if (!itemStackHandler.getStackInSlot(i).isEmpty()) {
+                powerTier++;
+            }
+        }
+
+        if (powerTier != currentPowerTier) {
+            currentPowerTier = powerTier;
+
+            energyStorage.clearStorages();
+
+            for (int i = 4; i < 7; i++) {
+                ItemStack stack = itemStackHandler.getStackInSlot(i);
+
+                if (!stack.isEmpty()) {
+                    energyStorage.addStorage(stack.getCapability(CapabilityEnergy.ENERGY, null));
+                }
+            }
+
+            Aunis.logger.debug("Updated to power tier: " + powerTier);
+        }
+    }
+
+    public static enum TransportRingsUpgradeEnum implements EnumKeyInterface<Item> {
+        GOAULD_UPGRADE(AunisItems.CRYSTAL_GLYPH_MILKYWAY);
+
+        private static final EnumKeyMap<Item, TransportRingsAbstractTile.TransportRingsUpgradeEnum> idMap = new EnumKeyMap<>(values());
+        public Item item;
+
+        private TransportRingsUpgradeEnum(Item item) {
+            this.item = item;
+        }
+
+        public static TransportRingsAbstractTile.TransportRingsUpgradeEnum valueOf(Item item) {
+            return idMap.valueOf(item);
+        }
+
+        public static boolean contains(Item item) {
+            return idMap.contains(item);
+        }
+
+        @Override
+        public Item getKey() {
+            return item;
+        }
     }
 }

@@ -3,6 +3,7 @@ package mrjake.aunis.state.transportrings;
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.state.State;
+import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
 import mrjake.aunis.transportrings.TransportRings;
 import mrjake.aunis.transportrings.TransportRingsAddress;
 
@@ -66,7 +67,7 @@ public class TransportRingsGuiState extends State {
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		address = new TransportRingsAddress();
+		address = new TransportRingsAddress(SymbolTypeTransportRingsEnum.GOAULD);
 		inGrid = buf.readBoolean();
 		
 		if (inGrid) {
@@ -76,7 +77,7 @@ public class TransportRingsGuiState extends State {
 
 			int size = buf.readInt();
 			for (int i = 0; i < size; i++) {
-				TransportRingsAddress address = new TransportRingsAddress();
+				TransportRingsAddress address = new TransportRingsAddress(SymbolTypeTransportRingsEnum.GOAULD);
 				address.fromBytes(buf);
 
 				length = buf.readInt();

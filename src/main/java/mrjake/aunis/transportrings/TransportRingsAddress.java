@@ -2,7 +2,7 @@ package mrjake.aunis.transportrings;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.Aunis;
-import mrjake.aunis.stargate.network.StargateAddress;
+import mrjake.aunis.stargate.network.SymbolInterface;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 
@@ -14,15 +14,18 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
 
     public static final int MAX_SYMBOLS = 4;
 
-    protected List<SymbolTransportRingsEnum> address = new ArrayList<>(MAX_SYMBOLS); // address without origin
+    protected List<SymbolInterface> address = new ArrayList<>(MAX_SYMBOLS); // address without origin
+    protected SymbolTypeTransportRingsEnum symbolType;
 
-    public TransportRingsAddress(){}
+    public TransportRingsAddress(SymbolTypeTransportRingsEnum symbolType) {
+        this.symbolType = symbolType;
+    }
 
     public TransportRingsAddress(NBTTagCompound compound) {
         deserializeNBT(compound);
     }
 
-    public TransportRingsAddress(List<SymbolTransportRingsEnum> addressList) {
+    public TransportRingsAddress(List<SymbolInterface> addressList) {
         this.address = addressList;
     }
 
@@ -33,7 +36,7 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
         }
 
         while (address.size() < MAX_SYMBOLS) {
-            SymbolTransportRingsEnum symbol = SymbolTransportRingsEnum.getRandomSymbol(random);
+            SymbolInterface symbol = symbolType.getRandomSymbol(random);
 
             if (!address.contains(symbol))
                 address.add(symbol);
@@ -42,16 +45,20 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
         return this;
     }
 
-    public void clear(){
+    public void clear() {
         this.address.clear();
     }
 
-    public void add(SymbolTransportRingsEnum symbol){
+    public SymbolTypeTransportRingsEnum getSymbolType(){
+        return symbolType;
+    }
+
+    public void add(SymbolInterface symbol) {
         this.address.add(symbol);
     }
 
     public void addAll(TransportRingsAddress ringsAddress) {
-        if (address.size()+ringsAddress.address.size() > MAX_SYMBOLS) {
+        if (address.size() + ringsAddress.address.size() > MAX_SYMBOLS) {
             Aunis.logger.error("Tried to add symbols to already populated address");
             return;
         }
@@ -59,36 +66,35 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
         address.addAll(ringsAddress.address);
     }
 
-    public boolean contains(SymbolTransportRingsEnum symbol){
+    public boolean contains(SymbolInterface symbol) {
         return address.contains(symbol);
     }
 
-    public SymbolTransportRingsEnum getLast(){
-        if(address.size() < 1) return SymbolTransportRingsEnum.getOrigin();
-        return address.get(address.size()-1);
+    public SymbolInterface getLast() {
+        if (address.size() < 1) return symbolType.getOrigin();
+        return address.get(address.size() - 1);
     }
 
     public TransportRingsAddress stripOrigin() {
-        return new TransportRingsAddress(address.subList(0, address.size()-1));
+        return new TransportRingsAddress(address.subList(0, address.size() - 1));
     }
 
     public boolean equalsV2(TransportRingsAddress address) {
-        for(int i = 0; i < address.size(); i++){
-            if(this.address.size() >= i+1){
-                if(this.address.get(i) != address.get(i))
+        for (int i = 0; i < address.size(); i++) {
+            if (this.address.size() >= i + 1) {
+                if (this.address.get(i) != address.get(i))
                     return false;
-            }
-            else return false;
+            } else return false;
         }
         return true;
     }
 
-    public int size(){
+    public int size() {
         return address.size();
     }
 
-    public SymbolTransportRingsEnum get(int i){
-        if(i >= address.size()) return SymbolTransportRingsEnum.getOrigin();
+    public SymbolInterface get(int i) {
+        if (i >= address.size()) return symbolType.getOrigin();
         return address.get(i);
     }
 
@@ -99,8 +105,9 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
             compound.setInteger("addressLength", address.size());
             for (int i = 0; i < address.size(); i++)
                 compound.setInteger("addressSymbol" + i, address.get(i).getId());
-        }
-        catch (Exception ignored){}
+        } catch (Exception ignored) {}
+
+        compound.setInteger("symbolType", symbolType.id);
 
         return compound;
     }
@@ -113,18 +120,22 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
         }
         int length = compound.getInteger("addressLength");
         for (int i = 0; i < length; i++)
-            address.add(SymbolTransportRingsEnum.valueOf(compound.getInteger("addressSymbol" + i)));
+            address.add(SymbolGoauldEnum.valueOf(compound.getInteger("addressSymbol" + i)));
+
+        symbolType = SymbolTypeTransportRingsEnum.valueOf(compound.getInteger("symbolType"));
     }
 
     public void toBytes(ByteBuf buf) {
+        buf.writeInt(symbolType.id);
         buf.writeInt(address.size());
-        for (SymbolTransportRingsEnum symbol : address) {
-            if(symbol == null) continue;
+        for (SymbolInterface symbol : address) {
+            if (symbol == null) continue;
             buf.writeInt(symbol.getId());
         }
     }
 
     public void fromBytes(ByteBuf buf) {
+        symbolType = SymbolTypeTransportRingsEnum.valueOf(buf.readInt());
         try {
             if (!address.isEmpty()) {
                 Aunis.logger.error("Tried to deserialize address already containing symbols");
@@ -132,16 +143,17 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
             }
             int length = buf.readInt();
             for (int i = 0; i < length; i++)
-                address.add(SymbolTransportRingsEnum.valueOf(buf.readInt()));
+                address.add(SymbolGoauldEnum.valueOf(buf.readInt()));
+        } catch (Exception ignored) {
         }
-        catch (Exception ignored){}
     }
 
+    @Override
     public String toString() {
         StringBuilder stringAddress = new StringBuilder();
-        if(address == null || address.size() < 1) return "";
-        for (SymbolTransportRingsEnum symbol : address) {
-            if (symbol == null){
+        if (address == null || address.size() < 1) return "";
+        for (SymbolInterface symbol : address) {
+            if (symbol == null) {
                 stringAddress.append("--null--, ");
                 continue;
             }
@@ -152,9 +164,9 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
 
     public String toShortString() {
         StringBuilder stringAddress = new StringBuilder();
-        if(address == null || address.size() < 1) return "";
-        for (SymbolTransportRingsEnum symbol : address) {
-            if (symbol == null){
+        if (address == null || address.size() < 1) return "";
+        for (SymbolInterface symbol : address) {
+            if (symbol == null) {
                 stringAddress.append("-, ");
                 continue;
             }
@@ -166,9 +178,9 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
 
     public String calAddress() {
         StringBuilder stringAddress = new StringBuilder();
-        if(address == null || address.size() < 1) return "";
-        for (SymbolTransportRingsEnum symbol : address) {
-            if (symbol == null){
+        if (address == null || address.size() < 1) return "";
+        for (SymbolInterface symbol : address) {
+            if (symbol == null) {
                 stringAddress.append("null");
                 continue;
             }

@@ -18,6 +18,7 @@ import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
+import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
 import mrjake.aunis.transportrings.TransportRings;
 import mrjake.aunis.util.EnumKeyInterface;
 import mrjake.aunis.util.EnumKeyMap;
@@ -213,7 +214,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                         targetPosOld = compound.getLong(mode.tagPosName);
                     }
 
-                    for (BlockPos targetPos : BlockPos.getAllInBoxMutable(pos.add(-10, -10, -10), pos.add(10, 10, 10))) {
+                    for (BlockPos targetPos : BlockPos.getAllInBoxMutable(pos.add(-10, -40, -10), pos.add(10, 40, 10))) {
                         if (AunisBlocks.isInBlocksArray(world.getBlockState(targetPos).getBlock(), mode.matchBlocks)) {
                             switch (mode) {
                                 case MEMORY:
@@ -386,7 +387,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                 case RINGS:
                     TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(linkedPos);
                     if(ringsTile == null) break;
-                    ringsTile.attemptTransportTo(new TransportRings(selectedCompound).getAddress(), 5).sendMessageIfFailed(player);
+                    ringsTile.attemptTransportTo(new TransportRings(selectedCompound).getAddress(SymbolTypeTransportRingsEnum.valueOf(0)), 5).sendMessageIfFailed(player);
 
                     break;
 

@@ -1,6 +1,7 @@
 package mrjake.aunis.stargate.network;
 
 import mrjake.aunis.stargate.EnumSpinDirection;
+import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
 import net.minecraft.util.ResourceLocation;
 
 public interface SymbolInterface {
