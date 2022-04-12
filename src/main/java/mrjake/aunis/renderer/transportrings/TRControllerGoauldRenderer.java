@@ -1,10 +1,8 @@
 package mrjake.aunis.renderer.transportrings;
 
-import mrjake.aunis.Aunis;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.loader.model.ModelLoader;
 import mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile;
-import mrjake.aunis.transportrings.SymbolGoauldEnum;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
@@ -25,8 +23,8 @@ public class TRControllerGoauldRenderer extends TRControllerAbstractRenderer {
                     ModelLoader.getModel(button.modelResource).render();
                 }
                 GlStateManager.popMatrix();
-                if(te.getWorld().getTotalWorldTime() % 40 == 0)
-                    Aunis.info(rendererState.isButtonActive(SymbolGoauldEnum.valueOf(symbolId)) + "");
+                //if(te.getWorld().getTotalWorldTime() % 40 == 0)
+                    //Aunis.info(rendererState.isButtonActive(SymbolGoauldEnum.valueOf(symbolId)) + "");
                 symbolId++;
             }
         }

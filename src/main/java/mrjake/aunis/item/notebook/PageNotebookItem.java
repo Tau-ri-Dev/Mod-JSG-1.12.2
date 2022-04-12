@@ -5,6 +5,8 @@ import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
 import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
+import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
+import mrjake.aunis.transportrings.TransportRingsAddress;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -81,13 +83,22 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 		else {			
 			if (stack.hasTagCompound()) {
 				NBTTagCompound compound = stack.getTagCompound();
-				
-				SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf(compound.getInteger("symbolType"));
-				StargateAddress stargateAddress = new StargateAddress(compound.getCompoundTag("address"));
-				int maxSymbols = symbolType.getMaxSymbolsDisplay(compound.getBoolean("hasUpgrade"));
-								
-				for (int i=0; i<maxSymbols; i++) {
-					tooltip.add(TextFormatting.ITALIC + "" + (i > 5 ? TextFormatting.DARK_PURPLE : TextFormatting.AQUA) + stargateAddress.get(i).localize());
+				if(!compound.hasKey("address")) {
+					SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf(compound.getInteger("symbolType"));
+					StargateAddress stargateAddress = new StargateAddress(compound.getCompoundTag("address"));
+					int maxSymbols = symbolType.getMaxSymbolsDisplay(compound.getBoolean("hasUpgrade"));
+
+					for (int i = 0; i < maxSymbols; i++) {
+						tooltip.add(TextFormatting.ITALIC + "" + (i > 5 ? TextFormatting.DARK_PURPLE : TextFormatting.AQUA) + stargateAddress.get(i).localize());
+					}
+				}
+				else{
+					SymbolTypeTransportRingsEnum symbolType = SymbolTypeTransportRingsEnum.valueOf(compound.getInteger("symbolType"));
+					TransportRingsAddress trAddress = new TransportRingsAddress(compound.getCompoundTag("address"));
+
+					for (int i = 0; i < trAddress.size(); i++) {
+						tooltip.add(TextFormatting.ITALIC + "" + (i > 5 ? TextFormatting.DARK_PURPLE : TextFormatting.AQUA) + trAddress.get(i).localize());
+					}
 				}
 			}
 		}
@@ -133,6 +144,19 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 		compound.setBoolean("hasUpgrade", hasUpgrade);
 		compound.setInteger("color", PageNotebookItem.getColorForBiome(registryPath));
 		
+		return compound;
+	}
+
+	public static NBTTagCompound getCompoundFromAddress(TransportRingsAddress address, String registryPath) {
+		NBTTagCompound compound = new NBTTagCompound();
+		if(address != null) {
+			if (address.getSymbolType() != null) compound.setInteger("symbolType", address.getSymbolType().id);
+			if (address.serializeNBT() != null) compound.setTag("address", address.serializeNBT());
+		}
+		compound.setBoolean("hasUpgrade", false);
+		compound.setBoolean("transportRings", true);
+		compound.setInteger("color", PageNotebookItem.getColorForBiome(registryPath));
+
 		return compound;
 	}
 

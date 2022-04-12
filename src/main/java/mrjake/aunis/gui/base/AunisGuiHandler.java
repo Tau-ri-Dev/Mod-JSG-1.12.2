@@ -2,6 +2,8 @@ package mrjake.aunis.gui.base;
 
 import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.gui.container.*;
+import mrjake.aunis.gui.container.transportrings.TRContainer;
+import mrjake.aunis.gui.container.transportrings.TRGui;
 import mrjake.aunis.gui.container.zpm.ZPMContainer;
 import mrjake.aunis.gui.container.zpm.ZPMContainerGui;
 import mrjake.aunis.gui.container.zpmhub.ZPMHubContainer;
@@ -36,6 +38,9 @@ public class AunisGuiHandler implements IGuiHandler {
 
 			case GUI_ZPMHUB:
 				return new ZPMHubContainer(player.inventory, world, x, y ,z);
+
+			case GUI_RINGS:
+				return new TRContainer(player.inventory, world, x, y ,z);
 		}
 		
 		return null;
@@ -64,6 +69,9 @@ public class AunisGuiHandler implements IGuiHandler {
 
 			case GUI_ZPMHUB:
 				return new ZPMHubContainerGui(new ZPMHubContainer(player.inventory, world, x, y ,z));
+
+			case GUI_RINGS:
+				return new TRGui(new BlockPos(x, y, z), new TRContainer(player.inventory, world, x, y ,z));
 				
 		}
 		

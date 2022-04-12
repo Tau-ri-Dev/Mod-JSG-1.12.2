@@ -1,9 +1,10 @@
 package mrjake.aunis.gui.container.transportrings;
 
 import io.netty.buffer.ByteBuf;
-import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.state.State;
+import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
+import mrjake.aunis.transportrings.TransportRingsAddress;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,27 +12,27 @@ import java.util.Map;
 public class TRGuiState extends State {
 	public TRGuiState() {}
 	
-	public Map<SymbolTypeEnum, StargateAddress> gateAdddressMap;
+	public Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> trAdddressMap;
 	
-	public TRGuiState(Map<SymbolTypeEnum, StargateAddress> gateAdddressMap) {
-		this.gateAdddressMap = gateAdddressMap;
+	public TRGuiState(Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> adddressMap) {
+		this.trAdddressMap = adddressMap;
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {		
-		for (SymbolTypeEnum symbolType : SymbolTypeEnum.values()) {
-			gateAdddressMap.get(symbolType).toBytes(buf);
+		for (SymbolTypeTransportRingsEnum symbolType : SymbolTypeTransportRingsEnum.values()) {
+			trAdddressMap.get(symbolType).toBytes(buf);
 		}
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		gateAdddressMap = new HashMap<>(3);
+		trAdddressMap = new HashMap<>(3);
 		
-		for (SymbolTypeEnum symbolType : SymbolTypeEnum.values()) {
-			StargateAddress address = new StargateAddress(symbolType);
+		for (SymbolTypeTransportRingsEnum symbolType : SymbolTypeTransportRingsEnum.values()) {
+			TransportRingsAddress address = new TransportRingsAddress(symbolType);
 			address.fromBytes(buf);
-			gateAdddressMap.put(symbolType, address);
+			trAdddressMap.put(symbolType, address);
 		}
 	}
 }

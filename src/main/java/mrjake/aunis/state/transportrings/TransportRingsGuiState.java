@@ -8,9 +8,7 @@ import mrjake.aunis.transportrings.TransportRings;
 import mrjake.aunis.transportrings.TransportRingsAddress;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class TransportRingsGuiState extends State {
 
@@ -35,7 +33,7 @@ public class TransportRingsGuiState extends State {
 		inGrid = rings.isInGrid();
 		
 		if (inGrid) {
-			this.address = rings.getAddress();
+			this.address = rings.getAddress(SymbolTypeTransportRingsEnum.GOAULD);
 			this.name = rings.getName();
 			this.distance = rings.getRingsDistance();
 			
@@ -56,7 +54,7 @@ public class TransportRingsGuiState extends State {
 			buf.writeInt(ringsList.size());
 			
 			for (TransportRings rings : ringsList) {
-				rings.getAddress().toBytes(buf);
+				rings.getAddress(SymbolTypeTransportRingsEnum.GOAULD).toBytes(buf);
 				buf.writeInt(rings.getName().length());
 				buf.writeCharSequence(rings.getName(), StandardCharsets.UTF_8);
 			}
@@ -77,13 +75,16 @@ public class TransportRingsGuiState extends State {
 
 			int size = buf.readInt();
 			for (int i = 0; i < size; i++) {
-				TransportRingsAddress address = new TransportRingsAddress(SymbolTypeTransportRingsEnum.GOAULD);
-				address.fromBytes(buf);
+				Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> addressMap = new HashMap<>();
+				for(SymbolTypeTransportRingsEnum symbolType : SymbolTypeTransportRingsEnum.values()) {
+					TransportRingsAddress address = new TransportRingsAddress(symbolType);
+					address.fromBytes(buf);
 
-				length = buf.readInt();
-				String name = buf.readCharSequence(length, StandardCharsets.UTF_8).toString();
-
-				ringsList.add(new TransportRings(address, name));
+					length = buf.readInt();
+					String name = buf.readCharSequence(length, StandardCharsets.UTF_8).toString();
+					addressMap.put(symbolType, address);
+				}
+				ringsList.add(new TransportRings(addressMap, name));
 			}
 
 			distance = buf.readInt();

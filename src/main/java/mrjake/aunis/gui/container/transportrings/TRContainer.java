@@ -70,17 +70,10 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
             });
         }
 
-        // Page slots (index 7-9)
-        for (int i = 0; i < 3; i++) {
+        // Page slots (index 7-8)
+        for (int i = 0; i < 2; i++) {
             addSlotToContainer(new SlotItemHandler(itemHandler, i + 7, -22, 89 + 22 * i));
         }
-
-        // Biome overlay slot (index 10)
-        addSlotToContainer(new SlotItemHandler(itemHandler, 10, 0, 0));
-
-        // Shield/Iris Upgrade (index 11)
-        addSlotToContainer(new SlotItemHandler(itemHandler, 11, 16 + 18 * 3, 27));
-
         for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 86))
             addSlotToContainer(slot);
     }
@@ -100,8 +93,8 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
         ItemStack stack = getSlot(index).getStack();
 
         // Transfering from Stargate to player's inventory
-        if (index < 12) {
-            if (!mergeItemStack(stack, 12, inventorySlots.size(), false)) {
+        if (index < trTile.getSlotsCount()) {
+            if (!mergeItemStack(stack, trTile.getSlotsCount(), inventorySlots.size(), false)) {
                 return ItemStack.EMPTY;
             }
 

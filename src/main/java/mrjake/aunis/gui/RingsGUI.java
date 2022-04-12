@@ -6,8 +6,9 @@ import mrjake.aunis.gui.base.AunisGuiButton;
 import mrjake.aunis.gui.element.GuiHelper;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.transportrings.SaveRingsParametersToServer;
+import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.state.transportrings.TransportRingsGuiState;
-import mrjake.aunis.transportrings.SymbolGoauldEnum;
+import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
 import mrjake.aunis.transportrings.TransportRings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -76,7 +77,7 @@ public class RingsGUI extends AunisGuiBase {
         float color = 1.0f;
         int space = 34;
         for (int i = 0; i < state.getAddress().size(); i++) {
-            SymbolGoauldEnum symbol = state.getAddress().get(i);
+            SymbolInterface symbol = state.getAddress().get(i);
             if (symbol.origin()) continue;
             Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource());
             GuiHelper.drawTexturedRectWithShadow(60 + 20 / 2 + space * i, 25, shadow, shadow, 20, 20, color);
@@ -92,7 +93,7 @@ public class RingsGUI extends AunisGuiBase {
         for (TransportRings rings : state.getRings()) {
             if(y > maxY) break; // prevents from rendering out of gui / under save button
             drawString(rings.getName(), 5, y, 0x00AAAA);
-            drawString("" + rings.getAddress(), 50, y, 0x00AA00);
+            drawString("" + rings.getAddress(SymbolTypeTransportRingsEnum.GOAULD), 50, y, 0x00AA00);
 
             y += 12;
         }

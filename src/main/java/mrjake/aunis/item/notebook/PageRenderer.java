@@ -4,6 +4,8 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.renderer.AunisFontRenderer;
 import mrjake.aunis.item.renderer.ItemRenderHelper;
 import mrjake.aunis.stargate.network.*;
+import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
+import mrjake.aunis.transportrings.TransportRingsAddress;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -67,34 +69,50 @@ public class PageRenderer {
 	    GL11.glTexCoord2f(0, 0.71875f); GL11.glVertex3f(0.0f, 1.0f, 0.0f);
 		
 	    GL11.glEnd();
-			
-		SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf(compound.getInteger("symbolType"));
-		StargateAddress stargateAddress = new StargateAddress(compound.getCompoundTag("address"));
-		int maxSymbols = symbolType.getMaxSymbolsDisplay(compound.getBoolean("hasUpgrade"));
-		
-		for (int i=0; i<maxSymbols; i++) {
-			float x = 0.21f*(i%3);
-			float y = 0.20f*(i/3) + 0.14f;
+	    if(!compound.hasKey("transportRings")) {
+			SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf(compound.getInteger("symbolType"));
+			StargateAddress stargateAddress = new StargateAddress(compound.getCompoundTag("address"));
+			int maxSymbols = symbolType.getMaxSymbolsDisplay(compound.getBoolean("hasUpgrade"));
 
+			for (int i=0; i<maxSymbols; i++) {
+				float x = 0.21f*(i%3);
+				float y = 0.20f*(i/3) + 0.14f;
+
+				if (symbolType == SymbolTypeEnum.UNIVERSE) {
+					y = 0.20f*(i/3) + 0.18f;
+					x += 0.04f;
+					renderSymbol(x, y, 0.095f, 0.2f, stargateAddress.get(i));
+				}
+				else {
+					renderSymbol(x, y, 0.2f, 0.2f, stargateAddress.get(i));
+				}
+			}
+
+			float x = 0.10f * 2;
+			float y = 0.20f*(3) + 0.14f;
+			float w = 0.2f;
 			if (symbolType == SymbolTypeEnum.UNIVERSE) {
-				y = 0.20f*(i/3) + 0.18f;
-				x += 0.04f;
-				renderSymbol(x, y, 0.095f, 0.2f, stargateAddress.get(i));
+				w = 0.095f;
+				x = 0.10f * 2.5f;
 			}
-			else {
-				renderSymbol(x, y, 0.2f, 0.2f, stargateAddress.get(i));
+
+			renderSymbol(x, y, w, 0.2f, Objects.requireNonNull(symbolType.getOrigin()));
+		}
+	    else{
+			SymbolTypeTransportRingsEnum symbolType = SymbolTypeTransportRingsEnum.valueOf(compound.getInteger("symbolType"));
+			TransportRingsAddress address = new TransportRingsAddress(compound.getCompoundTag("address"));
+
+			for (int i=0; i<address.size(); i++) {
+				float x = 0.21f*(i%3);
+				float y = 0.20f*((float)i/3) + 0.14f;
+				renderSymbol(x, y, 0.2f, 0.2f, address.get(i));
 			}
-		}
 
-		float x = 0.10f * 2;
-		float y = 0.20f*(3) + 0.14f;
-		float w = 0.2f;
-		if (symbolType == SymbolTypeEnum.UNIVERSE) {
-			w = 0.095f;
-			x = 0.10f * 2.5f;
+			float x = 0.10f * 2;
+			float y = 0.20f*(3) + 0.14f;
+			float w = 0.2f;
+			renderSymbol(x, y, w, 0.2f, Objects.requireNonNull(symbolType.getOrigin()));
 		}
-
-		renderSymbol(x, y, w, 0.2f, Objects.requireNonNull(symbolType.getOrigin()));
 		
 		String name = PageNotebookItem.getNameFromCompound(compound);
 		

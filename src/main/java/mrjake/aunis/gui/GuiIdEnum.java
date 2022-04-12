@@ -11,7 +11,8 @@ public enum GuiIdEnum {
 	GUI_PEGASUS_DHD(4),
 
 	GUI_ZPM(5),
-	GUI_ZPMHUB(6)
+	GUI_ZPMHUB(6),
+	GUI_RINGS(7)
 	;
     public int id;
 	

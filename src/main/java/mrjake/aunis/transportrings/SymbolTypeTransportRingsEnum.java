@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Random;
 
 public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
-  GOAULD(0, 32, 32);
+  GOAULD(0, 32, 32),
+  ORI(1, 32, 32);
 
   public int id;
   public int iconWidht;
@@ -23,6 +24,7 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
   public SymbolInterface getRandomSymbol(Random random) {
     switch (this) {
       case GOAULD:
+      case ORI:
         return SymbolGoauldEnum.getRandomSymbol(random);
     }
 
@@ -32,6 +34,7 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
   public List<SymbolInterface> stripOrigin(List<SymbolInterface> dialedAddress) {
     switch (this) {
       case GOAULD:
+      case ORI:
         return SymbolGoauldEnum.stripOrigin(dialedAddress);
     }
 
@@ -41,6 +44,7 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
   public SymbolInterface getOrigin() {
     switch (this) {
       case GOAULD:
+      case ORI:
         return SymbolGoauldEnum.getOrigin();
     }
 
@@ -50,6 +54,7 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
   public SymbolInterface getSymbol(int symbolId) {
     switch (this) {
       case GOAULD:
+      case ORI:
         return SymbolGoauldEnum.valueOf(symbolId);
     }
 
@@ -60,6 +65,7 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
   public SymbolInterface fromEnglishName(String englishName) {
     switch (this) {
       case GOAULD:
+      case ORI:
         return SymbolGoauldEnum.fromEnglishName(englishName);
     }
 
@@ -73,6 +79,7 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
   public boolean validateDialedAddress(TransportRingsAddress address) {
     switch (this) {
       case GOAULD:
+      case ORI:
         return SymbolGoauldEnum.validateDialedAddress(address);
     }
 

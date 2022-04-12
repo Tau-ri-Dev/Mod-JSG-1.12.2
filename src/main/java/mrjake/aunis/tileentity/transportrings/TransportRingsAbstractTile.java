@@ -10,8 +10,10 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.gui.RingsGUI;
+import mrjake.aunis.gui.container.transportrings.TRGuiState;
+import mrjake.aunis.gui.container.transportrings.TRGuiUpdate;
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.packet.StateUpdateRequestToServer;
@@ -22,11 +24,11 @@ import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.EnumScheduledTask;
 import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.stargate.power.StargateClassicEnergyStorage;
+import mrjake.aunis.stargate.power.StargateEnergyRequired;
 import mrjake.aunis.state.State;
 import mrjake.aunis.state.StateProviderInterface;
 import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.state.dialhomedevice.DHDActivateButtonState;
-import mrjake.aunis.state.transportrings.TransportRingsGuiState;
 import mrjake.aunis.state.transportrings.TransportRingsRendererState;
 import mrjake.aunis.state.transportrings.TransportRingsStartAnimationRequest;
 import mrjake.aunis.tesr.RendererInterface;
@@ -38,7 +40,6 @@ import mrjake.aunis.transportrings.*;
 import mrjake.aunis.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -97,6 +98,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     // ---------------------------------------------------------------------------------
     // Rings network
     protected TransportRings rings;
+    protected int energyTransferedLastTick = 0;
     List<ScheduledTask> scheduledTasks = new ArrayList<>();
     // ---------------------------------------------------------------------------------
     // Renders
@@ -115,12 +117,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     private BlockPos linkedController;
     protected TransportRingsAddress dialedAddress = new TransportRingsAddress(getSymbolType());
     private int linkId = -1;
-    @SideOnly(Side.CLIENT)
-    private RingsGUI openGui;
     // ------------------------------------------------------------
     // Node-related work
     private Node node = Aunis.ocWrapper.createNode(this, "transportrings");
     private int currentPowerTier = 1;
+    public int itemStackHandlerSlotsCount = 9;
     private final AunisItemStackHandler itemStackHandler = new AunisItemStackHandler(9) {
 
         @Override
@@ -171,13 +172,32 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             markDirty();
         }
     };
+    // ------------------------------------------------------------
+    // Page progress
+    private short pageProgress = 0;
+    private int pageSlotId;
+    private boolean doPageProgress;
+    private ScheduledTask givePageTask;
+    private boolean lockPage;
+    // ------------------------------------------------------------
+    // Energy
+    private int keepAliveEnergyPerTick = 0;
+    private int energyStoredLastTick = 0;
+
+    public short getPageProgress() {
+        return pageProgress;
+    }
+
+    public void setPageProgress(int pageProgress) {
+        this.pageProgress = (short) pageProgress;
+    }
 
     @Override
     public void update() {
         if (!world.isRemote) {
             ScheduledTask.iterate(scheduledTasks, world.getTotalWorldTime());
 
-            if (getRings().getAddresses() == null || getRings().getAddresses().size() < SymbolTypeTransportRingsEnum.values().length)
+            if (getRings().getAddresses() == null || getRings().getAddresses().size() < SymbolTypeTransportRingsEnum.values().length || getRings().getAddress(SymbolTypeTransportRingsEnum.valueOf(0)).contains(SymbolGoauldEnum.getOrigin()))
                 generateAddress(true);
 
             if (!lastPos.equals(pos)) {
@@ -190,7 +210,74 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                 markDirty();
             }
+
+            /*
+             * Draw power (engaged)
+             *
+             * If initiating
+             * 	True: Extract energy each tick
+             * 	False: Update the source gate about consumed energy each second
+             */
+            if (isBusy() && initiating) {
+                if (targetRingsPos == null) return;
+                int energyStored = getEnergyStorage().getEnergyStored();
+
+                // Max Open Time
+                if (world.getTileEntity(targetRingsPos) == null) return;
+                if (getEnergyStorage().getEnergyStored() >= keepAliveEnergyPerTick) {
+                    getEnergyStorage().extractEnergy(keepAliveEnergyPerTick, false);
+                    markDirty();
+                }
+            }
+
+            if (givePageTask != null) {
+                if (givePageTask.update(world.getTotalWorldTime())) {
+                    givePageTask = null;
+                }
+            }
+
+            if (doPageProgress) {
+                if (world.getTotalWorldTime() % 2 == 0) {
+                    pageProgress++;
+
+                    if (pageProgress > 18) {
+                        pageProgress = 0;
+                        doPageProgress = false;
+                    }
+                }
+
+                if (itemStackHandler.getStackInSlot(pageSlotId).isEmpty()) {
+                    lockPage = false;
+                    doPageProgress = false;
+                    pageProgress = 0;
+                    givePageTask = null;
+                }
+            } else {
+                if (lockPage && itemStackHandler.getStackInSlot(pageSlotId).isEmpty()) {
+                    lockPage = false;
+                }
+
+                if (!lockPage) {
+                    for (int i = 7; i < itemStackHandlerSlotsCount; i++) {
+                        if (!itemStackHandler.getStackInSlot(i).isEmpty()) {
+                            doPageProgress = true;
+                            lockPage = true;
+                            pageSlotId = i;
+                            givePageTask = new ScheduledTask(EnumScheduledTask.STARGATE_GIVE_PAGE, 36);
+                            givePageTask.setTaskCreated(world.getTotalWorldTime());
+                            givePageTask.setExecutor(this);
+
+                            break;
+                        }
+                    }
+                }
+            }
+
         }
+    }
+
+    public int getSlotsCount(){
+        return itemStackHandlerSlotsCount;
     }
 
     @Override
@@ -262,6 +349,13 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                 addTask(new ScheduledTask(EnumScheduledTask.RINGS_FADE_OUT));
                 addTask(new ScheduledTask(EnumScheduledTask.RINGS_SOLID_BLOCKS, 35));
+
+                if (initiating) {
+                    StargateEnergyRequired energyRequired = new StargateEnergyRequired(1000, 10);
+                    getEnergyStorage().extractEnergy(energyRequired.energyToOpen, false);
+                    keepAliveEnergyPerTick = energyRequired.keepAlive;
+                    markDirty();
+                }
                 break;
 
             case RINGS_SOLID_BLOCKS:
@@ -313,6 +407,23 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 if (targetRingsTile != null) targetRingsTile.setBusy(false);
 
                 sendSignal(ocContext, "transportrings_teleport_finished", initiating);
+                keepAliveEnergyPerTick = 0;
+                markDirty();
+
+                break;
+
+
+            case STARGATE_GIVE_PAGE:
+                SymbolTypeTransportRingsEnum symbolType = SymbolTypeTransportRingsEnum.valueOf(pageSlotId - 7);
+                ItemStack stack = itemStackHandler.getStackInSlot(pageSlotId);
+                if (stack.isEmpty()) break;
+                Aunis.logger.info("Giving Notebook page of address " + symbolType);
+
+                NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(getRings().getAddresses().get(symbolType), PageNotebookItem.getRegistryPathFromWorld(world, pos));
+
+                stack = new ItemStack(AunisItems.PAGE_NOTEBOOK_ITEM, 1, 1);
+                stack.setTagCompound(compound);
+                itemStackHandler.setStackInSlot(pageSlotId, stack);
 
                 break;
 
@@ -520,6 +631,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return !isLinked();
     }
 
+
+    // ---------------------------------------------------------------------------------
+    // NBT data
+
     @Override
     public int getLinkId() {
         return linkId;
@@ -551,7 +666,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
 
     // ---------------------------------------------------------------------------------
-    // NBT data
+    // States
 
     public void removeRings(Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> addressMap) {
         TransportRings rings = ringsMap.get(addressMap);
@@ -575,17 +690,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return setRingsParams(name);
     }
 
-    public ParamsSetResult setRingsParams(SymbolTypeTransportRingsEnum symbolType, TransportRingsAddress address) {
-        return setRingsParams(address, symbolType, getRings().getName());
-    }
-
     public ParamsSetResult setRingsParams(Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> addressMap) {
         return setRingsParams(null, addressMap, null, getRings().getName());
     }
-
-
-    // ---------------------------------------------------------------------------------
-    // States
 
     public ParamsSetResult setRingsParams(String name) {
         return setRingsParams(null, null, name);
@@ -620,8 +727,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             getRings().setAddress(symbolType, address);
         else if (addressMap != null) {
             getRings().setAddress(addressMap);
-        } else
+        } else {
             getRings().setAddress(addressOld);
+        }
         getRings().setName(name);
         getRings().setRingsDistance(ringsDistance);
 
@@ -680,9 +788,14 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         }
 
         compound.setBoolean("initiating", initiating);
+        compound.setTag("itemHandler", itemStackHandler.serializeNBT());
 
         return super.writeToNBT(compound);
     }
+
+
+    // ------------------------------------------------------------------------
+    // OpenComputers
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
@@ -734,6 +847,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         ringsDistance = compound.getInteger("ringsDistance");
         initiating = compound.getBoolean("initiating");
 
+        itemStackHandler.deserializeNBT(compound.getCompoundTag("itemHandler"));
+
         super.readFromNBT(compound);
     }
 
@@ -744,7 +859,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 return rendererState;
 
             case GUI_STATE:
-                return new TransportRingsGuiState(getRings(), ringsMap.values());
+                return new TRGuiState(getRings().getAddresses());
+
+            case GUI_UPDATE:
+                return new TRGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick);
+
 
             default:
                 return null;
@@ -761,7 +880,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 return new TransportRingsStartAnimationRequest();
 
             case GUI_STATE:
-                return new TransportRingsGuiState();
+                return new TRGuiState();
+
+            case GUI_UPDATE:
+                return new TRGuiUpdate();
 
             default:
                 return null;
@@ -783,16 +905,15 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 break;
 
             case GUI_STATE:
-
-                if (openGui == null || !openGui.isOpen) {
-                    openGui = new RingsGUI(pos, (TransportRingsGuiState) state);
-                    Minecraft.getMinecraft().displayGuiScreen(openGui);
-                } else {
-                    openGui.state = (TransportRingsGuiState) state;
-                }
-
+                TRGuiState guiState = (TRGuiState) state;
+                getRings().setAddress(guiState.trAdddressMap);
                 break;
 
+            case GUI_UPDATE:
+                TRGuiUpdate guiUpdate = (TRGuiUpdate) state;
+                energyStorage.setEnergyStoredInternally(guiUpdate.energyStored);
+                energyTransferedLastTick = guiUpdate.transferedLastTick;
+                break;
             default:
                 break;
         }
@@ -815,10 +936,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         setLinkedController(closestController, linkId);
     }
 
-
-    // ------------------------------------------------------------------------
-    // OpenComputers
-
     @Override
     public RendererInterface getRenderer() {
         return renderer;
@@ -836,34 +953,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         if (node != null) node.remove();
     }
 
-    @Override
-    public void invalidate() {
-        if (node != null) node.remove();
-
-        super.invalidate();
-    }
-
-    @Override
-    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
-    public Node node() {
-        return node;
-    }
-
-    @Override
-    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
-    public void onConnect(Node node) {
-    }
-
-    @Override
-    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
-    public void onDisconnect(Node node) {
-    }
-
-    @Override
-    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
-    public void onMessage(Message message) {
-    }
-
     /*@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getAddress(Context context, Arguments args) {
@@ -872,8 +961,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return new Object[]{rings.getAddress()};
     }*/
 
-    public void sendSignal(Object context, String name, Object... params) {
-        Aunis.ocWrapper.sendSignalToReachable(node, (Context) context, name, params);
+    @Override
+    public void invalidate() {
+        if (node != null) node.remove();
+
+        super.invalidate();
     }
 
     /*@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
@@ -889,12 +981,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return new Object[]{setRingsParams(address, rings.getName())};
     }*/
 
-    // ------------------------------------------------------------
-    // Methods
+    @Override
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
-    @Callback
-    public Object[] isInGrid(Context context, Arguments args) {
-        return new Object[]{rings.isInGrid()};
+    public Node node() {
+        return node;
     }
 
     /*@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
@@ -909,12 +999,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return new Object[]{setRingsParams(address, name)};
     }*/
 
+    @Override
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
-    @Callback
-    public Object[] getName(Context context, Arguments args) {
-        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
-
-        return new Object[]{rings.getName()};
+    public void onConnect(Node node) {
     }
 
     /*@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
@@ -924,6 +1011,42 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         return new Object[]{ringsMap.keySet()};
     }*/
+
+    @Override
+    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    public void onDisconnect(Node node) {
+    }
+
+    // -----------------------------------------------------------------------------
+    // Capabilities
+
+    @Override
+    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    public void onMessage(Message message) {
+    }
+
+    public void sendSignal(Object context, String name, Object... params) {
+        Aunis.ocWrapper.sendSignalToReachable(node, (Context) context, name, params);
+    }
+
+    // ------------------------------------------------------------
+    // Methods
+    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    @Callback
+    public Object[] isInGrid(Context context, Arguments args) {
+        return new Object[]{rings.isInGrid()};
+    }
+
+    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    @Callback
+    public Object[] getName(Context context, Arguments args) {
+        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
+
+        return new Object[]{rings.getName()};
+    }
+
+    // -----------------------------------------------------------------------------
+    // Power system
 
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
@@ -935,9 +1058,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         return new Object[]{};
     }
-
-    // -----------------------------------------------------------------------------
-    // Capabilities
 
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
@@ -988,8 +1108,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return super.getCapability(capability, facing);
     }
 
-    // -----------------------------------------------------------------------------
-    // Power system
+    public int getEnergyTransferedLastTick() {
+        return energyTransferedLastTick;
+    }
 
     public abstract int getSupportedCapacitors();
 
@@ -1028,7 +1149,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     public static enum TransportRingsUpgradeEnum implements EnumKeyInterface<Item> {
-        GOAULD_UPGRADE(AunisItems.CRYSTAL_GLYPH_MILKYWAY);
+        GOAULD_UPGRADE(AunisItems.CRYSTAL_GLYPH_MILKYWAY),
+        ORI_UPGRADE(AunisItems.CRYSTAL_GLYPH_PEGASUS);
 
         private static final EnumKeyMap<Item, TransportRingsAbstractTile.TransportRingsUpgradeEnum> idMap = new EnumKeyMap<>(values());
         public Item item;
