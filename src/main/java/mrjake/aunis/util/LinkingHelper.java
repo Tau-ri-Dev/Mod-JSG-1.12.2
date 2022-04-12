@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public class LinkingHelper {
   private static int nextLinkId = 0;
@@ -46,6 +47,25 @@ public class LinkingHelper {
             closestDistance = distanceSq;
             closest = target.toImmutable();
           }
+        }
+      }
+    }
+
+    return closest;
+  }
+
+  @Nullable
+  public static BlockPos findClosestPos(World world, BlockPos startPos, BlockPos radius, Block targetBlock, ArrayList<BlockPos> blacklist) {
+    double closestDistance = Double.MAX_VALUE;
+    BlockPos closest = null;
+
+    for (BlockPos target : BlockPos.getAllInBoxMutable(startPos.subtract(radius), startPos.add(radius))) {
+      if (world.getBlockState(target).getBlock() == targetBlock && !(blacklist.contains(target))) {
+        double distanceSq = startPos.distanceSq(target);
+
+        if (distanceSq < closestDistance) {
+          closestDistance = distanceSq;
+          closest = target.toImmutable();
         }
       }
     }

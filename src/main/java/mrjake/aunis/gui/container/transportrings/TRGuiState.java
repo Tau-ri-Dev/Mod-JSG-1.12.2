@@ -27,7 +27,7 @@ public class TRGuiState extends State {
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		trAdddressMap = new HashMap<>(3);
+		trAdddressMap = new HashMap<>();
 		
 		for (SymbolTypeTransportRingsEnum symbolType : SymbolTypeTransportRingsEnum.values()) {
 			TransportRingsAddress address = new TransportRingsAddress(symbolType);

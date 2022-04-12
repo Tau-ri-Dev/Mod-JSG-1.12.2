@@ -211,12 +211,14 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 markDirty();
             }
 
+            if(world.getTotalWorldTime() % 40 == 0)
+                updateRenderBox();
+
             /*
-             * Draw power (engaged)
+             * Draw power (isBusy)
              *
              * If initiating
              * 	True: Extract energy each tick
-             * 	False: Update the source gate about consumed energy each second
              */
             if (isBusy() && initiating) {
                 if (targetRingsPos == null) return;
@@ -224,10 +226,13 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                 // Max Open Time
                 if (world.getTileEntity(targetRingsPos) == null) return;
-                if (getEnergyStorage().getEnergyStored() >= keepAliveEnergyPerTick) {
+                if (energyStored >= keepAliveEnergyPerTick) {
                     getEnergyStorage().extractEnergy(keepAliveEnergyPerTick, false);
                     markDirty();
                 }
+
+                energyTransferedLastTick = getEnergyStorage().getEnergyStored() - energyStored;
+                markDirty();
             }
 
             if (givePageTask != null) {
@@ -288,7 +293,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         }
         if (!world.isRemote) {
             setBarrierBlocks(false, false);
+
+            //todo(Mine): fix this
             generateAddress(false);
+            //generateAddress(true);
+
             globalTeleportBox = LOCAL_TELEPORT_BOX.offset(pos);
         }
         Aunis.ocWrapper.joinOrCreateNetwork(this);
@@ -327,7 +336,12 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         LOCAL_TELEPORT_BOX = new AunisAxisAlignedBB(-1, ringsDistance, -1, 2, ringsDistance + 2.5, 2);
         invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, ringsDistance, 2), new BlockPos(1, ringsDistance, 2), new BlockPos(2, ringsDistance, 1));
         globalTeleportBox = LOCAL_TELEPORT_BOX.offset(pos);
-        renderBoundingBox = ringsDistance < 0 ? new AunisAxisAlignedBB(-5.5, 5, -0.5, 5.5, ringsDistance - 15, 0.5) : new AunisAxisAlignedBB(-5.5, -5, -0.5, 5.5, ringsDistance + 15, 0.5);
+        updateRenderBox();
+        markDirty();
+    }
+
+    public void updateRenderBox(){
+        renderBoundingBox = new AunisAxisAlignedBB(-3, -40, -3, 3, 40, 3);
         markDirty();
     }
 
@@ -490,11 +504,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     public boolean canAddSymbol(SymbolInterface symbol) {
-        if (dialedAddress.size() > 0) {
-            if (!(dialedAddress.getSymbolType().getOrigin() == symbol.getSymbolType().getOrigin())) {
-                return false;
-            }
-        }
         if (dialedAddress.contains(symbol)) return false;
         if (dialedAddress.size() > MAX_SYMBOLS) {
             dialedAddress.clear();
@@ -687,19 +696,15 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     public ParamsSetResult setRingsParams(String name, int distance) {
         setNewRingsDistance(distance);
-        return setRingsParams(name);
+        return setRingsParams(null, null, null, name);
     }
 
     public ParamsSetResult setRingsParams(Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> addressMap) {
         return setRingsParams(null, addressMap, null, getRings().getName());
     }
 
-    public ParamsSetResult setRingsParams(String name) {
-        return setRingsParams(null, null, name);
-    }
-
-    public ParamsSetResult setRingsParams(TransportRingsAddress address, SymbolTypeTransportRingsEnum symbolType, String name) {
-        return setRingsParams(address, null, symbolType, name);
+    public void setRingsParams(TransportRingsAddress address, SymbolTypeTransportRingsEnum symbolType, String name) {
+        setRingsParams(address, null, symbolType, name);
     }
 
     public ParamsSetResult setRingsParams(TransportRingsAddress address, Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> addressMap, SymbolTypeTransportRingsEnum symbolType, String name) {
@@ -730,6 +735,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         } else {
             getRings().setAddress(addressOld);
         }
+        Aunis.info("Name set to: " + name + ", remote?: " + world.isRemote);
         getRings().setName(name);
         getRings().setRingsDistance(ringsDistance);
 
@@ -862,7 +868,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 return new TRGuiState(getRings().getAddresses());
 
             case GUI_UPDATE:
-                return new TRGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick);
+                return new TRGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, getRings().getRingsDistance(), getRings().getName(), getRings().getAddresses());
 
 
             default:
@@ -913,6 +919,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 TRGuiUpdate guiUpdate = (TRGuiUpdate) state;
                 energyStorage.setEnergyStoredInternally(guiUpdate.energyStored);
                 energyTransferedLastTick = guiUpdate.transferedLastTick;
+                getRings().setRingsDistance(guiUpdate.ringsDistance);
+                getRings().setName(guiUpdate.ringsName);
+                setRingsParams(guiUpdate.trAdddressMap);
                 break;
             default:
                 break;

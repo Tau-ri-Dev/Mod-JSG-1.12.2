@@ -24,10 +24,6 @@ public class NumberOnlyTextField extends GuiTextField {
         super.writeText(textToWrite);
     }
 
-    public void setNumber(double number){
-        setText(number + "");
-    }
-
     @Override
     public void setEnabled(boolean enabled) {
         if (!enabled && isFocused()) setFocused(false);

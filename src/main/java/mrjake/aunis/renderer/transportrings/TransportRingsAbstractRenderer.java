@@ -40,17 +40,20 @@ public abstract class TransportRingsAbstractRenderer implements RendererInterfac
     private int lastRingAnimated;
     private long lastTick;
     private int ringsDistance;
+    private final AunisAxisAlignedBB renderBoundingBox = new AunisAxisAlignedBB(-3, -40, -3, 3, 40, 3);
 
     public abstract void renderRings(float partialTicks, int distance);
 
     @Override
     public void render(double x, double y, double z, float partialTicks) {
+        //todo(Mine): fix rendering of <0 distances
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 15 * 16, 15 * 16);
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
 
         if (AunisConfig.debugConfig.renderBoundingBoxes) {
             localTeleportBox.render();
+            renderBoundingBox.render();
         }
 
         GlStateManager.translate(0.50, 0.63271 / 2 + 1.35, 0.50);

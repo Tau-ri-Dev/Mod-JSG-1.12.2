@@ -117,10 +117,10 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
         labels.add(new TextFieldLabel(50, y + 2, "tile.aunis.transportrings_block.rings_name"));
 
         y += 20;
-        distanceTextField = new NumberOnlyTextField(++id,
+        distanceTextField = new GuiTextField(++id,
                 Minecraft.getMinecraft().fontRenderer, 50, y + 10,
                 50, 10);
-        ((NumberOnlyTextField) distanceTextField).setNumber(container.trTile.getRings().getDistance());
+        distanceTextField.setText(container.trTile.getRings().getRingsDistance() + "");
         textFields.add(distanceTextField);
         labels.add(new TextFieldLabel(50, y + 2, "tile.aunis.transportrings_block.rings_distance"));
         /*
@@ -293,6 +293,11 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
     @Override
     public void onGuiClosed() {
+        saveData();
+        super.onGuiClosed();
+    }
+
+    public void saveData(){
         EntityPlayer player = Minecraft.getMinecraft().player;
         try {
             String name = nameTextField.getText();
@@ -301,6 +306,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
                 if (distance >= -40 && distance <= 40) {
                     AunisPacketHandler.INSTANCE.sendToServer(new SaveRingsParametersToServer(pos, name, distance));
+                    container.trTile.setRingsParams(name, distance);
                 } else {
                     player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_block.wrong_distance"), true);
                 }
@@ -310,6 +316,5 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
         } catch (NumberFormatException e) {
             player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_block.wrong_address"), true);
         }
-        super.onGuiClosed();
     }
 }
