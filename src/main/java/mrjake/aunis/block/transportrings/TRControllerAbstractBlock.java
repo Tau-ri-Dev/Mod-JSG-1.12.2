@@ -92,7 +92,7 @@ public abstract class TRControllerAbstractBlock extends Block {
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         TRControllerAbstractTile controllerTile = (TRControllerAbstractTile) world.getTileEntity(pos);
 
-        if (!world.isRemote && controllerTile != null && controllerTile.isLinked())
+        if (!world.isRemote && controllerTile != null && controllerTile.isLinked() && controllerTile.getLinkedRingsTile(world) != null)
             controllerTile.getLinkedRingsTile(world).setLinkedController(null, -1);
 
         super.breakBlock(world, pos, state);

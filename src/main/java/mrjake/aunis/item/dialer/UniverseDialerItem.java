@@ -186,9 +186,9 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
         }
     }
 
-    public BlockPos getNearest(World world, BlockPos pos, ArrayList<BlockPos> blacklist){
+    public BlockPos getNearest(World world, BlockPos pos, ArrayList<BlockPos> blacklist, UniverseDialerMode mode){
         BlockPos targetPos = null;
-        for (Block block : AunisBlocks.RINGS_BLOCKS) {
+        for (Block block : mode.matchBlocks) {
             if (targetPos != null) break;
             targetPos = LinkingHelper.findClosestPos(world, pos, new BlockPos(10, 40, 10), block, blacklist);
         }
@@ -231,7 +231,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                     ArrayList<BlockPos> blacklist = new ArrayList<>();
                     int loop = 0;
                     do{
-                        targetPos = getNearest(world, pos, blacklist);
+                        targetPos = getNearest(world, pos, blacklist, mode);
                         if(targetPos == null)
                             break;
 
@@ -244,8 +244,6 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                     blacklist.add(targetPos);
                                     continue;
                                 }
-
-
 
                                 NBTTagList nearbyList = new NBTTagList();
                                 int squaredGate = AunisConfig.stargateConfig.universeGateNearbyReach * AunisConfig.stargateConfig.universeGateNearbyReach;

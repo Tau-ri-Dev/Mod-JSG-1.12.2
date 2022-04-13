@@ -46,7 +46,6 @@ public abstract class TransportRingsAbstractRenderer implements RendererInterfac
 
     @Override
     public void render(double x, double y, double z, float partialTicks) {
-        //todo(Mine): fix rendering of <0 distances
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 15 * 16, 15 * 16);
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);

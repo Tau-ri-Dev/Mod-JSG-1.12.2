@@ -18,6 +18,7 @@ import mrjake.aunis.renderer.SpecialRenderer;
 import mrjake.aunis.renderer.energy.ZPMRenderer;
 import mrjake.aunis.renderer.stargate.*;
 import mrjake.aunis.renderer.transportrings.TRControllerGoauldRenderer;
+import mrjake.aunis.renderer.transportrings.TransportRingsGoauldRenderer;
 import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundPositionedEnum;
 import mrjake.aunis.tileentity.*;

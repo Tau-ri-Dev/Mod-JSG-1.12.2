@@ -341,7 +341,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     public void updateRenderBox(){
-        renderBoundingBox = new AunisAxisAlignedBB(-3, -40, -3, 3, 40, 3);
+        renderBoundingBox = new AunisAxisAlignedBB(-3, -40, -3, 3, 40, 3).offset(pos);
         markDirty();
     }
 

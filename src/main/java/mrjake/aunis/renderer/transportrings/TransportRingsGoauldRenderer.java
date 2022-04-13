@@ -6,6 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class TransportRingsGoauldRenderer extends TransportRingsAbstractRenderer {
+    //todo(Mine): fix rendering
     public TransportRingsGoauldRenderer(World world, BlockPos pos, AunisAxisAlignedBB localTeleportBox) {
         super(world, pos, localTeleportBox);
     }
