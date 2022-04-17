@@ -118,7 +118,7 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
                         return stack;
                     }
                 }
-            } else if (StargateUpgradeEnum.contains(stack.getItem()) && !trTile.hasUpgrade(stack.getItem())) {
+            } else if (TransportRingsAbstractTile.TransportRingsUpgradeEnum.contains(stack.getItem()) && !trTile.hasUpgrade(stack.getItem())) {
                 for (int i = 0; i < 4; i++) {
                     if (!getSlot(i).getHasStack()) {
                         ItemStack stack1 = stack.copy();
