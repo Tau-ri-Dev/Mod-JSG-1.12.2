@@ -655,6 +655,9 @@ public class AunisConfig {
         @Name("Enable Open Computers integration")
         public boolean ocIntegration = true;
 
+        @Name("OC wireless network range (in blocks)")
+        public int ocIntegrationWirelessRange = 20;
+
         @Name("Enable Thermal Expansion integration")
         public boolean tExpansionIntegration = true;
     }
@@ -691,13 +694,13 @@ public class AunisConfig {
         @Name("Enable peg gates with myst pages")
         public boolean pegGatesMyst = false;
 
-        @Name("test1")
-        public double test1 = 0.1;
+        @Name("test1-xy")
+        public float test1 = 0.2f;
 
-        @Name("test2")
-        public double test2 = 0.1;
+        @Name("test2-z")
+        public float test2 = 0.2f;
 
-        @Name("test3")
+        @Name("test3-b")
         public boolean test3 = true;
     }
 

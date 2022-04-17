@@ -116,7 +116,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     // ---------------------------------------------------------------------------------
     // Controller
     private BlockPos linkedController;
-    protected TransportRingsAddress dialedAddress = new TransportRingsAddress(getSymbolType());
+    public TransportRingsAddress dialedAddress = new TransportRingsAddress(getSymbolType());
     private int linkId = -1;
     // ------------------------------------------------------------
     // Node-related work
@@ -354,6 +354,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             case RINGS_START_ANIMATION:
                 animationStart();
                 setBarrierBlocks(true, true);
+                sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(getSymbolType().getLight()));
 
                 addTask(new ScheduledTask(EnumScheduledTask.RINGS_FADE_OUT));
                 addTask(new ScheduledTask(EnumScheduledTask.RINGS_SOLID_BLOCKS, 35));
@@ -406,8 +407,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             case RINGS_CLEAR_OUT:
                 setBarrierBlocks(false, false);
                 setBusy(false);
-                if (getLinkedControllerTile(world) != null)
-                    getLinkedControllerTile(world).sendState(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(false));
+                sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
                 dialedAddress.clear();
                 markDirty();
 
@@ -425,7 +425,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 SymbolTypeTransportRingsEnum symbolType = SymbolTypeTransportRingsEnum.valueOf(pageSlotId - 7);
                 ItemStack stack = itemStackHandler.getStackInSlot(pageSlotId);
                 if (stack.isEmpty()) break;
-                Aunis.logger.info("Giving Notebook page of address " + symbolType);
+                Aunis.logger.debug("Giving Notebook page of address " + symbolType);
 
                 NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(getRings().getAddresses().get(symbolType), PageNotebookItem.getRegistryPathFromWorld(world, pos));
 
@@ -479,6 +479,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     public TransportResult addSymbolToAddress(SymbolInterface symbol) {
         if (canAddSymbol(symbol)) {
+            dialedAddress.setSymbolType(getSymbolType());
             dialedAddress.add(symbol);
             markDirty();
             if (ringsWillLock()) {
@@ -486,19 +487,17 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 if (!result.ok()) {
                     dialedAddress.clear();
                     if (getLinkedControllerTile(world) != null)
-                        getLinkedControllerTile(world).sendState(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(false));
+                        getLinkedControllerTile(world).sendState(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
                     markDirty();
                     sendSignal(ocContext, "transportrings_symbol_engage_failed", result.toString());
                     return result;
                 }
             }
-            if (getLinkedControllerTile(world) != null)
-                getLinkedControllerTile(world).sendState(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbol));
+            sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbol));
             sendSignal(ocContext, "transportrings_symbol_engage", TransportResult.OK.toString());
             return TransportResult.OK;
         }
-        if (getLinkedControllerTile(world) != null)
-            getLinkedControllerTile(world).sendState(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(false));
+        sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
         dialedAddress.clear();
         markDirty();
         sendSignal(ocContext, "transportrings_symbol_engage_failed", TransportResult.NO_SUCH_ADDRESS.toString());
@@ -512,6 +511,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             return false;
         }
         return !isBusy();
+    }
+
+    public void sendStateToController(StateTypeEnum stateType, State state){
+        if(getLinkedControllerTile(world) != null)
+            getLinkedControllerTile(world).sendState(stateType, state);
     }
 
     public boolean ringsWillLock() {
@@ -537,10 +541,14 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         TransportRingsAddress strippedAddress = (address.getLast().origin()) ? address.stripOrigin() : address;
 
+        if(address.size() < MAX_SYMBOLS){
+            return TransportResult.NO_SUCH_ADDRESS;
+        }
+
         boolean found = false;
         for (TransportRings rings : ringsMap.values()) {
             // Binding exists
-            if (rings.getAddress(address.getSymbolType()).equalsV2(strippedAddress)) {
+            if (rings.getAddress(address.getSymbolType()).equalsV2(strippedAddress, 4)) {
                 if (!rings.isInGrid()) return TransportResult.NO_SUCH_ADDRESS;
                 BlockPos targetRingsPos = rings.getPos();
                 TransportRingsAbstractTile targetRingsTile = (TransportRingsAbstractTile) world.getTileEntity(targetRingsPos);
@@ -564,8 +572,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 break;
             }
         }
-        if (!found)
+        if (!found) {
             return TransportResult.NO_SUCH_ADDRESS;
+        }
         else
             return TransportResult.OK;
     }
@@ -925,7 +934,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 energyStorage.setEnergyStoredInternally(guiUpdate.energyStored);
                 energyTransferedLastTick = guiUpdate.transferedLastTick;
                 setRingsParams(guiUpdate.ringsName, guiUpdate.distance);
-                Aunis.info("Distance: " + guiUpdate.distance + ", Name: " + guiUpdate.ringsName);
                 break;
             default:
                 break;

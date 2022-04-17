@@ -2,6 +2,7 @@ package mrjake.aunis.transportrings;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.Aunis;
+import mrjake.aunis.stargate.network.StargateAddressDynamic;
 import mrjake.aunis.stargate.network.SymbolInterface;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -53,6 +54,10 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
         return symbolType;
     }
 
+    public void setSymbolType(SymbolTypeTransportRingsEnum symbolType){
+        this.symbolType = symbolType;
+    }
+
     public void add(SymbolInterface symbol) {
         this.address.add(symbol);
     }
@@ -79,12 +84,14 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
         return new TransportRingsAddress(address.subList(0, address.size() - 1));
     }
 
-    public boolean equalsV2(TransportRingsAddress address) {
-        for (int i = 0; i < address.size(); i++) {
-            if (this.address.size() >= i + 1) {
-                if (this.address.get(i) != address.get(i))
+    public boolean equalsV2(TransportRingsAddress address, int checkLength) {
+        for(int i = 0; i < address.size(); i++){
+            if(i + 1 > checkLength) break;
+            if(this.address.size() >= i+1){
+                if(this.address.get(i) != address.get(i))
                     return false;
-            } else return false;
+            }
+            else return false;
         }
         return true;
     }

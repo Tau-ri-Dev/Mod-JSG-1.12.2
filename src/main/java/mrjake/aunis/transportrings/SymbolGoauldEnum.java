@@ -16,7 +16,8 @@ public enum SymbolGoauldEnum implements SymbolInterface {
     GAMMA(2, 2, "Gamma"),
     DELTA(3, 3, "Delta"),
     OMEGA(4, 4, "Omega"),
-    ORIGIN(5, 5, "Origin");
+    ORIGIN(5, 5, "Origin"),
+    LIGHT(6, 6, "Light");
 
     public int id;
     public int angleIndex;
@@ -24,6 +25,7 @@ public enum SymbolGoauldEnum implements SymbolInterface {
     public String englishName;
     public String translationKey;
     public ResourceLocation iconResource;
+    public ResourceLocation modelResource;
 
     SymbolGoauldEnum(int id, int angleIndex, String englishName) {
         this.id = id;
@@ -33,6 +35,7 @@ public enum SymbolGoauldEnum implements SymbolInterface {
         this.englishName = englishName;
         this.translationKey = "glyph.aunis.transportrings.goauld." + englishName.toLowerCase().replace(" ", "_");
         this.iconResource = new ResourceLocation(Aunis.ModID, "textures/gui/symbol/transportrings/goauld/" + englishName.toLowerCase() + ".png");
+        this.modelResource = new ResourceLocation(Aunis.ModID, "models/tesr/transportrings/controller/goauld/goauld_button_" + (id+1) + ".obj");
     }
 
     @Override
@@ -88,7 +91,7 @@ public enum SymbolGoauldEnum implements SymbolInterface {
         int id = 0;
         do {
             id = random.nextInt(5);
-        } while (id == ORIGIN.id);
+        } while (id == ORIGIN.id || id == LIGHT.id);
 
         return valueOf(id);
     }

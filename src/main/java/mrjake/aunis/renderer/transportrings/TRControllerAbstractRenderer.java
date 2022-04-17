@@ -1,12 +1,16 @@
 package mrjake.aunis.renderer.transportrings;
 
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile;
 import mrjake.vector.Vector3f;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
+import org.lwjgl.opengl.GL11;
 
 public abstract class TRControllerAbstractRenderer extends TileEntitySpecialRenderer<TRControllerAbstractTile> {
 

@@ -6,6 +6,7 @@ import li.cil.oc.api.machine.Machine;
 import li.cil.oc.api.network.*;
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.oc.ItemWirelessEndpoint;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -72,7 +73,7 @@ public class OCWrapperLoaded implements OCWrapperInterface {
 		Packet packet = Network.newPacket("unv-dialer-"+player.getName(), address, port, data);
 //		Aunis.info("sending packet with endpoint: " + endpointStack.getEndpoint());
 		
-		Network.sendWirelessPacket((WirelessEndpoint) endpointStack.getEndpoint(), 20, packet);
+		Network.sendWirelessPacket((WirelessEndpoint) endpointStack.getEndpoint(), AunisConfig.integrationsConfig.ocIntegrationWirelessRange, packet);
 	}
 	
 	@Override

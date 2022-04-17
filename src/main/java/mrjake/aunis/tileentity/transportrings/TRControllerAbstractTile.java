@@ -61,7 +61,6 @@ public abstract class TRControllerAbstractTile extends TileEntity implements ITi
     @Override
     public void update() {
         if (world.isRemote) {
-            AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
             // Client
 
             if (world.getTotalWorldTime() % 40 == 0) {
@@ -95,6 +94,10 @@ public abstract class TRControllerAbstractTile extends TileEntity implements ITi
 
     public BlockPos getLinkedRings() {
         return linkedRings;
+    }
+
+    public TransportRingsAbstractTile getLinkedRingsTile() {
+        return (TransportRingsAbstractTile) world.getTileEntity(linkedRings);
     }
 
     public boolean isLinked() {
@@ -194,6 +197,7 @@ public abstract class TRControllerAbstractTile extends TileEntity implements ITi
             Aunis.logger.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
         }
     }
+
 
     public abstract TRControllerAbstractRenderer getNewRenderer();
 }

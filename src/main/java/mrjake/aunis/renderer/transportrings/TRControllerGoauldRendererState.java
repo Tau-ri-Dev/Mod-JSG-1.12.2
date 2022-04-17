@@ -20,19 +20,19 @@ import java.util.List;
 import java.util.Map;
 
 public class TRControllerGoauldRendererState extends TRControllerAbstractRendererState {
-    private static final String SYMBOL_TEXTURE_BASE = "textures/tesr/transportrings/controller/goauld/button";
-    //private static final String BRB_TEXTURE_BASE = "textures/tesr/milkyway/brb";
+    private static final String SYMBOL_TEXTURE_BASE = "textures/tesr/transportrings/controller/goauld/goauld_button_";
+    private static final String LIGHT_TEXTURE_BASE = "textures/tesr/transportrings/controller/goauld/goauld_light_";
     private static final String SYMBOL_TEXTURE_END = "jpg";
-    private static final String BRB_TEXTURE_END = "jpg";
-    private static final Map<BiomeOverlayEnum, TRControllerGoauldRendererState.TextureContainer> BIOME_TEXTURE_MAP = new HashMap<>();
+    private static final String LIGHT_TEXTURE_END = "jpg";
+    private static final Map<BiomeOverlayEnum, TextureContainer> BIOME_TEXTURE_MAP = new HashMap<>();
 
     static {
         for (BiomeOverlayEnum biomeOverlay : BiomeOverlayEnum.values()) {
-            TRControllerGoauldRendererState.TextureContainer container = new TRControllerGoauldRendererState.TextureContainer();
+            TextureContainer container = new TextureContainer();
 
             for (int i = 0; i <= 5; i++) {
                 container.SYMBOL_RESOURCE_MAP.put(i, new ResourceLocation(Aunis.ModID, SYMBOL_TEXTURE_BASE + i + biomeOverlay.suffix + "." + SYMBOL_TEXTURE_END));
-                //container.BRB_RESOURCE_MAP.put(i, new ResourceLocation(Aunis.ModID, BRB_TEXTURE_BASE + i + biomeOverlay.suffix + "." + BRB_TEXTURE_END));
+                container.LIGHT_RESOURCE_MAP.put(i, new ResourceLocation(Aunis.ModID, LIGHT_TEXTURE_BASE + i + biomeOverlay.suffix + "." + LIGHT_TEXTURE_END));
             }
 
             BIOME_TEXTURE_MAP.put(biomeOverlay, container);
@@ -41,11 +41,15 @@ public class TRControllerGoauldRendererState extends TRControllerAbstractRendere
 
     // Symbols
     // Not saved
-    private final Map<Integer, Integer> BUTTON_STATE_MAP = new HashMap<>(6);
+    private final Map<Integer, Integer> BUTTON_STATE_MAP = new HashMap<>(7);
     public List<Activation<SymbolInterface>> activationList = new ArrayList<>();
 
     public TRControllerGoauldRendererState(TransportRingsAddress addressDialed, BiomeOverlayEnum biomeOverride, boolean ringsAreConnected) {
         super(addressDialed, biomeOverride, ringsAreConnected);
+    }
+
+    public TRControllerGoauldRendererState(){
+        super();
     }
 
     public TRControllerGoauldRendererState initClient(BlockPos pos, BiomeOverlayEnum biomeOverlay, TransportRingsAbstractTile rings) {
@@ -82,7 +86,9 @@ public class TRControllerGoauldRendererState extends TRControllerAbstractRendere
     }
 
     public ResourceLocation getButtonTexture(int symbolId, BiomeOverlayEnum biomeOverlay) {
-        TRControllerGoauldRendererState.TextureContainer container = BIOME_TEXTURE_MAP.get(biomeOverlay);
+        TextureContainer container = BIOME_TEXTURE_MAP.get(biomeOverlay);
+        if(symbolId == 6) // 6 are the lights
+            return container.LIGHT_RESOURCE_MAP.get(BUTTON_STATE_MAP.get(symbolId));
         return container.SYMBOL_RESOURCE_MAP.get(BUTTON_STATE_MAP.get(symbolId));
     }
 
@@ -107,6 +113,6 @@ public class TRControllerGoauldRendererState extends TRControllerAbstractRendere
 
     private static class TextureContainer {
         public final Map<Integer, ResourceLocation> SYMBOL_RESOURCE_MAP = new HashMap<>();
-        public final Map<Integer, ResourceLocation> BRB_RESOURCE_MAP = new HashMap<>();
+        public final Map<Integer, ResourceLocation> LIGHT_RESOURCE_MAP = new HashMap<>();
     }
 }

@@ -30,6 +30,8 @@ public abstract class TRControllerAbstractRendererState extends State {
         this.ringsAreConnected = ringsAreConnected;
     }
 
+    public TRControllerAbstractRendererState(){}
+
     public TRControllerAbstractRendererState initClient(BlockPos pos, BiomeOverlayEnum biomeOverlay, TransportRingsAbstractTile rings) {
         this.pos = pos;
         this.biomeOverlay = biomeOverlay;

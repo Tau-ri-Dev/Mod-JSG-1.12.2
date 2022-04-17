@@ -31,6 +31,14 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
     return null;
   }
 
+  public SymbolInterface getLight(){
+    switch (this) {
+      case GOAULD:
+        return getSymbol(6);
+    }
+    return getOrigin();
+  }
+
   public List<SymbolInterface> stripOrigin(List<SymbolInterface> dialedAddress) {
     switch (this) {
       case GOAULD:

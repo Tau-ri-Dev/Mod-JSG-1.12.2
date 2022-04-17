@@ -70,7 +70,7 @@ public enum ElementEnum {
   RING_ORI("transportrings/rings_ori.obj", "transportrings/rings_ori"),
 
   RINGSCONTROLLER_GOAULD("transportrings/controller/goauld/plate_goauld.obj", "transportrings/controller/goauld/goauld_panel"),
-  RINGSCONTROLLER_GOAULD_BUTTON("transportrings/controller/goauld/button_goauld.obj", "transportrings/controller/goauld/goauld_button"),
+  RINGSCONTROLLER_GOAULD_LIGHT("transportrings/controller/goauld/indicator_lights.obj", "transportrings/controller/goauld/goauld_light"),
 
   // --------------------------------------------------------------------------------------------
   // ZPM things
