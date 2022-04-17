@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 
 public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
-    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_stargate.png");
+    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_transportrings.png");
     private final List<GuiTextField> textFields = new ArrayList<>();
     private final List<TextFieldLabel> labels = new ArrayList<>();
     private final TRContainer container;
@@ -98,7 +98,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setBackgroundTextureLocation(176, 0)
                 .setIconRenderPos(1, 7)
                 .setIconSize(20, 18)
-                .setIconTextureLocation(304, 0).build();
+                .setIconTextureLocation(304, 18).build();
 
         tabs.add(goauldAddressTab);
         tabs.add(oriAddressTab);
@@ -124,7 +124,6 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
         textFields.add(distanceTextField);
         labels.add(new TextFieldLabel(50, y + 2, "tile.aunis.transportrings_block.rings_distance"));
     }
-
 
     // todo(Mine): temporarily solution
     public void tryToUpdateInputs(){
@@ -224,8 +223,6 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
         fontRenderer.drawString(energyPercent, 168 - fontRenderer.getStringWidth(energyPercent) + 2, 71, 4210752);
 
         fontRenderer.drawString(I18n.format("gui.upgrades"), 7, 6, 4210752);
-        // if (!container.trTile.getRings().isInGrid())
-        //    fontRenderer.drawString(I18n.format("tile.aunis.transportrings_block.rings_not_in_grid"), 7, 6, 0xB36262);
         fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 
         for (TextFieldLabel label : labels)

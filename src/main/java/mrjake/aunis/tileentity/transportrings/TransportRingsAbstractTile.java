@@ -41,6 +41,7 @@ import mrjake.aunis.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -221,18 +222,18 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
              * If initiating
              * 	True: Extract energy each tick
              */
-            if (isBusy() && initiating) {
+            energyTransferedLastTick = 0;
+            if (keepAliveEnergyPerTick > 0) {
                 if (targetRingsPos == null) return;
-                int energyStored = getEnergyStorage().getEnergyStored();
 
-                // Max Open Time
                 if (world.getTileEntity(targetRingsPos) == null) return;
-                if (energyStored >= keepAliveEnergyPerTick) {
+                if (getEnergyStorage().getEnergyStored() >= keepAliveEnergyPerTick) {
                     getEnergyStorage().extractEnergy(keepAliveEnergyPerTick, false);
                     markDirty();
                 }
 
-                energyTransferedLastTick = getEnergyStorage().getEnergyStored() - energyStored;
+                energyTransferedLastTick = getEnergyStorage().getEnergyStored() - energyStoredLastTick;
+                energyStoredLastTick = getEnergyStorage().getEnergyStored();
                 markDirty();
             }
 
@@ -360,7 +361,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 addTask(new ScheduledTask(EnumScheduledTask.RINGS_SOLID_BLOCKS, 35));
 
                 if (initiating) {
-                    StargateEnergyRequired energyRequired = new StargateEnergyRequired(1000, 10);
+                    StargateEnergyRequired energyRequired = new StargateEnergyRequired(1000, 100);
                     getEnergyStorage().extractEnergy(energyRequired.energyToOpen, false);
                     keepAliveEnergyPerTick = energyRequired.keepAlive;
                     markDirty();
@@ -396,6 +397,16 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                         double y = targetRingsPos.getY() + targetRingsHeight;
                         entity.setPositionAndUpdate(ePos.getX(), y, ePos.getZ());
                     }
+                }
+
+                if (initiating) {
+                    int count = 0;
+                    for(Entity entity : teleportList){
+                        if(entity instanceof EntityLivingBase)
+                            count++;
+                    }
+                    getEnergyStorage().extractEnergy(50*count, false);
+                    markDirty();
                 }
 
                 teleportList.clear();
@@ -463,6 +474,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         addTask(new ScheduledTask(EnumScheduledTask.RINGS_START_ANIMATION, waitTime));
         sendSignal(ocContext, "transportrings_teleport_start", initiating);
         this.initiating = initiating;
+        markDirty();
 
         return world.getEntitiesWithinAABB(Entity.class, globalTeleportBox);
     }
@@ -495,13 +507,16 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             }
             sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbol));
             sendSignal(ocContext, "transportrings_symbol_engage", TransportResult.OK.toString());
-            return TransportResult.OK;
+            return TransportResult.ACTIVATED;
         }
-        sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
-        dialedAddress.clear();
-        markDirty();
-        sendSignal(ocContext, "transportrings_symbol_engage_failed", TransportResult.NO_SUCH_ADDRESS.toString());
-        return TransportResult.NO_SUCH_ADDRESS;
+        if(symbol.origin()) {
+            sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
+            dialedAddress.clear();
+            markDirty();
+            sendSignal(ocContext, "transportrings_symbol_engage_failed", TransportResult.NO_SUCH_ADDRESS.toString());
+            return TransportResult.NO_SUCH_ADDRESS;
+        }
+        return TransportResult.ALREADY_ACTIVATED;
     }
 
     public boolean canAddSymbol(SymbolInterface symbol) {
@@ -941,11 +956,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     public void updateLinkStatus() {
-        BlockPos closestController = null;
-        for (Block block : AunisBlocks.RINGS_CONTROLLERS) {
-            if (closestController != null) break;
-            closestController = LinkingHelper.findClosestUnlinked(world, pos, new BlockPos(10, 5, 10), block, linkId);
-        }
+        BlockPos closestController = LinkingHelper.findClosestUnlinked(world, pos, new BlockPos(10, 5, 10), AunisBlocks.RINGS_CONTROLLERS, linkId);
 
         int linkId = closestController == null ? -1 : LinkingHelper.getLinkId();
 
@@ -1174,8 +1185,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     public static enum TransportRingsUpgradeEnum implements EnumKeyInterface<Item> {
-        GOAULD_UPGRADE(AunisItems.CRYSTAL_GLYPH_MILKYWAY),
-        ORI_UPGRADE(AunisItems.CRYSTAL_GLYPH_PEGASUS);
+        GOAULD_UPGRADE(AunisItems.CRYSTAL_GLYPH_GOAULD),
+        ORI_UPGRADE(AunisItems.CRYSTAL_GLYPH_ORI);
 
         private static final EnumKeyMap<Item, TransportRingsAbstractTile.TransportRingsUpgradeEnum> idMap = new EnumKeyMap<>(values());
         public Item item;

@@ -56,6 +56,10 @@ public class AunisItems {
     public static final Item CRYSTAL_GLYPH_PEGASUS = ItemHelper.createGenericItem("crystal_glyph_pegasus", aunisItemsCreativeTab);
     public static final Item CRYSTAL_GLYPH_UNIVERSE = ItemHelper.createGenericItem("crystal_glyph_universe", aunisItemsCreativeTab);
 
+    // transportrings
+    public static final Item CRYSTAL_GLYPH_GOAULD = ItemHelper.createGenericItem("crystal_glyph_goauld", aunisItemsCreativeTab);
+    public static final Item CRYSTAL_GLYPH_ORI = ItemHelper.createGenericItem("crystal_glyph_ori", aunisItemsCreativeTab);
+
     /**
      * Diffrent Naquadah(main Stargate building material) stages of purity
      */
@@ -127,6 +131,8 @@ public class AunisItems {
             CRYSTAL_GLYPH_MILKYWAY,
             CRYSTAL_GLYPH_PEGASUS,
             CRYSTAL_GLYPH_UNIVERSE,
+            CRYSTAL_GLYPH_GOAULD,
+            CRYSTAL_GLYPH_ORI,
 
             NAQUADAH_SHARD,
             NAQUADAH_ALLOY,

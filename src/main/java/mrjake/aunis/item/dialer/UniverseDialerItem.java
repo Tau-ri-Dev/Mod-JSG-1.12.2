@@ -187,12 +187,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
     }
 
     public BlockPos getNearest(World world, BlockPos pos, ArrayList<BlockPos> blacklist, UniverseDialerMode mode){
-        BlockPos targetPos = null;
-        for (Block block : mode.matchBlocks) {
-            if (targetPos != null) break;
-            targetPos = LinkingHelper.findClosestPos(world, pos, new BlockPos(10, 40, 10), block, blacklist);
-        }
-        return targetPos;
+        return LinkingHelper.findClosestPos(world, pos, new BlockPos(10, 40, 10), mode.matchBlocks, blacklist);
     }
 
     @Override

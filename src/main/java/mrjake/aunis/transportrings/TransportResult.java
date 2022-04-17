@@ -13,8 +13,9 @@ public enum TransportResult {
 	OBSTRUCTED_TARGET(new TextComponentTranslation("tile.aunis.transportrings_block.obstructed_target")),
 	NO_SUCH_ADDRESS(new TextComponentTranslation("tile.aunis.transportrings_block.non_existing_address")),
 	NOT_IN_GRID(new TextComponentTranslation("tile.aunis.transportrings_block.rings_not_in_grid")),
-	ACTIVATED(null);
-	
+	ACTIVATED(null),
+	ALREADY_ACTIVATED(null);
+
 	@Nullable
 	public TextComponentTranslation textComponent;
 
@@ -26,9 +27,9 @@ public enum TransportResult {
 	public boolean ok() {
 		return this == OK;
 	}
-	
+
 	public void sendMessageIfFailed(EntityPlayer player) {
-		if (!ok()) {
+		if (textComponent != null) {
 			player.sendStatusMessage(textComponent, true);
 		}
 	}

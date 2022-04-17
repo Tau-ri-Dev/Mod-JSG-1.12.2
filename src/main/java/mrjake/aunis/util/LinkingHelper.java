@@ -1,6 +1,7 @@
 package mrjake.aunis.util;
 
 import li.cil.oc.api.event.RackMountableRenderEvent.TileEntity;
+import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
@@ -55,17 +56,45 @@ public class LinkingHelper {
   }
 
   @Nullable
-  public static BlockPos findClosestPos(World world, BlockPos startPos, BlockPos radius, Block targetBlock, ArrayList<BlockPos> blacklist) {
+  public static BlockPos findClosestUnlinked(World world, BlockPos startPos, BlockPos radius, Block[] targetBlocks, int linkId) {
     double closestDistance = Double.MAX_VALUE;
     BlockPos closest = null;
 
     for (BlockPos target : BlockPos.getAllInBoxMutable(startPos.subtract(radius), startPos.add(radius))) {
-      if (world.getBlockState(target).getBlock() == targetBlock && !(blacklist.contains(target))) {
-        double distanceSq = startPos.distanceSq(target);
+      for (Block targetBlock : targetBlocks) {
+        if (world.getBlockState(target).getBlock() == targetBlock) {
 
-        if (distanceSq < closestDistance) {
-          closestDistance = distanceSq;
-          closest = target.toImmutable();
+          ILinkable linkedTile = (ILinkable) world.getTileEntity(target);
+
+          if (linkedTile.canLinkTo() || linkId == linkedTile.getLinkId()) {
+            double distanceSq = startPos.distanceSq(target);
+
+            if (distanceSq < closestDistance) {
+              closestDistance = distanceSq;
+              closest = target.toImmutable();
+            }
+          }
+        }
+      }
+    }
+
+    return closest;
+  }
+
+  @Nullable
+  public static BlockPos findClosestPos(World world, BlockPos startPos, BlockPos radius, Block[] targetBlocks, ArrayList<BlockPos> blacklist) {
+    double closestDistance = Double.MAX_VALUE;
+    BlockPos closest = null;
+
+    for (BlockPos target : BlockPos.getAllInBoxMutable(startPos.subtract(radius), startPos.add(radius))) {
+      for (Block targetBlock : targetBlocks) {
+        if (world.getBlockState(target).getBlock() == targetBlock && !(blacklist.contains(target))) {
+          double distanceSq = startPos.distanceSq(target);
+
+          if (distanceSq < closestDistance) {
+            closestDistance = distanceSq;
+            closest = target.toImmutable();
+          }
         }
       }
     }

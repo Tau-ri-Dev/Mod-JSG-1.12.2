@@ -24,8 +24,9 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
   public SymbolInterface getRandomSymbol(Random random) {
     switch (this) {
       case GOAULD:
-      case ORI:
         return SymbolGoauldEnum.getRandomSymbol(random);
+      case ORI:
+        return SymbolOriEnum.getRandomSymbol(random);
     }
 
     return null;
@@ -42,8 +43,9 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
   public List<SymbolInterface> stripOrigin(List<SymbolInterface> dialedAddress) {
     switch (this) {
       case GOAULD:
-      case ORI:
         return SymbolGoauldEnum.stripOrigin(dialedAddress);
+      case ORI:
+        return SymbolOriEnum.stripOrigin(dialedAddress);
     }
 
     return null;
@@ -52,8 +54,9 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
   public SymbolInterface getOrigin() {
     switch (this) {
       case GOAULD:
-      case ORI:
         return SymbolGoauldEnum.getOrigin();
+      case ORI:
+        return SymbolOriEnum.getOrigin();
     }
 
     return null;
@@ -62,8 +65,9 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
   public SymbolInterface getSymbol(int symbolId) {
     switch (this) {
       case GOAULD:
-      case ORI:
         return SymbolGoauldEnum.valueOf(symbolId);
+      case ORI:
+        return SymbolOriEnum.valueOf(symbolId);
     }
 
     return null;
@@ -73,8 +77,9 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
   public SymbolInterface fromEnglishName(String englishName) {
     switch (this) {
       case GOAULD:
-      case ORI:
         return SymbolGoauldEnum.fromEnglishName(englishName);
+      case ORI:
+        return SymbolOriEnum.fromEnglishName(englishName);
     }
 
     return null;
@@ -87,8 +92,9 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
   public boolean validateDialedAddress(TransportRingsAddress address) {
     switch (this) {
       case GOAULD:
-      case ORI:
         return SymbolGoauldEnum.validateDialedAddress(address);
+      case ORI:
+        return SymbolOriEnum.validateDialedAddress(address);
     }
 
     return false;

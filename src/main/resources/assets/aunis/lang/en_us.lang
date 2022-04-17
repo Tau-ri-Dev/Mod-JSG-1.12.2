@@ -355,6 +355,10 @@ gui.capacitor.name=Capacitor Bank
 gui.zpmhub.name=ZPM Hub Interface
 gui.zpm.name=ZPM Interface
 
+gui.transportrings.energyBuffer=Energy buffer
+gui.transportrings.ori_address=Ori address
+gui.transportrings.goauld_address=Goauld address
+
 tile.aunis.beamer_block.name=Beamer Block
 item.aunis.beamer_crystal_power.name=Beamer Power Crystal
 item.aunis.beamer_crystal_fluid.name=Beamer Fluid Crystal
