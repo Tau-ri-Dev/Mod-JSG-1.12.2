@@ -13,17 +13,25 @@ import mrjake.aunis.transportrings.SymbolGoauldEnum;
 import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
 import mrjake.aunis.transportrings.TransportRingsAddress;
 
+import java.util.EnumSet;
+
 public class TRControllerGoauldTile extends TRControllerAbstractTile implements StateProviderInterface {
 
-    TRControllerGoauldRendererState rendererState = new TRControllerGoauldRendererState(new TransportRingsAddress(SymbolTypeTransportRingsEnum.GOAULD), BiomeOverlayEnum.NORMAL, false);
+    public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST);
 
     @Override
     public void onLoad() {
+        rendererState = new TRControllerGoauldRendererState(new TransportRingsAddress(SymbolTypeTransportRingsEnum.GOAULD), BiomeOverlayEnum.NORMAL, false);
         if (world.isRemote) {
             setRenderer(new TRControllerGoauldRenderer());
-            setBiomeOverlay(BiomeOverlayEnum.updateBiomeOverlay(world, pos, SUPPORTED_OVERLAYS));
+            setBiomeOverlay(BiomeOverlayEnum.updateBiomeOverlay(world, pos, getSupportedOverlays()));
         }
         super.onLoad();
+    }
+
+    @Override
+    protected EnumSet<BiomeOverlayEnum> getSupportedOverlays() {
+        return SUPPORTED_OVERLAYS;
     }
 
     @Override
@@ -32,7 +40,7 @@ public class TRControllerGoauldTile extends TRControllerAbstractTile implements 
     }
 
     @Override
-    public TRControllerAbstractRendererState getRendererState(){
+    public TRControllerAbstractRendererState getRendererState() {
         return rendererState;
     }
 
@@ -62,11 +70,10 @@ public class TRControllerGoauldTile extends TRControllerAbstractTile implements 
 
                 rendererState.setIsConnected(connected);
 
-                if (activateState.clearAll){
-                    rendererState.clearSymbols(world.getTotalWorldTime());
-                }
-                else {
-                    rendererState.activateSymbol(world.getTotalWorldTime(), SymbolGoauldEnum.valueOf(activateState.symbol));
+                if (activateState.clearAll) {
+                    ((TRControllerGoauldRendererState) rendererState).clearSymbols(world.getTotalWorldTime());
+                } else {
+                    ((TRControllerGoauldRendererState) rendererState).activateSymbol(world.getTotalWorldTime(), SymbolGoauldEnum.valueOf(activateState.symbol));
                 }
                 break;
 
@@ -84,7 +91,7 @@ public class TRControllerGoauldTile extends TRControllerAbstractTile implements 
 
                 if (isLinked()) {
                     TransportRingsAbstractTile trTile = getLinkedRingsTile();
-                    if(trTile == null) return rendererState;
+                    if (trTile == null) return rendererState;
 
                     address.addAll(trTile.dialedAddress);
                     boolean ringsAreConnected = trTile.isBusy();

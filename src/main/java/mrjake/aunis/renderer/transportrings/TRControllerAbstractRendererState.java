@@ -21,7 +21,6 @@ public abstract class TRControllerAbstractRendererState extends State {
     public TransportRingsAddress addressDialed;
     // Biome Override
     // Saved
-    public BiomeOverlayEnum biomeOverride;
     protected BiomeOverlayEnum biomeOverlay;
 
     public TRControllerAbstractRendererState(TransportRingsAddress addressDialed, BiomeOverlayEnum biomeOverride, boolean ringsAreConnected) {
@@ -44,9 +43,6 @@ public abstract class TRControllerAbstractRendererState extends State {
     }
 
     public BiomeOverlayEnum getBiomeOverlay() {
-        if (biomeOverride != null)
-            return biomeOverride;
-
         return biomeOverlay;
     }
 
@@ -63,23 +59,11 @@ public abstract class TRControllerAbstractRendererState extends State {
 
     public void toBytes(ByteBuf buf) {
         addressDialed.toBytes(buf);
-
-        if (biomeOverride != null) {
-            buf.writeBoolean(true);
-            buf.writeInt(biomeOverride.ordinal());
-        } else {
-            buf.writeBoolean(false);
-        }
-
         buf.writeBoolean(ringsAreConnected);
     }
 
     public void fromBytes(ByteBuf buf) {
         addressDialed.fromBytes(buf);
-
-        if (buf.readBoolean()) {
-            biomeOverride = BiomeOverlayEnum.values()[buf.readInt()];
-        }
         ringsAreConnected = buf.readBoolean();
     }
 }

@@ -28,12 +28,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.EnumSet;
 
 public abstract class TRControllerAbstractTile extends TileEntity implements ITickable, ILinkable, StateProviderInterface {
-
-    public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY);
     protected BiomeOverlayEnum biomeOverlay = BiomeOverlayEnum.NORMAL;
     protected TransportRingsAbstractTile linkedRingsTile;
     protected TRControllerAbstractRenderer renderer;
     protected NetworkRegistry.TargetPoint targetPoint;
+    TRControllerAbstractRendererState rendererState;
     private BlockPos lastPos = BlockPos.ORIGIN;
     // ------------------------------------------------------------------------
     // Rings
@@ -44,11 +43,11 @@ public abstract class TRControllerAbstractTile extends TileEntity implements ITi
         return biomeOverlay;
     }
 
-    public abstract SymbolTypeTransportRingsEnum getSymbolType();
-
     public void setBiomeOverlay(BiomeOverlayEnum biomeOverlay) {
         this.biomeOverlay = biomeOverlay;
     }
+
+    public abstract SymbolTypeTransportRingsEnum getSymbolType();
 
     @Override
     public void onLoad() {
@@ -63,8 +62,9 @@ public abstract class TRControllerAbstractTile extends TileEntity implements ITi
         if (world.isRemote) {
             // Client
 
-            if (world.getTotalWorldTime() % 40 == 0) {
-                biomeOverlay = BiomeOverlayEnum.updateBiomeOverlay(world, pos, SUPPORTED_OVERLAYS);
+            if (world.getTotalWorldTime() % 40 == 0 && rendererState != null) {
+                biomeOverlay = BiomeOverlayEnum.updateBiomeOverlay(world, pos, getSupportedOverlays());
+                rendererState.setBiomeOverlay(BiomeOverlayEnum.updateBiomeOverlay(world, pos, getSupportedOverlays()));
             }
 
             if (!lastPos.equals(pos)) {
@@ -82,6 +82,8 @@ public abstract class TRControllerAbstractTile extends TileEntity implements ITi
             linkedRingsTile = null;
         }
     }
+
+    protected abstract EnumSet<BiomeOverlayEnum> getSupportedOverlays();
 
     public abstract TRControllerAbstractRendererState getRendererState();
 
