@@ -32,6 +32,8 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
     private BlockPos pos;
     private int lastEnergyStored;
     private int energyTransferedLastTick;
+    private int ringsDistance;
+    private String ringsName;
     private int lastProgress;
     private int openTabId = -1;
 
@@ -154,7 +156,9 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
 
         if (lastEnergyStored != energyStorage.getEnergyStoredInternally()
                 || energyTransferedLastTick != trTile.getEnergyTransferedLastTick()
-
+                || ringsName == null
+                || !(ringsName.equals(trTile.getRings().getName()))
+                || ringsDistance != trTile.getRings().getRingsDistance()
         ) {
             for (IContainerListener listener : listeners) {
                 if (listener instanceof EntityPlayerMP) {
@@ -164,6 +168,8 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
 
             lastEnergyStored = energyStorage.getEnergyStoredInternally();
             energyTransferedLastTick = trTile.getEnergyTransferedLastTick();
+            ringsName = trTile.getRings().getName();
+            ringsDistance = trTile.getRings().getRingsDistance();
         }
 
         if (lastProgress != trTile.getPageProgress()) {
@@ -179,7 +185,8 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
 
-        if (listener instanceof EntityPlayerMP)
+        if (listener instanceof EntityPlayerMP){
             AunisPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(pos, StateTypeEnum.GUI_STATE, trTile.getState(StateTypeEnum.GUI_STATE)), (EntityPlayerMP) listener);
+        }
     }
 }

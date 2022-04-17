@@ -144,15 +144,7 @@ public class TransportRings {
      * @return should put rings on map
      */
     public boolean isInGrid() {
-        return true;
-        /*if (name == null)
-            Aunis.info("Name is null");
-        if(name.equals(""))
-          Aunis.info("Name is empty");
-        if(name.equals("[empty]"))
-          Aunis.info("Name is [empty]");
-        if(name.length() < 1)
-          Aunis.info("Name < 1");*/
+        return true; // rings can operate without name
         //return (name != null && !(name.equals("")) && !(name.equals("[empty]")) && name.length() > 0);
     }
 

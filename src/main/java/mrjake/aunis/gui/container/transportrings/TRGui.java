@@ -2,7 +2,6 @@ package mrjake.aunis.gui.container.transportrings;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.gui.base.AunisGuiButton;
 import mrjake.aunis.gui.element.*;
 import mrjake.aunis.gui.element.Tab.SlotTab;
 import mrjake.aunis.packet.AunisPacketHandler;
@@ -46,7 +45,8 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
     private int maxEnergyStored;
     private GuiTextField nameTextField;
     private GuiTextField distanceTextField;
-    private AunisGuiButton saveButton;
+
+    private boolean keyTyped = false;
 
     private BlockPos pos;
 
@@ -112,7 +112,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
         nameTextField = new GuiTextField(++id,
                 Minecraft.getMinecraft().fontRenderer, 50, y + 10,
                 50, 10);
-        nameTextField.setText(container.trTile.getRings().getName());
+        nameTextField.setText(container.trTile.getRingsName());
         textFields.add(nameTextField);
         labels.add(new TextFieldLabel(50, y + 2, "tile.aunis.transportrings_block.rings_name"));
 
@@ -120,19 +120,31 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
         distanceTextField = new GuiTextField(++id,
                 Minecraft.getMinecraft().fontRenderer, 50, y + 10,
                 50, 10);
-        distanceTextField.setText(container.trTile.getRings().getRingsDistance() + "");
+        distanceTextField.setText(container.trTile.getRingsDistance() + "");
         textFields.add(distanceTextField);
         labels.add(new TextFieldLabel(50, y + 2, "tile.aunis.transportrings_block.rings_distance"));
-        /*
-		y += 20;
-		saveButton = new AunisGuiButton(++id, width / 2 - 25, guiTop + y, 50, 6*2, Aunis.proxy.localize("tile.aunis.transportrings_block.rings_save"));
-		buttonList.add(saveButton);
-		*/
+    }
+
+
+    // todo(Mine): temporarily solution
+    public void tryToUpdateInputs(){
+        if(!keyTyped){
+            try {
+                String name = container.trTile.getRingsName();
+                int distance = container.trTile.getRingsDistance();
+                if (!(nameTextField.getText().equals(name)))
+                    nameTextField.setText(name);
+                if (Integer.parseInt(distanceTextField.getText()) != distance)
+                    distanceTextField.setText(distance + "");
+            }
+            catch (Exception ignored){}
+        }
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
+        tryToUpdateInputs();
 
         boolean hasGoauldUpgrade = false;
         boolean hasOriUpgrade = false;
@@ -279,8 +291,10 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         super.keyTyped(typedChar, keyCode);
-        for (GuiTextField tf : textFields)
-            tf.textboxKeyTyped(typedChar, keyCode);
+        for (GuiTextField tf : textFields) {
+            if(tf.textboxKeyTyped(typedChar, keyCode))
+                keyTyped = true;
+        }
     }
 
     @Override
@@ -297,7 +311,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
         super.onGuiClosed();
     }
 
-    public void saveData(){
+    public void saveData() {
         EntityPlayer player = Minecraft.getMinecraft().player;
         try {
             String name = nameTextField.getText();

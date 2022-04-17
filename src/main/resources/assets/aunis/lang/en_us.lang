@@ -139,13 +139,11 @@ tile.aunis.transportrings_controller_block.not_linked=Controller not linked
 tile.aunis.transportrings_block.name=Goauld Transport rings
 tile.aunis.transportrings_ori_block.name=Ori Transport rings
 tile.aunis.transportrings_block.non_existing_address=Unable to reach this address
-tile.aunis.transportrings_block.duplicate_address=Duplicate address
-tile.aunis.transportrings_block.wrong_address=Wrong address, should be 1-6
+tile.aunis.transportrings_block.wrong_distance=Wrong distance, should be from -40 to 40
 tile.aunis.transportrings_block.obstructed=Rings obstructed, clear 5x5 area around rings
 tile.aunis.transportrings_block.obstructed_target=Target rings obstructed, clear 5x5 area around target rings
 tile.aunis.transportrings_block.busy=Rings busy
 tile.aunis.transportrings_block.busy_target=Target rings busy
-tile.aunis.transportrings_block.rings_no=Rings No. %s
 tile.aunis.transportrings_block.rings_not_in_grid=Rings not in grid
 tile.aunis.transportrings_block.rings_address=Address
 tile.aunis.transportrings_block.rings_address_list=Near rings
@@ -184,6 +182,13 @@ death.attack.eventHorizon=%s was given a kawoosh cremation
 death.attack.irisDeath=%s was given a iris cremation
 death.attack.wrongSide=%s entered wrong side of gate
 
+# Goauld Glyphs
+glyph.aunis.transportrings.goauld.alpha=Alpha
+glyph.aunis.transportrings.goauld.beta=Beta
+glyph.aunis.transportrings.goauld.gamma=Gamma
+glyph.aunis.transportrings.goauld.delta=Delta
+glyph.aunis.transportrings.goauld.omega=Omega
+glyph.aunis.transportrings.goauld.origin=Origin
 
 # Milkyway Glyphs
 glyph.aunis.milkyway.sculptor=Sculptor

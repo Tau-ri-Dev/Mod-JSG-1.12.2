@@ -79,7 +79,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     };
     // ---------------------------------------------------------------------------------
     // Ticking and loading
-    public int ringsDistance = 2;
     public Map<Map<SymbolTypeTransportRingsEnum, TransportRingsAddress>, TransportRings> ringsMap = new HashMap<>();
     protected AunisAxisAlignedBB LOCAL_TELEPORT_BOX = new AunisAxisAlignedBB(-1, 2, -1, 2, 4.5, 2);
     protected AunisAxisAlignedBB globalTeleportBox;
@@ -100,6 +99,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     protected TransportRings rings;
     protected int energyTransferedLastTick = 0;
     List<ScheduledTask> scheduledTasks = new ArrayList<>();
+    protected int ringsDistance = 2;
+    protected String ringsName = "";
     // ---------------------------------------------------------------------------------
     // Renders
     TransportRingsAbstractRenderer renderer;
@@ -211,8 +212,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 markDirty();
             }
 
-            if(world.getTotalWorldTime() % 40 == 0)
-                updateRenderBox();
+            if(world.getTotalWorldTime() % 80 == 0) // every 4 seconds, update boxed (render and teleport)
+                updateRingsDistance();
 
             /*
              * Draw power (isBusy)
@@ -293,8 +294,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         }
         if (!world.isRemote) {
             setBarrierBlocks(false, false);
-
-            //todo(Mine): fix this
             generateAddress(false);
             //generateAddress(true);
 
@@ -336,11 +335,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         LOCAL_TELEPORT_BOX = new AunisAxisAlignedBB(-1, ringsDistance, -1, 2, ringsDistance + 2.5, 2);
         invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, ringsDistance, 2), new BlockPos(1, ringsDistance, 2), new BlockPos(2, ringsDistance, 1));
         globalTeleportBox = LOCAL_TELEPORT_BOX.offset(pos);
-        updateRenderBox();
-        markDirty();
-    }
-
-    public void updateRenderBox(){
         renderBoundingBox = new AunisAxisAlignedBB(-3, -40, -3, 3, 40, 3).offset(pos);
         markDirty();
     }
@@ -452,6 +446,14 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     public void setBusy(boolean busy) {
         this.busy = busy;
+    }
+
+    public int getRingsDistance(){
+        return ringsDistance;
+    }
+
+    public String getRingsName(){
+        return ringsName;
     }
 
     public List<Entity> startAnimationAndTeleport(BlockPos targetRingsPos, List<Entity> excludedEntities, int waitTime, boolean initiating) {
@@ -696,6 +698,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     public ParamsSetResult setRingsParams(String name, int distance) {
         setNewRingsDistance(distance);
+        setRingsName(name);
         return setRingsParams(null, null, null, name);
     }
 
@@ -704,6 +707,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     public void setRingsParams(TransportRingsAddress address, SymbolTypeTransportRingsEnum symbolType, String name) {
+        setRingsName(name);
         setRingsParams(address, null, symbolType, name);
     }
 
@@ -735,7 +739,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         } else {
             getRings().setAddress(addressOld);
         }
-        Aunis.info("Name set to: " + name + ", remote?: " + world.isRemote);
         getRings().setName(name);
         getRings().setRingsDistance(ringsDistance);
 
@@ -746,6 +749,12 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         markDirty();
         return ParamsSetResult.OK;
+    }
+
+    public void setRingsName(String name){
+        getRings().setName(name);
+        ringsName = name;
+        markDirty();
     }
 
     @Override
@@ -784,7 +793,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         compound.setLong("targetRingsPos", targetRingsPos.toLong());
         compound.setBoolean("busy", isBusy());
-        compound.setInteger("ringsDistance", ringsDistance);
 
         if (node != null) {
             NBTTagCompound nodeCompound = new NBTTagCompound();
@@ -798,10 +806,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         return super.writeToNBT(compound);
     }
-
-
-    // ------------------------------------------------------------------------
-    // OpenComputers
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
@@ -850,10 +854,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         if (node != null && compound.hasKey("node")) node.load(compound.getCompoundTag("node"));
 
         setBusy(compound.getBoolean("busy"));
-        ringsDistance = compound.getInteger("ringsDistance");
         initiating = compound.getBoolean("initiating");
 
         itemStackHandler.deserializeNBT(compound.getCompoundTag("itemHandler"));
+        ringsDistance = getRings().getRingsDistance();
+        ringsName = getRings().getName();
 
         super.readFromNBT(compound);
     }
@@ -868,7 +873,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 return new TRGuiState(getRings().getAddresses());
 
             case GUI_UPDATE:
-                return new TRGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, getRings().getRingsDistance(), getRings().getName(), getRings().getAddresses());
+                return new TRGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, ringsName, ringsDistance);
 
 
             default:
@@ -912,16 +917,15 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
             case GUI_STATE:
                 TRGuiState guiState = (TRGuiState) state;
-                getRings().setAddress(guiState.trAdddressMap);
+                setRingsParams(guiState.trAdddressMap);
                 break;
 
             case GUI_UPDATE:
                 TRGuiUpdate guiUpdate = (TRGuiUpdate) state;
                 energyStorage.setEnergyStoredInternally(guiUpdate.energyStored);
                 energyTransferedLastTick = guiUpdate.transferedLastTick;
-                getRings().setRingsDistance(guiUpdate.ringsDistance);
-                getRings().setName(guiUpdate.ringsName);
-                setRingsParams(guiUpdate.trAdddressMap);
+                setRingsParams(guiUpdate.ringsName, guiUpdate.distance);
+                Aunis.info("Distance: " + guiUpdate.distance + ", Name: " + guiUpdate.ringsName);
                 break;
             default:
                 break;
@@ -962,13 +966,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         if (node != null) node.remove();
     }
 
-    /*@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
-    @Callback
-    public Object[] getAddress(Context context, Arguments args) {
-        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
-
-        return new Object[]{rings.getAddress()};
-    }*/
+    // ------------------------------------------------------------------------
+    // OpenComputers
 
     @Override
     public void invalidate() {
@@ -977,49 +976,16 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         super.invalidate();
     }
 
-    /*@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
-    @Callback
-    public Object[] setAddress(Context context, Arguments args) {
-        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
-
-        int address = args.checkInteger(0);
-
-        if (address < 1 || address > 6)
-            throw new IllegalArgumentException("bad argument #1 (address out of range, allowed <1..6>)");
-
-        return new Object[]{setRingsParams(address, rings.getName())};
-    }*/
-
     @Override
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     public Node node() {
         return node;
     }
 
-    /*@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
-    @Callback
-    public Object[] setAddressAndName(Context context, Arguments args) {
-        int address = args.checkInteger(0);
-        String name = args.checkString(1);
-
-        if (address < 1 || address > 6)
-            throw new IllegalArgumentException("bad argument #1 (address out of range, allowed <1..6>)");
-
-        return new Object[]{setRingsParams(address, name)};
-    }*/
-
     @Override
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     public void onConnect(Node node) {
     }
-
-    /*@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
-    @Callback
-    public Object[] getAvailableRingsAddresses(Context context, Arguments args) {
-        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
-
-        return new Object[]{ringsMap.keySet()};
-    }*/
 
     @Override
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
@@ -1040,6 +1006,48 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     // ------------------------------------------------------------
     // Methods
+
+    /*@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    @Callback
+    public Object[] getAddress(Context context, Arguments args) {
+        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
+
+        return new Object[]{rings.getAddress()};
+    }
+
+    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    @Callback
+    public Object[] getAvailableRingsAddresses(Context context, Arguments args) {
+        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
+
+        return new Object[]{ringsMap.keySet()};
+    }
+
+    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    @Callback
+    public Object[] setAddressAndName(Context context, Arguments args) {
+        int address = args.checkInteger(0);
+        String name = args.checkString(1);
+
+        if (address < 1 || address > 6)
+            throw new IllegalArgumentException("bad argument #1 (address out of range, allowed <1..6>)");
+
+        return new Object[]{setRingsParams(address, name)};
+    }
+
+    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    @Callback
+    public Object[] setAddress(Context context, Arguments args) {
+        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
+
+        int address = args.checkInteger(0);
+
+        if (address < 1 || address > 6)
+            throw new IllegalArgumentException("bad argument #1 (address out of range, allowed <1..6>)");
+
+        return new Object[]{setRingsParams(address, rings.getName())};
+    }*/
+
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] isInGrid(Context context, Arguments args) {
@@ -1053,9 +1061,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         return new Object[]{rings.getName()};
     }
-
-    // -----------------------------------------------------------------------------
-    // Power system
 
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
@@ -1116,6 +1121,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         return super.getCapability(capability, facing);
     }
+
+    // -----------------------------------------------------------------------------
+    // Power system
 
     public int getEnergyTransferedLastTick() {
         return energyTransferedLastTick;

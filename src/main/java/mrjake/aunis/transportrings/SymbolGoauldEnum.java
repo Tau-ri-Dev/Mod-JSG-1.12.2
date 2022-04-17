@@ -31,8 +31,8 @@ public enum SymbolGoauldEnum implements SymbolInterface {
         this.angleIndex = angleIndex;
 
         this.englishName = englishName;
-        this.translationKey = "glyph.aunis.transportrings." + englishName.toLowerCase().replace(" ", "_");
-        this.iconResource = new ResourceLocation(Aunis.ModID, "textures/gui/symbol/transportrings/" + englishName.toLowerCase() + ".png");
+        this.translationKey = "glyph.aunis.transportrings.goauld." + englishName.toLowerCase().replace(" ", "_");
+        this.iconResource = new ResourceLocation(Aunis.ModID, "textures/gui/symbol/transportrings/goauld/" + englishName.toLowerCase() + ".png");
     }
 
     @Override

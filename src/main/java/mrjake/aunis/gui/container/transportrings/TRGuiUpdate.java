@@ -14,43 +14,31 @@ public class TRGuiUpdate extends State {
 	
 	public int energyStored;
 	public int transferedLastTick;
-	public int ringsDistance;
 	public String ringsName;
-	public Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> trAdddressMap;
+	public int distance;
 
-	public TRGuiUpdate(int energyStored, int transferedLastTick, int ringsDistance, String ringsName, Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> adddressMap) {
+	public TRGuiUpdate(int energyStored, int transferedLastTick, String ringsName, int distance) {
 		this.energyStored = energyStored;
 		this.transferedLastTick = transferedLastTick;
-		this.ringsDistance = ringsDistance;
 		this.ringsName = ringsName;
-		this.trAdddressMap = adddressMap;
+		this.distance = distance;
 	}
 	
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(energyStored);
 		buf.writeInt(transferedLastTick);
-		buf.writeInt(ringsDistance);
 		buf.writeInt(ringsName.length());
 		buf.writeCharSequence(ringsName, StandardCharsets.UTF_8);
-		for (SymbolTypeTransportRingsEnum symbolType : SymbolTypeTransportRingsEnum.values()) {
-			trAdddressMap.get(symbolType).toBytes(buf);
-		}
+		buf.writeInt(distance);
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		energyStored = buf.readInt();
 		transferedLastTick = buf.readInt();
-		ringsDistance = buf.readInt();
 		int size = buf.readInt();
 		ringsName = buf.readCharSequence(size, StandardCharsets.UTF_8).toString();
-		trAdddressMap = new HashMap<>();
-
-		for (SymbolTypeTransportRingsEnum symbolType : SymbolTypeTransportRingsEnum.values()) {
-			TransportRingsAddress address = new TransportRingsAddress(symbolType);
-			address.fromBytes(buf);
-			trAdddressMap.put(symbolType, address);
-		}
+		distance = buf.readInt();
 	}
 }

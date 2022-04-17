@@ -70,13 +70,14 @@ public class PageRenderer {
 		
 	    GL11.glEnd();
 	    if(!compound.hasKey("transportRings")) {
+	    	// render stargate address
 			SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf(compound.getInteger("symbolType"));
 			StargateAddress stargateAddress = new StargateAddress(compound.getCompoundTag("address"));
 			int maxSymbols = symbolType.getMaxSymbolsDisplay(compound.getBoolean("hasUpgrade"));
 
 			for (int i=0; i<maxSymbols; i++) {
 				float x = 0.21f*(i%3);
-				float y = 0.20f*(i/3) + 0.14f;
+				float y = 0.20f*((int) Math.floor((float) i/3)) + 0.14f;
 
 				if (symbolType == SymbolTypeEnum.UNIVERSE) {
 					y = 0.20f*(i/3) + 0.18f;
@@ -99,12 +100,13 @@ public class PageRenderer {
 			renderSymbol(x, y, w, 0.2f, Objects.requireNonNull(symbolType.getOrigin()));
 		}
 	    else{
+	    	// render tr address
 			SymbolTypeTransportRingsEnum symbolType = SymbolTypeTransportRingsEnum.valueOf(compound.getInteger("symbolType"));
 			TransportRingsAddress address = new TransportRingsAddress(compound.getCompoundTag("address"));
 
 			for (int i=0; i<address.size(); i++) {
 				float x = 0.21f*(i%3);
-				float y = 0.20f*((float)i/3) + 0.14f;
+				float y = 0.20f*((int) Math.floor((float) i/3)) + 0.14f;
 				renderSymbol(x, y, 0.2f, 0.2f, address.get(i));
 			}
 
