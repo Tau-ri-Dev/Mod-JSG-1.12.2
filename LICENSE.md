@@ -16,4 +16,4 @@
 3. All licenses of works listed in README should be abided.
 
 
-4. Pay attention that this repo is a fork the original version (link is in README file)
+4. Pay attention that this repo is a fork of the original version (link is in README file)
