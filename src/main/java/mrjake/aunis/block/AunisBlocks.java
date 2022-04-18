@@ -119,7 +119,7 @@ public class AunisBlocks {
     }
 
 
-    private static Block[] blocks = {
+    private static final Block[] blocks = {
             ORE_NAQUADAH_BLOCK, ORE_NAQUADAH_BLOCK_STONE, NAQUADAH_BLOCK,
 
             ORE_TRINIUM_BLOCK, ORE_TITANIUM_BLOCK,
