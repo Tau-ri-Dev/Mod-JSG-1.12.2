@@ -1,0 +1,44 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"FYF",
+		"BIE",
+		"TRT"
+	],
+	
+	"key": {
+		"T": {
+			"type" : "forge:ore_dict",
+			"ore": "ingotTrinium"
+		},
+	
+		"F": {
+			"item": "aunis:transportrings_ring_fragment"
+		},
+		
+		"I": {
+			"item": "aunis:circuit_control_naquadah"
+		},
+		
+		"B": {
+			"item": "aunis:crystal_blue"
+		},
+		
+		"E": {
+			"item": "aunis:crystal_ender"
+		},
+		
+		"R": {
+			"item": "aunis:crystal_red"
+		},
+		
+		"Y": {
+			"item": "aunis:crystal_yellow"
+		}
+	},
+	
+	"result": {
+		"item": "aunis:transportrings_ori_block",
+		"count": 1
+	}
+}

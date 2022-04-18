@@ -1,6 +1,8 @@
 package mrjake.aunis.renderer.transportrings;
 
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.loader.ElementEnum;
+import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.state.transportrings.TransportRingsRendererState;
 import mrjake.aunis.tesr.RendererInterface;
 import mrjake.aunis.util.AunisAxisAlignedBB;
@@ -19,6 +21,10 @@ public abstract class TransportRingsAbstractRenderer implements RendererInterfac
     public static final int INTERVAL_FALLING = 5;
 
     public static final double ANIMATION_SPEED_DIVISOR = 2.7;
+
+    public static final int PLATFORM_ANIMATION_DURATION = 10;
+    public static final float PLATFORM_MAX_Y = 0.8f;
+    public static final float PLATFORM_MAX_X = 3.5f;
 
     protected World world;
     protected AunisAxisAlignedBB localTeleportBox;
@@ -59,16 +65,18 @@ public abstract class TransportRingsAbstractRenderer implements RendererInterfac
         GlStateManager.scale(0.5, 0.5, 0.5);
 
         int relativeY = -4;
-        if(ringsDistance < 0)
+        if(ringsDistance < 0) {
             relativeY = 2;
-
-        GlStateManager.translate(0, relativeY, 0);
-
-        renderRings(partialTicks, ringsDistance);
-        GlStateManager.popMatrix();
+        }
 
         // ---------------------------------------------------------------------------
+
         long tick = world.getTotalWorldTime() - state.animationStart;
+        renderPlatform(tick);
+
+        GlStateManager.translate(0, relativeY, 0);
+        renderRings(partialTicks, ringsDistance);
+        GlStateManager.popMatrix();
 
         if (state.isAnimationActive) {
             /**
@@ -150,16 +158,20 @@ public abstract class TransportRingsAbstractRenderer implements RendererInterfac
     }
 
     public void animationStart(long animationStart, int distance) {
+        setRingsDistance(distance);
         lastTick = -1;
         currentRing = 0;
         lastRingAnimated = -1;
-        ringsDistance = distance;
-        localTeleportBox = new AunisAxisAlignedBB(-1, ringsDistance, -1, 2, ringsDistance + 2.5, 2);
 
         state.animationStart = animationStart;
         state.ringsUprising = true;
         state.isAnimationActive = true;
+    }
+
+    public void setRingsDistance(int distance){
         state.ringsDistance = distance;
+        ringsDistance = distance;
+        localTeleportBox = new AunisAxisAlignedBB(-1, ringsDistance, -1, 2, ringsDistance + 2.5, 2);
     }
 
     TransportRingsRendererState state = new TransportRingsRendererState();
@@ -167,5 +179,62 @@ public abstract class TransportRingsAbstractRenderer implements RendererInterfac
     public void setState(TransportRingsRendererState rendererState) {
         lastTick = -1;
         this.state = rendererState;
+    }
+
+    public void renderPlatform(long tick){
+        float platformX = 0;
+        float platformY = 0;
+        int coefficient = -1;
+        if(ringsDistance < 0) coefficient = 1;
+        if (state.isAnimationActive) {
+            // temporarily rendering the platform here
+            if (tick < PLATFORM_ANIMATION_DURATION) {
+                if (state.ringsUprising) {
+                    float multiplier = ((float) tick / (PLATFORM_ANIMATION_DURATION - ((float) PLATFORM_ANIMATION_DURATION/3)));
+                    if(multiplier > 1) multiplier = 1;
+                    if(multiplier < -1) multiplier = -1;
+                    if(tick > PLATFORM_ANIMATION_DURATION/3) {
+                        platformX = multiplier * PLATFORM_MAX_X;
+                        platformY = PLATFORM_MAX_Y;
+                    }
+                    if(tick <= PLATFORM_ANIMATION_DURATION/3)
+                        platformY = multiplier * PLATFORM_MAX_Y;
+                }
+            }
+            else{
+                platformX = PLATFORM_MAX_X;
+                platformY = PLATFORM_MAX_Y;
+            }
+        }
+        if (!state.ringsUprising) {
+            long tick2 = tick - 135;
+            if(tick2 >= 0) {
+                if (tick2 <= PLATFORM_ANIMATION_DURATION) {
+                    float multiplier = ((float) tick2 / (PLATFORM_ANIMATION_DURATION - ((float) PLATFORM_ANIMATION_DURATION / 3)));
+                    if (multiplier > 1) multiplier = 1;
+                    if (multiplier < -1) multiplier = -1;
+                    if (tick2 <= PLATFORM_ANIMATION_DURATION / 3) {
+                        platformX = PLATFORM_MAX_X - multiplier * PLATFORM_MAX_X;
+                        platformY = PLATFORM_MAX_Y;
+                    }
+                    if (tick2 > PLATFORM_ANIMATION_DURATION / 3)
+                        platformY = PLATFORM_MAX_Y- multiplier * PLATFORM_MAX_Y;
+                }
+            }
+            else{
+                platformX = PLATFORM_MAX_X;
+                platformY = PLATFORM_MAX_Y;
+            }
+        }
+        for (int i = 0; i < 2; i++) {
+            GlStateManager.pushMatrix();
+            int distance = ringsDistance;
+            if(distance < 0) distance += 4;
+            GlStateManager.translate(platformX * (i == 1 ? 1 : -1), (platformY * coefficient) - 3.2f + distance*2, 0);
+            if (i == 1)
+                GlStateManager.rotate(180, 0, 1, 0);
+            ElementEnum.PLATFORM_RINGS_GOAULD_BASIC.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
+            GlStateManager.popMatrix();
+        }
     }
 }

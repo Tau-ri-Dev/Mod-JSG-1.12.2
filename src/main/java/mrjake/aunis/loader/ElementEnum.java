@@ -69,8 +69,11 @@ public enum ElementEnum {
   RING_BLACK("transportrings/rings_ancient.obj", "transportrings/rings_ancient"),
   RING_ORI("transportrings/rings_ori.obj", "transportrings/rings_ori"),
 
-  RINGSCONTROLLER_GOAULD("transportrings/controller/goauld/plate_goauld.obj", "transportrings/controller/goauld/goauld_panel"),
-  RINGSCONTROLLER_GOAULD_LIGHT("transportrings/controller/goauld/indicator_lights.obj", "transportrings/controller/goauld/goauld_light"),
+  RINGS_CONTROLLER_GOAULD("transportrings/controller/goauld/plate_goauld.obj", "transportrings/controller/goauld/goauld_panel"),
+  RINGS_CONTROLLER_GOAULD_LIGHT("transportrings/controller/goauld/indicator_lights.obj", "transportrings/controller/goauld/goauld_light"),
+
+  // platforms
+  PLATFORM_RINGS_GOAULD_BASIC("platforms/rings/goauld_basic.obj", "platforms/rings/goauld_basic"),
 
   // --------------------------------------------------------------------------------------------
   // ZPM things

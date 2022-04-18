@@ -343,6 +343,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, ringsDistance, 2), new BlockPos(1, ringsDistance, 2), new BlockPos(2, ringsDistance, 1));
         globalTeleportBox = LOCAL_TELEPORT_BOX.offset(pos);
         renderBoundingBox = new AunisAxisAlignedBB(-3, -40, -3, 3, 40, 3).offset(pos);
+        rendererState.ringsDistance = ringsDistance;
+        NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
+        AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RINGS_DISTANCE_UPDATE, new TransportRingsStartAnimationRequest(rendererState.animationStart, rendererState.ringsDistance)), point);
         markDirty();
     }
 
@@ -918,6 +921,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 return new TransportRingsRendererState();
 
             case RINGS_START_ANIMATION:
+            case RINGS_DISTANCE_UPDATE:
                 return new TransportRingsStartAnimationRequest();
 
             case GUI_STATE:
@@ -943,6 +947,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 int distance = ((TransportRingsStartAnimationRequest) state).ringsDistance;
                 AunisSoundHelper.playSoundEventClientSide(world, (distance > 0 ? pos.up(distance + 2) : pos.down((distance * -1) - (distance < -2 ? 2 : 0))), SoundEventEnum.RINGS_TRANSPORT);
                 renderer.animationStart(((TransportRingsStartAnimationRequest) state).animationStart, distance);
+                break;
+
+            case RINGS_DISTANCE_UPDATE:
+                renderer.setRingsDistance(((TransportRingsStartAnimationRequest) state).ringsDistance);
                 break;
 
             case GUI_STATE:

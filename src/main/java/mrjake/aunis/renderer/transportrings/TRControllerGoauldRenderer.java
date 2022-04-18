@@ -13,13 +13,13 @@ public class TRControllerGoauldRenderer extends TRControllerAbstractRenderer {
     public void renderController(TRControllerAbstractTile te, TRControllerAbstractRendererState rendererState) {
 
         // render plate
-        ElementEnum.RINGSCONTROLLER_GOAULD.bindTextureAndRender(te.getBiomeOverlay());
+        ElementEnum.RINGS_CONTROLLER_GOAULD.bindTextureAndRender(te.getBiomeOverlay());
 
         // render light
         ResourceLocation lightTexture = ((TRControllerGoauldRendererState) rendererState).getButtonTexture(6, rendererState.getBiomeOverlay());
         if (rendererDispatcher != null && rendererDispatcher.renderEngine != null && lightTexture!= null) {
             rendererDispatcher.renderEngine.bindTexture(lightTexture);
-            ModelLoader.getModel(ElementEnum.RINGSCONTROLLER_GOAULD_LIGHT.modelResource).render();
+            ModelLoader.getModel(ElementEnum.RINGS_CONTROLLER_GOAULD_LIGHT.modelResource).render();
         }
 
         // render buttons

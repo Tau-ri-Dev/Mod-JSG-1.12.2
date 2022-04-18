@@ -6,7 +6,6 @@ import mrjake.aunis.renderer.transportrings.TRControllerAbstractRendererState;
 import mrjake.aunis.renderer.transportrings.TRControllerGoauldRenderer;
 import mrjake.aunis.renderer.transportrings.TRControllerGoauldRendererState;
 import mrjake.aunis.state.State;
-import mrjake.aunis.state.StateProviderInterface;
 import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.state.dialhomedevice.DHDActivateButtonState;
 import mrjake.aunis.transportrings.SymbolGoauldEnum;
@@ -15,7 +14,7 @@ import mrjake.aunis.transportrings.TransportRingsAddress;
 
 import java.util.EnumSet;
 
-public class TRControllerGoauldTile extends TRControllerAbstractTile implements StateProviderInterface {
+public class TRControllerGoauldTile extends TRControllerAbstractTile {
 
     public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST);
 
