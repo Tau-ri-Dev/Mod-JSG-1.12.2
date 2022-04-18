@@ -1,6 +1,7 @@
 package mrjake.aunis.transportrings;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 

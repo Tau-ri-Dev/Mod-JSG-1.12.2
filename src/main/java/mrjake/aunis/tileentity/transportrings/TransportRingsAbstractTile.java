@@ -198,9 +198,15 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     public void update() {
         if (!world.isRemote) {
             ScheduledTask.iterate(scheduledTasks, world.getTotalWorldTime());
-
-            if (getRings().getAddresses() == null || getRings().getAddresses().size() < SymbolTypeTransportRingsEnum.values().length || getRings().getAddress(SymbolTypeTransportRingsEnum.valueOf(0)).contains(SymbolGoauldEnum.getOrigin()))
+            if (getRings().getAddresses() == null // if is null
+                    || getRings().getAddresses().size() < SymbolTypeTransportRingsEnum.values().length // if is short
+                    || getRings().getAddress(SymbolTypeTransportRingsEnum.valueOf(0)).get(0).equals(SymbolGoauldEnum.getOrigin()) // if first symbol is origin
+                    || getRings().getAddress(SymbolTypeTransportRingsEnum.valueOf(0)).get(0).equals(getRings().getAddress(SymbolTypeTransportRingsEnum.valueOf(0)).get(1)) // if there are two same symbols
+            ) {
+                if(getRings().getAddresses() != null)
+                    Aunis.logger.debug("TransportRings at " + pos.toString() + " are generating new addresses!");
                 generateAddress(true);
+            }
 
             if (!lastPos.equals(pos)) {
                 lastPos = pos;
@@ -849,7 +855,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
             targetRingsPos = BlockPos.fromLong(compound.getLong("targetRingsPos"));
 
-        } catch (NullPointerException | IndexOutOfBoundsException | ClassCastException e) {
+        }catch (NullPointerException | IndexOutOfBoundsException | ClassCastException e) {
             Aunis.logger.warn("Exception at reading NBT");
             Aunis.logger.warn("If loading world used with previous version and nothing game-breaking doesn't happen, please ignore it");
 

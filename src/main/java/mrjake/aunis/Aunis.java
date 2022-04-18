@@ -95,7 +95,7 @@ public class Aunis {
         Aunis.info("Started loading Aunis mod in " + source.getAbsolutePath());
         Aunis.info("Loading Aunis version " + Version);
 
-        // todo(Mine): fix this shitty shit
+        // todo(Mine): fix this
         //AUNIS_SOUNDS = AunisSoundCategory.add("AUNIS_SOUNDS");
         AUNIS_SOUNDS = SoundCategory.BLOCKS;
 
