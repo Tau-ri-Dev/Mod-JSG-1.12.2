@@ -31,8 +31,6 @@ import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.state.dialhomedevice.DHDActivateButtonState;
 import mrjake.aunis.state.transportrings.TransportRingsRendererState;
 import mrjake.aunis.state.transportrings.TransportRingsStartAnimationRequest;
-import mrjake.aunis.tesr.RendererInterface;
-import mrjake.aunis.tesr.RendererProviderInterface;
 import mrjake.aunis.tileentity.util.IUpgradable;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.tileentity.util.ScheduledTaskExecutorInterface;
@@ -66,7 +64,7 @@ import java.util.*;
 import static mrjake.aunis.transportrings.TransportRingsAddress.MAX_SYMBOLS;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
-public abstract class TransportRingsAbstractTile extends TileEntity implements ITickable, RendererProviderInterface, StateProviderInterface, ScheduledTaskExecutorInterface, ILinkable, Environment, IUpgradable {
+public abstract class TransportRingsAbstractTile extends TileEntity implements ITickable, StateProviderInterface, ScheduledTaskExecutorInterface, ILinkable, Environment, IUpgradable {
     public static final int FADE_OUT_TOTAL_TIME = 2 * 20; // 2s
     public static final int TIMEOUT_TELEPORT = FADE_OUT_TOTAL_TIME / 2;
     public static final int TIMEOUT_FADE_OUT = (int) (30 + TransportRingsAbstractRenderer.INTERVAL_UPRISING * TransportRingsAbstractRenderer.RING_COUNT + TransportRingsAbstractRenderer.ANIMATION_SPEED_DIVISOR * Math.PI);
@@ -81,7 +79,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     // ---------------------------------------------------------------------------------
     // Ticking and loading
     public Map<Map<SymbolTypeTransportRingsEnum, TransportRingsAddress>, TransportRings> ringsMap = new HashMap<>();
-    protected AunisAxisAlignedBB LOCAL_TELEPORT_BOX = new AunisAxisAlignedBB(-1, 2, -1, 2, 4.5, 2);
+    public AunisAxisAlignedBB LOCAL_TELEPORT_BOX = new AunisAxisAlignedBB(-1, 2, -1, 2, 4.5, 2);
     protected AunisAxisAlignedBB globalTeleportBox;
     protected List<Entity> teleportList = new ArrayList<>();
     protected BlockPos lastPos = BlockPos.ORIGIN;
@@ -297,6 +295,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     public void onLoad() {
         if (world.isRemote) {
             renderer = getNewRenderer();
+            rendererState.ringsDistance = ringsDistance;
             AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
         }
         if (!world.isRemote) {
@@ -455,6 +454,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                 break;
 
+            case RINGS_SYMBOL_DEACTIVATE:
+                int symbolId = customData.getInteger("symbol");
+                sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbolId, true));
+
             default:
                 throw new UnsupportedOperationException("EnumScheduledTask." + scheduledTask.name() + " not implemented on " + this.getClass().getName());
         }
@@ -493,12 +496,19 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         rendererState.ringsUprising = true;
         rendererState.isAnimationActive = true;
         rendererState.ringsDistance = getRings().getRingsDistance();
+        markDirty();
 
         NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
         AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RINGS_START_ANIMATION, new TransportRingsStartAnimationRequest(rendererState.animationStart, rendererState.ringsDistance)), point);
     }
 
+    public TransportRingsRendererState getRendererState(){
+        return rendererState;
+    }
+
     public TransportResult addSymbolToAddress(SymbolInterface symbol) {
+        NBTTagCompound compound = new NBTTagCompound();
+        compound.setInteger("symbol", symbol.getId());
         if (canAddSymbol(symbol)) {
             dialedAddress.setSymbolType(getSymbolType());
             dialedAddress.add(symbol);
@@ -507,14 +517,14 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 TransportResult result = attemptTransportTo(dialedAddress, EnumScheduledTask.RINGS_START_ANIMATION.waitTicks);
                 if (!result.ok()) {
                     dialedAddress.clear();
-                    if (getLinkedControllerTile(world) != null)
-                        getLinkedControllerTile(world).sendState(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
+                    sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
                     markDirty();
                     sendSignal(ocContext, "transportrings_symbol_engage_failed", result.toString());
                     return result;
                 }
             }
             sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbol));
+            addTask(new ScheduledTask(EnumScheduledTask.RINGS_SYMBOL_DEACTIVATE, compound));
             sendSignal(ocContext, "transportrings_symbol_engage", TransportResult.OK.toString());
             return TransportResult.ACTIVATED;
         }
@@ -938,19 +948,28 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     @Override
     @SideOnly(Side.CLIENT)
     public void setState(StateTypeEnum stateType, State state) {
+        int distance = 0;
+        long animationStart = 0;
         switch (stateType) {
             case RENDERER_STATE:
-                renderer.setState((TransportRingsRendererState) state);
+                rendererState = ((TransportRingsRendererState) state);
                 break;
 
             case RINGS_START_ANIMATION:
-                int distance = ((TransportRingsStartAnimationRequest) state).ringsDistance;
+                distance = ((TransportRingsStartAnimationRequest) state).ringsDistance;
+                animationStart = ((TransportRingsStartAnimationRequest) state).animationStart;
                 AunisSoundHelper.playSoundEventClientSide(world, (distance > 0 ? pos.up(distance + 2) : pos.down((distance * -1) - (distance < -2 ? 2 : 0))), SoundEventEnum.RINGS_TRANSPORT);
-                renderer.animationStart(((TransportRingsStartAnimationRequest) state).animationStart, distance);
+                rendererState.ringsDistance = distance;
+                rendererState.animationStart = animationStart;
+                rendererState.isAnimationActive = true;
+                rendererState.ringsUprising = true;
+                //renderer.animationStart(distance);
                 break;
 
             case RINGS_DISTANCE_UPDATE:
-                renderer.setRingsDistance(((TransportRingsStartAnimationRequest) state).ringsDistance);
+                distance = ((TransportRingsStartAnimationRequest) state).ringsDistance;
+                rendererState.ringsDistance = distance;
+                //renderer.setRingsDistance(distance);
                 break;
 
             case GUI_STATE:
@@ -980,11 +999,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         }
 
         setLinkedController(closestController, linkId);
-    }
-
-    @Override
-    public RendererInterface getRenderer() {
-        return renderer;
     }
 
     public abstract TransportRingsAbstractRenderer getNewRenderer();

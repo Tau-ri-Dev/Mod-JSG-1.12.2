@@ -1,5 +1,6 @@
 package mrjake.aunis.renderer.transportrings;
 
+import io.netty.buffer.ByteBuf;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import net.minecraft.client.renderer.GlStateManager;
@@ -11,7 +12,7 @@ import net.minecraft.world.World;
  */
 public class Ring {
 
-    private final int index;
+    private int index;
     private World world;
     private boolean shouldRender;
     private boolean shouldAnimate;
@@ -20,9 +21,7 @@ public class Ring {
     private double y;
     private double yMax;
 
-    public Ring(World world, int index) {
-        this.world = world;
-
+    public Ring(int index) {
         this.shouldRender = false;
 
         this.y = 0;
@@ -30,7 +29,32 @@ public class Ring {
         this.yMax = index;
     }
 
+    public Ring(ByteBuf buf) {
+        this.fromBytes(buf);
+    }
+
+    public void toBytes(ByteBuf buf){
+        buf.writeInt(index);
+        buf.writeBoolean(shouldRender);
+        buf.writeBoolean(shouldAnimate);
+        buf.writeBoolean(ringsUprising);
+        buf.writeLong(animationStart);
+        buf.writeDouble(y);
+        buf.writeDouble(yMax);
+    }
+
+    public void fromBytes(ByteBuf buf){
+        index = buf.readInt();
+        shouldRender = buf.readBoolean();
+        shouldAnimate = buf.readBoolean();
+        ringsUprising = buf.readBoolean();
+        animationStart = buf.readLong();
+        y = buf.readDouble();
+        yMax = buf.readDouble();
+    }
+
     public void render(double partialTicks, ElementEnum type, int distance) {
+        if(world == null) return;
         if (distance >= 0) {
             yMax = (distance * 2) - index + 1.5 + 4;
         } else {
@@ -82,6 +106,10 @@ public class Ring {
 
         shouldAnimate = false;
         shouldRender = true;
+    }
+
+    public void setWorld(World world){
+        this.world = world;
     }
 
     public void setDown() {

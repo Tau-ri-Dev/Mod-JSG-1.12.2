@@ -1,34 +1,23 @@
 package mrjake.aunis.state.transportrings;
 
 import io.netty.buffer.ByteBuf;
+import mrjake.aunis.renderer.transportrings.Ring;
 import mrjake.aunis.state.State;
 
-/**
- * Rings state.
- * Used to communicate the state of rings to clients loading the block.
- * 
- * DO NOT use this to start animations. It will send too much unnecessary parameters to the clients.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+import static mrjake.aunis.renderer.transportrings.TransportRingsAbstractRenderer.RING_COUNT;
+
 public class TransportRingsRendererState extends State {
-	
-	/**
-	 * Indicates if the block should render rings at all
-	 */
 	public boolean isAnimationActive;
-
-	/**
-	 * It should be useful when the player comes around in ring's mid-transfer state
-	 */
 	public long animationStart;
-	
-	/**
-	 * True: Rings going up
-	 * False: Rings going back into ground
-	 */
 	public boolean ringsUprising;
-
 	public int ringsDistance;
-
+	public long lastTick;
+	public int currentRing;
+	public int lastRingAnimated;
+	public List<Ring> rings = new ArrayList<>();
 	
 	public TransportRingsRendererState() {
 		this.isAnimationActive = false;
@@ -36,6 +25,12 @@ public class TransportRingsRendererState extends State {
 		this.animationStart = 0;
 		this.ringsUprising = true;
 		this.ringsDistance = 2;
+		this.currentRing = 0;
+		this.lastRingAnimated = -1;
+		this.lastTick = -1;
+		for (int i = 0; i < RING_COUNT; i++) {
+			rings.add(new Ring(i));
+		}
 	}
 	
 	
@@ -45,13 +40,30 @@ public class TransportRingsRendererState extends State {
 		buf.writeLong(animationStart);
 		buf.writeBoolean(ringsUprising);
 		buf.writeInt(ringsDistance);
+		buf.writeLong(lastTick);
+		buf.writeInt(currentRing);
+		buf.writeInt(lastRingAnimated);
+
+		buf.writeInt(rings.size());
+		for(Ring ring : rings) {
+			ring.toBytes(buf);
+		}
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
+		rings = new ArrayList<>();
 		isAnimationActive = buf.readBoolean();
 		animationStart = buf.readLong();
 		ringsUprising = buf.readBoolean();
 		ringsDistance = buf.readInt();
+		lastTick = buf.readLong();
+		currentRing = buf.readInt();
+		lastRingAnimated = buf.readInt();
+
+		int size = buf.readInt();
+		for(int i = 0; i < size; i++){
+			rings.add(new Ring(buf));
+		}
 	}
 }

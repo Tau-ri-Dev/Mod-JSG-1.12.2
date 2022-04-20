@@ -68,11 +68,14 @@ public class TRControllerGoauldTile extends TRControllerAbstractTile {
                 DHDActivateButtonState activateState = (DHDActivateButtonState) state;
 
                 rendererState.setIsConnected(connected);
-
-                if (activateState.clearAll) {
+                int symbol = activateState.symbol;
+                if (activateState.deactivate) {
+                    ((TRControllerGoauldRendererState) rendererState).deactivateSymbol(world.getTotalWorldTime(), SymbolGoauldEnum.valueOf(symbol));
+                }
+                else if (activateState.clearAll) {
                     ((TRControllerGoauldRendererState) rendererState).clearSymbols(world.getTotalWorldTime());
                 } else {
-                    ((TRControllerGoauldRendererState) rendererState).activateSymbol(world.getTotalWorldTime(), SymbolGoauldEnum.valueOf(activateState.symbol));
+                    ((TRControllerGoauldRendererState) rendererState).activateSymbol(world.getTotalWorldTime(), SymbolGoauldEnum.valueOf(symbol));
                 }
                 break;
 

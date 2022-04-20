@@ -78,6 +78,10 @@ public class TRControllerGoauldRendererState extends TRControllerAbstractRendere
         activationList.add(new DHDActivation(symbol, totalWorldTime, false));
     }
 
+    public void deactivateSymbol(long totalWorldTime, SymbolGoauldEnum symbol) {
+        activationList.add(new DHDActivation(symbol, totalWorldTime, true));
+    }
+
     @Override
     public void iterate(World world, double partialTicks) {
         Activation.iterate(activationList, world.getTotalWorldTime(), partialTicks, (index, stage) -> {

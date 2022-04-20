@@ -1,36 +1,21 @@
 package mrjake.aunis.renderer.dialhomedevice;
 
-import com.sun.scenario.effect.impl.Renderer;
 import mrjake.aunis.AunisProps;
-import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.notebook.NotebookItem;
-import mrjake.aunis.item.renderer.AunisFontRenderer;
-import mrjake.aunis.loader.ElementEnum;
-import mrjake.aunis.loader.model.ModelLoader;
 import mrjake.aunis.renderer.BlockRenderer;
-import mrjake.aunis.stargate.EnumStargateState;
-import mrjake.aunis.stargate.StargateClosedReasonEnum;
 import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.SymbolInterface;
-import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
-import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
-import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
-import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.awt.*;
 
 public abstract class DHDAbstractRenderer extends TileEntitySpecialRenderer<DHDAbstractTile> {
 

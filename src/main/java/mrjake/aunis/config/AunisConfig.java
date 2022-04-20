@@ -693,15 +693,6 @@ public class AunisConfig {
     public static class DevConfig {
         @Name("Enable peg gates with myst pages")
         public boolean pegGatesMyst = false;
-
-        @Name("test1-xy")
-        public float test1 = 0.2f;
-
-        @Name("test2-z")
-        public float test2 = 0.2f;
-
-        @Name("test3-b")
-        public boolean test3 = true;
     }
 
     public static class RecipesConfig {

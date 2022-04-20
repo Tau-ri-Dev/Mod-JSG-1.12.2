@@ -14,11 +14,11 @@ import mrjake.aunis.renderer.BeamerRenderer;
 import mrjake.aunis.renderer.dialhomedevice.DHDPegasusRenderer;
 import mrjake.aunis.renderer.dialhomedevice.DHDMilkyWayRenderer;
 import mrjake.aunis.renderer.energy.ZPMHubRenderer;
-import mrjake.aunis.renderer.SpecialRenderer;
 import mrjake.aunis.renderer.energy.ZPMRenderer;
 import mrjake.aunis.renderer.stargate.*;
 import mrjake.aunis.renderer.transportrings.TRControllerGoauldRenderer;
 import mrjake.aunis.renderer.transportrings.TransportRingsGoauldRenderer;
+import mrjake.aunis.renderer.transportrings.TransportRingsOriRenderer;
 import mrjake.aunis.sound.AunisSoundHelperClient;
 import mrjake.aunis.sound.SoundPositionedEnum;
 import mrjake.aunis.tileentity.*;
@@ -85,8 +85,8 @@ public class ProxyClient implements IProxy {
     ClientRegistry.bindTileEntitySpecialRenderer(ZPMTile.class, new ZPMRenderer());
     ClientRegistry.bindTileEntitySpecialRenderer(DHDPegasusTile.class, new DHDPegasusRenderer());
 
-    ClientRegistry.bindTileEntitySpecialRenderer(TransportRingsGoauldTile.class, new SpecialRenderer());
-    ClientRegistry.bindTileEntitySpecialRenderer(TransportRingsOriTile.class, new SpecialRenderer());
+    ClientRegistry.bindTileEntitySpecialRenderer(TransportRingsGoauldTile.class, new TransportRingsGoauldRenderer());
+    ClientRegistry.bindTileEntitySpecialRenderer(TransportRingsOriTile.class, new TransportRingsOriRenderer());
     ClientRegistry.bindTileEntitySpecialRenderer(TRControllerGoauldTile.class, new TRControllerGoauldRenderer());
 
     ClientRegistry.bindTileEntitySpecialRenderer(BeamerTile.class, new BeamerRenderer());

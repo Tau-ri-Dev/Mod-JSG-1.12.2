@@ -10,6 +10,7 @@ public class DHDActivateButtonState extends State {
 	
 	public int symbol;
 	public boolean clearAll = false;
+	public boolean deactivate = false;
 
 	public DHDActivateButtonState(boolean clearAll) {
 		this.clearAll = clearAll;
@@ -17,6 +18,10 @@ public class DHDActivateButtonState extends State {
 	
 	public DHDActivateButtonState(SymbolInterface symbol) {
 		this.symbol = symbol.getId();
+	}
+	public DHDActivateButtonState(int symbolId, boolean deactivate) {
+		this.symbol = symbolId;
+		this.deactivate = deactivate;
 	}
 
     @Override
@@ -26,6 +31,7 @@ public class DHDActivateButtonState extends State {
 		if (!clearAll) {
 			buf.writeInt(symbol);
 		}
+		buf.writeBoolean(deactivate);
 	}
 
 	@Override
@@ -35,5 +41,6 @@ public class DHDActivateButtonState extends State {
 		if (!clearAll) {
 			symbol = buf.readInt();
 		}
+		deactivate = buf.readBoolean();
 	}
 }

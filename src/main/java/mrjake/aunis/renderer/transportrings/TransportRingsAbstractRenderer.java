@@ -1,20 +1,16 @@
 package mrjake.aunis.renderer.transportrings;
 
-import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
+import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.state.transportrings.TransportRingsRendererState;
-import mrjake.aunis.tesr.RendererInterface;
-import mrjake.aunis.util.AunisAxisAlignedBB;
+import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public abstract class TransportRingsAbstractRenderer implements RendererInterface {
+public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRenderer<TransportRingsAbstractTile> {
 
     public static final int RING_COUNT = 5;
     public static final int INTERVAL_UPRISING = 5;
@@ -26,40 +22,34 @@ public abstract class TransportRingsAbstractRenderer implements RendererInterfac
     public static final float PLATFORM_MAX_Y = 0.8f;
     public static final float PLATFORM_MAX_X = 3.5f;
 
-    protected World world;
-    protected AunisAxisAlignedBB localTeleportBox;
-    protected List<Ring> rings;
-
-    public TransportRingsAbstractRenderer(World world, BlockPos pos, AunisAxisAlignedBB localTeleportBox) {
-        this.world = world;
-        this.localTeleportBox = localTeleportBox;
-
-        rings = new ArrayList<>();
-        for (int i = 0; i < RING_COUNT; i++) {
-            rings.add(new Ring(world, i));
-        }
-    }
-
-
-    // --------------------------------------------------------------------------
-    private int currentRing;
-    private int lastRingAnimated;
-    private long lastTick;
-    private int ringsDistance;
-    private final AunisAxisAlignedBB renderBoundingBox = new AunisAxisAlignedBB(-3, -40, -3, 3, 40, 3);
-
-    public abstract void renderRings(float partialTicks, int distance);
+    public abstract void renderRings(TransportRingsRendererState state, float partialTicks, int distance);
 
     @Override
-    public void render(double x, double y, double z, float partialTicks) {
+    public void render(TransportRingsAbstractTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+        TransportRingsRendererState state = te.getRendererState();
+        if(state == null) return;
+
+        World world = te.getWorld();
+        int ringsDistance = state.ringsDistance;
+
+        if(state.rings.size() < RING_COUNT){
+            for (int i = state.rings.size(); i < RING_COUNT; i++) {
+                state.rings.add(new Ring(i));
+            }
+        }
+        for(Ring ring : state.rings){
+            ring.setWorld(world);
+        }
+
+
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 15 * 16, 15 * 16);
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
 
-        if (AunisConfig.debugConfig.renderBoundingBoxes) {
+        /*if (AunisConfig.debugConfig.renderBoundingBoxes) {
             localTeleportBox.render();
             renderBoundingBox.render();
-        }
+        }*/
 
         GlStateManager.translate(0.50, 0.63271 / 2 + 1.35, 0.50);
         GlStateManager.scale(0.5, 0.5, 0.5);
@@ -72,10 +62,10 @@ public abstract class TransportRingsAbstractRenderer implements RendererInterfac
         // ---------------------------------------------------------------------------
 
         long tick = world.getTotalWorldTime() - state.animationStart;
-        renderPlatform(tick);
+        renderPlatform(state, tick);
 
         GlStateManager.translate(0, relativeY, 0);
-        renderRings(partialTicks, ringsDistance);
+        renderRings(state, partialTicks, ringsDistance);
         GlStateManager.popMatrix();
 
         if (state.isAnimationActive) {
@@ -89,30 +79,30 @@ public abstract class TransportRingsAbstractRenderer implements RendererInterfac
                     /**
                      * Spawn rings in intervals of 7 ticks(not repeated in a single tick)
                      */
-                    if (tick % INTERVAL_UPRISING == 0 && tick != lastTick) {
-                        currentRing = (int) (tick / INTERVAL_UPRISING) - 1;
+                    if (tick % INTERVAL_UPRISING == 0 && tick != state.lastTick) {
+                        state.currentRing = (int) (tick / INTERVAL_UPRISING) - 1;
 
 //						Aunis.info("[uprising][currentRing="+currentRing+"]: tick: "+tick);
 
                         // Handles correction when rings were not rendered
-                        for (int ring = lastRingAnimated + 1; ring < Math.min(currentRing, RING_COUNT); ring++) {
+                        for (int ring = state.lastRingAnimated + 1; ring < Math.min(state.currentRing, RING_COUNT); ring++) {
 //							Aunis.info("[uprising][ring="+ring+"]: setTop()");
 
-                            rings.get(ring).setTop();
+                            state.rings.get(ring).setTop();
                         }
 
-                        if (currentRing < RING_COUNT) {
-                            rings.get(currentRing).animate(state.ringsUprising);
+                        if (state.currentRing < RING_COUNT) {
+                            state.rings.get(state.currentRing).animate(state.ringsUprising);
 
-                            lastRingAnimated = currentRing;
-                            lastTick = tick;
+                            state.lastRingAnimated = state.currentRing;
+                            state.lastTick = tick;
                         }
 
-                        if (currentRing >= RING_COUNT - 1) {
+                        if (state.currentRing >= RING_COUNT - 1) {
                             state.ringsUprising = false;
 
-                            lastRingAnimated = RING_COUNT;
-                            lastTick = -1;
+                            state.lastRingAnimated = RING_COUNT;
+                            state.lastTick = -1;
                         }
                     }
                 }
@@ -128,64 +118,42 @@ public abstract class TransportRingsAbstractRenderer implements RendererInterfac
                     /**
                      * Start lowering them in interval of 5 ticks
                      */
-                    if (tick % INTERVAL_FALLING == 0 && tick != lastTick) {
-                        currentRing = RING_COUNT - (int) (tick / INTERVAL_FALLING);
+                    if (tick % INTERVAL_FALLING == 0 && tick != state.lastTick) {
+                        state.currentRing = RING_COUNT - (int) (tick / INTERVAL_FALLING);
 
 //						Aunis.info("[falling ][currentRing="+currentRing+"]: lastRingAnimated: "+lastRingAnimated);
 
                         // Correction for skipped frames(when not looking at)
-                        for (int ring = lastRingAnimated - 1; ring > Math.max(currentRing, -1); ring--) {
+                        for (int ring = state.lastRingAnimated - 1; ring > Math.max(state.currentRing, -1); ring--) {
 //							Aunis.info("[falling ][ring="+ring+"]: setDown()");
 
-                            rings.get(ring).setDown();
+                            state.rings.get(ring).setDown();
                         }
 
 
-                        if (currentRing >= 0) {
-                            rings.get(currentRing).animate(state.ringsUprising);
+                        if (state.currentRing >= 0) {
+                            state.rings.get(state.currentRing).animate(state.ringsUprising);
 
-                            lastRingAnimated = currentRing;
-                            lastTick = tick;
+                            state.lastRingAnimated = state.currentRing;
+                            state.lastTick = tick;
                         } else {
                             state.isAnimationActive = false;
                         }
 
-                        lastTick = tick;
+                        state.lastTick = tick;
                     }
                 }
             }
+
+            te.setState(StateTypeEnum.RENDERER_STATE, state);
         }
     }
 
-    public void animationStart(long animationStart, int distance) {
-        setRingsDistance(distance);
-        lastTick = -1;
-        currentRing = 0;
-        lastRingAnimated = -1;
-
-        state.animationStart = animationStart;
-        state.ringsUprising = true;
-        state.isAnimationActive = true;
-    }
-
-    public void setRingsDistance(int distance){
-        state.ringsDistance = distance;
-        ringsDistance = distance;
-        localTeleportBox = new AunisAxisAlignedBB(-1, ringsDistance, -1, 2, ringsDistance + 2.5, 2);
-    }
-
-    TransportRingsRendererState state = new TransportRingsRendererState();
-
-    public void setState(TransportRingsRendererState rendererState) {
-        lastTick = -1;
-        this.state = rendererState;
-    }
-
-    public void renderPlatform(long tick){
+    public void renderPlatform(TransportRingsRendererState state, long tick){
         float platformX = 0;
         float platformY = 0;
         int coefficient = -1;
-        if(ringsDistance < 0) coefficient = 1;
+        if(state.ringsDistance < 0) coefficient = 1;
         if (state.isAnimationActive) {
             // temporarily rendering the platform here
             if (tick < PLATFORM_ANIMATION_DURATION) {
@@ -228,7 +196,7 @@ public abstract class TransportRingsAbstractRenderer implements RendererInterfac
         }
         for (int i = 0; i < 2; i++) {
             GlStateManager.pushMatrix();
-            int distance = ringsDistance;
+            int distance = state.ringsDistance;
             if(distance < 0) distance += 4;
             GlStateManager.translate(platformX * (i == 1 ? 1 : -1), (platformY * coefficient) - 3.2f + distance*2, 0);
             if (i == 1)
