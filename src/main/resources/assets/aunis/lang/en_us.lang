@@ -147,6 +147,7 @@ tile.aunis.transportrings_block.wrong_distance=Wrong distance, should be from -4
 tile.aunis.transportrings_block.obstructed=Rings obstructed, clear 5x5 area around rings
 tile.aunis.transportrings_block.obstructed_target=Target rings obstructed, clear 5x5 area around target rings
 tile.aunis.transportrings_block.busy=Rings busy
+tile.aunis.transportrings_block.not_enough_power=Not enough power to activate rings
 tile.aunis.transportrings_block.busy_target=Target rings busy
 tile.aunis.transportrings_block.rings_not_in_grid=Rings not in grid
 tile.aunis.transportrings_block.rings_address=Address
@@ -186,13 +187,21 @@ death.attack.eventHorizon=%s was given a kawoosh cremation
 death.attack.irisDeath=%s was given a iris cremation
 death.attack.wrongSide=%s entered wrong side of gate
 
+# Ori Glyphs
+glyph.aunis.transportrings.ori.alpha=Alpha
+glyph.aunis.transportrings.ori.beta=Beta
+glyph.aunis.transportrings.ori.gamma=Gamma
+glyph.aunis.transportrings.ori.delta=Delta
+glyph.aunis.transportrings.ori.omega=Omega
+glyph.aunis.transportrings.ori.origin=Origin
+
 # Goauld Glyphs
-glyph.aunis.transportrings.goauld.alpha=Alpha
-glyph.aunis.transportrings.goauld.beta=Beta
-glyph.aunis.transportrings.goauld.gamma=Gamma
-glyph.aunis.transportrings.goauld.delta=Delta
-glyph.aunis.transportrings.goauld.omega=Omega
-glyph.aunis.transportrings.goauld.origin=Origin
+glyph.aunis.transportrings.goauld.amun=Amun
+glyph.aunis.transportrings.goauld.serket=Serket
+glyph.aunis.transportrings.goauld.khepri=Khepri
+glyph.aunis.transportrings.goauld.ra=Ra
+glyph.aunis.transportrings.goauld.felluca=Felluca
+glyph.aunis.transportrings.goauld.cobra=Cobra
 
 # Milkyway Glyphs
 glyph.aunis.milkyway.sculptor=Sculptor

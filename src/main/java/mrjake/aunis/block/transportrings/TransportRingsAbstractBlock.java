@@ -2,7 +2,10 @@ package mrjake.aunis.block.transportrings;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.gui.GuiIdEnum;
+import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
+import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
+import mrjake.aunis.util.ItemHandlerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -14,6 +17,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 public abstract class TransportRingsAbstractBlock extends Block {
 
@@ -61,11 +65,14 @@ public abstract class TransportRingsAbstractBlock extends Block {
 
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(pos);
-        if (ringsTile != null) {
-            if (ringsTile.isLinked()) ringsTile.getLinkedControllerTile(world).setLinkedRings(null, -1);
-            ringsTile.removeAllRings();
-            ringsTile.onBreak();
+        if (!world.isRemote) {
+            TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(pos);
+            if (ringsTile != null) {
+                if (ringsTile.isLinked()) ringsTile.getLinkedControllerTile(world).setLinkedRings(null, -1);
+                ringsTile.removeAllRings();
+                ringsTile.onBreak();
+                ItemHandlerHelper.dropInventoryItems(world, pos, ringsTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null));
+            }
         }
         super.breakBlock(world, pos, state);
     }

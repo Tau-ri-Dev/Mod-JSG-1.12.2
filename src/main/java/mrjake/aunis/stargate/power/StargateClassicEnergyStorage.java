@@ -1,5 +1,6 @@
 package mrjake.aunis.stargate.power;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.ArrayList;

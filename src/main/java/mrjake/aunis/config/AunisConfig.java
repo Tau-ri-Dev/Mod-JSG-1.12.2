@@ -358,6 +358,19 @@ public class AunisConfig {
         @RangeInt(min = 1)
         public int instabilitySeconds = 20;
 
+        @Name("Transport Rings active power draw")
+        @Comment({
+                "Energy extracted from rings every tick when they are active (calculated by distance from these rings)"
+        })
+        public int ringsKeepAliveBlockToEnergyRatioPerTick = 2;
+
+        @Name("Transport Rings teleport power draw")
+        @Comment({
+                "Energy extracted from rings when they teleport LIVING entity (not drop)"
+        })
+        @RangeInt(min = 0)
+        public int ringsTeleportPowerDraw = 640;
+
         @Name("Orlin's gate energy multiplier")
         @RangeDouble(min = 0)
         public double stargateOrlinEnergyMul = 2.0;

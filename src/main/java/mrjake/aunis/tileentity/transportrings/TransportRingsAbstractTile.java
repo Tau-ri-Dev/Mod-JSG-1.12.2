@@ -10,6 +10,7 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.config.StargateDimensionConfig;
 import mrjake.aunis.gui.container.transportrings.TRGuiState;
 import mrjake.aunis.gui.container.transportrings.TRGuiUpdate;
 import mrjake.aunis.item.AunisItems;
@@ -22,6 +23,7 @@ import mrjake.aunis.renderer.transportrings.TransportRingsAbstractRenderer;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.EnumScheduledTask;
+import mrjake.aunis.stargate.network.StargatePos;
 import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.stargate.power.StargateClassicEnergyStorage;
 import mrjake.aunis.stargate.power.StargateEnergyRequired;
@@ -297,9 +299,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         if (!world.isRemote) {
             setBarrierBlocks(false, false);
             generateAddress(false);
-            //generateAddress(true);
-
             globalTeleportBox = LOCAL_TELEPORT_BOX.offset(pos);
+
+            updatePowerTier();
         }
         Aunis.ocWrapper.joinOrCreateNetwork(this);
     }
@@ -353,6 +355,22 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         markDirty();
     }
 
+    protected StargateEnergyRequired getEnergyRequiredToDial(TransportRings targetRings) {
+        BlockPos sPos = pos;
+        BlockPos tPos = targetRings.getPos();
+
+        double distance = (int) sPos.getDistance(tPos.getX(), tPos.getY(), tPos.getZ());
+
+        if (distance < 200) distance *= 0.8;
+        else distance = 200 * Math.log10(distance) / Math.log10(200);
+
+        int energyBase = AunisConfig.powerConfig.ringsKeepAliveBlockToEnergyRatioPerTick;
+        StargateEnergyRequired energyRequired = new StargateEnergyRequired(energyBase, energyBase);
+        energyRequired = energyRequired.mul(distance);
+
+        return energyRequired;
+    }
+
     @Override
     public void executeTask(EnumScheduledTask scheduledTask, NBTTagCompound customData) {
         switch (scheduledTask) {
@@ -363,13 +381,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                 addTask(new ScheduledTask(EnumScheduledTask.RINGS_FADE_OUT));
                 addTask(new ScheduledTask(EnumScheduledTask.RINGS_SOLID_BLOCKS, 35));
-
-                if (initiating) {
-                    StargateEnergyRequired energyRequired = new StargateEnergyRequired(1000, 100);
-                    getEnergyStorage().extractEnergy(energyRequired.energyToOpen, false);
-                    keepAliveEnergyPerTick = energyRequired.keepAlive;
-                    markDirty();
-                }
                 break;
 
             case RINGS_SOLID_BLOCKS:
@@ -395,23 +406,23 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 if (targetTile == null) break;
                 int targetRingsHeight = targetTile.getRings().getRingsDistance();
 
-                for (Entity entity : teleportList) {
-                    if (!excludedEntities.contains(entity)) {
-                        BlockPos ePos = entity.getPosition().add(teleportVector);
-                        double y = targetRingsPos.getY() + targetRingsHeight;
-                        entity.setPositionAndUpdate(ePos.getX(), y, ePos.getZ());
-                    }
-                }
+                for(Entity entity : teleportList){
+                    int extracted = getEnergyStorage().extractEnergy(AunisConfig.powerConfig.ringsTeleportPowerDraw, true);
+                    if(!initiating || extracted >= AunisConfig.powerConfig.ringsTeleportPowerDraw || !(entity instanceof EntityLivingBase)) {
 
-                if (initiating) {
-                    int count = 0;
-                    for(Entity entity : teleportList){
-                        if(entity instanceof EntityLivingBase)
-                            count++;
+                        if(entity instanceof EntityLivingBase && initiating)
+                            getEnergyStorage().extractEnergy(extracted, false);
+                        else if (!initiating && entity instanceof EntityLivingBase)
+                            targetTile.getEnergyStorage().extractEnergy(extracted, false);
+
+                        if (!excludedEntities.contains(entity)) {
+                            BlockPos ePos = entity.getPosition().add(teleportVector);
+                            double y = targetRingsPos.getY() + targetRingsHeight;
+                            entity.setPositionAndUpdate(ePos.getX(), y, ePos.getZ());
+                        }
                     }
-                    getEnergyStorage().extractEnergy(50*count, false);
-                    markDirty();
                 }
+                markDirty();
 
                 teleportList.clear();
                 excludedEntities.clear();
@@ -453,6 +464,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             case RINGS_SYMBOL_DEACTIVATE:
                 int symbolId = customData.getInteger("symbol");
                 sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbolId, true));
+                break;
 
             default:
                 throw new UnsupportedOperationException("EnumScheduledTask." + scheduledTask.name() + " not implemented on " + this.getClass().getName());
@@ -580,6 +592,16 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             // Binding exists
             if (rings.getAddress(address.getSymbolType()).equalsV2(strippedAddress, 4)) {
                 if (!rings.isInGrid()) return TransportResult.NO_SUCH_ADDRESS;
+
+                // power
+                StargateEnergyRequired energyRequired = getEnergyRequiredToDial(rings);
+                int extracted = getEnergyStorage().extractEnergy((energyRequired.keepAlive*20), true);
+                if(extracted < (energyRequired.keepAlive*20)) // *20 because rings should be active more than 1 second
+                    return TransportResult.NOT_ENOUGH_POWER;
+
+                keepAliveEnergyPerTick = energyRequired.keepAlive;
+                // ------
+
                 BlockPos targetRingsPos = rings.getPos();
                 TransportRingsAbstractTile targetRingsTile = (TransportRingsAbstractTile) world.getTileEntity(targetRingsPos);
 
@@ -842,6 +864,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         compound.setBoolean("initiating", initiating);
         compound.setTag("itemHandler", itemStackHandler.serializeNBT());
+        compound.setTag("energyStorage", energyStorage.serializeNBT());
 
         return super.writeToNBT(compound);
     }
@@ -864,40 +887,42 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
             targetRingsPos = BlockPos.fromLong(compound.getLong("targetRingsPos"));
 
+            if (compound.hasKey("ringsData")) getRings().deserializeNBT(compound.getCompoundTag("ringsData"));
+
+            if (compound.hasKey("linkedController")) {
+                linkedController = BlockPos.fromLong(compound.getLong("linkedController"));
+                linkId = compound.getInteger("linkId");
+            }
+
+            if (compound.hasKey("ringsMapLength")) {
+                int len = compound.getInteger("ringsMapLength");
+
+                ringsMap.clear();
+
+                for (int i = 0; i < len; i++) {
+                    TransportRings rings = new TransportRings(compound.getCompoundTag("ringsMap" + i));
+
+                    ringsMap.put(rings.getAddresses(), rings);
+                }
+            }
+
+            if (node != null && compound.hasKey("node")) node.load(compound.getCompoundTag("node"));
+
+            setBusy(compound.getBoolean("busy"));
+            initiating = compound.getBoolean("initiating");
+
+            itemStackHandler.deserializeNBT(compound.getCompoundTag("itemHandler"));
+            ringsDistance = getRings().getRingsDistance();
+            ringsName = getRings().getName();
+
+            energyStorage.deserializeNBT(compound.getCompoundTag("energyStorage"));
+
         }catch (NullPointerException | IndexOutOfBoundsException | ClassCastException e) {
             Aunis.logger.warn("Exception at reading NBT");
             Aunis.logger.warn("If loading world used with previous version and nothing game-breaking doesn't happen, please ignore it");
 
             e.printStackTrace();
         }
-
-        if (compound.hasKey("ringsData")) getRings().deserializeNBT(compound.getCompoundTag("ringsData"));
-
-        if (compound.hasKey("linkedController")) {
-            linkedController = BlockPos.fromLong(compound.getLong("linkedController"));
-            linkId = compound.getInteger("linkId");
-        }
-
-        if (compound.hasKey("ringsMapLength")) {
-            int len = compound.getInteger("ringsMapLength");
-
-            ringsMap.clear();
-
-            for (int i = 0; i < len; i++) {
-                TransportRings rings = new TransportRings(compound.getCompoundTag("ringsMap" + i));
-
-                ringsMap.put(rings.getAddresses(), rings);
-            }
-        }
-
-        if (node != null && compound.hasKey("node")) node.load(compound.getCompoundTag("node"));
-
-        setBusy(compound.getBoolean("busy"));
-        initiating = compound.getBoolean("initiating");
-
-        itemStackHandler.deserializeNBT(compound.getCompoundTag("itemHandler"));
-        ringsDistance = getRings().getRingsDistance();
-        ringsName = getRings().getName();
 
         super.readFromNBT(compound);
     }

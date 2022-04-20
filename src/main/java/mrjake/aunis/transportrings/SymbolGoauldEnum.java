@@ -11,12 +11,12 @@ import java.util.Map;
 import java.util.Random;
 
 public enum SymbolGoauldEnum implements SymbolInterface {
-    ALPHA(0, 0, "Alpha"),
-    BETA(1, 1, "Beta"),
-    GAMMA(2, 2, "Gamma"),
-    DELTA(3, 3, "Delta"),
-    OMEGA(4, 4, "Omega"),
-    ORIGIN(5, 5, "Origin"),
+    AMUN(0, 0, "Amun"),
+    SERKET(1, 1, "Serket"),
+    KHEPRI(2, 2, "Khepri"),
+    RA(3, 3, "Ra"),
+    FELLUCA(4, 4, "Felluca"),
+    COBRA(5, 5, "Cobra"),
     LIGHT(6, 6, "Light");
 
     public int id;
@@ -38,9 +38,13 @@ public enum SymbolGoauldEnum implements SymbolInterface {
         this.modelResource = new ResourceLocation(Aunis.ModID, "models/tesr/transportrings/controller/goauld/goauld_button_" + (id+1) + ".obj");
     }
 
+    public static SymbolGoauldEnum getOrigin() {
+        return COBRA;
+    }
+
     @Override
     public boolean origin() {
-        return this == ORIGIN;
+        return this == getOrigin();
     }
 
     @Override
@@ -91,7 +95,7 @@ public enum SymbolGoauldEnum implements SymbolInterface {
         int id = 0;
         do {
             id = random.nextInt(5);
-        } while (id == ORIGIN.id || id == LIGHT.id);
+        } while (id == getOrigin().id || id == LIGHT.id);
 
         return valueOf(id);
     }
@@ -107,11 +111,7 @@ public enum SymbolGoauldEnum implements SymbolInterface {
     }
 
     public static List<SymbolInterface> stripOrigin(List<SymbolInterface> dialedAddress) {
-        return dialedAddress.subList(0, dialedAddress.size()-1);
-    }
-
-    public static SymbolGoauldEnum getOrigin() {
-        return ORIGIN;
+        return dialedAddress.subList(0, dialedAddress.size() - 1);
     }
 
     private static final Map<Integer, SymbolGoauldEnum> ID_MAP = new HashMap<>();
