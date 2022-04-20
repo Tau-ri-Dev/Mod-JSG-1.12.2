@@ -101,9 +101,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     protected int ringsDistance = 2;
     protected String ringsName = "";
     // ---------------------------------------------------------------------------------
-    // Renders
-    TransportRingsAbstractRenderer renderer;
-    // ---------------------------------------------------------------------------------
     // Scheduled task
     TransportRingsRendererState rendererState = new TransportRingsRendererState();
     private List<BlockPos> invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, 2, 2), new BlockPos(1, 2, 2), new BlockPos(2, 2, 1));
@@ -294,7 +291,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     @Override
     public void onLoad() {
         if (world.isRemote) {
-            renderer = getNewRenderer();
             rendererState.ringsDistance = ringsDistance;
             AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
         }
@@ -963,13 +959,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 rendererState.animationStart = animationStart;
                 rendererState.isAnimationActive = true;
                 rendererState.ringsUprising = true;
-                //renderer.animationStart(distance);
                 break;
 
             case RINGS_DISTANCE_UPDATE:
                 distance = ((TransportRingsStartAnimationRequest) state).ringsDistance;
                 rendererState.ringsDistance = distance;
-                //renderer.setRingsDistance(distance);
                 break;
 
             case GUI_STATE:
@@ -1000,8 +994,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         setLinkedController(closestController, linkId);
     }
-
-    public abstract TransportRingsAbstractRenderer getNewRenderer();
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {

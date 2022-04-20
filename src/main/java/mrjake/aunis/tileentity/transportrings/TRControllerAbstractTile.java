@@ -6,7 +6,6 @@ import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.packet.StateUpdateRequestToServer;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
-import mrjake.aunis.renderer.transportrings.TRControllerAbstractRenderer;
 import mrjake.aunis.renderer.transportrings.TRControllerAbstractRendererState;
 import mrjake.aunis.state.State;
 import mrjake.aunis.state.StateProviderInterface;
@@ -15,7 +14,6 @@ import mrjake.aunis.state.dialhomedevice.DHDActivateButtonState;
 import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
 import mrjake.aunis.util.ILinkable;
 import mrjake.aunis.util.LinkingHelper;
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -30,7 +28,6 @@ import java.util.EnumSet;
 public abstract class TRControllerAbstractTile extends TileEntity implements ITickable, ILinkable, StateProviderInterface {
     protected BiomeOverlayEnum biomeOverlay = BiomeOverlayEnum.NORMAL;
     protected TransportRingsAbstractTile linkedRingsTile;
-    protected TRControllerAbstractRenderer renderer;
     protected NetworkRegistry.TargetPoint targetPoint;
     TRControllerAbstractRendererState rendererState;
     private BlockPos lastPos = BlockPos.ORIGIN;
@@ -159,10 +156,6 @@ public abstract class TRControllerAbstractTile extends TileEntity implements ITi
         super.readFromNBT(compound);
     }
 
-    public void setRenderer(TRControllerAbstractRenderer renderer) {
-        this.renderer = renderer;
-    }
-
     @Override
     public State createState(StateTypeEnum stateType) {
         switch (stateType) {
@@ -193,7 +186,4 @@ public abstract class TRControllerAbstractTile extends TileEntity implements ITi
             Aunis.logger.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
         }
     }
-
-
-    public abstract TRControllerAbstractRenderer getNewRenderer();
 }

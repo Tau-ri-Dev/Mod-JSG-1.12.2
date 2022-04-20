@@ -1,5 +1,6 @@
 package mrjake.aunis.renderer.transportrings;
 
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.state.StateTypeEnum;
@@ -18,7 +19,7 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
 
     public static final double ANIMATION_SPEED_DIVISOR = 2.7;
 
-    public static final int PLATFORM_ANIMATION_DURATION = 10;
+    public static final int PLATFORM_ANIMATION_DURATION = 20;
     public static final float PLATFORM_MAX_Y = 0.8f;
     public static final float PLATFORM_MAX_X = 3.5f;
 
@@ -150,10 +151,11 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
     }
 
     public void renderPlatform(TransportRingsRendererState state, long tick){
+        if(!AunisConfig.devConfig.enableRingPlatform) return;
         float platformX = 0;
         float platformY = 0;
         int coefficient = -1;
-        if(state.ringsDistance < 0) coefficient = 1;
+        if(state.ringsDistance < 0) return; // should not render if rings are from ceiling
         if (state.isAnimationActive) {
             // temporarily rendering the platform here
             if (tick < PLATFORM_ANIMATION_DURATION) {
@@ -198,7 +200,7 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
             GlStateManager.pushMatrix();
             int distance = state.ringsDistance;
             if(distance < 0) distance += 4;
-            GlStateManager.translate(platformX * (i == 1 ? 1 : -1), (platformY * coefficient) - 3.2f + distance*2, 0);
+            GlStateManager.translate(platformX * (i == 1 ? 1 : -1), (platformY * coefficient) - 3.4f + distance*2, 0);
             if (i == 1)
                 GlStateManager.rotate(180, 0, 1, 0);
             ElementEnum.PLATFORM_RINGS_GOAULD_BASIC.bindTextureAndRender(BiomeOverlayEnum.NORMAL);

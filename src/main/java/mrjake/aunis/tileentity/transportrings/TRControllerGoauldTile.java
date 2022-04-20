@@ -1,9 +1,7 @@
 package mrjake.aunis.tileentity.transportrings;
 
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
-import mrjake.aunis.renderer.transportrings.TRControllerAbstractRenderer;
 import mrjake.aunis.renderer.transportrings.TRControllerAbstractRendererState;
-import mrjake.aunis.renderer.transportrings.TRControllerGoauldRenderer;
 import mrjake.aunis.renderer.transportrings.TRControllerGoauldRendererState;
 import mrjake.aunis.state.State;
 import mrjake.aunis.state.StateTypeEnum;
@@ -22,7 +20,6 @@ public class TRControllerGoauldTile extends TRControllerAbstractTile {
     public void onLoad() {
         rendererState = new TRControllerGoauldRendererState(new TransportRingsAddress(SymbolTypeTransportRingsEnum.GOAULD), BiomeOverlayEnum.NORMAL, false);
         if (world.isRemote) {
-            setRenderer(new TRControllerGoauldRenderer());
             setBiomeOverlay(BiomeOverlayEnum.updateBiomeOverlay(world, pos, getSupportedOverlays()));
         }
         super.onLoad();
@@ -107,10 +104,5 @@ public class TRControllerGoauldTile extends TRControllerAbstractTile {
                 break;
         }
         return super.getState(stateType);
-    }
-
-    @Override
-    public TRControllerAbstractRenderer getNewRenderer() {
-        return new TRControllerGoauldRenderer();
     }
 }

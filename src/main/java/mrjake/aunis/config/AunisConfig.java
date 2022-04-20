@@ -693,6 +693,9 @@ public class AunisConfig {
     public static class DevConfig {
         @Name("Enable peg gates with myst pages")
         public boolean pegGatesMyst = false;
+
+        @Name("Enable rings platform")
+        public boolean enableRingPlatform = false;
     }
 
     public static class RecipesConfig {

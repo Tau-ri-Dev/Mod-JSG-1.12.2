@@ -1,17 +1,10 @@
 package mrjake.aunis.tileentity.transportrings;
 
-import mrjake.aunis.renderer.transportrings.TransportRingsAbstractRenderer;
-import mrjake.aunis.renderer.transportrings.TransportRingsGoauldRenderer;
 import mrjake.aunis.stargate.EnumScheduledTask;
+import mrjake.aunis.tileentity.util.ScheduledTaskExecutorInterface;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ITickable;
 
-public class TransportRingsGoauldTile extends TransportRingsAbstractTile implements ITickable {
-    @Override
-    public TransportRingsAbstractRenderer getNewRenderer() {
-        return new TransportRingsGoauldRenderer();
-    }
-
+public class TransportRingsGoauldTile extends TransportRingsAbstractTile implements ScheduledTaskExecutorInterface {
     @Override
     public int getSupportedCapacitors() {
         return 2;
