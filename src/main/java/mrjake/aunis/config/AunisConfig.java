@@ -601,32 +601,14 @@ public class AunisConfig {
 
         @Name("Titanium max veins in chunk")
         public int titaniumMaxVeinInChunk = 8;
-
-        /*@Name("Chance of generating gate in overworld")
-        @RangeInt(min = 0, max = 100)
-        @Comment({
-                "Set this to 0 to disable generation of gates in overworld."
-        })
-        public int chanceOfGateWorld = 1;
-        @Name("Chance of generating gate in nether")
-        @RangeInt(min = 0, max = 100)
-        @Comment({
-                "Set this to 0 to disable generation of gates in nether."
-        })
-        public int chanceOfGateNether = 1;
-        @Name("Chance of generating gate in overworld")
-        @RangeInt(min = 0, max = 100)
-        @Comment({
-                "Set this to 0 to disable generation of gates in overworld."
-        })
-        public int chanceOfGateEnd = 1;*/
     }
 
     public static class MainMenuConfig {
-        @Name("Disable Aunis main menu - WARNING: Requires reloading")
         @RequiresMcRestart
+        @Name("Disable Aunis main menu")
         @Comment({
                 "Disables showing custom main menu",
+                "WARNING! - Requires reloading!"
         })
         public boolean disableAunisMainMenu = false;
 
@@ -662,16 +644,28 @@ public class AunisConfig {
     }
 
     public static class IntegrationsConfig {
+        @RequiresMcRestart
         @Name("Enable Tinkers' Construct integration")
+        @Comment({
+                "WARNING! - Requires reloading!"
+        })
         public boolean tConstructIntegration = true;
 
+        @RequiresMcRestart
         @Name("Enable Open Computers integration")
+        @Comment({
+                "WARNING! - Requires reloading!"
+        })
         public boolean ocIntegration = true;
 
         @Name("OC wireless network range (in blocks)")
         public int ocIntegrationWirelessRange = 20;
 
+        @RequiresMcRestart
         @Name("Enable Thermal Expansion integration")
+        @Comment({
+                "WARNING! - Requires reloading!"
+        })
         public boolean tExpansionIntegration = true;
     }
 
@@ -713,15 +707,17 @@ public class AunisConfig {
 
     public static class RecipesConfig {
 
+        @RequiresMcRestart
         @Name("Convert thermal recipes to normal ones")
         @Comment({
                 "When Thermal expansion is not loaded, then",
-                "register convert Thermal recipes into",
+                "register converted Thermal recipes into",
                 "normal ones.",
                 "WARNING! - Requires reloading!"
         })
         public boolean convertThermal = true;
 
+        @RequiresMcRestart
         @Name("Allow bypass thermal recipes")
         @Comment({
                 "Even when thermal expansion is loaded, register",

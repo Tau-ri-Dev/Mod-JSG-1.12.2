@@ -5,6 +5,7 @@ import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.transportrings.TRControllerActivatedToServer;
 import mrjake.aunis.raycaster.util.Ray;
 import mrjake.aunis.renderer.transportrings.TRControllerAbstractRenderer;
+import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
 import mrjake.vector.Vector3f;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
@@ -16,8 +17,8 @@ import net.minecraft.world.World;
 import java.util.Arrays;
 import java.util.List;
 
-public class RaycasterRingsController extends Raycaster {
-	public static final RaycasterRingsController INSTANCE = new RaycasterRingsController();
+public class RaycasterRingsGoauldController extends Raycaster {
+	public static final RaycasterRingsGoauldController INSTANCE = new RaycasterRingsGoauldController();
 	
 	private static final List<Vector3f> vertices = Arrays.asList(
 			new Vector3f(0.314399f, -0.96172f, 0.201255f),
@@ -74,7 +75,7 @@ public class RaycasterRingsController extends Raycaster {
 		num += (x == 1 ? 1 : 0);
 				
 		player.swingArm(EnumHand.MAIN_HAND);
-		AunisPacketHandler.INSTANCE.sendToServer(new TRControllerActivatedToServer(pos, num));
+		AunisPacketHandler.INSTANCE.sendToServer(new TRControllerActivatedToServer(pos, num, SymbolTypeTransportRingsEnum.GOAULD));
 	}
 	
 	@Override

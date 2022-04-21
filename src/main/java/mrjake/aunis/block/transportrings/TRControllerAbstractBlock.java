@@ -1,8 +1,10 @@
 package mrjake.aunis.block.transportrings;
 
+import mcp.MethodsReturnNonnullByDefault;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
-import mrjake.aunis.raycaster.RaycasterRingsController;
+import mrjake.aunis.raycaster.Raycaster;
+import mrjake.aunis.raycaster.RaycasterRingsGoauldController;
 import mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -84,7 +86,9 @@ public abstract class TRControllerAbstractBlock extends Block {
         TRControllerAbstractTile controllerTile = (TRControllerAbstractTile) world.getTileEntity(pos);
 
         if (!world.isRemote) {
-            controllerTile.updateLinkStatus();
+            if (controllerTile != null) {
+                controllerTile.updateLinkStatus();
+            }
         }
     }
 
@@ -101,11 +105,13 @@ public abstract class TRControllerAbstractBlock extends Block {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (world.isRemote) {
-            if (hand == EnumHand.MAIN_HAND) RaycasterRingsController.INSTANCE.onActivated(world, pos, player);
+            if (hand == EnumHand.MAIN_HAND) onRayCasterActivated(world, pos, player);
         }
 
         return false;
     }
+
+    public abstract void onRayCasterActivated(World world, BlockPos pos, EntityPlayer player);
 
     // ------------------------------------------------------------------------
     @Override

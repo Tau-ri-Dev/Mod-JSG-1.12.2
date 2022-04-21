@@ -1,11 +1,14 @@
 package mrjake.aunis.transportrings;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -220,5 +223,13 @@ public class TransportRings {
     @Override
     public String toString() {
         return "[pos=" + pos.toString() + ", address=" + addressMap.toString() + ", name=" + name + "]";
+    }
+
+    public List<String> getAddressNameList(SymbolTypeTransportRingsEnum symbolType){
+        List<String> names = new ArrayList<>();
+        for(SymbolInterface symbol : addressMap.get(symbolType).address){
+            names.add(symbol.getEnglishName());
+        }
+        return names;
     }
 }

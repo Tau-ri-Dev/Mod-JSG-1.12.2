@@ -11,8 +11,9 @@ public class ItemHelper {
 		
 		item.setRegistryName(Aunis.ModID + ":" + name);
 		item.setUnlocalizedName(Aunis.ModID + "." + name);
-		
-		item.setCreativeTab(tab);
+
+		if(tab != null)
+			item.setCreativeTab(tab);
 		
 		return item;
 	}

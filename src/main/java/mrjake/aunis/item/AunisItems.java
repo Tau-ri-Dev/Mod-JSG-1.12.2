@@ -58,7 +58,7 @@ public class AunisItems {
 
     // transportrings
     public static final Item CRYSTAL_GLYPH_GOAULD = ItemHelper.createGenericItem("crystal_glyph_goauld", aunisItemsCreativeTab);
-    public static final Item CRYSTAL_GLYPH_ORI = ItemHelper.createGenericItem("crystal_glyph_ori", aunisItemsCreativeTab);
+    public static final Item CRYSTAL_GLYPH_ORI = ItemHelper.createGenericItem("crystal_glyph_ori", null); // todo(Mine): after ori panel is done, set this to items tab
 
     /**
      * Diffrent Naquadah(main Stargate building material) stages of purity

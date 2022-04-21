@@ -1287,6 +1287,13 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 	
 	// ------------------------------------------------------------
 	// Methods
+
+	@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+	@Callback
+	public Object[] getAunisVersion(Context context, Arguments args) {
+		return new Object[]{Aunis.Version};
+	}
+
 	@Optional.Method(modid = "opencomputers")
 	@Callback
 	public Object[] isActive(Context context, Arguments args) {

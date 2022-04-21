@@ -56,6 +56,7 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Map;
 
+import static mrjake.aunis.Aunis.aunisGatesCreativeTab;
 import static mrjake.aunis.Aunis.aunisItemsCreativeTab;
 import static mrjake.aunis.item.dialer.UniverseDialerMode.RINGS;
 
@@ -91,7 +92,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
         setUnlocalizedName(Aunis.ModID + "." + ITEM_NAME);
         setHasSubtypes(true);
         setMaxDamage(0);
-        setCreativeTab(aunisItemsCreativeTab);
+        setCreativeTab(aunisGatesCreativeTab);
         // setMaxStackSize(1);
     }
 

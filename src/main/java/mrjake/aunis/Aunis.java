@@ -17,7 +17,8 @@ import mrjake.aunis.integration.TConstructIntegration;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.proxy.IProxy;
-import mrjake.aunis.worldgen.AunisWorldGen;
+import mrjake.aunis.worldgen.AunisOresGenerator;
+import mrjake.aunis.worldgen.structures.AunisStructuresGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.SoundCategory;
@@ -41,7 +42,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 
-@Mod( modid = Aunis.ModID, name = Aunis.Name, version = Aunis.Version, acceptedMinecraftVersions = Aunis.MCVersion, dependencies = "after:cofhcore@[4.6.0,);after:opencomputers")
+@Mod( modid = Aunis.ModID, name = Aunis.Name, version = Aunis.Version, acceptedMinecraftVersions = Aunis.MCVersion, dependencies = "after:cofhcore@[4.6.0,);after:opencomputers;after:thermalexpansion;after:tconstruct")
 public class Aunis {	
     public static final String ModID = "aunis";
     public static final String Name = "Aunis";
@@ -95,8 +96,6 @@ public class Aunis {
         Aunis.info("Started loading Aunis mod in " + source.getAbsolutePath());
         Aunis.info("Loading Aunis version " + Version);
 
-        // todo(Mine): fix this
-        //AUNIS_SOUNDS = AunisSoundCategory.add("AUNIS_SOUNDS");
         AUNIS_SOUNDS = SoundCategory.BLOCKS;
 
         AunisPacketHandler.registerPackets();
@@ -119,7 +118,8 @@ public class Aunis {
  
     @EventHandler
     public void init(FMLInitializationEvent event) {
-    	GameRegistry.registerWorldGenerator(new AunisWorldGen(), 0);
+    	GameRegistry.registerWorldGenerator(new AunisOresGenerator(), 0);
+    	GameRegistry.registerWorldGenerator(new AunisStructuresGenerator(), 0);
         Aunis.info("Successfully registered World Generation!");
 
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new AunisGuiHandler());
@@ -128,8 +128,6 @@ public class Aunis {
         registerOreDictionary();
         Aunis.info("Successfully registered OreDictionary!");
 
-
-        // todo: test this
         // ThermalExpansion
         if(Loader.isModLoaded("thermalexpansion") && AunisConfig.integrationsConfig.tExpansionIntegration) {
             Aunis.info("Thermal Expansion found and connection is enabled... Connecting...");

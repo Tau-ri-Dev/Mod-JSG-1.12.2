@@ -10,7 +10,6 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.config.StargateDimensionConfig;
 import mrjake.aunis.gui.container.transportrings.TRGuiState;
 import mrjake.aunis.gui.container.transportrings.TRGuiUpdate;
 import mrjake.aunis.item.AunisItems;
@@ -23,7 +22,6 @@ import mrjake.aunis.renderer.transportrings.TransportRingsAbstractRenderer;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.EnumScheduledTask;
-import mrjake.aunis.stargate.network.StargatePos;
 import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.stargate.power.StargateClassicEnergyStorage;
 import mrjake.aunis.stargate.power.StargateEnergyRequired;
@@ -412,8 +410,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                         if(entity instanceof EntityLivingBase && initiating)
                             getEnergyStorage().extractEnergy(extracted, false);
-                        else if (!initiating && entity instanceof EntityLivingBase)
-                            targetTile.getEnergyStorage().extractEnergy(extracted, false);
 
                         if (!excludedEntities.contains(entity)) {
                             BlockPos ePos = entity.getPosition().add(teleportVector);
@@ -433,9 +429,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             case RINGS_CLEAR_OUT:
                 setBarrierBlocks(false, false);
                 setBusy(false);
-                sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
-                dialedAddress.clear();
-                markDirty();
+                clearButtonsDHD();
 
                 TransportRingsAbstractTile targetRingsTile = (TransportRingsAbstractTile) world.getTileEntity(targetRingsPos);
                 if (targetRingsTile != null) targetRingsTile.setBusy(false);
@@ -462,8 +456,13 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 break;
 
             case RINGS_SYMBOL_DEACTIVATE:
-                int symbolId = customData.getInteger("symbol");
-                sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbolId, true));
+                if(customData != null && customData.hasKey("symbol")) {
+                    int symbolId = customData.getInteger("symbol");
+                    sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbolId, true));
+                }
+                else{
+                    sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
+                }
                 break;
 
             default:
@@ -514,36 +513,53 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return rendererState;
     }
 
+
+    // -------------------------------
+    // Engaging symbols
+
     public TransportResult addSymbolToAddress(SymbolInterface symbol) {
-        NBTTagCompound compound = new NBTTagCompound();
-        compound.setInteger("symbol", symbol.getId());
+        if(isBusy()) return TransportResult.BUSY;
         if (canAddSymbol(symbol)) {
             dialedAddress.setSymbolType(getSymbolType());
             dialedAddress.add(symbol);
             markDirty();
-            if (ringsWillLock()) {
+            activateSymbolDHD(symbol);
+            if (symbolWillLock()) {
                 TransportResult result = attemptTransportTo(dialedAddress, EnumScheduledTask.RINGS_START_ANIMATION.waitTicks);
                 if (!result.ok()) {
-                    dialedAddress.clear();
-                    sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
+                    clearButtonsDHD(7);
                     markDirty();
                     sendSignal(ocContext, "transportrings_symbol_engage_failed", result.toString());
                     return result;
                 }
             }
-            sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbol));
-            addTask(new ScheduledTask(EnumScheduledTask.RINGS_SYMBOL_DEACTIVATE, compound));
             sendSignal(ocContext, "transportrings_symbol_engage", TransportResult.OK.toString());
             return TransportResult.ACTIVATED;
         }
         if(symbol.origin()) {
-            sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
-            dialedAddress.clear();
-            markDirty();
+            activateSymbolDHD(symbol);
+            clearButtonsDHD(7);
             sendSignal(ocContext, "transportrings_symbol_engage_failed", TransportResult.NO_SUCH_ADDRESS.toString());
             return TransportResult.NO_SUCH_ADDRESS;
         }
         return TransportResult.ALREADY_ACTIVATED;
+    }
+
+    public void activateSymbolDHD(SymbolInterface symbol){
+        NBTTagCompound compound = new NBTTagCompound();
+        compound.setInteger("symbol", symbol.getId());
+        sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbol));
+        addTask(new ScheduledTask(EnumScheduledTask.RINGS_SYMBOL_DEACTIVATE, compound));
+    }
+
+    public void clearButtonsDHD(){clearButtonsDHD(-1);}
+    public void clearButtonsDHD(int waitTicks){
+        if(waitTicks > -1)
+            addTask(new ScheduledTask(EnumScheduledTask.RINGS_SYMBOL_DEACTIVATE, waitTicks));
+        else
+            sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
+        dialedAddress.clear();
+        markDirty();
     }
 
     public boolean canAddSymbol(SymbolInterface symbol) {
@@ -560,7 +576,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             getLinkedControllerTile(world).sendState(stateType, state);
     }
 
-    public boolean ringsWillLock() {
+    public boolean symbolWillLock() {
         return (dialedAddress.size() > MAX_SYMBOLS || dialedAddress.getLast().origin());
     }
 
@@ -593,15 +609,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             if (rings.getAddress(address.getSymbolType()).equalsV2(strippedAddress, 4)) {
                 if (!rings.isInGrid()) return TransportResult.NO_SUCH_ADDRESS;
 
-                // power
-                StargateEnergyRequired energyRequired = getEnergyRequiredToDial(rings);
-                int extracted = getEnergyStorage().extractEnergy((energyRequired.keepAlive*20), true);
-                if(extracted < (energyRequired.keepAlive*20)) // *20 because rings should be active more than 1 second
-                    return TransportResult.NOT_ENOUGH_POWER;
-
-                keepAliveEnergyPerTick = energyRequired.keepAlive;
-                // ------
-
                 BlockPos targetRingsPos = rings.getPos();
                 TransportRingsAbstractTile targetRingsTile = (TransportRingsAbstractTile) world.getTileEntity(targetRingsPos);
 
@@ -612,6 +619,15 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 if (targetRingsTile.isBusy()) {
                     return TransportResult.BUSY_TARGET;
                 }
+
+                // power
+                StargateEnergyRequired energyRequired = getEnergyRequiredToDial(rings);
+                int extracted = getEnergyStorage().extractEnergy((energyRequired.keepAlive*20), true);
+                if(extracted < (energyRequired.keepAlive*20)) // *20 because rings should be active more than 1 second
+                    return TransportResult.NOT_ENOUGH_POWER;
+
+                keepAliveEnergyPerTick = energyRequired.keepAlive;
+                // ------
 
                 this.setBusy(true);
                 targetRingsTile.setBusy(true);
@@ -1071,46 +1087,29 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     // ------------------------------------------------------------
     // Methods
 
-    /*@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    @Callback
+    public Object[] getAunisVersion(Context context, Arguments args) {
+        return new Object[]{Aunis.Version};
+    }
+
+    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getAddress(Context context, Arguments args) {
-        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
+        Map<SymbolTypeTransportRingsEnum, List<String>> map = new HashMap<>();
 
-        return new Object[]{rings.getAddress()};
+        for (SymbolTypeTransportRingsEnum symbolType : SymbolTypeTransportRingsEnum.values()) {
+            map.put(symbolType, getRings().getAddressNameList(symbolType));
+        }
+
+        return new Object[]{map};
     }
 
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getAvailableRingsAddresses(Context context, Arguments args) {
-        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
-
         return new Object[]{ringsMap.keySet()};
     }
-
-    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
-    @Callback
-    public Object[] setAddressAndName(Context context, Arguments args) {
-        int address = args.checkInteger(0);
-        String name = args.checkString(1);
-
-        if (address < 1 || address > 6)
-            throw new IllegalArgumentException("bad argument #1 (address out of range, allowed <1..6>)");
-
-        return new Object[]{setRingsParams(address, name)};
-    }
-
-    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
-    @Callback
-    public Object[] setAddress(Context context, Arguments args) {
-        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
-
-        int address = args.checkInteger(0);
-
-        if (address < 1 || address > 6)
-            throw new IllegalArgumentException("bad argument #1 (address out of range, allowed <1..6>)");
-
-        return new Object[]{setRingsParams(address, rings.getName())};
-    }*/
 
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
@@ -1121,16 +1120,12 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getName(Context context, Arguments args) {
-        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
-
         return new Object[]{rings.getName()};
     }
 
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] setName(Context context, Arguments args) {
-        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
-
         String name = args.checkString(0);
         setRingsParams(null, rings.getAddresses(), null, name);
 
@@ -1140,8 +1135,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getAvailableRings(Context context, Arguments args) {
-        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
-
         Map<String, String> values = new HashMap<>(ringsMap.size());
 
         for (TransportRings rings : ringsMap.values()) {
@@ -1155,8 +1148,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     @Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] addSymbolToAddress(Context context, Arguments args) {
-        if (!rings.isInGrid()) return new Object[]{"NOT_IN_GRID", "Use setAddressAndName"};
-
         int symbolId = args.checkInteger(1);
         int symbolType = args.checkInteger(0);
 

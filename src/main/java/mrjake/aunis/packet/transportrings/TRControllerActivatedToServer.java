@@ -7,6 +7,7 @@ import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
 import mrjake.aunis.transportrings.SymbolGoauldEnum;
+import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
 import mrjake.aunis.transportrings.TransportResult;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
@@ -20,11 +21,13 @@ public class TRControllerActivatedToServer extends PositionedPacket {
 	public TRControllerActivatedToServer() {}
 	
 	public int symbol;
+	public int symbolType;
 	
-	public TRControllerActivatedToServer(BlockPos pos, int symbol) {
+	public TRControllerActivatedToServer(BlockPos pos, int symbol, SymbolTypeTransportRingsEnum symbolType) {
 		super(pos);
 		
 		this.symbol = symbol;
+		this.symbolType = symbolType.id;
 	}
 	
 	@Override
@@ -32,6 +35,7 @@ public class TRControllerActivatedToServer extends PositionedPacket {
 		super.toBytes(buf);
 		
 		buf.writeInt(symbol);
+		buf.writeInt(symbolType);
 	}
 
 	
@@ -40,6 +44,7 @@ public class TRControllerActivatedToServer extends PositionedPacket {
 		super.fromBytes(buf);
 		
 		symbol = buf.readInt();
+		symbolType = buf.readInt();
 	}
 
 	
@@ -56,8 +61,8 @@ public class TRControllerActivatedToServer extends PositionedPacket {
 					TransportRingsAbstractTile ringsTile = controllerTile.getLinkedRingsTile(world);
 
 					if (ringsTile != null) {
-						TransportResult result = ringsTile.addSymbolToAddress(SymbolGoauldEnum.valueOf(message.symbol-1));
-						if(result == TransportResult.ACTIVATED || result.ok())
+						TransportResult result = ringsTile.addSymbolToAddress(SymbolTypeTransportRingsEnum.valueOf(message.symbolType).getSymbol(message.symbol-1));
+						if(result != TransportResult.ALREADY_ACTIVATED && result != TransportResult.BUSY)
 							AunisSoundHelper.playSoundEvent(world, message.pos, SoundEventEnum.RINGS_CONTROLLER_BUTTON);
 						result.sendMessageIfFailed(player);
 					} else

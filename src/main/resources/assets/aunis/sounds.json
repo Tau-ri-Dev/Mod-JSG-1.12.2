@@ -380,27 +380,6 @@
     "sounds": [
       "aunis:misc/dialer/button_connect_universe"
     ]
-  },
-  "zpm_slide_in": {
-    "category": "ambient",
-    "subtitle": "aunis.subtitle.zpm_slide_in",
-    "sounds": [
-      "aunis:zpm/zpm_slide_in"
-    ]
-  },
-  "zpm_slide_out": {
-    "category": "ambient",
-    "subtitle": "aunis.subtitle.zpm_slide_out",
-    "sounds": [
-      "aunis:zpm/zpm_slide_out"
-    ]
-  },
-  "zpm_activated": {
-    "category": "ambient",
-    "subtitle": "aunis.subtitle.zpm_activated",
-    "sounds": [
-      "aunis:zpm/zpm_activated"
-    ]
   }
 }
 

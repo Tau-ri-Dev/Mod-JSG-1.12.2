@@ -17,10 +17,13 @@ import mrjake.aunis.block.transportrings.TransportRingsGoauldBlock;
 import mrjake.aunis.block.transportrings.TransportRingsOriBlock;
 import mrjake.aunis.block.zpm.ZPMBlock;
 import mrjake.aunis.block.zpm.ZPMHubBlock;
-import mrjake.aunis.item.*;
-import mrjake.aunis.tileentity.*;
-import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
+import mrjake.aunis.item.CapacitorItemBlock;
+import mrjake.aunis.item.StargateMilkyWayMemberItemBlock;
+import mrjake.aunis.item.StargatePegasusMemberItemBlock;
+import mrjake.aunis.item.StargateUniverseMemberItemBlock;
+import mrjake.aunis.tileentity.BeamerTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
+import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
 import mrjake.aunis.tileentity.energy.CapacitorTile;
 import mrjake.aunis.tileentity.stargate.*;
 import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
@@ -30,6 +33,7 @@ import mrjake.aunis.util.BlockHelpers;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
@@ -73,9 +77,9 @@ public class AunisBlocks {
     public static final DHDBlock DHD_BLOCK = new DHDBlock();
     public static final DHDPegasusBlock DHD_PEGASUS_BLOCK = new DHDPegasusBlock();
 
-    public static final TransportRingsGoauldBlock TRANSPORT_RINGS_BLOCK = new TransportRingsGoauldBlock();
+    public static final TransportRingsGoauldBlock TRANSPORT_RINGS_GOAULD_BLOCK = new TransportRingsGoauldBlock();
     public static final TransportRingsOriBlock TRANSPORT_RINGS_ORI_BLOCK = new TransportRingsOriBlock();
-    public static final TRControllerGoauldBlock TR_CONTROLLER_BLOCK = new TRControllerGoauldBlock();
+    public static final TRControllerGoauldBlock TR_CONTROLLER_GOAULD_BLOCK = new TRControllerGoauldBlock();
     public static final InvisibleBlock INVISIBLE_BLOCK = new InvisibleBlock();
     public static final IrisBlock IRIS_BLOCK = new IrisBlock();
 
@@ -99,26 +103,15 @@ public class AunisBlocks {
      * Used in {@link mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile#updateLinkStatus()}
      */
     public static final Block[] RINGS_BLOCKS = {
-            TRANSPORT_RINGS_BLOCK,
+            TRANSPORT_RINGS_GOAULD_BLOCK,
             TRANSPORT_RINGS_ORI_BLOCK
     };
     /**
      * Used in {@link mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile#updateLinkStatus()}
      */
     public static final Block[] RINGS_CONTROLLERS = {
-            TR_CONTROLLER_BLOCK
+            TR_CONTROLLER_GOAULD_BLOCK
     };
-
-    public static boolean isInBlocksArray(Block block, Block[] array){
-        for(Block b : array){
-            if(block == b) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
     private static final Block[] blocks = {
             ORE_NAQUADAH_BLOCK, ORE_NAQUADAH_BLOCK_STONE, NAQUADAH_BLOCK,
 
@@ -130,9 +123,9 @@ public class AunisBlocks {
 
             DHD_BLOCK, DHD_PEGASUS_BLOCK,
 
-            TRANSPORT_RINGS_BLOCK,
+            TRANSPORT_RINGS_GOAULD_BLOCK,
 
-            TR_CONTROLLER_BLOCK,
+            TR_CONTROLLER_GOAULD_BLOCK,
 
             INVISIBLE_BLOCK, IRIS_BLOCK,
 
@@ -144,6 +137,15 @@ public class AunisBlocks {
 
 
     };
+
+    public static boolean isInBlocksArray(Block block, Block[] array) {
+        for (Block b : array) {
+            if (block == b) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @SubscribeEvent
     public static void onRegisterBlocks(Register<Block> event) {
@@ -168,9 +170,9 @@ public class AunisBlocks {
         registerTile(StargatePegasusMemberTile.class, AunisBlocks.STARGATE_PEGASUS_MEMBER_BLOCK.getRegistryName());
         registerTile(DHDMilkyWayTile.class, AunisBlocks.DHD_BLOCK.getRegistryName());
         registerTile(DHDPegasusTile.class, AunisBlocks.DHD_PEGASUS_BLOCK.getRegistryName());
-        registerTile(TransportRingsGoauldTile.class, AunisBlocks.TRANSPORT_RINGS_BLOCK.getRegistryName());
+        registerTile(TransportRingsGoauldTile.class, AunisBlocks.TRANSPORT_RINGS_GOAULD_BLOCK.getRegistryName());
         registerTile(TransportRingsOriTile.class, AunisBlocks.TRANSPORT_RINGS_ORI_BLOCK.getRegistryName());
-        registerTile(TRControllerGoauldTile.class, AunisBlocks.TR_CONTROLLER_BLOCK.getRegistryName());
+        registerTile(TRControllerGoauldTile.class, AunisBlocks.TR_CONTROLLER_GOAULD_BLOCK.getRegistryName());
         registerTile(CapacitorTile.class, AunisBlocks.CAPACITOR_BLOCK.getRegistryName());
         registerTile(BeamerTile.class, AunisBlocks.BEAMER_BLOCK.getRegistryName());
 
@@ -178,8 +180,8 @@ public class AunisBlocks {
         //registerTile(ZPMTile.class, AunisBlocks.ZPM.getRegistryName());
     }
 
-    public static void registerTile(Class<? extends TileEntity> tileEntityClass, ResourceLocation key){
-        if(key == null) return;
+    public static void registerTile(Class<? extends TileEntity> tileEntityClass, ResourceLocation key) {
+        if (key == null) return;
         GameRegistry.registerTileEntity(tileEntityClass, key);
     }
 
@@ -229,6 +231,19 @@ public class AunisBlocks {
             case "aunis:stargatemember_orlin_block":
                 return STARGATE_ORLIN_MEMBER_BLOCK;
 
+            case "aunis:transportrings_block":
+                return TRANSPORT_RINGS_GOAULD_BLOCK;
+
+            case "aunis:transportrings_controller_block":
+                return TR_CONTROLLER_GOAULD_BLOCK;
+
+            case "aunis:zpm":
+            case "aunis:zpmhub_block":
+            case "aunis:connector_zpm":
+            case "aunis:holder_zpm":
+            case "aunis:circuit_control_zpm":
+                return Blocks.AIR;
+
             default:
                 return null;
         }
@@ -246,23 +261,8 @@ public class AunisBlocks {
     @SubscribeEvent
     public static void onMissingItemMappings(RegistryEvent.MissingMappings<Item> event) {
         for (Mapping<Item> mapping : event.getMappings()) {
-            switch (mapping.key.toString()) {
-                case "aunis:stargatebase_block":
-                    mapping.remap(ItemBlock.getItemFromBlock(STARGATE_MILKY_WAY_BASE_BLOCK));
-                    break;
-
-                case "aunis:stargate_member_block":
-                    mapping.remap(ItemBlock.getItemFromBlock(STARGATE_MILKY_WAY_MEMBER_BLOCK));
-                    break;
-
-                case "aunis:stargatebase_orlin_block":
-                    mapping.remap(ItemBlock.getItemFromBlock(STARGATE_ORLIN_BASE_BLOCK));
-                    break;
-
-                case "aunis:stargatemember_orlin_block":
-                    mapping.remap(ItemBlock.getItemFromBlock(STARGATE_ORLIN_MEMBER_BLOCK));
-                    break;
-            }
+            Block newBlock = remapBlock(mapping.key.toString());
+            if (newBlock != null) mapping.remap(ItemBlock.getItemFromBlock(newBlock));
         }
     }
 }

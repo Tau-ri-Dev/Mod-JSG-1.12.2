@@ -32,7 +32,7 @@ public class PageMysteriousItem extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(TextFormatting.ITALIC + Aunis.proxy.localize("item.aunis.mysterious_page.tooltip"));
+		tooltip.add(TextFormatting.ITALIC + Aunis.proxy.localize("item.aunis.page_mysterious.tooltip"));
 	}
 	
 	@Override

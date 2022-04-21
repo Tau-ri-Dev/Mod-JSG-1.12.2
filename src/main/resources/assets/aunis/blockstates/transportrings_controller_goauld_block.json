@@ -1,7 +1,7 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "aunis:transportrings_block"
+		"model": "aunis:transportrings_controller_goauld_block"
 	},
 	"variants": {
 		"normal": [{}],
@@ -11,7 +11,9 @@
 			"south": { "y": 180 },
 			"west": { "y": 270 },
 			"north": {},
-			"east": { "y": 90 }
+			"east": { "y": 90 },
+			"up": {},
+			"down": {}
 		}
 	}
 }

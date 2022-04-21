@@ -635,7 +635,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     if(((SymbolPegasusEnum) targetSymbol).brb()) {
       StargateOpenResult openResult = attemptOpenAndFail();
       if (openResult == StargateOpenResult.NOT_ENOUGH_POWER && lastSender != null)
-        lastSender.sendStatusMessage(new TextComponentTranslation("tile.aunis.stargatebase_block.not_enough_power"), true);
+        lastSender.sendStatusMessage(new TextComponentTranslation("tile.aunis.dhd_block.not_enough_power"), true);
       return;
     }
     if(AunisConfig.dhdConfig.animatePegDHDDial) {

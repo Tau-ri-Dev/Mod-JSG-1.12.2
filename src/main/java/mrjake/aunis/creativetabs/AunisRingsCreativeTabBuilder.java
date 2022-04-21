@@ -11,6 +11,6 @@ public class AunisRingsCreativeTabBuilder extends AunisAbstractCreativeTabBuilde
 
 	@Override
 	public ItemStack getTabIconItem() {
-		return new ItemStack(AunisBlocks.TRANSPORT_RINGS_BLOCK);
+		return new ItemStack(AunisBlocks.TRANSPORT_RINGS_GOAULD_BLOCK);
 	}
 }

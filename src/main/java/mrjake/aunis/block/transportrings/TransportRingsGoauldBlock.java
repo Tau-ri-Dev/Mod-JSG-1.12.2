@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 
 public class TransportRingsGoauldBlock extends TransportRingsAbstractBlock {
 
-  private static final String BLOCK_NAME = "transportrings_block";
+  private static final String BLOCK_NAME = "transportrings_goauld_block";
 
   public TransportRingsGoauldBlock() {
     super(BLOCK_NAME);

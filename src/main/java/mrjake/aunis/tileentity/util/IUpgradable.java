@@ -1,5 +1,6 @@
 package mrjake.aunis.tileentity.util;
 
+import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.util.EnumKeyInterface;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -62,11 +63,15 @@ public interface IUpgradable {
         if(stack.isEmpty())
             return false;
 
+        // we do not want to insert notebook pages by miss-click  - Mine
+        if(stack.getItem().equals(AunisItems.PAGE_NOTEBOOK_ITEM))
+            return false;
+
         IItemHandler itemHandler = getItemHandler();
 
-        Iterator<Integer> iter = getUpgradeSlotsIterator();
-        while (iter.hasNext()) {
-            int slot = iter.next();
+        Iterator<Integer> iterator = getUpgradeSlotsIterator();
+        while (iterator.hasNext()) {
+            int slot = iterator.next();
 
             if(itemHandler.getStackInSlot(slot).isEmpty() && itemHandler.isItemValid(slot, stack)) {
                 // Maybe should not take item in creative mode

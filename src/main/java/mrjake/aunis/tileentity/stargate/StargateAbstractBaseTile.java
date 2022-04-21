@@ -1830,6 +1830,13 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     // ------------------------------------------------------------
     // Methods
     // function(arg:type[, optionArg:type]):resultType; Description.
+
+    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    @Callback
+    public Object[] getAunisVersion(Context context, Arguments args) {
+        return new Object[]{Aunis.Version};
+    }
+
     @Optional.Method(modid = "opencomputers")
     @Callback(getter = true)
     public Object[] stargateAddress(Context context, Arguments args) {

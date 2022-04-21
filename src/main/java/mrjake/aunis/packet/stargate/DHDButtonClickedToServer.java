@@ -82,7 +82,7 @@ public class DHDButtonClickedToServer extends PositionedPacket {
 							StargateOpenResult openResult = gateTile.attemptOpenAndFail();
 
 							if (openResult == StargateOpenResult.NOT_ENOUGH_POWER) {
-								player.sendStatusMessage(new TextComponentTranslation("tile.aunis.stargatebase_block.not_enough_power"), true);
+								player.sendStatusMessage(new TextComponentTranslation("tile.aunis.dhd_block.not_enough_power"), true);
 							}
 						} else if (gateTile.canAddSymbol(message.symbol)) {
 							// Not BRB, some other glyph pressed on idling gate, we can add this symbol now
