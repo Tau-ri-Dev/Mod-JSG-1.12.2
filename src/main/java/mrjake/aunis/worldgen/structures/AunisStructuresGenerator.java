@@ -5,7 +5,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.BiomeForest;
+import net.minecraft.world.biome.*;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -16,13 +16,13 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class AunisStructuresGenerator implements IWorldGenerator {
-    public static final AunisStructure MINESHAFT = new AunisStructure("mineshaft");
+    public static final AunisStructure MINESHAFT = new AunisStructure("mineshaft", 14);
 
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         switch(world.provider.getDimensionType()) {
             case OVERWORLD:
-                this.generateStructure(MINESHAFT, world, random, chunkX, chunkZ, 200, Blocks.GRASS, BiomeForest.class);
+                this.generateStructure(MINESHAFT, world, random, chunkX, chunkZ, 250, Blocks.GRASS, BiomeForest.class, BiomePlains.class, BiomeSwamp.class);
                 break;
             default:
                 break;
@@ -53,6 +53,7 @@ public class AunisStructuresGenerator implements IWorldGenerator {
         while(y > 0 && !found){
             Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
             found = (block == topBlock);
+            y--;
         }
         return y;
     }
