@@ -173,7 +173,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
     protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks, boolean backOnly) {
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 15 * 16, 15 * 16);
 
-        float gateWait = getWorld().getTotalWorldTime() - rendererState.gateWaitStart;
+        float gateWait = (float) getWorld().getTotalWorldTime() - rendererState.gateWaitStart;
 
         // Waiting for sound sync
         if (gateWait < (44 - 24)) {
@@ -375,7 +375,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
      * @param mul      Multiplier of the horizon waving speed
      */
     protected void renderEventHorizon(double partialTicks, boolean white, Float alpha, boolean backOnly, float mul) {
-        float tick = (float) (getWorld().getTotalWorldTime() + partialTicks);
+        float tick = (float) (getWorld().getTotalWorldTime());
 
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.enableBlend();

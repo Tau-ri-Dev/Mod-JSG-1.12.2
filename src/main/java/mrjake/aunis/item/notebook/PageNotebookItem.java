@@ -83,7 +83,8 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 		else {			
 			if (stack.hasTagCompound()) {
 				NBTTagCompound compound = stack.getTagCompound();
-				if(!compound.hasKey("address")) {
+				if(compound == null) return;
+				if(!compound.hasKey("transportRings")) {
 					SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf(compound.getInteger("symbolType"));
 					StargateAddress stargateAddress = new StargateAddress(compound.getCompoundTag("address"));
 					int maxSymbols = symbolType.getMaxSymbolsDisplay(compound.getBoolean("hasUpgrade"));

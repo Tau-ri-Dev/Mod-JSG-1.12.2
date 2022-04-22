@@ -111,16 +111,17 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         markDirty();
         addSymbolToAddress(symbol);
         doIncomingAnimation(10, false);
+        int plusTime = new Random().nextInt(5);
 
         if (stargateWillLock(symbol)) {
             isFinalActive = true;
             if(AunisConfig.dialingConfig.dhdLastOpen)
-                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 5));
+                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 5 + plusTime));
             else
-                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10));
+                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10 + plusTime));
         }
         else
-            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10));
+            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10 + plusTime));
 
         sendSignal(null, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), isFinalActive, symbol.englishName});
 
@@ -155,6 +156,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     }
 
     public boolean tryDialEarth(){
+        if(network.getLastActivatedOrlins() == null) return false;
         if (dialedAddress.size() >= 6 && dialedAddress.equalsV2(StargateNetwork.EARTH_ADDRESS, 6) && !network.isStargateInNetwork(dialedAddress)) {
             if (StargateDimensionConfig.netherOverworld8thSymbol()) {
                 if (dialedAddress.size() == 7 && dialedAddress.equalsV2(StargateNetwork.EARTH_ADDRESS, 7)) {
