@@ -601,6 +601,19 @@ public class AunisConfig {
 
         @Name("Titanium max veins in chunk")
         public int titaniumMaxVeinInChunk = 8;
+
+        @Name("Enable random stargate generator")
+        @Comment({
+                "Generate stargate in world random.",
+        })
+        public boolean stargateRandomGeneratorEnabled = true;
+
+        @Name("Enable random structures generator")
+        @Comment({
+                "Enable generation of structures in the world.",
+                "This will not disable the stargate generation!",
+        })
+        public boolean structuresRandomGeneratorEnabled = true;
     }
 
     public static class MainMenuConfig {

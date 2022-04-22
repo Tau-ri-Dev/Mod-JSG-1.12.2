@@ -189,6 +189,8 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
 
             if (!(heldItem instanceof ItemBlock) && camoBlockState == null) {
                 BlockPos basePos = memberTile.getBasePos();
+                if(basePos == null)
+                    return true;
                 player.openGui(Aunis.instance, GuiIdEnum.GUI_STARGATE.id, world, basePos.getX(), basePos.getY(), basePos.getZ());
 
                 return true;
