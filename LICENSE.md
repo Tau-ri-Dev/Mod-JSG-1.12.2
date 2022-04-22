@@ -1,6 +1,6 @@
 # AUNIS: Ressurection License
 > Version 1.0, 2022
-> Copyright (C) 2022 MineDragonCZ (original by MrJake222)
+> Copyright (C) 2022 MrJake222 & MineDragonCZ
 
 1. You are ***allowed*** to:
 	*  Look around the code and figure out what we did (feel free to ask about certain solutions, on [*Discord*](https://discord.gg/NXp4NA8mBR) for example).
