@@ -7,14 +7,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
-import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -26,26 +24,26 @@ public class AunisOresGenerator implements IWorldGenerator {
 	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		switch(world.provider.getDimensionType()) {
 			case NETHER:
-				if (AunisConfig.worldgenConfig.naquadahEnable) {
+				if (AunisConfig.worldGeneratorConfig.naquadahEnable) {
 					runGenerator(AunisBlocks.ORE_NAQUADAH_BLOCK.getDefaultState(),
-							AunisConfig.worldgenConfig.naquadahVeinSize,
-							AunisConfig.worldgenConfig.naquadahMaxVeinInChunk, 0, 128,
+							AunisConfig.worldGeneratorConfig.naquadahVeinSize,
+							AunisConfig.worldGeneratorConfig.naquadahMaxVeinInChunk, 0, 128,
 							BlockMatcher.forBlock(Blocks.NETHERRACK), world, rand, chunkX, chunkZ);
 				}
 				break;
 			case OVERWORLD:
-				if (AunisConfig.worldgenConfig.titaniumEnable) {
+				if (AunisConfig.worldGeneratorConfig.titaniumEnable) {
 					runGenerator(AunisBlocks.ORE_TITANIUM_BLOCK.getDefaultState(),
-							AunisConfig.worldgenConfig.titaniumVeinSize,
-							AunisConfig.worldgenConfig.titaniumMaxVeinInChunk, 0, 25,
+							AunisConfig.worldGeneratorConfig.titaniumVeinSize,
+							AunisConfig.worldGeneratorConfig.titaniumMaxVeinInChunk, 0, 25,
 							BlockMatcher.forBlock(Blocks.STONE), world, rand, chunkX, chunkZ);
 				}
 				break;
 			case THE_END:
-				if (AunisConfig.worldgenConfig.triniumEnabled) {
+				if (AunisConfig.worldGeneratorConfig.triniumEnabled) {
 					runGenerator(AunisBlocks.ORE_TRINIUM_BLOCK.getDefaultState(),
-							AunisConfig.worldgenConfig.triniumVeinSize,
-							AunisConfig.worldgenConfig.triniumMaxVeinInChunk, 0, 128,
+							AunisConfig.worldGeneratorConfig.triniumVeinSize,
+							AunisConfig.worldGeneratorConfig.triniumMaxVeinInChunk, 0, 128,
 							BlockMatcher.forBlock(Blocks.END_STONE), world, rand, chunkX, chunkZ);
 				}
 				break;

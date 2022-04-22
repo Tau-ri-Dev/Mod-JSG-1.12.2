@@ -34,55 +34,58 @@ public class AunisStructuresGenerator implements IWorldGenerator {
                 blocks.add(Blocks.GRASS);
                 blocks.add(Blocks.DIRT);
                 blocks.add(Blocks.STONE);
+                if(AunisConfig.stargateGeneratorConfig.stargateRGChancePlains == 0) break;
                 this.generateStructure(
                         PLAINS,
                         world, random, chunkX, chunkZ,
-                        500,
+                        2000 - AunisConfig.stargateGeneratorConfig.stargateRGChancePlains,
                         blocks,
                         BiomeForest.class, BiomePlains.class, BiomeSwamp.class, BiomeHills.class, BiomeSnow.class, BiomeTaiga.class,
                         BiomeJungle.class, BiomeForestMutated.class, BiomeSavannaMutated.class, BiomeSavanna.class
 
                 );
+
                 blocks.clear();
                 blocks.add(Blocks.SAND);
                 blocks.add(Blocks.SANDSTONE);
+                if(AunisConfig.stargateGeneratorConfig.stargateRGChanceDesert == 0) break;
                 this.generateStructure(
                         DESERT,
                         world, random, chunkX, chunkZ,
-                        500,
+                        2000 - AunisConfig.stargateGeneratorConfig.stargateRGChanceDesert,
                         blocks,
                         BiomeDesert.class, BiomeMesa.class
                 );
-                blocks.clear();
                 break;
-            case NETHER:
+            /*case NETHER:
                 blocks.add(Blocks.NETHERRACK);
                 blocks.add(Blocks.SOUL_SAND);
                 blocks.add(Blocks.QUARTZ_ORE);
+                if(AunisConfig.stargateGeneratorConfig.stargateRGChanceNether == 0) break;
                 this.generateStructure(
                         NETHER,
                         world, random, chunkX, chunkZ,
-                        750,
+                        2000 - AunisConfig.stargateGeneratorConfig.stargateRGChanceNether,
                         blocks,
                         BiomeHell.class
                 );
-                blocks.clear();
-                break;
+                break;*/
             case THE_END:
                 blocks.add(Blocks.END_STONE);
                 blocks.add(Blocks.END_BRICKS);
+                if(AunisConfig.stargateGeneratorConfig.stargateRGChanceTheEnd == 0) break;
                 this.generateStructure(
                         THE_END,
                         world, random, chunkX, chunkZ,
-                        500,
+                        2000 - AunisConfig.stargateGeneratorConfig.stargateRGChanceTheEnd,
                         blocks,
                         BiomeEnd.class
                 );
-                blocks.clear();
                 break;
             default:
                 break;
         }
+        blocks.clear();
     }
 
     private void generateStructure(WorldGenerator generator, World world, Random random, int chunkX, int chunkZ, int chance, List<Block> topBlocks, Class<?>... classes) {

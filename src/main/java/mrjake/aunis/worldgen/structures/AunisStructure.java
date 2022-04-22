@@ -49,11 +49,11 @@ public class AunisStructure extends WorldGenerator implements IStructure{
         pos = pos.down(yNegativeOffset);
         WorldServer worldToSpawn = world.getMinecraftServer().getWorld(dimensionToSpawn);
         // generate stargate
-        if(isStargateStructure && AunisConfig.worldgenConfig.stargateRandomGeneratorEnabled){
+        if(isStargateStructure && AunisConfig.stargateGeneratorConfig.stargateRandomGeneratorEnabled){
             String size = AunisConfig.stargateSize == StargateSizeEnum.LARGE ? "_large" : "_small";
             generateStargate(world, pos, "sg_" + structureName + size, isPegasusGate, dimensionToSpawn);
         }
-        else if(AunisConfig.worldgenConfig.structuresRandomGeneratorEnabled) {
+        else if(AunisConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled) {
 
             // else generate normal structure
             MinecraftServer mcServer = world.getMinecraftServer();

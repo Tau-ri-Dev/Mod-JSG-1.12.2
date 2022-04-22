@@ -67,8 +67,11 @@ public class AunisConfig {
     @Name("Audio/Video")
     public static AudioVideoConfig avConfig = new AudioVideoConfig();
 
-    @Name("WorldGen config")
-    public static WorldGenConfig worldgenConfig = new WorldGenConfig();
+    @Name("Ore Generator config")
+    public static WorldOreGenerator worldGeneratorConfig = new WorldOreGenerator();
+
+    @Name("Stargate Generator config")
+    public static WorldStargateGenerator stargateGeneratorConfig = new WorldStargateGenerator();
 
     @Name("MainMenu config")
     public static MainMenuConfig mainMenuConfig = new MainMenuConfig();
@@ -227,7 +230,7 @@ public class AunisConfig {
     }
 
     public static class HorizonConfig {
-        @Name("Disable animated Event Horizon - WARNING: Requires reloading")
+        @Name("Disable animated Event Horizon")
         @RequiresMcRestart
         @Comment({
                 "Changing this option will require you to reload resources manually.",
@@ -565,7 +568,7 @@ public class AunisConfig {
         public float volume = 1;
     }
 
-    public static class WorldGenConfig {
+    public static class WorldOreGenerator {
         @Name("Enable Naquadah ore generation")
         @Comment({
                 "Do you want to spawn naquadah ores in the Nether?",
@@ -601,7 +604,9 @@ public class AunisConfig {
 
         @Name("Titanium max veins in chunk")
         public int titaniumMaxVeinInChunk = 8;
+    }
 
+    public static class WorldStargateGenerator {
         @Name("Enable random stargate generator")
         @Comment({
                 "Generate stargate in world random.",
@@ -614,6 +619,24 @@ public class AunisConfig {
                 "This will not disable the stargate generation!",
         })
         public boolean structuresRandomGeneratorEnabled = true;
+
+
+        @Name("Chance of generating Plains gate")
+        @RangeInt(min = 0, max = 1500)
+        public int stargateRGChancePlains = 540;
+
+        @Name("Chance of generating Desert gate")
+        @RangeInt(min = 0, max = 1500)
+        public int stargateRGChanceDesert = 420;
+
+        //@Name("Chance of generating Nether gate")
+        //@RangeInt(min = 0, max = 1500)
+        //public int stargateRGChanceNether = 750;
+
+        @Name("Chance of generating End gate")
+        @RangeInt(min = 0, max = 1500)
+        public int stargateRGChanceTheEnd = 0;
+
     }
 
     public static class MainMenuConfig {

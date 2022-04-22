@@ -1,76 +1,36 @@
+# itemGroups - creative tabs
 itemGroup.aunis_gates=Aunis: Gates
 itemGroup.aunis_items=Aunis: Items
 itemGroup.aunis_rings=Aunis: Rings
 itemGroup.aunis_ores=Aunis: Ores
 itemGroup.aunis_energy=Aunis: Energy
 
+# sound categories
 soundCategory.aunis_sounds=Aunis
 
-item.aunis.analyzer_ancient.name=Analizador Antiguo
-item.aunis.crystal_control_dhd.name=Cristal de Control
-item.aunis.dialer_fast.name=Marcado Rapido (debug)
+# -------------------
+# ITEMS
 
-item.aunis.crystal_control_pegasus_dhd.name=Cristal de control de Pegasus
-item.aunis.raw_pegasus_dhd_crystal.name=Cristal de control de Pegasus (sin procesar)
-
-item.aunis.crystal_glyph_dhd.name=Cristal de glifo DHD
-item.aunis.crystal_glyph_stargate.name=Cristal de glifo Stargate
-item.aunis.crystal_glyph_milkyway.name=Cristal de glifos de la Vía Láctea
-item.aunis.crystal_glyph_pegasus.name=Cristal de glifos de Pegaso
-item.aunis.crystal_glyph_universe.name=Cristal de glifos Universo
-
-
+# iris
 item.aunis.iris_blade.name=Hoja del Iris (Titanio)
 item.aunis.iris_blade_trinium.name=Hoja del Iris (Trinium)
 item.aunis.quad_iris_blade.name=Hoja cuádruple de iris (Titanio)
 item.aunis.quad_iris_blade_trinium.name=Hoja cuádruple de iris (Trinium)
 item.aunis.upgrade_iris.name=Mejora de Iris (Titanio)
 item.aunis.upgrade_iris_trinium.name=Mejora de Iris (Trinium)
-
 item.aunis.shield_emitter.name=Emisor de Escudo
 item.aunis.upgrade_shield.name=Mejora de Escudo
 
+# ingots
 item.aunis.trinium_ingot.name=Lingote de Trinium
 item.aunis.titanium_ingot.name=Lingote de Titanio
-
-
-tile.aunis.naquadah_ore.name=Mineral de Naquadah
-tile.aunis.naquadah_ore_stone.name=Mineral de Naquadah (Piedra)
-tile.aunis.naquadah_block.name=Bloque de Naquadah
-tile.aunis.naquadah_block_raw.name=Bloque de Naquadah (Sin procesar)
 item.aunis.naquadah_shard.name=Fragmento de Naquadah
 item.aunis.naquadah_alloy.name=Lingote de Naquadah refinado
 item.aunis.naquadah_alloy_raw.name=Lingote de Naquadah
 
-tile.aunis.trinium_ore.name=Mineral de Trinium
-tile.aunis.titanium_ore.name=Mineral de Titanio
-tile.aunis.trinium_block.name=Bloque de Trinium
-tile.aunis.titanium_block.name=Bloque de Titanio
-
-tile.aunis.invisible_block.name=No puedes verme
-
-tile.aunis.stargate_milkyway_base_block.name=Base de Stargate (Vía Láctea)
-tile.aunis.stargate_milkyway_ring_block.name=Anillo de Stargate (Vía Láctea)
-tile.aunis.stargate_milkyway_chevron_block.name=Chevrón de Stargate (Vía Láctea)
-tile.aunis.dhd_block.name=Dispositivo de Llamada a Casa (DHD)
-tile.aunis.dhd_pegasus_block.name=Dispositivo de Llamada a Casa (DHD de Pegasus)
-tile.aunis.capacitor_block.name=Capacitor
-tile.aunis.capacitor_block_empty.name=Capacitor (Vacío)
-
-tile.aunis.stargate_orlin_base_block.open_count=Veces abierto: %s / %s
-tile.aunis.stargate_orlin_base_block.name=Base de Stargate (Orlin)
-tile.aunis.stargate_orlin_member_block.name=Anillo de Stargate (Orlin)
-
-tile.aunis.stargate_universe_base_block.name=Base de Stargate (Universo)
-tile.aunis.stargate_universe_chevron_block.name=Chevrón de Stargate (Universo)
-tile.aunis.stargate_universe_ring_block.name=Anillo de Stargate (Universo)
-
-tile.aunis.stargate_pegasus_base_block.name=Base de Stargate (Pegasus)
-tile.aunis.stargate_pegasus_ring_block.name=Anillo de Stargate (Pegasus)
-tile.aunis.stargate_pegasus_chevron_block.name=Chevrón de Stargate (Pegasus)
-
+# crystals
 item.aunis.crystal_fragment.name=Semilla de cristal
-item.aunis.crystal_blank.name=Cristal en Blanco
+
 item.aunis.crystal_blue.name=Cristal de Teletransporte
 item.aunis.crystal_red.name=Cristal de Poder
 item.aunis.crystal_ender.name=Cristal Ender
@@ -82,66 +42,202 @@ item.aunis.circuit_control_base.name=Base del Circuito de Control
 item.aunis.circuit_control_naquadah.name=Circuito del Control de Naquadah
 item.aunis.circuit_control_crystal.name=Circuito del Cristal de Control 
 
+item.aunis.crystal_control_dhd.name=Cristal de Control
+item.aunis.crystal_control_pegasus_dhd.name=Cristal de control de Pegasus
+item.aunis.raw_pegasus_dhd_crystal.name=Cristal de control de Pegasus (sin procesar)
+item.aunis.crystal_glyph_dhd.name=Cristal de glifo DHD
+item.aunis.crystal_glyph_stargate.name=Cristal de glifo Stargate
+item.aunis.crystal_glyph_milkyway.name=Cristal de glifos de la Vía Láctea
+item.aunis.crystal_glyph_pegasus.name=Cristal de glifos de Pegaso
+item.aunis.crystal_glyph_universe.name=Cristal de glifos Universo
+item.aunis.crystal_glyph_goauld.name=Goauld Rings Glyphs Crystal
+item.aunis.crystal_glyph_ori.name=Ori Rings Glyphs Crystal
+item.aunis.crystal_glyph_ancient.name=Ancient Rings Glyphs Crystal
+
+# dhd
 item.aunis.dhd_brb.name=Botón Brillante Rojo (BBR)
 item.aunis.dhd_bbb.name=Botón Brillante Azul (BBA)
 
+# rings fragments
 item.aunis.stargate_ring_fragment.name=Fragmento de Anillo de Stargate
 item.aunis.universe_ring_fragment.name=Fragmento de Anillo de Universo
+item.aunis.transportrings_ring_fragment.name=Fragmento de Anillo Transportador
+
+# holders
 item.aunis.holder_crystal.name=Soporte de cristal
 item.aunis.holder_crystal_pegasus.name=Soporte de cristal (Pegasus)
 
+# notebook
 item.aunis.page_notebook.name=Página de Cuaderno
+
+# mysterious page
 item.aunis.page_mysterious.name=Página Misteriosa
 item.aunis.page_mysterious.empty=Vacío
-item.aunis.mysterious_page.tooltip=Quien sabe donde llevará
+item.aunis.page_mysterious.tooltip=Who knows where it leads
 
+# beamer
+item.aunis.beamer_crystal_power.name=Cristal beamer de poder
+item.aunis.beamer_crystal_fluid.name=Cristal beamer de fluidos
+item.aunis.beamer_crystal_items.name=Cristal beamer de items
+
+# universe dialer
+item.aunis.universe_dialer.name=Control Antiguo
+item.aunis.universe_dialer.broken.name=Control Antiguo (Roto)
+item.aunis.universe_dialer.saved_gates=Portales guardados: %s
+item.aunis.universe_dialer.not_linked=No enlazado
+item.aunis.universe_dialer.gate_busy=El Portal está ocupado
+item.aunis.universe_dialer.mode_scan=Cercano
+item.aunis.universe_dialer.mode_saved=Memoria
+item.aunis.universe_dialer.mode_rings=Anillos
+item.aunis.universe_dialer.mode_oc=OpnCom
+item.aunis.universe_dialer.aborting=Cancelar Marcado
+item.aunis.universe_dialer.abort=Cancelar
+item.aunis.universe_dialer.dial_start=Dialing the gate...
+item.aunis.universe_dialer.not_dialing=No marcando
+item.aunis.universe_dialer.dialer_broke=El dial se ha roto para evitar que Minecraft se crasheara
+item.aunis.universe_dialer.oc_name=Nombre de la entrada
+item.aunis.universe_dialer.oc_address=Dirección del módem de OpenComputers (Dejar en blanco para transmitir)
+item.aunis.universe_dialer.oc_port=Puerto del módem
+item.aunis.universe_dialer.oc_data=Parámetros de OpenComputers (separados por coma)
+item.aunis.universe_dialer.oc_save=Guardar
+item.aunis.universe_dialer.oc_port_invalid=Puerto inválido
+item.aunis.universe_dialer.oc_message_received=Respuesta recibida: 
+item.aunis.universe_dialer.toggle_fast_dial=Toggle fast dialing
+item.aunis.universe_dialer.fast_dail_false=Fast dialing set to: False
+item.aunis.universe_dialer.fast_dail_true=Fast dialing set to: True
+
+# notebook
+item.aunis.notebook.name=Cuaderno
+item.aunis.notebook.rename_gui=Nombre Nuevo
+item.aunis.notebook.unnamed=<sin nombre>
+
+# gdo
+item.aunis.gui.name=Nombre
+item.aunis.gui.address=Dirección
+item.aunis.gui.rename=Renombrar
+item.aunis.gui.oc_address=Dirección del módem
+item.aunis.gui.oc_port=Puerto
+item.aunis.gui.oc_params=Parámetros
+item.aunis.gui.oc_port_invalid=Puerto Inválido
+item.aunis.gdo.name=Abrepuertas (GDO)
+item.aunis.gdo.not_linked=No vinculado
+item.aunis.gdo.code_sender=Código
+item.aunis.gdo.iris_opened=El Iris está abierto!
+item.aunis.gdo.iris_busy=El Iris está ocupado!
+item.aunis.gdo.code_accepted=Código aceptado! Abriendo Iris...
+item.aunis.gdo.code_rejected=Código incorrecto!
+item.aunis.gdo.code_not_set=Debes entrar un código!
+item.aunis.gdo.computer_handled=Esperando a la computadora...
+item.aunis.gdo.mode_oc=OpnCom
+item.aunis.gdo.oc_name=Nombre de Entrada
+item.aunis.gdo.oc_address=Dirección del módem de OpenComputers (Deje en blanco para transmit)
+item.aunis.gdo.oc_port=Puerto del módem
+item.aunis.gdo.oc_data=Parametros de OpenComputers (separados por coma)
+item.aunis.gdo.oc_save=Guardar
+item.aunis.gdo.oc_port_invalid=Puerto Inválido
+item.aunis.gdo.oc_message_received=Respuesta Recibida: 
+
+# -------------------
+
+# -------------------
+# TILE ENTITIES/BLOCKS
+
+# special blocks
+tile.aunis.invisible_block.name=No puedes verme
+
+# ores and ore blocks
+tile.aunis.naquadah_ore.name=Mineral de Naquadah
+tile.aunis.naquadah_ore_stone.name=Mineral de Naquadah (Piedra)
+tile.aunis.naquadah_block.name=Bloque de Naquadah
+tile.aunis.naquadah_block_raw.name=Bloque de Naquadah (Sin procesar)
+tile.aunis.trinium_ore.name=Mineral de Trinium
+tile.aunis.titanium_ore.name=Mineral de Titanio
+tile.aunis.trinium_block.name=Bloque de Trinium
+tile.aunis.titanium_block.name=Bloque de Titanio
+
+# dhd
+tile.aunis.dhd_block.name=Dispositivo de Llamada a Casa (DHD)
+tile.aunis.dhd_block.incoming_wormhole_warn=Imposible cerrar el portal de este lado
+tile.aunis.dhd_block.not_linked_warn=El DHD no esta vinculado a este portal
+tile.aunis.dhd_block.no_crystal_warn=El DHD no tiene cristal de control
+tile.aunis.dhd_block.no_enough_power=El DHD requiere al menos 10,000uI para operar correctamente
+tile.aunis.dhd_block.computer_dial=La marcación por computadora está en progreso
+tile.aunis.dhd_block.not_enough_power=Enegía insuficiente
+
+tile.aunis.dhd_pegasus_block.name=Dispositivo de Llamada a Casa (DHD de Pegasus)
+tile.aunis.dhd_pegasus_block.unknown_buttons=This button isn't working
+
+# stargate - MW
+tile.aunis.stargate_milkyway_base_block.name=Base de Stargate (Vía Láctea)
+tile.aunis.stargate_milkyway_ring_block.name=Anillo de Stargate (Vía Láctea)
+tile.aunis.stargate_milkyway_chevron_block.name=Chevrón de Stargate (Vía Láctea)
+
+# stargate - ORLIN
+tile.aunis.stargate_orlin_base_block.open_count=Veces abierto: %s / %s
+tile.aunis.stargate_orlin_base_block.name=Base de Stargate (Orlin)
+tile.aunis.stargate_orlin_member_block.name=Anillo de Stargate (Orlin)
+
+# stargate - UNI
+tile.aunis.stargate_universe_base_block.name=Base de Stargate (Universo)
+tile.aunis.stargate_universe_chevron_block.name=Chevrón de Stargate (Universo)
+tile.aunis.stargate_universe_ring_block.name=Anillo de Stargate (Universo)
+
+# stargate - PEG
+tile.aunis.stargate_pegasus_base_block.name=Base de Stargate (Pegasus)
+tile.aunis.stargate_pegasus_ring_block.name=Anillo de Stargate (Pegasus)
+tile.aunis.stargate_pegasus_chevron_block.name=Chevrón de Stargate (Pegasus)
+
+# capacitor
+tile.aunis.capacitor_block.name=Capacitor
+tile.aunis.capacitor_block_empty.name=Capacitor (Vacío)
+
+# rings controller
+tile.aunis.transportrings_controller_goauld_block.name=Controlador del Anillo Transportador
+tile.aunis.transportrings_controller_block.not_linked=Controlador no vinculado
+
+# rings
+tile.aunis.transportrings_goauld_block.name=Anillo Transportador
+tile.aunis.transportrings_ori_block.name=Transport rings (Ori)
+
+tile.aunis.transportrings_block.non_existing_address=Imposible alcanzar esta dirección
+tile.aunis.transportrings_block.wrong_distance=Wrong distance, should be from -40 to 40
+tile.aunis.transportrings_block.obstructed=Anillos obstruidos, libera un area de 5x5 alrededor de los anillos
+tile.aunis.transportrings_block.obstructed_target=Anillos de destino obstruidos, libera un area de 5x5 alrededor de los anillos
+tile.aunis.transportrings_block.busy=Anillos Ocupados
+tile.aunis.transportrings_block.busy_target=Anillos de destino ocupados
+tile.aunis.transportrings_block.not_enough_power=Not enough power to activate rings
+tile.aunis.transportrings_block.rings_name=Nombre
+tile.aunis.transportrings_block.rings_distance=Distance
+
+# beamer
+tile.aunis.beamer_block.name=Bloque beamer
+
+# -------------------
+
+# -------------------
+# FLUIDS
+
+# silicon
 fluid.silicon_molten_black=Silicona Derretida
 fluid.silicon_molten_white=Silicona Refinada
 fluid.silicon_molten_red=Mezcla de energía
 fluid.silicon_molten_blue=Mezcla de teletransportación
 fluid.silicon_molten_ender=Mezcla de Ender
 fluid.silicon_molten_yellow=Mezcla de luz
+
+# naquadah
 fluid.naquadah_molten_raw=Naquadah Líquido
 fluid.naquadah_molten_refined=Naquadah Refinado
 fluid.naquadah_molten_alloy=Aleación de Naquadah Líquida
+
+# other
 fluid.trinium_molten=Trinium Derretido
 fluid.titanium_molten=Titanio Derretido
 
+# -------------------
 
-
-tile.aunis.dhd_block.incoming_wormhole_warn=Imposible cerrar el portal de este lado
-tile.aunis.dhd_block.not_linked_warn=El DHD no esta vinculado a este portal
-tile.aunis.dhd_block.no_crystal_warn=El DHD no tiene cristal de control
-tile.aunis.dhd_block.no_enough_power=El DHD requiere al menos 10,000uI para operar correctamente
-tile.aunis.dhd_block.computer_dial=La marcación por computadora está en progreso
-
-tile.aunis.dhd_pegasus_block.incoming_wormhole_warn=Imposible cerrar el portal de este lado
-tile.aunis.dhd_pegasus_block.not_linked_warn=El DHD no esta vinculado a este portal
-tile.aunis.dhd_pegasus_block.no_crystal_warn=El DHD no tiene cristal de control
-tile.aunis.dhd_pegasus_block.no_enough_power=El DHD requiere al menos 10,000uI para operar correctamente
-tile.aunis.dhd_pegasus_block.computer_dial=La marcación por computadora está en progreso
-tile.aunis.dhd_pegasus_block.unknown_buttons=This button isn't working
-
-tile.aunis.stargatebase_block.not_enough_power=Enegía insuficiente
-
-item.aunis.transportrings_ring_fragment.name=Fragmento de Anillo Transportador
-tile.aunis.transportrings_controller_block.name=Controlador del Anillo Transportador
-tile.aunis.transportrings_controller_block.not_linked=Controlador no vinculado
-
-tile.aunis.transportrings_block.name=Anillo Transportador
-tile.aunis.transportrings_block.non_existing_address=Imposible alcanzar esta dirección
-tile.aunis.transportrings_block.duplicate_address=Dirección duplicada
-tile.aunis.transportrings_block.wrong_address=Dirección incorrecta, debería ser 1-6
-tile.aunis.transportrings_block.obstructed=Anillos obstruidos, libera un area de 5x5 alrededor de los anillos
-tile.aunis.transportrings_block.obstructed_target=Anillos de destino obstruidos, libera un area de 5x5 alrededor de los anillos
-tile.aunis.transportrings_block.busy=Anillos Ocupados
-tile.aunis.transportrings_block.busy_target=Anillos de destino ocupados
-tile.aunis.transportrings_block.rings_no=Anillo No. %s
-tile.aunis.transportrings_block.rings_not_in_grid=Los Anillos no están en la red
-tile.aunis.transportrings_block.rings_address=Dirección
-tile.aunis.transportrings_block.rings_name=Nombre
-tile.aunis.transportrings_block.rings_distance=Distance
-tile.aunis.transportrings_block.rings_save=Guardar
+# -------------------
+# COMMANDS
 
 commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim=X] [map=Y] [id=Z]
 commands.sgquery.number_expected=Número esperado
@@ -170,11 +266,38 @@ commands.sgcloseall.number_expected=Número o "actual" esperado como ID de dimen
 commands.sggenincoming.usage=/sggenincoming (x y z) (entities<0-10>) (addressLength<7-9>)
 commands.sggenincoming.notstargate=Targeted block is not a Stargate Base
 
+# -------------------
+
+# -------------------
+# DEATH MESSAGES
+
 death.attack.eventHorizon=%s fue vaporizado por el Kawoosh
 death.attack.irisDeath=%s se estampó contra el Iris
 death.attack.wrongSide=%s entered wrong side of gate
 
+# -------------------
 
+# -------------------
+# GLYPHS
+
+# RINGS
+# Ori Glyphs
+glyph.aunis.transportrings.ori.alpha=Alpha
+glyph.aunis.transportrings.ori.beta=Beta
+glyph.aunis.transportrings.ori.gamma=Gamma
+glyph.aunis.transportrings.ori.delta=Delta
+glyph.aunis.transportrings.ori.omega=Omega
+glyph.aunis.transportrings.ori.origin=Origin
+
+# Goauld Glyphs
+glyph.aunis.transportrings.goauld.amun=Amun
+glyph.aunis.transportrings.goauld.serket=Serket
+glyph.aunis.transportrings.goauld.khepri=Khepri
+glyph.aunis.transportrings.goauld.ra=Ra
+glyph.aunis.transportrings.goauld.felluca=Felluca
+glyph.aunis.transportrings.goauld.cobra=Cobra
+
+# STARGATE
 # Milkyway Glyphs
 glyph.aunis.milkyway.sculptor=Sculptor
 glyph.aunis.milkyway.scorpius=Scorpius
@@ -293,11 +416,15 @@ glyph.aunis.universe.g33=Glyph 33
 glyph.aunis.universe.g34=Glyph 34
 glyph.aunis.universe.g35=Glyph 35
 glyph.aunis.universe.g36=Glyph 36
-glyph.aunis.universe.g37=Symbol 37
-# trololo
+
+# -------------------
+
+# -------------------
+# GUI
 
 gui.upgrades=Mejoras
 
+# dhd
 gui.dhd.fusion=Fusión fría
 gui.dhd.crystalStatus=Cristal de Control:
 gui.dhd.no_crystal=Falta el cristal
@@ -310,6 +437,7 @@ gui.dhd.running=En funcionamiento
 gui.dhd.standby=En espera
 gui.dhd.no_fuel=Sin combustible
 
+# stargate
 gui.stargate.milky_way_address=Vía Láctea
 gui.stargate.pegasus_address=Pegasus
 gui.stargate.universe_address=Universo
@@ -335,12 +463,15 @@ gui.stargate.biome_overlay.sooty=Mugriento
 gui.stargate.capacitors=Capacitores
 gui.stargate.energyBuffer=Búfer de energía
 
+# capacitor
 gui.capacitor.name=Banco de capacitores
 
-tile.aunis.beamer_block.name=Bloque beamer
-item.aunis.beamer_crystal_power.name=Cristal beamer de poder
-item.aunis.beamer_crystal_fluid.name=Cristal beamer de fluidos
-item.aunis.beamer_crystal_items.name=Cristal beamer de items
+# rings
+gui.transportrings.energyBuffer=Energy buffer
+gui.transportrings.ori_address=Ori address
+gui.transportrings.goauld_address=Goauld address
+
+# beamer
 gui.beamer.name=Gate Beamer
 gui.beamer.beamer_status=Estado beamer:
 gui.beamer.beamer_ok=El beamer ve el portal
@@ -377,61 +508,14 @@ gui.beamer.after_inactivity=inactividad [s]
 gui.beamer.save=Guardar
 gui.beamer.invalid=Inválido
 
+# gdo
 gui.gdo.send_code=Inserte código:
 gui.gdo.send_button=Enviar código
 
-chat.orlins.energyStored=Energía almacenada: %s RF (Requerido: %s RF, %s s)
+# -------------------
 
-item.aunis.universe_dialer.name=Control Antiguo
-item.aunis.universe_dialer.broken.name=Control Antiguo (Roto)
-item.aunis.universe_dialer.saved_gates=Portales guardados: %s
-item.aunis.universe_dialer.not_linked=No enlazado
-item.aunis.universe_dialer.gate_busy=El Portal está ocupado
-item.aunis.universe_dialer.mode_scan=Cercano
-item.aunis.universe_dialer.mode_saved=Memoria
-item.aunis.universe_dialer.mode_rings=Anillos
-item.aunis.universe_dialer.mode_oc=OpnCom
-item.aunis.universe_dialer.aborting=Cancelar Marcado
-item.aunis.universe_dialer.abort=Cancelar
-item.aunis.universe_dialer.not_dialing=No marcando
-item.aunis.universe_dialer.dialer_broke=El dial se ha roto para evitar que Minecraft se crasheara
-item.aunis.universe_dialer.oc_name=Nombre de la entrada
-item.aunis.universe_dialer.oc_address=Dirección del módem de OpenComputers (Dejar en blanco para transmitir)
-item.aunis.universe_dialer.oc_port=Puerto del módem
-item.aunis.universe_dialer.oc_data=Parámetros de OpenComputers (separados por coma)
-item.aunis.universe_dialer.oc_save=Guardar
-item.aunis.universe_dialer.oc_port_invalid=Puerto inválido
-item.aunis.universe_dialer.oc_message_received=Respuesta recibida: 
-item.aunis.notebook.name=Cuaderno
-item.aunis.notebook.rename_gui=Nombre Nuevo
-item.aunis.notebook.unnamed=<sin nombre>
-item.aunis.gui.name=Nombre
-item.aunis.gui.address=Dirección
-item.aunis.gui.rename=Renombrar
-item.aunis.gui.oc_address=Dirección del módem
-item.aunis.gui.oc_port=Puerto
-item.aunis.gui.oc_params=Parámetros
-item.aunis.gui.oc_port_invalid=Puerto Inválido
-
-item.aunis.gdo.name=Abrepuertas (GDO)
-item.aunis.gdo.not_linked=No vinculado
-
-item.aunis.gdo.code_sender=Código
-item.aunis.gdo.iris_opened=El Iris está abierto!
-item.aunis.gdo.iris_busy=El Iris está ocupado!
-item.aunis.gdo.code_accepted=Código aceptado! Abriendo Iris...
-item.aunis.gdo.code_rejected=Código incorrecto!
-item.aunis.gdo.code_not_set=Debes entrar un código!
-item.aunis.gdo.computer_handled=Esperando a la computadora...
-
-item.aunis.gdo.mode_oc=OpnCom
-item.aunis.gdo.oc_name=Nombre de Entrada
-item.aunis.gdo.oc_address=Dirección del módem de OpenComputers (Deje en blanco para transmit)
-item.aunis.gdo.oc_port=Puerto del módem
-item.aunis.gdo.oc_data=Parametros de OpenComputers (separados por coma)
-item.aunis.gdo.oc_save=Guardar
-item.aunis.gdo.oc_port_invalid=Puerto Inválido
-item.aunis.gdo.oc_message_received=Respuesta Recibida: 
+# -------------------
+# KEY BINDINGS
 
 config.aunis.mode_scroll=Control Antiguo modo de desplazamiento
 config.aunis.mode_up=Control Antiguo arriba
@@ -441,6 +525,10 @@ config.aunis.address_up=Control Antiguo/Cuaderno de direcciones abajo
 config.aunis.address_down=Control Antiguo/Cuaderno de direcciones arriba
 config.aunis.address_edit=Abrir el menú de direcciones
 
+# -------------------
+
+# -------------------
+# SUBTITLES
 
 aunis.subtitle.dhd_milkyway_press=DHD símbolo presionado
 aunis.subtitle.dhd_milkyway_press_brb=DHD botón brillante rojo presionado
@@ -448,8 +536,8 @@ aunis.subtitle.gate_milkyway_open=La astrovía se conecta
 aunis.subtitle.gate_milkyway_close=La astrovía se cierra
 aunis.subtitle.gate_milkyway_ring_roll=Anillo de Stargate girando
 aunis.subtitle.gate_milkyway_dial_fail=No se puede conectar la Stargate
-aunis.subtitle.gate_orlin_dial_fail=Stargate fails to connect
 aunis.subtitle.gate_orlin_broke=Stargate has broken
+aunis.subtitle.gate_orlin_dial_fail=Stargate fails to connect
 aunis.subtitle.gate_milkyway_dial_fail_computer=Stargate computer dialing fails
 aunis.subtitle.gate_milkyway_incoming=Chevrón bloqueado
 aunis.subtitle.gate_milkyway_chevron_shut=El chevron de Stargate se cierra
@@ -495,61 +583,24 @@ aunis.subtitle.beamer_loop=Sonido de láser
 aunis.subtitle.page_flip=Cambio de página
 aunis.subtitle.gdo_button_beep=Pressed GDO button
 aunis.subtitle.universe_dialer_beep=Pressed Universe Dialer button
+aunis.subtitle.universe_dialer_change_mode=Changed Universe Dialer mode
+aunis.subtitle.universe_dialer_connect=Universe Dialer connected
+
+# -------------------
+
+# -------------------
+# OTHER
+
+# orlin chat message
+chat.orlins.energyStored=Energía almacenada: %s RF (Requerido: %s RF, %s s)
+
+# -------------------
+
+# -------------------
+# MAIN MENU
 
 menu.about=Acerca de Aunis
 menu.gate_overlay=Gate
 menu.music_toggle=Music
 
-
-# category: main
-aunis.advancements.main.title=§3Aunis
-aunis.advancements.main.desc=All you need is stargate
-
-aunis.advancements.main.liquid_naquadah.title=§2Now THIS is hot stuff!
-aunis.advancements.main.liquid_naquadah.desc=Obtain Liquid Naquadah
-aunis.advancements.main.naquadah_alloy.title=§3The best Super Conductor
-aunis.advancements.main.naquadah_alloy.desc=Craft Naquadah alloy
-aunis.advancements.main.raw_naquadah_alloy.title=§dA little scabrous...
-aunis.advancements.main.raw_naquadah_alloy.desc=Craft Raw Naquadah alloy
-aunis.advancements.main.beamer.title=§bBeamers gonna Beam
-aunis.advancements.main.beamer.desc=Craft a Beamer
-aunis.advancements.main.beamer.title=§bBeamers gonna Beam
-aunis.advancements.main.beamer.desc=Craft a Beamer
-
-aunis.advancements.main.tr.title=§5Shortcut
-aunis.advancements.main.tr.desc=Use Transport rings to teleport
-
-aunis.advancements.orlin.gate.title=§6You will need a new toaster, Carter
-aunis.advancements.orlin.gate.desc=Build an Orlin´s gate
-
-# category: milkyway
-aunis.advancements.milkyway.title=§cMilkyWay
-aunis.advancements.milkyway.desc=MilkyWay category
-
-aunis.advancements.milkyway.gate.title=§6A good old one
-aunis.advancements.milkyway.gate.desc='Build a MilkyWay gate
-
-aunis.advancements.milkyway.gdo.title=§7Garage Door Opener
-aunis.advancements.milkyway.gdo.desc=Craft GDO and try not forget about it
-aunis.advancements.milkyway.dhd.title=§4Just like the old phones
-aunis.advancements.milkyway.dhd.desc=Craft Dial Home Device
-
-# category: universe
-aunis.advancements.universe.title=§cUniverse
-aunis.advancements.universe.desc=Universe category
-
-aunis.advancements.universe.gate.title=§7Ancient, in both meanings
-aunis.advancements.universe.gate.desc=Build a Universe gate
-
-aunis.advancements.universe.unidailer.title=§8Ancient handheld device
-aunis.advancements.universe.unidailer.desc=Obtain Universe Dialer
-
-# category: pegasus
-aunis.advancements.pegasus.title=§cPegasus
-aunis.advancements.pegasus.desc=Pegasus category
-
-aunis.advancements.pegasus.gate.title=§9Advanced Technologies
-aunis.advancements.pegasus.gate.desc=Build a Pegasus gate
-
-aunis.advancements.pegasus.dhd.title=§4Modern smartphones
-aunis.advancements.pegasus.dhd.desc=Craft Pegasus Dial Home Device
+# -------------------
