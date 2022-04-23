@@ -19,14 +19,13 @@ import mrjake.aunis.item.CapacitorItemBlock;
 import mrjake.aunis.item.StargateMilkyWayMemberItemBlock;
 import mrjake.aunis.item.StargatePegasusMemberItemBlock;
 import mrjake.aunis.item.StargateUniverseMemberItemBlock;
+import mrjake.aunis.item.gdo.GDOItem;
 import mrjake.aunis.tileentity.BeamerTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
 import mrjake.aunis.tileentity.energy.CapacitorTile;
 import mrjake.aunis.tileentity.stargate.*;
-import mrjake.aunis.tileentity.transportrings.TRControllerGoauldTile;
-import mrjake.aunis.tileentity.transportrings.TransportRingsGoauldTile;
-import mrjake.aunis.tileentity.transportrings.TransportRingsOriTile;
+import mrjake.aunis.tileentity.transportrings.*;
 import mrjake.aunis.util.BlockHelpers;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -93,18 +92,29 @@ public class AunisBlocks {
     public static final BeamerBlock BEAMER_BLOCK = new BeamerBlock();
 
     /**
-     * Used in {@link mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile#updateLinkStatus()}
+     * Used in {@link TRControllerAbstractTile#updateLinkStatus()}
      */
     public static final Block[] RINGS_BLOCKS = {
             TRANSPORT_RINGS_GOAULD_BLOCK,
             TRANSPORT_RINGS_ORI_BLOCK
     };
     /**
-     * Used in {@link mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile#updateLinkStatus()}
+     * Used in {@link TransportRingsAbstractTile#updateLinkStatus()}
      */
     public static final Block[] RINGS_CONTROLLERS = {
             TR_CONTROLLER_GOAULD_BLOCK
     };
+    /**
+     * Used in {@link GDOItem#onUpdate}
+     */
+    public static final Block[] STARGATE_BASE_BLOCKS = {
+            STARGATE_PEGASUS_BASE_BLOCK,
+            STARGATE_MILKY_WAY_BASE_BLOCK,
+            STARGATE_UNIVERSE_BASE_BLOCK,
+            STARGATE_ORLIN_BASE_BLOCK
+    };
+
+
     private static final Block[] blocks = {
             ORE_NAQUADAH_BLOCK, ORE_NAQUADAH_BLOCK_STONE, NAQUADAH_BLOCK,
 
@@ -123,8 +133,6 @@ public class AunisBlocks {
             INVISIBLE_BLOCK, IRIS_BLOCK,
 
             CAPACITOR_BLOCK_EMPTY, BEAMER_BLOCK,
-
-            // ZPM_HUB,
 
             TRANSPORT_RINGS_ORI_BLOCK,
 
@@ -149,7 +157,6 @@ public class AunisBlocks {
         registry.register(STARGATE_UNIVERSE_MEMBER_BLOCK);
         registry.register(STARGATE_PEGASUS_MEMBER_BLOCK);
         registry.register(CAPACITOR_BLOCK);
-        //registry.register(ZPM);
 
 
         registerTile(StargateMilkyWayBaseTile.class, AunisBlocks.STARGATE_MILKY_WAY_BASE_BLOCK.getRegistryName());

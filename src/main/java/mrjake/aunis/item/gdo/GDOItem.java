@@ -7,6 +7,7 @@ import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.GuiSendCode;
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.item.dialer.UniverseDialerMode;
 import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
@@ -14,6 +15,8 @@ import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.stargate.network.StargateNetwork;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
+import mrjake.aunis.util.LinkingHelper;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.creativetab.CreativeTabs;
@@ -34,6 +37,8 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
 
 // It would be better to make gdo and uni dialer share code... -- matousss
 public class GDOItem extends Item implements CustomModelItemInterface {
@@ -110,7 +115,7 @@ public class GDOItem extends Item implements CustomModelItemInterface {
             if (world.getTotalWorldTime() % 20 == 0 && isSelected) {
                 BlockPos pos = entity.getPosition();
 
-                int reachSquared = AunisConfig.stargateConfig.universeDialerReach * AunisConfig.stargateConfig.universeDialerReach * 2;
+                int reachSquared = AunisConfig.stargateConfig.universeDialerReach * AunisConfig.stargateConfig.universeDialerReach;
                 GDOMode mode = GDOMode.valueOf(compound.getByte("mode"));
 
                 if (mode.linkable) {
@@ -122,16 +127,25 @@ public class GDOItem extends Item implements CustomModelItemInterface {
                         }
                     } else {
                         boolean found = false;
+                        BlockPos targetPos;
+                        ArrayList<BlockPos> blacklist = new ArrayList<>();
+                        int loop = 0;
+                        do {
 
-                        for (BlockPos targetPos : BlockPos.getAllInBoxMutable(pos.add(-10, -10, -10), pos.add(10, 10, 10))) {
+                            targetPos = getNearest(world, pos, blacklist);
+                            if(targetPos == null)
+                                break;
+
                             if (world.getTileEntity(targetPos) instanceof StargateAbstractBaseTile) {
                                 switch (mode) {
                                     case CODE_SENDER:
                                     case OC:
                                         StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(targetPos);
 
-                                        if (!gateTile.isMerged())
+                                        if (gateTile == null || !gateTile.isMerged()){
+                                            blacklist.add(targetPos);
                                             continue;
+                                        }
 
                                         compound.setLong(mode.tagPosName, targetPos.toLong());
                                         found = true;
@@ -141,10 +155,8 @@ public class GDOItem extends Item implements CustomModelItemInterface {
                                         break;
                                 }
                             }
-
-                            if (found)
-                                break;
-                        }
+                            loop++;
+                        }while(!found && loop < 100);
                     }
                 }
             }
@@ -153,6 +165,10 @@ public class GDOItem extends Item implements CustomModelItemInterface {
             ItemEndpointInterface endpointStack = stack.getCapability(ItemEndpointCapability.ENDPOINT_CAPABILITY, null);
             endpointStack.checkAndUpdateEndpoint(world.getTotalWorldTime());
         }
+    }
+
+    public BlockPos getNearest(World world, BlockPos pos, ArrayList<BlockPos> blacklist){
+        return LinkingHelper.findClosestPos(world, pos, new BlockPos(AunisConfig.stargateConfig.universeDialerReach, 10, AunisConfig.stargateConfig.universeDialerReach), AunisBlocks.STARGATE_BASE_BLOCKS, blacklist);
     }
 
     @Override
@@ -172,8 +188,6 @@ public class GDOItem extends Item implements CustomModelItemInterface {
 
             if (mode.linkable && !compound.hasKey(mode.tagPosName))
                 return super.onItemRightClick(world, player, hand);
-
-            BlockPos linkedPos = BlockPos.fromLong(compound.getLong(mode.tagPosName));
 
             switch (mode) {
                 case CODE_SENDER:
