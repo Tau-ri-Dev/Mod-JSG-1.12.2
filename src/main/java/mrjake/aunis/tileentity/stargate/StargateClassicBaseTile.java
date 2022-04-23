@@ -176,6 +176,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return false;
     }
 
+    public abstract void addSymbolToAddressDHD(SymbolInterface symbol);
 
     @Override
     public void incomingWormhole(int dialedAddressSize) {

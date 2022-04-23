@@ -106,6 +106,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     public StargateAddress getAddressToDial() {
         return addressToDial;
     }
+    public void addSymbolToAddressDHD(SymbolInterface symbol) {}
 
     /**
      * Dial the address using DIALER

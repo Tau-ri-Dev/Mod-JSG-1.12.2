@@ -23,6 +23,7 @@ import mrjake.aunis.state.*;
 import mrjake.aunis.state.dialhomedevice.DHDActivateButtonState;
 import mrjake.aunis.state.stargate.StargateBiomeOverrideState;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
+import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
 import mrjake.aunis.tileentity.stargate.StargatePegasusBaseTile;
 import mrjake.aunis.tileentity.util.IUpgradable;
@@ -577,11 +578,6 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
         if(gateTile == null)
             return new Object[]{null, "dhd_not_connected", "DHD is not connected to stargate"};
 
-        if((this instanceof DHDMilkyWayTile) && !(gateTile instanceof StargateMilkyWayBaseTile))
-            return new Object[]{null, "dhd_wrong_stargate", "Wrong type of stargate detected, this is a bug!"};
-        if((this instanceof DHDPegasusTile) && !(gateTile instanceof StargatePegasusBaseTile))
-            return new Object[]{null, "dhd_wrong_stargate", "Wrong type of stargate detected, this is a bug!"};
-
         if (!gateTile.getStargateState().idle() && !gateTile.getStargateState().dialingDHD()) {
             return new Object[]{null, "dhd_failure_busy", "Linked stargate is busy, state: " + gateTile.getStargateState().toString()};
         }
@@ -590,35 +586,22 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
             return new Object[]{null, "dhd_failure_full", "Already dialed 9 chevrons"};
         }
 
-        if(this instanceof DHDMilkyWayTile) {
-            SymbolMilkyWayEnum targetSymbol = (SymbolMilkyWayEnum) gateTile.getSymbolFromNameIndex(args.checkAny(0));
-            if (targetSymbol == SymbolMilkyWayEnum.BRB) {
-                StargateOpenResult result = gateTile.attemptOpenAndFail();
-                if (result.ok())
-                    return new Object[]{null, "dhd_engage", "Opening gate"};
-                else if (result == StargateOpenResult.NOT_ENOUGH_POWER)
-                    return new Object[]{null, "dhd_engage_failed", "Not enough power to open gate"};
-                else if (result == StargateOpenResult.ADDRESS_MALFORMED)
-                    return new Object[]{null, "dhd_engage_failed", "Wrong address"};
-                else
-                    return new Object[]{null, "dhd_engage_failed_unknown", "Unknown error! This is a bug!"};
+        if(args.isInteger(0) || args.isString(0)){
+            SymbolInterface symbol = gateTile.getSymbolFromNameIndex(args.checkAny(0));
+            if(symbol != null){
+                if (symbol == gateTile.getSymbolType().getOrigin()) {
+                    StargateOpenResult result = gateTile.attemptOpenAndFail();
+                    if (result.ok())
+                        return new Object[]{null, "dhd_engage", "Opening gate"};
+                    else if (result == StargateOpenResult.NOT_ENOUGH_POWER)
+                        return new Object[]{null, "dhd_engage_failed", "Not enough power to open gate"};
+                    else if (result == StargateOpenResult.ADDRESS_MALFORMED)
+                        return new Object[]{null, "dhd_engage_failed", "Wrong address"};
+                    else
+                        return new Object[]{null, "dhd_engage_failed_unknown", "Unknown error! This is a bug!"};
+                }
+                ((StargateClassicBaseTile) gateTile).addSymbolToAddressDHD(symbol);
             }
-            ((StargateMilkyWayBaseTile) gateTile).addSymbolToAddressDHD(targetSymbol);
-        }
-        if(this instanceof DHDPegasusTile) {
-            SymbolPegasusEnum targetSymbol = (SymbolPegasusEnum) gateTile.getSymbolFromNameIndex(args.checkAny(0));
-            if (targetSymbol == SymbolPegasusEnum.BRB) {
-                StargateOpenResult result = gateTile.attemptOpenAndFail();
-                if (result.ok())
-                    return new Object[]{null, "dhd_engage", "Opening gate"};
-                else if (result == StargateOpenResult.NOT_ENOUGH_POWER)
-                    return new Object[]{null, "dhd_engage_failed", "Not enough power to open gate"};
-                else if (result == StargateOpenResult.ADDRESS_MALFORMED)
-                    return new Object[]{null, "dhd_engage_failed", "Wrong address"};
-                else
-                    return new Object[]{null, "dhd_engage_failed_unknown", "Unknown error! This is a bug!"};
-            }
-            ((StargatePegasusBaseTile) gateTile).addSymbolToAddressDHD(targetSymbol);
         }
         markDirty();
 
@@ -631,14 +614,11 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
         StargateAbstractBaseTile gateTile = this.getLinkedGate(world);
         if(gateTile == null)
             return new Object[]{null, "dhd_not_connected", "DHD is not connected to stargate"};
-        if(!(gateTile instanceof StargateMilkyWayBaseTile || gateTile instanceof StargatePegasusBaseTile))
-            return new Object[]{null, "dhd_wrong_stargate", "Wrong type of stargate detected, this is a bug!"};
         if(gateTile.getStargateState().initiating()){
             gateTile.attemptClose(StargateClosedReasonEnum.REQUESTED);
             return new Object[]{null, "dhd_disengage", "Closing gate..."};
         }
-
-        if (!gateTile.getStargateState().idle() && !gateTile.getStargateState().dialingDHD()) {
+        if (!gateTile.getStargateState().idle()) {
             return new Object[]{null, "dhd_failure_busy", "Linked stargate is busy, state: " + gateTile.getStargateState().toString()};
         }
         StargateOpenResult result = gateTile.attemptOpenAndFail();
@@ -648,8 +628,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
             return new Object[]{null, "dhd_engage_failed", "Not enough power to open gate"};
         else if(result == StargateOpenResult.ADDRESS_MALFORMED)
             return new Object[]{null, "dhd_engage_failed", "Wrong address"};
-        else
-            return new Object[]{null, "dhd_engage_failed_unknown", "Unknown error! This is a bug!"};
+        return new Object[]{null, "dhd_engage_failed_unknown", "Unknown error! This is a bug!"};
     }
 
 

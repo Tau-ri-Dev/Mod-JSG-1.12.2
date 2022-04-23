@@ -106,7 +106,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         return getStargateSizeConfig(server).teleportBox;
     }
 
-    public void addSymbolToAddressDHD(SymbolMilkyWayEnum symbol) {
+    public void addSymbolToAddressDHD(SymbolInterface symbol) {
         stargateState = EnumStargateState.DIALING;
         markDirty();
         addSymbolToAddress(symbol);
@@ -123,7 +123,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         else
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10 + plusTime));
 
-        sendSignal(null, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), isFinalActive, symbol.englishName});
+        sendSignal(null, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), isFinalActive, symbol.getEnglishName()});
 
         markDirty();
     }
