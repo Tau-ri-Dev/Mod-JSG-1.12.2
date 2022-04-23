@@ -29,6 +29,9 @@ public final class JEIIntegration implements IModPlugin {
         // Hide Notebook from JEI
         registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(AunisItems.NOTEBOOK_ITEM, 1));
 
+        // Hide ORI thing
+        registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(AunisItems.CRYSTAL_GLYPH_ORI, 1));
+
         // Tab handling
         registry.addAdvancedGuiHandlers(new JEIAdvancedGuiHandler());
 
