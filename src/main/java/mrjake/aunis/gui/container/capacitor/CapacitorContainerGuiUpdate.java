@@ -1,4 +1,4 @@
-package mrjake.aunis.gui.container;
+package mrjake.aunis.gui.container.capacitor;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.state.State;

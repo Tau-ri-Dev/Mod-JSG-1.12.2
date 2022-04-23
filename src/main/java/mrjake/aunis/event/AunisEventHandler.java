@@ -83,12 +83,6 @@ public class AunisEventHandler {
 
 			event.getTable().addPool(pool);
 		}
-		if (event.getName().toString().equals("minecraft:chests/nether_bridge")) {
-			LootEntry entry = new LootEntryTable(new ResourceLocation(Aunis.ModID, "nether_bridge"), 1, 0, new LootCondition[]{}, "zpm");
-			LootPool pool = new LootPool(new LootEntry[]{entry}, new LootCondition[]{}, new RandomValueRange(2), new RandomValueRange(0), "zpm_pool");
-
-			event.getTable().addPool(pool);
-		}
 	}
 
 	@SubscribeEvent

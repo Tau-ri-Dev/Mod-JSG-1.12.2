@@ -1,11 +1,11 @@
-package mrjake.aunis.gui.container;
+package mrjake.aunis.gui.container.dhd;
 
+import mrjake.aunis.gui.container.OpenTabHolderInterface;
 import mrjake.aunis.gui.util.ContainerHelper;
-import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.state.StateTypeEnum;
-import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
+import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
 import mrjake.aunis.tileentity.util.ReactorStateEnum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -13,6 +13,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,31 +23,31 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class DHDPegasusContainer extends Container implements OpenTabHolderInterface {
+public abstract class DHDAbstractContainer extends Container implements OpenTabHolderInterface {
 
 	public Slot slotCrystal;
 	public FluidTank tankNaquadah;
-	public DHDPegasusTile dhdTile;
-
-	private BlockPos pos;
-	private int tankLastAmount;
-	private ReactorStateEnum lastReactorState;
-	private boolean lastLinked;
-	private int openTabId = -1;
-
+	public DHDAbstractTile dhdTile;
+		
+	protected BlockPos pos;
+	protected int tankLastAmount;
+	protected ReactorStateEnum lastReactorState;
+	protected boolean lastLinked;
+	protected int openTabId = -1;
+	
 	@Override
 	public int getOpenTabId() {
 		return openTabId;
 	}
-
+	
 	@Override
 	public void setOpenTabId(int tabId) {
 		openTabId = tabId;
 	}
-
-	public DHDPegasusContainer(IInventory playerInventory, World world, int x, int y, int z) {
+	
+	public DHDAbstractContainer(IInventory playerInventory, World world, int x, int y, int z) {
 		pos = new BlockPos(x, y, z);
-		dhdTile = (DHDPegasusTile) world.getTileEntity(pos);
+		dhdTile = (DHDAbstractTile) world.getTileEntity(pos);
 		IItemHandler itemHandler = dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		
 		// Crystal slot (index 0)
@@ -89,7 +90,7 @@ public class DHDPegasusContainer extends Container implements OpenTabHolderInter
         
 		// Transfering from player's inventory to DHD
         else {
-        	if (stack.getItem() == AunisItems.CRYSTAL_CONTROL_PEGASUS_DHD) {
+        	if (stack.getItem() == getControlCrystal()) {
         		if (!slotCrystal.getHasStack()) {
         			ItemStack stack1 = stack.copy();
     				stack1.setCount(1);
@@ -101,7 +102,7 @@ public class DHDPegasusContainer extends Container implements OpenTabHolderInter
         		}
         	}
         	
-        	else if (DHDPegasusTile.SUPPORTED_UPGRADES.contains(stack.getItem()) && !dhdTile.hasUpgrade(stack.getItem())) {
+        	else if (DHDAbstractTile.SUPPORTED_UPGRADES.contains(stack.getItem()) && !dhdTile.hasUpgrade(stack.getItem())) {
         		for (int i=1; i<5; i++) {
         			if (!getSlot(i).getHasStack()) {
         				ItemStack stack1 = stack.copy();
@@ -138,7 +139,7 @@ public class DHDPegasusContainer extends Container implements OpenTabHolderInter
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 				
-		if (tankLastAmount != tankNaquadah.getFluidAmount() || lastReactorState != dhdTile.getReactorState() || lastLinked != dhdTile.isLinked()) {			
+		if (tankLastAmount != tankNaquadah.getFluidAmount() || lastReactorState != dhdTile.getReactorState() || lastLinked != dhdTile.isLinked()) {
 			for (IContainerListener listener : listeners) {
 				if (listener instanceof EntityPlayerMP) {
 					AunisPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(pos, StateTypeEnum.GUI_UPDATE, new DHDContainerGuiUpdate(tankNaquadah.getFluidAmount(), tankNaquadah.getCapacity(), dhdTile.getReactorState(), dhdTile.isLinked())), (EntityPlayerMP) listener);
@@ -150,4 +151,6 @@ public class DHDPegasusContainer extends Container implements OpenTabHolderInter
 			lastLinked = dhdTile.isLinked();
 		}
 	}
+
+	public abstract Item getControlCrystal();
 }

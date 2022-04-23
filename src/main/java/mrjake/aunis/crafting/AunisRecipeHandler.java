@@ -42,7 +42,6 @@ public class AunisRecipeHandler {
 	 */
 	public static final CircuitCrystalRecipe CIRCUIT_CONTROL_CRYSTAL = new CircuitCrystalRecipe();
 	public static final CircuitNaquadahRecipe CIRCUIT_CONTROL_NAQUADAH = new CircuitNaquadahRecipe();
-	//public static final CircuitZpmRecipe CIRCUIT_CONTROL_ZPM = new CircuitZpmRecipe();
 
 	/**
 	 * Ingots
@@ -72,7 +71,6 @@ public class AunisRecipeHandler {
 			// Circuits
 			CIRCUIT_CONTROL_CRYSTAL,
 			CIRCUIT_CONTROL_NAQUADAH,
-			//CIRCUIT_CONTROL_ZPM,
 
 			// Ingots
 			INGOT_NAQUADAH_ALLOY,

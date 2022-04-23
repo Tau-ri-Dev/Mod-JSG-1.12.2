@@ -9,7 +9,7 @@ import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.fluid.AunisFluids;
-import mrjake.aunis.gui.container.DHDContainerGuiUpdate;
+import mrjake.aunis.gui.container.dhd.DHDContainerGuiUpdate;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
@@ -322,7 +322,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
             switch (slot) {
                 case 0:
                     if(instance instanceof DHDMilkyWayTile)
-                        return item == AunisItems.CRYSTAL_CONTROL_DHD;
+                        return item == AunisItems.CRYSTAL_CONTROL_MILKYWAY_DHD;
                     if(instance instanceof DHDPegasusTile)
                         return item == AunisItems.CRYSTAL_CONTROL_PEGASUS_DHD;
 

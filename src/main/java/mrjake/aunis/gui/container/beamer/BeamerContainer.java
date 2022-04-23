@@ -1,4 +1,4 @@
-package mrjake.aunis.gui.container;
+package mrjake.aunis.gui.container.beamer;
 
 import mrjake.aunis.beamer.BeamerModeEnum;
 import mrjake.aunis.beamer.BeamerRoleEnum;

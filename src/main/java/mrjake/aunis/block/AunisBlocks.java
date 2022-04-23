@@ -15,8 +15,6 @@ import mrjake.aunis.block.stargate.*;
 import mrjake.aunis.block.transportrings.TRControllerGoauldBlock;
 import mrjake.aunis.block.transportrings.TransportRingsGoauldBlock;
 import mrjake.aunis.block.transportrings.TransportRingsOriBlock;
-import mrjake.aunis.block.zpm.ZPMBlock;
-import mrjake.aunis.block.zpm.ZPMHubBlock;
 import mrjake.aunis.item.CapacitorItemBlock;
 import mrjake.aunis.item.StargateMilkyWayMemberItemBlock;
 import mrjake.aunis.item.StargatePegasusMemberItemBlock;
@@ -82,11 +80,6 @@ public class AunisBlocks {
     public static final TRControllerGoauldBlock TR_CONTROLLER_GOAULD_BLOCK = new TRControllerGoauldBlock();
     public static final InvisibleBlock INVISIBLE_BLOCK = new InvisibleBlock();
     public static final IrisBlock IRIS_BLOCK = new IrisBlock();
-
-    // -----------------------------------------------------------------------------
-
-    public static final ZPMHubBlock ZPM_HUB = new ZPMHubBlock();
-    public static final ZPMBlock ZPM = new ZPMBlock();
 
     // -----------------------------------------------------------------------------
 
@@ -175,9 +168,6 @@ public class AunisBlocks {
         registerTile(TRControllerGoauldTile.class, AunisBlocks.TR_CONTROLLER_GOAULD_BLOCK.getRegistryName());
         registerTile(CapacitorTile.class, AunisBlocks.CAPACITOR_BLOCK.getRegistryName());
         registerTile(BeamerTile.class, AunisBlocks.BEAMER_BLOCK.getRegistryName());
-
-        //registerTile(ZPMHubTile.class, AunisBlocks.ZPM_HUB.getRegistryName());
-        //registerTile(ZPMTile.class, AunisBlocks.ZPM.getRegistryName());
     }
 
     public static void registerTile(Class<? extends TileEntity> tileEntityClass, ResourceLocation key) {
@@ -196,7 +186,6 @@ public class AunisBlocks {
         registry.register(new StargateUniverseMemberItemBlock(STARGATE_UNIVERSE_MEMBER_BLOCK));
         registry.register(new StargatePegasusMemberItemBlock(STARGATE_PEGASUS_MEMBER_BLOCK));
         registry.register(new CapacitorItemBlock(CAPACITOR_BLOCK));
-        //registry.register(new ZPMItemBlock(ZPM));
     }
 
     @SubscribeEvent
@@ -213,7 +202,6 @@ public class AunisBlocks {
         ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(STARGATE_PEGASUS_MEMBER_BLOCK), STARGATE_PEGASUS_MEMBER_BLOCK.CHEVRON_META, new ModelResourceLocation("aunis:stargate_pegasus_chevron_block"));
 
         ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(CAPACITOR_BLOCK), 0, new ModelResourceLocation(CAPACITOR_BLOCK.getRegistryName(), "inventory"));
-        //ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ZPM), 0, new ModelResourceLocation(ZPM.getRegistryName(), "inventory"));
     }
 
     @Nullable

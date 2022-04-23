@@ -1,4 +1,4 @@
-package mrjake.aunis.gui.container;
+package mrjake.aunis.gui.container.beamer;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.beamer.BeamerRoleEnum;

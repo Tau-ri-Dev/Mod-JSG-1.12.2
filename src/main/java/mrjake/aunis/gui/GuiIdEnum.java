@@ -9,10 +9,7 @@ public enum GuiIdEnum {
 	GUI_CAPACITOR(2),
 	GUI_BEAMER(3),
 	GUI_PEGASUS_DHD(4),
-
-	GUI_ZPM(5),
-	GUI_ZPMHUB(6),
-	GUI_RINGS(7)
+	GUI_RINGS(5)
 	;
     public int id;
 	

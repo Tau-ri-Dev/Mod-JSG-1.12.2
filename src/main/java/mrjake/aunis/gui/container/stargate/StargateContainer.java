@@ -1,6 +1,7 @@
-package mrjake.aunis.gui.container;
+package mrjake.aunis.gui.container.stargate;
 
 import mrjake.aunis.block.AunisBlocks;
+import mrjake.aunis.gui.container.OpenTabHolderInterface;
 import mrjake.aunis.gui.util.ContainerHelper;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;

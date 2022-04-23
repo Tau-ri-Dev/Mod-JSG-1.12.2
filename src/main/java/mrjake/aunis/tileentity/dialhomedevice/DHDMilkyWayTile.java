@@ -179,7 +179,7 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
       NBTTagList tagList = inventoryTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 
       if (tagList.tagCount() > 0) {
-        itemStackHandler.setStackInSlot(0, new ItemStack(AunisItems.CRYSTAL_CONTROL_DHD));
+        itemStackHandler.setStackInSlot(0, new ItemStack(AunisItems.CRYSTAL_CONTROL_MILKYWAY_DHD));
 
         int energy = tagList.getCompoundTagAt(0).getCompoundTag("ForgeCaps").getCompoundTag("Parent").getInteger("energy");
         int fluidAmount = energy / AunisConfig.dhdConfig.energyPerNaquadah;

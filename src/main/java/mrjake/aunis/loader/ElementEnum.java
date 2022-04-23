@@ -76,12 +76,6 @@ public enum ElementEnum {
   PLATFORM_RINGS_GOAULD_BASIC("platforms/rings/goauld_basic.obj", "platforms/rings/goauld_basic"),
 
   // --------------------------------------------------------------------------------------------
-  // ZPM things
-
-  ZPM_HUB("zpm/zpmhub.obj", "zpm/hub/zpmhub"),
-  //ZPM("zpm/zpm.obj", "zpm/item/zpm_1"),
-
-  // --------------------------------------------------------------------------------------------
   // Irises/Shields
 
   SHIELD("iris/shield.obj", "iris/shield"),

@@ -385,10 +385,6 @@ public class AunisConfig {
 
         @Name("Capacitors supported by Universe gates")
         public int universeCapacitors = 0;
-
-        @Name("ZPM Capacity")
-        @RangeInt(min = 0)
-        public int zpmEnergyStorage = 2000000000;
     }
 
     public static class RingsConfig {

@@ -1,4 +1,4 @@
-package mrjake.aunis.gui.container;
+package mrjake.aunis.gui.container.capacitor;
 
 import mrjake.aunis.gui.util.ContainerHelper;
 import mrjake.aunis.packet.AunisPacketHandler;

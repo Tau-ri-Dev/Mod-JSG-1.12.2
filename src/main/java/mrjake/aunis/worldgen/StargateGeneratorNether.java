@@ -193,7 +193,7 @@ public class StargateGeneratorNether {
 						((FluidTank) world.getTileEntity(dhdPos).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)).fillInternal(new FluidStack(AunisFluids.moltenNaquadahRefined, fluid), true);
 						
 						itemHandler = world.getTileEntity(dhdPos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-						itemHandler.insertItem(0, new ItemStack(AunisItems.CRYSTAL_CONTROL_DHD), false);
+						itemHandler.insertItem(0, new ItemStack(AunisItems.CRYSTAL_CONTROL_MILKYWAY_DHD), false);
 						
 						if (StargateDimensionConfig.netherOverworld8thSymbol())
 							itemHandler.insertItem(1, new ItemStack(AunisItems.CRYSTAL_GLYPH_DHD), false);

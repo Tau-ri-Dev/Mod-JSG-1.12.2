@@ -133,7 +133,7 @@ public class StargateGenerator {
 
 						DHDAbstractTile dhdTile = (DHDAbstractTile) world.getTileEntity(dhdPos);
 
-						ItemStack crystal = new ItemStack(isPegasusGate ? AunisItems.CRYSTAL_CONTROL_PEGASUS_DHD : AunisItems.CRYSTAL_CONTROL_DHD);
+						ItemStack crystal = new ItemStack(isPegasusGate ? AunisItems.CRYSTAL_CONTROL_PEGASUS_DHD : AunisItems.CRYSTAL_CONTROL_MILKYWAY_DHD);
 
 						dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(0, crystal, false);
 						if(isPegasusGate) dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(1, new ItemStack(AunisItems.CRYSTAL_GLYPH_DHD), false);

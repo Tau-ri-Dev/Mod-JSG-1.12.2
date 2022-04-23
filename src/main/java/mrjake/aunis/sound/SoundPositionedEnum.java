@@ -29,12 +29,7 @@ public enum SoundPositionedEnum {
   MAINMENU_GATE_OPEN(7, "gate_milkyway_open", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
   MAINMENU_GATE_GO(8, "wormhole_go", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
   MAINMENU_CHEVRON_SHUT(9, "gate_milkyway_chevron_shut", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
-  MAINMENU_CHEVRON_OPEN(10, "gate_milkyway_chevron_open", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
-
-  // zpm stuff
-  ZPMHUB_ZPM_SLIDE_IN(11, "zpm_slide_in", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
-  ZPMHUB_ZPM_SLIDE_OUT(12, "zpm_slide_out", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false),
-  ZPMHUB_ZPM_ACTIVATED(13, "zpm_activated", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false);
+  MAINMENU_CHEVRON_OPEN(10, "gate_milkyway_chevron_open", AunisSoundHelper.AUNIS_SOUND_CATEGORY, false);
 
   public int id;
   public ResourceLocation resourceLocation;

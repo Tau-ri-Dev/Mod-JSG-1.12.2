@@ -1,7 +1,7 @@
 package mrjake.aunis.tileentity.energy;
 
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.gui.container.CapacitorContainerGuiUpdate;
+import mrjake.aunis.gui.container.capacitor.CapacitorContainerGuiUpdate;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.packet.StateUpdateRequestToServer;

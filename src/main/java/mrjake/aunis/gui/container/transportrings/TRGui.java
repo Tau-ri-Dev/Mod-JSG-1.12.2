@@ -287,7 +287,8 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        super.keyTyped(typedChar, keyCode);
+        if(keyCode == 1)
+            super.keyTyped(typedChar, keyCode);
         for (GuiTextField tf : textFields) {
             if(tf.textboxKeyTyped(typedChar, keyCode))
                 keyTyped = true;

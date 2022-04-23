@@ -6,11 +6,8 @@ import mrjake.aunis.item.gdo.GDOItem;
 import mrjake.aunis.item.notebook.NotebookItem;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent.Register;
@@ -25,7 +22,7 @@ public class AunisItems {
     /**
      * DHD power/control crystal
      */
-    public static final Item CRYSTAL_CONTROL_DHD = ItemHelper.createGenericItem("crystal_control_dhd", aunisItemsCreativeTab);
+    public static final Item CRYSTAL_CONTROL_MILKYWAY_DHD = ItemHelper.createGenericItem("crystal_control_dhd", aunisItemsCreativeTab);
     public static final Item CRYSTAL_CONTROL_PEGASUS_DHD = ItemHelper.createGenericItem("crystal_control_pegasus_dhd", aunisItemsCreativeTab);
     /**
      * DHD Pegasus control crystal crafting
@@ -94,10 +91,6 @@ public class AunisItems {
     public static final Item HOLDER_CRYSTAL = ItemHelper.createGenericItem("holder_crystal", aunisItemsCreativeTab);
     public static final Item HOLDER_CRYSTAL_PEGASUS = ItemHelper.createGenericItem("holder_crystal_pegasus", aunisItemsCreativeTab);
 
-    //public static final Item HOLDER_ZPM = ItemHelper.createGenericItem("holder_zpm", aunisItemsCreativeTab);
-    //public static final Item CIRCUIT_CONTROL_ZPM = ItemHelper.createGenericItem("circuit_control_zpm", aunisItemsCreativeTab);
-    //public static final Item CONNECTOR_ZPM = ItemHelper.createGenericItem("connector_zpm", aunisItemsCreativeTab);
-
     public static final Item DHD_BRB = ItemHelper.createGenericItem("dhd_brb", aunisItemsCreativeTab);
     public static final Item DHD_BBB = ItemHelper.createGenericItem("dhd_bbb", aunisItemsCreativeTab);
 
@@ -113,7 +106,7 @@ public class AunisItems {
     public static final Item BEAMER_CRYSTAL_ITEMS = ItemHelper.createGenericItem("beamer_crystal_items", aunisItemsCreativeTab);
 
     private static Item[] items = {
-            CRYSTAL_CONTROL_DHD,
+            CRYSTAL_CONTROL_MILKYWAY_DHD,
             CRYSTAL_CONTROL_PEGASUS_DHD,
             CRYSTAL_RAW_PEGASUS_DHD,
 
@@ -153,17 +146,12 @@ public class AunisItems {
             CIRCUIT_CONTROL_CRYSTAL,
             CIRCUIT_CONTROL_NAQUADAH,
 
-            //CIRCUIT_CONTROL_ZPM,
-            //CONNECTOR_ZPM,
-
             STARGATE_RING_FRAGMENT,
             UNIVERSE_RING_FRAGMENT,
             TR_RING_FRAGMENT,
 
             HOLDER_CRYSTAL,
             HOLDER_CRYSTAL_PEGASUS,
-
-            //HOLDER_ZPM,
 
             DHD_BRB,
             DHD_BBB,

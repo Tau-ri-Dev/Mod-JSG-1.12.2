@@ -1,13 +1,12 @@
-package mrjake.aunis.gui.container;
+package mrjake.aunis.gui.container.dhd;
 
-import mrjake.aunis.Aunis;
 import mrjake.aunis.fluid.AunisFluids;
 import mrjake.aunis.gui.element.*;
 import mrjake.aunis.gui.element.Diode.DiodeStatus;
 import mrjake.aunis.gui.element.Tab.SlotTab;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.SetOpenTabToServer;
-import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
+import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
 import mrjake.aunis.tileentity.util.ReactorStateEnum;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -25,11 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DHDPegasusContainerGui extends GuiContainer implements TabbedContainerInterface {
-
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_dhd_pegasus.png");
-
-	private DHDPegasusContainer container;
+public abstract class DHDAbstractContainerGui extends GuiContainer implements TabbedContainerInterface {
+	private DHDAbstractContainer container;
 	private FluidTankElement tank;
 
 	private List<Diode> diodes = new ArrayList<Diode>(3);
@@ -37,7 +33,7 @@ public class DHDPegasusContainerGui extends GuiContainer implements TabbedContai
 	private List<Tab> tabs = new ArrayList<>();
 	private TabBiomeOverlay overlayTab;
 
-	public DHDPegasusContainerGui(DHDPegasusContainer container) {
+	public DHDAbstractContainerGui(DHDAbstractContainer container) {
 		super(container);
 		
 		this.xSize = 176;
@@ -109,7 +105,7 @@ public class DHDPegasusContainerGui extends GuiContainer implements TabbedContai
 				.setTabSize(128, 51)
 				.setTabTitle(I18n.format("gui.stargate.biome_overlay"))
 				.setTabSide(TabSideEnum.RIGHT)
-				.setTexture(BACKGROUND_TEXTURE, 256)
+				.setTexture(getBackgroundTexture(), 256)
 				.setBackgroundTextureLocation(0, 194)
 				.setIconRenderPos(107, 7)
 				.setIconSize(20, 18)
@@ -117,8 +113,7 @@ public class DHDPegasusContainerGui extends GuiContainer implements TabbedContai
 		
 		tabs.add(overlayTab);
 		
-		container.inventorySlots.set(DHDPegasusTile.BIOME_OVERRIDE_SLOT, overlayTab.createAndSaveSlot((SlotItemHandler)
-				container.getSlot(DHDPegasusTile.BIOME_OVERRIDE_SLOT)));
+		container.inventorySlots.set(DHDAbstractTile.BIOME_OVERRIDE_SLOT, overlayTab.createAndSaveSlot((SlotItemHandler) container.getSlot(DHDAbstractTile.BIOME_OVERRIDE_SLOT)));
 	}
 
 	@Override
@@ -139,7 +134,7 @@ public class DHDPegasusContainerGui extends GuiContainer implements TabbedContai
 			tab.render(fontRenderer, mouseX, mouseY);
 		}
 		
-		mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
+		mc.getTextureManager().bindTexture(getBackgroundTexture());
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
         
 		// Crystal background
@@ -166,7 +161,7 @@ public class DHDPegasusContainerGui extends GuiContainer implements TabbedContai
 		
 		// Naquadah ducts
 		GlStateManager.enableBlend();
-		mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
+		mc.getTextureManager().bindTexture(getBackgroundTexture());
 		drawTexturedModalRect(guiLeft+102, guiTop+55, 0, 168, 48, 16);
 		drawTexturedModalRect(guiLeft+83, guiTop+72, 0, 184, 84, 10);
 		GlStateManager.disableBlend();
@@ -183,7 +178,7 @@ public class DHDPegasusContainerGui extends GuiContainer implements TabbedContai
         
         // Tank's gauge
 		GlStateManager.enableBlend();
-		mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
+		mc.getTextureManager().bindTexture(getBackgroundTexture());
 		drawTexturedModalRect(151, 18, 176, 32, 16, 54);
 		GlStateManager.disableBlend();
 		
@@ -231,4 +226,6 @@ public class DHDPegasusContainerGui extends GuiContainer implements TabbedContai
 				.map(tab -> tab.getArea())
 				.collect(Collectors.toList());
 	}
+
+	public abstract ResourceLocation getBackgroundTexture();
 }
