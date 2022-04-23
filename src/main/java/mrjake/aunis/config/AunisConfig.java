@@ -1,8 +1,10 @@
 package mrjake.aunis.config;
 
+import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.util.ItemMetaPair;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.config.Config;
@@ -68,7 +70,7 @@ public class AunisConfig {
     public static AudioVideoConfig avConfig = new AudioVideoConfig();
 
     @Name("Ore Generator config")
-    public static WorldOreGenerator worldGeneratorConfig = new WorldOreGenerator();
+    public static WorldOreGenerator oreGeneratorConfig = new WorldOreGenerator();
 
     @Name("Stargate Generator config")
     public static WorldStargateGenerator stargateGeneratorConfig = new WorldStargateGenerator();
@@ -109,21 +111,24 @@ public class AunisConfig {
 
         @Name("Kawoosh invincible blocks")
         @Comment({
-                "Format: \"modid:blockid[:meta]\", for example: ",
+                "Format: \"modid:blockid[:meta/*]\", for example: ",
                 "\"minecraft:wool:7\"",
-                "\"minecraft:stone\""
+                "\"minecraft:stone\"",
+                "\"minecraft:concrete:*\""
         })
         public String[] kawooshInvincibleBlocks = {};
 
-        private List<IBlockState> cachedInvincibleBlocks = null;
+        private Map<IBlockState, Boolean> cachedInvincibleBlocks = null;
 
         public boolean canKawooshDestroyBlock(IBlockState state) {
             if (state.getBlock() == AunisBlocks.IRIS_BLOCK) return false;
-            if (cachedInvincibleBlocks == null) {
+            if (cachedInvincibleBlocks == null || debugConfig.checkInvincibleBlocks) {
                 cachedInvincibleBlocks = BlockMetaParser.parseConfig(kawooshInvincibleBlocks);
             }
-
-            return !cachedInvincibleBlocks.contains(state);
+            if(cachedInvincibleBlocks.get(state.getBlock().getDefaultState())){
+                return false;
+            }
+            return cachedInvincibleBlocks.get(state) == null;
         }
 
 
@@ -150,22 +155,18 @@ public class AunisConfig {
 
         private Map<Biome, BiomeOverlayEnum> cachedBiomeMatchesReverse = null;
 
-        private void genBiomeOverrideBiomeCache() {
-            cachedBiomeMatchesReverse = new HashMap<>();
-
-            for (Map.Entry<String, String[]> entry : biomeMatches.entrySet()) {
-                List<Biome> parsedList = BiomeParser.parseConfig(entry.getValue());
-                BiomeOverlayEnum biomeOverlay = BiomeOverlayEnum.fromString(entry.getKey());
-
-                for (Biome biome : parsedList) {
-                    cachedBiomeMatchesReverse.put(biome, biomeOverlay);
-                }
-            }
-        }
-
         public Map<Biome, BiomeOverlayEnum> getBiomeOverrideBiomes() {
             if (cachedBiomeMatchesReverse == null) {
-                genBiomeOverrideBiomeCache();
+                cachedBiomeMatchesReverse = new HashMap<>();
+
+                for (Map.Entry<String, String[]> entry : biomeMatches.entrySet()) {
+                    List<Biome> parsedList = BiomeParser.parseConfig(entry.getValue());
+                    BiomeOverlayEnum biomeOverlay = BiomeOverlayEnum.fromString(entry.getKey());
+
+                    for (Biome biome : parsedList) {
+                        cachedBiomeMatchesReverse.put(biome, biomeOverlay);
+                    }
+                }
             }
 
             return cachedBiomeMatchesReverse;
@@ -461,6 +462,9 @@ public class AunisConfig {
 
         @Name("Show loading textures in log")
         public boolean logTexturesLoading = false;
+
+        @Name("Ignore cashed invincible blocks")
+        public boolean checkInvincibleBlocks = false;
     }
 
     public static class MysteriousConfig {
@@ -733,14 +737,6 @@ public class AunisConfig {
         };
     }
 
-    public static class DevConfig {
-        @Name("Enable peg gates with myst pages")
-        public boolean pegGatesMyst = false;
-
-        @Name("Enable rings platform")
-        public boolean enableRingPlatform = false;
-    }
-
     public static class RecipesConfig {
 
         @RequiresMcRestart
@@ -761,6 +757,14 @@ public class AunisConfig {
                 "WARNING! - Requires reloading!"
         })
         public boolean bypassThermal = false;
+    }
+
+    public static class DevConfig {
+        @Name("Enable peg gates with myst pages")
+        public boolean pegGatesMyst = false;
+
+        @Name("Enable rings platform")
+        public boolean enableRingPlatform = false;
     }
 
     public static void resetCache() {

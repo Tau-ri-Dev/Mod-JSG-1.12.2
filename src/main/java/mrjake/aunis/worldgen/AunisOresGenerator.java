@@ -24,26 +24,26 @@ public class AunisOresGenerator implements IWorldGenerator {
 	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		switch(world.provider.getDimensionType()) {
 			case NETHER:
-				if (AunisConfig.worldGeneratorConfig.naquadahEnable) {
+				if (AunisConfig.oreGeneratorConfig.naquadahEnable) {
 					runGenerator(AunisBlocks.ORE_NAQUADAH_BLOCK.getDefaultState(),
-							AunisConfig.worldGeneratorConfig.naquadahVeinSize,
-							AunisConfig.worldGeneratorConfig.naquadahMaxVeinInChunk, 0, 128,
+							AunisConfig.oreGeneratorConfig.naquadahVeinSize,
+							AunisConfig.oreGeneratorConfig.naquadahMaxVeinInChunk, 0, 128,
 							BlockMatcher.forBlock(Blocks.NETHERRACK), world, rand, chunkX, chunkZ);
 				}
 				break;
 			case OVERWORLD:
-				if (AunisConfig.worldGeneratorConfig.titaniumEnable) {
+				if (AunisConfig.oreGeneratorConfig.titaniumEnable) {
 					runGenerator(AunisBlocks.ORE_TITANIUM_BLOCK.getDefaultState(),
-							AunisConfig.worldGeneratorConfig.titaniumVeinSize,
-							AunisConfig.worldGeneratorConfig.titaniumMaxVeinInChunk, 0, 25,
+							AunisConfig.oreGeneratorConfig.titaniumVeinSize,
+							AunisConfig.oreGeneratorConfig.titaniumMaxVeinInChunk, 0, 25,
 							BlockMatcher.forBlock(Blocks.STONE), world, rand, chunkX, chunkZ);
 				}
 				break;
 			case THE_END:
-				if (AunisConfig.worldGeneratorConfig.triniumEnabled) {
+				if (AunisConfig.oreGeneratorConfig.triniumEnabled) {
 					runGenerator(AunisBlocks.ORE_TRINIUM_BLOCK.getDefaultState(),
-							AunisConfig.worldGeneratorConfig.triniumVeinSize,
-							AunisConfig.worldGeneratorConfig.triniumMaxVeinInChunk, 0, 128,
+							AunisConfig.oreGeneratorConfig.triniumVeinSize,
+							AunisConfig.oreGeneratorConfig.triniumMaxVeinInChunk, 0, 128,
 							BlockMatcher.forBlock(Blocks.END_STONE), world, rand, chunkX, chunkZ);
 				}
 				break;
