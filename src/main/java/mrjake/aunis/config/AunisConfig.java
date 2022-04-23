@@ -116,16 +116,27 @@ public class AunisConfig {
                 "\"minecraft:stone\"",
                 "\"minecraft:concrete:*\""
         })
-        public String[] kawooshInvincibleBlocks = {};
+        public String[] kawooshInvincibleBlocks = {
+                "minecraft:snow_layer:*",
+                "minecraft:rail:*",
+                "minecraft:golden_rail:*",
+                "minecraft:detector_rail:*",
+                "minecraft:activator_rail:*",
+                "minecraft:carpet:*",
+                "minecraft:stone_pressure_plate:*",
+                "minecraft:wooden_pressure_plate:*",
+                "minecraft:light_weighted_pressure_plate:*",
+                "minecraft:heavy_weighted_pressure_plate:*"
+        };
 
         private Map<IBlockState, Boolean> cachedInvincibleBlocks = null;
 
         public boolean canKawooshDestroyBlock(IBlockState state) {
             if (state.getBlock() == AunisBlocks.IRIS_BLOCK) return false;
-            if (cachedInvincibleBlocks == null || debugConfig.checkInvincibleBlocks) {
+            if (cachedInvincibleBlocks == null) {
                 cachedInvincibleBlocks = BlockMetaParser.parseConfig(kawooshInvincibleBlocks);
             }
-            if(cachedInvincibleBlocks.get(state.getBlock().getDefaultState())){
+            if(cachedInvincibleBlocks.get(state.getBlock().getDefaultState()) != null && cachedInvincibleBlocks.get(state.getBlock().getDefaultState())){
                 return false;
             }
             return cachedInvincibleBlocks.get(state) == null;

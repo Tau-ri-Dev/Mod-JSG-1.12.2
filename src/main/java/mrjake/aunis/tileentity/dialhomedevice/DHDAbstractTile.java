@@ -589,7 +589,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
         if(args.isInteger(0) || args.isString(0)){
             SymbolInterface symbol = gateTile.getSymbolFromNameIndex(args.checkAny(0));
             if(symbol != null){
-                if (symbol == gateTile.getSymbolType().getOrigin()) {
+                if (symbol == gateTile.getSymbolType().getBRB()) {
                     StargateOpenResult result = gateTile.attemptOpenAndFail();
                     if (result.ok())
                         return new Object[]{null, "dhd_engage", "Opening gate"};

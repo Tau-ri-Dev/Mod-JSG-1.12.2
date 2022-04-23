@@ -36,6 +36,21 @@ public enum SymbolTypeEnum implements EnumKeyInterface<Integer> {
     return null;
   }
 
+  public SymbolInterface getBRB() {
+    switch (this) {
+      case MILKYWAY:
+        return SymbolMilkyWayEnum.BRB;
+
+      case PEGASUS:
+        return SymbolPegasusEnum.BRB;
+
+      case UNIVERSE:
+        return SymbolUniverseEnum.getTopSymbol();
+    }
+
+    return null;
+  }
+
   public SymbolInterface valueOfSymbol(int id) {
     switch (this) {
       case MILKYWAY:
