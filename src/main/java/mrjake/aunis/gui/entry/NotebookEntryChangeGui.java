@@ -3,6 +3,8 @@ package mrjake.aunis.gui.entry;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
+import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
+import mrjake.aunis.transportrings.TransportRingsAddress;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHand;
@@ -29,11 +31,20 @@ public class NotebookEntryChangeGui extends AbstractAddressEntryChangeGui {
 			NBTTagCompound compound = list.getCompoundTagAt(i);
 			
 			String name = PageNotebookItem.getNameFromCompound(compound);
-			SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf(compound.getInteger("symbolType"));
-			StargateAddress stargateAddress = new StargateAddress(compound.getCompoundTag("address"));
-			int maxSymbols = symbolType.getMaxSymbolsDisplay(compound.getBoolean("hasUpgrade"));			
-			
-			NotebookEntry entry = new NotebookEntry(mc, i, list.tagCount(), hand, name, (action, index) -> performAction(action, index), symbolType, stargateAddress, maxSymbols);
+			NotebookEntry entry;
+			if(compound.hasKey("transportRings")){
+				SymbolTypeTransportRingsEnum symbolType = SymbolTypeTransportRingsEnum.valueOf(compound.getInteger("symbolType"));
+				TransportRingsAddress address = new TransportRingsAddress(compound.getCompoundTag("address"));
+
+				entry = new NotebookEntry(mc, i, list.tagCount(), hand, name, (action, index) -> performAction(action, index), null, symbolType, null, address, address.size());
+			}
+			else {
+				SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf(compound.getInteger("symbolType"));
+				StargateAddress stargateAddress = new StargateAddress(compound.getCompoundTag("address"));
+				int maxSymbols = symbolType.getMaxSymbolsDisplay(compound.getBoolean("hasUpgrade"));
+
+				entry = new NotebookEntry(mc, i, list.tagCount(), hand, name, (action, index) -> performAction(action, index), symbolType, null, stargateAddress, null, maxSymbols);
+			}
 			entries.add(entry);
 		}
 	}

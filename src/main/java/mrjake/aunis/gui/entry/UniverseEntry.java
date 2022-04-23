@@ -19,7 +19,7 @@ public class UniverseEntry extends AbstractAddressEntry {
     public BetterButton dialButton;
 
     public UniverseEntry(Minecraft mc, int index, int maxIndex, EnumHand hand, String name, ActionListener reloadListener, SymbolTypeEnum type, StargateAddress addr, int maxSymbols) {
-        super(mc, index, maxIndex, hand, name, reloadListener, type, addr, maxSymbols);
+        super(mc, index, maxIndex, hand, name, reloadListener, type, null, addr, null, maxSymbols);
 
         dialButton = new ArrowButton(150, 0, 0, ArrowButton.ArrowType.RIGHT)
                 .setFgColor(GuiUtils.getColorCode('a', true))
@@ -38,6 +38,7 @@ public class UniverseEntry extends AbstractAddressEntry {
 
         int x = dx + (ADDRESS_WIDTH - addressWidth) / 2;
         for (int i = 0; i < maxSymbols; i++) {
+            if(stargateAddress == null) break;
             SymbolInterface symbol = stargateAddress.get(i);
 
             renderSymbol(x, dy, width, height, mouseX, mouseY, symbol);

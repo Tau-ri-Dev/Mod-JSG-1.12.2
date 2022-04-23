@@ -4,6 +4,8 @@ import mrjake.aunis.packet.gui.entry.EntryDataTypeEnum;
 import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
+import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
+import mrjake.aunis.transportrings.TransportRingsAddress;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumHand;
 
@@ -12,8 +14,8 @@ public class NotebookEntry extends AbstractAddressEntry {
 	public static final int ADDRESS_WIDTH = 160;
 	public static final int BUTTON_COUNT = 3;
 	
-	public NotebookEntry(Minecraft mc, int index, int maxIndex, EnumHand hand, String name, ActionListener reloadListener, SymbolTypeEnum type, StargateAddress addr, int maxSymbols) {
-		super(mc, index, maxIndex, hand, name, reloadListener, type, addr, maxSymbols);
+	public NotebookEntry(Minecraft mc, int index, int maxIndex, EnumHand hand, String name, ActionListener reloadListener, SymbolTypeEnum type, SymbolTypeTransportRingsEnum ringsType, StargateAddress addr, TransportRingsAddress ringsAddr, int maxSymbols) {
+		super(mc, index, maxIndex, hand, name, reloadListener, type, ringsType, addr,  ringsAddr, maxSymbols);
 	}
 	
 	@Override
@@ -22,9 +24,14 @@ public class NotebookEntry extends AbstractAddressEntry {
 		int x = dx+(ADDRESS_WIDTH-size*(maxSymbols))/2;
 		
 		for (int i=0; i<maxSymbols; i++) {
-			SymbolInterface symbol = stargateAddress.get(i);	
-			
-			renderSymbol(x, dy, size, size, mouseX, mouseY, symbol);
+			SymbolInterface symbol = null;
+			if(stargateAddress != null)
+				symbol = stargateAddress.get(i);
+			else if(ringsAddress != null)
+				symbol = ringsAddress.get(i);
+
+			if(symbol != null)
+				renderSymbol(x, dy, size, size, mouseX, mouseY, symbol);
 			x += size;
 		}
 		super.renderAt(dx+ADDRESS_WIDTH+10, dy, mouseX, mouseY, partialTicks);
