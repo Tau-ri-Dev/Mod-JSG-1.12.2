@@ -1114,20 +1114,20 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] isInGrid(Context context, Arguments args) {
-        return new Object[]{rings.isInGrid()};
+        return new Object[]{getRings().isInGrid()};
     }
 
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getName(Context context, Arguments args) {
-        return new Object[]{rings.getName()};
+        return new Object[]{getRings().getName()};
     }
 
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] setName(Context context, Arguments args) {
         String name = args.checkString(0);
-        setRingsParams(null, rings.getAddresses(), null, name);
+        setRingsName(name);
 
         return new Object[]{};
     }
@@ -1148,18 +1148,28 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     @Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] addSymbolToAddress(Context context, Arguments args) {
-        int symbolId = args.checkInteger(1);
+        String symbolName = "";
+        int symbolId = -1;
+        if(!args.isInteger(1))
+            symbolName = args.checkString(1);
+        else
+            symbolId = args.checkInteger(1);
+
         int symbolType = args.checkInteger(0);
+        int maxSymbolType = SymbolTypeTransportRingsEnum.values().length;
+        if (symbolType < 0 || symbolType >= maxSymbolType)
+            throw new IllegalArgumentException("bad argument #1 (symbolType must be in a range (0 - " + maxSymbolType + "))");
 
-        if (symbolId < 0)
-            throw new IllegalArgumentException("bad argument #1 (address out of range, must be higher than -1)");
-
-        if (symbolType < 0 || symbolType > SymbolTypeTransportRingsEnum.values().length)
-            throw new IllegalArgumentException("bad argument #2 (symbolType must be in a range)");
+        SymbolTypeTransportRingsEnum symbolTypeConverted = SymbolTypeTransportRingsEnum.valueOf(symbolType);
+        int maxSymbols = symbolTypeConverted.getSymbolsCount();
+        if (symbolName.equals("") && (symbolId < 0 || symbolId >= maxSymbols))
+            throw new IllegalArgumentException("bad argument #2 (address out of range, must be higher than -1 and lower than " + maxSymbols + ")");
 
         ocContext = context;
-
-        return new Object[]{addSymbolToAddress(SymbolTypeTransportRingsEnum.valueOf(symbolType).getSymbol(symbolId))};
+        if(symbolName.equals(""))
+            return new Object[]{addSymbolToAddress(symbolTypeConverted.getSymbol(symbolId))};
+        else
+            return new Object[]{addSymbolToAddress(symbolTypeConverted.fromEnglishName(symbolName))};
     }
 
     @Override

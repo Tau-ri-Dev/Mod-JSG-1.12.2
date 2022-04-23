@@ -32,6 +32,17 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
     return null;
   }
 
+  public int getSymbolsCount(){
+    switch (this) {
+      case GOAULD:
+        return SymbolGoauldEnum.values().length;
+      case ORI:
+        return SymbolOriEnum.values().length;
+    }
+
+    return 0;
+  }
+
   public SymbolInterface getLight(){
     switch (this) {
       case GOAULD:
