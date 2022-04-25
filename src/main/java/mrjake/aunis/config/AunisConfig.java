@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static mrjake.aunis.config.StargateTimeLimitModeEnum.DRAW_MORE_POWER;
+
 @Config(modid = "aunis", name = "aunis") // + Aunis.Version)
 public class AunisConfig {
 
@@ -469,9 +471,6 @@ public class AunisConfig {
 
         @Name("Show loading textures in log")
         public boolean logTexturesLoading = false;
-
-        @Name("Ignore cashed invincible blocks")
-        public boolean checkInvincibleBlocks = false;
     }
 
     public static class MysteriousConfig {
@@ -531,7 +530,7 @@ public class AunisConfig {
         @Comment({
                 "U can use: closeGate, drawMorePower"
         })
-        public String maxOpenedWhat = "drawMorePower";
+        public StargateTimeLimitModeEnum maxOpenedWhat = DRAW_MORE_POWER;
 
         @Name("Enable max open time?")
         public boolean maxOpenedEnabled = true;
@@ -767,9 +766,6 @@ public class AunisConfig {
     }
 
     public static class DevConfig {
-        @Name("Enable peg gates with myst pages")
-        public boolean pegGatesMyst = false;
-
         @Name("Enable rings platform")
         public boolean enableRingPlatform = false;
     }

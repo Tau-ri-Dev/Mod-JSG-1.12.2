@@ -69,6 +69,8 @@ import javax.annotation.Nullable;
 import javax.vecmath.Vector2f;
 import java.util.*;
 
+import static mrjake.aunis.config.StargateTimeLimitModeEnum.CLOSE_GATE;
+
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
 public abstract class StargateAbstractBaseTile extends TileEntity implements StateProviderInterface, ITickable, ICapabilityProvider, ScheduledTaskExecutorInterface, Environment, WirelessEndpoint, PreparableInterface {
 
@@ -1056,8 +1058,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         addTimeLimitSecond();
         int configPower = AunisConfig.openLimitConfig.maxOpenedPowerDrawAfterLimit;
         if (AunisConfig.openLimitConfig.maxOpenedEnabled && getAutoCloseManager().afterLimitSeconds()) {
-            if (AunisConfig.openLimitConfig.maxOpenedWhat.equals("closeGate")){
-                //attemptClose(StargateClosedReasonEnum.TIMELIMIT);
+            if (AunisConfig.openLimitConfig.maxOpenedWhat == CLOSE_GATE){
                 attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
                 if(this instanceof StargatePegasusBaseTile) ((StargatePegasusBaseTile) this).clearDHDSymbols();
                 if(this instanceof StargateMilkyWayBaseTile) ((StargateMilkyWayBaseTile) this).clearDHDSymbols();
