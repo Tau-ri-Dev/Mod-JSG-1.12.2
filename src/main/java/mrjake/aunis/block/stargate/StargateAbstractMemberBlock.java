@@ -115,6 +115,11 @@ public abstract class StargateAbstractMemberBlock extends Block {
     }
 
     @Override
+    public boolean isTranslucent(IBlockState state){
+        return true;
+    }
+
+    @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing facing) {
     	if (state.getValue(AunisProps.RENDER_BLOCK)) {
     		// Rendering some block

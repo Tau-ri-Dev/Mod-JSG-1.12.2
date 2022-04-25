@@ -3,10 +3,12 @@ package mrjake.aunis.block.stargate;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
+import mrjake.aunis.block.dialhomedevice.DHDAbstractBlock;
 import mrjake.aunis.block.dialhomedevice.DHDBlock;
 import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.stargate.CamoPropertiesHelper;
 import mrjake.aunis.stargate.EnumMemberVariant;
+import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicMemberTile;
 import net.minecraft.block.Block;
@@ -21,9 +23,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -35,6 +39,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.UniversalBucket;
 
 public abstract class StargateClassicMemberBlock extends StargateAbstractMemberBlock {
 
@@ -153,9 +159,9 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
         if (!world.isRemote && memberTile != null) {
             // Server and tile entity exists
 
-            if (memberTile.isMerged() && memberTile.getCamoState() == null || DHDBlock.SNOW_MATCHER.apply(memberTile.getCamoState())) {
+            if (memberTile.isMerged() && memberTile.getCamoState() == null || DHDAbstractBlock.SNOW_MATCHER.apply(memberTile.getCamoState())) {
                 // Merged and camo is empty or it's snow
-                boolean snowAround = DHDBlock.isSnowAroundBlock(world, pos);
+                boolean snowAround = DHDAbstractBlock.isSnowAroundBlock(world, pos);
 
                 // Set camo to snow or null
                 memberTile.setCamoState(snowAround ? Blocks.SNOW_LAYER.getDefaultState() : null);
@@ -163,7 +169,6 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
             }
         }
     }
-
 
     // ------------------------------------------------------------------------
     @SuppressWarnings("deprecation")
@@ -186,7 +191,6 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
 
             if (!memberTile.isMerged() || heldBlock instanceof StargateClassicMemberBlock || heldBlock instanceof StargateClassicBaseBlock)
                 return false;
-
             if (!(heldItem instanceof ItemBlock) && camoBlockState == null) {
                 BlockPos basePos = memberTile.getBasePos();
                 if(basePos == null)

@@ -1,7 +1,6 @@
 package mrjake.aunis.renderer.dialhomedevice;
 
 import mrjake.aunis.block.AunisBlocks;
-import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.loader.model.ModelLoader;
 import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
@@ -17,11 +16,8 @@ import net.minecraft.world.World;
 
 public class DHDMilkyWayRenderer extends DHDAbstractRenderer {
     @Override
-    public void renderSymbols(DHDAbstractTile te, DHDAbstractRendererState rendererState, World world, BlockPos lightPos){
-        NBTTagCompound compound = null;
-        ItemStack item = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
-        if(item.hasTagCompound()) //&& item.equals(new ItemStack(AunisItems.PAGE_NOTEBOOK_ITEM)))
-            compound = item.getTagCompound();
+    public void renderSymbols(DHDAbstractTile te, DHDAbstractRendererState rendererState, World world, BlockPos lightPos) {
+        NBTTagCompound compound = getNoteBookPage();
 
         for (SymbolMilkyWayEnum symbol : SymbolMilkyWayEnum.values()) {
             setColorByAddress(te, rendererState, compound, SymbolTypeEnum.MILKYWAY, symbol);
@@ -31,12 +27,12 @@ public class DHDMilkyWayRenderer extends DHDAbstractRenderer {
     }
 
     @Override
-    public void renderDHD(DHDAbstractRendererState rendererState){
+    public void renderDHD(DHDAbstractRendererState rendererState) {
         ElementEnum.MILKYWAY_DHD.bindTextureAndRender(rendererState.getBiomeOverlay());
     }
 
     @Override
-    public Block getDHDBlock(){
+    public Block getDHDBlock() {
         return AunisBlocks.DHD_BLOCK;
     }
 }

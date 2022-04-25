@@ -1,10 +1,12 @@
 package mrjake.aunis.renderer.transportrings;
 
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile;
 import mrjake.vector.Vector3f;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -13,6 +15,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+
+import static mrjake.aunis.block.AunisBlocks.isInBlocksArray;
 
 public abstract class TRControllerAbstractRenderer extends TileEntitySpecialRenderer<TRControllerAbstractTile> {
 
@@ -65,6 +69,7 @@ public abstract class TRControllerAbstractRenderer extends TileEntitySpecialRend
 	public void render(TRControllerAbstractTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		TRControllerAbstractRendererState rendererState = te.getRendererState();
 		if(rendererState == null) return;
+		if(!isInBlocksArray(te.getWorld().getBlockState(te.getPos()).getBlock(), AunisBlocks.RINGS_CONTROLLERS)) return;
 		rendererState.iterate(getWorld(), partialTicks);
 		IBlockState blockState = te.getWorld().getBlockState(te.getPos());
 		facing = blockState.getValue(AunisProps.FACING_HORIZONTAL);

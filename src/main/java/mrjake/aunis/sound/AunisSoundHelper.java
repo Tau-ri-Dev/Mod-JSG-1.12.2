@@ -17,23 +17,21 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 @EventBusSubscriber
 public class AunisSoundHelper {
-	
-	public static final SoundCategory AUNIS_SOUND_CATEGORY = Aunis.AUNIS_SOUNDS;
 
 	public static void playPositionedSound(World world, BlockPos pos, SoundPositionedEnum soundEnum, boolean play) {
 		AunisPacketHandler.INSTANCE.sendToAllTracking(new SoundPositionedPlayToClient(pos, soundEnum, play), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512));
 	}
 	
 	public static void playSoundEventClientSide(World world, BlockPos pos, SoundEventEnum soundEventEnum) {		
-		world.playSound(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, soundEventEnum.soundEvent, AUNIS_SOUND_CATEGORY, soundEventEnum.volume * AunisConfig.avConfig.volume, 1.0f, false);
+		world.playSound(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, soundEventEnum.soundEvent, Aunis.AUNIS_SOUNDS, soundEventEnum.volume * AunisConfig.avConfig.volume * 5f, 1.0f, false);
 	}	
 	
 	public static void playSoundEvent(World world, BlockPos pos, SoundEventEnum soundEventEnum) {		
-		world.playSound(null, pos, soundEventEnum.soundEvent, AUNIS_SOUND_CATEGORY, soundEventEnum.volume * AunisConfig.avConfig.volume, 1.0f);
+		world.playSound(null, pos, soundEventEnum.soundEvent, Aunis.AUNIS_SOUNDS, soundEventEnum.volume * AunisConfig.avConfig.volume * 5f, 1.0f);
 	}
 	
 	public static void playSoundToPlayer(EntityPlayerMP player, SoundEventEnum soundEventEnum, BlockPos pos) {
-		player.connection.sendPacket(new SPacketSoundEffect(soundEventEnum.soundEvent, AUNIS_SOUND_CATEGORY, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, soundEventEnum.volume * AunisConfig.avConfig.volume, 1.0f));
+		player.connection.sendPacket(new SPacketSoundEffect(soundEventEnum.soundEvent, Aunis.AUNIS_SOUNDS, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, soundEventEnum.volume * AunisConfig.avConfig.volume, 1.0f));
 	}
 	
 	@SubscribeEvent

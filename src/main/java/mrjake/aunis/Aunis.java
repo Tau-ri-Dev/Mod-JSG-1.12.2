@@ -164,6 +164,9 @@ public class Aunis {
 
         StargateSizeEnum.init();
         Aunis.info("Successfully registered Stargate sizes!");
+
+        AunisFluids.registerWaterLogs();
+        Aunis.info("Successfully registered Water logged blocks! - jk... maybe later");
     	proxy.init(event);
     }
 
