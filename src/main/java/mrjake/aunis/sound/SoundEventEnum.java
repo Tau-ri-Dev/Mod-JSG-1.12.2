@@ -54,7 +54,7 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     DHD_PEGASUS_PRESS_BRB(81, "dhd_pegasus_press_brb", 0.08f),
 
     GATE_PEGASUS_CHEVRON_OPEN(82, "gate_pegasus_chevron_open", 0.4f),
-    GATE_PEGASUS_OPEN(83, "gate_pegasus_open", 0.2f),
+    GATE_PEGASUS_OPEN(83, "gate_pegasus_open", 0.1f),
     GATE_PEGASUS_INCOMING(84, "gate_pegasus_incoming", 0.4f),
     GATE_PEGASUS_DIAL_FAILED(85, "gate_pegasus_dial_fail", 0.4f),
 
