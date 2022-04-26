@@ -2,11 +2,11 @@ package mrjake.aunis.block.stargate;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.block.AunisBlock;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateAbstractMemberTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicMemberTile;
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public abstract class StargateAbstractMemberBlock extends Block {
+public abstract class StargateAbstractMemberBlock extends AunisBlock {
 
     public StargateAbstractMemberBlock(String blockName) {
         super(Material.IRON);

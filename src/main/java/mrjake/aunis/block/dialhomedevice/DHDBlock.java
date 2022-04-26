@@ -8,18 +8,24 @@ import net.minecraft.world.World;
 
 public class DHDBlock extends DHDAbstractBlock {
 
-  public static final String BLOCK_NAME = "dhd_block";
+    public static final String BLOCK_NAME = "dhd_block";
 
-  public DHDBlock() {
-    super(BLOCK_NAME);
-  }
-  @Override
-  public TileEntity createTileEntity(World world, IBlockState state) {
-    return new DHDMilkyWayTile();
-  }
+    public DHDBlock() {
+        super(BLOCK_NAME);
+    }
 
-  @Override
-  public GuiIdEnum getGui() {
-    return GuiIdEnum.GUI_DHD;
-  }
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state) {
+        return new DHDMilkyWayTile();
+    }
+
+    @Override
+    public Class<? extends TileEntity> getTileEntityClass() {
+        return DHDMilkyWayTile.class;
+    }
+
+    @Override
+    public GuiIdEnum getGui() {
+        return GuiIdEnum.GUI_DHD;
+    }
 }

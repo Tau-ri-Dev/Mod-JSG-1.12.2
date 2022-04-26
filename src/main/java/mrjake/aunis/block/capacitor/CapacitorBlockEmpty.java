@@ -2,6 +2,7 @@ package mrjake.aunis.block.capacitor;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.block.AunisBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -14,7 +15,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CapacitorBlockEmpty extends Block {
+public class CapacitorBlockEmpty extends AunisBlock {
 	
 	public static final String BLOCK_NAME = "capacitor_block_empty";
 	

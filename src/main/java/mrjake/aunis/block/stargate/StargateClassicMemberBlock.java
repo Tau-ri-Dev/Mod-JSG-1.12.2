@@ -45,6 +45,8 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.UniversalBucket;
 
+import java.util.Map;
+
 public abstract class StargateClassicMemberBlock extends StargateAbstractMemberBlock {
 
     public StargateClassicMemberBlock(String blockName) {
@@ -349,4 +351,7 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess access, BlockPos pos) {
         return CamoPropertiesHelper.getStargateBlockBoundingBox(state, access, pos, true);
     }
+
+    public abstract ItemBlock getItemBlock();
+    public abstract Map<Integer, String> getAllMetaTypes();
 }

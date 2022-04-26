@@ -3,6 +3,7 @@ package mrjake.aunis.block.transportrings;
 import mcp.MethodsReturnNonnullByDefault;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.block.AunisBlock;
 import mrjake.aunis.raycaster.Raycaster;
 import mrjake.aunis.raycaster.RaycasterRingsGoauldController;
 import mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile;
@@ -25,7 +26,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public abstract class TRControllerAbstractBlock extends Block {
+public abstract class TRControllerAbstractBlock extends AunisBlock {
     public TRControllerAbstractBlock(String blockName) {
         super(Material.ROCK);
 

@@ -1,6 +1,7 @@
 package mrjake.aunis.block.transportrings;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.block.AunisBlock;
 import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
@@ -19,7 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public abstract class TransportRingsAbstractBlock extends Block {
+public abstract class TransportRingsAbstractBlock extends AunisBlock {
 
     public TransportRingsAbstractBlock(String name) {
         super(Material.IRON);

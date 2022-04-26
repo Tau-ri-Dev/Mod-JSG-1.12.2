@@ -35,16 +35,16 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     GATE_MILKYWAY_DIAL_FAILED_COMPUTER(15, "gate_milkyway_dial_fail_computer", 0.5f),
     GATE_MILKYWAY_INCOMING(16, "gate_milkyway_incoming", 0.4f),
 
-    GATE_MILKYWAY_CHEVRON_SHUT(17, "gate_milkyway_chevron_shut", 0.4f),
-    GATE_MILKYWAY_CHEVRON_OPEN(18, "gate_milkyway_chevron_open", 0.4f),
+    GATE_MILKYWAY_CHEVRON_SHUT(17, "gate_milkyway_chevron_shut", 0.6f),
+    GATE_MILKYWAY_CHEVRON_OPEN(18, "gate_milkyway_chevron_open", 0.6f),
 
 
     // ----------------------------------------------------------
     // Stargate - Universe
     GATE_UNIVERSE_DIAL_START(70, "gate_universe_dial_start", 0.5f),
-    GATE_UNIVERSE_CHEVRON_LOCK(71, "gate_universe_chevron_lock", 0.7f),
-    GATE_UNIVERSE_CHEVRON_TOP_LOCK(72, "gate_universe_chevron_top_lock", 0.7f),
-    GATE_UNIVERSE_DIAL_FAILED(73, "gate_universe_fail", 0.7f),
+    GATE_UNIVERSE_CHEVRON_LOCK(71, "gate_universe_chevron_lock", 0.6f),
+    GATE_UNIVERSE_CHEVRON_TOP_LOCK(72, "gate_universe_chevron_top_lock", 0.6f),
+    GATE_UNIVERSE_DIAL_FAILED(73, "gate_universe_fail", 0.6f),
     GATE_UNIVERSE_OPEN(74, "gate_universe_open", 0.5f),
     GATE_UNIVERSE_CLOSE(75, "gate_universe_close", 0.5f),
 

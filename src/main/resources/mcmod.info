@@ -5,7 +5,7 @@
     "description": "Stargate mod",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "https://github.com/MineDragonCZ/Aunis1/",
+    "url": "https://github.com/MineDragonCZ/Aunis/",
     "updateUrl": "",
     "authorList": [ "MrJake222", "MarcelMPL", "slava_110", "Harald De Luca", "MineDragonCZ_", "matousss"],
     "credits": "Main thing by MrJake222. Updated by MineDragonCZ_ and matousss.",

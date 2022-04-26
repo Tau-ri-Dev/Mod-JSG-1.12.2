@@ -2,6 +2,7 @@ package mrjake.aunis.block.stargate;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.block.AunisBlock;
 import mrjake.aunis.stargate.EnumMemberVariant;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
@@ -27,7 +28,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class StargateAbstractBaseBlock extends Block {
+public abstract class StargateAbstractBaseBlock extends AunisBlock {
 
   public StargateAbstractBaseBlock(String blockName) {
     super(Material.IRON);

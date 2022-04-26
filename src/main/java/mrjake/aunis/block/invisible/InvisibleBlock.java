@@ -2,6 +2,7 @@ package mrjake.aunis.block.invisible;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.block.AunisBlock;
 import mrjake.aunis.config.AunisConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -16,7 +17,7 @@ import net.minecraft.world.IBlockAccess;
 
 import javax.annotation.Nullable;
 
-public class InvisibleBlock extends Block {
+public class InvisibleBlock extends AunisBlock {
 
 	public static final String blockName = "invisible_block";
 

@@ -3,16 +3,19 @@ package mrjake.aunis.block.stargate;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.item.StargateMilkyWayMemberItemBlock;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargateOrlinMergeHelper;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateOrlinMemberTile;
+import mrjake.aunis.tileentity.stargate.StargateUniverseMemberTile;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -189,5 +192,10 @@ public final class StargateOrlinMemberBlock extends StargateAbstractMemberBlock 
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new StargateOrlinMemberTile();
+	}
+
+	@Override
+	public Class<? extends TileEntity> getTileEntityClass() {
+		return StargateOrlinMemberTile.class;
 	}
 }

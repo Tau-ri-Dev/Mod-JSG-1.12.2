@@ -1,5 +1,6 @@
 package mrjake.aunis.block.stargate;
 
+import mrjake.aunis.tileentity.stargate.StargateMilkyWayMemberTile;
 import mrjake.aunis.tileentity.stargate.StargatePegasusBaseTile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
@@ -16,5 +17,10 @@ public final class StargatePegasusBaseBlock extends StargateClassicBaseBlock {
   @Override
   public TileEntity createTileEntity(World world, IBlockState state) {
     return new StargatePegasusBaseTile();
+  }
+
+  @Override
+  public Class<? extends TileEntity> getTileEntityClass() {
+    return StargatePegasusBaseTile.class;
   }
 }

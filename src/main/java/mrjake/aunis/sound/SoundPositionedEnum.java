@@ -10,8 +10,8 @@ import java.util.Map;
 public enum SoundPositionedEnum {
 
   // gate ring sounds
-  MILKYWAY_RING_ROLL(0, "gate_milkyway_ring_roll", Aunis.AUNIS_SOUNDS, true, 0.5f),
-  MILKYWAY_RING_ROLL_START(14, "gate_milkyway_ring_roll_start", Aunis.AUNIS_SOUNDS, false, 0.5f),
+  MILKYWAY_RING_ROLL(0, "gate_milkyway_ring_roll", Aunis.AUNIS_SOUNDS, true, 0.4f),
+  MILKYWAY_RING_ROLL_START(14, "gate_milkyway_ring_roll_start", Aunis.AUNIS_SOUNDS, false, 0.4f),
 
   UNIVERSE_RING_ROLL(2, "gate_universe_roll", Aunis.AUNIS_SOUNDS, true, 0.5f),
   UNIVERSE_RING_ROLL_START(15, "gate_universe_roll_start", Aunis.AUNIS_SOUNDS, false, 0.5f),

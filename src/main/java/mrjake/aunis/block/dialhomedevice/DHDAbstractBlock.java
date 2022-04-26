@@ -2,6 +2,7 @@ package mrjake.aunis.block.dialhomedevice;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.block.AunisBlock;
 import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
@@ -36,7 +37,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
 
-public abstract class DHDAbstractBlock extends Block {
+public abstract class DHDAbstractBlock extends AunisBlock {
 
   public DHDAbstractBlock(String blockName) {
     super(Material.IRON);

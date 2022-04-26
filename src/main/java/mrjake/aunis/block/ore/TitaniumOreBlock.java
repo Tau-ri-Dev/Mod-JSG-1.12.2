@@ -1,6 +1,7 @@
 package mrjake.aunis.block.ore;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.block.AunisBlock;
 import mrjake.aunis.item.AunisItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -16,7 +17,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class TitaniumOreBlock extends Block {
+public class TitaniumOreBlock extends AunisBlock {
 
 	public TitaniumOreBlock(String blockName) {
 		super(Material.ROCK);

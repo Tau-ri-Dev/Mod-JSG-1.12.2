@@ -6,6 +6,7 @@ import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.stargate.merging.StargateOrlinMergeHelper;
 import mrjake.aunis.stargate.network.StargateNetwork;
 import mrjake.aunis.stargate.power.StargateEnergyRequired;
+import mrjake.aunis.tileentity.stargate.StargateMilkyWayMemberTile;
 import mrjake.aunis.tileentity.stargate.StargateOrlinBaseTile;
 import mrjake.aunis.worldgen.StargateGeneratorNether;
 import net.minecraft.block.Block;
@@ -156,7 +157,11 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new StargateOrlinBaseTile();
 	}
-	
+
+	@Override
+	public Class<? extends TileEntity> getTileEntityClass() {
+		return StargateOrlinBaseTile.class;
+	}
 	
 	// ------------------------------------------------------------------------
 	// Render

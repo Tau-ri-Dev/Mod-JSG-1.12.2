@@ -2,7 +2,10 @@ package mrjake.aunis.block.capacitor;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.block.AunisAbstractCustomItemBlock;
 import mrjake.aunis.gui.GuiIdEnum;
+import mrjake.aunis.item.CapacitorItemBlock;
+import mrjake.aunis.item.StargateUniverseMemberItemBlock;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
 import mrjake.aunis.stargate.power.StargateItemEnergyStorage;
 import mrjake.aunis.tileentity.energy.CapacitorTile;
@@ -13,6 +16,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -28,7 +32,7 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-public class CapacitorBlock extends Block {
+public class CapacitorBlock extends AunisAbstractCustomItemBlock {
 	
 	public static final String BLOCK_NAME = "capacitor_block";
 	
@@ -130,7 +134,12 @@ public class CapacitorBlock extends Block {
 	public boolean hasTileEntity(IBlockState state) {
 		return true;
 	}
-	
+
+	@Override
+	public Class<? extends TileEntity> getTileEntityClass() {
+		return CapacitorTile.class;
+	}
+
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new CapacitorTile();
@@ -143,5 +152,10 @@ public class CapacitorBlock extends Block {
 	@Override
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
+	}
+
+	@Override
+	public ItemBlock getItemBlock() {
+		return new CapacitorItemBlock(this);
 	}
 }

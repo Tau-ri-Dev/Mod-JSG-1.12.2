@@ -3,10 +3,12 @@ package mrjake.aunis.block.beamer;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.beamer.BeamerLinkingHelper;
+import mrjake.aunis.block.AunisBlock;
 import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundPositionedEnum;
 import mrjake.aunis.tileentity.BeamerTile;
+import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
 import mrjake.aunis.util.ItemHandlerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -26,7 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class BeamerBlock extends Block {
+public class BeamerBlock extends AunisBlock {
 	
 	public static final String BLOCK_NAME = "beamer_block";
 	
@@ -146,6 +148,11 @@ public class BeamerBlock extends Block {
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new BeamerTile();
+	}
+
+	@Override
+	public Class<? extends TileEntity> getTileEntityClass() {
+		return BeamerTile.class;
 	}
 	
 	
