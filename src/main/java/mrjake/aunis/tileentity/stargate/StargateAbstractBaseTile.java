@@ -896,6 +896,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 Aunis.ocWrapper.joinOrCreateNetwork(this);
                 // Aunis.info(pos + ": Stargate joined OC network");
             }
+            if(targetPoint == null){
+                targetPoint = new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
+                markDirty();
+            }
 
             if (stargateState.engaged() && targetGatePos == null && !randomIncomingIsActive) {
                 Aunis.logger.error("A stargateState indicates the Gate should be open, but targetGatePos is null. This is a bug. Closing gate...");

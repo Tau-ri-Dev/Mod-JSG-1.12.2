@@ -8,8 +8,11 @@ import mrjake.aunis.block.dialhomedevice.DHDBlock;
 import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.stargate.CamoPropertiesHelper;
 import mrjake.aunis.stargate.EnumMemberVariant;
+import mrjake.aunis.stargate.merging.StargateClassicMergeHelper;
+import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
 import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
+import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicMemberTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
@@ -175,26 +178,29 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack heldItemStack = player.getHeldItem(EnumHand.MAIN_HAND);
+
+        if(AunisBlocks.isInBlocksArray(Block.getBlockFromItem(heldItemStack.getItem()), AunisBlocks.CAMO_BLOCKS_BLACKLIST)){
+            heldItemStack = ItemStack.EMPTY;
+        }
+
         Item heldItem = heldItemStack.getItem();
         Block heldBlock = Block.getBlockFromItem(heldItemStack.getItem());
 
         StargateClassicMemberTile memberTile = (StargateClassicMemberTile) world.getTileEntity(pos);
-        //		StargateMilkyWayBaseTile gateTile = StargateMilkyWayMergeHelper.findBaseTile(world, pos, state.getValue(AunisProps.FACING_HORIZONTAL));
 
         if (!world.isRemote) {
-            //			BlockPos vec = pos.subtract(gateTile.getPos());
-            //			Aunis.info("new BlockPos(" + vec.getX() + ", " + vec.getY() + ", " + vec.getZ() + "),");
-
             IBlockState camoBlockState = memberTile.getCamoState();
-
-            //  if (heldItem == Item.getItemFromBlock(AunisBlocks.STARGATE_MILKY_WAY_MEMBER_BLOCK) || heldItem == Item.getItemFromBlock(AunisBlocks.STARGATE_MILKY_WAY_BASE_BLOCK) || !memberTile.isMerged())
-
             if (!memberTile.isMerged() || heldBlock instanceof StargateClassicMemberBlock || heldBlock instanceof StargateClassicBaseBlock)
                 return false;
             if (!(heldItem instanceof ItemBlock) && camoBlockState == null) {
                 BlockPos basePos = memberTile.getBasePos();
-                if(basePos == null)
-                    return true;
+                if(basePos == null || world.getTileEntity(basePos) == null || !(world.getTileEntity(basePos) instanceof StargateClassicBaseTile)){
+                    StargateAbstractBaseTile gateTile = getMergeHelper().findBaseTile(memberTile.getWorld(), memberTile.getPos(), blockState.getBaseState().getValue(AunisProps.FACING_HORIZONTAL));
+                    if(gateTile == null)
+                        return false;
+                    memberTile.setBasePos(gateTile.getPos());
+                    basePos = memberTile.getBasePos();
+                }
                 player.openGui(Aunis.instance, GuiIdEnum.GUI_STARGATE.id, world, basePos.getX(), basePos.getY(), basePos.getZ());
 
                 return true;

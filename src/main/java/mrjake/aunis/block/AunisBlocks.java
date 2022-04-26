@@ -113,6 +113,19 @@ public class AunisBlocks {
             STARGATE_UNIVERSE_BASE_BLOCK,
             STARGATE_ORLIN_BASE_BLOCK
     };
+    /**
+     * Used in {@link StargateClassicMemberBlock}
+     */
+    public static final Block[] CAMO_BLOCKS_BLACKLIST = {
+            CAPACITOR_BLOCK,
+            CAPACITOR_BLOCK_EMPTY,
+            DHD_PEGASUS_BLOCK,
+            DHD_BLOCK,
+            TR_CONTROLLER_GOAULD_BLOCK,
+            TRANSPORT_RINGS_GOAULD_BLOCK,
+            TRANSPORT_RINGS_ORI_BLOCK,
+            BEAMER_BLOCK
+    };
 
 
     private static final Block[] blocks = {
@@ -122,7 +135,8 @@ public class AunisBlocks {
 
             NAQUADAH_BLOCK_RAW, TRINIUM_BLOCK, TITANIUM_BLOCK,
 
-            STARGATE_MILKY_WAY_BASE_BLOCK, STARGATE_UNIVERSE_BASE_BLOCK, STARGATE_ORLIN_BASE_BLOCK, STARGATE_ORLIN_MEMBER_BLOCK, STARGATE_PEGASUS_BASE_BLOCK,
+            STARGATE_MILKY_WAY_BASE_BLOCK, STARGATE_UNIVERSE_BASE_BLOCK, STARGATE_ORLIN_BASE_BLOCK,
+            STARGATE_ORLIN_MEMBER_BLOCK, STARGATE_PEGASUS_BASE_BLOCK,
 
             DHD_BLOCK, DHD_PEGASUS_BLOCK,
 
@@ -135,7 +149,6 @@ public class AunisBlocks {
             CAPACITOR_BLOCK_EMPTY, BEAMER_BLOCK,
 
             TRANSPORT_RINGS_ORI_BLOCK,
-
 
     };
 
