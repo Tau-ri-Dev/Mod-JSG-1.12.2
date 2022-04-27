@@ -1129,7 +1129,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
 
-        AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, rounds)), targetPoint);
+        if(targetPoint != null)
+            AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, rounds)), targetPoint);
         if (stargateState.incoming()) {
             stargateState = EnumStargateState.INCOMING;
             markDirty();
