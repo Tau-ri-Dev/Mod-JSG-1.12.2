@@ -8,10 +8,7 @@ import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateClassicRendererState;
 import mrjake.aunis.renderer.stargate.StargateUniverseRendererState;
 import mrjake.aunis.sound.*;
-import mrjake.aunis.stargate.EnumIrisMode;
-import mrjake.aunis.stargate.EnumScheduledTask;
-import mrjake.aunis.stargate.EnumStargateState;
-import mrjake.aunis.stargate.StargateOpenResult;
+import mrjake.aunis.stargate.*;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargateUniverseMergeHelper;
 import mrjake.aunis.stargate.network.*;
@@ -127,6 +124,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
         sendRenderingUpdate(StargateRendererActionState.EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
         addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 35, null));
         ringSpinContext = null;
+        spinDirection = EnumSpinDirection.CLOCKWISE;
         setCoolDown();
         markDirty();
         return true;
@@ -244,6 +242,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
             targetRingSymbol = targetSymbol;
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 35, null));
             ringSpinContext = context;
+            spinDirection = EnumSpinDirection.CLOCKWISE;
         } else super.addSymbolToAddressManual(targetSymbol, context);
 
         if(targetSymbol == getSymbolType().getTopSymbol())

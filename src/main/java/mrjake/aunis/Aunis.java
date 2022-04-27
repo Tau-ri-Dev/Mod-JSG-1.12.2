@@ -9,6 +9,7 @@ import mrjake.aunis.config.StargateDimensionConfig;
 import mrjake.aunis.config.StargateSizeEnum;
 import mrjake.aunis.creativetabs.*;
 import mrjake.aunis.datafixer.TileNamesFixer;
+import mrjake.aunis.entity.EntityRegister;
 import mrjake.aunis.fluid.AunisFluids;
 import mrjake.aunis.gui.base.AunisGuiHandler;
 import mrjake.aunis.integration.OCWrapperInterface;
@@ -112,6 +113,9 @@ public class Aunis {
         }
 
     	StargateDimensionConfig.load(event.getModConfigurationDirectory());
+
+        EntityRegister.registerEntities();
+        Aunis.info("Successfully registered Entities!");
     	
         proxy.preInit(event);
     }

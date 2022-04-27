@@ -66,22 +66,22 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
   @Override
   protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
 
-    GlStateManager.translate(0, 0.04, 0);
+    GlStateManager.translate(0, -0.05f, 0);
     GlStateManager.rotate(90, 1, 0, 0);
     GlStateManager.scale(0.9, 0.9, 0.9);
 
     super.renderKawoosh(rendererState, partialTicks);
 
   }
-  private static final float darkness = .6f;
+  private static final float DARKNESS = 0.6f;
   @Override
   public void renderIris(double partialTicks, World world, StargateUniverseRendererState rendererState, boolean backOnly) {
     GlStateManager.pushMatrix();
-    GlStateManager.translate(0, 0.04, 0);
+    GlStateManager.translate(0, -0.05f, 0);
     GlStateManager.rotate(90, 1, 0, 0);
-    GlStateManager.scale(0.9, 0.9, 0.9);
+    GlStateManager.scale(0.887f, 0.887f, 0.887f);
     if (rendererState.irisType == EnumIrisType.SHIELD) GlStateManager.color(1,1 ,1);
-    else GlStateManager.color(darkness, darkness, darkness);
+    else GlStateManager.color(DARKNESS, DARKNESS, DARKNESS);
     super.renderIris(partialTicks, world, rendererState, backOnly);
     GlStateManager.popMatrix();
   }

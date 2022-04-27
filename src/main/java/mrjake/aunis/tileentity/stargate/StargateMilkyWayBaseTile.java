@@ -211,7 +211,9 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         incomingPeriod -= (int) Math.round((double) 20/addressSize);
 
         // spin ring
-        spinRing(1, false, true, incomingPeriod*addressSize);
+        if(AunisConfig.dialingConfig.allowIncomingAnimations && incomingPeriod > 9)
+            // disable ringsSpin when dialing with DHD or dialing (somehow) fast
+            spinRing(1, false, true, incomingPeriod*addressSize);
 
         markDirty();
     }

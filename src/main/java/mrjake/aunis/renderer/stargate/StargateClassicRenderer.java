@@ -2,6 +2,7 @@ package mrjake.aunis.renderer.stargate;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.loader.texture.Texture;
 import mrjake.aunis.loader.texture.TextureLoader;
@@ -76,8 +77,6 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
 
     protected static final ResourceLocation SHIELD_TEXTURE =
             new ResourceLocation(Aunis.ModID, "textures/tesr/iris/shield.jpg");
-    protected static final ResourceLocation IRIS_TEXTURE =
-            new ResourceLocation(Aunis.ModID, "textures/tesr/iris/iris_blade.jpg");
 
     public static final int PHYSICAL_IRIS_ANIMATION_LENGTH = 60;
     public static final int SHIELD_IRIS_ANIMATION_LENGTH = 10;
@@ -149,7 +148,6 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
                 GlStateManager.rotate(rotateIndex, 0, 0, 1);
                 GlStateManager.translate(-irisAnimationStage, -(irisAnimationStage * 2), 0.02);
                 ElementEnum.IRIS.render();
-
                 GlStateManager.popMatrix();
             }
         }
