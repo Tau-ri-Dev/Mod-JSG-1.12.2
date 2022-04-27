@@ -665,7 +665,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             }
         }
 
-        return false;
+        return this.pos.getY() + ringsDistance < 0;
     }
 
     protected void setBarrierBlocks(boolean set, boolean passable) {
