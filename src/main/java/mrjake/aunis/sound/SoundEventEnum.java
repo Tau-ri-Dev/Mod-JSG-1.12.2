@@ -10,7 +10,6 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
 
     // ----------------------------------------------------------
     // Stargate - General
-
     WORMHOLE_GO(0, "wormhole_go", 0.5f),
     WORMHOLE_FLICKER(1, "wormhole_flicker", 0.5f),
 
@@ -22,10 +21,8 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     SHIELD_CLOSING(134, "shield_closing", 0.5f),
     SHIELD_OPENING(135, "shield_opening", 0.5f),
 
-
     // ----------------------------------------------------------
     // Stargate - Milky Way
-
     DHD_MILKYWAY_PRESS(10, "dhd_milkyway_press", 0.1f),
     DHD_MILKYWAY_PRESS_BRB(11, "dhd_milkyway_press_brb", 0.1f),
 
@@ -60,14 +57,12 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
 
     // ----------------------------------------------------------
     // Stargate - Orlin
-
     GATE_ORLIN_DIAL(90, "gate_orlin_dial", 0.5f),
     GATE_ORLIN_FAIL(91, "gate_orlin_dial_fail", 0.5f),
     GATE_ORLIN_BROKE(92, "gate_orlin_broke", 0.5f),
 
     // ----------------------------------------------------------
     // Ring transporter
-
     RINGS_TRANSPORT(100, "rings_transport", 0.5f),
     RINGS_CONTROLLER_BUTTON(101, "rings_controller_button", 0.5f),
 
@@ -82,7 +77,13 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     GUI_SEND_CODE_BUTTON_PRESS(121, "gui_send_code_button_press", 0.1f),
     UNIVERSE_DIALER_MODE_CHANGE(122, "universe_dialer_mode_change", 0.1f),
     UNIVERSE_DIALER_CONNECTED(123, "universe_dialer_connect", 0.2f),
-    UNIVERSE_DIALER_START_DIAL(124, "universe_dialer_start_dial", .1f);
+    UNIVERSE_DIALER_START_DIAL(124, "universe_dialer_start_dial", 0.1f),
+
+    // ----------------------------------------------------------
+    // Entities
+    ZAT_SHOOT(140, "item_zat_staff", 0.1f);
+
+
     // ----------------------------------------------------------
 
 

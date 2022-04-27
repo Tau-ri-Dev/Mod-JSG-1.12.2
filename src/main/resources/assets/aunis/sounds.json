@@ -380,6 +380,13 @@
     "sounds": [
       "aunis:misc/dialer/button_connect_universe"
     ]
+  },
+  "item_zat_shoot": {
+    "category": "ambient",
+    "subtitle": "aunis.subtitle.item_zat_shoot",
+    "sounds": [
+      "aunis:item/zat/shoot"
+    ]
   }
 }
 

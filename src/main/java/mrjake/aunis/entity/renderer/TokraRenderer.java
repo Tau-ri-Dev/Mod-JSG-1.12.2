@@ -14,7 +14,7 @@ public class TokraRenderer extends RenderLiving<TokraEntity> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(Aunis.ModID, "textures/entity/tokra/default.png");
 
     public TokraRenderer(RenderManager manager) {
-        super(manager, new ModelPlayer(1, false), 0.5f);
+        super(manager, new ModelPlayer(0.8f, false), 0.5f);
     }
 
     @Nullable

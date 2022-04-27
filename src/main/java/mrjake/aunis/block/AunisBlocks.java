@@ -197,7 +197,7 @@ public class AunisBlocks {
                 registry.register(((StargateClassicMemberBlock) block).getItemBlock());
             else if (block instanceof AunisAbstractCustomItemBlock)
                 registry.register(((AunisAbstractCustomItemBlock) block).getItemBlock());
-            else
+            else if(block.getRegistryName() != null)
                 registry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
         }
     }
