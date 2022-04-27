@@ -22,9 +22,7 @@ public class EntityRegister {
     }
 
     public static void playSoundEvent(SoundEventEnum sound, Entity entity) {
-        if (!entity.isSilent()) {
-            BlockPos pos = new BlockPos(entity.posX, entity.posY, entity.posZ);
-            AunisSoundHelper.playSoundEvent(entity.world, pos, sound);
-        }
+        BlockPos pos = new BlockPos(entity.posX, entity.posY, entity.posZ);
+        AunisSoundHelper.playSoundEvent(entity.world, pos, sound);
     }
 }

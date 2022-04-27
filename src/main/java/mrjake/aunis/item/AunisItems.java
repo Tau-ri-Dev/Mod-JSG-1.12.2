@@ -6,6 +6,7 @@ import mrjake.aunis.item.gdo.GDOItem;
 import mrjake.aunis.item.notebook.NotebookItem;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
+import mrjake.aunis.item.tools.ZatItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -105,6 +106,11 @@ public class AunisItems {
     public static final Item BEAMER_CRYSTAL_FLUID = ItemHelper.createGenericItem("beamer_crystal_fluid", aunisItemsCreativeTab);
     public static final Item BEAMER_CRYSTAL_ITEMS = ItemHelper.createGenericItem("beamer_crystal_items", aunisItemsCreativeTab);
 
+    /**
+     * TOOLS
+     */
+    public static final Item ZAT = new ZatItem();
+
     private static Item[] items = {
             CRYSTAL_CONTROL_MILKYWAY_DHD,
             CRYSTAL_CONTROL_PEGASUS_DHD,
@@ -164,7 +170,9 @@ public class AunisItems {
 
             BEAMER_CRYSTAL_POWER,
             BEAMER_CRYSTAL_FLUID,
-            BEAMER_CRYSTAL_ITEMS
+            BEAMER_CRYSTAL_ITEMS,
+
+            ZAT
     };
 
     public static Item[] getItems() {

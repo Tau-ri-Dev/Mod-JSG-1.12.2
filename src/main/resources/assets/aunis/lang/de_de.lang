@@ -4,6 +4,7 @@ itemGroup.aunis_items=Aunis: Items
 itemGroup.aunis_rings=Aunis: Rings
 itemGroup.aunis_ores=Aunis: Ores
 itemGroup.aunis_energy=Aunis: Energy
+itemGroup.aunis_tools=Aunis: Tools
 
 # sound categories
 soundCategory.aunis_sounds=Aunis:
@@ -135,7 +136,10 @@ item.aunis.gdo.oc_port=Modem Port
 item.aunis.gdo.oc_data=OpenComputers Parameter (durch Komma getrennt)
 item.aunis.gdo.oc_save=Sichern
 item.aunis.gdo.oc_port_invalid=Ungültiger Port
-item.aunis.gdo.oc_message_received=Antwort erhalten: 
+item.aunis.gdo.oc_message_received=Antwort erhalten:
+
+# tools
+item.aunis.zat.name=Zat'nik'tel
 
 # -------------------
 
@@ -211,6 +215,14 @@ tile.aunis.transportrings_block.rings_distance=Distance
 
 # beamer
 tile.aunis.beamer_block.name=Transporter Block
+
+# -------------------
+
+# -------------------
+# ENTITIES
+
+entity.Tokra.default=Tokra
+entity.tokra.name=Tokra
 
 # -------------------
 

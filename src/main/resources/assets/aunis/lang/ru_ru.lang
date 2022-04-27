@@ -4,6 +4,7 @@ itemGroup.aunis_items=Aunis: Предметы
 itemGroup.aunis_rings=Aunis: Кольца
 itemGroup.aunis_ores=Aunis: Руды
 itemGroup.aunis_energy=Aunis: Энергия
+itemGroup.aunis_tools=Aunis: Tools
 
 # sound categories
 soundCategory.aunis_sounds=Aunis
@@ -135,7 +136,10 @@ item.aunis.gdo.oc_port=Порт модема
 item.aunis.gdo.oc_data=Параметры (Разделение точкой)
 item.aunis.gdo.oc_save=Сохранить
 item.aunis.gdo.oc_port_invalid=Неверный порт
-item.aunis.gdo.oc_message_received=Полученный отклик: 
+item.aunis.gdo.oc_message_received=Полученный отклик:
+
+# tools
+item.aunis.zat.name=Zat'nik'tel
 
 # -------------------
 
@@ -211,6 +215,14 @@ tile.aunis.transportrings_block.rings_distance=Distance
 
 # beamer
 tile.aunis.beamer_block.name=Лучевой Передатчик
+
+# -------------------
+
+# -------------------
+# ENTITIES
+
+entity.Tokra.default=Tokra
+entity.tokra.name=Tokra
 
 # -------------------
 

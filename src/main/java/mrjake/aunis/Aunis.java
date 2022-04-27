@@ -65,6 +65,7 @@ public class Aunis {
     public static final AunisItemsCreativeTabBuilder aunisItemsCreativeTab = new AunisItemsCreativeTabBuilder();
     public static final AunisOresCreativeTabBuilder aunisOresCreativeTab = new AunisOresCreativeTabBuilder();
     public static final AunisEnergyCreativeTabBuilder aunisEnergyCreativeTab = new AunisEnergyCreativeTabBuilder();
+    public static final AunisToolsCreativeTabBuilder aunisToolsCreativeTab = new AunisToolsCreativeTabBuilder();
 
     @Instance(ModID)
 	public static Aunis instance;

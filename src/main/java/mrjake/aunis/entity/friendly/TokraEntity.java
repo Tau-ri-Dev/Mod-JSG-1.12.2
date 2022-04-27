@@ -1,44 +1,50 @@
 package mrjake.aunis.entity.friendly;
 
 import mrjake.aunis.entity.EntityRegister;
-import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.scoreboard.Team;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.datafix.DataFixer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.DifficultyInstance;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
 
-import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class TokraEntity extends EntityVillager implements IRangedAttackMob {
 
     public TokraEntity(World worldIn) {
-        super(worldIn);
+        super(worldIn, 0);
     }
 
     public static void registerFixesTokra(DataFixer fixer) {
         EntityLiving.registerFixesMob(fixer, TokraEntity.class);
     }
 
-    @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-        livingdata = super.onInitialSpawn(difficulty, livingdata);
-        this.setEquipmentBasedOnDifficulty(difficulty);
-        this.setEnchantmentBasedOnDifficulty(difficulty);
-        this.setCanPickUpLoot(this.rand.nextFloat() < 0.55F * difficulty.getClampedAdditionalDifficulty());
-        return livingdata;
+    @Override
+    public void onStruckByLightning(EntityLightningBolt lightningBolt) {
+        if (!this.world.isRemote && !this.isDead) {
+        }
     }
 
     @Override
@@ -47,10 +53,21 @@ public class TokraEntity extends EntityVillager implements IRangedAttackMob {
     }
 
     @Override
+    public TokraEntity createChild(EntityAgeable ageable) {
+        TokraEntity youngTokra = new TokraEntity(this.world);
+        youngTokra.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(youngTokra)), null);
+        return youngTokra;
+    }
+
+    @Override
+    protected void updateEquipmentIfNeeded(EntityItem itemEntity) {
+    }
+
+    @Override
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityAITradePlayer(this));
-        this.tasks.addTask(1, new EntityAIAttackRanged(this, 1.25D, 20, 10.0F));
+        this.tasks.addTask(1, new EntityAIAttackRanged(this, 0.8D, 20, 10.0F));
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, false));
         this.tasks.addTask(1, new EntityAILookAtTradePlayer(this));
         this.tasks.addTask(2, new EntityAIMoveIndoors(this));
@@ -67,7 +84,7 @@ public class TokraEntity extends EntityVillager implements IRangedAttackMob {
         this.tasks.addTask(12, new EntityAIWanderAvoidWater(this, 0.8D));
         this.tasks.addTask(15, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[0]));
+        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, TokraEntity.class));
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityLiving.class, 10, true, false, IMob.MOB_SELECTOR));
     }
 
@@ -77,20 +94,37 @@ public class TokraEntity extends EntityVillager implements IRangedAttackMob {
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
     }
 
-    @Nullable
-    protected ResourceLocation getLootTable() {
-        return LootTableList.EMPTY;
+    @Override
+    protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
+        Map<Item, Float> items = new HashMap<>();
+        items.put(Items.LEATHER_HELMET, 0.07F);
+        items.put(Items.LEATHER_BOOTS, 0.07F);
+        items.put(Items.LEATHER_CHESTPLATE, 0.07F);
+        items.put(Items.LEATHER_LEGGINGS, 0.07F);
+
+        Random rand = new Random();
+        for (Item item : items.keySet()) {
+            if (rand.nextFloat() < items.get(item))
+                this.entityDropItem(new ItemStack(item), 0.0F);
+        }
+        if (rand.nextFloat() < 0.5f) {
+            EntitySilverfish goauld = new EntitySilverfish(world);
+            goauld.setLocationAndAngles(posX, posY + 0.5D, posZ, rand.nextFloat() * 360.0F, 0.0F);
+            world.spawnEntity(goauld);
+        }
+
+    }
+
+    protected EntityArrow getArrow(float distanceFactor) {
+        EntityTippedArrow entitytippedarrow = new EntityTippedArrow(this.world, this);
+        entitytippedarrow.setEnchantmentEffectsFromEntity(this, distanceFactor);
+        return entitytippedarrow;
     }
 
     @Override
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
         // todo(Mine): make goauld staff projectile entity
-        EntityArrow arrow = new EntityArrow(this.world, this) {
-            @Override
-            protected ItemStack getArrowStack() {
-                return new ItemStack(Items.ARROW);
-            }
-        };
+        EntityArrow arrow = getArrow(distanceFactor);
         double d0 = target.posY + (double) target.getEyeHeight() - 1.100000023841858D;
         double d1 = target.posX - this.posX;
         double d2 = d0 - arrow.posY;
@@ -107,5 +141,31 @@ public class TokraEntity extends EntityVillager implements IRangedAttackMob {
 
     @Override
     public void setSwingingArms(boolean swingingArms) {
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        Team team = this.getTeam();
+        String s = this.getCustomNameTag();
+
+        if (!s.isEmpty()) {
+            TextComponentString textcomponentstring = new TextComponentString(ScorePlayerTeam.formatPlayerName(team, s));
+            textcomponentstring.getStyle().setHoverEvent(this.getHoverEvent());
+            textcomponentstring.getStyle().setInsertion(this.getCachedUniqueIdString());
+            return textcomponentstring;
+        } else {
+            super.getDisplayName();
+
+            String s1 = "default";
+            ITextComponent itextcomponent = new TextComponentTranslation("entity.Tokra." + s1);
+            itextcomponent.getStyle().setHoverEvent(this.getHoverEvent());
+            itextcomponent.getStyle().setInsertion(this.getCachedUniqueIdString());
+
+            if (team != null) {
+                itextcomponent.getStyle().setColor(team.getColor());
+            }
+
+            return itextcomponent;
+        }
     }
 }
