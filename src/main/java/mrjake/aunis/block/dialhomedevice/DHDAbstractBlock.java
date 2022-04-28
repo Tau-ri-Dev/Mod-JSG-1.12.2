@@ -168,7 +168,7 @@ public abstract class DHDAbstractBlock extends AunisBlock {
 
   @Override
   public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-    return true;
+    return side != EnumFacing.DOWN && side != EnumFacing.UP;
   }
 
   @Override
