@@ -24,6 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.datafix.FixTypes;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.CompoundDataFixer;
 import net.minecraftforge.common.util.ModFixs;
@@ -232,5 +233,10 @@ public class Aunis {
 
     public static void error(String string){
 	    logger.error(string);
+    }
+
+
+    public static String getInProgress(){
+	    return TextFormatting.AQUA + "Work In Progress Item!";
     }
 }

@@ -16,7 +16,7 @@ public class CapacitorContainerGui extends GuiContainer {
 
 	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_capacitor.png");
 	
-	private CapacitorContainer container;
+	private final CapacitorContainer container;
 	
 	public CapacitorContainerGui(CapacitorContainer container) {
 		super(container);

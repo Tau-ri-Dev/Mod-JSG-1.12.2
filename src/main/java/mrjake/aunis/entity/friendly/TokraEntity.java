@@ -3,6 +3,7 @@ package mrjake.aunis.entity.friendly;
 import mrjake.aunis.entity.AunisEnergyProjectile;
 import mrjake.aunis.entity.EntityRegister;
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.item.tools.zat.ZatItem;
 import mrjake.aunis.sound.SoundEventEnum;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
@@ -25,6 +26,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -40,9 +43,11 @@ public class TokraEntity extends EntityAgeable implements IRangedAttackMob, INpc
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void onStruckByLightning(EntityLightningBolt lightningBolt) {}
 
     @Override
+    @ParametersAreNonnullByDefault
     public TokraEntity createChild(EntityAgeable ageable) {
         TokraEntity youngTokra = new TokraEntity(this.world);
         youngTokra.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(youngTokra)), null);
@@ -50,24 +55,20 @@ public class TokraEntity extends EntityAgeable implements IRangedAttackMob, INpc
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void updateEquipmentIfNeeded(EntityItem itemEntity) {
     }
 
     @Override
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
-        //this.tasks.addTask(1, new EntityAITradePlayer(this));
         this.tasks.addTask(1, new EntityAIAttackRanged(this, 0.8D, 20, 10.0F));
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, false));
-        //this.tasks.addTask(1, new EntityAILookAtTradePlayer(this));
         this.tasks.addTask(2, new EntityAIMoveIndoors(this));
         this.tasks.addTask(3, new EntityAIRestrictOpenDoor(this));
         this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
         this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 0.6D));
-        //this.tasks.addTask(6, new EntityAIVillagerMate(this));
-        //this.tasks.addTask(7, new EntityAIFollowGolem(this));
         this.tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 3.0F, 1.0F));
-        //this.tasks.addTask(9, new EntityAIVillagerInteract(this));
         this.tasks.addTask(9, new EntityAIWanderAvoidWater(this, 0.6D));
         this.tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
         this.tasks.addTask(12, new EntityAIWanderAvoidWater(this, 0.8D));
@@ -84,6 +85,7 @@ public class TokraEntity extends EntityAgeable implements IRangedAttackMob, INpc
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
         Map<Item, Float> items = new HashMap<>();
         items.put(Items.LEATHER_HELMET, 0.07F);
@@ -105,9 +107,10 @@ public class TokraEntity extends EntityAgeable implements IRangedAttackMob, INpc
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
         EntityRegister.playSoundEvent(SoundEventEnum.ZAT_SHOOT, this);
-        this.world.spawnEntity(AunisEnergyProjectile.createEnergyBall(world, this));
+        this.world.spawnEntity(AunisEnergyProjectile.createEnergyBall(world, this, target, AunisItems.ZAT));
     }
 
     @Override
@@ -119,6 +122,7 @@ public class TokraEntity extends EntityAgeable implements IRangedAttackMob, INpc
     }
 
     @Override
+    @Nonnull
     public ITextComponent getDisplayName() {
         Team team = this.getTeam();
         String s = this.getCustomNameTag();

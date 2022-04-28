@@ -51,7 +51,7 @@ item.aunis.crystal_glyph_stargate.name=Символьный Кристалл З�
 item.aunis.crystal_glyph_milkyway.name=Кристалл Адреса Млечного Пути
 item.aunis.crystal_glyph_pegasus.name=Кристалл Адреса Пегаса
 item.aunis.crystal_glyph_universe.name=Кристалл Адреса Вселенной
-item.aunis.crystal_glyph_goauld.name=Goauld Rings Glyphs Crystal
+item.aunis.crystal_glyph_goauld.name=Goa'uld Rings Glyphs Crystal
 item.aunis.crystal_glyph_ori.name=Ori Rings Glyphs Crystal
 item.aunis.crystal_glyph_ancient.name=Ancient Rings Glyphs Crystal
 
@@ -140,6 +140,8 @@ item.aunis.gdo.oc_message_received=Полученный отклик:
 
 # tools
 item.aunis.zat.name=Zat'nik'tel
+item.aunis.staff.name=Goa'uld Staff weapon
+item.aunis.energyWeapon.available_shots=Available shots:
 
 # -------------------
 
@@ -287,6 +289,9 @@ death.attack.eventHorizon=%s был кремирован кавушем
 death.attack.irisDeath=%s расплющился об диафрагму
 death.attack.wrongSide=%s entered wrong side of gate
 
+death.attack.zatHit=%s was electrolyzed
+death.attack.staffHit=%s was melted using Goa'uld Staff Weapon
+
 # -------------------
 
 # -------------------
@@ -301,7 +306,7 @@ glyph.aunis.transportrings.ori.delta=Delta
 glyph.aunis.transportrings.ori.omega=Omega
 glyph.aunis.transportrings.ori.origin=Origin
 
-# Goauld Glyphs
+# Goa'uld Glyphs
 glyph.aunis.transportrings.goauld.amun=Amun
 glyph.aunis.transportrings.goauld.serket=Serket
 glyph.aunis.transportrings.goauld.khepri=Khepri
@@ -481,7 +486,7 @@ gui.capacitor.name=Конденсатор
 # rings
 gui.transportrings.energyBuffer=Energy buffer
 gui.transportrings.ori_address=Ori address
-gui.transportrings.goauld_address=Goauld address
+gui.transportrings.goauld_address=Goa'uld address
 
 # beamer
 gui.beamer.name=Лучевой Передатчик Врат
@@ -597,6 +602,9 @@ aunis.subtitle.gdo_button_beep=Нажата кнопка GDO
 aunis.subtitle.universe_dialer_beep=Портативное Устройство начало набор
 aunis.subtitle.universe_dialer_change_mode=Портативное Устройство сменило режим
 aunis.subtitle.universe_dialer_connect=Портативное Устройство подключилось
+
+aunis.subtitle.item_zat_shoot=Zat'nik'tel shoot
+aunis.subtitle.item_staff_shoot=Goa'uld Staff Weapon shoot
 
 # -------------------
 

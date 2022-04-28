@@ -18,17 +18,20 @@ import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.dialhomedevice.DHDAbstractRendererState;
 import mrjake.aunis.stargate.StargateClosedReasonEnum;
 import mrjake.aunis.stargate.StargateOpenResult;
-import mrjake.aunis.stargate.network.*;
-import mrjake.aunis.state.*;
+import mrjake.aunis.stargate.network.SymbolInterface;
+import mrjake.aunis.state.State;
+import mrjake.aunis.state.StateProviderInterface;
+import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.state.dialhomedevice.DHDActivateButtonState;
 import mrjake.aunis.state.stargate.StargateBiomeOverrideState;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
-import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
-import mrjake.aunis.tileentity.stargate.StargatePegasusBaseTile;
 import mrjake.aunis.tileentity.util.IUpgradable;
 import mrjake.aunis.tileentity.util.ReactorStateEnum;
-import mrjake.aunis.util.*;
+import mrjake.aunis.util.AunisItemStackHandler;
+import mrjake.aunis.util.EnumKeyInterface;
+import mrjake.aunis.util.ILinkable;
+import mrjake.aunis.util.ItemMetaPair;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -52,7 +55,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
 public abstract class DHDAbstractTile extends TileEntity implements ILinkable, IUpgradable, StateProviderInterface, ITickable, Environment, WirelessEndpoint {
@@ -60,260 +65,39 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     // ---------------------------------------------------------------------------------------------------
     // Gate linking
 
-    private BlockPos linkedGate = null;
+    public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.SOOTY, BiomeOverlayEnum.AGED);
+    public static final List<Item> SUPPORTED_UPGRADES = Arrays.asList(AunisItems.CRYSTAL_GLYPH_DHD);
+    public static final int BIOME_OVERRIDE_SLOT = 5;
+    protected final FluidTank fluidHandler = new FluidTank(new FluidStack(AunisFluids.moltenNaquadahRefined, 0), AunisConfig.dhdConfig.fluidCapacity) {
 
-    private int linkId = -1;
+        @Override
+        public boolean canFillFluidType(FluidStack fluid) {
+            if (fluid == null) return false;
 
+            return fluid.getFluid() == AunisFluids.moltenNaquadahRefined;
+        }
+
+        protected void onContentsChanged() {
+            markDirty();
+        }
+    };
+    public boolean isLinkedClient;
     protected DHDAbstractRendererState rendererStateClient;
-
-    public DHDAbstractRendererState getRendererStateClient() {
-        return rendererStateClient;
-    }
-
-    @Override
-    public void rotate(Rotation rotation) {
-        IBlockState state = world.getBlockState(pos);
-
-        int rotationOrig = state.getValue(AunisProps.ROTATION_HORIZONTAL);
-        world.setBlockState(pos, state.withProperty(AunisProps.ROTATION_HORIZONTAL, rotation.rotate(rotationOrig, 16)));
-    }
-
-    public void setLinkedGate(BlockPos gate, int linkId) {
-        this.linkedGate = gate;
-        this.linkId = linkId;
-
-        markDirty();
-    }
-
-    public boolean isLinked() {
-        return this.linkedGate != null;
-    }
-
-    public StargateAbstractBaseTile getLinkedGate(IBlockAccess world) {
-        if (linkedGate == null) return null;
-
-        return (StargateAbstractBaseTile) world.getTileEntity(linkedGate);
-    }
-
-    public abstract void updateLinkStatus(World world, BlockPos pos);
-
-    @Override
-    public boolean canLinkTo() {
-        return !isLinked();
-    }
-
-    @Override
-    public int getLinkId() {
-        return linkId;
-    }
+    protected TargetPoint targetPoint;
+    protected ReactorStateEnum reactorState = ReactorStateEnum.STANDBY;
+    private BlockPos linkedGate = null;
+    private int linkId = -1;
+    private BlockPos lastPos = BlockPos.ORIGIN;
 
     // ---------------------------------------------------------------------------------------------------
     // Renderer state
 
     // ---------------------------------------------------------------------------------------------------
     // Loading and ticking
-
-    protected TargetPoint targetPoint;
-    protected ReactorStateEnum reactorState = ReactorStateEnum.STANDBY;
-
-    public ReactorStateEnum getReactorState() {
-        return reactorState;
-    }
-
-    @Override
-    public void onLoad() {
-        if (!world.isRemote) {
-            targetPoint = new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
-            hadControlCrystal = hasControlCrystal();
-        } else {
-            AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
-        }
-    }
-
-    private BlockPos lastPos = BlockPos.ORIGIN;
-
     private boolean firstTick = true;
-
     private boolean addedToNetwork;
-
-    @Override
-    public void update() {
-        if (!world.isRemote) {
-            // This cannot be done in onLoad because it makes
-            // Tile invisible to the network sometimes
-            if (!addedToNetwork) {
-                addedToNetwork = true;
-                Aunis.ocWrapper.joinWirelessNetwork(this);
-                Aunis.ocWrapper.joinOrCreateNetwork(this);
-            }
-
-            if (!lastPos.equals(pos)) {
-                lastPos = pos;
-                this.updateLinkStatus(world, pos);
-            }
-
-            // Has crystal
-            if (hasControlCrystal()) {
-                if (isLinked()) {
-                    StargateAbstractBaseTile gateTile = getLinkedGate(world);
-                    if (gateTile == null) {
-                        setLinkedGate(null, -1);
-
-                        Aunis.logger.error("Gate didn't unlink properly, forcing...");
-                        return;
-                    }
-
-                    IEnergyStorage energyStorage = (IEnergyStorage) gateTile.getCapability(CapabilityEnergy.ENERGY, null);
-
-                    int amount = AunisConfig.dhdConfig.powerGenerationMultiplier;
-
-                    if (reactorState != ReactorStateEnum.STANDBY) {
-                        FluidStack simulatedDrain = fluidHandler.drainInternal(amount, false);
-
-                        if (simulatedDrain != null && simulatedDrain.amount >= amount) reactorState = ReactorStateEnum.ONLINE;
-                        else reactorState = ReactorStateEnum.NO_FUEL;
-                    }
-
-                    if (reactorState == ReactorStateEnum.ONLINE || reactorState == ReactorStateEnum.STANDBY) {
-                        float percent = energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored();
-                        //						Aunis.info("state: " + reactorState + ", percent: " + percent);
-
-                        if (percent < AunisConfig.dhdConfig.activationLevel) reactorState = ReactorStateEnum.ONLINE;
-
-                        else if (percent >= AunisConfig.dhdConfig.deactivationLevel) reactorState = ReactorStateEnum.STANDBY;
-                    }
-
-                    if (reactorState == ReactorStateEnum.ONLINE) {
-                        fluidHandler.drainInternal(amount, true);
-                        energyStorage.receiveEnergy(AunisConfig.dhdConfig.energyPerNaquadah * AunisConfig.dhdConfig.powerGenerationMultiplier, false);
-                    }
-                }
-
-                // Not linked
-                else {
-                    reactorState = ReactorStateEnum.NOT_LINKED;
-                }
-            }
-
-            // No crystal
-            else {
-                reactorState = ReactorStateEnum.NO_CRYSTAL;
-            }
-        }
-    }
-
-    // Server
-    protected BiomeOverlayEnum determineBiomeOverride() {
-        ItemStack stack = itemStackHandler.getStackInSlot(BIOME_OVERRIDE_SLOT);
-
-        if (stack.isEmpty()) {
-            return null;
-        }
-
-        BiomeOverlayEnum biomeOverlay = AunisConfig.stargateConfig.getBiomeOverrideItemMetaPairs().get(new ItemMetaPair(stack));
-
-        if (getSupportedOverlays().contains(biomeOverlay)) {
-            return biomeOverlay;
-        }
-
-        return null;
-    }
-
-    public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.SOOTY, BiomeOverlayEnum.AGED);
-
-    public EnumSet<BiomeOverlayEnum> getSupportedOverlays() {
-        return SUPPORTED_OVERLAYS;
-    }
-
     private boolean hadControlCrystal;
-
-    public boolean hasControlCrystal() {
-        return !itemStackHandler.getStackInSlot(0).isEmpty();
-    }
-
-    private void updateCrystal() {
-        boolean hasControlCrystal = hasControlCrystal();
-
-        if (hadControlCrystal != hasControlCrystal) {
-            if (hasControlCrystal) {
-                sendState(StateTypeEnum.RENDERER_STATE, getState(StateTypeEnum.RENDERER_STATE));
-            } else {
-                clearSymbols();
-            }
-
-            hadControlCrystal = hasControlCrystal;
-        }
-    }
-
-    // -----------------------------------------------------------------------------
-    // Symbol activation
-
-    public abstract void activateSymbol(SymbolInterface symbol);
-
-    public void clearSymbols() {
-        world.notifyNeighborsOfStateChange(pos, AunisBlocks.DHD_BLOCK, true);
-
-        sendState(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
-    }
-
-
-    // -----------------------------------------------------------------------------
-    // States
-
-    protected void sendState(StateTypeEnum type, State state) {
-        if (world.isRemote) return;
-
-        if (targetPoint != null) {
-            AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, type, state), targetPoint);
-        } else {
-            Aunis.logger.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
-        }
-    }
-
-    @Override
-    public State createState(StateTypeEnum stateType) {
-        switch (stateType) {
-
-            case DHD_ACTIVATE_BUTTON:
-                return new DHDActivateButtonState();
-
-            case GUI_UPDATE:
-                return new DHDContainerGuiUpdate();
-
-            case BIOME_OVERRIDE_STATE:
-                return new StargateBiomeOverrideState();
-
-            default:
-                throw new UnsupportedOperationException("EnumStateType." + stateType.name() + " not implemented on " + this.getClass().getName());
-        }
-    }
-
-    @Override
-    public void setState(StateTypeEnum stateType, State state) {
-        if (stateType == StateTypeEnum.GUI_UPDATE) {
-            DHDContainerGuiUpdate guiState = (DHDContainerGuiUpdate) state;
-
-            fluidHandler.setFluid(new FluidStack(AunisFluids.moltenNaquadahRefined, guiState.fluidAmount));
-            fluidHandler.setCapacity(guiState.tankCapacity);
-            reactorState = guiState.reactorState;
-            isLinkedClient = guiState.isLinked;
-        } else {
-            throw new UnsupportedOperationException("EnumStateType." + stateType.name() + " not implemented on " + this.getClass().getName());
-        }
-    }
-
-    public boolean isLinkedClient;
-
-
-    // -----------------------------------------------------------------------------
-    // Item handler
-
-    public static final List<Item> SUPPORTED_UPGRADES = Arrays.asList(AunisItems.CRYSTAL_GLYPH_DHD);
-
-    public static final int BIOME_OVERRIDE_SLOT = 5;
-
     private DHDAbstractTile instance = this;
-
     protected final ItemStackHandler itemStackHandler = new AunisItemStackHandler(6) {
 
         @Override
@@ -322,9 +106,9 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
 
             switch (slot) {
                 case 0:
-                    if(instance instanceof DHDMilkyWayTile)
+                    if (instance instanceof DHDMilkyWayTile)
                         return item == AunisItems.CRYSTAL_CONTROL_MILKYWAY_DHD;
-                    if(instance instanceof DHDPegasusTile)
+                    if (instance instanceof DHDPegasusTile)
                         return item == AunisItems.CRYSTAL_CONTROL_PEGASUS_DHD;
 
                 case 1:
@@ -388,39 +172,235 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
             markDirty();
         }
     };
+    // ------------------------------------------------------------
+    // Node-related work
+    private Node node = Aunis.ocWrapper.createNode(this, "dhd");
 
-    // TODO Get rid of EnumKeyInterface
-    public static enum DHDUpgradeEnum implements EnumKeyInterface<Item> {
-        CHEVRON_UPGRADE(AunisItems.CRYSTAL_GLYPH_DHD);
+    public DHDAbstractRendererState getRendererStateClient() {
+        return rendererStateClient;
+    }
 
-        public Item item;
+    @Override
+    public void rotate(Rotation rotation) {
+        IBlockState state = world.getBlockState(pos);
 
-        private DHDUpgradeEnum(Item item) {
-            this.item = item;
+        int rotationOrig = state.getValue(AunisProps.ROTATION_HORIZONTAL);
+        world.setBlockState(pos, state.withProperty(AunisProps.ROTATION_HORIZONTAL, rotation.rotate(rotationOrig, 16)));
+    }
+
+    public void setLinkedGate(BlockPos gate, int linkId) {
+        this.linkedGate = gate;
+        this.linkId = linkId;
+
+        markDirty();
+    }
+
+    public boolean isLinked() {
+        return this.linkedGate != null;
+    }
+
+    public StargateAbstractBaseTile getLinkedGate(IBlockAccess world) {
+        if (linkedGate == null) return null;
+
+        return (StargateAbstractBaseTile) world.getTileEntity(linkedGate);
+    }
+
+    public abstract void updateLinkStatus(World world, BlockPos pos);
+
+    @Override
+    public boolean canLinkTo() {
+        return !isLinked();
+    }
+
+    @Override
+    public int getLinkId() {
+        return linkId;
+    }
+
+    // -----------------------------------------------------------------------------
+    // Symbol activation
+
+    public ReactorStateEnum getReactorState() {
+        return reactorState;
+    }
+
+    @Override
+    public void onLoad() {
+        if (!world.isRemote) {
+            targetPoint = new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
+            hadControlCrystal = hasControlCrystal();
+        } else {
+            AunisPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
+        }
+    }
+
+
+    // -----------------------------------------------------------------------------
+    // States
+
+    @Override
+    public void update() {
+        if (!world.isRemote) {
+            // This cannot be done in onLoad because it makes
+            // Tile invisible to the network sometimes
+            if (!addedToNetwork) {
+                addedToNetwork = true;
+                Aunis.ocWrapper.joinWirelessNetwork(this);
+                Aunis.ocWrapper.joinOrCreateNetwork(this);
+            }
+
+            if (!lastPos.equals(pos)) {
+                lastPos = pos;
+                this.updateLinkStatus(world, pos);
+            }
+
+            // Has crystal
+            if (hasControlCrystal()) {
+                if (isLinked()) {
+                    StargateAbstractBaseTile gateTile = getLinkedGate(world);
+                    if (gateTile == null) {
+                        setLinkedGate(null, -1);
+
+                        Aunis.logger.error("Gate didn't unlink properly, forcing...");
+                        return;
+                    }
+
+                    IEnergyStorage energyStorage = (IEnergyStorage) gateTile.getCapability(CapabilityEnergy.ENERGY, null);
+
+                    int amount = AunisConfig.dhdConfig.powerGenerationMultiplier;
+
+                    if (reactorState != ReactorStateEnum.STANDBY) {
+                        FluidStack simulatedDrain = fluidHandler.drainInternal(amount, false);
+
+                        if (simulatedDrain != null && simulatedDrain.amount >= amount)
+                            reactorState = ReactorStateEnum.ONLINE;
+                        else reactorState = ReactorStateEnum.NO_FUEL;
+                    }
+
+                    if (reactorState == ReactorStateEnum.ONLINE || reactorState == ReactorStateEnum.STANDBY) {
+                        float percent = energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored();
+                        //						Aunis.info("state: " + reactorState + ", percent: " + percent);
+
+                        if (percent < AunisConfig.dhdConfig.activationLevel) reactorState = ReactorStateEnum.ONLINE;
+
+                        else if (percent >= AunisConfig.dhdConfig.deactivationLevel)
+                            reactorState = ReactorStateEnum.STANDBY;
+                    }
+
+                    if (reactorState == ReactorStateEnum.ONLINE) {
+                        fluidHandler.drainInternal(amount, true);
+                        energyStorage.receiveEnergy(AunisConfig.dhdConfig.energyPerNaquadah * AunisConfig.dhdConfig.powerGenerationMultiplier, false);
+                    }
+                }
+
+                // Not linked
+                else {
+                    reactorState = ReactorStateEnum.NOT_LINKED;
+                }
+            }
+
+            // No crystal
+            else {
+                reactorState = ReactorStateEnum.NO_CRYSTAL;
+            }
+        }
+    }
+
+    // Server
+    protected BiomeOverlayEnum determineBiomeOverride() {
+        ItemStack stack = itemStackHandler.getStackInSlot(BIOME_OVERRIDE_SLOT);
+
+        if (stack.isEmpty()) {
+            return null;
         }
 
-        @Override
-        public Item getKey() {
-            return item;
+        BiomeOverlayEnum biomeOverlay = AunisConfig.stargateConfig.getBiomeOverrideItemMetaPairs().get(new ItemMetaPair(stack));
+
+        if (getSupportedOverlays().contains(biomeOverlay)) {
+            return biomeOverlay;
+        }
+
+        return null;
+    }
+
+    public EnumSet<BiomeOverlayEnum> getSupportedOverlays() {
+        return SUPPORTED_OVERLAYS;
+    }
+
+    public boolean hasControlCrystal() {
+        return !itemStackHandler.getStackInSlot(0).isEmpty();
+    }
+
+
+    // -----------------------------------------------------------------------------
+    // Item handler
+
+    private void updateCrystal() {
+        boolean hasControlCrystal = hasControlCrystal();
+
+        if (hadControlCrystal != hasControlCrystal) {
+            if (hasControlCrystal) {
+                sendState(StateTypeEnum.RENDERER_STATE, getState(StateTypeEnum.RENDERER_STATE));
+            } else {
+                clearSymbols();
+            }
+
+            hadControlCrystal = hasControlCrystal;
+        }
+    }
+
+    public abstract void activateSymbol(SymbolInterface symbol);
+
+    public void clearSymbols() {
+        world.notifyNeighborsOfStateChange(pos, AunisBlocks.DHD_BLOCK, true);
+
+        sendState(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
+    }
+
+    protected void sendState(StateTypeEnum type, State state) {
+        if (world.isRemote) return;
+
+        if (targetPoint != null) {
+            AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, type, state), targetPoint);
+        } else {
+            Aunis.logger.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
+        }
+    }
+
+    @Override
+    public State createState(StateTypeEnum stateType) {
+        switch (stateType) {
+
+            case DHD_ACTIVATE_BUTTON:
+                return new DHDActivateButtonState();
+
+            case GUI_UPDATE:
+                return new DHDContainerGuiUpdate();
+
+            case BIOME_OVERRIDE_STATE:
+                return new StargateBiomeOverrideState();
+
+            default:
+                throw new UnsupportedOperationException("EnumStateType." + stateType.name() + " not implemented on " + this.getClass().getName());
         }
     }
 
     // -----------------------------------------------------------------------------
     // Fluid handler
 
-    protected final FluidTank fluidHandler = new FluidTank(new FluidStack(AunisFluids.moltenNaquadahRefined, 0), AunisConfig.dhdConfig.fluidCapacity) {
+    @Override
+    public void setState(StateTypeEnum stateType, State state) {
+        if (stateType == StateTypeEnum.GUI_UPDATE) {
+            DHDContainerGuiUpdate guiState = (DHDContainerGuiUpdate) state;
 
-        @Override
-        public boolean canFillFluidType(FluidStack fluid) {
-            if (fluid == null) return false;
-
-            return fluid.getFluid() == AunisFluids.moltenNaquadahRefined;
+            fluidHandler.setFluid(new FluidStack(AunisFluids.moltenNaquadahRefined, guiState.fluidAmount));
+            fluidHandler.setCapacity(guiState.tankCapacity);
+            reactorState = guiState.reactorState;
+            isLinkedClient = guiState.isLinked;
+        } else {
+            throw new UnsupportedOperationException("EnumStateType." + stateType.name() + " not implemented on " + this.getClass().getName());
         }
-
-        protected void onContentsChanged() {
-            markDirty();
-        }
-    };
+    }
 
 
     // -----------------------------------------------------------------------------
@@ -511,7 +491,6 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     }
 
 
-
     // ------------------------------------------------------------
     // Wireless Network
     @Override
@@ -539,10 +518,6 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     public void receivePacket(Packet packet, WirelessEndpoint sender) {
     }
 
-    // ------------------------------------------------------------
-    // Node-related work
-    private Node node = Aunis.ocWrapper.createNode(this, "dhd");
-
     @Override
     @Optional.Method(modid = "opencomputers")
     public Node node() {
@@ -568,14 +543,11 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
         Aunis.ocWrapper.sendSignalToReachable(node, (Context) context, name, params);
     }
 
-    // ------------------------------------------------------------
-    // Methods
-
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(symbolName:string) -- Activates DHD symbol")
     public Object[] pressButton(Context context, Arguments args) {
         StargateClassicBaseTile gateTile = (StargateClassicBaseTile) this.getLinkedGate(world);
-        if(gateTile == null)
+        if (gateTile == null)
             return new Object[]{null, "dhd_not_connected", "DHD is not connected to stargate"};
 
         if (!gateTile.getStargateState().idle() && !gateTile.getStargateState().dialingDHD()) {
@@ -586,9 +558,9 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
             return new Object[]{null, "dhd_failure_full", "Already dialed 9 chevrons"};
         }
 
-        if(args.isInteger(0) || args.isString(0)){
+        if (args.isInteger(0) || args.isString(0)) {
             SymbolInterface symbol = gateTile.getSymbolFromNameIndex(args.checkAny(0));
-            if(symbol != null){
+            if (symbol != null) {
                 if (symbol == gateTile.getSymbolType().getBRB()) {
                     StargateOpenResult result = gateTile.attemptOpenAndFail();
                     if (result.ok())
@@ -601,7 +573,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
                         return new Object[]{null, "dhd_engage_failed_unknown", "Unknown error! This is a bug!"};
                 }
 
-                if(!gateTile.canAddSymbol(symbol)){
+                if (!gateTile.canAddSymbol(symbol)) {
                     return new Object[]{null, "dhd_engage_failed", "Can¨not add that symbol!"};
                 }
                 gateTile.addSymbolToAddressDHD(symbol);
@@ -612,13 +584,16 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
         return new Object[]{null, "dhd_pressed"};
     }
 
+    // ------------------------------------------------------------
+    // Methods
+
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(symbolName:string) -- Activates DHD´s BRB")
     public Object[] pressBRB(Context context, Arguments args) {
         StargateAbstractBaseTile gateTile = this.getLinkedGate(world);
-        if(gateTile == null)
+        if (gateTile == null)
             return new Object[]{null, "dhd_not_connected", "DHD is not connected to stargate"};
-        if(gateTile.getStargateState().initiating()){
+        if (gateTile.getStargateState().initiating()) {
             gateTile.attemptClose(StargateClosedReasonEnum.REQUESTED);
             return new Object[]{null, "dhd_disengage", "Closing gate..."};
         }
@@ -626,13 +601,18 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
             return new Object[]{null, "dhd_failure_busy", "Linked stargate is busy, state: " + gateTile.getStargateState().toString()};
         }
         StargateOpenResult result = gateTile.attemptOpenAndFail();
-        if(result.ok())
+        if (result.ok())
             return new Object[]{null, "dhd_engage", "Opening gate"};
-        else if(result == StargateOpenResult.NOT_ENOUGH_POWER)
+        else if (result == StargateOpenResult.NOT_ENOUGH_POWER)
             return new Object[]{null, "dhd_engage_failed", "Not enough power to open gate"};
-        else if(result == StargateOpenResult.ADDRESS_MALFORMED)
+        else if (result == StargateOpenResult.ADDRESS_MALFORMED)
             return new Object[]{null, "dhd_engage_failed", "Wrong address"};
         return new Object[]{null, "dhd_engage_failed_unknown", "Unknown error! This is a bug!"};
+    }
+
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return new AxisAlignedBB(getPos().add(-1, 0, -1), getPos().add(1, 2, 1));
     }
 
 
@@ -640,12 +620,23 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     // Rendering distance
 
     @Override
-    public AxisAlignedBB getRenderBoundingBox() {
-        return new AxisAlignedBB(getPos().add(-1, 0, -1), getPos().add(1, 2, 1));
-    }
-
-    @Override
     public double getMaxRenderDistanceSquared() {
         return 65536;
+    }
+
+    // TODO Get rid of EnumKeyInterface
+    public static enum DHDUpgradeEnum implements EnumKeyInterface<Item> {
+        CHEVRON_UPGRADE(AunisItems.CRYSTAL_GLYPH_DHD);
+
+        public Item item;
+
+        private DHDUpgradeEnum(Item item) {
+            this.item = item;
+        }
+
+        @Override
+        public Item getKey() {
+            return item;
+        }
     }
 }

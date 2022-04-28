@@ -51,7 +51,7 @@ item.aunis.crystal_glyph_stargate.name=Stargate Glyph Crystal
 item.aunis.crystal_glyph_milkyway.name=Milky Way Glyphs Crystal
 item.aunis.crystal_glyph_pegasus.name=Pegasus Glyphs Crystal
 item.aunis.crystal_glyph_universe.name=Universe Glyphs Crystal
-item.aunis.crystal_glyph_goauld.name=Goauld Rings Glyphs Crystal
+item.aunis.crystal_glyph_goauld.name=Goa'uld Rings Glyphs Crystal
 item.aunis.crystal_glyph_ori.name=Ori Rings Glyphs Crystal
 item.aunis.crystal_glyph_ancient.name=Ancient Rings Glyphs Crystal
 
@@ -140,6 +140,8 @@ item.aunis.gdo.oc_message_received=Received response:
 
 # tools
 item.aunis.zat.name=Zat'nik'tel
+item.aunis.staff.name=Goa'uld Staff weapon
+item.aunis.energyWeapon.available_shots=Available shots:
 
 # -------------------
 
@@ -287,6 +289,9 @@ death.attack.eventHorizon=%s was given a kawoosh cremation
 death.attack.irisDeath=%s was given an iris cremation
 death.attack.wrongSide=%s entered wrong side of gate
 
+death.attack.zatHit=%s was electrolyzed
+death.attack.staffHit=%s was melted using Goa'uld Staff Weapon
+
 # -------------------
 
 # -------------------
@@ -301,7 +306,7 @@ glyph.aunis.transportrings.ori.delta=Delta
 glyph.aunis.transportrings.ori.omega=Omega
 glyph.aunis.transportrings.ori.origin=Origin
 
-# Goauld Glyphs
+# Goa'uld Glyphs
 glyph.aunis.transportrings.goauld.amun=Amun
 glyph.aunis.transportrings.goauld.serket=Serket
 glyph.aunis.transportrings.goauld.khepri=Khepri
@@ -481,7 +486,7 @@ gui.capacitor.name=Capacitor Bank
 # rings
 gui.transportrings.energyBuffer=Energy buffer
 gui.transportrings.ori_address=Ori address
-gui.transportrings.goauld_address=Goauld address
+gui.transportrings.goauld_address=Goa'uld address
 
 # beamer
 gui.beamer.name=Gate Beamer
@@ -597,6 +602,9 @@ aunis.subtitle.gdo_button_beep=Pressed GDO button
 aunis.subtitle.universe_dialer_beep=Universe Dialer started dialling
 aunis.subtitle.universe_dialer_change_mode=Changed Universe Dialer mode
 aunis.subtitle.universe_dialer_connect=Universe Dialer connected
+
+aunis.subtitle.item_zat_shoot=Zat'nik'tel shoot
+aunis.subtitle.item_staff_shoot=Goa'uld Staff Weapon shoot
 
 # -------------------
 

@@ -1,4 +1,4 @@
-package mrjake.aunis.item;
+package mrjake.aunis.item.stargate;
 
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.stargate.StargateAbstractMemberBlock;

@@ -12,7 +12,7 @@ import mrjake.aunis.config.StargateSizeEnum;
 import mrjake.aunis.gui.container.stargate.StargateContainerGuiState;
 import mrjake.aunis.gui.container.stargate.StargateContainerGuiUpdate;
 import mrjake.aunis.item.AunisItems;
-import mrjake.aunis.item.UpgradeIris;
+import mrjake.aunis.item.stargate.UpgradeIris;
 import mrjake.aunis.item.gdo.GDOMessages;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.packet.AunisPacketHandler;

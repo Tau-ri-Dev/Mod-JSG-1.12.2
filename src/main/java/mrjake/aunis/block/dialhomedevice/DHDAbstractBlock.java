@@ -154,11 +154,11 @@ public abstract class DHDAbstractBlock extends AunisBlock {
     StargateClassicBaseTile gateTile = (StargateClassicBaseTile) tile.getLinkedGate(world);
 
     if (gateTile == null) {
-      //Aunis.logger.error("gateTile was null while getting power for DHD. Did you use Mysterious Page? ;)");
       return 0;
     }
 
-    return gateTile.getDialedAddress().size() > 0 ? 15 : 0;
+    if(gateTile.getStargateState().engaged() || gateTile.getStargateState().unstable()) return 15;
+    return gateTile.getDialedAddress().size();
   }
 
   @Override
@@ -168,7 +168,7 @@ public abstract class DHDAbstractBlock extends AunisBlock {
 
   @Override
   public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-    return true;
+    return side != EnumFacing.DOWN && side != EnumFacing.UP;
   }
 
   @Override

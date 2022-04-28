@@ -51,9 +51,11 @@ item.aunis.crystal_glyph_stargate.name=Stargate Glyphenkristall
 item.aunis.crystal_glyph_milkyway.name=Milchstraßen Glyphenkristall
 item.aunis.crystal_glyph_pegasus.name=Pegasus Glyphenkristall
 item.aunis.crystal_glyph_universe.name=Universe Glyphenkristall
+<<<<<<
 item.aunis.crystal_glyph_goauld.name=Goauld Ring Glyphenkristall
 item.aunis.crystal_glyph_ori.name=Ori Ring Glyphenkristall
 item.aunis.crystal_glyph_ancient.name=Antiker Ring Glyphenkristall
+
 
 # dhd
 item.aunis.dhd_brb.name=Leuchtender Roter Knopf (BRB)
@@ -140,6 +142,8 @@ item.aunis.gdo.oc_message_received=Antwort erhalten:
 
 # tools
 item.aunis.zat.name=Zat'nik'tel
+item.aunis.staff.name=Goa'uld Staff weapon
+item.aunis.energyWeapon.available_shots=Available shots:
 
 # -------------------
 
@@ -287,6 +291,9 @@ death.attack.eventHorizon=%s wurde durch das Kawoosh ausgelöscht
 death.attack.irisDeath=%s warf sich gegen eine Iris
 death.attack.wrongSide=%s hat das Gate auf der falschen Seite betreten
 
+death.attack.zatHit=%s was electrolyzed
+death.attack.staffHit=%s was melted using Goa'uld Staff Weapon
+
 # -------------------
 
 # -------------------
@@ -301,7 +308,7 @@ glyph.aunis.transportrings.ori.delta=Delta
 glyph.aunis.transportrings.ori.omega=Omega
 glyph.aunis.transportrings.ori.origin=Origin
 
-# Goauld Glyphs
+# Goa'uld Glyphs
 glyph.aunis.transportrings.goauld.amun=Amun
 glyph.aunis.transportrings.goauld.serket=Serket
 glyph.aunis.transportrings.goauld.khepri=Khepri
@@ -481,7 +488,7 @@ gui.capacitor.name=Kondensatorbatterie
 # rings
 gui.transportrings.energyBuffer=Energy buffer
 gui.transportrings.ori_address=Ori address
-gui.transportrings.goauld_address=Goauld address
+gui.transportrings.goauld_address=Goa'uld address
 
 # beamer
 gui.beamer.name=Stargate Transporter
@@ -597,6 +604,9 @@ aunis.subtitle.gdo_button_beep=GDO-Knopf gedrückt
 aunis.subtitle.universe_dialer_beep=Pressed Universe Dialer button
 aunis.subtitle.universe_dialer_change_mode=Universe Dialer Modus geändert
 aunis.subtitle.universe_dialer_connect=Universe Dialer verbunden
+
+aunis.subtitle.item_zat_shoot=Zat'nik'tel shoot
+aunis.subtitle.item_staff_shoot=Goa'uld Staff Weapon shoot
 
 # -------------------
 

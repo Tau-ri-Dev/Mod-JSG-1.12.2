@@ -1,12 +1,11 @@
 package mrjake.aunis.block.stargate;
 
 import mrjake.aunis.AunisProps;
-import mrjake.aunis.item.StargatePegasusMemberItemBlock;
+import mrjake.aunis.item.stargate.StargatePegasusMemberItemBlock;
 import mrjake.aunis.stargate.EnumMemberVariant;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.stargate.merging.StargatePegasusMergeHelper;
 import mrjake.aunis.tileentity.stargate.StargatePegasusMemberTile;
-import mrjake.aunis.tileentity.stargate.StargateUniverseMemberTile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;

@@ -771,6 +771,23 @@ public class AunisConfig {
     public static class DevConfig {
         @Name("Enable rings platform")
         public boolean enableRingPlatform = false;
+
+        @Name("size")
+        public float zatSize = 0.3f;
+
+        @Name("x")
+        public double zatX = 0.8;
+        @Name("y")
+        public double zatY = 0;
+        @Name("z")
+        public double zatZ = -0.8;
+
+        @Name("rotx")
+        public int zatRotX = 35;
+        @Name("roty")
+        public int zatRotY = 0;
+        @Name("rotz")
+        public int zatRotZ = 15;
     }
 
     public static void resetCache() {
