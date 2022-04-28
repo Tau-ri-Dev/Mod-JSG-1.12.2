@@ -413,7 +413,7 @@ public class AunisConfig {
         public boolean ignoreObstructionCheck = false;
 
         @Name("Play sound at Computer Dial")
-        public boolean ocsoundring = true;
+        public boolean ocPressSound = true;
     }
 
     public static class DHDConfig {
