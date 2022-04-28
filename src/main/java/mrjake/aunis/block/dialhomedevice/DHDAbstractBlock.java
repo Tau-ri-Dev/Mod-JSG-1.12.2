@@ -158,7 +158,7 @@ public abstract class DHDAbstractBlock extends AunisBlock {
       return 0;
     }
 
-    return gateTile.getDialedAddress().size() > 0 ? 15 : 0;
+    return gateTile.getDialedAddress().size();
   }
 
   @Override
