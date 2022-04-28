@@ -152,12 +152,16 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
         if(oldStack.getItem() != newStack.getItem()) {
             if (oldStack.getItem() instanceof EnergyWeapon) {
                 if (oldStack.getTagCompound() != null) {
-                    oldStack.getTagCompound().setBoolean("scope", false);
+                    NBTTagCompound compound = oldStack.getTagCompound();
+                    compound.setBoolean("scope", false);
+                    oldStack.setTagCompound(compound);
                 }
             }
             if (newStack.getItem() instanceof EnergyWeapon) {
                 if (newStack.getTagCompound() != null) {
-                    newStack.getTagCompound().setBoolean("scope", false);
+                    NBTTagCompound compound = newStack.getTagCompound();
+                    compound.setBoolean("scope", false);
+                    newStack.setTagCompound(compound);
                 }
             }
             return true;
