@@ -1016,7 +1016,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 TRGuiUpdate guiUpdate = (TRGuiUpdate) state;
                 energyStorage.setEnergyStoredInternally(guiUpdate.energyStored);
                 energyTransferedLastTick = guiUpdate.transferedLastTick;
-                setRingsParams(guiUpdate.ringsName, guiUpdate.distance);
+                if(!getRings().getName().equals(guiUpdate.ringsName) || getRings().getRingsDistance() != guiUpdate.distance)
+                    setRingsParams(guiUpdate.ringsName, guiUpdate.distance);
                 break;
             default:
                 break;
