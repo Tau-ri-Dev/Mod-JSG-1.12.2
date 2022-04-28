@@ -524,6 +524,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             dialedAddress.add(symbol);
             markDirty();
             activateSymbolDHD(symbol);
+            if(AunisConfig.ringsConfig.ocsoundring)
+                AunisSoundHelper.playSoundEvent(world, pos, SoundEventEnum.RINGS_CONTROLLER_BUTTON);
             if (symbolWillLock()) {
                 TransportResult result = attemptTransportTo(dialedAddress, EnumScheduledTask.RINGS_START_ANIMATION.waitTicks);
                 if (!result.ok()) {

@@ -411,6 +411,9 @@ public class AunisConfig {
 
         @Name("Ignore rings check for blocks to replace")
         public boolean ignoreObstructionCheck = false;
+
+        @Name("Play sound at Computer Dial")
+        public boolean ocsoundring = true;
     }
 
     public static class DHDConfig {
