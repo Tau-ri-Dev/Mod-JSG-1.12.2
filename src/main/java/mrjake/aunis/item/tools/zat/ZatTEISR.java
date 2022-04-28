@@ -24,9 +24,7 @@ public class ZatTEISR extends TileEntityItemStackRenderer {
 
         // Item frame
         if (transformType == ItemCameraTransforms.TransformType.FIXED) {
-            AunisConfig.DevConfig config = AunisConfig.devConfig;
-
-            GlStateManager.translate(config.zatX, config.zatY, config.zatZ);
+            GlStateManager.translate(0.37, 0.3, 0.65);
             GlStateManager.rotate(80, 0, 1, 0);
 
             GlStateManager.scale(0.2f, 0.2f, 0.2f);

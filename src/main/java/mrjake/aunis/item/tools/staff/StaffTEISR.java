@@ -1,5 +1,6 @@
 package mrjake.aunis.item.tools.staff;
 
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.renderer.ItemRenderHelper;
 import mrjake.aunis.loader.ElementEnum;
@@ -23,10 +24,8 @@ public class StaffTEISR extends TileEntityItemStackRenderer {
 
         // Item frame
         if (transformType == ItemCameraTransforms.TransformType.FIXED) {
-            GlStateManager.translate(0.53, 0.50, 0.5);
-            GlStateManager.rotate(90, 0, 0, 1);
-
-            GlStateManager.scale(0.2f, 0.2f, 0.2f);
+            GlStateManager.translate(0.6, 0.5, 0.4);
+            GlStateManager.scale(0.045, 0.045, 0.045);
         } else {
             boolean mainhand = AunisItems.STAFF.getLastTransform() == ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND;
             EnumHandSide handSide = mainhand ? EnumHandSide.RIGHT : EnumHandSide.LEFT;
@@ -37,18 +36,18 @@ public class StaffTEISR extends TileEntityItemStackRenderer {
             angle = 1 - angle;
 
             if (handSide == EnumHandSide.RIGHT) {
-                GlStateManager.translate(1.5, -0.3, -1.0);
-                GlStateManager.rotate(15, 1, 0, 0);
+                GlStateManager.translate(0.0, -10.0, 0.0);
+                GlStateManager.rotate(90, 0, 1, 0);
 
                 GlStateManager.translate(0, 0.3 * angle, -0.1 * angle);
             } else {
-                GlStateManager.translate(-1.0, -0.3, -1.0);
-                GlStateManager.rotate(15, 1, 0, 0);
+                GlStateManager.translate(-50, -10, 0);
+                GlStateManager.rotate(90, 0, 1, 0);
 
                 GlStateManager.translate(0, 0.3 * angle, 0);
             }
 
-            GlStateManager.scale(0.30f, 0.30f, 0.30f);
+            GlStateManager.scale(40, 40, 40);
         }
 
         ElementEnum.STAFF.bindTextureAndRender(BiomeOverlayEnum.NORMAL);

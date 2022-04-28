@@ -107,7 +107,7 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
         String energyPercent = String.format("%.2f", energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored() * 100) + " %";
         tooltip.add(energyPercent);
         tooltip.add("");
-        tooltip.add(Aunis.proxy.localize("item.aunis.energyWeapon.available_shots") + (int) Math.floor((float) energyStorage.getEnergyStored() / energyPerShot) + "/" + (int) Math.floor((float) energyStorage.getMaxEnergyStored() / energyPerShot));
+        tooltip.add(Aunis.proxy.localize("item.aunis.energyWeapon.available_shots") + " " + (int) Math.floor((float) energyStorage.getEnergyStored() / energyPerShot) + "/" + (int) Math.floor((float) energyStorage.getMaxEnergyStored() / energyPerShot));
     }
 
     @Override

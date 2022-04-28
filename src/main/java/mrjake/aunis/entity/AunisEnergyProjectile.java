@@ -105,24 +105,19 @@ public class AunisEnergyProjectile extends EntitySmallFireball {
                                 }
                             }
                         }
-                        if (instaKill && !entity.isDead) {
+                        if (instaKill && !entity.isDead)
                             entity.attackEntityFrom(damageSource, Float.MAX_VALUE);
-                        }
-                        if (explode) {
+                        if (igniteGround || explode)
                             entity.setFire(5);
-                            world.newExplosion((Entity) null, posX, posY, posZ, (float) explosionPower, igniteGround, true);
-                        }
-                        if (igniteGround) {
-                            entity.setFire(5);
-                        }
                     }
                 } else {
                     if (igniteGround) {
                         BlockPos blockpos = result.getBlockPos().offset(result.sideHit);
-                        if (world.isAirBlock(blockpos)) {
+                        if (world.isAirBlock(blockpos))
                             world.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
-                        }
                     }
+                    if (explode)
+                        world.newExplosion((Entity) null, posX, posY, posZ, (float) explosionPower, igniteGround, true);
                 }
             }
             this.setDead();
