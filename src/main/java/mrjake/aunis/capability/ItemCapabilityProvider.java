@@ -11,7 +11,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nullable;
 
-public final class ItemCapabilityProvider implements ICapabilityProvider {
+public class ItemCapabilityProvider implements ICapabilityProvider {
 
 	private final StargateItemEnergyStorage energyStorage;
 	

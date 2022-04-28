@@ -3,6 +3,7 @@ package mrjake.aunis.item.gdo;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
+import mrjake.aunis.capability.endpoint.ItemEndpointImpl;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.AunisItems;

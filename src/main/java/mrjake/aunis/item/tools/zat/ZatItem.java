@@ -6,6 +6,7 @@ import mrjake.aunis.entity.EntityRegister;
 import mrjake.aunis.item.tools.EnergyWeapon;
 import mrjake.aunis.sound.SoundEventEnum;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -29,8 +30,11 @@ public class ZatItem extends EnergyWeapon {
     }
 
     @Override
-    public DamageSource getDamageSource(){
-        return AunisDamageSources.DAMAGE_ZAT;
+    public int getWeaponCoolDown(){ return 20; }
+
+    @Override
+    public DamageSource getDamageSource(Entity source, Entity attacker){
+        return AunisDamageSources.getDamageSourceZat(source, attacker);
     }
 
     @Override
@@ -40,5 +44,6 @@ public class ZatItem extends EnergyWeapon {
         projectile.paralyze = true;
         projectile.damage = 1.0F;
         projectile.igniteGround = false;
+        projectile.setSize(0.0125F);
     }
 }

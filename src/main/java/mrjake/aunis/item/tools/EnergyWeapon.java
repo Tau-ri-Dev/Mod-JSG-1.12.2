@@ -1,7 +1,8 @@
 package mrjake.aunis.item.tools;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.capability.ItemCapabilityProvider;
+import mrjake.aunis.capability.WeaponCapabilityProvider;
+import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.entity.AunisEnergyProjectile;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
@@ -42,13 +43,26 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
         setCreativeTab(Aunis.aunisToolsCreativeTab);
     }
 
+    private static void checkNBT(ItemStack stack) {
+        if (!stack.hasTagCompound()) {
+            initNBT(stack);
+        }
+    }
+
+    private static void initNBT(ItemStack stack) {
+        NBTTagCompound compound = new NBTTagCompound();
+        compound.setBoolean("scope", false);
+        stack.setTagCompound(compound);
+    }
+
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
         if (isInCreativeTab(tab)) {
             items.add(new ItemStack(this));
 
             ItemStack stack = new ItemStack(this);
             StargateItemEnergyStorage energyStorage = (StargateItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null);
+            if (energyStorage == null) return;
             energyStorage.setEnergyStored(energyStorage.getMaxEnergyStored());
             items.add(stack);
         }
@@ -58,19 +72,39 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         if (!world.isRemote) {
-            StargateItemEnergyStorage energyStorage = (StargateItemEnergyStorage) player.getHeldItem(hand).getCapability(CapabilityEnergy.ENERGY, null);
-            if (energyStorage != null && energyStorage.extractEnergy(energyPerShot, true) >= energyPerShot) {
-                playShootSound(world, player);
-                world.spawnEntity(AunisEnergyProjectile.createEnergyBall(world, player, this));
-                energyStorage.extractEnergy(energyPerShot, false);
+            checkNBT(player.getHeldItem(hand));
+            ItemStack stack = player.getHeldItem(hand);
+            NBTTagCompound compound = stack.getTagCompound();
+
+            if(!player.isSneaking()) {
+                StargateItemEnergyStorage energyStorage = (StargateItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null);
+                if (energyStorage != null && energyStorage.extractEnergy(energyPerShot, true) >= energyPerShot) {
+                    playShootSound(world, player);
+                    player.getCooldownTracker().setCooldown(this, getWeaponCoolDown());
+                    world.spawnEntity(AunisEnergyProjectile.createEnergyBall(world, player, this));
+                    energyStorage.extractEnergy(energyPerShot, false);
+                }
+            }
+            else if (compound != null) {
+                compound.setBoolean("scope", !compound.getBoolean("scope"));
+                stack.setTagCompound(compound);
             }
         }
         return super.onItemRightClick(world, player, hand);
     }
 
+    @Override
+    public boolean onDroppedByPlayer(ItemStack stack, EntityPlayer player) {
+        stack.getCapability(ItemEndpointCapability.ENDPOINT_CAPABILITY, null).removeEndpoint();
+
+        return super.onDroppedByPlayer(stack, player);
+    }
+
     public abstract void playShootSound(World world, EntityPlayer player);
 
-    public abstract DamageSource getDamageSource();
+    public abstract int getWeaponCoolDown();
+
+    public abstract DamageSource getDamageSource(Entity source, Entity attacker);
 
     public void setEnergyBallParams(AunisEnergyProjectile projectile) {
         projectile.maxAliveTime = 5;
@@ -79,18 +113,12 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
         projectile.paralyze = false;
         projectile.explode = false;
         projectile.invisible = true;
-        projectile.damageSource = getDamageSource();
+        projectile.damageSource = getDamageSource(projectile, projectile.shootingEntity);
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        if (!world.isRemote) {
-
-        }
-    }
-
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip,
+                               @Nonnull ITooltipFlag flagIn) {
         tooltip.add(Aunis.getInProgress());
         tooltip.add("");
         IEnergyStorage energyStorage = stack.getCapability(CapabilityEnergy.ENERGY, null);
@@ -121,16 +149,29 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
 
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return oldStack.getItem() != newStack.getItem();
+        if(oldStack.getItem() != newStack.getItem()) {
+            if (oldStack.getItem() instanceof EnergyWeapon) {
+                if (oldStack.getTagCompound() != null) {
+                    oldStack.getTagCompound().setBoolean("scope", false);
+                }
+            }
+            if (newStack.getItem() instanceof EnergyWeapon) {
+                if (newStack.getTagCompound() != null) {
+                    newStack.getTagCompound().setBoolean("scope", false);
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new ItemCapabilityProvider(stack, nbt, maxEnergyStored);
+    public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt) {
+        return new WeaponCapabilityProvider(stack, nbt, maxEnergyStored);
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean showDurabilityBar(@Nonnull ItemStack stack) {
         return true;
     }
 

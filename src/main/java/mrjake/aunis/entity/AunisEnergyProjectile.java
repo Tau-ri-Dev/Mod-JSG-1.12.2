@@ -42,18 +42,22 @@ public class AunisEnergyProjectile extends EntitySmallFireball {
         ticksAlive = 0;
     }
 
+    public void setSize(float size){
+        this.setSize(size, size);
+    }
+
     public static AunisEnergyProjectile createEnergyBall(World worldIn, EntityLivingBase shooter, EnergyWeapon itemIn) {
         Vec3d vector = shooter.getLookVec();
-        return new AunisEnergyProjectile(worldIn, shooter, vector.x * 50, vector.y * 50, vector.z * 50, itemIn);
+        return new AunisEnergyProjectile(worldIn, shooter, vector.x * 100, vector.y * 100, vector.z * 100, itemIn);
     }
 
     public static AunisEnergyProjectile createEnergyBall(World worldIn, EntityLivingBase shooter, EntityLivingBase target, EnergyWeapon itemIn) {
-        double d0 = target.posY + (double) target.getEyeHeight() - 1.100000023841858D;
+        double d0 = target.posY + (double) target.getEyeHeight() - 2.100000023841858D;
         double d1 = target.posX - shooter.posX;
         double d2 = d0 - (shooter.posY + 1);
         double d3 = target.posZ - shooter.posZ;
         float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
-        return new AunisEnergyProjectile(worldIn, shooter, d1, d2 + (double) f, d3, itemIn);
+        return new AunisEnergyProjectile(worldIn, shooter, d1 * 100, (d2 + (double) f) * 100, d3 * 100, itemIn);
     }
 
     @Override
@@ -92,7 +96,7 @@ public class AunisEnergyProjectile extends EntitySmallFireball {
                         entity.setDead();
 
                     if (flag) {
-                        this.applyEnchantments(this.shootingEntity, entity);
+                        this.applyEnchantments(shootingEntity, entity);
                         if (paralyze) {
                             if (entity instanceof EntityLivingBase) {
                                 EntityLivingBase e = (EntityLivingBase) entity;
