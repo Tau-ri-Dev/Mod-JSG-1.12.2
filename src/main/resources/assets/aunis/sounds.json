@@ -387,6 +387,13 @@
     "sounds": [
       "aunis:item/zat/shoot"
     ]
+  },
+  "item_staff_shoot": {
+    "category": "ambient",
+    "subtitle": "aunis.subtitle.item_staff_shoot",
+    "sounds": [
+      "aunis:item/staff/shoot"
+    ]
   }
 }
 

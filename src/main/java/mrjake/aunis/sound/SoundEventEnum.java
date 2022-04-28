@@ -81,7 +81,8 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
 
     // ----------------------------------------------------------
     // Entities
-    ZAT_SHOOT(140, "item_zat_shoot", 0.1f);
+    ZAT_SHOOT(140, "item_zat_shoot", 0.1f),
+    STAFF_SHOOT(141, "item_staff_shoot", 0.1f);
 
     // ----------------------------------------------------------
 

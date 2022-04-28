@@ -36,7 +36,7 @@ public class ZatItem extends EnergyWeapon {
     @Override
     public void setEnergyBallParams(AunisEnergyProjectile projectile) {
         super.setEnergyBallParams(projectile);
-        projectile.maxAliveTime = 15;
+        projectile.maxAliveTime = 25;
         projectile.paralyze = true;
         projectile.damage = 1.0F;
         projectile.igniteGround = false;

@@ -25,7 +25,7 @@ public class StaffItem extends EnergyWeapon {
 
     @Override
     public void playShootSound(World world, EntityPlayer player){
-        EntityRegister.playSoundEvent(SoundEventEnum.ZAT_SHOOT, player);
+        EntityRegister.playSoundEvent(SoundEventEnum.STAFF_SHOOT, player);
     }
 
     @Override

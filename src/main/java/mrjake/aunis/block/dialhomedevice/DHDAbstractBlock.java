@@ -154,10 +154,10 @@ public abstract class DHDAbstractBlock extends AunisBlock {
     StargateClassicBaseTile gateTile = (StargateClassicBaseTile) tile.getLinkedGate(world);
 
     if (gateTile == null) {
-      //Aunis.logger.error("gateTile was null while getting power for DHD. Did you use Mysterious Page? ;)");
       return 0;
     }
 
+    if(gateTile.getStargateState().engaged() || gateTile.getStargateState().unstable()) return 15;
     return gateTile.getDialedAddress().size();
   }
 

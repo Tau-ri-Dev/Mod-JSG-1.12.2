@@ -47,7 +47,7 @@ public class StaffTEISR extends TileEntityItemStackRenderer {
                 GlStateManager.translate(0, 0.3 * angle, 0);
             }
 
-            GlStateManager.scale(40, 40, 40);
+            GlStateManager.scale(7.0f, 7.0f, 7.0f);
         }
 
         ElementEnum.STAFF.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
