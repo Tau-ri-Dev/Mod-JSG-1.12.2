@@ -81,7 +81,13 @@ public enum ElementEnum {
   SHIELD("iris/shield.obj", "iris/shield"),
   IRIS("iris/iris_blade.obj", "iris/iris_blade"),
 
-  GDO("iris/gdo.obj", "iris/gdo.png");
+  GDO("iris/gdo.obj", "iris/gdo.png"),
+
+  // --------------------------------------------------------------------------------------------
+  // Tools
+
+  ZAT("tools/zat.obj", "tools/zat.png"),
+  STAFF("tools/staff.obj", "tools/staff.png");
 
   // --------------------------------------------------------------------------------------------
 

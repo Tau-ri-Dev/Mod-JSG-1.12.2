@@ -89,9 +89,6 @@ public class AunisConfig {
     @Name("Recipes options")
     public static RecipesConfig recipesConfig = new RecipesConfig();
 
-    @Name("Tools config")
-    public static ToolsConfig toolsConfig = new ToolsConfig();
-
     public static class StargateConfig {
         @Name("Orlin's gate max open count")
         @RangeInt(min = 0)
@@ -768,15 +765,26 @@ public class AunisConfig {
         public boolean bypassThermal = false;
     }
 
-    public static class ToolsConfig {
-        @Name("Zat projectile max distance")
-        @RangeInt(min = 1, max = 50)
-        public int zatDistance = 12;
-    }
-
     public static class DevConfig {
         @Name("Enable rings platform")
         public boolean enableRingPlatform = false;
+
+        @Name("size")
+        public float zatSize = 0.3f;
+
+        @Name("x")
+        public double zatX = 0.8;
+        @Name("y")
+        public double zatY = 0;
+        @Name("z")
+        public double zatZ = -0.8;
+
+        @Name("rotx")
+        public int zatRotX = 35;
+        @Name("roty")
+        public int zatRotY = 0;
+        @Name("rotz")
+        public int zatRotZ = 15;
     }
 
     public static void resetCache() {

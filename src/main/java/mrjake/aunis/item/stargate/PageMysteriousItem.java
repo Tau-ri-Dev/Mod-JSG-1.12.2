@@ -1,7 +1,8 @@
-package mrjake.aunis.item;
+package mrjake.aunis.item.stargate;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.worldgen.StargateGenerator;
 import mrjake.aunis.worldgen.StargateGenerator.GeneratedStargate;

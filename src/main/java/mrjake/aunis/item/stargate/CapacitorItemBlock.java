@@ -1,7 +1,8 @@
-package mrjake.aunis.item;
+package mrjake.aunis.item.stargate;
 
 import mrjake.aunis.block.capacitor.CapacitorBlock;
-import mrjake.aunis.capability.CapacitorCapabilityProvider;
+import mrjake.aunis.capability.ItemCapabilityProvider;
+import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.stargate.power.StargateItemEnergyStorage;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
@@ -55,7 +56,7 @@ public class CapacitorItemBlock extends ItemBlock {
 	
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-		return new CapacitorCapabilityProvider(stack, nbt);
+		return new ItemCapabilityProvider(stack, nbt, AunisConfig.powerConfig.stargateEnergyStorage/4);
 	}
 	
 	@Override

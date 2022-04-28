@@ -6,7 +6,10 @@ import mrjake.aunis.item.gdo.GDOItem;
 import mrjake.aunis.item.notebook.NotebookItem;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
-import mrjake.aunis.item.tools.ZatItem;
+import mrjake.aunis.item.stargate.PageMysteriousItem;
+import mrjake.aunis.item.stargate.UpgradeIris;
+import mrjake.aunis.item.tools.staff.StaffItem;
+import mrjake.aunis.item.tools.zat.ZatItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -109,9 +112,10 @@ public class AunisItems {
     /**
      * TOOLS
      */
-    public static final Item ZAT = new ZatItem();
+    public static final ZatItem ZAT = new ZatItem();
+    public static final StaffItem STAFF = new StaffItem();
 
-    private static Item[] items = {
+    private static final Item[] items = {
             CRYSTAL_CONTROL_MILKYWAY_DHD,
             CRYSTAL_CONTROL_PEGASUS_DHD,
             CRYSTAL_RAW_PEGASUS_DHD,
@@ -148,6 +152,10 @@ public class AunisItems {
             CRYSTAL_WHITE,
             CRYSTAL_BLUE_PEGASUS,
 
+            BEAMER_CRYSTAL_POWER,
+            BEAMER_CRYSTAL_FLUID,
+            BEAMER_CRYSTAL_ITEMS,
+
             CIRCUIT_CONTROL_BASE,
             CIRCUIT_CONTROL_CRYSTAL,
             CIRCUIT_CONTROL_NAQUADAH,
@@ -168,11 +176,8 @@ public class AunisItems {
 
             GDO,
 
-            BEAMER_CRYSTAL_POWER,
-            BEAMER_CRYSTAL_FLUID,
-            BEAMER_CRYSTAL_ITEMS,
-
-            ZAT
+            ZAT,
+            STAFF,
     };
 
     public static Item[] getItems() {

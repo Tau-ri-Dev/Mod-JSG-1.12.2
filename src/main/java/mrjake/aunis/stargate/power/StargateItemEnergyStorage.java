@@ -7,9 +7,11 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 public class StargateItemEnergyStorage implements IEnergyStorage {
     private final ItemStack stack;
+    private final int maxEnergyStored;
 
-    public StargateItemEnergyStorage(ItemStack stack) {
+    public StargateItemEnergyStorage(ItemStack stack, int maxEnergyStored) {
         this.stack = stack;
+        this.maxEnergyStored = maxEnergyStored;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class StargateItemEnergyStorage implements IEnergyStorage {
 
     @Override
     public int getMaxEnergyStored() {
-        return AunisConfig.powerConfig.stargateEnergyStorage/4;
+        return maxEnergyStored;
     }
 
     @Override

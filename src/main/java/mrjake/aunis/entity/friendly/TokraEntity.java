@@ -3,6 +3,7 @@ package mrjake.aunis.entity.friendly;
 import mrjake.aunis.entity.AunisEnergyProjectile;
 import mrjake.aunis.entity.EntityRegister;
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.item.tools.zat.ZatItem;
 import mrjake.aunis.sound.SoundEventEnum;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
@@ -109,7 +110,7 @@ public class TokraEntity extends EntityAgeable implements IRangedAttackMob, INpc
     @ParametersAreNonnullByDefault
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
         EntityRegister.playSoundEvent(SoundEventEnum.ZAT_SHOOT, this);
-        this.world.spawnEntity(AunisEnergyProjectile.createEnergyBall(world, this, target));
+        this.world.spawnEntity(AunisEnergyProjectile.createEnergyBall(world, this, target, AunisItems.ZAT));
     }
 
     @Override

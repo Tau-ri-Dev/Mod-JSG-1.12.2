@@ -11,12 +11,12 @@ import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nullable;
 
-public final class CapacitorCapabilityProvider implements ICapabilityProvider {
+public final class ItemCapabilityProvider implements ICapabilityProvider {
 
 	private final StargateItemEnergyStorage energyStorage;
 	
-	public CapacitorCapabilityProvider(final ItemStack stack, @Nullable NBTTagCompound nbt) {
-		energyStorage = new StargateItemEnergyStorage(stack);
+	public ItemCapabilityProvider(final ItemStack stack, @Nullable NBTTagCompound nbt, int maxEnergy) {
+		energyStorage = new StargateItemEnergyStorage(stack, maxEnergy);
 		if(nbt != null && nbt.hasKey("Parent", Constants.NBT.TAG_COMPOUND))
 			backwardsCompat(nbt.getCompoundTag("Parent"));
 	}

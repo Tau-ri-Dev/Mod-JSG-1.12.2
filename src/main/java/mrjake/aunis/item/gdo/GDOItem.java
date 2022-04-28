@@ -5,18 +5,12 @@ import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.gui.GuiSendCode;
 import mrjake.aunis.item.AunisItems;
-import mrjake.aunis.item.dialer.UniverseDialerMode;
 import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
-import mrjake.aunis.stargate.EnumStargateState;
-import mrjake.aunis.stargate.network.StargateNetwork;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
-import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.util.LinkingHelper;
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,7 +20,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
@@ -43,6 +36,7 @@ import java.util.ArrayList;
 // It would be better to make gdo and uni dialer share code... -- matousss
 public class GDOItem extends Item implements CustomModelItemInterface {
     public static final String ITEM_NAME = "gdo";
+    private CustomModel customModel;
 
     public GDOItem() {
         setRegistryName(new ResourceLocation(Aunis.ModID, ITEM_NAME));
@@ -70,6 +64,15 @@ public class GDOItem extends Item implements CustomModelItemInterface {
         stack.setTagCompound(compound);
     }
 
+    public static boolean isLinked(ItemStack itemStack) {
+        if (itemStack.getItem() == AunisItems.GDO) {
+            if (itemStack.hasTagCompound()) {
+                return itemStack.getTagCompound().hasKey("linkedGate");
+            }
+        }
+        return false;
+    }
+
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
@@ -78,8 +81,6 @@ public class GDOItem extends Item implements CustomModelItemInterface {
             items.add(stack);
         }
     }
-
-    private CustomModel customModel;
 
     @Override
     public void setCustomModel(CustomModel customModel) {
@@ -133,7 +134,7 @@ public class GDOItem extends Item implements CustomModelItemInterface {
                         do {
 
                             targetPos = getNearest(world, pos, blacklist);
-                            if(targetPos == null)
+                            if (targetPos == null)
                                 break;
 
                             if (world.getTileEntity(targetPos) instanceof StargateAbstractBaseTile) {
@@ -142,7 +143,7 @@ public class GDOItem extends Item implements CustomModelItemInterface {
                                     case OC:
                                         StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(targetPos);
 
-                                        if (gateTile == null || !gateTile.isMerged()){
+                                        if (gateTile == null || !gateTile.isMerged()) {
                                             blacklist.add(targetPos);
                                             continue;
                                         }
@@ -156,7 +157,7 @@ public class GDOItem extends Item implements CustomModelItemInterface {
                                 }
                             }
                             loop++;
-                        }while(!found && loop < 100);
+                        } while (!found && loop < 100);
                     }
                 }
             }
@@ -167,7 +168,7 @@ public class GDOItem extends Item implements CustomModelItemInterface {
         }
     }
 
-    public BlockPos getNearest(World world, BlockPos pos, ArrayList<BlockPos> blacklist){
+    public BlockPos getNearest(World world, BlockPos pos, ArrayList<BlockPos> blacklist) {
         return LinkingHelper.findClosestPos(world, pos, new BlockPos(AunisConfig.stargateConfig.universeDialerReach, 10, AunisConfig.stargateConfig.universeDialerReach), AunisBlocks.STARGATE_BASE_BLOCKS, blacklist);
     }
 
@@ -214,14 +215,5 @@ public class GDOItem extends Item implements CustomModelItemInterface {
         }
 
         return super.onItemRightClick(world, player, hand);
-    }
-
-    public static boolean isLinked(ItemStack itemStack) {
-        if (itemStack.getItem() == AunisItems.GDO) {
-            if (itemStack.hasTagCompound()) {
-                return itemStack.getTagCompound().hasKey("linkedGate");
-            }
-        }
-        return false;
     }
 }
