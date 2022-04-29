@@ -76,7 +76,7 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
             ItemStack stack = player.getHeldItem(hand);
             NBTTagCompound compound = stack.getTagCompound();
 
-            if(!player.isSneaking()) {
+            if (!player.isSneaking()) {
                 StargateItemEnergyStorage energyStorage = (StargateItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null);
                 if (energyStorage != null && energyStorage.extractEnergy(energyPerShot, true) >= energyPerShot) {
                     playShootSound(world, player);
@@ -84,8 +84,7 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
                     world.spawnEntity(AunisEnergyProjectile.createEnergyBall(world, player, this));
                     energyStorage.extractEnergy(energyPerShot, false);
                 }
-            }
-            else if (compound != null) {
+            } else if (compound != null) {
                 compound.setBoolean("scope", !compound.getBoolean("scope"));
                 stack.setTagCompound(compound);
             }
@@ -100,7 +99,7 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
         return super.onDroppedByPlayer(stack, player);
     }
 
-    public abstract void playShootSound(World world, EntityPlayer player);
+    public abstract void playShootSound(World world, Entity entity);
 
     public abstract int getWeaponCoolDown();
 
@@ -149,7 +148,7 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
 
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        if(oldStack.getItem() != newStack.getItem()) {
+        if (oldStack.getItem() != newStack.getItem()) {
             if (oldStack.getItem() instanceof EnergyWeapon) {
                 if (oldStack.getTagCompound() != null) {
                     NBTTagCompound compound = oldStack.getTagCompound();

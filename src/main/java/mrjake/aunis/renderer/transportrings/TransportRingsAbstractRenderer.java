@@ -21,7 +21,7 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
 
     public static final int PLATFORM_ANIMATION_DURATION = 20;
     public static final float PLATFORM_MAX_Y = 0.8f;
-    public static final float PLATFORM_MAX_X = 3.5f;
+    public static final float PLATFORM_MAX_X = 3.8f;
 
     public abstract void renderRings(TransportRingsRendererState state, float partialTicks, int distance);
 

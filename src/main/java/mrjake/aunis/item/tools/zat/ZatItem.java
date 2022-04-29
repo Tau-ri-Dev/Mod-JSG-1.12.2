@@ -7,7 +7,6 @@ import mrjake.aunis.item.tools.EnergyWeapon;
 import mrjake.aunis.sound.SoundEventEnum;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
@@ -25,8 +24,8 @@ public class ZatItem extends EnergyWeapon {
     }
 
     @Override
-    public void playShootSound(World world, EntityPlayer player){
-        EntityRegister.playSoundEvent(SoundEventEnum.ZAT_SHOOT, player);
+    public void playShootSound(World world, Entity entity){
+        EntityRegister.playSoundEvent(SoundEventEnum.ZAT_SHOOT, entity);
     }
 
     @Override
