@@ -605,7 +605,7 @@ public class AunisConfig {
 
         @Name("Enable Titanium ore generation")
         @Comment({
-                "Do you want to spawn naquadah ores in the Overworld?",
+                "Do you want to spawn titanium ores in the Overworld?",
         })
         public boolean titaniumEnable = true;
 
