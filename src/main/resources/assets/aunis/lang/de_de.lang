@@ -2,9 +2,9 @@
 itemGroup.aunis_gates=Aunis: Gates
 itemGroup.aunis_items=Aunis: Items
 itemGroup.aunis_rings=Aunis: Rings
-itemGroup.aunis_ores=Aunis: Ores
-itemGroup.aunis_energy=Aunis: Energy
-itemGroup.aunis_tools=Aunis: Tools
+itemGroup.aunis_ores=Aunis: Erze
+itemGroup.aunis_energy=Aunis: Energie
+itemGroup.aunis_tools=Aunis: Werkzeuge
 
 # sound categories
 soundCategory.aunis_sounds=Aunis:
@@ -51,9 +51,10 @@ item.aunis.crystal_glyph_stargate.name=Stargate Glyphenkristall
 item.aunis.crystal_glyph_milkyway.name=Milchstraßen Glyphenkristall
 item.aunis.crystal_glyph_pegasus.name=Pegasus Glyphenkristall
 item.aunis.crystal_glyph_universe.name=Universe Glyphenkristall
-item.aunis.crystal_glyph_goauld.name=Goa'uld Rings Glyphs Crystal
-item.aunis.crystal_glyph_ori.name=Ori Rings Glyphs Crystal
-item.aunis.crystal_glyph_ancient.name=Ancient Rings Glyphs Crystal
+item.aunis.crystal_glyph_goauld.name=Goauld Ring Glyphenkristall
+item.aunis.crystal_glyph_ori.name=Ori Ring Glyphenkristall
+item.aunis.crystal_glyph_ancient.name=Antiker Ring Glyphenkristall
+
 
 # dhd
 item.aunis.dhd_brb.name=Leuchtender Roter Knopf (BRB)
@@ -74,7 +75,7 @@ item.aunis.page_notebook.name=Notizbuch Seite
 # mysterious page
 item.aunis.page_mysterious.name=Geheimnisvolle Seite
 item.aunis.page_mysterious.empty=Leer
-item.aunis.page_mysterious.tooltip=Who knows where it leads
+item.aunis.page_mysterious.tooltip=Wer weiß wohin es führt?
 
 # beamer
 item.aunis.beamer_crystal_power.name=Transporter Energiekristall
@@ -83,7 +84,7 @@ item.aunis.beamer_crystal_items.name=Transporter Item-Kristall
 
 # universe dialer
 item.aunis.universe_dialer.name=Universe Dialer
-item.aunis.universe_dialer.broken.name=Universe Dialer (Broken)
+item.aunis.universe_dialer.broken.name=Universe Dialer (Kaputt)
 item.aunis.universe_dialer.saved_gates=Gespeicherte gates: %s
 item.aunis.universe_dialer.not_linked=Nicht verbunden
 item.aunis.universe_dialer.gate_busy=Stargate ist beschäftigt
@@ -103,9 +104,9 @@ item.aunis.universe_dialer.oc_data=OpenComputers Parameter (durch Komma getrennt
 item.aunis.universe_dialer.oc_save=Speichern
 item.aunis.universe_dialer.oc_port_invalid=Ungültiger Port
 item.aunis.universe_dialer.oc_message_received=Anwort empfangen:
-item.aunis.universe_dialer.toggle_fast_dial=Toggle fast dialing
-item.aunis.universe_dialer.fast_dail_false=Fast dialing set to: False
-item.aunis.universe_dialer.fast_dail_true=Fast dialing set to: True
+item.aunis.universe_dialer.toggle_fast_dial=Schnelles wählen umschalten
+item.aunis.universe_dialer.fast_dail_false=Schnelles wählen ausgeschaltet
+item.aunis.universe_dialer.fast_dail_true=Schnelles wählen eingeschaltet
 
 # notebook
 item.aunis.notebook.name=Notizbuch
@@ -171,7 +172,7 @@ tile.aunis.dhd_block.computer_dial=Computeranwahl findet gerade statt
 tile.aunis.dhd_block.not_enough_power=Unzureichende Energie
 
 tile.aunis.dhd_pegasus_block.name=Pegasus Dial Home Device (DHD)
-tile.aunis.dhd_pegasus_block.unknown_buttons=This button isn't working
+tile.aunis.dhd_pegasus_block.unknown_buttons=Dieser Knopf funktioniert nicht
 
 # stargate - MW
 tile.aunis.stargate_milkyway_base_block.name=Stargate Basis (Milchstraße)
@@ -202,18 +203,18 @@ tile.aunis.transportrings_controller_goauld_block.name=Transporterring Steuerung
 tile.aunis.transportrings_controller_block.not_linked=Steuerung nicht verbunden
 
 # rings
-tile.aunis.transportrings_goauld_block.name=Transportringe
-tile.aunis.transportrings_ori_block.name=Transport rings (Ori)
+tile.aunis.transportrings_goauld_block.name=Transportringe (Goauld)
+tile.aunis.transportrings_ori_block.name=Transportringe (Ori)
 
 tile.aunis.transportrings_block.non_existing_address=Adresse existiert nicht
-tile.aunis.transportrings_block.wrong_distance=Wrong distance, should be from -40 to 40
+tile.aunis.transportrings_block.wrong_distance=Falsche distanz, es sollte von -40 bis 40 sein
 tile.aunis.transportrings_block.obstructed=Ringe sind versperrt, halte eine 5x5 Fläche um die Ringe frei
 tile.aunis.transportrings_block.obstructed_target=Zielringe sind versperrt, halte eine 5x5 Fläche um die Zielringe frei
 tile.aunis.transportrings_block.busy=Ringe aktiv
 tile.aunis.transportrings_block.busy_target=Ziel Ringe aktiv
-tile.aunis.transportrings_block.not_enough_power=Not enough power to activate rings
+tile.aunis.transportrings_block.not_enough_power=Nicht genug Energie um Ringe zu aktivieren.
 tile.aunis.transportrings_block.rings_name=Name
-tile.aunis.transportrings_block.rings_distance=Distance
+tile.aunis.transportrings_block.rings_distance=Entfernung
 
 # beamer
 tile.aunis.beamer_block.name=Transporter Block
@@ -223,8 +224,8 @@ tile.aunis.beamer_block.name=Transporter Block
 # -------------------
 # ENTITIES
 
-entity.Tokra.default=Tokra
-entity.tokra.name=Tokra
+entity.Tokra.default=Tok'ra
+entity.tokra.name=Tok'ra
 
 # -------------------
 
@@ -278,7 +279,7 @@ commands.sgcloseall.closing=Schließe Stargates in der Dimension
 commands.sgcloseall.closed=%s Stargates geschlossen.
 commands.sgcloseall.number_expected=Nummer oder "current" erwartet als Dimensions ID
 commands.sggenincoming.usage=/sggenincoming (x y z) (entities<0-10>) (addressLength<7-9>)
-commands.sggenincoming.notstargate=Targeted block is not a Stargate Base
+commands.sggenincoming.notstargate=Angepeilter Block ist kein Stargate
 
 # -------------------
 
@@ -287,7 +288,7 @@ commands.sggenincoming.notstargate=Targeted block is not a Stargate Base
 
 death.attack.eventHorizon=%s wurde durch das Kawoosh ausgelöscht
 death.attack.irisDeath=%s warf sich gegen eine Iris
-death.attack.wrongSide=%s entered wrong side of gate
+death.attack.wrongSide=%s hat das Gate auf der falschen Seite betreten
 
 death.attack.zatHit=%s was electrolyzed
 death.attack.staffHit=%s was melted using Goa'uld Staff Weapon
@@ -600,8 +601,8 @@ aunis.subtitle.beamer_loop=Transporter transportiert
 aunis.subtitle.page_flip=Seite schlägt um
 aunis.subtitle.gdo_button_beep=GDO-Knopf gedrückt
 aunis.subtitle.universe_dialer_beep=Pressed Universe Dialer button
-aunis.subtitle.universe_dialer_change_mode=Changed Universe Dialer mode
-aunis.subtitle.universe_dialer_connect=Universe Dialer connected
+aunis.subtitle.universe_dialer_change_mode=Universe Dialer Modus geändert
+aunis.subtitle.universe_dialer_connect=Universe Dialer verbunden
 
 aunis.subtitle.item_zat_shoot=Zat'nik'tel shoot
 aunis.subtitle.item_staff_shoot=Goa'uld Staff Weapon shoot
@@ -621,6 +622,6 @@ chat.orlins.energyStored=Energie gespeichert: %s RF (Benötigt: %s RF, %s s)
 
 menu.about=Über AUNIS
 menu.gate_overlay=Gate
-menu.music_toggle=Music
+menu.music_toggle=Musik
 
 # -------------------
