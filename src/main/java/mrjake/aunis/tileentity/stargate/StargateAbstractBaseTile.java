@@ -195,8 +195,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             }
         } else
             return isMerged && (stargateState.idle() || stargateState.incoming());
-        if(targetGatePos.getTileEntity().connectedToGatePos == null) return false;
-        return gatePosMap.get(getSymbolType()).equals(targetGatePos.getTileEntity().connectedToGatePos);
+        return false;
     }
 
     protected void sendRenderingUpdate(EnumGateAction gateAction, int chevronCount, boolean modifyFinal, EnumIrisType irisType, EnumIrisState irisState, long irisAnimation) {
@@ -421,7 +420,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         closeGate(reason);
     }
 
-    private static class ResultTargetValid {
+    protected static class ResultTargetValid {
         public final StargateOpenResult result;
         public final boolean targetVaild;
 

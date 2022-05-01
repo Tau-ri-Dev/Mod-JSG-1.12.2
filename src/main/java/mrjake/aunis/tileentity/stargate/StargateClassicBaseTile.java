@@ -148,6 +148,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     @Override
+    protected ResultTargetValid attemptOpenDialed() {
+        if(connectedToGatePos == null)
+            return new ResultTargetValid(StargateOpenResult.CALLER_HUNG_UP, true);
+        if(!(connectedToGatePos.getTileEntity().stargateState.incoming()))
+            return new ResultTargetValid(StargateOpenResult.CALLER_HUNG_UP, true);
+        return super.attemptOpenDialed();
+    }
+
+    @Override
     public void openGate(StargatePos targetGatePos, boolean isInitiating) {
         super.openGate(targetGatePos, isInitiating);
         playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
