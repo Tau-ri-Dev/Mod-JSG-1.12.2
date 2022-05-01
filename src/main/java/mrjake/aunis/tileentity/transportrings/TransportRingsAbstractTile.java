@@ -59,6 +59,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 import static mrjake.aunis.transportrings.TransportRingsAddress.MAX_SYMBOLS;
@@ -1174,12 +1175,12 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
         return (capability == CapabilityEnergy.ENERGY) || (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing == null) || super.hasCapability(capability, facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing == null)
             return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemStackHandler);
         if (capability == CapabilityEnergy.ENERGY)

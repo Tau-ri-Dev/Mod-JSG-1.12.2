@@ -386,52 +386,61 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
                 if (isMerged()) {
                     if (randomIncomingState == 0) { // incoming wormhole
-                        randomIncomingState++;
-                        int period = (((waitOpen) / 20) * 1000) / randomIncomingAddrSize;
-                        stargateState = EnumStargateState.INCOMING;
-                        isIncoming = true;
-                        if(connectedToGate){
-                            StargateAbstractBaseTile tGate;
-                            if(!dialedAddress.contains(getSymbolType().getOrigin()))
-                                dialedAddress.addOrigin();
-                            tGate = Objects.requireNonNull(network.getStargate(dialedAddress)).getTileEntity();
-                            if(tGate != null){
-                                tGate.stargateState = EnumStargateState.IDLE;
-                                tGate.markDirty();
+                        if(canAcceptConnectionFrom(null)) {
+                            randomIncomingState++;
+                            int period = (((waitOpen) / 20) * 1000) / randomIncomingAddrSize;
+                            stargateState = EnumStargateState.INCOMING;
+                            isIncoming = true;
+                            if (connectedToGate) {
+                                StargateAbstractBaseTile tGate;
+                                if (!dialedAddress.contains(getSymbolType().getOrigin()))
+                                    dialedAddress.addOrigin();
+                                tGate = Objects.requireNonNull(network.getStargate(dialedAddress)).getTileEntity();
+                                if (tGate != null) {
+                                    tGate.stargateState = EnumStargateState.IDLE;
+                                    tGate.markDirty();
+                                }
+                                connectedToGate = false;
+                                connectingToGate = false;
                             }
-                            connectedToGate = false;
-                            connectingToGate = false;
+                            markDirty();
+                            if (AunisConfig.dialingConfig.allowIncomingAnimations)
+                                this.incomingWormhole(randomIncomingAddrSize, period);
+                            else this.incomingWormhole(randomIncomingAddrSize);
+                            this.sendSignal(null, "stargate_incoming_wormhole", new Object[]{randomIncomingAddrSize});
+                            this.failGate();
                         }
-                        markDirty();
-                        if (AunisConfig.dialingConfig.allowIncomingAnimations)
-                            this.incomingWormhole(randomIncomingAddrSize, period);
-                        else this.incomingWormhole(randomIncomingAddrSize);
-                        this.sendSignal(null, "stargate_incoming_wormhole", new Object[]{randomIncomingAddrSize});
-                        this.failGate();
+                        else resetRandomIncoming();
                     } else if (randomIncomingState < waitOpen) { // wait waitOpen ticks to open gate
-                        stargateState = EnumStargateState.INCOMING;
-                        randomIncomingState++;
+                        if(!stargateState.engaged() && !stargateState.unstable()) {
+                            stargateState = EnumStargateState.INCOMING;
+                            randomIncomingState++;
+                        }
+                        else resetRandomIncoming();
                     } else if (randomIncomingState == waitOpen) { // open gate
-                        randomIncomingState++;
-                        targetGatePos = null;
+                        if(!stargateState.engaged() && !stargateState.unstable()) {
+                            randomIncomingState++;
+                            targetGatePos = null;
 
-                        ChunkManager.forceChunk(world, new ChunkPos(pos));
+                            ChunkManager.forceChunk(world, new ChunkPos(pos));
 
-                        sendRenderingUpdate(EnumGateAction.OPEN_GATE, 0, false);
+                            sendRenderingUpdate(EnumGateAction.OPEN_GATE, 0, false);
 
-                        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_OPEN_SOUND, getOpenSoundDelay()));
-                        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_HORIZON_LIGHT_BLOCK, EnumScheduledTask.STARGATE_OPEN_SOUND.waitTicks + 19 + getTicksPerHorizonSegment(true)));
-                        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_HORIZON_WIDEN, EnumScheduledTask.STARGATE_OPEN_SOUND.waitTicks + 23 + getTicksPerHorizonSegment(true))); // 1.3s of the sound to the kill
-                        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ENGAGE));
+                            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_OPEN_SOUND, getOpenSoundDelay()));
+                            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_HORIZON_LIGHT_BLOCK, EnumScheduledTask.STARGATE_OPEN_SOUND.waitTicks + 19 + getTicksPerHorizonSegment(true)));
+                            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_HORIZON_WIDEN, EnumScheduledTask.STARGATE_OPEN_SOUND.waitTicks + 23 + getTicksPerHorizonSegment(true))); // 1.3s of the sound to the kill
+                            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ENGAGE));
 
-                        sendSignal(null, "stargate_open", new Object[]{false});
+                            sendSignal(null, "stargate_open", new Object[]{false});
 
-                        // activate DHD brb
-                        activateDHDSymbolBRB();
+                            // activate DHD brb
+                            activateDHDSymbolBRB();
 
-                        markDirty();
+                            markDirty();
 
-                        this.isFinalActive = true;
+                            this.isFinalActive = true;
+                        }
+                        else resetRandomIncoming();
                     } else if (randomIncomingState < (waitOpen + wait)) {
                         randomIncomingState++;
                     } else if (randomIncomingState >= (waitOpen + wait) && randomIncomingEntities > 0 && (stargateState == EnumStargateState.ENGAGED || stargateState == EnumStargateState.INCOMING)) {
@@ -499,6 +508,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         if (this instanceof StargateMilkyWayBaseTile)
                             ((StargateMilkyWayBaseTile) this).clearDHDSymbols();
                     }
+
+                    markDirty();
                 } else resetRandomIncoming();
             }
         }
@@ -514,7 +525,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         super.extractEnergyByShield(0);
         if (!world.isRemote && isShieldIris()) {
             shieldKeepAlive = AunisConfig.irisConfig.shieldPowerDraw;
-            //if (isClosed()) getEnergyStorage().extractEnergy(shieldKeepAlive, false);
             if (isClosed()) super.extractEnergyByShield(shieldKeepAlive);
             if (getEnergyStorage().getEnergyStored() < shieldKeepAlive) {
                 toggleIris();

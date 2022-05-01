@@ -1,6 +1,10 @@
 package mrjake.aunis.entity.friendly;
 
 import mrjake.aunis.entity.AunisEnergyProjectile;
+import mrjake.aunis.entity.AunisTradeableEntity;
+import mrjake.aunis.entity.ai.AunisLookAtTradePlayerAI;
+import mrjake.aunis.entity.ai.AunisTradePlayerAI;
+import mrjake.aunis.entity.trading.ITradeList;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.tools.EnergyWeapon;
 import mrjake.aunis.util.AunisItemStackHandler;
@@ -10,7 +14,6 @@ import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -22,30 +25,41 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Team;
+import net.minecraft.stats.StatList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.village.MerchantRecipe;
+import net.minecraft.village.MerchantRecipeList;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class TokraEntity extends EntityVillager implements IRangedAttackMob, INpc {
+public class TokraEntity extends AunisTradeableEntity implements IRangedAttackMob, INpc {
 
     public static final int MAIN_HAND_SLOT = 0;
     public static final int OFF_HAND_SLOT = 1;
-    public final AunisItemStackHandler ITEM_HANDLER = new AunisItemStackHandler(4);
+    public final AunisItemStackHandler ITEM_HANDLER = new AunisItemStackHandler(12);
     private final ItemStack ZAT_ITEM = new ItemStack(AunisItems.ZAT);
     private final ItemStack STAFF_ITEM = new ItemStack(AunisItems.STAFF);
     private final Random RANDOM = new Random();
+    @Nullable
+    private MerchantRecipeList buyingList;
+    @Nullable
+    private EntityPlayer buyingPlayer;
 
     public TokraEntity(World worldIn) {
         super(worldIn);
@@ -56,10 +70,75 @@ public class TokraEntity extends EntityVillager implements IRangedAttackMob, INp
     }
 
     private void initTokra() {
-        if (RANDOM.nextInt(100) < 5) // 5% chance
-            ITEM_HANDLER.setStackInSlot(MAIN_HAND_SLOT, ZAT_ITEM);
-        else
+        if (RANDOM.nextInt(100) < 2) // 2% chance
             ITEM_HANDLER.setStackInSlot(MAIN_HAND_SLOT, STAFF_ITEM);
+        else
+            ITEM_HANDLER.setStackInSlot(MAIN_HAND_SLOT, ZAT_ITEM);
+    }
+
+    @Override
+    protected void initEntityAI() {
+        this.tasks.addTask(0, new EntityAISwimming(this));
+        this.tasks.addTask(1, new EntityAIAttackRanged(this, 0.5D, 20, 10.0F));
+        this.tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
+        this.tasks.addTask(1, new AunisTradePlayerAI(this));
+        this.tasks.addTask(1, new AunisLookAtTradePlayerAI(this));
+        this.tasks.addTask(2, new EntityAIMoveIndoors(this));
+        this.tasks.addTask(3, new EntityAIRestrictOpenDoor(this));
+        this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
+        this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 0.6D));
+        this.tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 3.0F, 1.0F));
+        this.tasks.addTask(9, new EntityAIWanderAvoidWater(this, 0.6D));
+        this.tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
+        this.tasks.addTask(12, new EntityAIWanderAvoidWater(this, 0.8D));
+        this.tasks.addTask(15, new EntityAILookIdle(this));
+
+        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, TokraEntity.class));
+        this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityLiving.class, 10, true, false, IMob.MOB_SELECTOR));
+    }
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+    }
+
+    @Override
+    protected boolean canDespawn() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrading() {
+        return this.buyingPlayer != null;
+    }
+
+    @Override
+    public void populateBuyingList() {
+        if (this.buyingList == null) {
+            this.buyingList = new MerchantRecipeList();
+        }
+        List<ITradeList> trades = getTrades();
+
+        if (trades != null) {
+            for (ITradeList trade : trades) {
+                trade.addMerchantRecipe(this, this.buyingList, this.rand);
+            }
+        }
+    }
+
+    @Override
+    public List<ITradeList> getTrades() {
+        return null;
+    }
+
+    @Override
+    @Nullable
+    public IEntityLivingData onInitialSpawn(@Nonnull DifficultyInstance difficulty, @Nullable IEntityLivingData livingData) {
+        return livingData;
+    }
+
+    @Override
+    protected void updateAITasks() {
     }
 
     @Nonnull
@@ -79,12 +158,6 @@ public class TokraEntity extends EntityVillager implements IRangedAttackMob, INp
     }
 
     @Override
-    @ParametersAreNonnullByDefault
-    public TokraEntity createChild(EntityAgeable entity) {
-        return null;
-    }
-
-    @Override
     protected SoundEvent getAmbientSound() {
         return this.isTrading() ? SoundEvents.ENTITY_VILLAGER_TRADING : SoundEvents.ENTITY_VILLAGER_AMBIENT;
     }
@@ -100,26 +173,32 @@ public class TokraEntity extends EntityVillager implements IRangedAttackMob, INp
     }
 
     @Override
-    protected void initEntityAI() {
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIAttackRanged(this, 0.5D, 20, 10.0F));
-        this.tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
-        this.tasks.addTask(1, new EntityAITradePlayer(this));
-        this.tasks.addTask(1, new EntityAILookAtTradePlayer(this));
-        this.tasks.addTask(2, new EntityAIMoveIndoors(this));
-        this.tasks.addTask(3, new EntityAIRestrictOpenDoor(this));
-        this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
-        this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 0.6D));
-        this.tasks.addTask(6, new EntityAIVillagerMate(this));
-        this.tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 3.0F, 1.0F));
-        this.tasks.addTask(9, new EntityAIVillagerInteract(this));
-        this.tasks.addTask(9, new EntityAIWanderAvoidWater(this, 0.6D));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
-        this.tasks.addTask(12, new EntityAIWanderAvoidWater(this, 0.8D));
-        this.tasks.addTask(15, new EntityAILookIdle(this));
+    public boolean processInteract(EntityPlayer player, @Nonnull EnumHand hand) {
+        ItemStack itemstack = player.getHeldItem(hand);
 
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, TokraEntity.class));
-        this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityLiving.class, 10, true, false, IMob.MOB_SELECTOR));
+        if (itemstack.getItem() == Items.NAME_TAG) {
+            itemstack.interactWithEntity(player, this, hand);
+            return true;
+        } else if (this.isEntityAlive() && !this.isTrading() && !player.isSneaking()) {
+            if (this.buyingList == null) {
+                this.populateBuyingList();
+            }
+
+            if (hand == EnumHand.MAIN_HAND) {
+                player.addStat(StatList.TALKED_TO_VILLAGER);
+            }
+
+            if (!this.world.isRemote && !this.buyingList.isEmpty()) {
+                this.setCustomer(player);
+                player.displayVillagerTradeGui(this);
+            } else if (this.buyingList.isEmpty()) {
+                return super.processInteract(player, hand);
+            }
+
+            return true;
+        } else {
+            return super.processInteract(player, hand);
+        }
     }
 
     @Override
@@ -164,8 +243,41 @@ public class TokraEntity extends EntityVillager implements IRangedAttackMob, INp
     public void setSwingingArms(boolean swingingArms) {
     }
 
+    @Override
     public float getEyeHeight() {
         return 1.7F;
+    }
+
+    @Nullable
+    @Override
+    public EntityPlayer getCustomer() {
+        return this.buyingPlayer;
+    }
+
+    @Override
+    public void setCustomer(@Nullable EntityPlayer player) {
+        this.buyingPlayer = player;
+    }
+
+    @Nullable
+    @Override
+    public MerchantRecipeList getRecipes(@Nonnull EntityPlayer player) {
+        return null;
+    }
+
+    @Override
+    public void setRecipes(@Nullable MerchantRecipeList recipeList) {
+
+    }
+
+    @Override
+    public void useRecipe(@Nonnull MerchantRecipe recipe) {
+
+    }
+
+    @Override
+    public void verifySellingItem(@Nonnull ItemStack stack) {
+
     }
 
     @Override
@@ -193,6 +305,16 @@ public class TokraEntity extends EntityVillager implements IRangedAttackMob, INp
 
             return itextcomponent;
         }
+    }
+
+    @Override
+    public World getWorld() {
+        return null;
+    }
+
+    @Override
+    public BlockPos getPos() {
+        return null;
     }
 
     @Override
