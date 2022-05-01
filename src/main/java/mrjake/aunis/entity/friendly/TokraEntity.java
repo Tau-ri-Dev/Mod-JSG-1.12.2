@@ -3,7 +3,7 @@ package mrjake.aunis.entity.friendly;
 import mrjake.aunis.entity.AunisEnergyProjectile;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.tools.EnergyWeapon;
-import net.minecraft.enchantment.EnchantmentHelper;
+import mrjake.aunis.util.AunisItemStackHandler;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -15,17 +15,22 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -35,17 +40,32 @@ import java.util.Random;
 
 public class TokraEntity extends EntityVillager implements IRangedAttackMob, INpc {
 
+    public static final int MAIN_HAND_SLOT = 0;
+    public static final int OFF_HAND_SLOT = 1;
+    public final AunisItemStackHandler ITEM_HANDLER = new AunisItemStackHandler(4);
+    private final ItemStack ZAT_ITEM = new ItemStack(AunisItems.ZAT);
+    private final ItemStack STAFF_ITEM = new ItemStack(AunisItems.STAFF);
+    private final Random RANDOM = new Random();
+
     public TokraEntity(World worldIn) {
         super(worldIn);
         this.setSize(0.6F, 1.95F);
         ((PathNavigateGround) this.getNavigator()).setBreakDoors(true);
         this.setCanPickUpLoot(true);
+        initTokra();
+    }
 
-        Random rand = new Random();
-        if (rand.nextInt(100) < 25)
-            this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(AunisItems.STAFF));
+    private void initTokra() {
+        if (RANDOM.nextInt(100) < 5) // 5% chance
+            ITEM_HANDLER.setStackInSlot(MAIN_HAND_SLOT, ZAT_ITEM);
         else
-            this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(AunisItems.ZAT));
+            ITEM_HANDLER.setStackInSlot(MAIN_HAND_SLOT, STAFF_ITEM);
+    }
+
+    @Nonnull
+    @Override
+    public EnumHandSide getPrimaryHand() {
+        return EnumHandSide.RIGHT;
     }
 
     @Override
@@ -62,80 +82,6 @@ public class TokraEntity extends EntityVillager implements IRangedAttackMob, INp
     @ParametersAreNonnullByDefault
     public TokraEntity createChild(EntityAgeable entity) {
         return null;
-    }
-
-    @Override
-    @ParametersAreNonnullByDefault
-    protected void updateEquipmentIfNeeded(EntityItem itemEntity) {
-        ItemStack itemstack = itemEntity.getItem();
-        EntityEquipmentSlot entityequipmentslot = getSlotForItemStack(itemstack);
-        boolean flag = true;
-        ItemStack itemstack1 = this.getItemStackFromSlot(entityequipmentslot);
-
-        if (!itemstack1.isEmpty()) {
-            if (entityequipmentslot.getSlotType() == EntityEquipmentSlot.Type.HAND) {
-                if (itemstack.getItem() instanceof ItemSword && !(itemstack1.getItem() instanceof ItemSword)) {
-                    flag = true;
-                } else if (itemstack.getItem() instanceof ItemSword && itemstack1.getItem() instanceof ItemSword) {
-                    ItemSword itemsword = (ItemSword) itemstack.getItem();
-                    ItemSword itemsword1 = (ItemSword) itemstack1.getItem();
-
-                    if (itemsword.getAttackDamage() == itemsword1.getAttackDamage()) {
-                        flag = itemstack.getMetadata() > itemstack1.getMetadata() || itemstack.hasTagCompound() && !itemstack1.hasTagCompound();
-                    } else {
-                        flag = itemsword.getAttackDamage() > itemsword1.getAttackDamage();
-                    }
-                } else if (itemstack.getItem() instanceof ItemBow && itemstack1.getItem() instanceof ItemBow) {
-                    flag = itemstack.hasTagCompound() && !itemstack1.hasTagCompound();
-                } else {
-                    flag = false;
-                }
-            } else if (itemstack.getItem() instanceof ItemArmor && !(itemstack1.getItem() instanceof ItemArmor)) {
-                flag = true;
-            } else if (itemstack.getItem() instanceof ItemArmor && itemstack1.getItem() instanceof ItemArmor && !EnchantmentHelper.hasBindingCurse(itemstack1)) {
-                ItemArmor itemarmor = (ItemArmor) itemstack.getItem();
-                ItemArmor itemArmor1 = (ItemArmor) itemstack1.getItem();
-
-                if (itemarmor.damageReduceAmount == itemArmor1.damageReduceAmount) {
-                    flag = itemstack.getMetadata() > itemstack1.getMetadata() || itemstack.hasTagCompound() && !itemstack1.hasTagCompound();
-                } else {
-                    flag = itemarmor.damageReduceAmount > itemArmor1.damageReduceAmount;
-                }
-            } else {
-                flag = false;
-            }
-        }
-
-        if (flag && this.canEquipItem(itemstack)) {
-            double d0;
-
-            switch (entityequipmentslot.getSlotType()) {
-                case HAND:
-                    d0 = this.inventoryHandsDropChances[entityequipmentslot.getIndex()];
-                    break;
-                case ARMOR:
-                    d0 = this.inventoryArmorDropChances[entityequipmentslot.getIndex()];
-                    break;
-                default:
-                    d0 = 0.0D;
-            }
-
-            if (!itemstack1.isEmpty() && (double) (this.rand.nextFloat() - 0.1F) < d0) {
-                this.entityDropItem(itemstack1, 0.0F);
-            }
-
-            this.setItemStackToSlot(entityequipmentslot, itemstack);
-
-            switch (entityequipmentslot.getSlotType()) {
-                case HAND:
-                    this.inventoryHandsDropChances[entityequipmentslot.getIndex()] = 2.0F;
-                    break;
-                case ARMOR:
-                    this.inventoryArmorDropChances[entityequipmentslot.getIndex()] = 2.0F;
-            }
-            this.onItemPickup(itemEntity, itemstack.getCount());
-            itemEntity.setDead();
-        }
     }
 
     @Override
@@ -247,5 +193,132 @@ public class TokraEntity extends EntityVillager implements IRangedAttackMob, INp
 
             return itextcomponent;
         }
+    }
+
+    @Override
+    protected void dropEquipment(boolean wasRecentlyHit, int lootingModifier) {
+        for (int i = 0; i < ITEM_HANDLER.getSize(); i++) {
+            entityDropItem(ITEM_HANDLER.getStackInSlot(i), 0f);
+        }
+    }
+
+    @Override
+    public boolean replaceItemInInventory(int inventorySlot, @Nonnull ItemStack itemStackIn) {
+        if (inventorySlot < 0 || inventorySlot >= ITEM_HANDLER.getSize()) return false;
+        ITEM_HANDLER.setStackInSlot(inventorySlot, itemStackIn);
+        return true;
+    }
+
+    @Override
+    public boolean getCanSpawnHere() {
+        return false;
+    }
+
+    @Override
+    public void setItemStackToSlot(EntityEquipmentSlot slotIn, @Nonnull ItemStack stack) {
+        int slotIndex = slotIn.getSlotIndex();
+        if (slotIn.getSlotType() != EntityEquipmentSlot.Type.HAND)
+            slotIndex += 2;
+        if (slotIndex >= ITEM_HANDLER.getSize()) return;
+        ITEM_HANDLER.setStackInSlot(slotIndex, stack);
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn) {
+        int slotIndex = slotIn.getSlotIndex();
+        if (slotIn.getSlotType() != EntityEquipmentSlot.Type.HAND)
+            slotIndex += 2;
+        if (slotIndex >= ITEM_HANDLER.getSize()) return ItemStack.EMPTY;
+
+        return ITEM_HANDLER.getStackInSlot(slotIndex);
+    }
+
+    private void updateItemHeld() {
+        if (!this.world.isRemote) {
+            this.setHeldItemMainhand(ITEM_HANDLER.getStackInSlot(MAIN_HAND_SLOT));
+            this.setHeldItemOffhand(ITEM_HANDLER.getStackInSlot(OFF_HAND_SLOT));
+        }
+    }
+
+    @Override
+    protected void updateEquipmentIfNeeded(EntityItem itemEntity) {
+        ItemStack stack = itemEntity.getItem();
+        if (!stack.isEmpty()) {
+            for (int i = 0; i < ITEM_HANDLER.getSize(); i++) {
+                ItemStack inventoryStack = ITEM_HANDLER.getStackInSlot(i);
+                if (inventoryStack.isEmpty()) {
+                    onItemPickup(itemEntity, stack.getCount());
+                    ITEM_HANDLER.setStackInSlot(i, stack);
+                    itemEntity.setDead();
+                    break;
+                }
+            }
+        }
+        this.updateItemHeld();
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getHeldItemMainhand() {
+        return getHeldItem(EnumHand.MAIN_HAND);
+    }
+
+    public void setHeldItemMainhand(ItemStack stack) {
+        this.setHeldItem(EnumHand.MAIN_HAND, stack);
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getHeldItemOffhand() {
+        return getHeldItem(EnumHand.OFF_HAND);
+    }
+
+    public void setHeldItemOffhand(ItemStack stack) {
+        this.setHeldItem(EnumHand.OFF_HAND, stack);
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getHeldItem(@Nonnull EnumHand hand) {
+        if (hand == EnumHand.MAIN_HAND) {
+            return this.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
+        } else if (hand == EnumHand.OFF_HAND) {
+            return this.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
+        } else {
+            throw new IllegalArgumentException("Invalid hand " + hand);
+        }
+    }
+
+    @Override
+    public void readEntityFromNBT(@Nonnull NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        if (compound.hasKey("Items")) {
+            NBTTagList nbtList = compound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+            for (int i = 0; i < nbtList.tagCount(); i++) {
+                NBTTagCompound comp = nbtList.getCompoundTagAt(i);
+                int slot = comp.getInteger("Slot");
+                if (slot >= 0 && slot < ITEM_HANDLER.getSize()) {
+                    ITEM_HANDLER.setStackInSlot(slot, new ItemStack(comp));
+                }
+            }
+        }
+        this.updateItemHeld();
+    }
+
+    @Override
+    public void writeEntityToNBT(@Nonnull NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        NBTTagList nbtList = new NBTTagList();
+        for (int i = 0; i < ITEM_HANDLER.getSize(); i++) {
+            ItemStack stack = ITEM_HANDLER.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setInteger("Slot", i);
+                stack.writeToNBT(tag);
+                nbtList.appendTag(tag);
+            }
+        }
+        compound.setTag("Items", nbtList);
     }
 }

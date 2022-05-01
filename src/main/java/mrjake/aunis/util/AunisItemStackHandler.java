@@ -6,17 +6,22 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 
-import javax.annotation.Nonnull;
-
 /**
  * Modified version of {@link ItemStackHandler}.
  * Respects resizing of the item handlers.
  */
 public class AunisItemStackHandler extends ItemStackHandler {
+
+    private final int size;
 	
 	public AunisItemStackHandler(int size) {
 		super(size);
+		this.size = size;
 	}
+
+	public int getSize() {
+	    return size;
+    }
 
 	@Override
     public void deserializeNBT(NBTTagCompound nbt)
@@ -34,5 +39,4 @@ public class AunisItemStackHandler extends ItemStackHandler {
         }
         onLoad();
     }
-
 }

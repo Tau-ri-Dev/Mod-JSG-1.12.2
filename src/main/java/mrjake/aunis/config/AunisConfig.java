@@ -1,10 +1,8 @@
 package mrjake.aunis.config;
 
-import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.util.ItemMetaPair;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.config.Config;
@@ -14,9 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static mrjake.aunis.Aunis.CONFIG_VERSION;
 import static mrjake.aunis.config.StargateTimeLimitModeEnum.DRAW_MORE_POWER;
 
-@Config(modid = "aunis", name = "aunis") // + Aunis.Version)
+@Config(modid = "aunis", name = "aunisConfig_" + CONFIG_VERSION)
 public class AunisConfig {
 
     @Name("Stargate size")

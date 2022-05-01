@@ -52,6 +52,7 @@ public class Aunis {
     //public static final String Version = "${version}"; // It works only in final builds.
     public static final String Version = "@VERSION@";
     public static final int DATA_VERSION = 15;
+    public static final String CONFIG_VERSION = "1.0";
 
     //public static final String MCVersion = "${mcversion}";
     public static final String MCVersion = "@MCVERSION@";
