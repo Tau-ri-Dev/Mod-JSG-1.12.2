@@ -134,6 +134,8 @@ public class AunisConfig {
 
         public boolean canKawooshDestroyBlock(IBlockState state) {
             if (state.getBlock() == AunisBlocks.IRIS_BLOCK) return false;
+            if(state.getBlock() == AunisBlocks.INVISIBLE_BLOCK) return false;
+
             if (cachedInvincibleBlocks == null) {
                 cachedInvincibleBlocks = BlockMetaParser.parseConfig(kawooshInvincibleBlocks);
             }
