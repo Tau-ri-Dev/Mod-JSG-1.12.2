@@ -260,9 +260,14 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 				
 				if (isLinked()) {
 					StargateClassicBaseTile gateTile = getLinkedGateTile();
-					
-					if (gateTile.getStargateState().engaged()) {
-						updateObstructed();
+					if(gateTile != null) {
+						if (gateTile.getStargateState().engaged()) {
+							updateObstructed();
+						}
+					}
+					else{
+						basePos = null;
+						markDirty();
 					}
 				}
 			}

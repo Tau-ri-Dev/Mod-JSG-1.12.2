@@ -185,7 +185,7 @@ public class EventHorizon {
                     int random = randomGenerator.nextInt(100);
 
                     if (random > chance) {
-                        UPGRADE_IRIS.setDamage(irisItem, UPGRADE_IRIS.getDamage(irisItem) + 1);
+                        irisItem.getItem().setDamage(irisItem, irisItem.getItem().getDamage(irisItem) + 1);
                     }
                     if (irisItem.getCount() == 0) {
                         ((StargateClassicBaseTile) targetGatePos.getTileEntity()).updateIrisType();

@@ -241,6 +241,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         BeamerLinkingHelper.findBeamersInFront(world, pos, facing);
         updateBeamers();
         updateIrisType();
+        initConfig();
     }
 
 
