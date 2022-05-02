@@ -481,6 +481,9 @@ gui.stargate.biome_overlay.sooty=Suie
 gui.stargate.capacitors=Condensateurs
 gui.stargate.energyBuffer=Tampon d'énergie
 
+gui.stargate.state.closed=Stargate closed!
+gui.stargate.state.opened=Open time:
+
 # capacitor
 gui.capacitor.name=Banque de condensateurs
 

@@ -264,11 +264,11 @@ public class AunisConfig {
 
     public static class DialingConfig {
 
-        @Name("Allow incoming animations")
-        @Comment({
-                "If the incoming animations of gates generate issues, set it to false",
-        })
-        public boolean allowIncomingAnimations = true;
+        //@Name("Allow incoming animations")
+        //@Comment({
+        //        "If the incoming animations of gates generate issues, set it to false",
+        //})
+        //public boolean allowIncomingAnimations = true;
 
         @Name("Connect to dialing gate")
         @Comment({
@@ -298,14 +298,14 @@ public class AunisConfig {
         })
         public boolean fasterMWGateDial = false;
 
-        @Name("Enable switching between fast dialing")
-        public boolean enableFastDialing = true;
+        //@Name("Enable switching between fast dialing")
+        //public boolean enableFastDialing = true;
 
-        @Name("Enable opening last chevron while dialing with dhd")
-        @Comment({
-                "Enable opening last chevron while dialing milkyway gate with dhd"
-        })
-        public boolean dhdLastOpen = true;
+        //@Name("Enable opening last chevron while dialing with dhd")
+        //@Comment({
+        //        "Enable opening last chevron while dialing milkyway gate with dhd"
+        //})
+        //public boolean dhdLastOpen = true;
 
     }
 

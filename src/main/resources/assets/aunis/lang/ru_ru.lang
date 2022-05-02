@@ -481,6 +481,9 @@ gui.stargate.biome_overlay.sooty=Пепельные
 gui.stargate.capacitors=Конденсаторы
 gui.stargate.energyBuffer=Буфер Энергии
 
+gui.stargate.state.closed=Stargate closed!
+gui.stargate.state.opened=Open time:
+
 # capacitor
 gui.capacitor.name=Конденсатор
 

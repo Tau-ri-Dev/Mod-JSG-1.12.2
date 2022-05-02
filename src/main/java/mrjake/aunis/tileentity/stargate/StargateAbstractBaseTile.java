@@ -68,6 +68,7 @@ import javax.vecmath.Vector2f;
 import java.util.*;
 
 import static mrjake.aunis.config.stargate.StargateTimeLimitModeEnum.CLOSE_GATE;
+import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_INCOMING;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
 public abstract class StargateAbstractBaseTile extends TileEntity implements StateProviderInterface, ITickable, ICapabilityProvider, ScheduledTaskExecutorInterface, Environment, WirelessEndpoint, PreparableInterface {
@@ -595,7 +596,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 }
                 targetGateTile.isIncoming = true;
                 targetGateTile.markDirty();
-                if(AunisConfig.dialingConfig.allowIncomingAnimations) targetGateTile.incomingWormhole(size, period);
+                if(targetGateTile instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) targetGateTile).config.getOption(ALLOW_INCOMING.id).getBooleanValue()) targetGateTile.incomingWormhole(size, period);
                 else targetGateTile.incomingWormhole(size);
                 targetGateTile.sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
                 targetGateTile.stargateState = EnumStargateState.INCOMING;

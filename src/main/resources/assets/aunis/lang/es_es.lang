@@ -481,6 +481,9 @@ gui.stargate.biome_overlay.sooty=Mugriento
 gui.stargate.capacitors=Capacitores
 gui.stargate.energyBuffer=Búfer de energía
 
+gui.stargate.state.closed=Stargate closed!
+gui.stargate.state.opened=Open time:
+
 # capacitor
 gui.capacitor.name=Banco de capacitores
 

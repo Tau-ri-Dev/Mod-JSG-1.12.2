@@ -10,7 +10,7 @@ import java.util.List;
 
 public class AunisTileEntityConfig {
 
-    public List<AunisConfigOption> options;
+    private final List<AunisConfigOption> options;
 
     public AunisTileEntityConfig() {
         this.options = new ArrayList<>();
@@ -20,6 +20,10 @@ public class AunisTileEntityConfig {
         this.options.addAll(Arrays.asList(options));
     }
 
+    public void addOption(@Nonnull AunisConfigOption options){
+        this.options.add(options);
+    }
+
     public List<AunisConfigOption> getOptions() {
         return options;
     }
@@ -27,7 +31,7 @@ public class AunisTileEntityConfig {
     public AunisConfigOption getOption(int id){
         if(id < options.size())
             return options.get(id);
-        return null;
+        return new AunisConfigOption(id).setLabel("error while getting option! (" + id + ")").setComment("").setType(AunisConfigOptionTypeEnum.TEXT).setValue("");
     }
 
     public void clearOptions(){

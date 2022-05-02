@@ -481,6 +481,9 @@ gui.stargate.biome_overlay.sooty=Sooty
 gui.stargate.capacitors=电容器
 gui.stargate.energyBuffer=能量缓冲计术
 
+gui.stargate.state.closed=Stargate closed!
+gui.stargate.state.opened=Open time:
+
 # capacitor
 gui.capacitor.name=Capacitor Bank
 

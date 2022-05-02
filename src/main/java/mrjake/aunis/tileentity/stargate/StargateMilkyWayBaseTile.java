@@ -39,6 +39,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_INCOMING;
+import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.DHD_LAST_OPEN;
+
 
 public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements ILinkable {
     @Override
@@ -115,7 +118,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
         if (stargateWillLock(symbol)) {
             isFinalActive = true;
-            if(AunisConfig.dialingConfig.dhdLastOpen)
+            if(config.getOption(DHD_LAST_OPEN.id).getBooleanValue())
                 addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 5 + plusTime));
             else
                 addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10 + plusTime));
@@ -211,7 +214,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         incomingPeriod -= (int) Math.round((double) 20/addressSize);
 
         // spin ring
-        if(AunisConfig.dialingConfig.allowIncomingAnimations && incomingPeriod > 9)
+        if(config.getOption(ALLOW_INCOMING.id).getBooleanValue() && incomingPeriod > 9)
             // disable ringsSpin when dialing with DHD or dialing (somehow) fast
             spinRing(1, false, true, incomingPeriod*addressSize);
 

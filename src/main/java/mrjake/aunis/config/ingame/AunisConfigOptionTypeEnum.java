@@ -3,7 +3,7 @@ package mrjake.aunis.config.ingame;
 public enum AunisConfigOptionTypeEnum {
     TEXT(0),
     NUMBER(1),
-    TOGGLE(2);
+    BOOLEAN(2);
 
     public int id;
 

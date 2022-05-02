@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.nbt.NBTTagCompound;
 
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,11 +13,10 @@ import java.util.List;
 
 public class AunisConfigOption {
     public int id;
-    private String label = "";
     public List<String> comment = new ArrayList<>();
     public AunisConfigOptionTypeEnum type = AunisConfigOptionTypeEnum.TEXT;
-
     public String value = "";
+    private String label = "";
 
     public AunisConfigOption(int id) {
         this.id = id;
@@ -32,13 +30,26 @@ public class AunisConfigOption {
         this.fromBytes(buf);
     }
 
-    public GuiTextField createField(int y){
+    public GuiTextField createField(int y) {
         int componentId = id + 100;
-        if(this.type == AunisConfigOptionTypeEnum.TEXT)
-            return new GuiTextField(componentId, Minecraft.getMinecraft().fontRenderer, -25, y, 90, 15);
-        else if(this.type == AunisConfigOptionTypeEnum.NUMBER)
-            return new NumberOnlyTextField(componentId, Minecraft.getMinecraft().fontRenderer, -25, y, 90, 15);
-        return null;
+        GuiTextField field = null;
+
+
+        if (this.type == AunisConfigOptionTypeEnum.TEXT)
+            field = new GuiTextField(componentId, Minecraft.getMinecraft().fontRenderer, -25, y, 90, 15);
+        else if (this.type == AunisConfigOptionTypeEnum.NUMBER)
+            field = new NumberOnlyTextField(componentId, Minecraft.getMinecraft().fontRenderer, -25, y, 90, 15);
+        else if (this.type == AunisConfigOptionTypeEnum.BOOLEAN)
+            field = new GuiTextField(componentId, Minecraft.getMinecraft().fontRenderer, -25, y, 90, 15);
+
+
+        if(field != null)
+            field.setText(this.value);
+        return field;
+    }
+
+    public String getLabel() {
+        return label;
     }
 
     public AunisConfigOption setLabel(String label) {
@@ -46,8 +57,8 @@ public class AunisConfigOption {
         return this;
     }
 
-    public String getLabel(){
-        return label;
+    public List<String> getComment() {
+        return comment;
     }
 
     public AunisConfigOption setComment(String... comment) {
@@ -55,13 +66,17 @@ public class AunisConfigOption {
         return this;
     }
 
-    public List<String> getComment(){
-        return comment;
-    }
-
     public AunisConfigOption setType(AunisConfigOptionTypeEnum type) {
         this.type = type;
         return this;
+    }
+
+    public AunisConfigOption setValue(String value) {
+        if (this.type == AunisConfigOptionTypeEnum.NUMBER)
+            return this.setIntValue(value);
+        else if (this.type == AunisConfigOptionTypeEnum.BOOLEAN)
+            return this.setBooleanValue(value);
+        return this.setStringValue(value);
     }
 
     public boolean getBooleanValue() {
@@ -69,8 +84,8 @@ public class AunisConfigOption {
         return this.value.equals("true");
     }
 
-    public AunisConfigOption setBooleanValue(boolean value) {
-        if (value)
+    private AunisConfigOption setBooleanValue(String value) {
+        if (value.equals("true"))
             this.value = "true";
         else
             this.value = "false";
@@ -86,8 +101,11 @@ public class AunisConfigOption {
         }
     }
 
-    public AunisConfigOption setIntValue(int value) {
-        this.value = value + "";
+    private AunisConfigOption setIntValue(String value) {
+        try {
+            this.value = Integer.parseInt(value) + "";
+        } catch (Exception ignored) {
+        }
         return this;
     }
 
@@ -95,7 +113,7 @@ public class AunisConfigOption {
         return this.value;
     }
 
-    public AunisConfigOption setStringValue(String value) {
+    private AunisConfigOption setStringValue(String value) {
         this.value = value;
         return this;
     }
@@ -126,7 +144,7 @@ public class AunisConfigOption {
         this.value = compound.getString("value");
     }
 
-    public void toBytes(ByteBuf buf){
+    public void toBytes(ByteBuf buf) {
         buf.writeInt(id);
         buf.writeInt(label.length());
         buf.writeCharSequence(label, StandardCharsets.UTF_8);
@@ -140,13 +158,13 @@ public class AunisConfigOption {
         buf.writeCharSequence(value, StandardCharsets.UTF_8);
     }
 
-    public void fromBytes(ByteBuf buf){
+    public void fromBytes(ByteBuf buf) {
         this.id = buf.readInt();
         int labelSize = buf.readInt();
         this.label = buf.readCharSequence(labelSize, StandardCharsets.UTF_8).toString();
         int commentsSize = buf.readInt();
         comment.clear();
-        for(int i = 0; i < commentsSize; i++){
+        for (int i = 0; i < commentsSize; i++) {
             int x = buf.readInt();
             comment.add(buf.readCharSequence(x, StandardCharsets.UTF_8).toString());
         }

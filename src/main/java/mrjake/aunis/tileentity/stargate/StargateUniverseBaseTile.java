@@ -32,6 +32,7 @@ import static mrjake.aunis.stargate.EnumStargateState.DIALING;
 import static mrjake.aunis.stargate.EnumStargateState.FAILING;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.G1;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
+import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_INCOMING;
 
 public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
@@ -475,7 +476,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
         if (stargateState.dialing())
             abortDialingSequence();
         markDirty();
-        this.lightUpChevronByIncoming(!AunisConfig.dialingConfig.allowIncomingAnimations);
+        this.lightUpChevronByIncoming(!config.getOption(ALLOW_INCOMING.id).getBooleanValue());
     }
 
     @Override

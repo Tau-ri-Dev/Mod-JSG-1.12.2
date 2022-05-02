@@ -81,6 +81,7 @@ import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.PHYSICAL_IR
 import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.SHIELD_IRIS_ANIMATION_LENGTH;
 import static mrjake.aunis.stargate.EnumSpinDirection.CLOCKWISE;
 import static mrjake.aunis.stargate.EnumSpinDirection.COUNTER_CLOCKWISE;
+import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_INCOMING;
 
 /**
  * This class wraps common behavior for the fully-functional Stargates i.e.
@@ -241,7 +242,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         BeamerLinkingHelper.findBeamersInFront(world, pos, facing);
         updateBeamers();
         updateIrisType();
-        initConfig();
     }
 
 
@@ -259,7 +259,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
             updateBeamers();
             updatePowerTier();
-            initConfig();
 
             updateIrisType();
             boolean set = irisType != EnumIrisType.NULL;
@@ -341,7 +340,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void tryRunIncoming(long ticks) {
         if (incomingPeriod == 0) incomingPeriod = 1;
         if (incomingPeriod != -1 && ticks % incomingPeriod == 0)
-            lightUpChevronByIncoming(!AunisConfig.dialingConfig.allowIncomingAnimations);
+            lightUpChevronByIncoming(!getConfig().getOption(ALLOW_INCOMING.id).getBooleanValue());
     }
 
 
@@ -357,6 +356,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
          * Stargate Random Incoming Generator (RIG)
          */
         if (!world.isRemote) {
+            initConfig();
 
             // Load entities
             String[] entityListString = AunisConfig.randomIncoming.entitiesToSpawn;
@@ -421,7 +421,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                                 connectingToGate = false;
                             }
                             markDirty();
-                            if (AunisConfig.dialingConfig.allowIncomingAnimations)
+                            if (getConfig().getOption(ALLOW_INCOMING.id).getBooleanValue())
                                 this.incomingWormhole(randomIncomingAddrSize, period);
                             else this.incomingWormhole(randomIncomingAddrSize);
                             this.sendSignal(null, "stargate_incoming_wormhole", new Object[]{randomIncomingAddrSize});
@@ -732,7 +732,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         compound.setInteger("incomingPeriod", incomingPeriod);
         compound.setInteger("incomingAddressSize", incomingAddressSize);
 
-        compound.setTag("config", config.serializeNBT());
+        compound.setTag("config", getConfig().serializeNBT());
 
         return super.writeToNBT(compound);
     }
@@ -769,7 +769,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         incomingLastChevronLightUp = compound.getInteger("incomingLastChevronLightUp");
         incomingAddressSize = compound.getInteger("incomingAddressSize");
 
-        config.deserializeNBT(compound.getCompoundTag("config"));
+        getConfig().deserializeNBT(compound.getCompoundTag("config"));
 
         super.readFromNBT(compound);
     }
@@ -794,6 +794,38 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     protected AunisTileEntityConfig config = new AunisTileEntityConfig();
 
+    public static enum ConfigOptions{
+        ALLOW_INCOMING(
+                0, "allowIncoming", AunisConfigOptionTypeEnum.BOOLEAN, "true",
+                "If the incoming animations",
+                "of gates generate issues,",
+                "set it to false"
+        ),
+        DHD_LAST_OPEN(
+                1, "dhdLastOpen", AunisConfigOptionTypeEnum.BOOLEAN, "true",
+                "Enable opening last chevron",
+                "while dialing milkyway gate with dhd"
+        ),
+        ALLOW_FAST_DIAL(
+                2, "allowFastDial", AunisConfigOptionTypeEnum.BOOLEAN, "false",
+                "Enable fast dialing toggle button on this gate"
+        );
+
+        public int id;
+        public String label;
+        public String[] comment;
+        public AunisConfigOptionTypeEnum type;
+        public String defaultValue;
+
+        ConfigOptions(int optionId, String label, AunisConfigOptionTypeEnum type, String defaultValue, String... comment){
+            this.id = optionId;
+            this.label = label;
+            this.type = type;
+            this.defaultValue = defaultValue;
+            this.comment = comment;
+        }
+    }
+
     @Override
     public AunisTileEntityConfig getConfig() {
         return this.config;
@@ -806,29 +838,18 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public void initConfig(){
-        config.clearOptions();
-        config.addOptions(
-                new AunisConfigOption(0)
-                        .setType(AunisConfigOptionTypeEnum.TEXT)
-                        .setLabel("gui.config.enableRIG")
-                        .setComment("test1", "test2", "test3")
-                        .setBooleanValue(AunisConfig.randomIncoming.enableRandomIncoming),
-
-                new AunisConfigOption(1)
-                        .setType(AunisConfigOptionTypeEnum.NUMBER)
-                        .setLabel("test option2")
-                        .setComment("test4", "test5", "test6"),
-
-                new AunisConfigOption(2)
-                        .setType(AunisConfigOptionTypeEnum.TEXT)
-                        .setLabel("test option3")
-                        .setComment("test4", "test5", "test6"),
-
-                new AunisConfigOption(3)
-                        .setType(AunisConfigOptionTypeEnum.NUMBER)
-                        .setLabel("test option4")
-                        .setComment("test4", "test5", "test6")
-        );
+        if(getConfig().getOptions().size() != ConfigOptions.values().length) {
+            getConfig().clearOptions();
+            for (ConfigOptions option : ConfigOptions.values()) {
+                getConfig().addOption(
+                        new AunisConfigOption(option.id)
+                                .setType(option.type)
+                                .setLabel(option.label)
+                                .setValue(option.defaultValue)
+                                .setComment(option.comment)
+                );
+            }
+        }
     }
 
 
@@ -895,7 +916,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 return new StargateContainerGuiState(gateAddressMap);
 
             case GUI_UPDATE:
-                return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose, this.irisMode, this.irisCode, getOpenedSecondsToDisplay(), config);
+                return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose, this.irisMode, this.irisCode, getOpenedSecondsToDisplay(), getConfig());
 
             default:
                 return super.getState(stateType);
@@ -1123,7 +1144,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 distance += 360;
                 plusRounds += 1;
             }
-            if (distance < 270 && AunisConfig.dialingConfig.allowIncomingAnimations) {
+            if (distance < 270 && getConfig().getOption(ALLOW_INCOMING.id).getBooleanValue()) {
                 if (targetRingSymbol == targetRingSymbol.getSymbolType().getOrigin()) {
                     distance += 360;
                     plusRounds += 1;

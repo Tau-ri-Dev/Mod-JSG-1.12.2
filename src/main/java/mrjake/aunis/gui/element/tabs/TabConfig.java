@@ -24,7 +24,7 @@ public class TabConfig extends TabScrollAble {
         int count = 0;
         for (int i = 0; i < config.getOptions().size(); i++) {
             if (config.getOption(i) != null) {
-                GuiTextField field = config.getOption(i).createField(30 * count + 25 + guiTop + defaultY + 5);
+                GuiTextField field = config.getOption(i).createField(30 * count + guiTop + defaultY + 5);
                 if (field != null) {
                     FIELDS.add(field);
                     count++;
@@ -89,14 +89,14 @@ public class TabConfig extends TabScrollAble {
         int top = 25 + guiTop + defaultY + 5;
         int bottom = guiTop + defaultY + height;
         if (FIELDS.size() < 1) return false;
-        return ((FIELDS.get(0).y <= (top + 2)) && k == 1) || ((FIELDS.get(FIELDS.size() - 1).y >= (bottom - 15)) && k == -1);
+        return ((FIELDS.get(0).y <= top) && k == 1) || ((FIELDS.get(FIELDS.size() - 1).y >= (bottom - 15 - 10)) && k == -1);
     }
 
     @Override
     public boolean canRenderEntry(int x, int y) {
         int top = 25 + guiTop + defaultY + 3;
         int bottom = guiTop + defaultY + height;
-        return y >= top && (y + FIELDS.get(0).height + 10) <= bottom;
+        return y >= (top - 2) && (y + FIELDS.get(0).height + 2) <= bottom;
     }
 
     @Override

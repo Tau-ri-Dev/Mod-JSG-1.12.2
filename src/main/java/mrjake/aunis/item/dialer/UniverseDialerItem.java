@@ -204,7 +204,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                 int reachSquared = AunisConfig.stargateConfig.universeDialerReach * AunisConfig.stargateConfig.universeDialerReach * 2;
                 UniverseDialerMode mode = UniverseDialerMode.valueOf(compound.getByte("mode"));
-                compound.setBoolean("serverSideEnabledFastDial", AunisConfig.dialingConfig.enableFastDialing);
+                compound.setBoolean("serverSideEnabledFastDial", false);
 
                 if (mode.linkable) {
                     if (compound.hasKey(mode.tagPosName)) {
@@ -275,6 +275,9 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                         // get only universe gates in nearby
                                         if (!(targetGateTile instanceof StargateUniverseBaseTile) && mode.equals(UniverseDialerMode.NEARBY))
                                             continue;
+
+
+                                        compound.setBoolean("serverSideEnabledFastDial", ((StargateClassicBaseTile) targetGateTile).getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ALLOW_FAST_DIAL.id).getBooleanValue());
 
                                         NBTTagCompound entryCompound = entry.getKey().serializeNBT();
 
