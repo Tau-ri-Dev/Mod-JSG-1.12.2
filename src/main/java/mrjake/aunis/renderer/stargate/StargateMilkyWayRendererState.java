@@ -2,7 +2,7 @@ package mrjake.aunis.renderer.stargate;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.config.StargateSizeEnum;
+import mrjake.aunis.config.stargate.StargateSizeEnum;
 
 public class StargateMilkyWayRendererState extends StargateClassicRendererState {
 	public StargateMilkyWayRendererState() {}

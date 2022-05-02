@@ -1,4 +1,4 @@
-package mrjake.aunis.gui.util;
+package mrjake.aunis.gui.element;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.gui.base.BetterButton;

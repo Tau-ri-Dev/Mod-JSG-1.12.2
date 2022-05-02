@@ -1,5 +1,6 @@
 package mrjake.aunis.gui;
 
+import mrjake.aunis.gui.element.LabeledTextBox;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.item.notebook.PageNotebookSetNameToServer;
 import mrjake.aunis.packet.AunisPacketHandler;

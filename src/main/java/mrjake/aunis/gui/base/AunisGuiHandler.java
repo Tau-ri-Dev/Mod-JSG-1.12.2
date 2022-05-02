@@ -14,7 +14,10 @@ import mrjake.aunis.gui.container.stargate.StargateContainer;
 import mrjake.aunis.gui.container.stargate.StargateContainerGui;
 import mrjake.aunis.gui.container.transportrings.TRContainer;
 import mrjake.aunis.gui.container.transportrings.TRGui;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -31,7 +34,8 @@ public class AunisGuiHandler implements IGuiHandler {
 				return new DHDPegasusContainer(player.inventory, world, x, y ,z);
 			
 			case GUI_STARGATE:
-				return new StargateContainer(player.inventory, world, x, y ,z);
+				boolean isOp = player.isCreative();
+				return new StargateContainer(player.inventory, world, x, y ,z, isOp);
 				
 			case GUI_CAPACITOR:
 				return new CapacitorContainer(player.inventory, world, x, y ,z);
@@ -55,8 +59,9 @@ public class AunisGuiHandler implements IGuiHandler {
 			case GUI_PEGASUS_DHD:
 				return new DHDPegasusContainerGui(new DHDPegasusContainer(player.inventory, world, x, y ,z));
 			
-			case GUI_STARGATE:	
-				return new StargateContainerGui(new BlockPos(x, y, z), new StargateContainer(player.inventory, world, x, y ,z));
+			case GUI_STARGATE:
+				boolean isOp = player.isCreative();
+				return new StargateContainerGui(new BlockPos(x, y, z), new StargateContainer(player.inventory, world, x, y ,z, isOp));
 				
 			case GUI_CAPACITOR:	
 				return new CapacitorContainerGui(new CapacitorContainer(player.inventory, world, x, y ,z));

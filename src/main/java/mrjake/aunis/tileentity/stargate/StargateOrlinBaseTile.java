@@ -7,7 +7,7 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.config.StargateDimensionConfig;
+import mrjake.aunis.config.stargate.StargateDimensionConfig;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;

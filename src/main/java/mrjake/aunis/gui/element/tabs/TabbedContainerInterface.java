@@ -1,4 +1,4 @@
-package mrjake.aunis.gui.element;
+package mrjake.aunis.gui.element.tabs;
 
 import java.awt.*;
 import java.util.List;

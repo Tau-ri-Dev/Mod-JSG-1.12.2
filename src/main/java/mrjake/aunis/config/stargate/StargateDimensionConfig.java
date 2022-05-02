@@ -1,4 +1,4 @@
-package mrjake.aunis.config;
+package mrjake.aunis.config.stargate;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

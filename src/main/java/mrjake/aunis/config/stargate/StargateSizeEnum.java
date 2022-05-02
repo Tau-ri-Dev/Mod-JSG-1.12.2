@@ -1,4 +1,4 @@
-package mrjake.aunis.config;
+package mrjake.aunis.config.stargate;
 
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.util.math.BlockPos;

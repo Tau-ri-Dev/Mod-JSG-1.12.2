@@ -2,8 +2,8 @@ package mrjake.aunis.tileentity.stargate;
 
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.config.StargateDimensionConfig;
-import mrjake.aunis.config.StargateSizeEnum;
+import mrjake.aunis.config.stargate.StargateDimensionConfig;
+import mrjake.aunis.config.stargate.StargateSizeEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.stargate.StargateAbstractRendererState;
 import mrjake.aunis.renderer.stargate.StargateMilkyWayRendererState;

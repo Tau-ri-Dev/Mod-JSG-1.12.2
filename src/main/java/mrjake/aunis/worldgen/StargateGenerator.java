@@ -3,7 +3,7 @@ package mrjake.aunis.worldgen;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.config.StargateSizeEnum;
+import mrjake.aunis.config.stargate.StargateSizeEnum;
 import mrjake.aunis.fluid.AunisFluids;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.stargate.network.StargateAddress;

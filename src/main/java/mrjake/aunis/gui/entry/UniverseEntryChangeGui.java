@@ -1,9 +1,8 @@
 package mrjake.aunis.gui.entry;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.base.BetterButton;
-import mrjake.aunis.gui.util.ArrowButton;
+import mrjake.aunis.gui.element.ArrowButton;
 import mrjake.aunis.item.dialer.UniverseDialerActionEnum;
 import mrjake.aunis.item.dialer.UniverseDialerActionPacketToServer;
 import mrjake.aunis.item.dialer.UniverseDialerMode;
@@ -11,13 +10,11 @@ import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.stargate.network.SymbolUniverseEnum;
-import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;

@@ -1,5 +1,8 @@
-package mrjake.aunis.gui.element;
+package mrjake.aunis.gui.element.tabs;
 
+import mrjake.aunis.Aunis;
+import mrjake.aunis.gui.element.GuiHelper;
+import mrjake.aunis.stargate.EnumIrisMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -139,6 +142,16 @@ public abstract class Tab {
 	
 		return isVisible && GuiHelper.isPointInRegion(guiLeft+iconX+currentOffsetX+xOffset, guiTop+defaultY+iconY, iconWidth - (isTabHidden ? 15 : 0), iconHeight, mouseX, mouseY);
 	}
+
+	public boolean isCursorOnTabBody(int mouseX, int mouseY) {
+		int xOffset = 0;
+		if (isTabHidden && hiddenX < defaultX) {
+			// hide - slides to the left
+			xOffset = 15;
+		}
+
+		return isVisible && GuiHelper.isPointInRegion(guiLeft+currentOffsetX+xOffset, guiTop+defaultY, width, height, mouseX, mouseY);
+	}
 	
 	public void openTab() {		
 		animateTo(openX, 10);
@@ -196,6 +209,12 @@ public abstract class Tab {
 		
 		// right
 		return new Rectangle(guiLeft+xSize, guiTop+defaultY, width+currentOffsetX-xSize, tabHeight);
+	}
+
+	public void keyTyped(char typedChar, int keyCode) {
+	}
+
+	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 	}
 		
 	// ------------------------------------------------------------------------------------------------
@@ -383,34 +402,34 @@ public abstract class Tab {
 		
 		public abstract Tab build();
 	}
-	
-	
+
+
 	// ------------------------------------------------------------------------------------------------
 	// Tab slot
-		
+
 	public class SlotTab extends SlotItemHandler {
-		
+
 		private UpdateSlotPositionInterface updateSlotPosition;
 
 		public SlotTab(SlotItemHandler slot, UpdateSlotPositionInterface updateSlotPosition) {
 			super(slot.getItemHandler(), slot.getSlotIndex(), slot.xPos, slot.yPos);
 			this.slotNumber = slot.slotNumber;
-			
+
 			this.updateSlotPosition = updateSlotPosition;
 		}
 
 		@Override
 		public boolean isEnabled() {
-			return isTabOpen && !animate;
+			return isTabOpen && !animate && isVisible();
 		}
-		
+
 		public void updatePos() {
 //			this.xPos = currentOffsetX + 106;
 //			this.yPos = defaultY + 87;
 			updateSlotPosition.updatePos(this);
 		}
 	}
-	
+
 	public static interface UpdateSlotPositionInterface {
 		public void updatePos(SlotTab slotTab);
 	}

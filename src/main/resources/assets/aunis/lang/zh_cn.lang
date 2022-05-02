@@ -440,6 +440,7 @@ glyph.aunis.universe.g36=Glyph 36
 # GUI
 
 gui.upgrades=升级
+gui.configuration=Configuration
 
 # dhd
 gui.dhd.fusion=冷聚变

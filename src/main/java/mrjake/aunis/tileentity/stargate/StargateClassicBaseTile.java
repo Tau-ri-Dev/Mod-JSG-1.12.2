@@ -8,7 +8,11 @@ import mrjake.aunis.beamer.BeamerLinkingHelper;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.chunkloader.ChunkManager;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.config.StargateSizeEnum;
+import mrjake.aunis.config.ingame.AunisConfigOption;
+import mrjake.aunis.config.ingame.AunisConfigOptionTypeEnum;
+import mrjake.aunis.config.ingame.AunisTileEntityConfig;
+import mrjake.aunis.config.ingame.ITileConfig;
+import mrjake.aunis.config.stargate.StargateSizeEnum;
 import mrjake.aunis.gui.container.stargate.StargateContainerGuiState;
 import mrjake.aunis.gui.container.stargate.StargateContainerGuiUpdate;
 import mrjake.aunis.item.AunisItems;
@@ -84,7 +88,7 @@ import static mrjake.aunis.stargate.EnumSpinDirection.COUNTER_CLOCKWISE;
  *
  * @author MrJake222
  */
-public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile implements IUpgradable {
+public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile implements IUpgradable, ITileConfig {
 
     // IRIS/SHIELD VARIABLES/CONSTANTS
     private EnumIrisState irisState = EnumIrisState.OPENED;
@@ -149,10 +153,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     protected ResultTargetValid attemptOpenDialed() {
+        StargateOpenResult result = checkAddressAndEnergy(dialedAddress);
+        boolean targetValid = result.ok();
         if(connectedToGatePos == null)
-            return new ResultTargetValid(StargateOpenResult.CALLER_HUNG_UP, true);
+            return new ResultTargetValid(StargateOpenResult.CALLER_HUNG_UP, targetValid);
         if(!(connectedToGatePos.getTileEntity().stargateState.incoming()))
-            return new ResultTargetValid(StargateOpenResult.CALLER_HUNG_UP, true);
+            return new ResultTargetValid(StargateOpenResult.CALLER_HUNG_UP, targetValid);
         return super.attemptOpenDialed();
     }
 
@@ -252,6 +258,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
             updateBeamers();
             updatePowerTier();
+            initConfig();
 
             updateIrisType();
             boolean set = irisType != EnumIrisType.NULL;
@@ -723,6 +730,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         compound.setInteger("incomingLastChevronLightUp", incomingLastChevronLightUp);
         compound.setInteger("incomingPeriod", incomingPeriod);
         compound.setInteger("incomingAddressSize", incomingAddressSize);
+
+        compound.setTag("config", config.serializeNBT());
+
         return super.writeToNBT(compound);
     }
 
@@ -758,6 +768,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         incomingLastChevronLightUp = compound.getInteger("incomingLastChevronLightUp");
         incomingAddressSize = compound.getInteger("incomingAddressSize");
 
+        config.deserializeNBT(compound.getCompoundTag("config"));
+
         super.readFromNBT(compound);
     }
 
@@ -774,6 +786,48 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
         codeSender.deserializeNBT(compound);
         return codeSender;
+    }
+
+    // -----------------------------------------------------------------
+    // Tile entity config
+
+    protected AunisTileEntityConfig config = new AunisTileEntityConfig();
+
+    @Override
+    public AunisTileEntityConfig getConfig() {
+        return this.config;
+    }
+
+    @Override
+    public void setConfig(AunisTileEntityConfig config) {
+        this.config = config;
+    }
+
+    @Override
+    public void initConfig(){
+        config.clearOptions();
+        config.addOptions(
+                new AunisConfigOption(0)
+                        .setType(AunisConfigOptionTypeEnum.TEXT)
+                        .setLabel("gui.config.enableRIG")
+                        .setComment("test1", "test2", "test3")
+                        .setBooleanValue(AunisConfig.randomIncoming.enableRandomIncoming),
+
+                new AunisConfigOption(1)
+                        .setType(AunisConfigOptionTypeEnum.NUMBER)
+                        .setLabel("test option2")
+                        .setComment("test4", "test5", "test6"),
+
+                new AunisConfigOption(2)
+                        .setType(AunisConfigOptionTypeEnum.TEXT)
+                        .setLabel("test option3")
+                        .setComment("test4", "test5", "test6"),
+
+                new AunisConfigOption(3)
+                        .setType(AunisConfigOptionTypeEnum.NUMBER)
+                        .setLabel("test option4")
+                        .setComment("test4", "test5", "test6")
+        );
     }
 
 
@@ -840,10 +894,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 return new StargateContainerGuiState(gateAddressMap);
 
             case GUI_UPDATE:
-                return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose, this.irisMode, this.irisCode, getOpenedSecondsToDisplay());
-
-//            case IRIS_UPDATE:
-//                return getRendererStateServer().build();
+                return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose, this.irisMode, this.irisCode, getOpenedSecondsToDisplay(), config);
 
             default:
                 return super.getState(stateType);
@@ -933,6 +984,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 irisMode = guiUpdate.irisMode;
                 irisCode = guiUpdate.irisCode;
                 secondsOpened = guiUpdate.openedSeconds;
+                config = guiUpdate.config;
                 break;
 
             case SPIN_STATE:
@@ -1925,6 +1977,5 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         return new Object[]{energyMap};
     }
-
 
 }

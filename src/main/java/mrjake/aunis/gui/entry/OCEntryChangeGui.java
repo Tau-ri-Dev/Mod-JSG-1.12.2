@@ -1,7 +1,7 @@
 package mrjake.aunis.gui.entry;
 
 import mrjake.aunis.gui.OCAddMessageGui;
-import mrjake.aunis.gui.util.ArrowButton;
+import mrjake.aunis.gui.element.ArrowButton;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.item.dialer.UniverseDialerMode;
 import mrjake.aunis.item.oc.ItemOCMessage;

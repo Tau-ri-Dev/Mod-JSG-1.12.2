@@ -1,7 +1,8 @@
-package mrjake.aunis.gui.element;
+package mrjake.aunis.gui.element.tabs;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.beamer.BeamerModeEnum;
+import mrjake.aunis.gui.element.GuiHelper;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.BeamerChangedInactivityToServer;
 import mrjake.aunis.packet.BeamerChangedLevelsToServer;
@@ -176,7 +177,7 @@ public class TabRedstone extends Tab {
 		}
 	}
 	
-	public void keyTyped(char typedChar, int keyCode) throws IOException {		
+	public void keyTyped(char typedChar, int keyCode) {
 		for (LabeledTextBox tf : getTextBoxes(beamerModeGetter.get()))
 			tf.textField.textboxKeyTyped(typedChar, keyCode);
 	}
@@ -186,7 +187,7 @@ public class TabRedstone extends Tab {
 			tf.textField.updateCursorCounter();
 	}
 	
-	public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		if (!isOpen())
 			return;
 		

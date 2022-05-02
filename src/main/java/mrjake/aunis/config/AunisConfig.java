@@ -1,6 +1,11 @@
 package mrjake.aunis.config;
 
 import mrjake.aunis.block.AunisBlocks;
+import mrjake.aunis.config.stargate.StargateSizeEnum;
+import mrjake.aunis.config.stargate.StargateTimeLimitModeEnum;
+import mrjake.aunis.config.parsers.BiomeParser;
+import mrjake.aunis.config.parsers.BlockMetaParser;
+import mrjake.aunis.config.parsers.ItemMetaParser;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.util.ItemMetaPair;
 import net.minecraft.block.state.IBlockState;
@@ -13,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import static mrjake.aunis.Aunis.CONFIG_VERSION;
-import static mrjake.aunis.config.StargateTimeLimitModeEnum.DRAW_MORE_POWER;
+import static mrjake.aunis.config.stargate.StargateTimeLimitModeEnum.DRAW_MORE_POWER;
 
 @Config(modid = "aunis", name = "aunisConfig_" + CONFIG_VERSION)
 public class AunisConfig {
@@ -528,9 +533,6 @@ public class AunisConfig {
         public int maxOpenedSeconds = 240;
 
         @Name("What happens after the open time reach this time")
-        @Comment({
-                "U can use: closeGate, drawMorePower"
-        })
         public StargateTimeLimitModeEnum maxOpenedWhat = DRAW_MORE_POWER;
 
         @Name("Enable max open time?")
@@ -769,23 +771,6 @@ public class AunisConfig {
     public static class DevConfig {
         @Name("Enable rings platform")
         public boolean enableRingPlatform = false;
-
-        @Name("size")
-        public float zatSize = 0.3f;
-
-        @Name("x")
-        public double zatX = 0.8;
-        @Name("y")
-        public double zatY = 0;
-        @Name("z")
-        public double zatZ = -0.8;
-
-        @Name("rotx")
-        public int zatRotX = 35;
-        @Name("roty")
-        public int zatRotY = 0;
-        @Name("rotz")
-        public int zatRotZ = 15;
     }
 
     public static void resetCache() {

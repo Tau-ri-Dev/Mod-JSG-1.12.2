@@ -1,7 +1,10 @@
-package mrjake.aunis.gui.element;
+package mrjake.aunis.gui.element.tabs;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.gui.element.GuiHelper;
+import mrjake.aunis.gui.element.ModeButton;
+import mrjake.aunis.gui.element.NumberOnlyTextField;
 import mrjake.aunis.stargate.EnumIrisMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

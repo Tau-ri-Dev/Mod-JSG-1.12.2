@@ -1,7 +1,7 @@
 package mrjake.aunis.tileentity.stargate;
 
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.config.StargateSizeEnum;
+import mrjake.aunis.config.stargate.StargateSizeEnum;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;

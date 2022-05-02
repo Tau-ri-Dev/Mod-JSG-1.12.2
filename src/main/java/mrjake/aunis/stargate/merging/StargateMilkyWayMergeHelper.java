@@ -6,7 +6,7 @@ import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.block.stargate.StargateMilkyWayBaseBlock;
 import mrjake.aunis.block.stargate.StargateMilkyWayMemberBlock;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.config.StargateSizeEnum;
+import mrjake.aunis.config.stargate.StargateSizeEnum;
 import mrjake.aunis.stargate.EnumMemberVariant;
 import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
 import mrjake.aunis.util.AunisAxisAlignedBB;

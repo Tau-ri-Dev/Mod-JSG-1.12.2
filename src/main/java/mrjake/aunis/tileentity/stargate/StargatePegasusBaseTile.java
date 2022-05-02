@@ -3,7 +3,7 @@ package mrjake.aunis.tileentity.stargate;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.config.StargateSizeEnum;
+import mrjake.aunis.config.stargate.StargateSizeEnum;
 import mrjake.aunis.gui.container.stargate.StargateContainerGuiUpdate;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;

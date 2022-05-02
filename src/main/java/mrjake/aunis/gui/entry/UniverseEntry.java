@@ -1,7 +1,7 @@
 package mrjake.aunis.gui.entry;
 
 import mrjake.aunis.gui.base.BetterButton;
-import mrjake.aunis.gui.util.ArrowButton;
+import mrjake.aunis.gui.element.ArrowButton;
 import mrjake.aunis.packet.gui.entry.EntryActionEnum;
 import mrjake.aunis.packet.gui.entry.EntryDataTypeEnum;
 import mrjake.aunis.stargate.network.StargateAddress;

@@ -1,4 +1,4 @@
-package mrjake.aunis.config;
+package mrjake.aunis.config.parsers;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
@@ -18,7 +18,7 @@ public class BiomeParser {
 	 * @return List of {@link Biome}s or empty list.
 	 */
 	@Nonnull
-	static List<Biome> parseConfig(String[] config) {
+	public static List<Biome> parseConfig(String[] config) {
 		List<Biome> list = new ArrayList<>();
 
 		for (String line : config) {

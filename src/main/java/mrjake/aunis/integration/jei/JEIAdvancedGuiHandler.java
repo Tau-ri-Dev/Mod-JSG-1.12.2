@@ -1,7 +1,7 @@
 package mrjake.aunis.integration.jei;
 
 import mezz.jei.api.gui.IAdvancedGuiHandler;
-import mrjake.aunis.gui.element.TabbedContainerInterface;
+import mrjake.aunis.gui.element.tabs.TabbedContainerInterface;
 import net.minecraft.client.gui.inventory.GuiContainer;
 
 import java.awt.*;

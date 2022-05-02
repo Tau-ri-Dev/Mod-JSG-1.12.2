@@ -1,4 +1,4 @@
-package mrjake.aunis.gui.element;
+package mrjake.aunis.gui.element.tabs;
 
 /**
  * Describes on which side the tab is.

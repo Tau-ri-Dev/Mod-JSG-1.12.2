@@ -1,4 +1,4 @@
-package mrjake.aunis.config;
+package mrjake.aunis.config.parsers;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -17,7 +17,7 @@ public class BlockMetaParser {
 	 * @return List of {@link IBlockState}s or empty list.
 	 */
 	@Nonnull
-	static Map<IBlockState, Boolean> parseConfig(String[] config) {
+	public static Map<IBlockState, Boolean> parseConfig(String[] config) {
 		Map<IBlockState, Boolean> map = new HashMap<>();
 
 		for (String line : config) {

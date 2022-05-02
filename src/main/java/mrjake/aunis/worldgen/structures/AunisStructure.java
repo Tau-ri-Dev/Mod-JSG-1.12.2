@@ -2,7 +2,7 @@ package mrjake.aunis.worldgen.structures;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.config.StargateSizeEnum;
+import mrjake.aunis.config.stargate.StargateSizeEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;

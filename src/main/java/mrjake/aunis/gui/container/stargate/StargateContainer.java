@@ -39,6 +39,8 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
     private int irisCode;
     private float openedSeconds;
 
+    public boolean isOperator;
+
     @Override
     public int getOpenTabId() {
         return openTabId;
@@ -49,7 +51,9 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
         openTabId = tabId;
     }
 
-    public StargateContainer(IInventory playerInventory, World world, int x, int y, int z) {
+    public StargateContainer(IInventory playerInventory, World world, int x, int y, int z, boolean isOperator) {
+        this.isOperator = isOperator;
+
         pos = new BlockPos(x, y, z);
         gateTile = (StargateClassicBaseTile) world.getTileEntity(pos);
         IItemHandler itemHandler = gateTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
@@ -83,7 +87,7 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
         addSlotToContainer(new SlotItemHandler(itemHandler, 10, 0, 0));
 
         // Shield/Iris Upgrade (index 11)
-        addSlotToContainer(new SlotItemHandler(itemHandler, 11, 16 + 18 * 3, 27));
+        addSlotToContainer(new SlotItemHandler(itemHandler, 11, 17 + 18 * 3, 27));
 
         for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 86))
             addSlotToContainer(slot);

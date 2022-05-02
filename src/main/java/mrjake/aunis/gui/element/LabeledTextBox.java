@@ -1,4 +1,4 @@
-package mrjake.aunis.gui;
+package mrjake.aunis.gui.element;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;

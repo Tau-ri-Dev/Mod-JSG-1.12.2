@@ -2,7 +2,7 @@ package mrjake.aunis.gui.entry;
 
 import mrjake.aunis.gui.base.BetterButton;
 import mrjake.aunis.gui.base.BetterTextField;
-import mrjake.aunis.gui.util.ArrowButton;
+import mrjake.aunis.gui.element.ArrowButton;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.gui.entry.EntryActionEnum;
 import mrjake.aunis.packet.gui.entry.EntryActionToServer;
@@ -13,15 +13,12 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 
-import static mrjake.aunis.gui.element.GuiHelper.isPointInRegion;
 import static net.minecraftforge.fml.client.config.GuiUtils.drawHoveringText;
 
 public abstract class AbstractEntry {

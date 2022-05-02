@@ -1,4 +1,4 @@
-package mrjake.aunis.config;
+package mrjake.aunis.config.parsers;
 
 import mrjake.aunis.util.ItemMetaPair;
 import net.minecraft.block.state.IBlockState;
@@ -13,13 +13,13 @@ import java.util.List;
 public class ItemMetaParser {
 	
 	/**
-	 * Parses array of configured items/blocks. For format see {@link ItemMetaParser#getBlockStateFromString(String)}
+	 * Parses array of configured items/blocks.
 	 * 
 	 * @param config Array of single lines
 	 * @return List of {@link IBlockState}s or empty list.
 	 */
 	@Nonnull
-	static List<ItemMetaPair> parseConfig(String[] config) {
+	public static List<ItemMetaPair> parseConfig(String[] config) {
 		List<ItemMetaPair> list = new ArrayList<>();
 
 		for (String line : config) {
@@ -40,7 +40,7 @@ public class ItemMetaParser {
 	 * @return {@link IBlockState} when valid block, {@code null} otherwise.
 	 */
 	@Nullable
-	static ItemMetaPair getItemMetaPairFromString(String line) {
+	public static ItemMetaPair getItemMetaPairFromString(String line) {
         String[] parts = line.trim().split(":", 3);
         
         Item item = Item.REGISTRY.getObject(new ResourceLocation(parts[0], parts[1]));

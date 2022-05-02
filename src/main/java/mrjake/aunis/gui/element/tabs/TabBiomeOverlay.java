@@ -1,6 +1,7 @@
-package mrjake.aunis.gui.element;
+package mrjake.aunis.gui.element.tabs;
 
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.gui.element.GuiHelper;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.util.ItemMetaPair;
 import net.minecraft.client.Minecraft;

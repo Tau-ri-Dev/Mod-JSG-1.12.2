@@ -6,15 +6,13 @@ import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.*;
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisDamageSources;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.api.event.*;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.block.dialhomedevice.DHDBlock;
 import mrjake.aunis.chunkloader.ChunkManager;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.config.StargateDimensionConfig;
-import mrjake.aunis.gui.element.TabBiomeOverlay;
+import mrjake.aunis.config.stargate.StargateDimensionConfig;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.StateUpdatePacketToClient;
 import mrjake.aunis.packet.StateUpdateRequestToServer;
@@ -69,7 +67,7 @@ import javax.annotation.Nullable;
 import javax.vecmath.Vector2f;
 import java.util.*;
 
-import static mrjake.aunis.config.StargateTimeLimitModeEnum.CLOSE_GATE;
+import static mrjake.aunis.config.stargate.StargateTimeLimitModeEnum.CLOSE_GATE;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
 public abstract class StargateAbstractBaseTile extends TileEntity implements StateProviderInterface, ITickable, ICapabilityProvider, ScheduledTaskExecutorInterface, Environment, WirelessEndpoint, PreparableInterface {
@@ -282,9 +280,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             /* TODO Find a test case for resultTarget.targetVaild
 
              */
-            if (resultTarget.targetVaild) {
+            if (resultTarget.targetVaild && network.getStargate(dialedAddress) != null && network.getStargate(dialedAddress).getTileEntity() != null) {
                 // We can call dialing failed on the target gate
-                Objects.requireNonNull(network.getStargate(dialedAddress)).getTileEntity().dialingFailed(StargateOpenResult.CALLER_HUNG_UP);
+                network.getStargate(dialedAddress).getTileEntity().dialingFailed(StargateOpenResult.CALLER_HUNG_UP);
             }
         }
 

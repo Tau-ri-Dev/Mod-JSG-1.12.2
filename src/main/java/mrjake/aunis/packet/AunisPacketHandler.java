@@ -24,7 +24,9 @@ import mrjake.aunis.packet.gui.entry.OCActionToServer;
 import mrjake.aunis.packet.gui.entry.OCActionToServer.OCActionServerHandler;
 import mrjake.aunis.packet.stargate.*;
 import mrjake.aunis.packet.stargate.DHDButtonClickedToServer.DHDButtonClickedServerHandler;
+import mrjake.aunis.packet.stargate.DHDPegasusButtonClickedToServer.DHDPegasusButtonClickedServerHandler;
 import mrjake.aunis.packet.stargate.SaveIrisCodeToServer.SaveIrisCodeToServerHandler;
+import mrjake.aunis.packet.stargate.SaveConfigToServer.SaveConfigToServerHandler;
 import mrjake.aunis.packet.stargate.StargateMotionToClient.RetrieveMotionClientHandler;
 import mrjake.aunis.packet.stargate.StargateMotionToServer.MotionServerHandler;
 import mrjake.aunis.packet.transportrings.SaveRingsParametersToServer;
@@ -45,7 +47,7 @@ public class AunisPacketHandler {
 	public static void registerPackets() {
 		// serverside packets
 		INSTANCE.registerMessage(DHDButtonClickedServerHandler.class, DHDButtonClickedToServer.class, id, Side.SERVER); id++;
-		INSTANCE.registerMessage(DHDPegasusButtonClickedToServer.DHDPegasusButtonClickedServerHandler.class, DHDPegasusButtonClickedToServer.class, id, Side.SERVER); id++;
+		INSTANCE.registerMessage(DHDPegasusButtonClickedServerHandler.class, DHDPegasusButtonClickedToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(MotionServerHandler.class, StargateMotionToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(StateUpdateServerHandler.class, StateUpdateRequestToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(SaveRingsParametersServerHandler.class, SaveRingsParametersToServer.class, id, Side.SERVER); id++;
@@ -63,6 +65,7 @@ public class AunisPacketHandler {
 		INSTANCE.registerMessage(EntryActionServerHandler.class, EntryActionToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(OCActionServerHandler.class, OCActionToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(SaveIrisCodeToServerHandler.class, SaveIrisCodeToServer.class, id, Side.SERVER); id++;
+		INSTANCE.registerMessage(SaveConfigToServerHandler.class, SaveConfigToServer.class, id, Side.SERVER); id++;
 
 		// clientside packets
 		INSTANCE.registerMessage(RetrieveMotionClientHandler.class, StargateMotionToClient.class, id, Side.CLIENT); id++;

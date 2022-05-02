@@ -2,10 +2,7 @@ package mrjake.aunis.renderer.stargate;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.config.StargateSizeEnum;
-import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
-import mrjake.aunis.stargate.EnumIrisState;
-import mrjake.aunis.stargate.EnumIrisType;
+import mrjake.aunis.config.stargate.StargateSizeEnum;
 import mrjake.aunis.stargate.StargatePegasusSpinHelper;
 
 import java.util.HashMap;

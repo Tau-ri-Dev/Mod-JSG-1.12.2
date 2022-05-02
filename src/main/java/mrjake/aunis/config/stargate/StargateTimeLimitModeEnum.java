@@ -1,4 +1,4 @@
-package mrjake.aunis.config;
+package mrjake.aunis.config.stargate;
 
 public enum StargateTimeLimitModeEnum {
     CLOSE_GATE,

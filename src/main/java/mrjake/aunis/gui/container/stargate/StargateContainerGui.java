@@ -2,8 +2,9 @@ package mrjake.aunis.gui.container.stargate;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.gui.element.*;
-import mrjake.aunis.gui.element.Tab.SlotTab;
+import mrjake.aunis.gui.element.tabs.*;
+import mrjake.aunis.gui.element.tabs.Tab.SlotTab;
+import mrjake.aunis.gui.entry.AbstractEntry;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.SetOpenTabToServer;
 import mrjake.aunis.packet.stargate.SaveIrisCodeToServer;
@@ -23,6 +24,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.SlotItemHandler;
+import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.io.IOException;
@@ -31,13 +33,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.lang.Integer.parseInt;
-
 public class StargateContainerGui extends GuiContainer implements TabbedContainerInterface {
 	
 	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_stargate.png");
 	
-	private StargateContainer container;
+	private final StargateContainer container;
 	private List<Tab> tabs;
 	
 	private TabAddress milkyWayAddressTab;
@@ -45,11 +45,12 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 	private TabAddress universeAddressTab;
 	private TabBiomeOverlay overlayTab;
 	private TabIris irisTab;
+	private TabConfig configTab;
 
 	private int energyStored;
 	private int maxEnergyStored;
 
-	private BlockPos pos;
+	private final BlockPos pos;
 		
 	public StargateContainerGui(BlockPos pos, StargateContainer container) {
 		super(container);
@@ -147,18 +148,36 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				.setTabTitle(I18n.format("gui.stargate.iris_code"))
 				.setTabSide(TabSideEnum.RIGHT)
 				.setTexture(BACKGROUND_TEXTURE, 512)
-				.setBackgroundTextureLocation(176, 113)
+				.setBackgroundTextureLocation(176, 114)
 				.setIconRenderPos(107, 7)
 				.setIconSize(20, 18)
 				.setIconTextureLocation(304, 72).build();
 
+		configTab = (TabConfig) TabConfig.builder()
+				.setConfig(container.gateTile.getConfig())
+				.setGuiSize(xSize, ySize)
+				.setGuiPosition(guiLeft, guiTop)
+				.setTabPosition(176-107, 2+(22*2))
+				.setOpenX(176)
+				.setHiddenX(54)
+				.setTabSize(128, 113)
+				.setTabTitle(I18n.format("gui.configuration"))
+				.setTabSide(TabSideEnum.RIGHT)
+				.setTexture(BACKGROUND_TEXTURE, 512)
+				.setBackgroundTextureLocation(176, 165)
+				.setIconRenderPos(107, 7)
+				.setIconSize(20, 18)
+				.setIconTextureLocation(304, 91).build();
+
 		irisTab.setOnTabClose(this::saveIrisCode);
+		configTab.setOnTabClose(this::saveConfig);
 
 		tabs.add(milkyWayAddressTab);
 		tabs.add(pegasusAddressTab);
 		tabs.add(universeAddressTab);
 		tabs.add(overlayTab);
 		tabs.add(irisTab);
+		tabs.add(configTab);
 		
 		container.inventorySlots.set(7, milkyWayAddressTab.createSlot((SlotItemHandler) container.getSlot(7)));
 		container.inventorySlots.set(8, pegasusAddressTab.createSlot((SlotItemHandler) container.getSlot(8)));
@@ -210,6 +229,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 		pegasusAddressTab.setVisible(hasAtlantisUpgrade);
 		universeAddressTab.setVisible(hasUniverseUpgrade);
 		irisTab.setVisible(hasIrisUpgrade);
+		configTab.setVisible(container.isOperator);
 
 		Tab.updatePositions(tabs);
 		
@@ -276,11 +296,11 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 			int minutes = ((int) Math.floor(openedSeconds / 60));
 			int seconds = ((int) (openedSeconds - (60 * minutes)));
 			String secondsString = ((seconds < 10) ? "0" + seconds : "" + seconds);
-			String openedTime = "Opened: " + minutes + ":" + secondsString + "min";
+			String openedTime = I18n.format("gui.stargate.state.opened") + " " + minutes + ":" + secondsString + "min";
 			fontRenderer.drawString(openedTime, 46, 16, 4210752);
 		}
 		else{
-			fontRenderer.drawString("Gate closed", 46, 16, 4210752);
+			fontRenderer.drawString(I18n.format("gui.stargate.state.closed"), 46, 16, 4210752);
 		}
 
 		fontRenderer.drawString(I18n.format("gui.upgrades"), 7, 6, 4210752);
@@ -339,9 +359,27 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				
 				break;
 			}
+
 		}
-		if (irisTab.isOpen()) {
-			irisTab.mouseClicked(mouseX, mouseY, mouseButton);
+		for(Tab tab : tabs){
+			if(tab.isOpen() && tab.isVisible()){
+				tab.mouseClicked(mouseX, mouseY, mouseButton);
+			}
+		}
+	}
+
+
+	@Override
+	public void handleMouseInput() throws IOException {
+		super.handleMouseInput();
+		int wheel = Mouse.getEventDWheel();
+
+		if (wheel != 0) {
+			for(Tab tab : tabs){
+				if(tab instanceof TabScrollAble && tab.isVisible() && tab.isOpen()){
+					((TabScrollAble) tab).scroll(wheel);
+				}
+			}
 		}
 	}
 	
@@ -354,8 +392,10 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (irisTab.isOpen()){
-			irisTab.keyTyped(typedChar, keyCode);
+		for(Tab tab : tabs){
+			if(tab.isOpen() && tab.isVisible()){
+				tab.keyTyped(typedChar, keyCode);
+			}
 		}
 		super.keyTyped(typedChar, keyCode);
 	}
@@ -363,6 +403,11 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 	@Override
 	public void onGuiClosed() {
 		saveIrisCode();
+		saveConfig();
+	}
+
+	private void saveConfig(){
+
 	}
 
 	private void saveIrisCode() {
