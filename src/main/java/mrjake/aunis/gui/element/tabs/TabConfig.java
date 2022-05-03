@@ -13,7 +13,6 @@ import java.util.List;
 
 public class TabConfig extends TabScrollAble {
 
-
     private final List<GuiTextField> FIELDS = new ArrayList<>();
     public AunisTileEntityConfig config;
     public StargateClassicBaseTile gateTile;
@@ -22,7 +21,7 @@ public class TabConfig extends TabScrollAble {
     protected TabConfig(TabConfigBuilder builder) {
         super(builder);
         this.gateTile = builder.gateTile;
-        updateConfig(gateTile.getConfig());
+        updateConfig(gateTile.getConfig(), true);
     }
 
     public static TabConfig.TabConfigBuilder builder() {
@@ -33,20 +32,18 @@ public class TabConfig extends TabScrollAble {
     public void render(FontRenderer fontRenderer, int mouseX, int mouseY) {
         if (!isVisible()) return;
         super.render(fontRenderer, mouseX, mouseY);
-        updateConfig(null); // update pos of fields;
+        updateConfig(null, false); // update pos of fields
         for (GuiTextField field : FIELDS) {
-            field.y += scrolled;
             int id = field.getId() - 100;
             int y = field.y - 10;
-            int x = guiLeft + 6 + currentOffsetX + 25;
+            int x = field.x;
             if (canRenderEntry(x, y)) {
                 if (id < 0) continue;
                 fontRenderer.drawString(I18n.format(config.getOption(id).getLabel()), x, y, 4210752);
-
-                field.x = x;
                 field.drawTextBox();
             }
         }
+        renderCover(fontRenderer);
     }
 
     @Override
@@ -66,45 +63,31 @@ public class TabConfig extends TabScrollAble {
     }
 
     @Override
-    public void scroll(int k) {
-        if (k == 0) return;
-        if (k < 0) k = -1;
-        if (k > 0) k = 1;
-        if (isVisible() && isOpen() && canContinueScrolling(k)) {
-            scrolled += (SCROLL_AMOUNT * k);
-        }
-    }
-
-    @Override
     public boolean canContinueScrolling(int k) {
-        int top = 25 + guiTop + defaultY + 5;
-        int bottom = guiTop + defaultY + height;
+        int top = guiTop + defaultY + 30;
+        int bottom = guiTop + defaultY + height - 34;
         if (FIELDS.size() < 1) return false;
-        return ((FIELDS.get(0).y <= top) && k == 1) || ((FIELDS.get(FIELDS.size() - 1).y >= (bottom - 15 - 10)) && k == -1);
+        return ((FIELDS.get(0).y <= top) && k == 1) || ((FIELDS.get(FIELDS.size() - 1).y >= bottom) && k == -1);
     }
 
     @Override
     public boolean canRenderEntry(int x, int y) {
-        int top = 25 + guiTop + defaultY + 3;
+        int top = guiTop + defaultY + 3;
         int bottom = guiTop + defaultY + height;
-        return y >= (top - 7) && (y + FIELDS.get(0).height + 2) <= bottom;
+        return y >= top && (y + FIELDS.get(0).height) <= (bottom - 12);
     }
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        if (isVisible() && isOpen()) {
-            for (GuiTextField field : FIELDS) {
-                field.mouseClicked(mouseX, mouseY, mouseButton);
-            }
+        for (GuiTextField field : FIELDS) {
+            field.mouseClicked(mouseX, mouseY, mouseButton);
         }
     }
 
     @Override
     public void keyTyped(char typedChar, int keyCode) {
-        if (isVisible() && isOpen()) {
-            for (GuiTextField field : FIELDS) {
-                field.textboxKeyTyped(typedChar, keyCode);
-            }
+        for (GuiTextField field : FIELDS) {
+            field.textboxKeyTyped(typedChar, keyCode);
         }
     }
 
@@ -127,14 +110,24 @@ public class TabConfig extends TabScrollAble {
         return config;
     }
 
-    public void updateConfig(AunisTileEntityConfig config) {
+    public void updateConfig(AunisTileEntityConfig config, boolean resetFields) {
         if (config != null) this.config = config;
-        FIELDS.clear();
-        for (int i = 0; i < this.config.getOptions().size(); i++) {
-            if (this.config.getOption(i) != null) {
-                GuiTextField field = this.config.getOption(i).createField(30 * i + guiTop + defaultY + 30);
-                if (field != null) {
-                    FIELDS.add(field);
+        int k = guiTop + defaultY + 34;
+        if (resetFields) {
+            FIELDS.clear();
+            for (int i = 0; i < this.config.getOptions().size(); i++) {
+                if (this.config.getOption(i) != null) {
+                    GuiTextField field = this.config.getOption(i).createField(k);
+                    if (field != null) {
+                        FIELDS.add(field);
+                    }
+                }
+            }
+        } else {
+            for (int i = 0; i < FIELDS.size(); i++) {
+                if (FIELDS.get(i) != null) {
+                    FIELDS.get(i).y = 27 * i + k + scrolled;
+                    FIELDS.get(i).x = guiLeft + 6 + currentOffsetX + 25;
                 }
             }
         }

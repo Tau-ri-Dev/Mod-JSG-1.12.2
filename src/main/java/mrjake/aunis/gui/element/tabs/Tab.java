@@ -26,7 +26,7 @@ public abstract class Tab {
 	protected int defaultX;
 	protected int defaultY;
 	protected int openX;
-	private int hiddenX;
+	protected int hiddenX;
 	protected int width;
 	protected int height;
 	protected String tabTitle;
@@ -35,16 +35,16 @@ public abstract class Tab {
 	// Background texture
 	protected ResourceLocation bgTexLocation;
 	protected int textureSize;
-	private int bgTexX;
-	private int bgTexY;
+	protected int bgTexX;
+	protected int bgTexY;
 	
 	// Icon texture
-	private int iconX;
-	private int iconY;
-	private int iconWidth;
-	private int iconHeight;
-	private int iconTexX;
-	private int iconTexY;
+	protected int iconX;
+	protected int iconY;
+	protected int iconWidth;
+	protected int iconHeight;
+	protected int iconTexX;
+	protected int iconTexY;
 	
 	protected Tab(TabBuilder builder) {
 		this.guiLeft = builder.guiLeft;
@@ -118,7 +118,7 @@ public abstract class Tab {
 		mc.getTextureManager().bindTexture(bgTexLocation);
 		Gui.drawModalRectWithCustomSizedTexture(guiLeft+currentOffsetX, guiTop+defaultY, bgTexX, bgTexY, width, height, textureSize, textureSize);
 		Gui.drawModalRectWithCustomSizedTexture(guiLeft+iconX+currentOffsetX, guiTop+defaultY+iconY, iconTexX, iconTexY, iconWidth, iconHeight, textureSize, textureSize);
-		
+
 		fontRenderer.drawString(tabTitle, guiLeft+currentOffsetX+(side.left() ? 24 : 0)+4, guiTop+defaultY+10, 4210752);
 		
 		GlStateManager.disableBlend();

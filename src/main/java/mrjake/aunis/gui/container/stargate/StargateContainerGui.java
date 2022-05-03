@@ -122,6 +122,22 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				.setIconRenderPos(1, 7)
 				.setIconSize(20, 18)
 				.setIconTextureLocation(304, 18*2).build();
+
+		configTab = (TabConfig) TabConfig.builder()
+				.setGateTile(container.gateTile)
+				.setGuiSize(xSize, ySize)
+				.setGuiPosition(guiLeft, guiTop)
+				.setTabPosition(-21, 2+22*3)
+				.setOpenX(-128)
+				.setHiddenX(-6)
+				.setTabSize(128, 94)
+				.setTabTitle(I18n.format("gui.configuration"))
+				.setTabSide(TabSideEnum.LEFT)
+				.setTexture(BACKGROUND_TEXTURE, 512)
+				.setBackgroundTextureLocation(176, 165)
+				.setIconRenderPos(1, 7)
+				.setIconSize(20, 18)
+				.setIconTextureLocation(304, 91).build();
 		
 		overlayTab = (TabBiomeOverlay) TabBiomeOverlay.builder()
 				.setSupportedOverlays(container.gateTile.getSupportedOverlays())
@@ -157,33 +173,16 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				.setIconSize(20, 18)
 				.setIconTextureLocation(304, 72).build();
 
-		configTab = (TabConfig) TabConfig.builder()
-				.setGateTile(container.gateTile)
-				.setGuiSize(xSize, ySize)
-				.setGuiPosition(guiLeft, guiTop)
-				.setTabPosition(-21, 2+22*3)
-				.setOpenX(-128)
-				.setHiddenX(-6)
-				.setTabSize(128, 113)
-				.setTabTitle(I18n.format("gui.configuration"))
-				.setTabSide(TabSideEnum.LEFT)
-				.setTexture(BACKGROUND_TEXTURE, 512)
-				.setBackgroundTextureLocation(176, 165)
-				.setIconRenderPos(1, 7)
-				.setIconSize(20, 18)
-				.setIconTextureLocation(304, 91).build();
-
-		Aunis.info(container.gateTile.getConfig().getOption(0).getLabel());
-
 		irisTab.setOnTabClose(this::saveIrisCode);
 		configTab.setOnTabClose(this::saveConfig);
 
 		tabs.add(milkyWayAddressTab);
 		tabs.add(pegasusAddressTab);
 		tabs.add(universeAddressTab);
+		tabs.add(configTab);
+
 		tabs.add(overlayTab);
 		tabs.add(irisTab);
-		tabs.add(configTab);
 		
 		container.inventorySlots.set(7, milkyWayAddressTab.createSlot((SlotItemHandler) container.getSlot(7)));
 		container.inventorySlots.set(8, pegasusAddressTab.createSlot((SlotItemHandler) container.getSlot(8)));
@@ -272,7 +271,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				irisTab.updateValue(container.gateTile.getIrisCode());
 		}
 		if(container.gateTile.getConfig().getOptions().size() != configTab.getConfig(false).getOptions().size())
-			configTab.updateConfig(container.gateTile.getConfig());
+			configTab.updateConfig(container.gateTile.getConfig(), true);
 		for (Tab tab : tabs) {
 			tab.render(fontRenderer, mouseX, mouseY);
 		}
@@ -362,8 +361,9 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				if (Tab.tabsInteract(tabs, i)) {
 					container.setOpenTabId(i);
 				}
-				else
+				else {
 					container.setOpenTabId(-1);
+				}
 				
 				AunisPacketHandler.INSTANCE.sendToServer(new SetOpenTabToServer(container.getOpenTabId()));
 				

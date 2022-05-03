@@ -743,10 +743,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void readFromNBT(NBTTagCompound compound) {
         itemStackHandler.deserializeNBT(compound.getCompoundTag("itemHandler"));
 
-        if (compound.getBoolean("hasUpgrade")) { // todo(global): can be deleted probably? (used by old version)
-            itemStackHandler.setStackInSlot(0, new ItemStack(AunisItems.CRYSTAL_GLYPH_STARGATE));
-        }
-
         isFinalActive = compound.getBoolean("isFinalActive");
 
         isSpinning = compound.getBoolean("isSpinning");
@@ -804,8 +800,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 "of gates generate issues,",
                 "set it to false"
         ),
-        DHD_LAST_OPEN(
-                1, "dhdLastOpen", AunisConfigOptionTypeEnum.BOOLEAN, "true",
+        DHD_TOP_CHEVRON_LOCK(
+                1, "dhdTopChevronLock", AunisConfigOptionTypeEnum.BOOLEAN, "true",
                 "Enable opening last chevron",
                 "while dialing milkyway gate with dhd"
         ),
@@ -854,7 +850,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if(!wasConfigLoaded) return;
         if(getConfig().getOptions().size() != ConfigOptions.values().length) {
             getConfig().clearOptions();
-            Aunis.info("Config reset!");
             for (ConfigOptions option : ConfigOptions.values()) {
                 getConfig().addOption(
                         new AunisConfigOption(option.id)
@@ -926,7 +921,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public State getState(StateTypeEnum stateType) {
         switch (stateType) {
             case GUI_STATE:
-                Aunis.info("Server: " + getConfig().getOption(0).getLabel());
                 return new StargateContainerGuiState(gateAddressMap, getConfig());
 
             case GUI_UPDATE:
@@ -1011,7 +1005,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 StargateContainerGuiState guiState = (StargateContainerGuiState) state;
                 gateAddressMap = guiState.gateAdddressMap;
                 config = guiState.config;
-                Aunis.info("Client: " + config.getOption(0).getLabel());
                 break;
 
             case GUI_UPDATE:
