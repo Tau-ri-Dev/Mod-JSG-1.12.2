@@ -10,11 +10,14 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.items.SlotItemHandler;
 
+import java.awt.*;
+
 public class TabAddress extends Tab {
 
     // Gate's address
-    private StargateClassicBaseTile gateTile;
-    private SymbolTypeEnum symbolType;
+    private final StargateClassicBaseTile gateTile;
+    private final SymbolTypeEnum symbolType;
+    private final int progressColor;
     private int maxSymbols;
 
     protected TabAddress(TabAddressBuilder builder) {
@@ -22,6 +25,7 @@ public class TabAddress extends Tab {
 
         this.gateTile = builder.gateTile;
         this.symbolType = builder.symbolType;
+        this.progressColor = builder.progressColor;
         this.maxSymbols = 6;
     }
 
@@ -65,6 +69,11 @@ public class TabAddress extends Tab {
 
             Minecraft.getMinecraft().getTextureManager().bindTexture(bgTexLocation);
             int progress = gateTile.getPageProgress();
+            Color c = new Color(progressColor);
+            float red = c.getRed();
+            float green = c.getGreen();
+            float blue = c.getBlue();
+            GlStateManager.color(red, green, blue);
             Gui.drawModalRectWithCustomSizedTexture(guiLeft + currentOffsetX + 97, guiTop + defaultY + 86 + (18 - progress), 0, 174 + (18 - progress), 6, progress, textureSize, textureSize);
 
             GlStateManager.disableBlend();
@@ -124,16 +133,20 @@ public class TabAddress extends Tab {
         // Gate's TileEntity reference
         private StargateClassicBaseTile gateTile;
         private SymbolTypeEnum symbolType;
+        private int progressColor;
 
         public TabAddressBuilder setGateTile(StargateClassicBaseTile gateTile) {
             this.gateTile = gateTile;
-
             return this;
         }
 
         public TabAddressBuilder setSymbolType(SymbolTypeEnum symbolType) {
             this.symbolType = symbolType;
+            return this;
+        }
 
+        public TabAddressBuilder setProgressColor(int color) {
+            this.progressColor = color;
             return this;
         }
 

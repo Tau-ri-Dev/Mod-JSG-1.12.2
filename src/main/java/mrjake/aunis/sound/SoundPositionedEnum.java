@@ -24,12 +24,12 @@ public enum SoundPositionedEnum {
   WORMHOLE_LOOP(1, "wormhole_loop", Aunis.AUNIS_SOUNDS, true, 0.4f),
 
   // main menu
-  MAINMENU_RING_ROLL(5, "mainmenu_ring_roll", Aunis.AUNIS_SOUNDS, true, 0.5f),
-  MAINMENU_MUSIC(6, "mainmenu_music", Aunis.AUNIS_SOUNDS, true, 0.5f),
-  MAINMENU_GATE_OPEN(7, "gate_milkyway_open", Aunis.AUNIS_SOUNDS, false, 0.5f),
-  MAINMENU_GATE_GO(8, "wormhole_go", Aunis.AUNIS_SOUNDS, false, 0.5f),
-  MAINMENU_CHEVRON_SHUT(9, "gate_milkyway_chevron_shut", Aunis.AUNIS_SOUNDS, false, 0.5f),
-  MAINMENU_CHEVRON_OPEN(10, "gate_milkyway_chevron_open", Aunis.AUNIS_SOUNDS, false, 0.5f);
+  MAINMENU_RING_ROLL(5, "mainmenu_ring_roll", Aunis.AUNIS_SOUNDS, true, 0.4f),
+  MAINMENU_MUSIC(6, "mainmenu_music", Aunis.AUNIS_SOUNDS, true, 0.6f),
+  MAINMENU_GATE_OPEN(7, "gate_milkyway_open", Aunis.AUNIS_SOUNDS, false, 0.3f),
+  MAINMENU_GATE_GO(8, "wormhole_go", Aunis.AUNIS_SOUNDS, false, 0.7f),
+  MAINMENU_CHEVRON_SHUT(9, "gate_milkyway_chevron_shut", Aunis.AUNIS_SOUNDS, false, 0.4f),
+  MAINMENU_CHEVRON_OPEN(10, "gate_milkyway_chevron_open", Aunis.AUNIS_SOUNDS, false, 0.4f);
 
   public int id;
   public ResourceLocation resourceLocation;

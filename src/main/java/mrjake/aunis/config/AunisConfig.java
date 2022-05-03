@@ -264,12 +264,6 @@ public class AunisConfig {
 
     public static class DialingConfig {
 
-        //@Name("Allow incoming animations")
-        //@Comment({
-        //        "If the incoming animations of gates generate issues, set it to false",
-        //})
-        //public boolean allowIncomingAnimations = true;
-
         @Name("Connect to dialing gate")
         @Comment({
                 "If target gate is dialing and this option is set to true,",
@@ -297,15 +291,6 @@ public class AunisConfig {
                 "Speed up dialing with computer on MW and UNI gates"
         })
         public boolean fasterMWGateDial = false;
-
-        //@Name("Enable switching between fast dialing")
-        //public boolean enableFastDialing = true;
-
-        //@Name("Enable opening last chevron while dialing with dhd")
-        //@Comment({
-        //        "Enable opening last chevron while dialing milkyway gate with dhd"
-        //})
-        //public boolean dhdLastOpen = true;
 
     }
 
@@ -719,12 +704,6 @@ public class AunisConfig {
     }
 
     public static class RandomIncomingConfig {
-
-        @Name("Enable random incoming wormholes")
-        @Comment({
-                "Enable random incoming wormholes generator"
-        })
-        public boolean enableRandomIncoming = true;
 
         @Name("Chance of spawning")
         @Comment({

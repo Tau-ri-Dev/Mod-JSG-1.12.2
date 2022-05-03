@@ -2,6 +2,7 @@ package mrjake.aunis.gui.element.tabs;
 
 import mrjake.aunis.config.ingame.AunisTileEntityConfig;
 import mrjake.aunis.gui.element.GuiHelper;
+import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -14,23 +15,14 @@ public class TabConfig extends TabScrollAble {
 
 
     private final List<GuiTextField> FIELDS = new ArrayList<>();
-    protected AunisTileEntityConfig config;
+    public AunisTileEntityConfig config;
+    public StargateClassicBaseTile gateTile;
     private Runnable onTabClose = null;
 
     protected TabConfig(TabConfigBuilder builder) {
         super(builder);
-        this.config = builder.config;
-
-        int count = 0;
-        for (int i = 0; i < config.getOptions().size(); i++) {
-            if (config.getOption(i) != null) {
-                GuiTextField field = config.getOption(i).createField(30 * count + guiTop + defaultY + 5);
-                if (field != null) {
-                    FIELDS.add(field);
-                    count++;
-                }
-            }
-        }
+        this.gateTile = builder.gateTile;
+        updateConfig(gateTile.getConfig());
     }
 
     public static TabConfig.TabConfigBuilder builder() {
@@ -41,11 +33,12 @@ public class TabConfig extends TabScrollAble {
     public void render(FontRenderer fontRenderer, int mouseX, int mouseY) {
         if (!isVisible()) return;
         super.render(fontRenderer, mouseX, mouseY);
-
+        updateConfig(null); // update pos of fields;
         for (GuiTextField field : FIELDS) {
+            field.y += scrolled;
             int id = field.getId() - 100;
             int y = field.y - 10;
-            int x = guiLeft + 6 + currentOffsetX;
+            int x = guiLeft + 6 + currentOffsetX + 25;
             if (canRenderEntry(x, y)) {
                 if (id < 0) continue;
                 fontRenderer.drawString(I18n.format(config.getOption(id).getLabel()), x, y, 4210752);
@@ -78,9 +71,7 @@ public class TabConfig extends TabScrollAble {
         if (k < 0) k = -1;
         if (k > 0) k = 1;
         if (isVisible() && isOpen() && canContinueScrolling(k)) {
-            for (GuiTextField field : FIELDS) {
-                field.y += SCROLL_AMOUNT * k;
-            }
+            scrolled += (SCROLL_AMOUNT * k);
         }
     }
 
@@ -96,7 +87,7 @@ public class TabConfig extends TabScrollAble {
     public boolean canRenderEntry(int x, int y) {
         int top = 25 + guiTop + defaultY + 3;
         int bottom = guiTop + defaultY + height;
-        return y >= (top - 2) && (y + FIELDS.get(0).height + 2) <= bottom;
+        return y >= (top - 7) && (y + FIELDS.get(0).height + 2) <= bottom;
     }
 
     @Override
@@ -125,14 +116,36 @@ public class TabConfig extends TabScrollAble {
     public void closeTab() {
         if (onTabClose != null) onTabClose.run();
         super.closeTab();
+    }
 
+    public AunisTileEntityConfig getConfig(boolean saveValues) {
+        if (saveValues) {
+            for (GuiTextField field : FIELDS) {
+                config.getOption(field.getId() - 100).setValue(field.getText());
+            }
+        }
+        return config;
+    }
+
+    public void updateConfig(AunisTileEntityConfig config) {
+        if (config != null) this.config = config;
+        FIELDS.clear();
+        for (int i = 0; i < this.config.getOptions().size(); i++) {
+            if (this.config.getOption(i) != null) {
+                GuiTextField field = this.config.getOption(i).createField(30 * i + guiTop + defaultY + 30);
+                if (field != null) {
+                    FIELDS.add(field);
+                }
+            }
+        }
     }
 
     public static class TabConfigBuilder extends TabBuilder {
-        private AunisTileEntityConfig config;
 
-        public TabBuilder setConfig(AunisTileEntityConfig config) {
-            this.config = config;
+        private StargateClassicBaseTile gateTile;
+
+        public TabConfigBuilder setGateTile(StargateClassicBaseTile gateTile) {
+            this.gateTile = gateTile;
             return this;
         }
 

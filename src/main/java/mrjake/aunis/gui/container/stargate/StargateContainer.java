@@ -28,7 +28,7 @@ import net.minecraftforge.items.SlotItemHandler;
 public class StargateContainer extends Container implements OpenTabHolderInterface {
 
     public StargateClassicBaseTile gateTile;
-
+    public boolean isOperator;
     private BlockPos pos;
     private int lastEnergyStored;
     private int energyTransferedLastTick;
@@ -38,18 +38,6 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
     private EnumIrisMode irisMode;
     private int irisCode;
     private float openedSeconds;
-
-    public boolean isOperator;
-
-    @Override
-    public int getOpenTabId() {
-        return openTabId;
-    }
-
-    @Override
-    public void setOpenTabId(int tabId) {
-        openTabId = tabId;
-    }
 
     public StargateContainer(IInventory playerInventory, World world, int x, int y, int z, boolean isOperator) {
         this.isOperator = isOperator;
@@ -91,6 +79,16 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
 
         for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 86))
             addSlotToContainer(slot);
+    }
+
+    @Override
+    public int getOpenTabId() {
+        return openTabId;
+    }
+
+    @Override
+    public void setOpenTabId(int tabId) {
+        openTabId = tabId;
     }
 
     @Override

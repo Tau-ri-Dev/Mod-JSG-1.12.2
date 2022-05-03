@@ -1,6 +1,7 @@
 package mrjake.aunis.gui.container.stargate;
 
 import io.netty.buffer.ByteBuf;
+import mrjake.aunis.config.ingame.AunisTileEntityConfig;
 import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.state.State;
@@ -12,9 +13,11 @@ public class StargateContainerGuiState extends State {
 	public StargateContainerGuiState() {}
 	
 	public Map<SymbolTypeEnum, StargateAddress> gateAdddressMap;
+	public AunisTileEntityConfig config;
 	
-	public StargateContainerGuiState(Map<SymbolTypeEnum, StargateAddress> gateAdddressMap) {		
+	public StargateContainerGuiState(Map<SymbolTypeEnum, StargateAddress> gateAdddressMap, AunisTileEntityConfig config) {
 		this.gateAdddressMap = gateAdddressMap;
+		this.config = config;
 	}
 
 	@Override
@@ -22,6 +25,8 @@ public class StargateContainerGuiState extends State {
 		for (SymbolTypeEnum symbolType : SymbolTypeEnum.values()) {
 			gateAdddressMap.get(symbolType).toBytes(buf);
 		}
+
+		config.toBytes(buf);
 	}
 
 	@Override
@@ -33,5 +38,7 @@ public class StargateContainerGuiState extends State {
 			address.fromBytes(buf);
 			gateAdddressMap.put(symbolType, address);
 		}
+
+		config = new AunisTileEntityConfig(buf);
 	}
 }

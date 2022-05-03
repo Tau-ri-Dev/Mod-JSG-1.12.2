@@ -47,6 +47,7 @@ import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.util.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -82,6 +83,7 @@ import static mrjake.aunis.renderer.stargate.StargateClassicRenderer.SHIELD_IRIS
 import static mrjake.aunis.stargate.EnumSpinDirection.CLOCKWISE;
 import static mrjake.aunis.stargate.EnumSpinDirection.COUNTER_CLOCKWISE;
 import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_INCOMING;
+import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_RIG;
 
 /**
  * This class wraps common behavior for the fully-functional Stargates i.e.
@@ -375,7 +377,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             }
 
             Random rand = new Random();
-            if (AunisConfig.randomIncoming.enableRandomIncoming && world.isAreaLoaded(pos, 10)) {
+            if (config.getOption(ALLOW_RIG.id).getBooleanValue() && world.isAreaLoaded(pos, 10)) {
                 if (world.getTotalWorldTime() % 200 == 0) { // every 10 seconds
                     int chanceToRandom = rand.nextInt(1000);
 
@@ -770,6 +772,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         incomingAddressSize = compound.getInteger("incomingAddressSize");
 
         getConfig().deserializeNBT(compound.getCompoundTag("config"));
+        wasConfigLoaded = true;
 
         super.readFromNBT(compound);
     }
@@ -794,7 +797,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     protected AunisTileEntityConfig config = new AunisTileEntityConfig();
 
-    public static enum ConfigOptions{
+    public enum ConfigOptions{
         ALLOW_INCOMING(
                 0, "allowIncoming", AunisConfigOptionTypeEnum.BOOLEAN, "true",
                 "If the incoming animations",
@@ -808,7 +811,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         ),
         ALLOW_FAST_DIAL(
                 2, "allowFastDial", AunisConfigOptionTypeEnum.BOOLEAN, "false",
-                "Enable fast dialing toggle button on this gate"
+                "Enable fast dialing toggle",
+                "button on this gate"
+        ),
+        ALLOW_RIG(
+                3, "enableRIG", AunisConfigOptionTypeEnum.BOOLEAN, "true",
+                "Enable random incoming",
+                "generator on this gate"
         );
 
         public int id;
@@ -833,13 +842,19 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public void setConfig(AunisTileEntityConfig config) {
-        this.config = config;
+        for(AunisConfigOption o : config.getOptions()){
+            this.config.getOption(o.id).setValue(o.getStringValue());
+        }
+        markDirty();
     }
 
+    private boolean wasConfigLoaded = false;
     @Override
     public void initConfig(){
+        if(!wasConfigLoaded) return;
         if(getConfig().getOptions().size() != ConfigOptions.values().length) {
             getConfig().clearOptions();
+            Aunis.info("Config reset!");
             for (ConfigOptions option : ConfigOptions.values()) {
                 getConfig().addOption(
                         new AunisConfigOption(option.id)
@@ -857,8 +872,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // Rendering
 
     protected void updateChevronLight(int lightUp, boolean isFinalActive) {
-        //		Aunis.info("Updating chevron light to: " + lightUp);
-
         if (isFinalActive) lightUp--;
 
         for (int i = 0; i < 9; i++) {
@@ -913,10 +926,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public State getState(StateTypeEnum stateType) {
         switch (stateType) {
             case GUI_STATE:
-                return new StargateContainerGuiState(gateAddressMap);
+                Aunis.info("Server: " + getConfig().getOption(0).getLabel());
+                return new StargateContainerGuiState(gateAddressMap, getConfig());
 
             case GUI_UPDATE:
-                return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose, this.irisMode, this.irisCode, getOpenedSecondsToDisplay(), getConfig());
+                return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose, this.irisMode, this.irisCode, getOpenedSecondsToDisplay());
 
             default:
                 return super.getState(stateType);
@@ -996,6 +1010,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             case GUI_STATE:
                 StargateContainerGuiState guiState = (StargateContainerGuiState) state;
                 gateAddressMap = guiState.gateAdddressMap;
+                config = guiState.config;
+                Aunis.info("Client: " + config.getOption(0).getLabel());
                 break;
 
             case GUI_UPDATE:
@@ -1006,7 +1022,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 irisMode = guiUpdate.irisMode;
                 irisCode = guiUpdate.irisCode;
                 secondsOpened = guiUpdate.openedSeconds;
-                config = guiUpdate.config;
                 break;
 
             case SPIN_STATE:

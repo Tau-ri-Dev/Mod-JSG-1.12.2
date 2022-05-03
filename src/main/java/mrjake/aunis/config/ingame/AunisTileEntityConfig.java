@@ -10,10 +10,14 @@ import java.util.List;
 
 public class AunisTileEntityConfig {
 
-    private final List<AunisConfigOption> options;
+    private List<AunisConfigOption> options;
 
     public AunisTileEntityConfig() {
         this.options = new ArrayList<>();
+    }
+
+    public AunisTileEntityConfig(ByteBuf buf) {
+        this.fromBytes(buf);
     }
 
     public void addOptions(@Nonnull AunisConfigOption... options){
@@ -63,6 +67,7 @@ public class AunisTileEntityConfig {
     }
 
     public void fromBytes(ByteBuf buf) {
+        this.options = new ArrayList<>();
         int size = buf.readInt();
         for(int i = 0; i < size; i++){
             options.add(new AunisConfigOption(buf));

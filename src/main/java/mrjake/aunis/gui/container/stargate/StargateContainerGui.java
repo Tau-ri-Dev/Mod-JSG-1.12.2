@@ -7,6 +7,7 @@ import mrjake.aunis.gui.element.tabs.Tab.SlotTab;
 import mrjake.aunis.gui.entry.AbstractEntry;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.SetOpenTabToServer;
+import mrjake.aunis.packet.stargate.SaveConfigToServer;
 import mrjake.aunis.packet.stargate.SaveIrisCodeToServer;
 import mrjake.aunis.stargate.network.SymbolMilkyWayEnum;
 import mrjake.aunis.stargate.network.SymbolPegasusEnum;
@@ -38,7 +39,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_stargate.png");
 	
 	private final StargateContainer container;
-	private List<Tab> tabs;
+	private final List<Tab> tabs = new ArrayList<Tab>();;
 	
 	private TabAddress milkyWayAddressTab;
 	private TabAddress pegasusAddressTab;
@@ -66,11 +67,12 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 	public void initGui() {
 		super.initGui();
 		
-		tabs = new ArrayList<Tab>();
+		tabs.clear();
 				
 		milkyWayAddressTab = (TabAddress) TabAddress.builder()
 				.setGateTile(container.gateTile)
 				.setSymbolType(SymbolTypeEnum.MILKYWAY)
+				.setProgressColor(0x98BCF9)
 				.setGuiSize(xSize, ySize)
 				.setGuiPosition(guiLeft, guiTop)
 				.setTabPosition(-21, 2)
@@ -88,6 +90,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 		pegasusAddressTab = (TabAddress) TabAddress.builder()
 				.setGateTile(container.gateTile)
 				.setSymbolType(SymbolTypeEnum.PEGASUS)
+				.setProgressColor(0x5BCAEC)
 				.setGuiSize(xSize, ySize)
 				.setGuiPosition(guiLeft, guiTop)
 				.setTabPosition(-21, 2+22)
@@ -105,6 +108,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 		universeAddressTab = (TabAddress) TabAddress.builder()
 				.setGateTile(container.gateTile)
 				.setSymbolType(SymbolTypeEnum.UNIVERSE)
+				.setProgressColor(0x707070)
 				.setGuiSize(xSize, ySize)
 				.setGuiPosition(guiLeft, guiTop)
 				.setTabPosition(-21, 2+22*2)
@@ -154,20 +158,22 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				.setIconTextureLocation(304, 72).build();
 
 		configTab = (TabConfig) TabConfig.builder()
-				.setConfig(container.gateTile.getConfig())
+				.setGateTile(container.gateTile)
 				.setGuiSize(xSize, ySize)
 				.setGuiPosition(guiLeft, guiTop)
-				.setTabPosition(176-107, 2+(22*2))
-				.setOpenX(176)
-				.setHiddenX(54)
+				.setTabPosition(-21, 2+22*3)
+				.setOpenX(-128)
+				.setHiddenX(-6)
 				.setTabSize(128, 113)
 				.setTabTitle(I18n.format("gui.configuration"))
-				.setTabSide(TabSideEnum.RIGHT)
+				.setTabSide(TabSideEnum.LEFT)
 				.setTexture(BACKGROUND_TEXTURE, 512)
 				.setBackgroundTextureLocation(176, 165)
-				.setIconRenderPos(107, 7)
+				.setIconRenderPos(1, 7)
 				.setIconSize(20, 18)
 				.setIconTextureLocation(304, 91).build();
+
+		Aunis.info(container.gateTile.getConfig().getOption(0).getLabel());
 
 		irisTab.setOnTabClose(this::saveIrisCode);
 		configTab.setOnTabClose(this::saveConfig);
@@ -260,9 +266,13 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		if (irisTab.isVisible() && !irisTab.isOpen()) {
-			if (irisTab.getIrisMode() != container.gateTile.getIrisMode()) irisTab.updateValue(container.gateTile.getIrisMode());
-			if (irisTab.getCode() != container.gateTile.getIrisCode()) irisTab.updateValue(container.gateTile.getIrisCode());
+			if (irisTab.getIrisMode() != container.gateTile.getIrisMode())
+				irisTab.updateValue(container.gateTile.getIrisMode());
+			if (irisTab.getCode() != container.gateTile.getIrisCode())
+				irisTab.updateValue(container.gateTile.getIrisCode());
 		}
+		if(container.gateTile.getConfig().getOptions().size() != configTab.getConfig(false).getOptions().size())
+			configTab.updateConfig(container.gateTile.getConfig());
 		for (Tab tab : tabs) {
 			tab.render(fontRenderer, mouseX, mouseY);
 		}
@@ -386,7 +396,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 	@Override
 	public List<Rectangle> getGuiExtraAreas() {		
 		return tabs.stream()
-				.map(tab -> tab.getArea())
+				.map(Tab::getArea)
 				.collect(Collectors.toList());
 	}
 
@@ -397,17 +407,19 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				tab.keyTyped(typedChar, keyCode);
 			}
 		}
-		super.keyTyped(typedChar, keyCode);
+		if(keyCode == 1)
+			super.keyTyped(typedChar, keyCode);
 	}
 
 	@Override
 	public void onGuiClosed() {
-		saveIrisCode();
 		saveConfig();
+		saveIrisCode();
 	}
 
 	private void saveConfig(){
-
+		AunisPacketHandler.INSTANCE.sendToServer(new SaveConfigToServer(pos, configTab.config));
+		container.gateTile.setConfig(configTab.getConfig(true));
 	}
 
 	private void saveIrisCode() {
