@@ -1099,6 +1099,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                                 .setType(option.type)
                                 .setLabel(option.label)
                                 .setValue(option.defaultValue)
+                                .setDefaultValue(option.defaultValue)
                                 .setMinInt(option.minInt)
                                 .setMaxInt(option.maxInt)
                                 .setComment(option.comment)

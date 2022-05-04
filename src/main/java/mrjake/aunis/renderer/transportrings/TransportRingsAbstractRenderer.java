@@ -1,6 +1,5 @@
 package mrjake.aunis.renderer.transportrings;
 
-import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.state.StateTypeEnum;
@@ -28,17 +27,17 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
     @Override
     public void render(TransportRingsAbstractTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         TransportRingsRendererState state = te.getRendererState();
-        if(state == null) return;
+        if (state == null) return;
 
         World world = te.getWorld();
         int ringsDistance = state.ringsDistance;
 
-        if(state.rings.size() < RING_COUNT){
+        if (state.rings.size() < RING_COUNT) {
             for (int i = state.rings.size(); i < RING_COUNT; i++) {
                 state.rings.add(new Ring(i));
             }
         }
-        for(Ring ring : state.rings){
+        for (Ring ring : state.rings) {
             ring.setWorld(world);
         }
 
@@ -56,7 +55,7 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
         GlStateManager.scale(0.5, 0.5, 0.5);
 
         int relativeY = -4;
-        if(ringsDistance < 0) {
+        if (ringsDistance < 0) {
             relativeY = 2;
         }
 
@@ -150,35 +149,35 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
         }
     }
 
-    public void renderPlatform(TransportRingsRendererState state, long tick){
-        if(!AunisConfig.devConfig.enableRingPlatform) return;
+    public void renderPlatform(TransportRingsRendererState state, long tick) {
+        if (!state.ringsConfig.getOption(TransportRingsAbstractTile.ConfigOptions.RENDER_PLATFORM.id).getBooleanValue())
+            return;
         float platformX = 0;
         float platformY = 0;
         int coefficient = -1;
-        if(state.ringsDistance < 0) return; // should not render if rings are from ceiling
+        if (state.ringsDistance < 0) return; // should not render if rings are from ceiling
         if (state.isAnimationActive) {
             // temporarily rendering the platform here
             if (tick < PLATFORM_ANIMATION_DURATION) {
                 if (state.ringsUprising) {
-                    float multiplier = ((float) tick / (PLATFORM_ANIMATION_DURATION - ((float) PLATFORM_ANIMATION_DURATION/3)));
-                    if(multiplier > 1) multiplier = 1;
-                    if(multiplier < -1) multiplier = -1;
-                    if(tick > PLATFORM_ANIMATION_DURATION/3) {
+                    float multiplier = ((float) tick / (PLATFORM_ANIMATION_DURATION - ((float) PLATFORM_ANIMATION_DURATION / 3)));
+                    if (multiplier > 1) multiplier = 1;
+                    if (multiplier < -1) multiplier = -1;
+                    if (tick > PLATFORM_ANIMATION_DURATION / 3) {
                         platformX = multiplier * PLATFORM_MAX_X;
                         platformY = PLATFORM_MAX_Y;
                     }
-                    if(tick <= PLATFORM_ANIMATION_DURATION/3)
+                    if (tick <= PLATFORM_ANIMATION_DURATION / 3)
                         platformY = multiplier * PLATFORM_MAX_Y;
                 }
-            }
-            else{
+            } else {
                 platformX = PLATFORM_MAX_X;
                 platformY = PLATFORM_MAX_Y;
             }
         }
         if (!state.ringsUprising) {
             long tick2 = tick - 135;
-            if(tick2 >= 0) {
+            if (tick2 >= 0) {
                 if (tick2 <= PLATFORM_ANIMATION_DURATION) {
                     float multiplier = ((float) tick2 / (PLATFORM_ANIMATION_DURATION - ((float) PLATFORM_ANIMATION_DURATION / 3)));
                     if (multiplier > 1) multiplier = 1;
@@ -188,10 +187,9 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
                         platformY = PLATFORM_MAX_Y;
                     }
                     if (tick2 > PLATFORM_ANIMATION_DURATION / 3)
-                        platformY = PLATFORM_MAX_Y- multiplier * PLATFORM_MAX_Y;
+                        platformY = PLATFORM_MAX_Y - multiplier * PLATFORM_MAX_Y;
                 }
-            }
-            else{
+            } else {
                 platformX = PLATFORM_MAX_X;
                 platformY = PLATFORM_MAX_Y;
             }
@@ -199,8 +197,8 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
         for (int i = 0; i < 2; i++) {
             GlStateManager.pushMatrix();
             int distance = state.ringsDistance;
-            if(distance < 0) distance += 4;
-            GlStateManager.translate(platformX * (i == 1 ? 1 : -1), (platformY * coefficient) - 3.4f + distance*2, 0);
+            if (distance < 0) distance += 4;
+            GlStateManager.translate(platformX * (i == 1 ? 1 : -1), (platformY * coefficient) - 3.4f + distance * 2, 0);
             if (i == 1)
                 GlStateManager.rotate(180, 0, 1, 0);
             ElementEnum.PLATFORM_RINGS_GOAULD_BASIC.bindTextureAndRender(BiomeOverlayEnum.NORMAL);

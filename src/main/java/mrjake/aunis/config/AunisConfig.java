@@ -736,8 +736,6 @@ public class AunisConfig {
     }
 
     public static class DevConfig {
-        @Name("Enable rings platform")
-        public boolean enableRingPlatform = false;
     }
 
     public static void resetCache() {

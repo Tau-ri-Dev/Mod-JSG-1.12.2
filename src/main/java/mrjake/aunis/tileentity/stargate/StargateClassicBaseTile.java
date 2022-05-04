@@ -880,6 +880,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                                 .setType(option.type)
                                 .setLabel(option.label)
                                 .setValue(option.defaultValue)
+                                .setDefaultValue(option.defaultValue)
                                 .setMinInt(option.minInt)
                                 .setMaxInt(option.maxInt)
                                 .setComment(option.comment)

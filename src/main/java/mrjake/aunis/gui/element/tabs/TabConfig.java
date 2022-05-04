@@ -5,6 +5,7 @@ import mrjake.aunis.config.ingame.AunisConfigOptionTypeEnum;
 import mrjake.aunis.config.ingame.AunisTileEntityConfig;
 import mrjake.aunis.gui.element.GuiHelper;
 import mrjake.aunis.gui.element.ModeButton;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -72,7 +73,7 @@ public class TabConfig extends TabScrollAble {
                 int id = field.getId() - 100;
 
                 if (GuiHelper.isPointInRegion(x, y, field.width, 10 + field.height, mouseX, mouseY)) {
-                    screen.drawHoveringText(config.getOption(id).getComment(), mouseX - guiLeft, mouseY - guiTop);
+                    screen.drawHoveringText(config.getOption(id).getCommentToRender(), mouseX - guiLeft, mouseY - guiTop);
                 }
             }
             for (ModeButton button : BUTTONS) {
@@ -81,7 +82,7 @@ public class TabConfig extends TabScrollAble {
                 int id = button.id - 100;
 
                 if (GuiHelper.isPointInRegion(x, y, 75, 10 + button.height, mouseX, mouseY)) {
-                    screen.drawHoveringText(config.getOption(id).getComment(), mouseX - guiLeft, mouseY - guiTop);
+                    screen.drawHoveringText(config.getOption(id).getCommentToRender(), mouseX - guiLeft, mouseY - guiTop);
                 }
             }
         }
@@ -113,7 +114,22 @@ public class TabConfig extends TabScrollAble {
             field.mouseClicked(mouseX, mouseY, mouseButton);
         }
         for (ModeButton button : BUTTONS) {
-            button.mouseClicked(mouseX, mouseY, mouseButton);
+            if (GuiHelper.isPointInRegion(button.x, button.y,
+                    button.width, button.height, mouseX, mouseY)) {
+                switch (mouseButton) {
+                    case 0:
+                        button.nextState();
+                        break;
+                    case 1:
+                        button.previousState();
+                        break;
+                    case 2:
+                        button.setCurrentState(config.getOption(button.id - 100).getIntValue(true));
+                        break;
+
+                }
+                button.playPressSound(Minecraft.getMinecraft().getSoundHandler());
+            }
         }
         getConfig(true);
     }

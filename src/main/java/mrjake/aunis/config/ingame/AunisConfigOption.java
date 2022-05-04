@@ -19,6 +19,7 @@ public class AunisConfigOption {
     public List<String> comment = new ArrayList<>();
     public AunisConfigOptionTypeEnum type = AunisConfigOptionTypeEnum.TEXT;
     public String value = "";
+    public String defaultValue = "";
     private String label = "";
 
     private int minInt = -1;
@@ -74,8 +75,8 @@ public class AunisConfigOption {
         return this;
     }
 
-    public List<String> getComment() {
-        List<String> c = comment;
+    public List<String> getCommentToRender() {
+        List<String> c = new ArrayList<>(getComment());
         if(maxInt != -1 || minInt != -1){
             c.add("---------------------------------");
             if(minInt != -1)
@@ -84,8 +85,11 @@ public class AunisConfigOption {
                 c.add("Max: " + maxInt);
             c.add("---------------------------------");
         }
-
         return c;
+    }
+
+    public List<String> getComment() {
+        return comment;
     }
 
     public AunisConfigOption setComment(String... comment) {
@@ -104,6 +108,11 @@ public class AunisConfigOption {
         else if (this.type == AunisConfigOptionTypeEnum.BOOLEAN)
             return this.setBooleanValue(value);
         return this.setStringValue(value);
+    }
+
+    public AunisConfigOption setDefaultValue(String value) {
+        this.defaultValue = value;
+        return this;
     }
 
     public AunisConfigOption setMinInt(int value){
@@ -130,13 +139,20 @@ public class AunisConfigOption {
     }
 
     public int getIntValue() {
-        if (this.value == null) return -1;
+        return getIntValue(false);
+    }
+    public int getIntValue(boolean getDefault) {
+        String v = value;
+        if(getDefault)
+            v = defaultValue;
+
+        if (v == null) return -1;
         try {
-            return Integer.parseInt(this.value);
+            return Integer.parseInt(v);
         } catch (Exception e) {
-            if(value.equals("true"))
+            if(v.equals("true"))
                 return 1;
-            if(value.equals("false"))
+            if(v.equals("false"))
                 return 0;
             return -1;
         }
@@ -173,6 +189,7 @@ public class AunisConfigOption {
         compound.setString("value", value);
         compound.setInteger("minInt", minInt);
         compound.setInteger("maxInt", maxInt);
+        compound.setString("defaultValue", defaultValue);
 
         return compound;
     }
@@ -189,6 +206,7 @@ public class AunisConfigOption {
         this.value = compound.getString("value");
         this.minInt = compound.getInteger("minInt");
         this.maxInt = compound.getInteger("maxInt");
+        this.defaultValue = compound.getString("defaultValue");
     }
 
     public void toBytes(ByteBuf buf) {
@@ -205,6 +223,8 @@ public class AunisConfigOption {
         buf.writeCharSequence(value, StandardCharsets.UTF_8);
         buf.writeInt(minInt);
         buf.writeInt(maxInt);
+        buf.writeInt(defaultValue.length());
+        buf.writeCharSequence(defaultValue, StandardCharsets.UTF_8);
     }
 
     public void fromBytes(ByteBuf buf) {
@@ -222,5 +242,7 @@ public class AunisConfigOption {
         this.value = buf.readCharSequence(valueSize, StandardCharsets.UTF_8).toString();
         this.minInt = buf.readInt();
         this.maxInt = buf.readInt();
+        int defaultValueSize = buf.readInt();
+        this.defaultValue = buf.readCharSequence(defaultValueSize, StandardCharsets.UTF_8).toString();
     }
 }
