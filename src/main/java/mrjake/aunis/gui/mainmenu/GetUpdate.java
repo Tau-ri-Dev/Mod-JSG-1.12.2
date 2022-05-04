@@ -46,6 +46,10 @@ public class GetUpdate {
                 if (parseInt(currentVersionSplit[i]) < parseInt(gotVersionSplit[i])){
                     return gotVersion;
                 }
+
+                if (parseInt(currentVersionSplit[i]) > parseInt(gotVersionSplit[i])){
+                    return "false";
+                }
             }
         }
         catch(Exception ignored){}
