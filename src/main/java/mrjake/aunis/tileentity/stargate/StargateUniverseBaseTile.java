@@ -33,6 +33,7 @@ import static mrjake.aunis.stargate.EnumStargateState.FAILING;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.G1;
 import static mrjake.aunis.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_INCOMING;
+import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.SPIN_GATE_INCOMING;
 
 public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
@@ -483,12 +484,16 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     public void lightUpChevronByIncoming(boolean disableAnimation) {
         super.lightUpChevronByIncoming(disableAnimation);
         if (incomingPeriod == -1) return;
+
+        boolean spin = config.getOption(SPIN_GATE_INCOMING.id).getBooleanValue();
+
         if (!disableAnimation && incomingLastChevronLightUp == 1){
             stargateState = EnumStargateState.INCOMING;
             NBTTagCompound compound = new NBTTagCompound();
             int time = incomingPeriod - (8+7);
             compound.setInteger("period", time);
-            addTask(new ScheduledTask(EnumScheduledTask.BEGIN_SPIN, 8+7, compound));
+            if(spin)
+                addTask(new ScheduledTask(EnumScheduledTask.BEGIN_SPIN, 8+7, compound));
             addTask(new ScheduledTask(EnumScheduledTask.LIGHT_UP_CHEVRONS, 8));
             sendSignal(null, "stargate_incoming_wormhole", new Object[]{incomingAddressSize});
             playSoundEvent(StargateSoundEventEnum.INCOMING);

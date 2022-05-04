@@ -831,6 +831,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 6, "pegDialAnim", AunisConfigOptionTypeEnum.BOOLEAN, AunisConfig.dhdConfig.animatePegDHDDial + "",
                 "Enable pegasus dialing",
                 "animation with DHD"
+        ),
+        SPIN_GATE_INCOMING(
+                7, "incomingSpin", AunisConfigOptionTypeEnum.BOOLEAN, "true",
+                "Enable ring spin",
+                "animation while incoming animation",
+                "occurs"
         );
 
         public int id;

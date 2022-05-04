@@ -39,8 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_INCOMING;
-import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.DHD_TOP_LOCK;
+import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.*;
 
 
 public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements ILinkable {
@@ -214,7 +213,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         incomingPeriod -= (int) Math.round((double) 20/addressSize);
 
         // spin ring
-        if(config.getOption(ALLOW_INCOMING.id).getBooleanValue() && incomingPeriod > 9)
+        if(config.getOption(SPIN_GATE_INCOMING.id).getBooleanValue() && incomingPeriod > 9)
             // disable ringsSpin when dialing with DHD or dialing (somehow) fast
             spinRing(1, false, true, incomingPeriod*addressSize);
 

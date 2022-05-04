@@ -44,6 +44,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.SPIN_GATE_INCOMING;
+
 public class StargatePegasusBaseTile extends StargateClassicBaseTile implements ILinkable {
   @Override
   public StargateSizeEnum getStargateSize() {
@@ -178,9 +180,11 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     if(incomingPeriod == -1) return;
 
     if(!disableAnimation){
+      boolean spin = config.getOption(SPIN_GATE_INCOMING.id).getBooleanValue();
+
       int z = incomingLastChevronLightUp;
 
-      if(z == 1) {
+      if(z == 1 && spin) {
         addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, 15));
         playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL_START, true);
       }
@@ -215,7 +219,12 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
           return;
         }
       }
-      sendRenderingUpdate(EnumGateAction.ACTIVATE_GLYPH, z, false);
+      if(spin)
+        sendRenderingUpdate(EnumGateAction.ACTIVATE_GLYPH, z, false);
+      else if(z == 1){
+        for(int i = 0; i < 36; i ++)
+          sendRenderingUpdate(EnumGateAction.ACTIVATE_GLYPH, i, false);
+      }
     }
     else{
       sendRenderingUpdate(EnumGateAction.LIGHT_UP_CHEVRONS, incomingAddressSize, false);
