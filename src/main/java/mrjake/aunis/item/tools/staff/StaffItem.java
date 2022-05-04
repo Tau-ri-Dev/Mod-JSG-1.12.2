@@ -10,6 +10,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class StaffItem extends EnergyWeapon {
 
@@ -20,6 +22,7 @@ public class StaffItem extends EnergyWeapon {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public TileEntityItemStackRenderer createTEISR() {
         return new StaffTEISR();
     }
