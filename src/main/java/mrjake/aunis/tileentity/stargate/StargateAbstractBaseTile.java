@@ -923,6 +923,19 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 horizonFlashTask.update(world.getTotalWorldTime());
             }
 
+            // Anti idle target (AIT)
+            if(targetGatePos != null && world.getTotalWorldTime() % 80 == 0){
+                if(this.stargateState.engaged()){
+                    StargateAbstractBaseTile tile = targetGatePos.getTileEntity();
+                    if(tile != null){
+                        if(tile.stargateState.idle()){
+                            this.attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
+                        }
+                    }
+                }
+            }
+
+
             // Event horizon killing
             kawooshDestruction();
 
