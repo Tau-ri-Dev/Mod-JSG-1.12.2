@@ -8,6 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -39,6 +41,8 @@ public class AunisConfigOption {
 
     private static final int X = -25;
 
+
+    @SideOnly(Side.CLIENT)
     public GuiTextField createField(int y) {
         int componentId = id + 100;
         GuiTextField field = null;
