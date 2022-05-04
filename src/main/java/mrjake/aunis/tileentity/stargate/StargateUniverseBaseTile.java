@@ -630,7 +630,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
     @Override
     public int getSupportedCapacitors() {
-        return AunisConfig.powerConfig.universeCapacitors;
+        return getConfig().getOption(ConfigOptions.CAPACITORS_COUNT.id).getIntValue();
     }
 
 

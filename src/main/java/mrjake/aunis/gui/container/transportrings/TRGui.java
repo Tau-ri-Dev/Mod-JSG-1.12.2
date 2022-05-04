@@ -3,13 +3,11 @@ package mrjake.aunis.gui.container.transportrings;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.element.*;
-import mrjake.aunis.gui.element.tabs.Tab;
+import mrjake.aunis.gui.element.tabs.*;
 import mrjake.aunis.gui.element.tabs.Tab.SlotTab;
-import mrjake.aunis.gui.element.tabs.TabSideEnum;
-import mrjake.aunis.gui.element.tabs.TabTRAddress;
-import mrjake.aunis.gui.element.tabs.TabbedContainerInterface;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.SetOpenTabToServer;
+import mrjake.aunis.packet.stargate.SaveConfigToServer;
 import mrjake.aunis.packet.transportrings.SaveRingsParametersToServer;
 import mrjake.aunis.stargate.power.StargateClassicEnergyStorage;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
@@ -28,6 +26,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.SlotItemHandler;
+import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.io.IOException;
@@ -39,12 +38,14 @@ import java.util.stream.Collectors;
 public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_transportrings.png");
+    private static final ResourceLocation BACKGROUND_TEXTURE_SG = new ResourceLocation(Aunis.ModID, "textures/gui/container_stargate.png");
     private final List<GuiTextField> textFields = new ArrayList<>();
     private final List<TextFieldLabel> labels = new ArrayList<>();
     private final TRContainer container;
     private List<Tab> tabs;
     private TabTRAddress goauldAddressTab;
     private TabTRAddress oriAddressTab;
+    private TabConfig configTab;
     private int energyStored;
     private int maxEnergyStored;
     private GuiTextField nameTextField;
@@ -94,7 +95,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setProgressColor(0x90E0F9)
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(-21, 2)
+                .setTabPosition(-21, 2+22)
                 .setOpenX(-128)
                 .setHiddenX(-6)
                 .setTabSize(128, 113)
@@ -106,8 +107,29 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setIconSize(20, 18)
                 .setIconTextureLocation(304, 18).build();
 
+        configTab = (TabConfig) TabConfig.builder()
+                .setConfig(container.trTile.getConfig())
+                .setGuiSize(xSize, ySize)
+                .setGuiPosition(guiLeft, guiTop)
+                .setTabPosition(-21, 2+22*2)
+                .setOpenX(-128)
+                .setHiddenX(-6)
+                .setTabSize(128, 94)
+                .setTabTitle(I18n.format("gui.configuration"))
+                .setTabSide(TabSideEnum.LEFT)
+                .setTexture(BACKGROUND_TEXTURE_SG, 512)
+                .setBackgroundTextureLocation(176, 165)
+                .setIconRenderPos(1, 7)
+                .setIconSize(20, 18)
+                .setIconTextureLocation(304, 91).build();
+
         tabs.add(goauldAddressTab);
         tabs.add(oriAddressTab);
+        tabs.add(configTab);
+
+        configTab.setOnTabClose(this::saveConfig);
+
+        configTab.setVisible(container.isOperator);
 
         container.inventorySlots.set(7, goauldAddressTab.createSlot((SlotItemHandler) container.getSlot(7)));
         container.inventorySlots.set(8, oriAddressTab.createSlot((SlotItemHandler) container.getSlot(8)));
@@ -201,6 +223,9 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+        if(container.trTile.getConfig().getOptions().size() != configTab.getConfig(false).getOptions().size())
+            configTab.updateConfig(container.trTile.getConfig(), true);
+
         for (Tab tab : tabs) {
             tab.render(fontRenderer, mouseX, mouseY);
         }
@@ -282,6 +307,25 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 break;
             }
         }
+        for(Tab tab : tabs){
+            if(tab.isOpen() && tab.isVisible()){
+                tab.mouseClicked(mouseX, mouseY, mouseButton);
+            }
+        }
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        int wheel = Mouse.getEventDWheel();
+
+        if (wheel != 0) {
+            for(Tab tab : tabs){
+                if(tab instanceof TabScrollAble && tab.isVisible() && tab.isOpen()){
+                    ((TabScrollAble) tab).scroll(wheel);
+                }
+            }
+        }
     }
 
     @Override
@@ -299,6 +343,11 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
             if(tf.textboxKeyTyped(typedChar, keyCode))
                 keyTyped = true;
         }
+        for(Tab tab : tabs){
+            if(tab.isOpen() && tab.isVisible()){
+                tab.keyTyped(typedChar, keyCode);
+            }
+        }
     }
 
     @Override
@@ -312,7 +361,13 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
     @Override
     public void onGuiClosed() {
         saveData();
+        saveConfig();
         super.onGuiClosed();
+    }
+
+    private void saveConfig(){
+        AunisPacketHandler.INSTANCE.sendToServer(new SaveConfigToServer(pos, configTab.config));
+        container.trTile.setConfig(configTab.getConfig(true));
     }
 
     public void saveData() {

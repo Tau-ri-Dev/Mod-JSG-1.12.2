@@ -242,14 +242,12 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                                 NBTTagList nearbyList = new NBTTagList();
                                 int squaredGate = AunisConfig.stargateConfig.universeGateNearbyReach * AunisConfig.stargateConfig.universeGateNearbyReach;
-
-
-                                compound.setBoolean("requireOnlySeven", true);
                                 try {
 
                                     addrToBytes(gateTile.getDialedAddress(), compound, "dialedAddress");
                                     addrToBytes(((StargateUniverseBaseTile) gateTile).getAddressToDial(), compound, "toDialAddress");
                                     compound.setInteger("gateStatus", gateTile.getStargateState().id);
+                                    compound.setBoolean("serverSideEnabledFastDial", ((StargateClassicBaseTile) gateTile).getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ALLOW_FAST_DIAL.id).getBooleanValue());
 
                                     for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet()) {
 
@@ -276,12 +274,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                         if (!(targetGateTile instanceof StargateUniverseBaseTile) && mode.equals(UniverseDialerMode.NEARBY))
                                             continue;
 
-
-                                        compound.setBoolean("serverSideEnabledFastDial", ((StargateClassicBaseTile) targetGateTile).getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ALLOW_FAST_DIAL.id).getBooleanValue());
-
                                         NBTTagCompound entryCompound = entry.getKey().serializeNBT();
-
-                                        entryCompound.setBoolean("requireOnlySeven", true);
 
                                         nearbyList.appendTag(entryCompound);
                                     }

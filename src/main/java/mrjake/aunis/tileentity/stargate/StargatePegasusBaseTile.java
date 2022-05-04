@@ -636,7 +636,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         lastSender.sendStatusMessage(new TextComponentTranslation("tile.aunis.dhd_block.not_enough_power"), true);
       return;
     }
-    if(AunisConfig.dhdConfig.animatePegDHDDial) {
+    if(getConfig().getOption(ConfigOptions.PEG_DIAL_ANIMATION.id).getBooleanValue()) {
 
       Object context = null;
       stargateState = EnumStargateState.DIALING;

@@ -386,9 +386,6 @@ public class AunisConfig {
         @Name("Universe gate energy multiplier")
         @RangeDouble(min = 0)
         public double stargateUniverseEnergyMul = 1.5;
-
-        @Name("Capacitors supported by Universe gates")
-        public int universeCapacitors = 0;
     }
 
     public static class RingsConfig {
@@ -412,15 +409,6 @@ public class AunisConfig {
         @Name("DHD range's radius vertical")
         @RangeInt(min = 1)
         public int rangeVertical = 5;
-
-        @Name("Pegasus DHD do dial animation")
-        @Comment({
-                "Disable this, to disable animation when dial gate with DHD (pegasus)"
-        })
-        public boolean animatePegDHDDial = true;
-
-        @Name("Enable press sound when dialing with computer")
-        public boolean computerDialSound = false;
 
         @Name("DHD's max fluid capacity")
         @RangeInt(min = 1)

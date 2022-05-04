@@ -16,6 +16,7 @@ import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.state.dialhomedevice.DHDActivateButtonState;
 import mrjake.aunis.state.stargate.StargateBiomeOverrideState;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
+import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
 import mrjake.aunis.util.LinkingHelper;
 import net.minecraft.item.ItemStack;
@@ -56,7 +57,7 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
     SymbolMilkyWayEnum symbol = SymbolMilkyWayEnum.valueOf(symbolInt.getId());
 
     // When using OC to dial, don't play sound of the DHD button press
-    if (!gateTile.getStargateState().dialingComputer() || AunisConfig.dhdConfig.computerDialSound) {
+    if (!gateTile.getStargateState().dialingComputer() || ((StargateClassicBaseTile) gateTile).getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ENABLE_DHD_PRESS_SOUND.id).getBooleanValue()) {
 
       if (symbol.brb()) AunisSoundHelper.playSoundEvent(world, pos, SoundEventEnum.DHD_MILKYWAY_PRESS_BRB);
       else AunisSoundHelper.playSoundEvent(world, pos, SoundEventEnum.DHD_MILKYWAY_PRESS);

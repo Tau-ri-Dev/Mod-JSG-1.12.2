@@ -1,6 +1,7 @@
 package mrjake.aunis.gui.container.transportrings;
 
 import io.netty.buffer.ByteBuf;
+import mrjake.aunis.config.ingame.AunisTileEntityConfig;
 import mrjake.aunis.stargate.network.SymbolTypeEnum;
 import mrjake.aunis.state.State;
 import mrjake.aunis.transportrings.SymbolTypeTransportRingsEnum;
@@ -14,9 +15,11 @@ public class TRGuiState extends State {
 	public TRGuiState() {}
 	
 	public Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> trAdddressMap;
+	public AunisTileEntityConfig config;
 	
-	public TRGuiState(Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> adddressMap) {
+	public TRGuiState(Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> adddressMap, AunisTileEntityConfig config) {
 		this.trAdddressMap = adddressMap;
+		this.config = config;
 	}
 
 	@Override
@@ -24,6 +27,8 @@ public class TRGuiState extends State {
 		for (SymbolTypeTransportRingsEnum symbolType : SymbolTypeTransportRingsEnum.values()) {
 			trAdddressMap.get(symbolType).toBytes(buf);
 		}
+
+		config.toBytes(buf);
 	}
 
 	@Override
@@ -35,5 +40,7 @@ public class TRGuiState extends State {
 			address.fromBytes(buf);
 			trAdddressMap.put(symbolType, address);
 		}
+
+		config = new AunisTileEntityConfig(buf);
 	}
 }

@@ -768,7 +768,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         incomingAddressSize = compound.getInteger("incomingAddressSize");
 
         getConfig().deserializeNBT(compound.getCompoundTag("config"));
-        wasConfigLoaded = true;
 
         super.readFromNBT(compound);
     }
@@ -795,25 +794,43 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     public enum ConfigOptions{
         ALLOW_INCOMING(
-                0, "allowIncoming", AunisConfigOptionTypeEnum.BOOLEAN, "true",
-                "If the incoming animations",
-                "of gates generate issues,",
-                "set it to false"
+                0, "allowIncomingAnim", AunisConfigOptionTypeEnum.BOOLEAN, "true",
+                "Enable incoming animation",
+                "on this gate"
         ),
-        DHD_TOP_CHEVRON_LOCK(
-                1, "dhdTopChevronLock", AunisConfigOptionTypeEnum.BOOLEAN, "true",
+        DHD_TOP_LOCK(
+                1, "dhdLockPoO", AunisConfigOptionTypeEnum.BOOLEAN, "true",
                 "Enable opening last chevron",
-                "while dialing milkyway gate with dhd"
+                "while dialing milkyway gate with dhd",
+                " - ONLY FOR MW GATES - "
         ),
         ALLOW_FAST_DIAL(
                 2, "allowFastDial", AunisConfigOptionTypeEnum.BOOLEAN, "false",
                 "Enable fast dialing toggle",
-                "button on this gate"
+                "button on this gate",
+                " - ONLY FOR UNI GATES NOW - "
         ),
         ALLOW_RIG(
                 3, "enableRIG", AunisConfigOptionTypeEnum.BOOLEAN, "true",
                 "Enable random incoming",
                 "generator on this gate"
+        ),
+        ENABLE_DHD_PRESS_SOUND(
+                4, "dhdPressSound", AunisConfigOptionTypeEnum.BOOLEAN, "false",
+                "Enable DHD press sound",
+                "when dialing with OC"
+        ),
+        CAPACITORS_COUNT(
+                5, "maxCapacitors", AunisConfigOptionTypeEnum.NUMBER, "0", 0, 3,
+                "Specifies how many",
+                "capacitors can be installed",
+                "into this gate",
+                " - ONLY FOR UNI GATES NOW - "
+        ),
+        PEG_DIAL_ANIMATION(
+                6, "pegDialAnim", AunisConfigOptionTypeEnum.BOOLEAN, "true",
+                "Enable pegasus dialing",
+                "animation with DHD"
         );
 
         public int id;
@@ -822,11 +839,20 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         public AunisConfigOptionTypeEnum type;
         public String defaultValue;
 
+        public int minInt;
+        public int maxInt;
+
         ConfigOptions(int optionId, String label, AunisConfigOptionTypeEnum type, String defaultValue, String... comment){
+            this(optionId, label, type, defaultValue, -1, -1, comment);
+        }
+
+        ConfigOptions(int optionId, String label, AunisConfigOptionTypeEnum type, String defaultValue, int minInt, int maxInt, String... comment){
             this.id = optionId;
             this.label = label;
             this.type = type;
             this.defaultValue = defaultValue;
+            this.minInt = minInt;
+            this.maxInt = maxInt;
             this.comment = comment;
         }
     }
@@ -844,10 +870,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         markDirty();
     }
 
-    private boolean wasConfigLoaded = false;
     @Override
     public void initConfig(){
-        if(!wasConfigLoaded) return;
         if(getConfig().getOptions().size() != ConfigOptions.values().length) {
             getConfig().clearOptions();
             for (ConfigOptions option : ConfigOptions.values()) {
@@ -856,6 +880,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                                 .setType(option.type)
                                 .setLabel(option.label)
                                 .setValue(option.defaultValue)
+                                .setMinInt(option.minInt)
+                                .setMaxInt(option.maxInt)
                                 .setComment(option.comment)
                 );
             }

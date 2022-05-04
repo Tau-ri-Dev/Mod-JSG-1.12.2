@@ -1,10 +1,13 @@
 package mrjake.aunis.config.ingame;
 
 import io.netty.buffer.ByteBuf;
+import mrjake.aunis.Aunis;
+import mrjake.aunis.gui.element.ModeButton;
 import mrjake.aunis.gui.element.NumberOnlyTextField;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -18,6 +21,9 @@ public class AunisConfigOption {
     public String value = "";
     private String label = "";
 
+    private int minInt = -1;
+    private int maxInt = -1;
+
     public AunisConfigOption(int id) {
         this.id = id;
     }
@@ -30,22 +36,33 @@ public class AunisConfigOption {
         this.fromBytes(buf);
     }
 
+    private static final int X = -25;
+
     public GuiTextField createField(int y) {
         int componentId = id + 100;
         GuiTextField field = null;
+        if (this.type == AunisConfigOptionTypeEnum.NUMBER)
+            field = new NumberOnlyTextField(componentId, Minecraft.getMinecraft().fontRenderer, X, y, 90, 15);
+        else
+            field = new GuiTextField(componentId, Minecraft.getMinecraft().fontRenderer, X, y, 90, 15);
 
-
-        if (this.type == AunisConfigOptionTypeEnum.TEXT)
-            field = new GuiTextField(componentId, Minecraft.getMinecraft().fontRenderer, -25, y, 90, 15);
-        else if (this.type == AunisConfigOptionTypeEnum.NUMBER)
-            field = new NumberOnlyTextField(componentId, Minecraft.getMinecraft().fontRenderer, -25, y, 90, 15);
-        else if (this.type == AunisConfigOptionTypeEnum.BOOLEAN)
-            field = new GuiTextField(componentId, Minecraft.getMinecraft().fontRenderer, -25, y, 90, 15);
-
-
-        if(field != null)
-            field.setText(this.value);
+        field.setText(this.value);
         return field;
+    }
+
+    public ModeButton createButton(int y) {
+        int componentId = id + 100;
+        String textureBase = "textures/gui/config/";
+        ModeButton button = null;
+        if (this.type == AunisConfigOptionTypeEnum.BOOLEAN)
+            button = new ModeButton(
+                    componentId, X, y, 16, new ResourceLocation(Aunis.ModID, textureBase + "boolean_modes.png"),
+                    32, 32, 2
+            );
+
+        if(button != null)
+            button.setCurrentState(this.getIntValue());
+        return button;
     }
 
     public String getLabel() {
@@ -58,7 +75,17 @@ public class AunisConfigOption {
     }
 
     public List<String> getComment() {
-        return comment;
+        List<String> c = comment;
+        if(maxInt != -1 || minInt != -1){
+            c.add("---------------------------------");
+            if(minInt != -1)
+                c.add("Min: " + minInt);
+            if(maxInt != -1)
+                c.add("Max: " + maxInt);
+            c.add("---------------------------------");
+        }
+
+        return c;
     }
 
     public AunisConfigOption setComment(String... comment) {
@@ -79,13 +106,23 @@ public class AunisConfigOption {
         return this.setStringValue(value);
     }
 
+    public AunisConfigOption setMinInt(int value){
+        this.minInt = value;
+        return this;
+    }
+
+    public AunisConfigOption setMaxInt(int value){
+        this.maxInt = value;
+        return this;
+    }
+
     public boolean getBooleanValue() {
         if (this.value == null) return false;
         return this.value.equals("true");
     }
 
     private AunisConfigOption setBooleanValue(String value) {
-        if (value.equals("true"))
+        if (value.equals("true") || value.equals("1"))
             this.value = "true";
         else
             this.value = "false";
@@ -97,13 +134,19 @@ public class AunisConfigOption {
         try {
             return Integer.parseInt(this.value);
         } catch (Exception e) {
+            if(value.equals("true"))
+                return 1;
+            if(value.equals("false"))
+                return 0;
             return -1;
         }
     }
 
     private AunisConfigOption setIntValue(String value) {
         try {
-            this.value = Integer.parseInt(value) + "";
+            int i = Integer.parseInt(value);
+            if((maxInt == -1 || i <= maxInt) && (minInt == -1 || i >= minInt))
+                this.value = i + "";
         } catch (Exception ignored) {
         }
         return this;
@@ -128,6 +171,8 @@ public class AunisConfigOption {
         }
         compound.setInteger("type", type.id);
         compound.setString("value", value);
+        compound.setInteger("minInt", minInt);
+        compound.setInteger("maxInt", maxInt);
 
         return compound;
     }
@@ -142,6 +187,8 @@ public class AunisConfigOption {
         }
         this.type = AunisConfigOptionTypeEnum.byId(compound.getInteger("type"));
         this.value = compound.getString("value");
+        this.minInt = compound.getInteger("minInt");
+        this.maxInt = compound.getInteger("maxInt");
     }
 
     public void toBytes(ByteBuf buf) {
@@ -156,6 +203,8 @@ public class AunisConfigOption {
         buf.writeInt(type.id);
         buf.writeInt(value.length());
         buf.writeCharSequence(value, StandardCharsets.UTF_8);
+        buf.writeInt(minInt);
+        buf.writeInt(maxInt);
     }
 
     public void fromBytes(ByteBuf buf) {
@@ -171,5 +220,7 @@ public class AunisConfigOption {
         this.type = AunisConfigOptionTypeEnum.byId(buf.readInt());
         int valueSize = buf.readInt();
         this.value = buf.readCharSequence(valueSize, StandardCharsets.UTF_8).toString();
+        this.minInt = buf.readInt();
+        this.maxInt = buf.readInt();
     }
 }

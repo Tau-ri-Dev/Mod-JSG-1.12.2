@@ -28,6 +28,7 @@ import net.minecraftforge.items.SlotItemHandler;
 public class TRContainer extends Container implements OpenTabHolderInterface {
 
     public TransportRingsAbstractTile trTile;
+    public boolean isOperator;
 
     private BlockPos pos;
     private int lastEnergyStored;
@@ -47,7 +48,8 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
         openTabId = tabId;
     }
 
-    public TRContainer(IInventory playerInventory, World world, int x, int y, int z) {
+    public TRContainer(IInventory playerInventory, World world, int x, int y, int z, boolean isOperator) {
+        this.isOperator = isOperator;
         pos = new BlockPos(x, y, z);
         trTile = (TransportRingsAbstractTile) world.getTileEntity(pos);
         IItemHandler itemHandler = trTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);

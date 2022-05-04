@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_INCOMING;
-import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.DHD_TOP_CHEVRON_LOCK;
+import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.DHD_TOP_LOCK;
 
 
 public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements ILinkable {
@@ -118,7 +118,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
         if (stargateWillLock(symbol)) {
             isFinalActive = true;
-            if(config.getOption(DHD_TOP_CHEVRON_LOCK.id).getBooleanValue())
+            if(config.getOption(DHD_TOP_LOCK.id).getBooleanValue())
                 addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 5 + plusTime));
             else
                 addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10 + plusTime));

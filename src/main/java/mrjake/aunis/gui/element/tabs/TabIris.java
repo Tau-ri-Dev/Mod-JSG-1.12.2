@@ -118,6 +118,8 @@ public class TabIris extends Tab {
      * right = 1
      * middle = 2
      * */
+
+    @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         inputField.mouseClicked(mouseX, mouseY, mouseButton);
         if (GuiHelper.isPointInRegion(buttonChangeMode.x, buttonChangeMode.y,

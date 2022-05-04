@@ -124,7 +124,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				.setIconTextureLocation(304, 18*2).build();
 
 		configTab = (TabConfig) TabConfig.builder()
-				.setGateTile(container.gateTile)
+				.setConfig(container.gateTile.getConfig())
 				.setGuiSize(xSize, ySize)
 				.setGuiPosition(guiLeft, guiTop)
 				.setTabPosition(-21, 2+22*3)
@@ -407,7 +407,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 				tab.keyTyped(typedChar, keyCode);
 			}
 		}
-		if(keyCode == 1)
+		if(keyCode == 1) // pressed "e"
 			super.keyTyped(typedChar, keyCode);
 	}
 
@@ -415,6 +415,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 	public void onGuiClosed() {
 		saveConfig();
 		saveIrisCode();
+		super.onGuiClosed();
 	}
 
 	private void saveConfig(){

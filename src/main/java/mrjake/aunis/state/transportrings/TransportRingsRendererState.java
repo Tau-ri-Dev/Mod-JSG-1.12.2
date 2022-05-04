@@ -1,6 +1,7 @@
 package mrjake.aunis.state.transportrings;
 
 import io.netty.buffer.ByteBuf;
+import mrjake.aunis.config.ingame.AunisTileEntityConfig;
 import mrjake.aunis.renderer.transportrings.Ring;
 import mrjake.aunis.state.State;
 
@@ -14,6 +15,7 @@ public class TransportRingsRendererState extends State {
 	public long animationStart;
 	public boolean ringsUprising;
 	public int ringsDistance;
+	public AunisTileEntityConfig ringsConfig;
 	public long lastTick;
 	public int currentRing;
 	public int lastRingAnimated;
@@ -31,6 +33,7 @@ public class TransportRingsRendererState extends State {
 		for (int i = 0; i < RING_COUNT; i++) {
 			rings.add(new Ring(i));
 		}
+		this.ringsConfig = new AunisTileEntityConfig();
 	}
 	
 	
@@ -48,6 +51,8 @@ public class TransportRingsRendererState extends State {
 		for(Ring ring : rings) {
 			ring.toBytes(buf);
 		}
+
+		ringsConfig.toBytes(buf);
 	}
 
 	@Override
@@ -65,5 +70,7 @@ public class TransportRingsRendererState extends State {
 		for(int i = 0; i < size; i++){
 			rings.add(new Ring(buf));
 		}
+
+		ringsConfig.fromBytes(buf);
 	}
 }

@@ -10,6 +10,10 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.config.ingame.AunisConfigOption;
+import mrjake.aunis.config.ingame.AunisConfigOptionTypeEnum;
+import mrjake.aunis.config.ingame.AunisTileEntityConfig;
+import mrjake.aunis.config.ingame.ITileConfig;
 import mrjake.aunis.gui.container.transportrings.TRGuiState;
 import mrjake.aunis.gui.container.transportrings.TRGuiUpdate;
 import mrjake.aunis.item.AunisItems;
@@ -31,6 +35,7 @@ import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.state.dialhomedevice.DHDActivateButtonState;
 import mrjake.aunis.state.transportrings.TransportRingsRendererState;
 import mrjake.aunis.state.transportrings.TransportRingsStartAnimationRequest;
+import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.util.IUpgradable;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.tileentity.util.ScheduledTaskExecutorInterface;
@@ -65,7 +70,7 @@ import java.util.*;
 import static mrjake.aunis.transportrings.TransportRingsAddress.MAX_SYMBOLS;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
-public abstract class TransportRingsAbstractTile extends TileEntity implements ITickable, StateProviderInterface, ScheduledTaskExecutorInterface, ILinkable, Environment, IUpgradable {
+public abstract class TransportRingsAbstractTile extends TileEntity implements ITickable, StateProviderInterface, ScheduledTaskExecutorInterface, ILinkable, Environment, IUpgradable, ITileConfig {
     public static final int FADE_OUT_TOTAL_TIME = 2 * 20; // 2s
     public static final int TIMEOUT_TELEPORT = FADE_OUT_TOTAL_TIME / 2;
     public static final int TIMEOUT_FADE_OUT = (int) (30 + TransportRingsAbstractRenderer.INTERVAL_UPRISING * TransportRingsAbstractRenderer.RING_COUNT + TransportRingsAbstractRenderer.ANIMATION_SPEED_DIVISOR * Math.PI);
@@ -340,8 +345,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         globalTeleportBox = LOCAL_TELEPORT_BOX.offset(pos);
         renderBoundingBox = new AunisAxisAlignedBB(-3, -40, -3, 3, 40, 3).offset(pos);
         rendererState.ringsDistance = ringsDistance;
+        rendererState.ringsConfig = config;
         NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
-        AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RINGS_DISTANCE_UPDATE, new TransportRingsStartAnimationRequest(rendererState.animationStart, rendererState.ringsDistance)), point);
+        AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RINGS_DISTANCE_UPDATE, new TransportRingsStartAnimationRequest(rendererState.animationStart, rendererState.ringsDistance, rendererState.ringsConfig)), point);
         markDirty();
     }
 
@@ -504,10 +510,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         rendererState.ringsUprising = true;
         rendererState.isAnimationActive = true;
         rendererState.ringsDistance = getRings().getRingsDistance();
+        rendererState.ringsConfig = config;
         markDirty();
 
         NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
-        AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RINGS_START_ANIMATION, new TransportRingsStartAnimationRequest(rendererState.animationStart, rendererState.ringsDistance)), point);
+        AunisPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RINGS_START_ANIMATION, new TransportRingsStartAnimationRequest(rendererState.animationStart, rendererState.ringsDistance, rendererState.ringsConfig)), point);
     }
 
     public TransportRingsRendererState getRendererState(){
@@ -883,6 +890,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         compound.setTag("itemHandler", itemStackHandler.serializeNBT());
         compound.setTag("energyStorage", energyStorage.serializeNBT());
 
+        compound.setTag("config", config.serializeNBT());
+
         return super.writeToNBT(compound);
     }
 
@@ -934,6 +943,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
             energyStorage.deserializeNBT(compound.getCompoundTag("energyStorage"));
 
+            config.deserializeNBT(compound.getCompoundTag("config"));
+
         }catch (NullPointerException | IndexOutOfBoundsException | ClassCastException e) {
             Aunis.logger.warn("Exception at reading NBT");
             Aunis.logger.warn("If loading world used with previous version and nothing game-breaking doesn't happen, please ignore it");
@@ -951,7 +962,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 return rendererState;
 
             case GUI_STATE:
-                return new TRGuiState(getRings().getAddresses());
+                return new TRGuiState(getRings().getAddresses(), getConfig());
 
             case GUI_UPDATE:
                 return new TRGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, ringsName, ringsDistance);
@@ -1004,13 +1015,15 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 break;
 
             case RINGS_DISTANCE_UPDATE:
-                distance = ((TransportRingsStartAnimationRequest) state).ringsDistance;
-                rendererState.ringsDistance = distance;
+                TransportRingsStartAnimationRequest s = ((TransportRingsStartAnimationRequest) state);
+                rendererState.ringsDistance = s.ringsDistance;
+                rendererState.ringsConfig = s.ringsConfig;
                 break;
 
             case GUI_STATE:
                 TRGuiState guiState = (TRGuiState) state;
                 setRingsParams(guiState.trAdddressMap);
+                config = guiState.config;
                 break;
 
             case GUI_UPDATE:
@@ -1024,6 +1037,77 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 break;
         }
     }
+
+
+
+    // -----------------------------------------------------------------
+    // Tile entity config
+
+    protected AunisTileEntityConfig config = new AunisTileEntityConfig();
+
+    public enum ConfigOptions{
+        RENDER_PLATFORM(
+                0, "renderPlatform", AunisConfigOptionTypeEnum.BOOLEAN, "false",
+                "Render rings platform",
+                " -- WORK IN PROGRESS OPTION -- "
+        );
+
+        public int id;
+        public String label;
+        public String[] comment;
+        public AunisConfigOptionTypeEnum type;
+        public String defaultValue;
+
+        public int minInt;
+        public int maxInt;
+
+        ConfigOptions(int optionId, String label, AunisConfigOptionTypeEnum type, String defaultValue, String... comment){
+            this(optionId, label, type, defaultValue, -1, -1, comment);
+        }
+
+        ConfigOptions(int optionId, String label, AunisConfigOptionTypeEnum type, String defaultValue, int minInt, int maxInt, String... comment){
+            this.id = optionId;
+            this.label = label;
+            this.type = type;
+            this.defaultValue = defaultValue;
+            this.minInt = minInt;
+            this.maxInt = maxInt;
+            this.comment = comment;
+        }
+    }
+
+    @Override
+    public AunisTileEntityConfig getConfig() {
+        return this.config;
+    }
+
+    @Override
+    public void setConfig(AunisTileEntityConfig config) {
+        for(AunisConfigOption o : config.getOptions()){
+            this.config.getOption(o.id).setValue(o.getStringValue());
+        }
+        markDirty();
+    }
+
+    @Override
+    public void initConfig(){
+        if(getConfig().getOptions().size() != TransportRingsAbstractTile.ConfigOptions.values().length) {
+            getConfig().clearOptions();
+            for (TransportRingsAbstractTile.ConfigOptions option : TransportRingsAbstractTile.ConfigOptions.values()) {
+                getConfig().addOption(
+                        new AunisConfigOption(option.id)
+                                .setType(option.type)
+                                .setLabel(option.label)
+                                .setValue(option.defaultValue)
+                                .setMinInt(option.minInt)
+                                .setMaxInt(option.maxInt)
+                                .setComment(option.comment)
+                );
+            }
+        }
+    }
+
+
 
     public void updateLinkStatus() {
         BlockPos closestController = LinkingHelper.findClosestUnlinked(world, pos, new BlockPos(10, 5, 10), AunisBlocks.RINGS_CONTROLLERS, linkId);

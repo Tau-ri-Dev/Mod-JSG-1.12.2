@@ -1,12 +1,11 @@
 package mrjake.aunis.gui.element;
 
+import mrjake.aunis.Aunis;
+import mrjake.aunis.stargate.EnumIrisMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
 
-/**
- * @author matousss
- */
 public class ModeButton extends GuiButton {
     public final int textureWidth;
     public final int textureHeight;
@@ -29,12 +28,10 @@ public class ModeButton extends GuiButton {
 
             this.mouseDragged(Minecraft.getMinecraft(), mouseX, mouseY);
 
-
             Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
             if (hovered) {
                 drawModalRectWithCustomSizedTexture(x, y, width, height, width, height, textureWidth, textureHeight);
-            }
-            else {
+            } else {
                 drawModalRectWithCustomSizedTexture(x, y, 0, height, width, height, textureWidth, textureHeight);
             }
             drawModalRectWithCustomSizedTexture(x, y, currentState * width, 0, width, height, textureWidth, textureHeight);
@@ -47,8 +44,34 @@ public class ModeButton extends GuiButton {
     }
 
     public void previousState() {
-        if (currentState == 0) currentState = states-1;
+        if (currentState == 0) currentState = states - 1;
         else currentState--;
+    }
+
+    /*
+     * left = 0
+     * right = 1
+     * middle = 2
+     *
+     */
+    public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+        if (GuiHelper.isPointInRegion(this.x, this.y,
+                this.width, this.height, mouseX, mouseY)) {
+            switch (mouseButton) {
+                case 0:
+                    this.nextState();
+                    break;
+                case 1:
+                    this.previousState();
+                    break;
+                case 2:
+                    this.setCurrentState(0);
+                    break;
+
+            }
+            this.playPressSound(Minecraft.getMinecraft().getSoundHandler());
+        }
+
     }
 
     public int getCurrentState() {
