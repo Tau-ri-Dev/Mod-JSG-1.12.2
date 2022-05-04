@@ -198,6 +198,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     @Override
     public void update() {
         if (!world.isRemote) {
+            initConfig();
             ScheduledTask.iterate(scheduledTasks, world.getTotalWorldTime());
             if (getRings().getAddresses() == null // if is null
                     || getRings().getAddresses().size() < SymbolTypeTransportRingsEnum.values().length // if is short

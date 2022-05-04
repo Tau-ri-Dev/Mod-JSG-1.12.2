@@ -54,9 +54,6 @@ public class AunisConfig {
     @Name("Debug options")
     public static DebugConfig debugConfig = new DebugConfig();
 
-    @Name("Developer options")
-    public static DevConfig devConfig = new DevConfig();
-
     @Name("Mysterious Page options")
     public static MysteriousConfig mysteriousConfig = new MysteriousConfig();
 
@@ -264,6 +261,13 @@ public class AunisConfig {
 
     public static class DialingConfig {
 
+        @Name("Allow incoming animations")
+        @Comment({
+                "If the incoming animations of gates generate issues, set it to false",
+                "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
+        })
+        public boolean allowIncomingAnimations = true;
+
         @Name("Connect to dialing gate")
         @Comment({
                 "If target gate is dialing and this option is set to true,",
@@ -291,6 +295,19 @@ public class AunisConfig {
                 "Speed up dialing with computer on MW and UNI gates"
         })
         public boolean fasterMWGateDial = false;
+
+        @Name("Enable switching between fast dialing")
+        @Comment({
+                "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
+        })
+        public boolean enableFastDialing = false;
+
+        @Name("Enable opening last chevron while dialing with dhd")
+        @Comment({
+                "Enable opening last chevron while dialing milkyway gate with dhd",
+                "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
+        })
+        public boolean dhdLastOpen = true;
 
     }
 
@@ -386,6 +403,12 @@ public class AunisConfig {
         @Name("Universe gate energy multiplier")
         @RangeDouble(min = 0)
         public double stargateUniverseEnergyMul = 1.5;
+
+        @Name("Capacitors supported by Universe gates")
+        @Comment({
+                "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
+        })
+        public int universeCapacitors = 0;
     }
 
     public static class RingsConfig {
@@ -409,6 +432,19 @@ public class AunisConfig {
         @Name("DHD range's radius vertical")
         @RangeInt(min = 1)
         public int rangeVertical = 5;
+
+        @Name("Pegasus DHD do dial animation")
+        @Comment({
+                "Disable this, to disable animation when dial gate with DHD (pegasus)",
+                "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
+        })
+        public boolean animatePegDHDDial = true;
+
+        @Name("Enable press sound when dialing with computer")
+        @Comment({
+                "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
+        })
+        public boolean computerDialSound = false;
 
         @Name("DHD's max fluid capacity")
         @RangeInt(min = 1)
@@ -693,6 +729,13 @@ public class AunisConfig {
 
     public static class RandomIncomingConfig {
 
+        @Name("Enable random incoming wormholes")
+        @Comment({
+                "Enable random incoming wormholes generator",
+                "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
+        })
+        public boolean enableRandomIncoming = true;
+
         @Name("Chance of spawning")
         @Comment({
                 "10 = 1%"
@@ -733,9 +776,6 @@ public class AunisConfig {
                 "WARNING! - Requires reloading!"
         })
         public boolean bypassThermal = false;
-    }
-
-    public static class DevConfig {
     }
 
     public static void resetCache() {

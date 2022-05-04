@@ -794,41 +794,41 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     public enum ConfigOptions{
         ALLOW_INCOMING(
-                0, "allowIncomingAnim", AunisConfigOptionTypeEnum.BOOLEAN, "true",
+                0, "allowIncomingAnim", AunisConfigOptionTypeEnum.BOOLEAN, AunisConfig.dialingConfig.allowIncomingAnimations + "",
                 "Enable incoming animation",
                 "on this gate"
         ),
         DHD_TOP_LOCK(
-                1, "dhdLockPoO", AunisConfigOptionTypeEnum.BOOLEAN, "true",
+                1, "dhdLockPoO", AunisConfigOptionTypeEnum.BOOLEAN, AunisConfig.dialingConfig.dhdLastOpen + "",
                 "Enable opening last chevron",
                 "while dialing milkyway gate with dhd",
                 " - ONLY FOR MW GATES - "
         ),
         ALLOW_FAST_DIAL(
-                2, "allowFastDial", AunisConfigOptionTypeEnum.BOOLEAN, "false",
+                2, "allowFastDial", AunisConfigOptionTypeEnum.BOOLEAN, AunisConfig.dialingConfig.enableFastDialing + "",
                 "Enable fast dialing toggle",
                 "button on this gate",
                 " - ONLY FOR UNI GATES NOW - "
         ),
         ALLOW_RIG(
-                3, "enableRIG", AunisConfigOptionTypeEnum.BOOLEAN, "true",
+                3, "enableRIG", AunisConfigOptionTypeEnum.BOOLEAN, AunisConfig.randomIncoming.enableRandomIncoming + "",
                 "Enable random incoming",
                 "generator on this gate"
         ),
         ENABLE_DHD_PRESS_SOUND(
-                4, "dhdPressSound", AunisConfigOptionTypeEnum.BOOLEAN, "false",
+                4, "dhdPressSound", AunisConfigOptionTypeEnum.BOOLEAN, AunisConfig.dhdConfig.computerDialSound + "",
                 "Enable DHD press sound",
                 "when dialing with OC"
         ),
         CAPACITORS_COUNT(
-                5, "maxCapacitors", AunisConfigOptionTypeEnum.NUMBER, "0", 0, 3,
+                5, "maxCapacitors", AunisConfigOptionTypeEnum.NUMBER, AunisConfig.powerConfig.universeCapacitors + "", 0, 3,
                 "Specifies how many",
                 "capacitors can be installed",
                 "into this gate",
                 " - ONLY FOR UNI GATES NOW - "
         ),
         PEG_DIAL_ANIMATION(
-                6, "pegDialAnim", AunisConfigOptionTypeEnum.BOOLEAN, "true",
+                6, "pegDialAnim", AunisConfigOptionTypeEnum.BOOLEAN, AunisConfig.dhdConfig.animatePegDHDDial + "",
                 "Enable pegasus dialing",
                 "animation with DHD"
         );
