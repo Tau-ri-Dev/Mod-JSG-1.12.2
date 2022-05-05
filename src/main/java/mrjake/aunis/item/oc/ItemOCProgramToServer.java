@@ -2,14 +2,12 @@ package mrjake.aunis.item.oc;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.item.AunisItems;
-import mrjake.aunis.item.dialer.UniverseDialerMode;
+import mrjake.aunis.item.linkable.dialer.UniverseDialerMode;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.play.server.SPacketHeldItemChange;
 import net.minecraft.network.play.server.SPacketWindowItems;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.WorldServer;
@@ -19,8 +17,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
 
 public class ItemOCProgramToServer implements IMessage {
 	public ItemOCProgramToServer() {}

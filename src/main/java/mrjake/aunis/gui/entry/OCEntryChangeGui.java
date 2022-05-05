@@ -3,7 +3,7 @@ package mrjake.aunis.gui.entry;
 import mrjake.aunis.gui.OCAddMessageGui;
 import mrjake.aunis.gui.element.ArrowButton;
 import mrjake.aunis.item.AunisItems;
-import mrjake.aunis.item.dialer.UniverseDialerMode;
+import mrjake.aunis.item.linkable.dialer.UniverseDialerMode;
 import mrjake.aunis.item.oc.ItemOCMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;

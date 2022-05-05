@@ -1,4 +1,4 @@
-package mrjake.aunis.item.gdo;
+package mrjake.aunis.item.linkable.gdo;
 
 public enum GDOActionEnum {
 	SEND_CODE,

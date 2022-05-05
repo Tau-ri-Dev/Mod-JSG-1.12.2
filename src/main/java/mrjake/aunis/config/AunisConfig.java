@@ -90,6 +90,9 @@ public class AunisConfig {
     @Name("Recipes options")
     public static RecipesConfig recipesConfig = new RecipesConfig();
 
+    @Name("Development config")
+    public static DevConfig devConfig = new DevConfig();
+
     public static class StargateConfig {
         @Name("Orlin's gate max open count")
         @RangeInt(min = 0)
@@ -776,6 +779,11 @@ public class AunisConfig {
                 "WARNING! - Requires reloading!"
         })
         public boolean bypassThermal = false;
+    }
+
+    public static class DevConfig {
+        @Name("x")
+        public float x = 1.4f;
     }
 
     public static void resetCache() {

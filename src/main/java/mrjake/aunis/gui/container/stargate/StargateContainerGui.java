@@ -301,10 +301,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 		// opened time
 		float openedSeconds = container.gateTile.getOpenedSecondsToDisplay();
 		if(openedSeconds > 0) {
-			int minutes = ((int) Math.floor(openedSeconds / 60));
-			int seconds = ((int) (openedSeconds - (60 * minutes)));
-			String secondsString = ((seconds < 10) ? "0" + seconds : "" + seconds);
-			String openedTime = I18n.format("gui.stargate.state.opened") + " " + minutes + ":" + secondsString + "min";
+			String openedTime = I18n.format("gui.stargate.state.opened") + " " + container.gateTile.getOpenedSecondsToDisplayAsMinutes();
 			fontRenderer.drawString(openedTime, 46, 16, 4210752);
 		}
 		else{

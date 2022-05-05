@@ -203,6 +203,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
             return;
         }
         super.failGate();
+        addressToDial = null;
         if (!abortingDialing && targetRingSymbol != TOP_CHEVRON)
             addSymbolToAddressManual(TOP_CHEVRON, null);
     }
@@ -221,6 +222,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
         isIncoming = false;
         markDirty();
         super.disconnectGate();
+        addressToDial = null;
         if(!abortingDialing)
             addSymbolToAddressManual(TOP_CHEVRON, null);
     }

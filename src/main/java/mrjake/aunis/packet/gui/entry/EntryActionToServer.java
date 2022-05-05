@@ -2,8 +2,8 @@ package mrjake.aunis.packet.gui.entry;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.item.AunisItems;
-import mrjake.aunis.item.dialer.UniverseDialerItem;
-import mrjake.aunis.item.dialer.UniverseDialerMode;
+import mrjake.aunis.item.linkable.dialer.UniverseDialerItem;
+import mrjake.aunis.item.linkable.dialer.UniverseDialerMode;
 import mrjake.aunis.item.notebook.NotebookItem;
 import mrjake.aunis.stargate.network.StargateAddress;
 import mrjake.aunis.stargate.network.SymbolUniverseEnum;

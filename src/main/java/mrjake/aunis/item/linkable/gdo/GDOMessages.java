@@ -1,4 +1,4 @@
-package mrjake.aunis.item.gdo;
+package mrjake.aunis.item.linkable.gdo;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentTranslation;

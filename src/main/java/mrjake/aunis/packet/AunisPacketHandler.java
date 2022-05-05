@@ -1,11 +1,11 @@
 package mrjake.aunis.packet;
 
-import mrjake.aunis.item.dialer.UniverseDialerActionPacketToServer;
-import mrjake.aunis.item.dialer.UniverseDialerActionPacketToServer.UniverseDialerActionPacketServerHandler;
+import mrjake.aunis.item.linkable.dialer.UniverseDialerActionPacketToServer;
+import mrjake.aunis.item.linkable.dialer.UniverseDialerActionPacketToServer.UniverseDialerActionPacketServerHandler;
 import mrjake.aunis.item.oc.ItemOCProgramToServer;
 import mrjake.aunis.item.oc.ItemOCProgramToServer.ItemOCProgramServerHandler;
-import mrjake.aunis.item.gdo.GDOActionPacketToServer;
-import mrjake.aunis.item.gdo.GDOActionPacketToServer.GDOActionPacketServerHandler;
+import mrjake.aunis.item.linkable.gdo.GDOActionPacketToServer;
+import mrjake.aunis.item.linkable.gdo.GDOActionPacketToServer.GDOActionPacketServerHandler;
 import mrjake.aunis.item.notebook.NotebookActionPacketToServer;
 import mrjake.aunis.item.notebook.NotebookActionPacketToServer.NotebookActionPacketServerHandler;
 import mrjake.aunis.item.notebook.PageNotebookSetNameToServer;

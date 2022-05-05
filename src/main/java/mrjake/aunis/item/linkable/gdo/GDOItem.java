@@ -1,4 +1,4 @@
-package mrjake.aunis.item.gdo;
+package mrjake.aunis.item.linkable.gdo;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
@@ -6,6 +6,7 @@ import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.item.linkable.LinkAbleCapabilityProvider;
 import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
@@ -32,6 +33,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 // It would be better to make gdo and uni dialer share code... -- matousss
@@ -100,7 +102,7 @@ public class GDOItem extends Item implements CustomModelItemInterface {
 
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-        return new GDOCapabilityProvider();
+        return new LinkAbleCapabilityProvider();
     }
 
     @Override
@@ -180,8 +182,9 @@ public class GDOItem extends Item implements CustomModelItemInterface {
         return super.onDroppedByPlayer(stack, player);
     }
 
+    @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         if (!world.isRemote) {
             checkNBT(player.getHeldItem(hand));
             NBTTagCompound compound = player.getHeldItem(hand).getTagCompound();
@@ -191,27 +194,12 @@ public class GDOItem extends Item implements CustomModelItemInterface {
             if (mode.linkable && !compound.hasKey(mode.tagPosName))
                 return super.onItemRightClick(world, player, hand);
 
-            switch (mode) {
-                case CODE_SENDER:
-//                    int irisCode = compound.getInteger("irisCode");
-//                    StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(linkedPos);
-//                    if (gateTile.getStargateState() == EnumStargateState.ENGAGED_INITIATING) {
-//                        TileEntity te = StargateNetwork.get(world).getStargate(gateTile.getDialedAddress()).getTileEntity();
-//                        if (!(te instanceof StargateClassicBaseTile)) break;
-//                        ((StargateClassicBaseTile) te).receiveIrisCode(player, irisCode);
-//                    }
-
-                    /** moved to {@link mrjake.aunis.event.InputHandlerClient}*/
-                    break;
-                case OC:
-                    NBTTagList tagList = compound.getTagList(mode.tagListName, Constants.NBT.TAG_COMPOUND);
-                    NBTTagCompound selectedCompound = tagList.getCompoundTagAt(selected);
-                    ItemOCMessage message = new ItemOCMessage(selectedCompound);
-                    Aunis.logger.debug("Sending OC message: " + message.toString());
-                    Aunis.ocWrapper.sendWirelessPacketPlayer(player, player.getHeldItem(hand), message.address, message.port, message.getData());
-                    break;
-                default:
-                    break;
+            if (mode == GDOMode.OC) {
+                NBTTagList tagList = compound.getTagList(mode.tagListName, Constants.NBT.TAG_COMPOUND);
+                NBTTagCompound selectedCompound = tagList.getCompoundTagAt(selected);
+                ItemOCMessage message = new ItemOCMessage(selectedCompound);
+                Aunis.logger.debug("Sending OC message: " + message.toString());
+                Aunis.ocWrapper.sendWirelessPacketPlayer(player, player.getHeldItem(hand), message.address, message.port, message.getData());
             }
         }
 

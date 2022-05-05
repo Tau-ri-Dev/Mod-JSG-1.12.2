@@ -1,8 +1,8 @@
 package mrjake.aunis.crafting;
 
 import mrjake.aunis.item.AunisItems;
-import mrjake.aunis.item.dialer.UniverseDialerItem;
-import mrjake.aunis.item.dialer.UniverseDialerMode;
+import mrjake.aunis.item.linkable.dialer.UniverseDialerItem;
+import mrjake.aunis.item.linkable.dialer.UniverseDialerMode;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

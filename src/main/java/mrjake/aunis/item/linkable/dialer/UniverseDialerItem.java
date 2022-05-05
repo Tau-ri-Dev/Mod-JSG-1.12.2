@@ -1,4 +1,4 @@
-package mrjake.aunis.item.dialer;
+package mrjake.aunis.item.linkable.dialer;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
@@ -6,6 +6,7 @@ import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.AunisItems;
+import mrjake.aunis.item.linkable.LinkAbleCapabilityProvider;
 import mrjake.aunis.item.oc.ItemOCMessage;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
@@ -145,7 +146,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
         if (stack.getItemDamage() == UniverseDialerVariants.BROKEN.meta) return null;
-        return new UniverseDialerCapabilityProvider();
+        return new LinkAbleCapabilityProvider();
     }
 
     @Override
@@ -305,6 +306,20 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                 compound.setTag(mode.tagListName, ringsList);
                                 compound.setLong(mode.tagPosName, targetPos.toLong());
                                 found = true;
+                                break;
+
+                            case GATE_INFO:
+                                StargateAbstractBaseTile tile = (StargateAbstractBaseTile) world.getTileEntity(targetPos);
+                                if(tile != null) {
+                                    if(tile instanceof StargateClassicBaseTile) {
+                                        StargateClassicBaseTile t = (StargateClassicBaseTile) tile;
+                                        compound.setInteger("gateStatus", t.getStargateState().id);
+                                        compound.setString("gateOpenTime", t.getOpenedSecondsToDisplay() > 0 ? t.getOpenedSecondsToDisplayAsMinutes() : "");
+                                        compound.setString("gateIrisState", t.hasIris() ? t.getIrisState().toString() : "");
+                                        compound.setString("gateLastSymbol", (t.getDialedAddress().size() > 0) ? t.getDialedAddress().get(t.getDialedAddress().size() - 1).toString() : "");
+                                        found = true;
+                                    }
+                                }
                                 break;
 
                             default:

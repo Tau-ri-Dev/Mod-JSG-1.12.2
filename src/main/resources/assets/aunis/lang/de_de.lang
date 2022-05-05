@@ -92,6 +92,7 @@ item.aunis.universe_dialer.mode_scan=Nahe
 item.aunis.universe_dialer.mode_saved=Speicher
 item.aunis.universe_dialer.mode_rings=Ringe
 item.aunis.universe_dialer.mode_oc=OpnCom
+item.aunis.universe_dialer.mode_info=Status
 item.aunis.universe_dialer.aborting=Anwahl abbrechen
 item.aunis.universe_dialer.abort=Abort
 item.aunis.universe_dialer.dial_start=Dialing the gate...

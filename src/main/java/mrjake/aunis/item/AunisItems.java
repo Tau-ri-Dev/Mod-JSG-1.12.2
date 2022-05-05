@@ -1,8 +1,8 @@
 package mrjake.aunis.item;
 
 import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.item.dialer.UniverseDialerItem;
-import mrjake.aunis.item.gdo.GDOItem;
+import mrjake.aunis.item.linkable.dialer.UniverseDialerItem;
+import mrjake.aunis.item.linkable.gdo.GDOItem;
 import mrjake.aunis.item.notebook.NotebookItem;
 import mrjake.aunis.item.notebook.PageNotebookItem;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;

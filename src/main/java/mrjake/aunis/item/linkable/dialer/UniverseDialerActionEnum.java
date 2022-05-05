@@ -1,4 +1,4 @@
-package mrjake.aunis.item.dialer;
+package mrjake.aunis.item.linkable.dialer;
 
 public enum UniverseDialerActionEnum {
 	MODE_CHANGE,

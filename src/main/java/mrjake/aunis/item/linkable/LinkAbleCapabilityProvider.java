@@ -1,4 +1,4 @@
-package mrjake.aunis.item.dialer;
+package mrjake.aunis.item.linkable;
 
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
 import mrjake.aunis.capability.endpoint.ItemEndpointImpl;
@@ -7,7 +7,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-public class UniverseDialerCapabilityProvider implements ICapabilityProvider {
+public class LinkAbleCapabilityProvider implements ICapabilityProvider {
 	
 	private ItemEndpointInterface itemEndpoint = new ItemEndpointImpl();
 	

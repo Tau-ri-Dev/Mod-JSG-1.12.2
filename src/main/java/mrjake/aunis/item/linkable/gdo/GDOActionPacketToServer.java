@@ -1,4 +1,4 @@
-package mrjake.aunis.item.gdo;
+package mrjake.aunis.item.linkable.gdo;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.Aunis;
@@ -7,7 +7,6 @@ import mrjake.aunis.stargate.codesender.PlayerCodeSender;
 import mrjake.aunis.stargate.network.StargateNetwork;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
-import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,8 +17,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GDOActionPacketToServer implements IMessage {
 	public GDOActionPacketToServer() {}

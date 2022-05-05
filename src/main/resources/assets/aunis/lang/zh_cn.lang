@@ -91,6 +91,7 @@ item.aunis.universe_dialer.mode_scan=在附近
 item.aunis.universe_dialer.mode_saved=内存
 item.aunis.universe_dialer.mode_rings=环
 item.aunis.universe_dialer.mode_oc=开放式电脑
+item.aunis.universe_dialer.mode_info=Status
 item.aunis.universe_dialer.aborting=中止拨号
 item.aunis.universe_dialer.abort=Abort
 item.aunis.universe_dialer.dial_start=Dialing the gate...

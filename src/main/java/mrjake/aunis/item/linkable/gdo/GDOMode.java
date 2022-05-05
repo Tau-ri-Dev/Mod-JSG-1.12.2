@@ -1,10 +1,8 @@
-package mrjake.aunis.item.gdo;
+package mrjake.aunis.item.linkable.gdo;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.util.EnumKeyInterface;
 import mrjake.aunis.util.EnumKeyMap;
-import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

@@ -1,4 +1,4 @@
-package mrjake.aunis.item.gdo;
+package mrjake.aunis.item.linkable.gdo;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.item.AunisItems;

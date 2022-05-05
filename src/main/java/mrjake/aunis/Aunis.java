@@ -101,6 +101,10 @@ public class Aunis {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
+    }
+
+    @EventHandler
+    public void loadComplete(FMLLoadCompleteEvent event){
         Aunis.info("Aunis loaded!");
     }
 
@@ -114,5 +118,10 @@ public class Aunis {
     public void serverStarted(FMLServerStartedEvent event) throws IOException {
         StargateDimensionConfig.update();
         Aunis.info("Server started!");
+    }
+
+    @EventHandler
+    public void serverStopped(FMLServerStoppedEvent event) {
+        Aunis.info("Good bye! Thank you for using Aunis: Resurrection :)");
     }
 }

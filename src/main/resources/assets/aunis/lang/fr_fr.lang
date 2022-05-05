@@ -91,6 +91,7 @@ item.aunis.universe_dialer.mode_scan=Proche
 item.aunis.universe_dialer.mode_saved=Mémoire
 item.aunis.universe_dialer.mode_rings=Anneaux
 item.aunis.universe_dialer.mode_oc=OpnCom
+item.aunis.universe_dialer.mode_info=Status
 item.aunis.universe_dialer.aborting=Abandon de la composition
 item.aunis.universe_dialer.abort=Abort
 item.aunis.universe_dialer.dial_start=Dialing the gate...

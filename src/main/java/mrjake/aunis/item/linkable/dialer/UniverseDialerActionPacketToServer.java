@@ -1,13 +1,9 @@
-package mrjake.aunis.item.dialer;
+package mrjake.aunis.item.linkable.dialer;
 
 import io.netty.buffer.ByteBuf;
 import mrjake.aunis.item.AunisItems;
-import mrjake.aunis.sound.AunisSoundHelper;
-import mrjake.aunis.sound.AunisSoundHelperClient;
-import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.tileentity.stargate.StargateUniverseBaseTile;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

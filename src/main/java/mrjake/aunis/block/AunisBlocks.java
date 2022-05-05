@@ -14,7 +14,7 @@ import mrjake.aunis.block.stargate.*;
 import mrjake.aunis.block.transportrings.TRControllerGoauldBlock;
 import mrjake.aunis.block.transportrings.TransportRingsGoauldBlock;
 import mrjake.aunis.block.transportrings.TransportRingsOriBlock;
-import mrjake.aunis.item.gdo.GDOItem;
+import mrjake.aunis.item.linkable.gdo.GDOItem;
 import mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
 import mrjake.aunis.util.BlockHelpers;

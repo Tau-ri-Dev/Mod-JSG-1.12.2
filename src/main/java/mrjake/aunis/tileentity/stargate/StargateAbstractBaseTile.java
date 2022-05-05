@@ -38,6 +38,7 @@ import mrjake.aunis.tileentity.util.ScheduledTaskExecutorInterface;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -1097,6 +1098,14 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     public float getOpenedSecondsToDisplay(){
         return secondsOpened;
+    }
+
+    public String getOpenedSecondsToDisplayAsMinutes(){
+        float openedSeconds = getOpenedSecondsToDisplay();
+        int minutes = ((int) Math.floor(openedSeconds / 60));
+        int seconds = ((int) (openedSeconds - (60 * minutes)));
+        String secondsString = ((seconds < 10) ? "0" + seconds : "" + seconds);
+        return minutes + ":" + secondsString + "min";
     }
 
     protected void extractEnergyByShield(int keepAlive){
