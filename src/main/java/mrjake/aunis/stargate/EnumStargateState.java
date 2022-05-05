@@ -35,6 +35,10 @@ public enum EnumStargateState {
 	public boolean initiating() {
 		return this == ENGAGED_INITIATING;
 	}
+
+	public boolean notInitiating() {
+		return this == ENGAGED;
+	}
 	
 	public boolean dialingComputer() {
 		return this == DIALING_COMPUTER;

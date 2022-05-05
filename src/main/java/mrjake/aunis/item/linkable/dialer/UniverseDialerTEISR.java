@@ -223,6 +223,8 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 
         GlStateManager.pushMatrix();
 
+        long actualTicks = 1;
+
         // Item frame
         if (transformType == TransformType.FIXED) {
             GlStateManager.translate(0.53, 0.50, 0.5);
@@ -235,6 +237,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
             EnumHandSide handSide = mainhand ? EnumHandSide.RIGHT : EnumHandSide.LEFT;
 
             EntityPlayer player = Minecraft.getMinecraft().player;
+            actualTicks = player.world != null ? player.world.getTotalWorldTime() : 1;
             float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * partialTicks;
             float angle = ItemRenderHelper.getMapAngleFromPitch(pitch);
 
@@ -302,6 +305,8 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 					String iris = compound.getString("gateIrisState");
 					String lastSymbol = compound.getString("gateLastSymbol");
 
+					boolean switchState = compound.getBoolean("switchState");
+
 					float top = 0.32f*2;
 					float row = 0.20f;
                     float x = -0.42f;
@@ -312,11 +317,16 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
                     drawStringWithShadow(x, top - (row * 2), "Iris:", false, false);
                     drawStringWithShadow(x, top - (row * 3), "Last glyph:", false, false);
 
-                    drawStringWithShadow(x + second, top - (row * 0), gateStatus.toString()
-                                    .replaceAll("ENGAGED", "ENGAGED IN")
-                                    .replaceAll("ENGAGED IN_INITIATING", "ENGAGED OUT")
-                                    .replaceAll("_", " ")
-                            , true, false);
+                    String state = gateStatus.toString()
+                            .replaceAll("ENGAGED", "ENGAGED INCOMING")
+                            .replaceAll("ENGAGED INCOMING_INITIATING", "ENGAGED OUTGOING")
+                            .replaceAll("_", " ");
+
+                    String[] s = state.split(" ");
+
+                    state = s.length > 1 ? s[switchState ? 1 : 0] : s.length > 0 ? s[0] : "";
+
+                    drawStringWithShadow(x + second, top - (row * 0), state, true, false);
                     drawStringWithShadow(x + second, top - (row * 1), opened, true, false);
                     drawStringWithShadow(x + second, top - (row * 2), iris, true, false);
                     drawStringWithShadow(x + second, top - (row * 3), lastSymbol.replaceAll("Glyph ", "G"), true, false);

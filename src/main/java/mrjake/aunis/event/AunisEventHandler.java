@@ -50,7 +50,7 @@ public class AunisEventHandler {
 
 		if (!player.isSpectator()) {
 			BlockPos pos = player.getPosition();
-			EnumFacing playerFacing = player.getHorizontalFacing(); //EnumFacing.getDirectionFromEntityLiving(pos, player).getOpposite()
+			EnumFacing playerFacing = player.getHorizontalFacing();
 
 			EnumFacing left = playerFacing.rotateYCCW();
 			EnumFacing right = playerFacing.rotateY();
