@@ -37,8 +37,8 @@ import java.util.stream.Collectors;
 
 public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
-    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_transportrings.png");
-    private static final ResourceLocation BACKGROUND_TEXTURE_SG = new ResourceLocation(Aunis.ModID, "textures/gui/container_stargate.png");
+    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.MOD_ID, "textures/gui/container_transportrings.png");
+    private static final ResourceLocation BACKGROUND_TEXTURE_SG = new ResourceLocation(Aunis.MOD_ID, "textures/gui/container_stargate.png");
     private final List<GuiTextField> textFields = new ArrayList<>();
     private final List<TextFieldLabel> labels = new ArrayList<>();
     private final TRContainer container;

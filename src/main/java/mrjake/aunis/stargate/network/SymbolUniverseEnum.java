@@ -3,16 +3,12 @@ package mrjake.aunis.stargate.network;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.model.ModelLoader;
-import mrjake.aunis.stargate.EnumSpinDirection;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import static mrjake.aunis.stargate.EnumSpinDirection.CLOCKWISE;
-import static mrjake.aunis.stargate.EnumSpinDirection.COUNTER_CLOCKWISE;
 
 public enum SymbolUniverseEnum implements SymbolInterface {
 	TOP_CHEVRON(0, null),
@@ -75,7 +71,7 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 		this.angle = 360 - (angleIndex * ANGLE_PER_SECTION);
 		this.englishName = "Glyph " + id;
 		this.translationKey = "glyph.aunis.universe.g" + id;
-		this.iconResource = new ResourceLocation(Aunis.ModID, "textures/gui/symbol/universe/g"+id+".png");
+		this.iconResource = new ResourceLocation(Aunis.MOD_ID, "textures/gui/symbol/universe/g"+id+".png");
 	}
 
 	@Override

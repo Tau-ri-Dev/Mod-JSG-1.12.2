@@ -14,7 +14,7 @@ import java.util.List;
 
 public class CapacitorContainerGui extends GuiContainer {
 
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_capacitor.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.MOD_ID, "textures/gui/container_capacitor.png");
 	
 	private final CapacitorContainer container;
 	

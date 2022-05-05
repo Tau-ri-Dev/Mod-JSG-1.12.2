@@ -19,14 +19,14 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-import static mrjake.aunis.Aunis.aunisItemsCreativeTab;
+import static mrjake.aunis.util.main.loader.AunisCreativeTabsHandler.aunisItemsCreativeTab;
 
 public class PageMysteriousItem extends Item {
 	public static final String ITEM_NAME = "page_mysterious";
 
 	public PageMysteriousItem() {
-		setRegistryName(Aunis.ModID + ":" + ITEM_NAME);
-		setUnlocalizedName(Aunis.ModID + "." + ITEM_NAME);
+		setRegistryName(Aunis.MOD_ID + ":" + ITEM_NAME);
+		setUnlocalizedName(Aunis.MOD_ID + "." + ITEM_NAME);
 		
 		setCreativeTab(aunisItemsCreativeTab);
 	}

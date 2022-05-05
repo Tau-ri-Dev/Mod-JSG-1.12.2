@@ -1,16 +1,12 @@
 package mrjake.aunis.block.stargate;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.block.dialhomedevice.DHDAbstractBlock;
-import mrjake.aunis.block.dialhomedevice.DHDBlock;
 import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.stargate.CamoPropertiesHelper;
 import mrjake.aunis.stargate.EnumMemberVariant;
-import mrjake.aunis.stargate.merging.StargateClassicMergeHelper;
-import mrjake.aunis.stargate.merging.StargateMilkyWayMergeHelper;
-import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicMemberTile;
@@ -26,11 +22,9 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -42,8 +36,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.UniversalBucket;
 
 import java.util.Map;
 

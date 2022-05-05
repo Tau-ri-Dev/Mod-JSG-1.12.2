@@ -49,7 +49,7 @@ public class AunisVideoOptions extends GuiVideoSettings {
     protected java.util.List<GuiButton> aunisButtonSliders = new ArrayList<>();
     protected static final ResourceLocation BACKGROUND_TEXTURE =
             AunisConfig.mainMenuConfig.disableAunisMainMenu ? null :
-                    new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");
+                    new ResourceLocation(Aunis.MOD_ID, "textures/gui/mainmenu/background.jpg");
 
     // render kawoosh and event horizon
     protected float kawooshState = 0f;

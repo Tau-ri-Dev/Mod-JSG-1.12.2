@@ -31,8 +31,8 @@ public class TRControllerGoauldRendererState extends TRControllerAbstractRendere
             TextureContainer container = new TextureContainer();
 
             for (int i = 0; i <= 5; i++) {
-                container.SYMBOL_RESOURCE_MAP.put(i, new ResourceLocation(Aunis.ModID, SYMBOL_TEXTURE_BASE + i + biomeOverlay.suffix + "." + SYMBOL_TEXTURE_END));
-                container.LIGHT_RESOURCE_MAP.put(i, new ResourceLocation(Aunis.ModID, LIGHT_TEXTURE_BASE + i + biomeOverlay.suffix + "." + LIGHT_TEXTURE_END));
+                container.SYMBOL_RESOURCE_MAP.put(i, new ResourceLocation(Aunis.MOD_ID, SYMBOL_TEXTURE_BASE + i + biomeOverlay.suffix + "." + SYMBOL_TEXTURE_END));
+                container.LIGHT_RESOURCE_MAP.put(i, new ResourceLocation(Aunis.MOD_ID, LIGHT_TEXTURE_BASE + i + biomeOverlay.suffix + "." + LIGHT_TEXTURE_END));
             }
 
             BIOME_TEXTURE_MAP.put(biomeOverlay, container);

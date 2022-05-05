@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 
 public class TokraRenderer extends RenderLiving<TokraEntity> {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(Aunis.ModID, "textures/entity/tokra/default.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(Aunis.MOD_ID, "textures/entity/tokra/default.png");
 
     public TokraRenderer(RenderManager manager) {
         super(manager, new ModelPlayer(0.0f, false), 0.5f);

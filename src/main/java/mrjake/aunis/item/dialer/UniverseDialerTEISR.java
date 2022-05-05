@@ -109,7 +109,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 			boolean notLinked = mode.linkable && !compound.hasKey(mode.tagPosName);
 			
 			if (notLinked) {
-				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(Aunis.ModID, "textures/gui/universe_warning.png"));
+				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(Aunis.MOD_ID, "textures/gui/universe_warning.png"));
 				GlStateManager.enableTexture2D();
 				GlStateManager.enableBlend();
 				GlStateManager.color(0.91f, 1, 1, 1);

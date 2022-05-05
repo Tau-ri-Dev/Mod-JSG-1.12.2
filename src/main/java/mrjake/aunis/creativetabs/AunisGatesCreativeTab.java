@@ -1,13 +1,14 @@
 package mrjake.aunis.creativetabs;
 
 import mrjake.aunis.block.AunisBlocks;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 
-public abstract class AunisAbstractCreativeTabBuilder extends CreativeTabs {
-	public AunisAbstractCreativeTabBuilder(String label) {
-		super(label);
+public class AunisGatesCreativeTab extends AunisAbstractCreativeTab {
+
+	public AunisGatesCreativeTab() {
+		super("aunis_gates");
 	}
+
 	@Override
 	public ItemStack getTabIconItem() {
 		return new ItemStack(AunisBlocks.STARGATE_MILKY_WAY_BASE_BLOCK);

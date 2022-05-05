@@ -1,6 +1,6 @@
 package mrjake.aunis.renderer.dialhomedevice;
 
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.notebook.NotebookItem;
 import mrjake.aunis.renderer.BlockRenderer;

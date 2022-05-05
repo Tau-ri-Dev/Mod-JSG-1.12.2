@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class StargateNetwork extends WorldSavedData {
 
-  private static final String DATA_NAME = Aunis.ModID + "_StargateNetworkData";
+  private static final String DATA_NAME = Aunis.MOD_ID + "_StargateNetworkData";
 
   public StargateNetwork() {
     super(DATA_NAME);

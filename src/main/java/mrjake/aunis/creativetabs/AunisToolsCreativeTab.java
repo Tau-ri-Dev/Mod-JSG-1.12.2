@@ -3,9 +3,9 @@ package mrjake.aunis.creativetabs;
 import mrjake.aunis.item.AunisItems;
 import net.minecraft.item.ItemStack;
 
-public class AunisToolsCreativeTabBuilder extends AunisAbstractCreativeTabBuilder {
+public class AunisToolsCreativeTab extends AunisAbstractCreativeTab {
 
-    public AunisToolsCreativeTabBuilder() {
+    public AunisToolsCreativeTab() {
         super("aunis_tools");
     }
 

@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class TabIris extends Tab {
     protected static final ResourceLocation MODES_ICONS =
-            new ResourceLocation(Aunis.ModID, "textures/gui/iris_mode.png");
+            new ResourceLocation(Aunis.MOD_ID, "textures/gui/iris_mode.png");
 
 
     protected NumberOnlyTextField inputField = new NumberOnlyTextField(1,

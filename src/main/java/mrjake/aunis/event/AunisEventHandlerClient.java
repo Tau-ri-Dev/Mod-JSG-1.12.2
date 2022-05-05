@@ -1,18 +1,15 @@
 package mrjake.aunis.event;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.mainmenu.AunisMainMenu;
 import mrjake.aunis.gui.mainmenu.AunisMainMenuOnLoad;
-import mrjake.aunis.sound.AunisSoundHelperClient;
-import mrjake.aunis.sound.SoundPositionedEnum;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -31,8 +28,8 @@ public class AunisEventHandlerClient {
 
   @SubscribeEvent
   public static void onConfigChangedEvent(OnConfigChangedEvent event) {
-    if (event.getModID().equals(Aunis.ModID)) {
-      ConfigManager.sync(Aunis.ModID, Type.INSTANCE);
+    if (event.getModID().equals(Aunis.MOD_ID)) {
+      ConfigManager.sync(Aunis.MOD_ID, Type.INSTANCE);
       AunisConfig.resetCache();
     }
   }

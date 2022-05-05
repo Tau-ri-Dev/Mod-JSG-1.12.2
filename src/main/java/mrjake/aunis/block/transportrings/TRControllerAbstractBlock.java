@@ -1,12 +1,10 @@
 package mrjake.aunis.block.transportrings;
 
-import mcp.MethodsReturnNonnullByDefault;
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlock;
-import mrjake.aunis.raycaster.Raycaster;
-import mrjake.aunis.raycaster.RaycasterRingsGoauldController;
 import mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile;
+import mrjake.aunis.util.main.loader.AunisCreativeTabsHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -30,11 +28,11 @@ public abstract class TRControllerAbstractBlock extends AunisBlock {
     public TRControllerAbstractBlock(String blockName) {
         super(Material.ROCK);
 
-        setRegistryName(Aunis.ModID + ":" + blockName);
-        setUnlocalizedName(Aunis.ModID + "." + blockName);
+        setRegistryName(Aunis.MOD_ID + ":" + blockName);
+        setUnlocalizedName(Aunis.MOD_ID + "." + blockName);
 
         setSoundType(SoundType.STONE);
-        setCreativeTab(Aunis.aunisRingsCreativeTab);
+        setCreativeTab(AunisCreativeTabsHandler.aunisRingsCreativeTab);
 
         setDefaultState(blockState.getBaseState().withProperty(AunisProps.FACING_HORIZONTAL, EnumFacing.NORTH));
 

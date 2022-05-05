@@ -1,20 +1,13 @@
 package mrjake.aunis.renderer.transportrings;
 
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
-import mrjake.aunis.config.AunisConfig;
-import mrjake.aunis.stargate.network.SymbolInterface;
 import mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile;
 import mrjake.vector.Vector3f;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 import static mrjake.aunis.block.AunisBlocks.isInBlocksArray;
 

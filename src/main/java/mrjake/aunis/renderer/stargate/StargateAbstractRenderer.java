@@ -1,7 +1,7 @@
 package mrjake.aunis.renderer.stargate;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.texture.Texture;
 import mrjake.aunis.loader.texture.TextureLoader;
@@ -160,10 +160,10 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
     protected ResourceLocation getEventHorizonTextureResource(StargateAbstractRendererState rendererState, boolean kawoosh) {
         String texture = (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE_ANIMATED : (kawoosh ? EV_HORIZON_KAWOOSH_TEXTURE_ANIMATED : EV_HORIZON_NORMAL_TEXTURE_ANIMATED));
-        if (AunisConfig.horizonConfig.disableAnimatedEventHorizon || !TextureLoader.isTextureLoaded(new ResourceLocation(Aunis.ModID, texture)))
+        if (AunisConfig.horizonConfig.disableAnimatedEventHorizon || !TextureLoader.isTextureLoaded(new ResourceLocation(Aunis.MOD_ID, texture)))
             texture = (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE : EV_HORIZON_NORMAL_TEXTURE);
 
-        return new ResourceLocation(Aunis.ModID, texture);
+        return new ResourceLocation(Aunis.MOD_ID, texture);
     }
 
     protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {

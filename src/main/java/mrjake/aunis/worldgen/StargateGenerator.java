@@ -95,7 +95,7 @@ public class StargateGenerator {
 		MinecraftServer server = world.getMinecraftServer();
 		Biome biome = world.getBiome(pos);
 		TemplateManager templateManager = worldServer.getStructureTemplateManager();
-		Template template = templateManager.getTemplate(server, new ResourceLocation(Aunis.ModID, templateName));
+		Template template = templateManager.getTemplate(server, new ResourceLocation(Aunis.MOD_ID, templateName));
 
 		if (template != null) {
 			Random rand = new Random();

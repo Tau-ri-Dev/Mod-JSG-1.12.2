@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 
 import java.util.Map;
 
-import static mrjake.aunis.Aunis.aunisOresCreativeTab;
+import static mrjake.aunis.util.main.loader.AunisCreativeTabsHandler.aunisOresCreativeTab;
 
 @EventBusSubscriber
 public class AunisBlocks {

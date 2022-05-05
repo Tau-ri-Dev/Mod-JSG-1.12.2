@@ -34,8 +34,8 @@ public enum SymbolOriEnum implements SymbolInterface {
 
         this.englishName = englishName;
         this.translationKey = "glyph.aunis.transportrings.ori." + englishName.toLowerCase().replace(" ", "_");
-        this.iconResource = new ResourceLocation(Aunis.ModID, "textures/gui/symbol/transportrings/ori/" + englishName.toLowerCase() + ".png");
-        this.modelResource = new ResourceLocation(Aunis.ModID, "models/tesr/transportrings/controller/ori/ori_button_" + (id+1) + ".obj");
+        this.iconResource = new ResourceLocation(Aunis.MOD_ID, "textures/gui/symbol/transportrings/ori/" + englishName.toLowerCase() + ".png");
+        this.modelResource = new ResourceLocation(Aunis.MOD_ID, "models/tesr/transportrings/controller/ori/ori_button_" + (id+1) + ".obj");
     }
 
     @Override

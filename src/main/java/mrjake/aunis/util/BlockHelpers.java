@@ -2,7 +2,7 @@ package mrjake.aunis.util;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlock;
-import mrjake.aunis.creativetabs.AunisAbstractCreativeTabBuilder;
+import mrjake.aunis.creativetabs.AunisAbstractCreativeTab;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -48,10 +48,10 @@ public class BlockHelpers {
 		return top;
 	}
 
-	public static AunisBlock createSimpleBlock(String id, Material material, AunisAbstractCreativeTabBuilder tab) {
+	public static AunisBlock createSimpleBlock(String id, Material material, AunisAbstractCreativeTab tab) {
 		AunisBlock block = new AunisBlock(material);
-		block.setRegistryName(Aunis.ModID, id);
-		block.setUnlocalizedName(Aunis.ModID + "." + id);
+		block.setRegistryName(Aunis.MOD_ID, id);
+		block.setUnlocalizedName(Aunis.MOD_ID + "." + id);
 		block.setCreativeTab(tab);
 		return block;
 	}

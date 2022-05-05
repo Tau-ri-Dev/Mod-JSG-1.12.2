@@ -26,8 +26,8 @@ public class AunisGuiKeyBindingList extends GuiListExtended {
     public final GuiListExtended.IGuiListEntry[] listEntries;
     public int maxListLabelWidth;
 
-    public static final ResourceLocation BACKGROUND1 = new ResourceLocation(Aunis.ModID,"textures/gui/mainmenu/background1.jpg");
-    public static final ResourceLocation BACKGROUND2 = new ResourceLocation(Aunis.ModID,"textures/gui/mainmenu/background2.jpg");
+    public static final ResourceLocation BACKGROUND1 = new ResourceLocation(Aunis.MOD_ID,"textures/gui/mainmenu/background1.jpg");
+    public static final ResourceLocation BACKGROUND2 = new ResourceLocation(Aunis.MOD_ID,"textures/gui/mainmenu/background2.jpg");
 
     public AunisGuiKeyBindingList(AunisBindingOptions controls, Minecraft mcIn) {
         super(mcIn, controls.width + 45, controls.height, 63, controls.height - 32, 20);

@@ -18,16 +18,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
-
-import static mrjake.aunis.Aunis.aunisItemsCreativeTab;
-
 public class NotebookItem extends Item implements CustomModelItemInterface {
 
 	public static final String ITEM_NAME = "notebook";
 	
 	public NotebookItem() {
-		setRegistryName(Aunis.ModID + ":" + ITEM_NAME);
-		setUnlocalizedName(Aunis.ModID + "." + ITEM_NAME);
+		setRegistryName(Aunis.MOD_ID + ":" + ITEM_NAME);
+		setUnlocalizedName(Aunis.MOD_ID + "." + ITEM_NAME);
 		
 		// setMaxStackSize(1);
 	}

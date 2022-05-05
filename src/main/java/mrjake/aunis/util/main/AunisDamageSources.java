@@ -1,4 +1,4 @@
-package mrjake.aunis;
+package mrjake.aunis.util.main;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;

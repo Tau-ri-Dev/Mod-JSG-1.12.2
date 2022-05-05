@@ -39,7 +39,7 @@ public class AunisMainMenu extends GuiMainMenu {
 
     // ---------------------------------------------------
     // VERSION
-    protected static final String VERSION = Aunis.Version.replace("1.12.2-", "");
+    protected static final String VERSION = Aunis.MOD_VERSION.replace("1.12.2-", "");
 
     // ---------------------------------------------------
 
@@ -72,8 +72,8 @@ public class AunisMainMenu extends GuiMainMenu {
     protected List<GuiButton> versionButtons = new ArrayList<>();
     protected List<GuiButton> afterDownloadButtons = new ArrayList<>();
     protected List<GuiButton> anyButton = new ArrayList<>();
-    protected static final ResourceLocation BACKGROUND_TEXTURE = AunisConfig.mainMenuConfig.disableAunisMainMenu ? null : new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");
-    protected static ResourceLocation EVENT_HORIZON_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/event_horizon.jpg");
+    protected static final ResourceLocation BACKGROUND_TEXTURE = AunisConfig.mainMenuConfig.disableAunisMainMenu ? null : new ResourceLocation(Aunis.MOD_ID, "textures/gui/mainmenu/background.jpg");
+    protected static ResourceLocation EVENT_HORIZON_TEXTURE = new ResourceLocation(Aunis.MOD_ID, "textures/gui/mainmenu/event_horizon.jpg");
 
     protected static final String LATEST = checkForUpdate(VERSION);
     protected static int showVersionAlert = 0;

@@ -25,15 +25,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-import static mrjake.aunis.Aunis.aunisItemsCreativeTab;
+import static mrjake.aunis.util.main.loader.AunisCreativeTabsHandler.aunisItemsCreativeTab;
 
 public class PageNotebookItem extends Item implements CustomModelItemInterface {
 
 	public static final String ITEM_NAME = "page_notebook";
 
 	public PageNotebookItem() {
-		setRegistryName(Aunis.ModID + ":" + ITEM_NAME);
-		setUnlocalizedName(Aunis.ModID + "." + ITEM_NAME);
+		setRegistryName(Aunis.MOD_ID + ":" + ITEM_NAME);
+		setUnlocalizedName(Aunis.MOD_ID + "." + ITEM_NAME);
 		
 		setCreativeTab(aunisItemsCreativeTab);
 		

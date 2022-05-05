@@ -3,11 +3,9 @@ package mrjake.aunis.block.transportrings;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlock;
 import mrjake.aunis.gui.GuiIdEnum;
-import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
-import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
 import mrjake.aunis.util.ItemHandlerHelper;
-import net.minecraft.block.Block;
+import mrjake.aunis.util.main.loader.AunisCreativeTabsHandler;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -25,11 +23,11 @@ public abstract class TransportRingsAbstractBlock extends AunisBlock {
     public TransportRingsAbstractBlock(String name) {
         super(Material.IRON);
 
-        setRegistryName(Aunis.ModID + ":" + name);
-        setUnlocalizedName(Aunis.ModID + "." + name);
+        setRegistryName(Aunis.MOD_ID + ":" + name);
+        setUnlocalizedName(Aunis.MOD_ID + "." + name);
 
         setSoundType(SoundType.STONE);
-        setCreativeTab(Aunis.aunisRingsCreativeTab);
+        setCreativeTab(AunisCreativeTabsHandler.aunisRingsCreativeTab);
 
         setLightOpacity(0);
 

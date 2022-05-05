@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class Diode {
 	
-	public static final ResourceLocation DIODE_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/diodes.png");
+	public static final ResourceLocation DIODE_TEXTURE = new ResourceLocation(Aunis.MOD_ID, "textures/gui/diodes.png");
 	
 	private GuiScreen screen;
 

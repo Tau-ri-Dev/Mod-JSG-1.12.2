@@ -1,6 +1,6 @@
 package mrjake.aunis.item.stargate;
 
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.stargate.StargateAbstractMemberBlock;
 import mrjake.aunis.stargate.EnumMemberVariant;
 import net.minecraft.item.ItemBlock;

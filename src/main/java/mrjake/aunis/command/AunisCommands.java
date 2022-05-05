@@ -18,7 +18,8 @@ public final class AunisCommands {
           new CommandDebug(),
           new CommandFix(),
           new CommandFixNether(),
-          new CommandGenerateIncoming()
+          new CommandGenerateIncoming(),
+          new CommandAgs()
   );
 
   public static void registerCommands(FMLServerStartingEvent event) {

@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static mrjake.aunis.Aunis.aunisItemsCreativeTab;
+import static mrjake.aunis.util.main.loader.AunisCreativeTabsHandler.aunisItemsCreativeTab;
 
 /**
  * @author matousss
@@ -25,8 +25,8 @@ public class UpgradeIris extends Item {
 
     public UpgradeIris(String name, int durability) {
         MAX_DAMAGE = durability;
-        setRegistryName(Aunis.ModID + ":" + name);
-        setUnlocalizedName(Aunis.ModID + "." + name);
+        setRegistryName(Aunis.MOD_ID + ":" + name);
+        setUnlocalizedName(Aunis.MOD_ID + "." + name);
 
         setCreativeTab(aunisItemsCreativeTab);
     }

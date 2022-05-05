@@ -1,7 +1,7 @@
 package mrjake.aunis.block.invisible;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import mrjake.aunis.util.AxisAlignedBBUtils;
 import net.minecraft.block.material.Material;
@@ -25,8 +25,8 @@ public class IrisBlock extends InvisibleBlock {
     public IrisBlock() {
         super(Material.AIR);
 
-        setRegistryName(Aunis.ModID + ":" + blockName);
-        setUnlocalizedName(Aunis.ModID + "." + InvisibleBlock.blockName);
+        setRegistryName(Aunis.MOD_ID + ":" + blockName);
+        setUnlocalizedName(Aunis.MOD_ID + "." + InvisibleBlock.blockName);
 
         setDefaultState(blockState.getBaseState()
                 .withProperty(AunisProps.FACING_HORIZONTAL, EnumFacing.NORTH));

@@ -35,7 +35,7 @@ public class ModelLoader {
 				Aunis.logger.info("Loading model: " + modelPath);
 			String modelResourcePath = modelPath.replaceFirst("assets/aunis/", "");
 			progressBar.step(modelResourcePath.replaceFirst("models/", ""));
-			LOADED_MODELS.put(new ResourceLocation(Aunis.ModID, modelResourcePath), OBJLoader.loadModel(modelPath));
+			LOADED_MODELS.put(new ResourceLocation(Aunis.MOD_ID, modelResourcePath), OBJLoader.loadModel(modelPath));
 		}
 		
 		Aunis.logger.info("Loaded "+modelPaths.size()+" models in "+(System.currentTimeMillis()-start)+" ms");
@@ -44,6 +44,6 @@ public class ModelLoader {
 	}
 	
 	public static ResourceLocation getModelResource(String model) {
-		return new ResourceLocation(Aunis.ModID, "models/tesr/" + model);
+		return new ResourceLocation(Aunis.MOD_ID, "models/tesr/" + model);
 	}
 }

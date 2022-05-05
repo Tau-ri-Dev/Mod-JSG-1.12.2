@@ -38,7 +38,7 @@ public class AunisGuiLoadingWorld extends LoadingScreenRenderer {
     // DEFINE VARIABLES
     protected static final ResourceLocation BACKGROUND_TEXTURE =
             AunisConfig.mainMenuConfig.disableAunisMainMenu ? null :
-            new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");
+            new ResourceLocation(Aunis.MOD_ID, "textures/gui/mainmenu/background.jpg");
 
     @Override
     public void setLoadingProgress(int progress) {

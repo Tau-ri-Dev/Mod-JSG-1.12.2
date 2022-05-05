@@ -1,12 +1,13 @@
 package mrjake.aunis.block.stargate;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlock;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateAbstractMemberTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicMemberTile;
+import mrjake.aunis.util.main.loader.AunisCreativeTabsHandler;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
@@ -28,11 +29,11 @@ public abstract class StargateAbstractMemberBlock extends AunisBlock {
     public StargateAbstractMemberBlock(String blockName) {
         super(Material.IRON);
 
-        setRegistryName(Aunis.ModID + ":" + blockName);
-        setUnlocalizedName(Aunis.ModID + "." + blockName);
+        setRegistryName(Aunis.MOD_ID + ":" + blockName);
+        setUnlocalizedName(Aunis.MOD_ID + "." + blockName);
 
         setSoundType(SoundType.METAL);
-        setCreativeTab(Aunis.aunisGatesCreativeTab);
+        setCreativeTab(AunisCreativeTabsHandler.aunisGatesCreativeTab);
 
         setHardness(3.0f);
         setResistance(60.0f);

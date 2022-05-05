@@ -1,9 +1,9 @@
 package mrjake.aunis.block.capacitor;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlock;
-import net.minecraft.block.Block;
+import mrjake.aunis.util.main.loader.AunisCreativeTabsHandler;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
@@ -22,11 +22,11 @@ public class CapacitorBlockEmpty extends AunisBlock {
 	public CapacitorBlockEmpty() {		
 		super(Material.IRON);
 		
-		setRegistryName(Aunis.ModID + ":" + BLOCK_NAME);
-		setUnlocalizedName(Aunis.ModID + "." + BLOCK_NAME);
+		setRegistryName(Aunis.MOD_ID + ":" + BLOCK_NAME);
+		setUnlocalizedName(Aunis.MOD_ID + "." + BLOCK_NAME);
 		
 		setSoundType(SoundType.METAL); 
-		setCreativeTab(Aunis.aunisEnergyCreativeTab);
+		setCreativeTab(AunisCreativeTabsHandler.aunisEnergyCreativeTab);
 		
 		setDefaultState(blockState.getBaseState()
 				.withProperty(AunisProps.FACING_HORIZONTAL, EnumFacing.NORTH));

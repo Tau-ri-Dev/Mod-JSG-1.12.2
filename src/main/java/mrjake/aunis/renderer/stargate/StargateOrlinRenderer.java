@@ -1,6 +1,6 @@
 package mrjake.aunis.renderer.stargate;
 
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.particle.ParticleBlender;
 import mrjake.aunis.particle.ParticleBlender.RandomizeInterface;

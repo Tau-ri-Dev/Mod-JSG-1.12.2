@@ -1,7 +1,7 @@
 package mrjake.aunis.worldgen;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.stargate.StargateDimensionConfig;
@@ -156,7 +156,7 @@ public class StargateGeneratorNether {
 		found = found.add(translate);
 		
 		TemplateManager templateManager = world.getStructureTemplateManager();
-		Template template = templateManager.getTemplate(world.getMinecraftServer(), new ResourceLocation(Aunis.ModID, "sg_nether_" + (AunisConfig.stargateSize == StargateSizeEnum.LARGE ? "large" : "small")));
+		Template template = templateManager.getTemplate(world.getMinecraftServer(), new ResourceLocation(Aunis.MOD_ID, "sg_nether_" + (AunisConfig.stargateSize == StargateSizeEnum.LARGE ? "large" : "small")));
 		
 		if (template != null) {
 			PlacementSettings settings = new PlacementSettings().setIgnoreStructureBlock(false).setRotation(rotation);

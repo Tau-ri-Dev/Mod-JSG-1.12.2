@@ -3,15 +3,12 @@ package mrjake.aunis.stargate.network;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.model.ModelLoader;
-import mrjake.aunis.stargate.EnumSpinDirection;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import static mrjake.aunis.stargate.EnumSpinDirection.COUNTER_CLOCKWISE;
 
 public enum SymbolPegasusEnum implements SymbolInterface {
   ROEHI(37, "Roehi", "37.obj", 11),
@@ -69,7 +66,7 @@ public enum SymbolPegasusEnum implements SymbolInterface {
     this.textureSlot = textureSlot;
     this.englishName = englishName;
     this.translationKey = "glyph.aunis.pegasus." + englishName.toLowerCase().replace(" ", "_");
-    this.iconResource = new ResourceLocation(Aunis.ModID, "textures/gui/symbol/pegasus/" + englishName.toLowerCase() + ".png");
+    this.iconResource = new ResourceLocation(Aunis.MOD_ID, "textures/gui/symbol/pegasus/" + englishName.toLowerCase() + ".png");
 
     this.modelResource = ModelLoader.getModelResource("pegasus/" + model);
   }

@@ -8,7 +8,7 @@ import li.cil.oc.api.network.Environment;
 import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.beamer.BeamerModeEnum;
 import mrjake.aunis.beamer.BeamerRendererAction;
 import mrjake.aunis.beamer.BeamerRoleEnum;
@@ -1296,7 +1296,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 	@net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
 	@Callback
 	public Object[] getAunisVersion(Context context, Arguments args) {
-		return new Object[]{Aunis.Version};
+		return new Object[]{Aunis.MOD_VERSION};
 	}
 
 	@Optional.Method(modid = "opencomputers")

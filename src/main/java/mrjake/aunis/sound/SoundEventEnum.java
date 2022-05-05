@@ -103,7 +103,7 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     }
 
     private static SoundEvent createSoundEvent(String name) {
-        ResourceLocation resourceLocation = new ResourceLocation(Aunis.ModID, name);
+        ResourceLocation resourceLocation = new ResourceLocation(Aunis.MOD_ID, name);
         return new SoundEvent(resourceLocation).setRegistryName(resourceLocation);
     }
 

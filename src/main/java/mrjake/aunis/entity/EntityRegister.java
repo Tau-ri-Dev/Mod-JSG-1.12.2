@@ -18,7 +18,7 @@ public class EntityRegister {
     }
 
     private static void registerEntity(String entityName, Class<? extends Entity> entityClass, int id, int trackingRange, int spawnEggColor1, int spawnEggColor2) {
-        EntityRegistry.registerModEntity(new ResourceLocation(Aunis.ModID, entityName), entityClass, entityName, id, Aunis.instance, trackingRange, 1, true, spawnEggColor1, spawnEggColor2);
+        EntityRegistry.registerModEntity(new ResourceLocation(Aunis.MOD_ID, entityName), entityClass, entityName, id, Aunis.instance, trackingRange, 1, true, spawnEggColor1, spawnEggColor2);
     }
 
     public static void playSoundEvent(SoundEventEnum sound, Entity entity) {

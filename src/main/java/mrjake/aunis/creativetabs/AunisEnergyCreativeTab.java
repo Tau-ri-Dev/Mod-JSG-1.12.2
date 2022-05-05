@@ -3,9 +3,9 @@ package mrjake.aunis.creativetabs;
 import mrjake.aunis.block.AunisBlocks;
 import net.minecraft.item.ItemStack;
 
-public class AunisEnergyCreativeTabBuilder extends AunisAbstractCreativeTabBuilder {
+public class AunisEnergyCreativeTab extends AunisAbstractCreativeTab {
 
-	public AunisEnergyCreativeTabBuilder() {
+	public AunisEnergyCreativeTab() {
 		super("aunis_energy");
 	}
 

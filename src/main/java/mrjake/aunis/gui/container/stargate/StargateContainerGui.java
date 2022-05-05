@@ -4,7 +4,6 @@ import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.gui.element.tabs.*;
 import mrjake.aunis.gui.element.tabs.Tab.SlotTab;
-import mrjake.aunis.gui.entry.AbstractEntry;
 import mrjake.aunis.packet.AunisPacketHandler;
 import mrjake.aunis.packet.SetOpenTabToServer;
 import mrjake.aunis.packet.stargate.SaveConfigToServer;
@@ -36,7 +35,7 @@ import java.util.stream.Collectors;
 
 public class StargateContainerGui extends GuiContainer implements TabbedContainerInterface {
 	
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/container_stargate.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Aunis.MOD_ID, "textures/gui/container_stargate.png");
 	
 	private final StargateContainer container;
 	private final List<Tab> tabs = new ArrayList<Tab>();;

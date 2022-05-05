@@ -2,14 +2,11 @@ package mrjake.aunis.block.ore;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlock;
-import mrjake.aunis.item.AunisItems;
-import net.minecraft.block.Block;
+import mrjake.aunis.util.main.loader.AunisCreativeTabsHandler;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -22,11 +19,11 @@ public class TitaniumOreBlock extends AunisBlock {
 	public TitaniumOreBlock(String blockName) {
 		super(Material.ROCK);
 		
-		setRegistryName(Aunis.ModID + ":" + blockName);
-		setUnlocalizedName(Aunis.ModID + "." + blockName);
+		setRegistryName(Aunis.MOD_ID + ":" + blockName);
+		setUnlocalizedName(Aunis.MOD_ID + "." + blockName);
 		
 		setSoundType(SoundType.STONE); 
-		setCreativeTab(Aunis.aunisOresCreativeTab);
+		setCreativeTab(AunisCreativeTabsHandler.aunisOresCreativeTab);
 		
 		setHardness(4.5f);
 		setHarvestLevel("pickaxe", 2);

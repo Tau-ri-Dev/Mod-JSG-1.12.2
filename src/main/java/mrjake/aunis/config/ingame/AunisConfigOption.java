@@ -61,7 +61,7 @@ public class AunisConfigOption {
         ModeButton button = null;
         if (this.type == AunisConfigOptionTypeEnum.BOOLEAN)
             button = new ModeButton(
-                    componentId, X, y, 16, new ResourceLocation(Aunis.ModID, textureBase + "boolean_modes.png"),
+                    componentId, X, y, 16, new ResourceLocation(Aunis.MOD_ID, textureBase + "boolean_modes.png"),
                     32, 32, 2
             );
 

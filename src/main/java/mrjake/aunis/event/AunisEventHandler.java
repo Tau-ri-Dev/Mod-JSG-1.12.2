@@ -2,13 +2,10 @@ package mrjake.aunis.event;
 
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
-import mrjake.aunis.item.tools.EnergyWeapon;
 import mrjake.aunis.raycaster.RaycasterDHD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -81,7 +78,7 @@ public class AunisEventHandler {
 	@SubscribeEvent
 	public static void onLootTableLoad(LootTableLoadEvent event) {
 		if (event.getName().toString().equals("minecraft:chests/end_city_treasure")) {
-			LootEntry entry = new LootEntryTable(new ResourceLocation(Aunis.ModID, "end_city_treasure"), 1, 0, new LootCondition[]{}, "universe_dialer");
+			LootEntry entry = new LootEntryTable(new ResourceLocation(Aunis.MOD_ID, "end_city_treasure"), 1, 0, new LootCondition[]{}, "universe_dialer");
 			LootPool pool = new LootPool(new LootEntry[]{entry}, new LootCondition[]{}, new RandomValueRange(1), new RandomValueRange(0), "univese_dialer_pool");
 
 			event.getTable().addPool(pool);

@@ -1,6 +1,6 @@
 package mrjake.aunis.stargate;
 
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

@@ -1,4 +1,4 @@
-package mrjake.aunis;
+package mrjake.aunis.util.main;
 
 import mrjake.aunis.block.beamer.BeamerBlock;
 import mrjake.aunis.block.capacitor.CapacitorBlock;

@@ -3,7 +3,6 @@ package mrjake.aunis.item.gdo;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.capability.endpoint.ItemEndpointCapability;
-import mrjake.aunis.capability.endpoint.ItemEndpointImpl;
 import mrjake.aunis.capability.endpoint.ItemEndpointInterface;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.AunisItems;
@@ -12,6 +11,7 @@ import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.util.LinkingHelper;
+import mrjake.aunis.util.main.loader.AunisCreativeTabsHandler;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.creativetab.CreativeTabs;
@@ -40,10 +40,10 @@ public class GDOItem extends Item implements CustomModelItemInterface {
     private CustomModel customModel;
 
     public GDOItem() {
-        setRegistryName(new ResourceLocation(Aunis.ModID, ITEM_NAME));
-        setUnlocalizedName(Aunis.ModID + "." + ITEM_NAME);
+        setRegistryName(new ResourceLocation(Aunis.MOD_ID, ITEM_NAME));
+        setUnlocalizedName(Aunis.MOD_ID + "." + ITEM_NAME);
 
-        setCreativeTab(Aunis.aunisToolsCreativeTab);
+        setCreativeTab(AunisCreativeTabsHandler.aunisToolsCreativeTab);
     }
 
     // TODO replace with capabilities. If item will have NBT like "display:Name" it will not init custom NBT! -- slava110

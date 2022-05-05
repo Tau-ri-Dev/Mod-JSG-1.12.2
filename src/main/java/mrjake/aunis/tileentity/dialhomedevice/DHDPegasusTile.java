@@ -1,13 +1,12 @@
 package mrjake.aunis.tileentity.dialhomedevice;
 
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.fluid.AunisFluids;
 import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.renderer.dialhomedevice.DHDAbstractRendererState;
-import mrjake.aunis.renderer.dialhomedevice.DHDMilkyWayRendererState;
 import mrjake.aunis.renderer.dialhomedevice.DHDPegasusRendererState;
 import mrjake.aunis.sound.AunisSoundHelper;
 import mrjake.aunis.sound.SoundEventEnum;

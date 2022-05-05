@@ -1,10 +1,9 @@
 package mrjake.aunis.block.invisible;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlock;
 import mrjake.aunis.config.AunisConfig;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -28,8 +27,8 @@ public class InvisibleBlock extends AunisBlock {
 	public InvisibleBlock() {
 		super(Material.AIR);
 		
-		setRegistryName(Aunis.ModID + ":" + blockName);
-		setUnlocalizedName(Aunis.ModID + "." + blockName);
+		setRegistryName(Aunis.MOD_ID + ":" + blockName);
+		setUnlocalizedName(Aunis.MOD_ID + "." + blockName);
 		
 		setDefaultState(blockState.getBaseState()
 				.withProperty(AunisProps.HAS_COLLISIONS, true));

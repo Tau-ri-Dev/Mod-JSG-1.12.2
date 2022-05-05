@@ -1,11 +1,6 @@
 package mrjake.aunis.gui.mainmenu;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.sound.StargateSoundEventEnum;
-import mrjake.aunis.stargate.EnumScheduledTask;
-import mrjake.aunis.state.stargate.StargateRendererActionState;
-import mrjake.aunis.tileentity.util.ScheduledTask;
-import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -22,7 +17,7 @@ public class GetUpdate {
 
     public static final String ERROR_STRING = "Error was occurred while updating Aunis!";
 
-    public static final String URL_BASE = "https://api.aunis.cz/?api=curseforge&version=" + Aunis.MCVersion;
+    public static final String URL_BASE = "https://api.aunis.cz/?api=curseforge&version=" + Aunis.MC_VERSION;
 
     public static final String GET_NAME_URL = URL_BASE + "&t=name";
     public static final String GET_DOWNLOAD_URL = URL_BASE + "?t=url";

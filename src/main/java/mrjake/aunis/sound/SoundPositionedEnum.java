@@ -39,7 +39,7 @@ public enum SoundPositionedEnum {
 
   SoundPositionedEnum(int id, String name, SoundCategory soundCategory, boolean repeat, float volume) {
     this.id = id;
-    this.resourceLocation = new ResourceLocation(Aunis.ModID, name);
+    this.resourceLocation = new ResourceLocation(Aunis.MOD_ID, name);
     this.soundCategory = soundCategory;
     this.repeat = repeat;
     this.volume = volume;

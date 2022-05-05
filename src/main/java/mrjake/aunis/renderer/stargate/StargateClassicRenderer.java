@@ -1,8 +1,7 @@
 package mrjake.aunis.renderer.stargate;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
-import mrjake.aunis.config.AunisConfig;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.loader.texture.Texture;
 import mrjake.aunis.loader.texture.TextureLoader;
@@ -76,7 +75,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     // Iris rendering
 
     protected static final ResourceLocation SHIELD_TEXTURE =
-            new ResourceLocation(Aunis.ModID, "textures/tesr/iris/shield.jpg");
+            new ResourceLocation(Aunis.MOD_ID, "textures/tesr/iris/shield.jpg");
 
     public static final int PHYSICAL_IRIS_ANIMATION_LENGTH = 60;
     public static final int SHIELD_IRIS_ANIMATION_LENGTH = 10;

@@ -1,18 +1,14 @@
 package mrjake.aunis.block.dialhomedevice;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlock;
 import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
-import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
-import mrjake.aunis.tileentity.dialhomedevice.DHDPegasusTile;
-import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
-import mrjake.aunis.tileentity.stargate.StargateMilkyWayBaseTile;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import mrjake.aunis.util.ItemHandlerHelper;
-import net.minecraft.block.Block;
+import mrjake.aunis.util.main.loader.AunisCreativeTabsHandler;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
@@ -23,7 +19,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -42,11 +37,11 @@ public abstract class DHDAbstractBlock extends AunisBlock {
   public DHDAbstractBlock(String blockName) {
     super(Material.IRON);
 
-    setRegistryName(Aunis.ModID + ":" + blockName);
-    setUnlocalizedName(Aunis.ModID + "." + blockName);
+    setRegistryName(Aunis.MOD_ID + ":" + blockName);
+    setUnlocalizedName(Aunis.MOD_ID + "." + blockName);
 
     setSoundType(SoundType.METAL);
-    setCreativeTab(Aunis.aunisGatesCreativeTab);
+    setCreativeTab(AunisCreativeTabsHandler.aunisGatesCreativeTab);
 
     setDefaultState(blockState.getBaseState().withProperty(AunisProps.ROTATION_HORIZONTAL, 0).withProperty(AunisProps.SNOWY, false));
 

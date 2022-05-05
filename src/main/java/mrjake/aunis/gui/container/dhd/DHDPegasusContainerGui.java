@@ -11,6 +11,6 @@ public class DHDPegasusContainerGui extends DHDAbstractContainerGui {
 
 	@Override
 	public ResourceLocation getBackgroundTexture(){
-		return new ResourceLocation(Aunis.ModID, "textures/gui/container_dhd_pegasus.png");
+		return new ResourceLocation(Aunis.MOD_ID, "textures/gui/container_dhd_pegasus.png");
 	}
 }

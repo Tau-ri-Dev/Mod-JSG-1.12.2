@@ -1,18 +1,17 @@
 package mrjake.aunis.block.stargate;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlock;
 import mrjake.aunis.stargate.EnumMemberVariant;
 import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
-import net.minecraft.block.Block;
+import mrjake.aunis.util.main.loader.AunisCreativeTabsHandler;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -33,11 +32,11 @@ public abstract class StargateAbstractBaseBlock extends AunisBlock {
   public StargateAbstractBaseBlock(String blockName) {
     super(Material.IRON);
 
-    setRegistryName(Aunis.ModID + ":" + blockName);
-    setUnlocalizedName(Aunis.ModID + "." + blockName);
+    setRegistryName(Aunis.MOD_ID + ":" + blockName);
+    setUnlocalizedName(Aunis.MOD_ID + "." + blockName);
 
     setSoundType(SoundType.METAL);
-    setCreativeTab(Aunis.aunisGatesCreativeTab);
+    setCreativeTab(AunisCreativeTabsHandler.aunisGatesCreativeTab);
 
     setDefaultState(blockState.getBaseState().withProperty(AunisProps.FACING_HORIZONTAL, EnumFacing.NORTH).withProperty(AunisProps.RENDER_BLOCK, true));
 

@@ -1,6 +1,6 @@
 package mrjake.aunis.item.tools.zat;
 
-import mrjake.aunis.AunisDamageSources;
+import mrjake.aunis.util.main.AunisDamageSources;
 import mrjake.aunis.entity.AunisEnergyProjectile;
 import mrjake.aunis.entity.EntityRegister;
 import mrjake.aunis.item.tools.EnergyWeapon;

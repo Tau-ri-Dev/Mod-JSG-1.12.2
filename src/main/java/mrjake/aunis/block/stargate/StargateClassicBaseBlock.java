@@ -1,7 +1,7 @@
 package mrjake.aunis.block.stargate;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.gui.GuiIdEnum;
 import mrjake.aunis.stargate.CamoPropertiesHelper;
 import mrjake.aunis.stargate.EnumMemberVariant;

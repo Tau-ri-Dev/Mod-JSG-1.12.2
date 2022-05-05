@@ -18,7 +18,7 @@ import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import static mrjake.aunis.Aunis.aunisItemsCreativeTab;
+import static mrjake.aunis.util.main.loader.AunisCreativeTabsHandler.aunisItemsCreativeTab;
 
 @EventBusSubscriber
 public class AunisItems {

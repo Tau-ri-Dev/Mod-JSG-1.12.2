@@ -1,6 +1,6 @@
 package mrjake.aunis.tileentity.dialhomedevice;
 
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.fluid.AunisFluids;

@@ -58,7 +58,7 @@ public class AunisStructure extends WorldGenerator implements IStructure{
             // else generate normal structure
             MinecraftServer mcServer = world.getMinecraftServer();
             TemplateManager manager = worldToSpawn.getStructureTemplateManager();
-            ResourceLocation resourceLocation = new ResourceLocation(Aunis.ModID, structureName);
+            ResourceLocation resourceLocation = new ResourceLocation(Aunis.MOD_ID, structureName);
             Template template = manager.getTemplate(mcServer, resourceLocation);
 
             IBlockState state = world.getBlockState(pos);

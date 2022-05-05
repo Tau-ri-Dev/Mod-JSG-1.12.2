@@ -6,7 +6,7 @@ import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.*;
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.api.event.*;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.block.dialhomedevice.DHDBlock;
@@ -1851,7 +1851,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getAunisVersion(Context context, Arguments args) {
-        return new Object[]{Aunis.Version};
+        return new Object[]{Aunis.MOD_VERSION};
     }
 
     @Optional.Method(modid = "opencomputers")

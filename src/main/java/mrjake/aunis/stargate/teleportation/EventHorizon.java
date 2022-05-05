@@ -1,7 +1,7 @@
 package mrjake.aunis.stargate.teleportation;
 
-import mrjake.aunis.AunisDamageSources;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisDamageSources;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.api.event.StargateTeleportEntityEvent;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.item.stargate.UpgradeIris;
@@ -31,8 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import static mrjake.aunis.item.AunisItems.UPGRADE_IRIS;
 
 public class EventHorizon {
     private World world;

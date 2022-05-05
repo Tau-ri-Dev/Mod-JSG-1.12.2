@@ -63,7 +63,7 @@ public class TextureLoader {
 				}
 			}
 						
-			ResourceLocation resourceLocation = new ResourceLocation(Aunis.ModID, texturePath);
+			ResourceLocation resourceLocation = new ResourceLocation(Aunis.MOD_ID, texturePath);
 			IResource resource = null;
 			
 			try {
@@ -97,6 +97,6 @@ public class TextureLoader {
 	}
 
 	public static ResourceLocation getTextureResource(String texture) {
-		return new ResourceLocation(Aunis.ModID, "textures/tesr/" + texture);
+		return new ResourceLocation(Aunis.MOD_ID, "textures/tesr/" + texture);
 	}	
 }

@@ -117,7 +117,7 @@ public class AunisModListGui extends GuiModList
     protected float screenCenterHeight = (((float) height) / 2f);
     protected float screenCenterWidth = ((float) width) / 2f;
     protected java.util.List<GuiButton> aunisButtonList = new ArrayList<>();
-    protected static final ResourceLocation BACKGROUND_TEXTURE = AunisConfig.mainMenuConfig.disableAunisMainMenu ? null : new ResourceLocation(Aunis.ModID, "textures/gui/mainmenu/background.jpg");
+    protected static final ResourceLocation BACKGROUND_TEXTURE = AunisConfig.mainMenuConfig.disableAunisMainMenu ? null : new ResourceLocation(Aunis.MOD_ID, "textures/gui/mainmenu/background.jpg");
 
     // render kawoosh and event horizon
     protected float kawooshState = 0f;

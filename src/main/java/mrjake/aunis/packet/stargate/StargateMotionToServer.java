@@ -1,7 +1,7 @@
 package mrjake.aunis.packet.stargate;
 
 import io.netty.buffer.ByteBuf;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.packet.PositionedPacket;
 import mrjake.aunis.stargate.teleportation.TeleportHelper;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;

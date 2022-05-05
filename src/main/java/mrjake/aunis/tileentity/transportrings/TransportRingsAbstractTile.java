@@ -7,7 +7,7 @@ import li.cil.oc.api.network.Environment;
 import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
 import mrjake.aunis.Aunis;
-import mrjake.aunis.AunisProps;
+import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.config.ingame.AunisConfigOption;
@@ -35,7 +35,6 @@ import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.state.dialhomedevice.DHDActivateButtonState;
 import mrjake.aunis.state.transportrings.TransportRingsRendererState;
 import mrjake.aunis.state.transportrings.TransportRingsStartAnimationRequest;
-import mrjake.aunis.tileentity.stargate.StargateClassicBaseTile;
 import mrjake.aunis.tileentity.util.IUpgradable;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.tileentity.util.ScheduledTaskExecutorInterface;
@@ -1178,7 +1177,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getAunisVersion(Context context, Arguments args) {
-        return new Object[]{Aunis.Version};
+        return new Object[]{Aunis.MOD_VERSION};
     }
 
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")

@@ -7,6 +7,7 @@ import mrjake.aunis.entity.AunisEnergyProjectile;
 import mrjake.aunis.item.renderer.CustomModel;
 import mrjake.aunis.item.renderer.CustomModelItemInterface;
 import mrjake.aunis.stargate.power.StargateItemEnergyStorage;
+import mrjake.aunis.util.main.loader.AunisCreativeTabsHandler;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -37,10 +38,10 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
         this.maxEnergyStored = maxEnergyStored;
         this.energyPerShot = energyPerShot;
 
-        setRegistryName(new ResourceLocation(Aunis.ModID, this.itemName));
-        setUnlocalizedName(Aunis.ModID + "." + this.itemName);
+        setRegistryName(new ResourceLocation(Aunis.MOD_ID, this.itemName));
+        setUnlocalizedName(Aunis.MOD_ID + "." + this.itemName);
         setMaxStackSize(1);
-        setCreativeTab(Aunis.aunisToolsCreativeTab);
+        setCreativeTab(AunisCreativeTabsHandler.aunisToolsCreativeTab);
     }
 
     private static void checkNBT(ItemStack stack) {

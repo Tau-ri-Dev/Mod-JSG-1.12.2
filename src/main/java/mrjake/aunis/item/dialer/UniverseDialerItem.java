@@ -23,8 +23,6 @@ import mrjake.aunis.transportrings.TransportRings;
 import mrjake.aunis.util.EnumKeyInterface;
 import mrjake.aunis.util.EnumKeyMap;
 import mrjake.aunis.util.LinkingHelper;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -56,8 +54,7 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Map;
 
-import static mrjake.aunis.Aunis.*;
-import static mrjake.aunis.item.dialer.UniverseDialerMode.RINGS;
+import static mrjake.aunis.util.main.loader.AunisCreativeTabsHandler.aunisToolsCreativeTab;
 
 public class UniverseDialerItem extends Item implements CustomModelItemInterface {
 
@@ -87,8 +84,8 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
     }
 
     public UniverseDialerItem() {
-        setRegistryName(new ResourceLocation(Aunis.ModID, ITEM_NAME));
-        setUnlocalizedName(Aunis.ModID + "." + ITEM_NAME);
+        setRegistryName(new ResourceLocation(Aunis.MOD_ID, ITEM_NAME));
+        setUnlocalizedName(Aunis.MOD_ID + "." + ITEM_NAME);
         setHasSubtypes(true);
         setMaxDamage(0);
         setCreativeTab(aunisToolsCreativeTab);

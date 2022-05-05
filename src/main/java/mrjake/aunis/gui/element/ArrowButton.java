@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
 public class ArrowButton extends BetterButton {
-    public static ResourceLocation TEXTURE = new ResourceLocation(Aunis.ModID, "textures/gui/arrow_button.png");
+    public static ResourceLocation TEXTURE = new ResourceLocation(Aunis.MOD_ID, "textures/gui/arrow_button.png");
     public static int SIZE = 20;
     public enum ArrowType {
         UP(20, 0),
