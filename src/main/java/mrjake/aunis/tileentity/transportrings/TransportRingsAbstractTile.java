@@ -376,6 +376,15 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return energyRequired;
     }
 
+    public void playPlatformSound(boolean closing){
+        if(ringsDistance < 0 || !(getConfig().getOption(ConfigOptions.RENDER_PLATFORM.id).getBooleanValue())) return; // platform is not rendering!
+        if(closing){
+            AunisSoundHelper.playSoundEvent(world, getPosWithDistance(ringsDistance), SoundEventEnum.RINGS_PLATFORM_GOAULD_CLOSE);
+            return;
+        }
+        AunisSoundHelper.playSoundEvent(world, getPosWithDistance(ringsDistance), SoundEventEnum.RINGS_PLATFORM_GOAULD_OPEN);
+    }
+
     @Override
     public void executeTask(EnumScheduledTask scheduledTask, NBTTagCompound customData) {
         switch (scheduledTask) {
@@ -386,6 +395,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                 addTask(new ScheduledTask(EnumScheduledTask.RINGS_FADE_OUT));
                 addTask(new ScheduledTask(EnumScheduledTask.RINGS_SOLID_BLOCKS, 35));
+
+                playPlatformSound(false);
                 break;
 
             case RINGS_SOLID_BLOCKS:
@@ -443,6 +454,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                 sendSignal(ocContext, "transportrings_teleport_finished", initiating);
                 keepAliveEnergyPerTick = 0;
+
+                playPlatformSound(true);
                 markDirty();
 
                 break;
@@ -994,6 +1007,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         }
     }
 
+    public BlockPos getPosWithDistance(int distance){
+        return (distance > 0 ? pos.up(distance + 2) : pos.down((distance * -1) - (distance < -2 ? 2 : 0)));
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public void setState(StateTypeEnum stateType, State state) {
@@ -1007,7 +1024,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             case RINGS_START_ANIMATION:
                 distance = ((TransportRingsStartAnimationRequest) state).ringsDistance;
                 animationStart = ((TransportRingsStartAnimationRequest) state).animationStart;
-                AunisSoundHelper.playSoundEventClientSide(world, (distance > 0 ? pos.up(distance + 2) : pos.down((distance * -1) - (distance < -2 ? 2 : 0))), SoundEventEnum.RINGS_TRANSPORT);
+                AunisSoundHelper.playSoundEventClientSide(world, getPosWithDistance(distance), SoundEventEnum.RINGS_TRANSPORT);
                 rendererState.ringsDistance = distance;
                 rendererState.animationStart = animationStart;
                 rendererState.isAnimationActive = true;
