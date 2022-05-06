@@ -394,6 +394,20 @@
     "sounds": [
       "aunis:item/staff/shoot"
     ]
+  },
+  "platform_goauld_open": {
+    "category": "ambient",
+    "subtitle": "aunis.subtitle.platform_goauld_open",
+    "sounds": [
+      "aunis:transportrings/platform/platform_goauld_open"
+    ]
+  },
+  "platform_goauld_close": {
+    "category": "ambient",
+    "subtitle": "aunis.subtitle.platform_goauld_close",
+    "sounds": [
+      "aunis:transportrings/platform/platform_goauld_close"
+    ]
   }
 }
 

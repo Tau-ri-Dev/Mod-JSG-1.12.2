@@ -66,6 +66,9 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     RINGS_TRANSPORT(100, "rings_transport", 0.5f),
     RINGS_CONTROLLER_BUTTON(101, "rings_controller_button", 0.5f),
 
+    RINGS_PLATFORM_GOAULD_OPEN(102, "platform_goauld_open", 0.5f),
+    RINGS_PLATFORM_GOAULD_CLOSE(103, "platform_goauld_close", 0.5f),
+
     // ----------------------------------------------------------
     // Beamer
     BEAMER_START(110, "beamer_start", 0.5f),
