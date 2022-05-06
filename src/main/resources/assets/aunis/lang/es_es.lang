@@ -162,6 +162,9 @@ tile.aunis.titanium_ore.name=Mineral de Titanio
 tile.aunis.trinium_block.name=Bloque de Trinium
 tile.aunis.titanium_block.name=Bloque de Titanio
 
+# props
+prop.aunis.platform_goauld_block.name=Rings platform (Goa'uld)
+
 # dhd
 tile.aunis.dhd_block.name=Dispositivo de Llamada a Casa (DHD)
 tile.aunis.dhd_block.incoming_wormhole_warn=Imposible cerrar el portal de este lado

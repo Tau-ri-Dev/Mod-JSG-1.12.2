@@ -162,6 +162,9 @@ tile.aunis.titanium_ore.name=Titanium Ore
 tile.aunis.trinium_block.name=Trinium Block
 tile.aunis.titanium_block.name=Titanium Block
 
+# props
+prop.aunis.platform_goauld_block.name=Rings platform (Goa'uld)
+
 # dhd
 tile.aunis.dhd_block.name=拨号回家装置(DHD)
 tile.aunis.dhd_block.incoming_wormhole_warn=无法关闭这一端的门

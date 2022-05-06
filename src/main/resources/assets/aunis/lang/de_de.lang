@@ -163,6 +163,9 @@ tile.aunis.titanium_ore.name=Titanium Erz
 tile.aunis.trinium_block.name=Trinium Block
 tile.aunis.titanium_block.name=Titanium Block
 
+# props
+prop.aunis.platform_goauld_block.name=Rings platform (Goa'uld)
+
 # dhd
 tile.aunis.dhd_block.name=Dial Home Device (DHD)
 tile.aunis.dhd_block.incoming_wormhole_warn=Stargate kann von dieser Seite nicht geschlossen werden

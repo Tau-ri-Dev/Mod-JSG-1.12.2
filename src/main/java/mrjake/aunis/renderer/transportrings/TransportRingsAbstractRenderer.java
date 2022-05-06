@@ -1,10 +1,12 @@
 package mrjake.aunis.renderer.transportrings;
 
+import mrjake.aunis.block.props.TRPlatformBlock;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.state.transportrings.TransportRingsRendererState;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
+import mrjake.aunis.transportrings.RingsPlatform;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -46,11 +48,6 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
 
-        /*if (AunisConfig.debugConfig.renderBoundingBoxes) {
-            localTeleportBox.render();
-            renderBoundingBox.render();
-        }*/
-
         GlStateManager.translate(0.50, 0.63271 / 2 + 1.35, 0.50);
         GlStateManager.scale(0.5, 0.5, 0.5);
 
@@ -62,23 +59,17 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
         // ---------------------------------------------------------------------------
 
         long tick = world.getTotalWorldTime() - state.animationStart;
-        renderPlatform(state, tick);
+        renderPlatform(state, tick, te);
 
         GlStateManager.translate(0, relativeY, 0);
         renderRings(state, partialTicks, ringsDistance);
         GlStateManager.popMatrix();
 
         if (state.isAnimationActive) {
-            /**
-             * If the rings are going up(initial state), wait 30 ticks(1.5s) for the animation to begin
-             */
             if (state.ringsUprising) {
                 if (tick > 30) {
                     tick -= 30;
 
-                    /**
-                     * Spawn rings in intervals of 7 ticks(not repeated in a single tick)
-                     */
                     if (tick % INTERVAL_UPRISING == 0 && tick != state.lastTick) {
                         state.currentRing = (int) (tick / INTERVAL_UPRISING) - 1;
 
@@ -106,18 +97,10 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
                         }
                     }
                 }
-            }
-
-            /**
-             * If going down wait 100 tick (5s, transport sound played)
-             */
-            else {
+            } else {
                 if (tick > 100) {
                     tick -= 100;
 
-                    /**
-                     * Start lowering them in interval of 5 ticks
-                     */
                     if (tick % INTERVAL_FALLING == 0 && tick != state.lastTick) {
                         state.currentRing = RING_COUNT - (int) (tick / INTERVAL_FALLING);
 
@@ -149,60 +132,89 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
         }
     }
 
-    public void renderPlatform(TransportRingsRendererState state, long tick) {
-        if (!state.ringsConfig.getOption(TransportRingsAbstractTile.ConfigOptions.RENDER_PLATFORM.id).getBooleanValue())
-            return;
+    public void renderPlatform(TransportRingsRendererState state, long tick, TransportRingsAbstractTile te) {
+        RingsPlatform platform = te.getPlatform();
+        if (platform == null) return;
+
+        TRPlatformBlock platformBlock = platform.platformBlock;
+
+        ElementEnum platformMoving = platformBlock.getPlatformModel(platformBlock);
+        ElementEnum platformBase = platformBlock.getPlatformModelBase(platformBlock);
+
         float platformX = 0;
         float platformY = 0;
         int coefficient = -1;
-        if (state.ringsDistance < 0) return; // should not render if rings are from ceiling
-        if (state.isAnimationActive) {
-            // temporarily rendering the platform here
-            if (tick < PLATFORM_ANIMATION_DURATION) {
-                if (state.ringsUprising) {
-                    float multiplier = ((float) tick / (PLATFORM_ANIMATION_DURATION - ((float) PLATFORM_ANIMATION_DURATION / 3)));
-                    if (multiplier > 1) multiplier = 1;
-                    if (multiplier < -1) multiplier = -1;
-                    if (tick > PLATFORM_ANIMATION_DURATION / 3) {
-                        platformX = multiplier * PLATFORM_MAX_X;
-                        platformY = PLATFORM_MAX_Y;
+
+
+        if (state.ringsDistance >= 0) {
+
+            // ---------------------
+            // MATH
+
+            if (state.isAnimationActive) {
+                if (tick < PLATFORM_ANIMATION_DURATION) {
+                    if (state.ringsUprising) {
+                        float multiplier = ((float) tick / (PLATFORM_ANIMATION_DURATION - ((float) PLATFORM_ANIMATION_DURATION / 3)));
+                        if (multiplier > 1) multiplier = 1;
+                        if (multiplier < -1) multiplier = -1;
+                        if (tick > PLATFORM_ANIMATION_DURATION / 3) {
+                            platformX = multiplier * PLATFORM_MAX_X;
+                            platformY = PLATFORM_MAX_Y;
+                        }
+                        if (tick <= PLATFORM_ANIMATION_DURATION / 3)
+                            platformY = multiplier * PLATFORM_MAX_Y;
                     }
-                    if (tick <= PLATFORM_ANIMATION_DURATION / 3)
-                        platformY = multiplier * PLATFORM_MAX_Y;
+                } else {
+                    platformX = PLATFORM_MAX_X;
+                    platformY = PLATFORM_MAX_Y;
                 }
-            } else {
-                platformX = PLATFORM_MAX_X;
-                platformY = PLATFORM_MAX_Y;
+            }
+            if (!state.ringsUprising) {
+                long tick2 = tick - 135;
+                if (tick2 >= 0) {
+                    if (tick2 <= PLATFORM_ANIMATION_DURATION) {
+                        float multiplier = ((float) tick2 / (PLATFORM_ANIMATION_DURATION - ((float) PLATFORM_ANIMATION_DURATION / 3)));
+                        if (multiplier > 1) multiplier = 1;
+                        if (multiplier < -1) multiplier = -1;
+                        if (tick2 <= PLATFORM_ANIMATION_DURATION / 3) {
+                            platformX = PLATFORM_MAX_X - multiplier * PLATFORM_MAX_X;
+                            platformY = PLATFORM_MAX_Y;
+                        }
+                        if (tick2 > PLATFORM_ANIMATION_DURATION / 3)
+                            platformY = PLATFORM_MAX_Y - multiplier * PLATFORM_MAX_Y;
+                    }
+                } else {
+                    platformX = PLATFORM_MAX_X;
+                    platformY = PLATFORM_MAX_Y;
+                }
             }
         }
-        if (!state.ringsUprising) {
-            long tick2 = tick - 135;
-            if (tick2 >= 0) {
-                if (tick2 <= PLATFORM_ANIMATION_DURATION) {
-                    float multiplier = ((float) tick2 / (PLATFORM_ANIMATION_DURATION - ((float) PLATFORM_ANIMATION_DURATION / 3)));
-                    if (multiplier > 1) multiplier = 1;
-                    if (multiplier < -1) multiplier = -1;
-                    if (tick2 <= PLATFORM_ANIMATION_DURATION / 3) {
-                        platformX = PLATFORM_MAX_X - multiplier * PLATFORM_MAX_X;
-                        platformY = PLATFORM_MAX_Y;
-                    }
-                    if (tick2 > PLATFORM_ANIMATION_DURATION / 3)
-                        platformY = PLATFORM_MAX_Y - multiplier * PLATFORM_MAX_Y;
+
+        // ---------------------
+        // RENDER
+
+        if (platformMoving != null) {
+            if (state.ringsConfig.getOption(TransportRingsAbstractTile.ConfigOptions.RENDER_PLATFORM_MOVING.id).getBooleanValue()) {
+                for (int i = 0; i < 2; i++) {
+                    GlStateManager.pushMatrix();
+                    int distance = state.ringsDistance;
+                    if (distance < 0) distance += 4;
+                    GlStateManager.translate(platformX * (i == 1 ? 1 : -1), (platformY * coefficient) - 3.4f + distance * 2, 0);
+                    if (i == 1)
+                        GlStateManager.rotate(180, 0, 1, 0);
+                    platformMoving.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
+                    GlStateManager.popMatrix();
                 }
-            } else {
-                platformX = PLATFORM_MAX_X;
-                platformY = PLATFORM_MAX_Y;
             }
         }
-        for (int i = 0; i < 2; i++) {
-            GlStateManager.pushMatrix();
-            int distance = state.ringsDistance;
-            if (distance < 0) distance += 4;
-            GlStateManager.translate(platformX * (i == 1 ? 1 : -1), (platformY * coefficient) - 3.4f + distance * 2, 0);
-            if (i == 1)
-                GlStateManager.rotate(180, 0, 1, 0);
-            ElementEnum.PLATFORM_RINGS_GOAULD_BASIC.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
-            GlStateManager.popMatrix();
+        if (platformBase != null) {
+            if (state.ringsConfig.getOption(TransportRingsAbstractTile.ConfigOptions.RENDER_PLATFORM_BASE.id).getBooleanValue()) {
+                GlStateManager.pushMatrix();
+                int distance = state.ringsDistance;
+                GlStateManager.translate(platformX * -1, (platformY * coefficient) - 3.4f + distance * 2, 0);
+                platformBase.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
+                GlStateManager.popMatrix();
+            }
         }
     }
 }

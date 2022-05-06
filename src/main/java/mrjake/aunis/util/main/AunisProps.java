@@ -82,4 +82,7 @@ public class AunisProps {
 	 * Used by {@link DHDBlock} to determine whether it's snow layer on the bottom should be rendered.
 	 */
 	public static final PropertyBool SNOWY = PropertyBool.create("snowy");
+
+
+	public static final PropertyInteger PROP_VARIANT = PropertyInteger.create("prop_variant", 0, 15);
 }

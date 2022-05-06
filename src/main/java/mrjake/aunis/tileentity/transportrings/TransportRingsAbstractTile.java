@@ -7,6 +7,7 @@ import li.cil.oc.api.network.Environment;
 import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
 import mrjake.aunis.Aunis;
+import mrjake.aunis.block.props.TRPlatformBlock;
 import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.config.AunisConfig;
@@ -121,7 +122,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     private int linkId = -1;
     // ------------------------------------------------------------
     // Node-related work
-    private Node node = Aunis.ocWrapper.createNode(this, "transportrings");
+    private final Node node = Aunis.ocWrapper.createNode(this, "transportrings");
     private int currentPowerTier = 1;
     public int itemStackHandlerSlotsCount = 9;
     private final AunisItemStackHandler itemStackHandler = new AunisItemStackHandler(9) {
@@ -153,7 +154,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         }
 
         @Override
-        protected int getStackLimit(int slot, ItemStack stack) {
+        protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
             return 1;
         }
 
@@ -193,6 +194,36 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     public void setPageProgress(int pageProgress) {
         this.pageProgress = (short) pageProgress;
     }
+
+
+    // --------------------------------------------------
+    // PLATFORMS
+
+    public boolean isTherePlatform(){
+        return getPlatform() != null;
+    }
+
+    public RingsPlatform getPlatform(){
+        for(EnumFacing facing : EnumFacing.values()){
+            BlockPos pos = this.pos.offset(facing, 1);
+            Block block = world.getBlockState(pos).getBlock();
+            if(block instanceof TRPlatformBlock){
+                return new RingsPlatform(pos, (TRPlatformBlock) block);
+            }
+        }
+        return null;
+    }
+
+    public void playPlatformSound(boolean closing){
+        if(ringsDistance < 0 || !isTherePlatform()) return; // platform is not rendering!
+        if(closing){
+            AunisSoundHelper.playSoundEvent(world, getPosWithDistance(ringsDistance), SoundEventEnum.RINGS_PLATFORM_GOAULD_CLOSE);
+            return;
+        }
+        AunisSoundHelper.playSoundEvent(world, getPosWithDistance(ringsDistance), SoundEventEnum.RINGS_PLATFORM_GOAULD_OPEN);
+    }
+
+
 
     @Override
     public void update() {
@@ -374,15 +405,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         energyRequired = energyRequired.mul(distance);
 
         return energyRequired;
-    }
-
-    public void playPlatformSound(boolean closing){
-        if(ringsDistance < 0 || !(getConfig().getOption(ConfigOptions.RENDER_PLATFORM.id).getBooleanValue())) return; // platform is not rendering!
-        if(closing){
-            AunisSoundHelper.playSoundEvent(world, getPosWithDistance(ringsDistance), SoundEventEnum.RINGS_PLATFORM_GOAULD_CLOSE);
-            return;
-        }
-        AunisSoundHelper.playSoundEvent(world, getPosWithDistance(ringsDistance), SoundEventEnum.RINGS_PLATFORM_GOAULD_OPEN);
     }
 
     @Override
@@ -716,10 +738,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         markDirty();
     }
 
-    public BlockPos getLinkedController() {
-        return linkedController;
-    }
-
     public boolean isLinked() {
         return linkedController != null && world.getTileEntity(linkedController) instanceof TRControllerAbstractTile;
     }
@@ -800,8 +818,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return setRingsParams(null, null, null, name);
     }
 
-    public ParamsSetResult setRingsParams(Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> addressMap) {
-        return setRingsParams(null, addressMap, null, getRings().getName());
+    public void setRingsParams(Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> addressMap) {
+        setRingsParams(null, addressMap, null, getRings().getName());
     }
 
     public void setRingsParams(TransportRingsAddress address, SymbolTypeTransportRingsEnum symbolType, String name) {
@@ -856,10 +874,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     @Override
-    protected void setWorldCreate(World worldIn) {
+    protected void setWorldCreate(@Nonnull World worldIn) {
         setWorld(worldIn);
     }
 
+    @Nonnull
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         compound.setTag("rendererState", rendererState.serializeNBT());
@@ -909,7 +928,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         try {
             rendererState.deserializeNBT(compound.getCompoundTag("rendererState"));
             ScheduledTask.deserializeList(compound.getCompoundTag("scheduledTasks"), scheduledTasks, this);
@@ -1014,8 +1033,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     @Override
     @SideOnly(Side.CLIENT)
     public void setState(StateTypeEnum stateType, State state) {
-        int distance = 0;
-        long animationStart = 0;
+        int distance;
+        long animationStart;
         switch (stateType) {
             case RENDERER_STATE:
                 rendererState = ((TransportRingsRendererState) state);
@@ -1063,10 +1082,13 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     protected AunisTileEntityConfig config = new AunisTileEntityConfig();
 
     public enum ConfigOptions{
-        RENDER_PLATFORM(
-                0, "renderPlatform", AunisConfigOptionTypeEnum.BOOLEAN, "false",
-                "Render rings platform",
-                " -- WORK IN PROGRESS OPTION -- "
+        RENDER_PLATFORM_MOVING(
+                0, "platformMoving", AunisConfigOptionTypeEnum.BOOLEAN, "true",
+                "Render platform moving part"
+        ),
+        RENDER_PLATFORM_BASE(
+                1, "platformBase", AunisConfigOptionTypeEnum.BOOLEAN, "true",
+                "Render platform base part"
         );
 
         public int id;
@@ -1134,12 +1156,15 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         if (closestController != null) {
             TRControllerAbstractTile controllerTile = (TRControllerAbstractTile) world.getTileEntity(closestController);
-            controllerTile.setLinkedRings(pos, linkId);
+            if (controllerTile != null) {
+                controllerTile.setLinkedRings(pos, linkId);
+            }
         }
 
         setLinkedController(closestController, linkId);
     }
 
+    @Nonnull
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         return renderBoundingBox;

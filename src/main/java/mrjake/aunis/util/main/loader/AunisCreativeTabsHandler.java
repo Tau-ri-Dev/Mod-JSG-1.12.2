@@ -9,4 +9,5 @@ public class AunisCreativeTabsHandler {
     public static final AunisOresCreativeTab aunisOresCreativeTab = new AunisOresCreativeTab();
     public static final AunisEnergyCreativeTab aunisEnergyCreativeTab = new AunisEnergyCreativeTab();
     public static final AunisToolsCreativeTab aunisToolsCreativeTab = new AunisToolsCreativeTab();
+    public static final AunisPropsCreativeTab aunisPropsCreativeTab = new AunisPropsCreativeTab();
 }

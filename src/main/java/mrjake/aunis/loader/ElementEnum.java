@@ -72,9 +72,6 @@ public enum ElementEnum {
   RINGS_CONTROLLER_GOAULD("transportrings/controller/goauld/plate_goauld.obj", "transportrings/controller/goauld/goauld_panel"),
   RINGS_CONTROLLER_GOAULD_LIGHT("transportrings/controller/goauld/indicator_lights.obj", "transportrings/controller/goauld/goauld_light"),
 
-  // platforms
-  PLATFORM_RINGS_GOAULD_BASIC("platforms/rings/goauld_basic.obj", "platforms/rings/goauld_basic"),
-
   // --------------------------------------------------------------------------------------------
   // Irises/Shields
 
@@ -87,7 +84,12 @@ public enum ElementEnum {
   // Tools
 
   ZAT("tools/zat.obj", "tools/zat.png"),
-  STAFF("tools/staff.obj", "tools/staff.png");
+  STAFF("tools/staff.obj", "tools/staff.png"),
+
+  // --------------------------------------------------------------------------------------------
+  // Platforms
+
+  PLATFORM_RINGS_GOAULD_BASIC("platforms/rings/goauld_basic.obj", "platforms/rings/goauld_basic");
 
   // --------------------------------------------------------------------------------------------
 

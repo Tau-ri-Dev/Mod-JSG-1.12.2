@@ -1,0 +1,6 @@
+{
+	"parent": "block/cube_all",
+	"textures": {
+		"all": "aunis:blocks/props/platform_rings_block"
+	}
+}

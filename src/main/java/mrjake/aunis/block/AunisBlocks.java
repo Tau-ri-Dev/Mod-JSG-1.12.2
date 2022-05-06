@@ -14,6 +14,7 @@ import mrjake.aunis.block.stargate.*;
 import mrjake.aunis.block.transportrings.TRControllerGoauldBlock;
 import mrjake.aunis.block.transportrings.TransportRingsGoauldBlock;
 import mrjake.aunis.block.transportrings.TransportRingsOriBlock;
+import mrjake.aunis.block.props.TRPlatformBlock;
 import mrjake.aunis.item.linkable.gdo.GDOItem;
 import mrjake.aunis.tileentity.transportrings.TRControllerAbstractTile;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
@@ -84,6 +85,12 @@ public class AunisBlocks {
     public static final CapacitorBlock CAPACITOR_BLOCK = new CapacitorBlock();
     public static final BeamerBlock BEAMER_BLOCK = new BeamerBlock();
 
+    // -----------------------------------------------------------------------------
+
+    public static final TRPlatformBlock TR_PLATFORM_BLOCK = new TRPlatformBlock();
+
+    // -----------------------------------------------------------------------------
+
     /**
      * Used in {@link TRControllerAbstractTile#updateLinkStatus()}
      */
@@ -153,6 +160,8 @@ public class AunisBlocks {
 
             TR_CONTROLLER_GOAULD_BLOCK,
 
+            TR_PLATFORM_BLOCK,
+
             CAPACITOR_BLOCK_EMPTY,
             CAPACITOR_BLOCK,
 
@@ -210,8 +219,15 @@ public class AunisBlocks {
                 Map<Integer, String> values = b.getAllMetaTypes();
                 for (Integer meta : values.keySet())
                     ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(b), meta, new ModelResourceLocation(values.get(meta)));
-            } else
+            }
+            else if (block instanceof AunisAbstractCustomMetaItemBlock) {
+                AunisAbstractCustomMetaItemBlock b = (AunisAbstractCustomMetaItemBlock) block;
+                Map<Integer, String> values = b.getAllMetaTypes();
+                for (Integer meta : values.keySet())
+                    ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(b), meta, new ModelResourceLocation(values.get(meta)));
+            } else {
                 ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName(), "inventory"));
+            }
         }
     }
 

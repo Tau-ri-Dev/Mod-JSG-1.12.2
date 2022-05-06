@@ -162,6 +162,9 @@ tile.aunis.titanium_ore.name=Титановая Руда
 tile.aunis.trinium_block.name=Блок Триниума
 tile.aunis.titanium_block.name=Блок Титана
 
+# props
+prop.aunis.platform_goauld_block.name=Rings platform (Goa'uld)
+
 # dhd
 tile.aunis.dhd_block.name=Наборное Устройство (DHD)
 tile.aunis.dhd_block.incoming_wormhole_warn=Невозможно закрыть с этой стороны

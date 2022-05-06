@@ -82,26 +82,4 @@ public class AunisFluids {
             blockFluidMap.put(fluid.getName(), blockFluid);
         }
     }
-
-	public static final Block[] WATER_LOGGABLE_BLOCKS = {
-			INVISIBLE_BLOCK,
-			IRIS_BLOCK,
-			STARGATE_MILKY_WAY_BASE_BLOCK,
-			STARGATE_MILKY_WAY_MEMBER_BLOCK,
-			STARGATE_UNIVERSE_BASE_BLOCK,
-			STARGATE_UNIVERSE_MEMBER_BLOCK,
-			STARGATE_PEGASUS_BASE_BLOCK,
-			STARGATE_PEGASUS_MEMBER_BLOCK,
-			STARGATE_ORLIN_BASE_BLOCK,
-			STARGATE_ORLIN_MEMBER_BLOCK,
-
-			DHD_BLOCK,
-			DHD_PEGASUS_BLOCK,
-			CAPACITOR_BLOCK_EMPTY,
-			CAPACITOR_BLOCK,
-			TR_CONTROLLER_GOAULD_BLOCK
-	};
-
-    public static void registerWaterLogs() {
-    }
 }
