@@ -5,6 +5,8 @@ itemGroup.aunis_rings=Aunis: Rings
 itemGroup.aunis_ores=Aunis: Erze
 itemGroup.aunis_energy=Aunis: Energie
 itemGroup.aunis_tools=Aunis: Werkzeuge
+itemGroup.aunis_props=Aunis: Props
+itemGroup.aunis_machines=Aunis: Machines
 
 # sound categories
 soundCategory.aunis_sounds=Aunis:
