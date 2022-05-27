@@ -662,6 +662,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         }
 
         sendSignal(null, "stargate_open", new Object[]{isInitiating});
+        Aunis.debug("Gate at " + pos.toString() + " opened!");
 
         markDirty();
     }
@@ -691,6 +692,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         connectingToGate = false;
         connectedToGatePos = null;
         isIncoming = false;
+        Aunis.debug("Gate at " + pos.toString() + " closed!");
 
         markDirty();
     }
@@ -717,6 +719,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             addFailedTaskAndPlaySound();
             if (stargateState != EnumStargateState.INCOMING)
                 stargateState = EnumStargateState.FAILING;
+
+            Aunis.debug("Gate at " + pos.toString() + " failed!");
 
             markDirty();
         }

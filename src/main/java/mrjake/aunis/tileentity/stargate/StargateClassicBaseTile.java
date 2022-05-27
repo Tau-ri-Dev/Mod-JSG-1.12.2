@@ -344,9 +344,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             lightUpChevronByIncoming(!getConfig().getOption(ALLOW_INCOMING.id).getBooleanValue());
     }
 
+    private String RIG_PREFIX = "";
 
     @Override
     public void update() {
+        RIG_PREFIX = "[RIG] at " + pos.toString() + ":: ";
 
         // Stargate Incoming Animations Timer
         if (!world.isRemote)
@@ -392,6 +394,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         if (entities < 3) entities = 3;
 
                         generateIncoming(entities, 7, delay); // execute
+                        Aunis.debug(RIG_PREFIX + "Stargate at " + pos.toString() + " generated RIG!");
                     }
                 }
             }
@@ -427,6 +430,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                             else this.incomingWormhole(randomIncomingAddrSize);
                             this.sendSignal(null, "stargate_incoming_wormhole", new Object[]{randomIncomingAddrSize});
                             this.failGate();
+                            Aunis.debug(RIG_PREFIX + "Incoming!");
                         }
                         else resetRandomIncoming();
                     } else if (randomIncomingState < waitOpen) { // wait waitOpen ticks to open gate
@@ -455,6 +459,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                             activateDHDSymbolBRB();
 
                             markDirty();
+                            Aunis.debug(RIG_PREFIX + "Opening!");
 
                             this.isFinalActive = true;
                         }
@@ -484,6 +489,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                                 // spawn zombie
                                 this.world.spawnEntity(mobEntity);
                                 AunisSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.WORMHOLE_GO);
+
+                                Aunis.debug(RIG_PREFIX + "Spawned " + mobEntity.getName());
                             } else {
                                 // do iris shit
 
@@ -514,6 +521,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                                         energyStorage.extractEnergy(500, false);
                                     }
                                 }
+                                Aunis.debug(RIG_PREFIX + mobEntity.getName() + " hit iris!");
                                 sendSignal(null, "stargate_event_iris_hit", new Object[]{"Something just hit the IRIS!"});
                             }
 
@@ -521,6 +529,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     } else if ((randomIncomingEntities <= 0 && randomIncomingState >= (waitOpen + wait)) || stargateState != EnumStargateState.ENGAGED) {
                         resetRandomIncoming();
                         closeGate(StargateClosedReasonEnum.AUTOCLOSE);
+                        Aunis.debug(RIG_PREFIX + "Closed!!!");
 
                         if (this instanceof StargatePegasusBaseTile) ((StargatePegasusBaseTile) this).clearDHDSymbols();
                         if (this instanceof StargateMilkyWayBaseTile)

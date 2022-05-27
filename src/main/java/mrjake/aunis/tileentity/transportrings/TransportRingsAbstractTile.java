@@ -419,6 +419,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 addTask(new ScheduledTask(EnumScheduledTask.RINGS_SOLID_BLOCKS, 35));
 
                 playPlatformSound(false);
+                Aunis.debug("Rings at " + pos.toString() + " started transport!");
                 break;
 
             case RINGS_SOLID_BLOCKS:
@@ -464,6 +465,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 excludedEntities.clear();
 
                 addTask(new ScheduledTask(EnumScheduledTask.RINGS_CLEAR_OUT));
+                Aunis.debug("Rings at " + pos.toString() + " transported entities!");
                 break;
 
             case RINGS_CLEAR_OUT:
@@ -479,6 +481,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                 playPlatformSound(true);
                 markDirty();
+                Aunis.debug("Rings at " + pos.toString() + " deactivated!");
 
                 break;
 
