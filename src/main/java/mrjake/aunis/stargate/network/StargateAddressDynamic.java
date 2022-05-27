@@ -15,6 +15,12 @@ public class StargateAddressDynamic extends StargateAddress {
 	public StargateAddressDynamic(NBTTagCompound compound) {
 		super(compound);
 	}
+
+	public StargateAddressDynamic(StargateAddress address) {
+		super(address.symbolType);
+		clear();
+		addAll(address);
+	}
 	
 	@Override
 	protected int getSavedSymbols() {

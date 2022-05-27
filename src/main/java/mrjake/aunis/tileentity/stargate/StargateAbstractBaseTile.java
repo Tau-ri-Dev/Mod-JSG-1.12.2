@@ -6,7 +6,6 @@ import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.*;
 import mrjake.aunis.Aunis;
-import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.api.event.*;
 import mrjake.aunis.block.AunisBlocks;
 import mrjake.aunis.block.dialhomedevice.DHDBlock;
@@ -27,7 +26,9 @@ import mrjake.aunis.stargate.network.*;
 import mrjake.aunis.stargate.power.StargateAbstractEnergyStorage;
 import mrjake.aunis.stargate.power.StargateEnergyRequired;
 import mrjake.aunis.stargate.teleportation.EventHorizon;
-import mrjake.aunis.state.*;
+import mrjake.aunis.state.State;
+import mrjake.aunis.state.StateProviderInterface;
+import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.state.stargate.StargateFlashState;
 import mrjake.aunis.state.stargate.StargateRendererActionState;
 import mrjake.aunis.state.stargate.StargateRendererActionState.EnumGateAction;
@@ -36,9 +37,9 @@ import mrjake.aunis.tileentity.util.PreparableInterface;
 import mrjake.aunis.tileentity.util.ScheduledTask;
 import mrjake.aunis.tileentity.util.ScheduledTaskExecutorInterface;
 import mrjake.aunis.util.AunisAxisAlignedBB;
+import mrjake.aunis.util.main.AunisProps;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -69,12 +70,13 @@ import javax.vecmath.Vector2f;
 import java.util.*;
 
 import static mrjake.aunis.config.stargate.StargateTimeLimitModeEnum.CLOSE_GATE;
+import static mrjake.aunis.stargate.network.internalgates.StargateAddressesEnum.tryDialInternal;
 import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_INCOMING;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
 public abstract class StargateAbstractBaseTile extends TileEntity implements StateProviderInterface, ITickable, ICapabilityProvider, ScheduledTaskExecutorInterface, Environment, WirelessEndpoint, PreparableInterface {
 
-    public StargateNetwork getNetwork(){
+    public StargateNetwork getNetwork() {
         return network;
     }
 
@@ -97,9 +99,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         AunisSoundHelper.playPositionedSound(world, getGateCenterPos(), SoundPositionedEnum.WORMHOLE_LOOP, true);
 
-        if(targetGatePos != null)
+        if (targetGatePos != null)
             new StargateOpenedEvent(this, targetGatePos.getTileEntity(), isInitiating).post();
-        else if(randomIncomingIsActive)
+        else if (randomIncomingIsActive)
             new StargateOpenedEvent(this, this, isInitiating).post();
 
         sendSignal(null, "stargate_wormhole_stabilized", new Object[]{isInitiating});
@@ -109,14 +111,14 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     protected void disconnectGate(boolean force) {
         disconnectGate();
-        if(force)
+        if (force)
             stargateState = EnumStargateState.IDLE;
         markDirty();
     }
 
     protected void disconnectGate() {
 
-        if(stargateState != EnumStargateState.INCOMING)
+        if (stargateState != EnumStargateState.INCOMING)
             stargateState = EnumStargateState.IDLE;
         else
             isIncoming = false;
@@ -136,7 +138,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     protected void failGate() {
-        if(stargateState != EnumStargateState.INCOMING) stargateState = EnumStargateState.IDLE;
+        if (stargateState != EnumStargateState.INCOMING) stargateState = EnumStargateState.IDLE;
         connectedToGate = false;
         connectingToGate = false;
 
@@ -272,7 +274,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      */
     public StargateOpenResult attemptOpenAndFail() {
         ResultTargetValid resultTarget = attemptOpenDialed();
-        if(resultTarget == null){
+        if (resultTarget == null) {
             return StargateOpenResult.ADDRESS_MALFORMED;
         }
 
@@ -331,7 +333,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * @return {@code True} if the address parameter is valid and the dialed gate can be reached, {@code false} otherwise.
      */
     protected StargateOpenResult checkAddress(StargateAddressDynamic address) {
-        if (!address.validate()){
+        if (!address.validate()) {
             return StargateOpenResult.ADDRESS_MALFORMED;
         }
 
@@ -352,7 +354,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * @param address Address to be checked.
      * @return {@code True} if the address parameter is valid and the dialed gate can be reached, {@code false} otherwise.
      */
-    protected StargateOpenResult checkAddressAndEnergy(StargateAddressDynamic address) {
+    public StargateOpenResult checkAddressAndEnergy(StargateAddressDynamic address) {
         StargateOpenResult result = checkAddress(address);
 
         if (!result.ok()) return result;
@@ -374,15 +376,15 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected boolean canDialAddress(StargateAddressDynamic address) {
         StargatePos targetGatePos = network.getStargate(address);
 
-        if (targetGatePos == null){
+        if (targetGatePos == null) {
             return false;
         }
 
-        if (targetGatePos.equals(gatePosMap.get(getSymbolType()))){
+        if (targetGatePos.equals(gatePosMap.get(getSymbolType()))) {
             return false;
         }
 
-        if (checkAddressLength(address, targetGatePos)){
+        if (checkAddressLength(address, targetGatePos)) {
             return false;
         }
 
@@ -398,7 +400,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     protected boolean checkAddressLength(StargateAddressDynamic address, StargatePos targetGatePosition) {
-        if(targetGatePosition == null) return false;
+        if (targetGatePosition == null) return false;
         boolean localDial = world.provider.getDimension() == targetGatePosition.dimensionID || StargateDimensionConfig.isGroupEqual(world.provider.getDimensionType(), DimensionManager.getProviderType(targetGatePosition.dimensionID));
 
         // TODO Optimize this, prevent dimension from loading only to check the SymbolType...
@@ -406,8 +408,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     public void attemptClose(StargateClosedReasonEnum reason) {
-        if(reason == null) return;
-        if(targetGatePos == null){
+        if (reason == null) return;
+        if (targetGatePos == null) {
             closeGate(reason);
             resetRandomIncoming();
             return;
@@ -485,19 +487,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         return false;
     }
 
-    //	public void setGateAddress(StargateAddress gateAddress) {
-    //		if (network.isStargateInNetwork(gateAddress))
-    //			Aunis.logger.error("Stargate with given address already exists");
-    //
-    //		if (network.isStargateInNetwork(gateAddress))
-    //			network.removeStargate(this.gateAddress);
-    //
-    //		StargateNetwork.get(world).addStargate(gateAddress, new StargatePos(world.provider.getDimension(), pos, gateAddress));
-    //
-    //		this.gateAddress = gateAddress;
-    //		markDirty();
-    //	}
-
     /**
      * Checks whether the symbol can be added to the address.
      *
@@ -523,20 +512,19 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      */
     protected void addSymbolToAddress(SymbolInterface symbol, int addSymbol) {
         if (!canAddSymbol(symbol)) throw new IllegalStateException("Cannot add that symbol");
-        if(addSymbol == 1) dialedAddress.addSymbol(symbol);
+        if (addSymbol == 1) dialedAddress.addSymbol(symbol);
         StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
         dialAddr_backup.clear();
         dialAddr_backup.addAll(dialedAddress);
-        if(symbol != getSymbolType().getOrigin()) {
-            if(dialedAddress.size() >= 6) {
+        if (symbol != getSymbolType().getOrigin()) {
+            if (dialedAddress.size() >= 6) {
                 dialedAddress.addOrigin();
 
                 if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate && !Objects.requireNonNull(network.getStargate(dialedAddress)).getTileEntity().stargateState.incoming()) {
                     connectingToGate = true;
-                }
-                else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
+                } else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
                     StargateAbstractBaseTile targetTile = Objects.requireNonNull(network.getStargate(dialedAddress)).getTileEntity();
-                    if(targetTile != null) {
+                    if (targetTile != null) {
                         targetTile.disconnectGate(true);
                         targetTile.stargateState = EnumStargateState.IDLE;
                         targetTile.markDirty();
@@ -550,12 +538,15 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         markDirty();
     }
 
-    protected void addSymbolToAddress(SymbolInterface symbol){
-        addSymbolToAddress(symbol, 1);
+    protected void addSymbolToAddress(SymbolInterface symbol) {
+        if (tryDialInternal(this, symbol))
+            addSymbolToAddress(symbol, 0);
+        else
+            addSymbolToAddress(symbol, 1);
     }
 
     protected void resetTargetIncomingAnimation() {
-        if(connectedToGatePos != null){
+        if (connectedToGatePos != null) {
             StargateAbstractBaseTile targetGateTile = connectedToGatePos.getTileEntity();
             targetGateTile.disconnectGate(true);
             targetGateTile.stargateState = EnumStargateState.IDLE;
@@ -570,20 +561,21 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected void doIncomingAnimation(int time, boolean byComputer) {
         doIncomingAnimation(time, byComputer, null);
     }
-    protected void doIncomingAnimation(int time, boolean byComputer, SymbolInterface symbol){
-        if(!connectingToGate) return;
+
+    protected void doIncomingAnimation(int time, boolean byComputer, SymbolInterface symbol) {
+        if (!connectingToGate) return;
         connectingToGate = false;
         markDirty();
         StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
         dialAddr_backup.clear();
         dialAddr_backup.addAll(dialedAddress);
-        if(dialedAddress.size() >= 6 && (symbol == null || symbol.origin())) {
+        if (dialedAddress.size() >= 6 && (symbol == null || symbol.origin())) {
             dialedAddress.addOrigin();
 
             StargatePos targetGatePos = network.getStargate(dialedAddress);
-            if(targetGatePos == null) return;
+            if (targetGatePos == null) return;
             StargateAbstractBaseTile targetGateTile = targetGatePos.getTileEntity();
-            if(targetGateTile == null) return;
+            if (targetGateTile == null) return;
             if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate) {
                 int size = dialedAddress.size();
 
@@ -591,20 +583,20 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 connectedToGatePos = targetGatePos;
                 markDirty();
                 int period = 400;
-                if(byComputer){
+                if (byComputer) {
                     time += 20; // add 20 ticks to time
                     period = ((time / 20) * 1000) / size;
                 }
                 targetGateTile.isIncoming = true;
                 targetGateTile.markDirty();
-                if(targetGateTile instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) targetGateTile).config.getOption(ALLOW_INCOMING.id).getBooleanValue()) targetGateTile.incomingWormhole(size, period);
+                if (targetGateTile instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) targetGateTile).config.getOption(ALLOW_INCOMING.id).getBooleanValue())
+                    targetGateTile.incomingWormhole(size, period);
                 else targetGateTile.incomingWormhole(size);
                 targetGateTile.sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
                 targetGateTile.stargateState = EnumStargateState.INCOMING;
                 targetGateTile.markDirty();
                 targetGateTile.failGate();
-            }
-            else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
+            } else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
                 targetGateTile.disconnectGate(true);
                 targetGateTile.stargateState = EnumStargateState.IDLE;
                 targetGateTile.markDirty();
@@ -710,7 +702,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         if (stargateState == EnumStargateState.DIALING || stargateState == EnumStargateState.DIALING_COMPUTER || stargateState == EnumStargateState.IDLE) {
 
             // disengage target gate
-            if(connectedToGate) {
+            if (connectedToGate) {
                 if (this instanceof StargateClassicBaseTile)
                     dialedAddress.addSymbol(getSymbolType().getOrigin());
 
@@ -723,7 +715,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             new StargateDialFailEvent(this, reason).post();
 
             addFailedTaskAndPlaySound();
-            if(stargateState != EnumStargateState.INCOMING)
+            if (stargateState != EnumStargateState.INCOMING)
                 stargateState = EnumStargateState.FAILING;
 
             markDirty();
@@ -855,15 +847,16 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public float randomIncomingState = 0;
     public boolean randomIncomingIsActive = false;
 
-    public void generateIncoming(int entities, int addressSize){
+    public void generateIncoming(int entities, int addressSize) {
         generateIncoming(entities, addressSize, 80);
     }
 
-    public void generateIncoming(int entities, int addressSize, int delay){
-        if(this instanceof StargateUniverseBaseTile && !((stargateState.idle() || (stargateState.dialing() && !stargateState.dialingComputer())) && !randomIncomingIsActive)) return;
-        else if(!((stargateState.idle() || stargateState.dialing()) && !randomIncomingIsActive)) return;
+    public void generateIncoming(int entities, int addressSize, int delay) {
+        if (this instanceof StargateUniverseBaseTile && !((stargateState.idle() || (stargateState.dialing() && !stargateState.dialingComputer())) && !randomIncomingIsActive))
+            return;
+        else if (!((stargateState.idle() || stargateState.dialing()) && !randomIncomingIsActive)) return;
 
-        if(stargateState.incoming()) return;
+        if (stargateState.incoming()) return;
 
         this.randomIncomingEntities = entities;
         this.randomIncomingAddrSize = addressSize;
@@ -872,14 +865,15 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         this.randomIncomingIsActive = true;
     }
 
-    public void resetRandomIncoming(){
+    public void resetRandomIncoming() {
         this.randomIncomingIsActive = false;
         this.randomIncomingEntities = 0;
         this.randomIncomingState = 0;
         this.randomIncomingAddrSize = 7;
         this.randomIncomingOpenDelay = 0;
     }
-    public void activateDHDSymbolBRB(){
+
+    public void activateDHDSymbolBRB() {
     }
 
     @Override
@@ -896,7 +890,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 Aunis.ocWrapper.joinOrCreateNetwork(this);
                 // Aunis.info(pos + ": Stargate joined OC network");
             }
-            if(targetPoint == null){
+            if (targetPoint == null) {
                 targetPoint = new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
                 markDirty();
             }
@@ -909,14 +903,14 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             // Event horizon teleportation
             if (stargateState.initiating()) {
                 eventHorizon.scheduleTeleportation(targetGatePos, true);
-            }
-            else if(stargateState.engaged()){
+            } else if (stargateState.engaged()) {
                 eventHorizon.scheduleTeleportation(targetGatePos, false);
             }
 
             // Autoclose
             if (world.getTotalWorldTime() % 20 == 0 && stargateState == EnumStargateState.ENGAGED && AunisConfig.autoCloseConfig.autocloseEnabled && shouldAutoclose()) {
-                if(targetGatePos != null) targetGatePos.getTileEntity().attemptClose(StargateClosedReasonEnum.AUTOCLOSE);
+                if (targetGatePos != null)
+                    targetGatePos.getTileEntity().attemptClose(StargateClosedReasonEnum.AUTOCLOSE);
                 else attemptClose(StargateClosedReasonEnum.AUTOCLOSE);
             }
 
@@ -925,11 +919,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             }
 
             // Anti idle target (AIT)
-            if(targetGatePos != null && world.getTotalWorldTime() % 80 == 0){
-                if(this.stargateState.engaged()){
+            if (targetGatePos != null && world.getTotalWorldTime() % 80 == 0) {
+                if (this.stargateState.engaged()) {
                     StargateAbstractBaseTile tile = targetGatePos.getTileEntity();
-                    if(tile != null){
-                        if(tile.stargateState.idle()){
+                    if (tile != null) {
+                        if (tile.stargateState.idle()) {
                             this.attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
                         }
                     }
@@ -948,13 +942,15 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
              * 	False: Update the source gate about consumed energy each second
              */
             if (stargateState.initiating()) {
-                if(targetGatePos == null) targetGatePos = network.getStargate(this.getStargateAddress(SymbolTypeEnum.MILKYWAY));
+                if (targetGatePos == null)
+                    targetGatePos = network.getStargate(this.getStargateAddress(SymbolTypeEnum.MILKYWAY));
                 int energyStored = getEnergyStorage().getEnergyStored();
 
                 // Max Open Time
-                if(targetGatePos.getTileEntity() != null) targetGatePos.getTileEntity().addTimeLimitSecond();
+                if (targetGatePos.getTileEntity() != null) targetGatePos.getTileEntity().addTimeLimitSecond();
                 int morePower = doTimeLimitFunc();
-                if(dialedAddress.size() == 9) morePower += keepAliveEnergyPerTick*0.75; // add energy draw when is 9 symbol address engaged
+                if (dialedAddress.size() == 9)
+                    morePower += keepAliveEnergyPerTick * 0.75; // add energy draw when is 9 symbol address engaged
                 energySecondsToClose = energyStored / (float) (keepAliveEnergyPerTick + morePower + shieldKeepAlive) / 20f;
 
                 if (energySecondsToClose >= 1) {
@@ -987,10 +983,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                     markDirty();
                 } else
                     attemptClose(StargateClosedReasonEnum.OUT_OF_POWER);
-            }
-            else{
-                if(shieldKeepAlive > 0) getEnergyStorage().extractEnergy(shieldKeepAlive, false);
-                if(getOpenedSeconds() > 0 && stargateState != EnumStargateState.ENGAGED) resetLimitSeconds();
+            } else {
+                if (shieldKeepAlive > 0) getEnergyStorage().extractEnergy(shieldKeepAlive, false);
+                if (getOpenedSeconds() > 0 && stargateState != EnumStargateState.ENGAGED) resetLimitSeconds();
             }
 
             energyTransferedLastTick = getEnergyStorage().getEnergyStored() - energyStoredLastTick;
@@ -1006,7 +1001,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
             // Get all blocks and entities inside the kawoosh
             for (int i = 0; i < horizonSegments; i++) {
-                if(localKillingBoxes.size() > i) {
+                if (localKillingBoxes.size() > i) {
                     AunisAxisAlignedBB gBox = localKillingBoxes.get(i).offset(pos);
 
                     entities.addAll(world.getEntitiesWithinAABB(Entity.class, gBox));
@@ -1060,47 +1055,47 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * @return {@code True} if the gate should be closed, false otherwise.
      */
     protected boolean shouldAutoclose() {
-        if(!randomIncomingIsActive && targetGatePos != null) return getAutoCloseManager().shouldClose(targetGatePos);
-        else if(!randomIncomingIsActive) return true;
+        if (!randomIncomingIsActive && targetGatePos != null) return getAutoCloseManager().shouldClose(targetGatePos);
+        else if (!randomIncomingIsActive) return true;
         return false;
     }
+
     protected void resetLimitSeconds() {
         secondsOpened = 0;
         getAutoCloseManager().resetLimitSeconds();
     }
 
-    protected int doTimeLimitFunc(){
+    protected int doTimeLimitFunc() {
         int morePower = 0;
         getOpenedSeconds();
         addTimeLimitSecond();
         int configPower = AunisConfig.openLimitConfig.maxOpenedPowerDrawAfterLimit;
         if (AunisConfig.openLimitConfig.maxOpenedEnabled && getAutoCloseManager().afterLimitSeconds()) {
-            if (AunisConfig.openLimitConfig.maxOpenedWhat == CLOSE_GATE){
+            if (AunisConfig.openLimitConfig.maxOpenedWhat == CLOSE_GATE) {
                 attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
-                if(this instanceof StargatePegasusBaseTile) ((StargatePegasusBaseTile) this).clearDHDSymbols();
-                if(this instanceof StargateMilkyWayBaseTile) ((StargateMilkyWayBaseTile) this).clearDHDSymbols();
+                if (this instanceof StargatePegasusBaseTile) ((StargatePegasusBaseTile) this).clearDHDSymbols();
+                if (this instanceof StargateMilkyWayBaseTile) ((StargateMilkyWayBaseTile) this).clearDHDSymbols();
                 resetLimitSeconds();
-            }
-            else
+            } else
                 morePower = (configPower + (getOpenedSeconds() * (configPower / 100)));
         }
         return morePower;
     }
 
-    protected void addTimeLimitSecond(){
+    protected void addTimeLimitSecond() {
         getAutoCloseManager().addLimitSecond();
     }
 
-    public int getOpenedSeconds(){
+    public int getOpenedSeconds() {
         secondsOpened = getAutoCloseManager().getOpenedSeconds();
         return (int) secondsOpened;
     }
 
-    public float getOpenedSecondsToDisplay(){
+    public float getOpenedSecondsToDisplay() {
         return secondsOpened;
     }
 
-    public String getOpenedSecondsToDisplayAsMinutes(){
+    public String getOpenedSecondsToDisplayAsMinutes() {
         float openedSeconds = getOpenedSecondsToDisplay();
         int minutes = ((int) Math.floor(openedSeconds / 60));
         int seconds = ((int) (openedSeconds - (60 * minutes)));
@@ -1108,7 +1103,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         return minutes + ":" + secondsString + "min";
     }
 
-    protected void extractEnergyByShield(int keepAlive){
+    protected void extractEnergyByShield(int keepAlive) {
         this.shieldKeepAlive = keepAlive;
     }
 
@@ -1427,7 +1422,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 break;
 
             case RENDERER_UPDATE:
-                if(getRendererStateClient() == null) break;
+                if (getRendererStateClient() == null) break;
                 switch (((StargateRendererActionState) state).action) {
                     case OPEN_GATE:
                         getRendererStateClient().horizonSegments = 0;

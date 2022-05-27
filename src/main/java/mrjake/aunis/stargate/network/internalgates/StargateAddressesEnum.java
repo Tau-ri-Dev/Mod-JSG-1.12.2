@@ -1,0 +1,73 @@
+package mrjake.aunis.stargate.network.internalgates;
+
+import mrjake.aunis.Aunis;
+import mrjake.aunis.stargate.network.*;
+import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
+
+public enum StargateAddressesEnum {
+    EARTH(0,
+            6,
+            7,
+            SymbolTypeEnum.MILKYWAY,
+            new SymbolInterface[] { // address to match
+                SymbolMilkyWayEnum.AURIGA,
+                SymbolMilkyWayEnum.CETUS,
+                SymbolMilkyWayEnum.CENTAURUS,
+                SymbolMilkyWayEnum.CANCER,
+                SymbolMilkyWayEnum.SCUTUM,
+                SymbolMilkyWayEnum.ERIDANUS,
+                SymbolMilkyWayEnum.SERPENSCAPUT
+            }
+    )
+    ;
+
+    public final StargateInternalAddress address;
+    public final int id;
+
+    StargateAddressesEnum(int id, int minAddressLength, int maxAddressLength, SymbolTypeEnum symbolType, SymbolInterface[] symbols){
+        this.id = id;
+        StargateAddressDynamic addressToMatch = new StargateAddressDynamic(symbolType);
+        for(SymbolInterface symbol : symbols)
+            addressToMatch.addSymbol(symbol);
+
+        this.address = new StargateInternalAddress(minAddressLength, maxAddressLength, addressToMatch);
+    }
+
+    public static boolean tryDialInternal(StargateAbstractBaseTile sgTile, SymbolInterface symbolToEngage){
+        StargateNetwork network = sgTile.getNetwork();
+        StargateAddressDynamic tileDialedAddress = sgTile.getDialedAddress();
+        StargateAddressDynamic dialedAddress = new StargateAddressDynamic(tileDialedAddress);
+
+        dialedAddress.addSymbol(symbolToEngage);
+
+        for(StargateAddressesEnum e : values()){
+            StargateInternalAddress address = network.getInternalAddress(e.id);
+
+            if(address == null) continue;
+            if(address.addressToReplace == null) continue;
+            if(address.addressToMatch.getSymbolType() != sgTile.getSymbolType()) continue;
+            if(dialedAddress.size() < address.minAddressLength) continue;
+            if(dialedAddress.size() > address.maxAddressLength) continue;
+            if(network.isStargateInNetwork(dialedAddress)) continue;
+            if(!dialedAddress.equalsV2(address.addressToMatch, dialedAddress.size())) continue;
+            if(address.addressToReplace.size() == 0) continue;
+
+            StargateAddressDynamic subAddress = new StargateAddressDynamic(address.addressToReplace.getSymbolType());
+            subAddress.addAll(address.addressToReplace.subList(0, dialedAddress.size()));
+
+            StargateAddressDynamic subAddressWithOrigin = new StargateAddressDynamic(subAddress);
+            subAddressWithOrigin.addOrigin();
+
+            if(!sgTile.checkAddressAndEnergy(subAddressWithOrigin).ok()) continue;
+
+
+            Aunis.debug("Dialed address changed to: ");
+            Aunis.debug(subAddress.toString());
+
+            tileDialedAddress.clear();
+            tileDialedAddress.addAll(subAddress);
+            return true;
+        }
+        return false;
+    }
+}

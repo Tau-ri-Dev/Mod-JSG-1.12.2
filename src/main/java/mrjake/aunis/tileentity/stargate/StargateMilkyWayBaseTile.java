@@ -21,6 +21,7 @@ import mrjake.aunis.state.stargate.StargateRendererActionState;
 import mrjake.aunis.state.stargate.StargateRendererActionState.EnumGateAction;
 import mrjake.aunis.state.State;
 import mrjake.aunis.state.StateTypeEnum;
+import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDMilkyWayTile;
 import mrjake.aunis.tileentity.dialhomedevice.DHDAbstractTile.DHDUpgradeEnum;
 import mrjake.aunis.tileentity.util.ScheduledTask;
@@ -135,46 +136,15 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         return isLinkedAndDHDOperational() && stargateState != EnumStargateState.DIALING_COMPUTER && !getLinkedDHD(world).hasUpgrade(DHDUpgradeEnum.CHEVRON_UPGRADE) ? 7 : 9;
     }
 
+
     @Override
     public void addSymbolToAddress(SymbolInterface symbol) {
-        StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
-        dialAddr_backup.clear();
-        dialAddr_backup.addAll(dialedAddress);
-        dialedAddress.addSymbol(symbol);
+        super.addSymbolToAddress(symbol);
 
-        boolean isEarth = tryDialEarth();
-        if(isEarth) {
-            super.addSymbolToAddress(symbol, 0);
+        DHDAbstractTile dhd = getLinkedDHD(world);
+        if (isLinkedAndDHDOperational() && dhd != null) {
+            dhd.activateSymbol((SymbolMilkyWayEnum) symbol);
         }
-        else {
-            dialedAddress.clear();
-            dialedAddress.addAll(dialAddr_backup);
-            super.addSymbolToAddress(symbol);
-        }
-
-        if (isLinkedAndDHDOperational()) {
-            getLinkedDHD(world).activateSymbol((SymbolMilkyWayEnum) symbol);
-        }
-    }
-
-    public boolean tryDialEarth(){
-        if(network.getLastActivatedOrlins() == null) return false;
-        if (dialedAddress.size() >= 6 && dialedAddress.equalsV2(StargateNetwork.EARTH_ADDRESS, 6) && !network.isStargateInNetwork(dialedAddress)) {
-            if (StargateDimensionConfig.netherOverworld8thSymbol()) {
-                if (dialedAddress.size() == 7 && dialedAddress.equalsV2(StargateNetwork.EARTH_ADDRESS, 7)) {
-                    dialedAddress.clear();
-                    dialedAddress.addAll(network.getLastActivatedOrlins().subList(0, 7));
-                    markDirty();
-                    return true;
-                }
-            } else {
-                dialedAddress.clear();
-                dialedAddress.addAll(network.getLastActivatedOrlins().subList(0, 6));
-                markDirty();
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override

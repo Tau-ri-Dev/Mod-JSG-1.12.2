@@ -76,6 +76,10 @@ public class Aunis {
         logger.error(string);
     }
 
+    public static void debug(String string) {
+        logger.debug(string);
+    }
+
     // --------------------------------------------
     // USED IN ITEMS
 

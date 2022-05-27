@@ -1,7 +1,6 @@
 package mrjake.aunis.renderer.stargate;
 
 import mrjake.aunis.Aunis;
-import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.texture.Texture;
 import mrjake.aunis.loader.texture.TextureLoader;
@@ -13,6 +12,7 @@ import mrjake.aunis.stargate.merging.StargateAbstractMergeHelper;
 import mrjake.aunis.tileentity.stargate.StargateAbstractBaseTile;
 import mrjake.aunis.util.AunisAxisAlignedBB;
 import mrjake.aunis.util.FacingToRotation;
+import mrjake.aunis.util.main.AunisProps;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -32,6 +32,15 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
     // ---------------------------------------------------------------------------------------
     // Render
+
+    protected static final String EV_HORIZON_NORMAL_TEXTURE_ANIMATED = "textures/tesr/event_horizon_animated.jpg";
+    protected static final String EV_HORIZON_KAWOOSH_TEXTURE_ANIMATED = "textures/tesr/event_horizon_animated_kawoosh.jpg";
+    protected static final String EV_HORIZON_DESATURATED_KAWOOSH_TEXTURE_ANIMATED = "textures/tesr/event_horizon_animated_kawoosh_unstable.jpg";
+    protected static final String EV_HORIZON_DESATURATED_TEXTURE_ANIMATED = "textures/tesr/event_horizon_animated_unstable.jpg";
+    protected static final String EV_HORIZON_NORMAL_TEXTURE = "textures/tesr/event_horizon.jpg";
+    protected static final String EV_HORIZON_DESATURATED_TEXTURE = "textures/tesr/event_horizon_unstable.jpg";
+    private static final float VORTEX_START = 5.275f;
+    private static final float SPEED_FACTOR = 6f;
 
     @Override
     public void render(StargateAbstractBaseTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -114,46 +123,6 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
     protected abstract void renderGate(S rendererState, double partialTicks);
 
-    private static final float VORTEX_START = 5.275f;
-    private static final float SPEED_FACTOR = 6f;
-
-    public enum EnumVortexState {
-        FORMING(0),
-        FULL(1),
-        DECREASING(2),
-        STILL(3),
-        CLOSING(4),
-        SHRINKING(5);
-
-        public int index;
-        private static Map<Integer, EnumVortexState> map = new HashMap<Integer, EnumVortexState>();
-
-        EnumVortexState(int index) {
-            this.index = index;
-        }
-
-        public boolean equals(EnumVortexState state) {
-            return this.index == state.index;
-        }
-
-        static {
-            for (EnumVortexState packet : EnumVortexState.values()) {
-                map.put(packet.index, packet);
-            }
-        }
-        public static EnumVortexState valueOf(int index) {
-            return map.get(index);
-        }
-    }
-
-    protected static final String EV_HORIZON_NORMAL_TEXTURE_ANIMATED = "textures/tesr/event_horizon_animated.jpg";
-    protected static final String EV_HORIZON_KAWOOSH_TEXTURE_ANIMATED = "textures/tesr/event_horizon_animated_kawoosh.jpg";
-    protected static final String EV_HORIZON_DESATURATED_KAWOOSH_TEXTURE_ANIMATED = "textures/tesr/event_horizon_animated_kawoosh_unstable.jpg";
-    protected static final String EV_HORIZON_DESATURATED_TEXTURE_ANIMATED = "textures/tesr/event_horizon_animated_unstable.jpg";
-
-    protected static final String EV_HORIZON_NORMAL_TEXTURE = "textures/tesr/event_horizon.jpg";
-    protected static final String EV_HORIZON_DESATURATED_TEXTURE = "textures/tesr/event_horizon_unstable.jpg";
-
     protected ResourceLocation getEventHorizonTextureResource(StargateAbstractRendererState rendererState) {
         return getEventHorizonTextureResource(rendererState, false);
     }
@@ -190,7 +159,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         Texture ehTexture = TextureLoader.getTexture(getEventHorizonTextureResource(rendererState));
 
         // SET THE TEXTURE TO KAWOOSH TEXTURE
-        if(rendererState.vortexState == EnumVortexState.FORMING
+        if (rendererState.vortexState == EnumVortexState.FORMING
                 || rendererState.vortexState == EnumVortexState.DECREASING
                 || rendererState.vortexState == EnumVortexState.FULL)
             ehTexture = TextureLoader.getTexture(getEventHorizonTextureResource(rendererState, true));
@@ -274,7 +243,8 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                         if (rendererState instanceof StargateClassicRendererState) {
                             StargateClassicRendererState casted = (StargateClassicRendererState) rendererState;
                             // disable mul while shield is closed
-                            if (casted.irisState == EnumIrisState.CLOSED && casted.irisType != EnumIrisType.NULL) mul = 0;
+                            if (casted.irisState == EnumIrisState.CLOSED && casted.irisType != EnumIrisType.NULL)
+                                mul = 0;
                         }
                         for (Map.Entry<Float, Float> e : StargateRendererStatic.Z_RadiusMap.entrySet()) {
                             if (first) {
@@ -411,5 +381,36 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
     }
 
     protected void renderIris(double partialTicks, World world, S rendererState, boolean backOnly) {
+    }
+
+    public enum EnumVortexState {
+        FORMING(0),
+        FULL(1),
+        DECREASING(2),
+        STILL(3),
+        CLOSING(4),
+        SHRINKING(5);
+
+        private static Map<Integer, EnumVortexState> map = new HashMap<Integer, EnumVortexState>();
+
+        static {
+            for (EnumVortexState packet : EnumVortexState.values()) {
+                map.put(packet.index, packet);
+            }
+        }
+
+        public int index;
+
+        EnumVortexState(int index) {
+            this.index = index;
+        }
+
+        public static EnumVortexState valueOf(int index) {
+            return map.get(index);
+        }
+
+        public boolean equals(EnumVortexState state) {
+            return this.index == state.index;
+        }
     }
 }
