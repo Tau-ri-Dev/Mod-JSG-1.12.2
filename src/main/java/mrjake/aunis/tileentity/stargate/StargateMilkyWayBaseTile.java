@@ -287,6 +287,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     }
 
     public void updateLinkStatus() {
+        if(!isMerged()) return;
         BlockPos closestDhd = LinkingHelper.findClosestUnlinked(world, pos, LinkingHelper.getDhdRange(), AunisBlocks.DHD_BLOCK, this.getLinkId());
         int linkId = LinkingHelper.getLinkId();
 
