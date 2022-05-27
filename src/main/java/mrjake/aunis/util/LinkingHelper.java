@@ -41,7 +41,10 @@ public class LinkingHelper {
 
         ILinkable linkedTile = (ILinkable) world.getTileEntity(target);
 
-        if (linkedTile.canLinkTo() || linkId == linkedTile.getLinkId()) {
+        if (linkedTile != null && (linkedTile.canLinkTo() || linkId == linkedTile.getLinkId())) {
+          if(linkedTile instanceof StargateClassicBaseTile){
+            if(!((StargateClassicBaseTile) linkedTile).isMerged()) continue;
+          }
           double distanceSq = startPos.distanceSq(target);
 
           if (distanceSq < closestDistance) {
