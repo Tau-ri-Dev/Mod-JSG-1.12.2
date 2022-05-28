@@ -41,7 +41,6 @@ public enum ElementEnum {
 
   ORLIN_GATE("orlin/gate_orlin.obj", "orlin/gate_orlin"),
 
-
   // --------------------------------------------------------------------------------------------
   // Universe
 
@@ -89,7 +88,8 @@ public enum ElementEnum {
   // --------------------------------------------------------------------------------------------
   // Platforms
 
-  PLATFORM_RINGS_GOAULD_BASIC("platforms/rings/goauld_basic.obj", "platforms/rings/goauld_basic");
+  PLATFORM_SHIPS_MOVING("platforms/rings/ships_moving.obj", "platforms/rings/ships_moving"),
+  PLATFORM_SHIPS_BASE("platforms/rings/ships_base.obj", "platforms/rings/ships_base");
 
   // --------------------------------------------------------------------------------------------
 

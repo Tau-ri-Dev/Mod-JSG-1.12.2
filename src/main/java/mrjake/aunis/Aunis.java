@@ -41,6 +41,7 @@ public class Aunis {
     public static Logger logger;
     public static OCWrapperInterface ocWrapper;
     public static boolean isThermalLoaded = false;
+    public static String clientModPath;
 
     // --------------------------------------------
     // PROXY

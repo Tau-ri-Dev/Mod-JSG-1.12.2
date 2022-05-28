@@ -1,6 +1,7 @@
 package mrjake.aunis.gui.mainmenu;
 
 import mrjake.aunis.Aunis;
+import mrjake.aunis.config.AunisConfig;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -23,11 +24,10 @@ public class GetUpdate {
     public static final String GET_DOWNLOAD_URL = URL_BASE + "?t=url";
     public static final String GET_SIZE_URL = URL_BASE + "?t=size";
 
-    public static final String MINECRAFT_ROOT = System.getenv("APPDATA") + "/.minecraft/mods/1.12.2/";
-
     public static double percentOfFileDownloaded = 0;
 
     public static String checkForUpdate(String currentVersion){
+        if(!AunisConfig.enableAutoUpdater) return "false";
         String gotVersion = getSiteContent(GET_NAME_URL).split("-")[2];
         if(gotVersion.equals(ERROR_STRING)) return "false";
 
@@ -78,19 +78,15 @@ public class GetUpdate {
     }
 
     public static void updatePercents() {
-        String[] url = getSiteContent(GET_NAME_URL).split("/");
-        StringBuilder url_final = new StringBuilder();
-        for(int i = 0; i < url.length; i++) {
-            if (url[i].equals("files"))
-                url[i] = "download";
-            url_final.append(url[i]);
-        }
         try {
-            long downloadedFileSize = Files.size(Paths.get(MINECRAFT_ROOT + url_final));
+            long downloadedFileSize = Files.size(Paths.get(Aunis.clientModPath));
             final long targetFileSize = Long.parseLong(getSiteContent(GET_SIZE_URL));
             percentOfFileDownloaded = (double) (downloadedFileSize/targetFileSize)*100;
         }
-        catch(Exception ignored){}
+        catch(Exception ignored){
+            Aunis.error("Error while getting update percents!");
+            Aunis.error("GetUpdate.java::78-88::updatePercents");
+        }
     }
 
     public static double getPercents(){

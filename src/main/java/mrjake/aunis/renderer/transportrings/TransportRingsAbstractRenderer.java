@@ -138,8 +138,8 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
 
         TRPlatformBlock platformBlock = platform.platformBlock;
 
-        ElementEnum platformMoving = platformBlock.getPlatformModel(platformBlock);
-        ElementEnum platformBase = platformBlock.getPlatformModelBase(platformBlock);
+        ElementEnum platformMoving = platformBlock.getPlatformModel();
+        ElementEnum platformBase = platformBlock.getPlatformModelBase();
 
         float platformX = 0;
         float platformY = 0;

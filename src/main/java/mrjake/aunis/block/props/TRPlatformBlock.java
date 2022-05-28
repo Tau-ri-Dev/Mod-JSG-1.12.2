@@ -3,6 +3,7 @@ package mrjake.aunis.block.props;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.item.props.TRPlatformItem;
 import mrjake.aunis.loader.ElementEnum;
+import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.util.main.AunisProps;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -41,13 +42,19 @@ public class TRPlatformBlock extends AunisAbstractProp {
     }
 
     @SideOnly(Side.CLIENT)
-    public ElementEnum getPlatformModel(AunisAbstractProp block) {
-        return TRPlatformItem.TRPlatformVariants.byId(block.getMetaFromState(block.getBlockState().getBaseState())).modelMoving;
+    public ElementEnum getPlatformModel() {
+        return TRPlatformItem.TRPlatformVariants.byId(this.getMetaFromState(this.getBlockState().getBaseState())).modelMoving;
+    }
+
+    public SoundEventEnum getPlatformSound(boolean closing) {
+        if(closing)
+            return TRPlatformItem.TRPlatformVariants.byId(this.getMetaFromState(this.getBlockState().getBaseState())).closingSound;
+        return TRPlatformItem.TRPlatformVariants.byId(this.getMetaFromState(this.getBlockState().getBaseState())).openingSound;
     }
 
     @SideOnly(Side.CLIENT)
-    public ElementEnum getPlatformModelBase(AunisAbstractProp block) {
-        return TRPlatformItem.TRPlatformVariants.byId(block.getMetaFromState(block.getBlockState().getBaseState())).modelBase;
+    public ElementEnum getPlatformModelBase() {
+        return TRPlatformItem.TRPlatformVariants.byId(this.getMetaFromState(this.getBlockState().getBaseState())).modelBase;
     }
 
     @Override

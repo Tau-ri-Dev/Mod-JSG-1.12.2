@@ -395,18 +395,18 @@
       "aunis:item/staff/shoot"
     ]
   },
-  "platform_goauld_open": {
+  "platform_ships_open": {
     "category": "ambient",
-    "subtitle": "aunis.subtitle.platform_goauld_open",
+    "subtitle": "aunis.subtitle.platform_ships_open",
     "sounds": [
-      "aunis:transportrings/platform/platform_goauld_open"
+      "aunis:transportrings/platform/platform_ships_open"
     ]
   },
-  "platform_goauld_close": {
+  "platform_ships_close": {
     "category": "ambient",
-    "subtitle": "aunis.subtitle.platform_goauld_close",
+    "subtitle": "aunis.subtitle.platform_ships_close",
     "sounds": [
-      "aunis:transportrings/platform/platform_goauld_close"
+      "aunis:transportrings/platform/platform_ships_close"
     ]
   }
 }

@@ -1,8 +1,8 @@
 package mrjake.aunis.item.props;
 
-import mrjake.aunis.Aunis;
 import mrjake.aunis.block.props.TRPlatformBlock;
 import mrjake.aunis.loader.ElementEnum;
+import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.util.main.AunisProps;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -24,26 +24,36 @@ public class TRPlatformItem extends ItemBlock {
     }
 
     public enum TRPlatformVariants {
-        GOAULD_BASIC(0, "goauld", ElementEnum.PLATFORM_RINGS_GOAULD_BASIC, null);
+        SHIPS_PLATFORM(
+                0,
+                "earth",
+                ElementEnum.PLATFORM_SHIPS_MOVING,
+                ElementEnum.PLATFORM_SHIPS_BASE,
+                SoundEventEnum.RINGS_PLATFORM_SHIPS_OPEN,
+                SoundEventEnum.RINGS_PLATFORM_SHIPS_CLOSE
+        );
 
         public int id;
         public String name;
         public ElementEnum modelMoving;
         public ElementEnum modelBase;
+        public SoundEventEnum openingSound;
+        public SoundEventEnum closingSound;
 
-        TRPlatformVariants(int meta, String name, ElementEnum modelMoving, ElementEnum modelBase) {
+        TRPlatformVariants(int meta, String name, ElementEnum modelMoving, ElementEnum modelBase, SoundEventEnum openingSound, SoundEventEnum closingSound) {
             this.id = meta;
             this.name = name;
             this.modelMoving = modelMoving;
             this.modelBase = modelBase;
+            this.openingSound = openingSound;
+            this.closingSound = closingSound;
         }
 
-        @Nonnull
         public static TRPlatformVariants byId(int id) {
             for (TRPlatformVariants variant : TRPlatformVariants.values()) {
                 if (variant.id == id) return variant;
             }
-            return TRPlatformVariants.GOAULD_BASIC;
+            return SHIPS_PLATFORM;
         }
     }
 }

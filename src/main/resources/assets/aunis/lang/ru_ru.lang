@@ -165,7 +165,7 @@ tile.aunis.trinium_block.name=Блок Триниума
 tile.aunis.titanium_block.name=Блок Титана
 
 # props
-prop.aunis.platform_goauld_block.name=Rings platform (Goa'uld)
+prop.aunis.platform_ships_block.name=Rings platform (Ships)
 
 # dhd
 tile.aunis.dhd_block.name=Наборное Устройство (DHD)

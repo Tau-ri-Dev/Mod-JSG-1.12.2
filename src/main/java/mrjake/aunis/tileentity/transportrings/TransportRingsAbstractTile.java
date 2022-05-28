@@ -216,11 +216,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     public void playPlatformSound(boolean closing){
         if(ringsDistance < 0 || !isTherePlatform()) return; // platform is not rendering!
-        if(closing){
-            AunisSoundHelper.playSoundEvent(world, getPosWithDistance(ringsDistance), SoundEventEnum.RINGS_PLATFORM_GOAULD_CLOSE);
-            return;
-        }
-        AunisSoundHelper.playSoundEvent(world, getPosWithDistance(ringsDistance), SoundEventEnum.RINGS_PLATFORM_GOAULD_OPEN);
+        AunisSoundHelper.playSoundEvent(world, getPosWithDistance(ringsDistance), getPlatform().platformBlock.getPlatformSound(closing));
     }
 
 

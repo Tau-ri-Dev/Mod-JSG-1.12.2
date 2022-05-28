@@ -19,10 +19,14 @@ public class AunisPreInit {
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
         Aunis.logger = event.getModLog();
+
+        // mod file path - used in updater
+        File source = event.getSourceFile();
+        Aunis.clientModPath = source.getAbsolutePath();
+
         Aunis.AUNIS_SOUNDS = SoundCategory.BLOCKS;
 
-        File source = event.getSourceFile();
-        Aunis.info("Started loading Aunis mod in " + source.getAbsolutePath());
+        Aunis.info("Started loading Aunis mod in " + Aunis.clientModPath);
         Aunis.info("Loading Aunis version " + Aunis.MOD_VERSION);
 
         AunisPacketHandler.registerPackets();
