@@ -53,7 +53,7 @@ public class StargateOrlinRenderer extends StargateAbstractRenderer<StargateAbst
 	}
 	
 	@Override
-	protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {				
+	protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
 		GlStateManager.translate(0, 3.80873f, -0.204347f);
 		GlStateManager.scale(0.7f, 0.7f, 0.7f);
 		

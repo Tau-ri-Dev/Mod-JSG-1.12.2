@@ -30,7 +30,6 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
     @Override
     protected void renderGate(StargatePegasusRendererState rendererState, double partialTicks) {
         renderRing(rendererState, partialTicks);
-        // GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
         renderChevrons(rendererState, partialTicks);
 
         if (rendererState.spinHelper.getIsSpinning()) {
@@ -47,9 +46,6 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
                 if (!rendererState.spinHelper.getIsSpinning() && rendererState.slotToGlyphMap.size() == 0) {
                     renderGlyph(i, i, true);
                 }
-                /*else if(!rendererState.spinHelper.getIsSpinning() && rendererState.slotToGlyphMap.containsKey(i)){
-                    renderGlyph(i, i, true);
-                }*/
                 continue;
             }
             else if (!rendererState.slotToGlyphMap.containsKey(i) && i >= GLYPHS_COUNT)
@@ -132,6 +128,12 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
     }
 
     protected void renderGlyph(int glyphId, int slot, boolean deactivated) {
+        renderGlyph(glyphId, slot, deactivated, false);
+        if(deactivated){
+            renderGlyph(glyphId, slot, false, true);
+        }
+    }
+    protected void renderGlyph(int glyphId, int slot, boolean deactivated, boolean translatePos) {
         GlStateManager.pushMatrix();
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
@@ -142,7 +144,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
         // Round is necessary here, since Minecraft doesn't handle many decimal places very well in this case,
         // so that the texture just ceases to exist.
-        GlStateManager.translate(NumberUtils.round(slotPos[0], 3), NumberUtils.round(slotPos[1], 3), 0.205);
+        GlStateManager.translate(NumberUtils.round(slotPos[0], 3), NumberUtils.round(slotPos[1], 3), translatePos ? -0.205 : 0.205);
         GlStateManager.rotate(90, 1, 0, 0);
 
         String path = String.format("pegasus/%s.png", deactivated ? "glyphs_off" : "glyphs");

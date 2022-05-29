@@ -3,9 +3,18 @@ package mrjake.aunis.sound;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.util.EnumKeyInterface;
 import mrjake.aunis.util.EnumKeyMap;
+import net.minecraft.block.Block;
+import net.minecraft.client.audio.Sound;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.annotation.Nullable;
+
+@Mod.EventBusSubscriber
 public enum SoundEventEnum implements EnumKeyInterface<Integer> {
 
     // ----------------------------------------------------------
@@ -90,14 +99,16 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     // ----------------------------------------------------------
 
 
-    private static EnumKeyMap<Integer, SoundEventEnum> idMap = new EnumKeyMap<Integer, SoundEventEnum>(values());
+    private static final EnumKeyMap<Integer, SoundEventEnum> idMap = new EnumKeyMap<Integer, SoundEventEnum>(values());
     public int id;
     public SoundEvent soundEvent;
     public float volume;
+    private final String name;
 
     SoundEventEnum(int id, String name, float volume) {
         this.id = id;
         this.volume = volume;
+        this.name = name;
         this.soundEvent = createSoundEvent(name);
     }
 
@@ -113,5 +124,27 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     @Override
     public Integer getKey() {
         return id;
+    }
+
+    @Nullable
+    public static SoundEvent remapSound(String oldBlockName) {
+        switch (oldBlockName) {
+            case "aunis:platform_goauld_close":
+                return createSoundEvent(RINGS_PLATFORM_SHIPS_CLOSE.name);
+            case "aunis:platform_goauld_open":
+                return createSoundEvent(RINGS_PLATFORM_SHIPS_OPEN.name);
+
+            default:
+                return null;
+        }
+    }
+
+    @SubscribeEvent
+    public static void onMissingSoundMappings(RegistryEvent.MissingMappings<SoundEvent> event) {
+        for (RegistryEvent.MissingMappings.Mapping<SoundEvent> mapping : event.getMappings()) {
+            SoundEvent newSound = remapSound(mapping.key.toString());
+
+            if (newSound != null) mapping.remap(newSound);
+        }
     }
 }

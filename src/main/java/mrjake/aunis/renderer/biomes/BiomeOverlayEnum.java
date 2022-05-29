@@ -17,11 +17,15 @@ public enum BiomeOverlayEnum {
 	FROST("_frost", TextFormatting.DARK_AQUA),
 	MOSSY("_mossy", TextFormatting.DARK_GREEN),
 	AGED("_aged", TextFormatting.GRAY),
-	SOOTY("_sooty", TextFormatting.DARK_GRAY);
+	SOOTY("_sooty", TextFormatting.DARK_GRAY),
+
+	// for transport rings
+	TR_NORMAL("", TextFormatting.GOLD)
+	;
 	
 	public String suffix;
-	private TextFormatting color;
-	private String unlocalizedName;
+	private final TextFormatting color;
+	private final String unlocalizedName;
 
 	BiomeOverlayEnum(String suffix, TextFormatting color) {
 		this.suffix = suffix;
@@ -40,7 +44,7 @@ public enum BiomeOverlayEnum {
 	 * @param world
 	 * @param topmostBlock Topmost block of the structure (Stargates should pass top chevron/ring)
 	 * @param supportedOverlays will only return enums which are in this Set
-	 * @return
+	 * @return BiomeOverlayEnum
 	 */
 	public static BiomeOverlayEnum updateBiomeOverlay(World world, BlockPos topmostBlock, EnumSet<BiomeOverlayEnum> supportedOverlays) {
 		BiomeOverlayEnum ret = getBiomeOverlay(world, topmostBlock);

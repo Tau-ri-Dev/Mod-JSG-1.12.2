@@ -14,6 +14,7 @@ import mrjake.aunis.util.AunisAxisAlignedBB;
 import mrjake.aunis.util.FacingToRotation;
 import mrjake.aunis.util.main.AunisProps;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -83,6 +84,11 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                     renderKawoosh(rendererState, partialTicks);
                     GlStateManager.popMatrix();
                 }
+                else{
+                    GlStateManager.pushMatrix();
+                    preRenderKawoosh(rendererState, partialTicks);
+                    GlStateManager.popMatrix();
+                }
 
                 renderIris(partialTicks, getWorld(), rendererState, false);
 
@@ -136,10 +142,20 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
     }
 
     protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
-        renderKawoosh(rendererState, partialTicks, false);
+        renderKawoosh(rendererState, partialTicks, true);
     }
 
-    protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks, boolean backOnly) {
+    protected void preRenderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
+
+        StargateAbstractRendererState rs = new StargateAbstractRendererState().initClient(rendererState.pos, rendererState.facing, rendererState.getBiomeOverlay());
+
+        for(int i = 0; i < 2; i++){
+            rs.vortexState = (i == 0 ? EnumVortexState.STILL : EnumVortexState.FORMING);
+            renderKawoosh(rs, partialTicks, false);
+        }
+    }
+
+    protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks, boolean render) {
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 15 * 16, 15 * 16);
 
         float gateWait = (float) getWorld().getTotalWorldTime() - rendererState.gateWaitStart;
@@ -154,6 +170,10 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, 00.01);
+
+        if(!render){
+            GlStateManager.scale(0.0000001f, 0.0000001f, 0.0000001f);
+        }
 
         // set default texture
         Texture ehTexture = TextureLoader.getTexture(getEventHorizonTextureResource(rendererState));
@@ -309,9 +329,9 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         if (rendererState.vortexState != null) {
             if (rendererState.vortexState == (EnumVortexState.STILL) || rendererState.vortexState == EnumVortexState.CLOSING) {
                 if (rendererState.vortexState == EnumVortexState.CLOSING)
-                    renderEventHorizon(partialTicks, true, rendererState.whiteOverlayAlpha, backOnly, 1.7f);
+                    renderEventHorizon(partialTicks, true, rendererState.whiteOverlayAlpha, false, 1.7f);
                 else
-                    renderEventHorizon(partialTicks, false, null, backOnly, rendererState.horizonUnstable ? 1.2f : 1);
+                    renderEventHorizon(partialTicks, false, null, false, rendererState.horizonUnstable ? 1.2f : 1);
 
                 GlStateManager.popMatrix();
                 GlStateManager.enableLighting();
@@ -345,7 +365,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
      * @param mul      Multiplier of the horizon waving speed
      */
     protected void renderEventHorizon(double partialTicks, boolean white, Float alpha, boolean backOnly, float mul) {
-        float tick = (float) (getWorld().getTotalWorldTime());
+        float tick = Minecraft.getMinecraft().getRenderPartialTicks();
 
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.enableBlend();
