@@ -1,11 +1,13 @@
 package mrjake.aunis.item.props;
 
+import jdk.nashorn.internal.ir.Block;
 import mrjake.aunis.block.props.TRPlatformBlock;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.sound.SoundEventEnum;
 import mrjake.aunis.util.main.AunisProps;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -26,27 +28,42 @@ public class TRPlatformItem extends ItemBlock {
     public enum TRPlatformVariants {
         SHIPS_PLATFORM(
                 0,
-                "earth",
+                "ships",
                 ElementEnum.PLATFORM_SHIPS_MOVING,
                 ElementEnum.PLATFORM_SHIPS_BASE,
+                ElementEnum.PLATFORM_SHIPS_OVERLAY,
                 SoundEventEnum.RINGS_PLATFORM_SHIPS_OPEN,
-                SoundEventEnum.RINGS_PLATFORM_SHIPS_CLOSE
+                SoundEventEnum.RINGS_PLATFORM_SHIPS_CLOSE,
+                false,
+
+                true,
+                new BlockPos(-3, 0, -3),
+                new BlockPos(3, 0, 3)
+
         );
 
         public int id;
         public String name;
         public ElementEnum modelMoving;
         public ElementEnum modelBase;
+        public ElementEnum modelOverlay;
         public SoundEventEnum openingSound;
         public SoundEventEnum closingSound;
+        public boolean canRenderUnderZero;
+        public boolean fromToPattern;
+        public BlockPos[] pattern;
 
-        TRPlatformVariants(int meta, String name, ElementEnum modelMoving, ElementEnum modelBase, SoundEventEnum openingSound, SoundEventEnum closingSound) {
+        TRPlatformVariants(int meta, String name, ElementEnum modelMoving, ElementEnum modelBase, ElementEnum modelOverlay, SoundEventEnum openingSound, SoundEventEnum closingSound, boolean canRenderUnderZero, boolean fromToPattern, BlockPos... pattern) {
             this.id = meta;
             this.name = name;
             this.modelMoving = modelMoving;
             this.modelBase = modelBase;
+            this.modelOverlay = modelOverlay;
             this.openingSound = openingSound;
             this.closingSound = closingSound;
+            this.canRenderUnderZero = canRenderUnderZero;
+            this.fromToPattern = fromToPattern;
+            this.pattern = pattern;
         }
 
         public static TRPlatformVariants byId(int id) {

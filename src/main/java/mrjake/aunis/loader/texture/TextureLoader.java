@@ -3,9 +3,13 @@ package mrjake.aunis.loader.texture;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.config.AunisConfig;
 import mrjake.aunis.loader.FolderLoader;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ProgressManager;
 import net.minecraftforge.fml.common.ProgressManager.ProgressBar;
@@ -98,5 +102,26 @@ public class TextureLoader {
 
 	public static ResourceLocation getTextureResource(String texture) {
 		return new ResourceLocation(Aunis.MOD_ID, "textures/tesr/" + texture);
-	}	
+	}
+
+	public static ResourceLocation getBlockTexture(IBlockState blockState) {
+
+		Minecraft minecraft = Minecraft.getMinecraft();
+		BlockRendererDispatcher ren = minecraft.getBlockRendererDispatcher();
+		String blockTexture = ren.getModelForState(blockState).getQuads(blockState, EnumFacing.NORTH, 0).get(0).getSprite().getIconName();
+		String domain = "minecraft";
+		String path = blockTexture;
+		int domainSeparator = blockTexture.indexOf(':');
+
+		if (domainSeparator >= 0) {
+			path = blockTexture.substring(domainSeparator + 1);
+
+			if (domainSeparator > 1) {
+				domain = blockTexture.substring(0, domainSeparator);
+			}
+		}
+
+		String resourcePath = "textures/" + path + ".png";  // base path and PNG are hardcoded in Minecraft
+		return new ResourceLocation(domain.toLowerCase(), resourcePath);
+	}
 }

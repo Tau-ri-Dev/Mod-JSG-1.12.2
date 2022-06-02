@@ -10,8 +10,6 @@ public class RingsPlatform {
     public int z;
 
     public TRPlatformBlock platformBlock;
-    public SoundEventEnum openSound;
-    public SoundEventEnum closeSound;
 
     public RingsPlatform(BlockPos pos, TRPlatformBlock platformBlock){
         this.x = pos.getX();
@@ -19,7 +17,5 @@ public class RingsPlatform {
         this.z = pos.getZ();
 
         this.platformBlock = platformBlock;
-        this.openSound = openSound;
-        this.closeSound = closeSound;
     }
 }

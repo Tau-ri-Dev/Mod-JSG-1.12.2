@@ -1,15 +1,23 @@
 package mrjake.aunis.renderer.transportrings;
 
+import mrjake.aunis.Aunis;
 import mrjake.aunis.block.props.TRPlatformBlock;
 import mrjake.aunis.loader.ElementEnum;
+import mrjake.aunis.loader.texture.TextureLoader;
 import mrjake.aunis.renderer.biomes.BiomeOverlayEnum;
 import mrjake.aunis.state.StateTypeEnum;
 import mrjake.aunis.state.transportrings.TransportRingsRendererState;
 import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
 import mrjake.aunis.transportrings.RingsPlatform;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRenderer<TransportRingsAbstractTile> {
@@ -134,12 +142,18 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
 
     public void renderPlatform(TransportRingsRendererState state, long tick, TransportRingsAbstractTile te) {
         RingsPlatform platform = te.getPlatform();
+
         if (platform == null) return;
+
+        IBlockState blockOverlayState = te.getPlatformOverlayBlockState();
+        ResourceLocation platformOverlayTextureLocation = TextureLoader.getBlockTexture(blockOverlayState);
 
         TRPlatformBlock platformBlock = platform.platformBlock;
 
-        ElementEnum platformMoving = platformBlock.getPlatformModel();
+        ElementEnum platformMoving = platformBlock.getPlatformModelMoving();
         ElementEnum platformBase = platformBlock.getPlatformModelBase();
+        ElementEnum platformToOverlay = platformBlock.getPlatformModelToOverlay();
+        boolean canRenderUnderZero = platformBlock.canRenderUnderZero();
 
         float platformX = 0;
         float platformY = 0;
@@ -193,12 +207,16 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
         // ---------------------
         // RENDER
 
+        int distance = state.ringsDistance;
+        if (distance < 0) {
+            if (!canRenderUnderZero) return;
+            distance += 4;
+        }
+
         if (platformMoving != null) {
             if (state.ringsConfig.getOption(TransportRingsAbstractTile.ConfigOptions.RENDER_PLATFORM_MOVING.id).getBooleanValue()) {
                 for (int i = 0; i < 2; i++) {
                     GlStateManager.pushMatrix();
-                    int distance = state.ringsDistance;
-                    if (distance < 0) distance += 4;
                     GlStateManager.translate(platformX * (i == 1 ? 1 : -1), (platformY * coefficient) - 3.4f + distance * 2, 0);
                     if (i == 1)
                         GlStateManager.rotate(180, 0, 1, 0);
@@ -209,10 +227,15 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
         }
         if (platformBase != null) {
             if (state.ringsConfig.getOption(TransportRingsAbstractTile.ConfigOptions.RENDER_PLATFORM_BASE.id).getBooleanValue()) {
+
                 GlStateManager.pushMatrix();
-                int distance = state.ringsDistance;
-                GlStateManager.translate(platformX * -1, (platformY * coefficient) - 3.4f + distance * 2, 0);
+                GlStateManager.translate(0, -3.4f + distance * 2, 0);
+
                 platformBase.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
+
+                Minecraft.getMinecraft().getTextureManager().bindTexture(platformOverlayTextureLocation);
+                //Aunis.info(platformOverlayTextureLocation.toString());
+                platformToOverlay.render();
                 GlStateManager.popMatrix();
             }
         }

@@ -20,7 +20,6 @@ public class StargatePegasusRendererState extends StargateClassicRendererState {
 
   public Map<Integer, Integer> slotToGlyphMap = new HashMap<Integer, Integer>();
 
-  // TODO(sentialx): refactor
   public int slotFromChevron(ChevronEnum chevron) {
     return new int[]{9, 5, 1, 33, 29, 25, 21, 17, 13}[chevron.rotationIndex];
   }
@@ -81,19 +80,6 @@ public class StargatePegasusRendererState extends StargateClassicRendererState {
   @Override
   public void fromBytes(ByteBuf buf) {
     stargateSize = StargateSizeEnum.fromId(buf.readInt());
-
-//
-//    chevronTextureList = new ChevronTextureList(getChevronTextureBase());
-//    chevronTextureList.fromBytes(buf);
-//
-//    spinHelper = new StargatePegasusSpinHelper();
-//    spinHelper.fromBytes(buf);
-//
-//    if (buf.readBoolean()) {
-//      biomeOverride = BiomeOverlayEnum.values()[buf.readInt()];
-//    }
-//    irisState = EnumIrisState.getValue(buf.readByte());
-//    irisType = EnumIrisType.byId(buf.readByte());
     super.fromBytes(buf, StargatePegasusSpinHelper.class);
   }
 

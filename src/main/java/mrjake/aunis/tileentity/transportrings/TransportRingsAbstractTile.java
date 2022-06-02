@@ -7,6 +7,8 @@ import li.cil.oc.api.network.Environment;
 import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
 import mrjake.aunis.Aunis;
+import mrjake.aunis.block.AunisBlock;
+import mrjake.aunis.block.invisible.InvisibleBlock;
 import mrjake.aunis.block.props.TRPlatformBlock;
 import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
@@ -46,6 +48,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -67,6 +70,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import javax.annotation.Nonnull;
 import java.util.*;
 
+import static mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile.ConfigOptions.RENDER_PLATFORM_MOVING;
 import static mrjake.aunis.transportrings.TransportRingsAddress.MAX_SYMBOLS;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
@@ -196,11 +200,92 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
 
-    // --------------------------------------------------
+    // ----------------------------------------------------------
     // PLATFORMS
+
+    public boolean isPlatformBuild = false;
+    public IBlockState platformOverlayBlockState = Blocks.CONCRETE.getStateFromMeta(10);
+
+    public IBlockState getPlatformOverlayBlockState(){
+        return platformOverlayBlockState;
+    }
 
     public boolean isTherePlatform(){
         return getPlatform() != null;
+    }
+    public void updatePlatformStatus(){
+        updatePlatformStatus(false);
+    }
+    public void updatePlatformStatus(boolean forceDeletion){
+        if(world.getTileEntity(pos) == null || !(world.getTileEntity(pos) instanceof TransportRingsAbstractTile)) forceDeletion = true;
+        boolean tempState = isTherePlatform() && (isPlatformBuild || hasPlatformSpace());
+        if(isPlatformBuild != tempState || forceDeletion){
+            tryBuildPlatformPattern(!tempState || forceDeletion);
+        }
+        isPlatformBuild = tempState;
+    }
+
+    public boolean isTherePlace(BlockPos pos){
+        IBlockState newState = world.getBlockState(pos);
+        Block newBlock = newState.getBlock();
+        return (newBlock.isAir(newState, world, pos) || newBlock.isReplaceable(world, pos) || !(newBlock instanceof AunisBlock));
+    }
+
+    public boolean hasPlatformSpace(){
+        return hasPlatformSpace(false, false);
+    }
+    public boolean hasPlatformSpace(boolean tryBuild, boolean removeBlocks){
+        BlockPos[] pattern = getPlatform().platformBlock.getPattern();
+        boolean fromToPattern = getPlatform().platformBlock.getPlatform().fromToPattern;
+
+        if(!fromToPattern) {
+            for (BlockPos offset : pattern) {
+                BlockPos o = new BlockPos(offset);
+
+                if (ringsDistance > 0) o.up(ringsDistance);
+                if (ringsDistance < 0) o.down(-ringsDistance);
+
+                BlockPos actualPos = new BlockPos(this.pos).add(o);
+
+                if(tryBuild){
+                    Aunis.info("L: " + o);
+                    if(isTherePlace(actualPos))
+                        world.setBlockState(actualPos, removeBlocks ? Blocks.AIR.getDefaultState() : AunisBlocks.NAQUADAH_BLOCK_RAW.getDefaultState());
+                    continue;
+                }
+                if (!isTherePlace(actualPos)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        else{
+            for(int x = pattern[0].getX(); x <= pattern[1].getX(); x++){
+                for(int z = pattern[0].getZ(); z <= pattern[1].getZ(); z++){
+                    BlockPos o = new BlockPos(x, 0, z);
+
+                    if (ringsDistance > 0) o.up(ringsDistance);
+                    if (ringsDistance < 0) o.down(-ringsDistance);
+
+                    BlockPos actualPos = new BlockPos(this.pos).add(o);
+
+                    if(tryBuild){
+                        Aunis.info("K: " + o);
+                        if(isTherePlace(actualPos))
+                            world.setBlockState(actualPos, removeBlocks ? Blocks.AIR.getDefaultState() : AunisBlocks.NAQUADAH_BLOCK_RAW.getDefaultState());
+                        continue;
+                    }
+                    if (!isTherePlace(actualPos)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public void tryBuildPlatformPattern(boolean removeBlocks){
+        hasPlatformSpace(true, removeBlocks);
     }
 
     public RingsPlatform getPlatform(){
@@ -215,11 +300,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     public void playPlatformSound(boolean closing){
-        if(ringsDistance < 0 || !isTherePlatform()) return; // platform is not rendering!
+        if(ringsDistance < 0 || !isTherePlatform() || !getConfig().getOption(RENDER_PLATFORM_MOVING.id).getBooleanValue()) return; // platform is not rendering!
         AunisSoundHelper.playSoundEvent(world, getPosWithDistance(ringsDistance), getPlatform().platformBlock.getPlatformSound(closing));
     }
 
-
+    // ----------------------------------------------------------
 
     @Override
     public void update() {
@@ -246,6 +331,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                 markDirty();
             }
+
+            updatePlatformStatus();
 
             if(world.getTotalWorldTime() % 80 == 0) // every 4 seconds, update boxed (render and teleport)
                 updateRingsDistance();
@@ -339,6 +426,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     public void onBreak() {
         setBarrierBlocks(false, false);
+        updatePlatformStatus(true);
     }
 
     public Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> generateAndPostAddress(boolean reset) {

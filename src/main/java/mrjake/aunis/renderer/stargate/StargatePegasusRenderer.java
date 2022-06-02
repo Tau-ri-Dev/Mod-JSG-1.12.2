@@ -144,7 +144,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
         // Round is necessary here, since Minecraft doesn't handle many decimal places very well in this case,
         // so that the texture just ceases to exist.
-        GlStateManager.translate(NumberUtils.round(slotPos[0], 3), NumberUtils.round(slotPos[1], 3), translatePos ? -0.205 : 0.205);
+        GlStateManager.translate(NumberUtils.round(slotPos[0], 3), NumberUtils.round(slotPos[1], 3), translatePos ? -0.105 : 0.205);
         GlStateManager.rotate(90, 1, 0, 0);
 
         String path = String.format("pegasus/%s.png", deactivated ? "glyphs_off" : "glyphs");

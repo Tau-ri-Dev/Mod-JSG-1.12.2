@@ -88,8 +88,9 @@ public enum ElementEnum {
   // --------------------------------------------------------------------------------------------
   // Platforms
 
-  PLATFORM_SHIPS_MOVING("platforms/rings/ships_moving.obj", "platforms/rings/ships_moving.jpg", true),
-  PLATFORM_SHIPS_BASE("platforms/rings/ships_base.obj", "platforms/rings/ships_base.jpg", true);
+  PLATFORM_SHIPS_MOVING("platforms/rings/ships/ships_moving.obj", "platforms/rings/ships/ships_moving.jpg", true),
+  PLATFORM_SHIPS_OVERLAY("platforms/rings/ships/ships_overlay.obj", "platforms/rings/ships/ships_overlay.jpg", true),
+  PLATFORM_SHIPS_BASE("platforms/rings/ships/ships_base.obj", "platforms/rings/ships/ships_base.jpg", true);
 
   // --------------------------------------------------------------------------------------------
 

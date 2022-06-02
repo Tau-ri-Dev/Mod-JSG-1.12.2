@@ -20,7 +20,7 @@ public enum EnumMemberVariant {
 		return name;
 	}
 	
-	private static Map<String, EnumMemberVariant> nameMap = new HashMap<>();
+	private static final Map<String, EnumMemberVariant> nameMap = new HashMap<>();
 	
 	static {
 		for (EnumMemberVariant variant : EnumMemberVariant.values()) {

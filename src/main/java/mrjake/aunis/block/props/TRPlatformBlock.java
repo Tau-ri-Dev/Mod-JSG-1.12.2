@@ -11,6 +11,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -41,20 +42,37 @@ public class TRPlatformBlock extends AunisAbstractProp {
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    public ElementEnum getPlatformModel() {
-        return TRPlatformItem.TRPlatformVariants.byId(this.getMetaFromState(this.getBlockState().getBaseState())).modelMoving;
-    }
-
     public SoundEventEnum getPlatformSound(boolean closing) {
         if(closing)
-            return TRPlatformItem.TRPlatformVariants.byId(this.getMetaFromState(this.getBlockState().getBaseState())).closingSound;
-        return TRPlatformItem.TRPlatformVariants.byId(this.getMetaFromState(this.getBlockState().getBaseState())).openingSound;
+            return getPlatform().closingSound;
+        return getPlatform().openingSound;
     }
 
     @SideOnly(Side.CLIENT)
     public ElementEnum getPlatformModelBase() {
-        return TRPlatformItem.TRPlatformVariants.byId(this.getMetaFromState(this.getBlockState().getBaseState())).modelBase;
+        return getPlatform().modelBase;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public ElementEnum getPlatformModelMoving() {
+        return getPlatform().modelMoving;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public ElementEnum getPlatformModelToOverlay() {
+        return getPlatform().modelOverlay;
+    }
+
+    public boolean canRenderUnderZero(){
+        return getPlatform().canRenderUnderZero;
+    }
+
+    public BlockPos[] getPattern(){
+        return getPlatform().pattern;
+    }
+
+    public TRPlatformItem.TRPlatformVariants getPlatform(){
+        return TRPlatformItem.TRPlatformVariants.byId(this.getMetaFromState(this.getBlockState().getBaseState()));
     }
 
     @Override

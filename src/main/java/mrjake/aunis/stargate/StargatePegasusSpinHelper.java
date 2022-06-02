@@ -16,19 +16,16 @@ import java.util.Map;
  * @author MrJake222
  */
 public class StargatePegasusSpinHelper implements ISpinHelper {
-  public StargatePegasusSpinHelper() {
 
-  }
 
-  public static float A_ANGLE_PER_TICK = 5;
-  public static final float U_SPEEDUP_TIME = 0;
-  public static final float S_STOP_TIME = 0;
+  // IntelliJ is stupid, and because of that, this constructor MUST be there!!!
+  public StargatePegasusSpinHelper() {}
 
   public SymbolTypeEnum symbolType;
 
   public boolean isSpinning;
   public SymbolInterface currentSymbol;
-  public EnumSpinDirection direction = EnumSpinDirection.CLOCKWISE;
+  public EnumSpinDirection direction;
 
   private long spinStartTime;
   private SymbolInterface targetSymbol;
@@ -54,65 +51,6 @@ public class StargatePegasusSpinHelper implements ISpinHelper {
   public SymbolInterface getTargetSymbol() {
     return targetSymbol;
   }
-
-  /**
-   * First phase function (with default values).
-   */
-  private static final MathRangedFunction SPEEDUP_PHASE_DEFAULT = getSpeedupRangedFunction(A_ANGLE_PER_TICK, U_SPEEDUP_TIME);
-
-  /**
-   * First phase ranged function generation method.
-   *
-   * @param a Angle per tick
-   * @param u Speedup time
-   *
-   * @return 1st phase function
-   */
-  private static MathRangedFunction getSpeedupRangedFunction(float a, float u) {
-    return new MathRangedFunction(new MathRange(0, u), new MathFunctionQuadratic(a / (2 * u), 0, 0));
-  }
-
-  /**
-   * Second phase's function (with default values).
-   */
-  private static final MathFunctionLinear LINEAR_SPIN_FUNCTION_DEFAULT = getLinearSpinFunction(A_ANGLE_PER_TICK, U_SPEEDUP_TIME);
-
-  /**
-   * Second phase function generation method.
-   *
-   * @param a Angle per tick
-   * @param u Speedup time
-   *
-   * @return 2nd phase function
-   */
-  private static MathFunctionLinear getLinearSpinFunction(float a, float u) {
-    return new MathFunctionLinear(a, -a * u / 2);
-  }
-
-  private static MathFunctionQuadratic getStopFunction(float a, float u, float s, float x0) {
-    return new MathFunctionQuadratic(-a / (2 * s), a + (a * x0 / s), -(a * u / 2 + a * x0 * x0 / (2 * s)));
-  }
-
-  private static float getx0(float targetAngle) {
-    return targetAngle / A_ANGLE_PER_TICK + (U_SPEEDUP_TIME - S_STOP_TIME) / 2;
-  }
-
-  private static float getTargetRotation(float x0) {
-    return A_ANGLE_PER_TICK * x0 + A_ANGLE_PER_TICK * (S_STOP_TIME - U_SPEEDUP_TIME) / 2;
-  }
-
-  public static float getMinimalDistance() {
-    return getTargetRotation(U_SPEEDUP_TIME);
-  }
-
-  public static int getAnimationDuration(float distance) {
-    return (int) (getx0(distance) + S_STOP_TIME);
-  }
-
-  /**
-   * {@link Map} containing the phases.
-   */
-  private Map<MathRange, MathFunction> phases = new HashMap<MathRange, MathFunction>(3);
 
   public StargatePegasusSpinHelper(SymbolTypeEnum symbolType, SymbolInterface currentSymbol, EnumSpinDirection spinDirection, boolean isSpinning, SymbolInterface targetRingSymbol, long spinStartTime, int plusRounds) {
     this.symbolType = symbolType;
