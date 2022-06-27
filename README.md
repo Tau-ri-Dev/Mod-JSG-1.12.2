@@ -11,4 +11,4 @@ Check out our youtube channel: https://www.youtube.com/channel/UChxSgOztJWUVqmw7
 
 > Created and coded by MineDragonCZ_ and matousss<br>
 > Models by MarcelMPL, **Harald de Luca** and from Aunis
-Checkout our official website: [JustSGMod.eu](https://justsgmod.eu)
+> Checkout our official website: [JustSGMod.eu](https://justsgmod.eu)
