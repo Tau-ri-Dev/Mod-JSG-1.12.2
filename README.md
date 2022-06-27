@@ -10,5 +10,5 @@ Check out our youtube channel: https://www.youtube.com/channel/UChxSgOztJWUVqmw7
 [![YouTube](https://img.shields.io/youtube/channel/subscribers/UChxSgOztJWUVqmw7TcZ-uMg?color=%232D2D2D&label=%20&logo=youtube&logoColor=%23ff2129&style=flat-square)](https://www.youtube.com/channel/UChxSgOztJWUVqmw7TcZ-uMg)
 
 > Created and coded by MineDragonCZ_ and matousss<br>
-> Models by MarcelMPL, **Harald de Luca** and from Aunis
+> Models by MarcelMPL, **Harald de Luca** and from Aunis<br>
 > Checkout our official website: [JustSGMod.eu](https://justsgmod.eu)
