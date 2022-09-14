@@ -47,6 +47,7 @@ public class AunisItems {
 
     public static final Item UPGRADE_SHIELD = ItemHelper.createGenericItem("upgrade_shield", aunisItemsCreativeTab);
     public static final Item SHIELD_EMITTER = ItemHelper.createGenericItem("shield_emitter", aunisItemsCreativeTab);
+    public static final Item TOLLAN_DEVICE = ItemHelper.createGenericItem("tollan_device", aunisItemsCreativeTab);
 
     /**
      * These allow for dialing 8th glyph(cross dimension travel) and show different address spaces
@@ -128,6 +129,7 @@ public class AunisItems {
             UPGRADE_IRIS_TRINIUM,
             UPGRADE_SHIELD,
             SHIELD_EMITTER,
+            TOLLAN_DEVICE,
 
             CRYSTAL_GLYPH_DHD,
             CRYSTAL_GLYPH_STARGATE,

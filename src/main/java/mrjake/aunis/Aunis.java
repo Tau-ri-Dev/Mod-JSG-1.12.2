@@ -110,7 +110,7 @@ public class Aunis {
 
     @EventHandler
     public void loadComplete(FMLLoadCompleteEvent event){
-        Aunis.info("Aunis loaded!");
+        Aunis.info("JSG loaded!");
     }
 
     @EventHandler
@@ -127,6 +127,6 @@ public class Aunis {
 
     @EventHandler
     public void serverStopped(FMLServerStoppedEvent event) {
-        Aunis.info("Good bye! Thank you for using Aunis: Resurrection :)");
+        Aunis.info("Good bye! Thank you for using JSG :)");
     }
 }

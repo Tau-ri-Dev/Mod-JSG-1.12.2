@@ -1,5 +1,7 @@
 package mrjake.aunis.stargate.teleportation;
 
+import mrjake.aunis.Aunis;
+import mrjake.aunis.item.AunisItems;
 import mrjake.aunis.util.main.AunisDamageSources;
 import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.api.event.StargateTeleportEntityEvent;
@@ -25,6 +27,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraft.inventory.*;
 
 import javax.vecmath.Vector2f;
 import java.util.HashMap;
@@ -149,9 +152,12 @@ public class EventHorizon {
                     if (AunisConfig.irisConfig.killAtDestination) {
                         packet.teleport(false);
                     }
+
                     if (AunisConfig.irisConfig.allowCreative
                             && packet.getEntity() instanceof EntityPlayer
-                            && ((EntityPlayer) packet.getEntity()).capabilities.isCreativeMode) {
+                            && ((EntityPlayer) packet.getEntity()).capabilities.isCreativeMode
+                            || packet.getEntity() instanceof EntityPlayer
+                            &&((EntityPlayer) packet.getEntity()).getHeldItemMainhand().getItem().equals(AunisItems.TOLLAN_DEVICE)) {
                         if (!AunisConfig.irisConfig.killAtDestination) {
                             packet.teleport();
                         }
