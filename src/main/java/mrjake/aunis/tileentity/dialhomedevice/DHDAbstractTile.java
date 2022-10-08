@@ -546,6 +546,10 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(symbolName:string) -- Activates DHD symbol")
     public Object[] pressButton(Context context, Arguments args) {
+        if(!isLinked())
+            return new Object[]{null, "dhd_failure_not_linked", "DHD is not linked to a gate"};
+        if(!hasControlCrystal())
+            return new Object[]{null, "dhd_failure_no_crystal", "DHD has no control crystal"};
         StargateClassicBaseTile gateTile = (StargateClassicBaseTile) this.getLinkedGate(world);
         if (gateTile == null)
             return new Object[]{null, "dhd_not_connected", "DHD is not connected to stargate"};
@@ -574,7 +578,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
                 }
 
                 if (!gateTile.canAddSymbol(symbol)) {
-                    return new Object[]{null, "dhd_engage_failed", "Can¨not add that symbol!"};
+                    return new Object[]{null, "dhd_engage_failed", "Can not add that symbol!"};
                 }
                 gateTile.addSymbolToAddressDHD(symbol);
             }

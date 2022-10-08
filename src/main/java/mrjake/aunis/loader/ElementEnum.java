@@ -98,10 +98,6 @@ public enum ElementEnum {
   public Map<BiomeOverlayEnum, ResourceLocation> biomeTextureResourceMap = new HashMap<>();
 
   ElementEnum(String model, String texture, boolean hasOverlays) {
-    if (model.startsWith("mainmenu/") && AunisConfig.mainMenuConfig.disableAunisMainMenu) {
-      modelResource = null;
-      return;
-    }
     this.modelResource = ModelLoader.getModelResource(model);
 
     for (BiomeOverlayEnum biomeOverlay : BiomeOverlayEnum.values())

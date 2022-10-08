@@ -2,6 +2,7 @@ package mrjake.aunis.loader.model;
 
 import org.lwjgl.BufferUtils;
 
+import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -94,14 +95,14 @@ public class OBJModel {
 	
 	private FloatBuffer createFloatBuffer(float[] input) {
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(input.length);
-		buffer.put(input).flip();
+		((Buffer) buffer.put(input)).flip();
 		
 		return buffer;
 	}
 	
 	private IntBuffer createIntBuffer(int[] input) {
 		IntBuffer buffer = BufferUtils.createIntBuffer(input.length);
-		buffer.put(input).flip();
+		((Buffer) buffer.put(input)).flip();
 		
 		return buffer;
 	}

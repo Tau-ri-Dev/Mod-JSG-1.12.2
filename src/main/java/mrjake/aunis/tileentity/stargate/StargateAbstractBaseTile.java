@@ -1879,7 +1879,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     @Optional.Method(modid = "opencomputers")
     @Callback(getter = true)
     public Object[] dialedAddress(Context context, Arguments args) {
-        return new Object[]{(isMerged && stargateState != EnumStargateState.ENGAGED) ? dialedAddress : null};
+        return (isMerged && !stargateState.incoming() && !stargateState.unstable() && !stargateState.notInitiating()) ? new Object[]{dialedAddress} : new Object[]{null};
     }
 
     @Optional.Method(modid = "opencomputers")

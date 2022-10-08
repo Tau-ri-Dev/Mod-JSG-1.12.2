@@ -8,7 +8,6 @@ import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
 import mrjake.aunis.Aunis;
 import mrjake.aunis.block.AunisBlock;
-import mrjake.aunis.block.invisible.InvisibleBlock;
 import mrjake.aunis.block.props.TRPlatformBlock;
 import mrjake.aunis.util.main.AunisProps;
 import mrjake.aunis.block.AunisBlocks;
@@ -70,6 +69,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import javax.annotation.Nonnull;
 import java.util.*;
 
+import static mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile.ConfigOptions.ENABLE_OC_PRESS_SOUND;
 import static mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile.ConfigOptions.RENDER_PLATFORM_MOVING;
 import static mrjake.aunis.transportrings.TransportRingsAddress.MAX_SYMBOLS;
 
@@ -647,13 +647,14 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     // -------------------------------
     // Engaging symbols
 
-    public TransportResult addSymbolToAddress(SymbolInterface symbol) {
+    public TransportResult addSymbolToAddressInternal(SymbolInterface symbol, boolean computer) {
         if(isBusy()) return TransportResult.BUSY;
         if (canAddSymbol(symbol)) {
             dialedAddress.setSymbolType(getSymbolType());
             dialedAddress.add(symbol);
             markDirty();
             activateSymbolDHD(symbol);
+            playControllerPressSound(computer);
             if (symbolWillLock()) {
                 TransportResult result = attemptTransportTo(dialedAddress, EnumScheduledTask.RINGS_START_ANIMATION.waitTicks);
                 if (!result.ok()) {
@@ -669,10 +670,17 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         if(symbol.origin()) {
             activateSymbolDHD(symbol);
             clearButtonsDHD(7);
+            playControllerPressSound(computer);
             sendSignal(ocContext, "transportrings_symbol_engage_failed", TransportResult.NO_SUCH_ADDRESS.toString());
             return TransportResult.NO_SUCH_ADDRESS;
         }
         return TransportResult.ALREADY_ACTIVATED;
+    }
+
+    public void playControllerPressSound(boolean computer){
+        TRControllerAbstractTile controller = getLinkedControllerTile(world);
+        if((!computer || config.getOption(ENABLE_OC_PRESS_SOUND.id).getBooleanValue()) && isLinked() && controller != null)
+            AunisSoundHelper.playSoundEvent(world, controller.getPos(), SoundEventEnum.RINGS_CONTROLLER_BUTTON);
     }
 
     public void activateSymbolDHD(SymbolInterface symbol){
@@ -1176,6 +1184,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         RENDER_PLATFORM_BASE(
                 1, "platformBase", AunisConfigOptionTypeEnum.BOOLEAN, "true",
                 "Render platform base part"
+        ),
+        ENABLE_OC_PRESS_SOUND(
+                2, "ocPressSound", AunisConfigOptionTypeEnum.BOOLEAN, "false",
+                "Play press sound when dialing with OC"
         );
 
         public int id;
@@ -1383,9 +1395,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         ocContext = context;
         if(symbolName.equals(""))
-            return new Object[]{addSymbolToAddress(symbolTypeConverted.getSymbol(symbolId))};
+            return new Object[]{addSymbolToAddressInternal(symbolTypeConverted.getSymbol(symbolId), true)};
         else
-            return new Object[]{addSymbolToAddress(symbolTypeConverted.fromEnglishName(symbolName))};
+            return new Object[]{addSymbolToAddressInternal(symbolTypeConverted.fromEnglishName(symbolName), true)};
     }
 
     @Override

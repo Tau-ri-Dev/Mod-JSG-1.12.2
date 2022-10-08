@@ -50,14 +50,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
 
 import static mrjake.aunis.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.SPIN_GATE_INCOMING;
 
 public class StargatePegasusBaseTile extends StargateClassicBaseTile implements ILinkable {
+    @Nonnull
     @Override
     public StargateSizeEnum getStargateSize() {
         return stargateSize;
@@ -81,7 +84,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
         resetToDialSymbols();
 
-        if (isLinkedAndDHDOperational()) getLinkedDHD(world).clearSymbols();
+        if (isLinkedAndDHDOperational()) Objects.requireNonNull(getLinkedDHD(world)).clearSymbols();
     }
 
     @Override
@@ -304,9 +307,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         if (!isLinked()) return false;
 
         DHDPegasusTile dhdTile = getLinkedDHD(world);
-        if (!dhdTile.hasControlCrystal()) return false;
-
-        return true;
+        if (dhdTile == null) return false;
+        return dhdTile.hasControlCrystal();
     }
 
     public void setLinkedDHD(BlockPos dhdPos, int linkId) {
@@ -440,27 +442,11 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         if (!world.isRemote) {
 
             if ((toDialSymbols.size() > 0) && (world.getTotalWorldTime() % 2 == 0) && stargateState.idle()) {
-                if (canAddSymbolInternal(toDialSymbols.get(0)) || toDialSymbols.get(0) == SymbolPegasusEnum.BRB) {
-
-                    SymbolPegasusEnum next = null;
-                    boolean continueDialing = false;
-
-                    for (SymbolPegasusEnum toDialSymbol : toDialSymbols) {
-                        if (toDialSymbol != toDialSymbols.get(0) && toDialSymbol != SymbolPegasusEnum.BRB) {
-                            next = toDialSymbol;
-                            break;
-                        }
-                    }
-
-                    //if(next != null && toDialSymbols.size() > 1 && toDialSymbols.get(0) != SymbolPegasusEnum.BRB && AunisConfig.stargateConfig.pegasContinueDial)
-                    //  continueDialing = true;
-
-                    this.continueDialing = continueDialing;
-                    markDirty();
-
+                if (canAddSymbolInternal(toDialSymbols.get(0)) || toDialSymbols.get(0) == SymbolPegasusEnum.BRB)
                     addSymbolToAddressByList(toDialSymbols.get(0));
-                }
-                if (toDialSymbols.size() > 0) toDialSymbols.remove(0);
+                if (toDialSymbols.size() > 0)
+                    toDialSymbols.remove(0);
+                markDirty();
             }
         }
 
@@ -633,24 +619,36 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
     @Override
     public boolean canAddSymbol(SymbolInterface symbol) {
-        if(dialedAddress.size() + toDialSymbols.size() + (this.stargateState.dialing() ? 1 : 0) >= getMaxChevrons()) return false;
+        if(dialedAddress.size() >= getMaxChevrons()) return false;
+
+        return super.canAddSymbol(symbol);
+    }
+
+    public boolean canAddSymbolToList(SymbolInterface symbol){
+        int size = toDialSymbols.size();
+        for(SymbolPegasusEnum s : toDialSymbols) {
+            if (s.brb()) size--;
+        }
+        if(dialedAddress.size() + size + (this.stargateState.dialing() ? 1 : 0) >= getMaxChevrons()) return false;
         if(toDialSymbols.contains((SymbolPegasusEnum) symbol)) return false;
 
         return super.canAddSymbol(symbol);
     }
 
     public void addSymbolToAddressDHD(SymbolInterface targetSymbol, EntityPlayer sender) {
-        addSymbolToAddressByList(targetSymbol);
         lastSender = sender;
+        addSymbolToAddressDHD(targetSymbol);
         markDirty();
     }
 
     public void addSymbolToAddressDHD(SymbolInterface targetSymbol) {
-        if(!canAddSymbol(targetSymbol)) return;
+        if(targetSymbol != SymbolPegasusEnum.BRB && !canAddSymbolToList(targetSymbol)) return;
+        if(!(targetSymbol instanceof SymbolPegasusEnum)) return;
+        if(toDialSymbols.contains(targetSymbol)) return;
         if (isLinkedAndDHDOperational() && (targetSymbol != SymbolPegasusEnum.BRB || toDialSymbols.size() > 0)) {
             DHDAbstractTile dhd = getLinkedDHD(world);
             if (dhd != null)
-                dhd.activateSymbol((SymbolPegasusEnum) targetSymbol);
+                dhd.activateSymbol(targetSymbol);
         }
         toDialSymbols.add((SymbolPegasusEnum) targetSymbol);
     }

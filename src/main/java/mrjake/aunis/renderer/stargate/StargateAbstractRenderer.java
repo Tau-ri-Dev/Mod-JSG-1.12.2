@@ -365,7 +365,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
      * @param mul      Multiplier of the horizon waving speed
      */
     protected void renderEventHorizon(double partialTicks, boolean white, Float alpha, boolean backOnly, float mul) {
-        float tick = Minecraft.getMinecraft().getRenderPartialTicks();
+        float tick = (float) Math.floor((Minecraft.getSystemTime()/(double)1000)*20);
 
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.enableBlend();

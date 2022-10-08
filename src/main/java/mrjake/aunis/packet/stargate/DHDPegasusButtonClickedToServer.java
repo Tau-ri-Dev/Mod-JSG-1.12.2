@@ -1,6 +1,7 @@
 package mrjake.aunis.packet.stargate;
 
 import io.netty.buffer.ByteBuf;
+import mrjake.aunis.Aunis;
 import mrjake.aunis.packet.PositionedPacket;
 import mrjake.aunis.stargate.EnumStargateState;
 import mrjake.aunis.stargate.StargateClosedReasonEnum;
@@ -87,14 +88,8 @@ public class DHDPegasusButtonClickedToServer extends PositionedPacket {
 					}
 					else if ((gateState.idle() || gateState.dialing()) && !gateState.dialingComputer()) {
 						// Gate is idle, some glyph was pressed
-
-						if (message.symbol.brb())
-							gateTile.addSymbolToAddressDHD(message.symbol, player);
-						else if (gateTile.canAddSymbol(message.symbol)) {
-							// Not BRB, some other glyph pressed on idling gate, we can add this symbol now
-							//gateTile.addSymbolToAddressManual(message.symbol, null);
-							gateTile.addSymbolToAddressDHD(message.symbol, player);
-						}
+						Aunis.info("LOL: " + message.symbol.getEnglishName());
+						gateTile.addSymbolToAddressDHD(message.symbol, player);
 					}
 
 

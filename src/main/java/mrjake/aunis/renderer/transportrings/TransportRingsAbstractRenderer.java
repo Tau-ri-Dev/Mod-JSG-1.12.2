@@ -1,6 +1,5 @@
 package mrjake.aunis.renderer.transportrings;
 
-import mrjake.aunis.Aunis;
 import mrjake.aunis.block.props.TRPlatformBlock;
 import mrjake.aunis.loader.ElementEnum;
 import mrjake.aunis.loader.texture.TextureLoader;
@@ -11,12 +10,9 @@ import mrjake.aunis.tileentity.transportrings.TransportRingsAbstractTile;
 import mrjake.aunis.transportrings.RingsPlatform;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -30,7 +26,7 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
 
     public static final int PLATFORM_ANIMATION_DURATION = 20;
     public static final float PLATFORM_MAX_Y = 0.8f;
-    public static final float PLATFORM_MAX_X = 3.8f;
+    public static final float PLATFORM_MAX_X = 5.0f;
 
     public abstract void renderRings(TransportRingsRendererState state, float partialTicks, int distance);
 

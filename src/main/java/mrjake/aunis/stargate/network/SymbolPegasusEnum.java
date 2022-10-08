@@ -54,12 +54,12 @@ public enum SymbolPegasusEnum implements SymbolInterface {
 
   BRB(38, "Bright Red Button", "BRB.obj", -39);
 
-  public int id;
-  public int textureSlot;
-  public String englishName;
-  public String translationKey;
-  public ResourceLocation iconResource;
-  public ResourceLocation modelResource;
+  public final int id;
+  public final int textureSlot;
+  public final String englishName;
+  public final String translationKey;
+  public final ResourceLocation iconResource;
+  public final ResourceLocation modelResource;
 
   private SymbolPegasusEnum(int id, String englishName, String model, int textureSlot) {
     this.id = id;

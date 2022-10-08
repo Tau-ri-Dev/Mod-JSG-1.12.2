@@ -61,9 +61,10 @@ public class TRControllerActivatedToServer extends PositionedPacket {
 					TransportRingsAbstractTile ringsTile = controllerTile.getLinkedRingsTile(world);
 
 					if (ringsTile != null) {
-						TransportResult result = ringsTile.addSymbolToAddress(SymbolTypeTransportRingsEnum.valueOf(message.symbolType).getSymbol(message.symbol-1));
-						if(result != TransportResult.ALREADY_ACTIVATED && result != TransportResult.BUSY)
-							AunisSoundHelper.playSoundEvent(world, message.pos, SoundEventEnum.RINGS_CONTROLLER_BUTTON);
+						TransportResult result = ringsTile.addSymbolToAddressInternal(SymbolTypeTransportRingsEnum.valueOf(message.symbolType).getSymbol(message.symbol-1), false);
+						// moved to tile entity
+						//if(result != TransportResult.ALREADY_ACTIVATED && result != TransportResult.BUSY)
+						//	AunisSoundHelper.playSoundEvent(world, message.pos, SoundEventEnum.RINGS_CONTROLLER_BUTTON);
 						result.sendMessageIfFailed(player);
 					} else
 						player.sendStatusMessage(new TextComponentTranslation("tile.aunis.transportrings_controller_block.not_linked"), true);

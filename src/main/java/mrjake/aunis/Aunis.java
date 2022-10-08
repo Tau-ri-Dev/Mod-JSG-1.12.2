@@ -25,9 +25,9 @@ public class Aunis {
     // CONSTANTS
 
     public static final String MOD_ID = "aunis";
-    public static final String MOD_NAME = "Aunis";
+    public static final String MOD_NAME = "Just Stargate Mod";
     public static final String MOD_VERSION = "@VERSION@";
-    public static final int DATA_VERSION = 17;
+    public static final int DATA_VERSION = 18;
     public static final String CONFIG_VERSION = "1.0";
     public static final String MC_VERSION = "@MCVERSION@";
     public static final String CLIENT = "mrjake.aunis.proxy.ProxyClient";
