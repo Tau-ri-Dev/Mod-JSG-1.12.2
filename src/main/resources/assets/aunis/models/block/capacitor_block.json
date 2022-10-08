@@ -1,9 +1,9 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"fluid": "aunis:fluids/silicon_molten_red_still",
-		"normal": "aunis:blocks/naquadah_block",
-		"particle": "aunis:blocks/naquadah_block"
+		"fluid": "jsg:fluids/silicon_molten_red_still",
+		"normal": "jsg:blocks/naquadah_block",
+		"particle": "jsg:blocks/naquadah_block"
 	},
     "elements": [
         {   "from": [ 0, 0, 0 ],

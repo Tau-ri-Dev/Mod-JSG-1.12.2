@@ -8,20 +8,20 @@
 	
 	"key": {
 		"N": {
-			"item": "aunis:naquadah_alloy"
+			"item": "jsg:naquadah_alloy"
 		},
 		
 		"B": {
-			"item": "aunis:crystal_blue"
+			"item": "jsg:crystal_blue"
 		},
 		
 		"R": {
-			"item": "aunis:stargate_ring_fragment"
+			"item": "jsg:stargate_ring_fragment"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:stargate_pegasus_member_block",
+		"item": "jsg:stargate_pegasus_member_block",
 		"count": 2,
 		"data": 6
 	}

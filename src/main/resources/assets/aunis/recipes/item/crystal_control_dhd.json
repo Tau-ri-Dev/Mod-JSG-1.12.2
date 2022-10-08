@@ -8,7 +8,7 @@
 	
 	"key": {
 		"R": {
-			"item": "aunis:crystal_red"
+			"item": "jsg:crystal_red"
 		},
 		
 		"S": {
@@ -17,7 +17,7 @@
 	},
 	
 	"result": {
-		"item": "aunis:crystal_control_dhd",
+		"item": "jsg:crystal_control_dhd",
 		"count": 1
 	}
 }

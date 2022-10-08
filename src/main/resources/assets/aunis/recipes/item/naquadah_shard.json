@@ -2,11 +2,11 @@
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
 		{
-			"item": "aunis:naquadah_block_raw"
+			"item": "jsg:naquadah_block_raw"
 		}
 	],
 	"result": {
-		"item": "aunis:naquadah_shard",
+		"item": "jsg:naquadah_shard",
 		"count": 4
 	}
 }

@@ -1,150 +1,150 @@
 # itemGroups - creative tabs
-itemGroup.aunis_gates=Aunis: Kapuk
-itemGroup.aunis_items=Aunis: Tárgyak
-itemGroup.aunis_rings=Aunis: Gyűrűk
-itemGroup.aunis_ores=Aunis: Ércek
-itemGroup.aunis_energy=Aunis: Energia
-itemGroup.aunis_tools=Aunis: Eszközök
-itemGroup.aunis_props=Aunis: Kellékek
-itemGroup.aunis_machines=Aunis: Gépek
+itemGroup.jsg_gates=JSG: Kapuk
+itemGroup.jsg_items=JSG: Tárgyak
+itemGroup.jsg_rings=JSG: Gyűrűk
+itemGroup.jsg_ores=JSG: Ércek
+itemGroup.jsg_energy=JSG: Energia
+itemGroup.jsg_tools=JSG: Eszközök
+itemGroup.jsg_props=JSG: Kellékek
+itemGroup.jsg_machines=JSG: Gépek
 
 # sound categories
-soundCategory.aunis_sounds=Aunis
+soundCategory.jsg_sounds=JSG
 
 # -------------------
 # ITEMS
 
 # iris
-item.aunis.iris_blade.name=Írisz Penge (Titánium)
-item.aunis.iris_blade_trinium.name=Írisz Penge (Trínium)
-item.aunis.quad_iris_blade.name=Négyszeres Írisz Penge (Titánium)
-item.aunis.quad_iris_blade_trinium.name=Négyszeres Írisz Penge (Trínium)
-item.aunis.upgrade_iris.name=Írisz Fejlesztés (Titánium)
-item.aunis.upgrade_iris_trinium.name=Írisz Fejlesztés (Trínium)
-item.aunis.shield_emitter.name=Pajzs Kibocsátó
-item.aunis.upgrade_shield.name=Pajzs Fejlesztés
+item.jsg.iris_blade.name=Írisz Penge (Titánium)
+item.jsg.iris_blade_trinium.name=Írisz Penge (Trínium)
+item.jsg.quad_iris_blade.name=Négyszeres Írisz Penge (Titánium)
+item.jsg.quad_iris_blade_trinium.name=Négyszeres Írisz Penge (Trínium)
+item.jsg.upgrade_iris.name=Írisz Fejlesztés (Titánium)
+item.jsg.upgrade_iris_trinium.name=Írisz Fejlesztés (Trínium)
+item.jsg.shield_emitter.name=Pajzs Kibocsátó
+item.jsg.upgrade_shield.name=Pajzs Fejlesztés
 
 # ingots
-item.aunis.trinium_ingot.name=Tríniumrúd
-item.aunis.titanium_ingot.name=Titániumrúd
-item.aunis.naquadah_shard.name=Nakvada Töredék
-item.aunis.naquadah_alloy.name=Finomított Nakvada Ötvözetrúd
-item.aunis.naquadah_alloy_raw.name=Nakvada Ötvözetrúd
+item.jsg.trinium_ingot.name=Tríniumrúd
+item.jsg.titanium_ingot.name=Titániumrúd
+item.jsg.naquadah_shard.name=Nakvada Töredék
+item.jsg.naquadah_alloy.name=Finomított Nakvada Ötvözetrúd
+item.jsg.naquadah_alloy_raw.name=Nakvada Ötvözetrúd
 
 # crystals
-item.aunis.crystal_fragment.name=Kristálymag
+item.jsg.crystal_fragment.name=Kristálymag
 
-item.aunis.crystal_blue.name=Teleportációs Kristály
-item.aunis.crystal_red.name=Energiakristály
-item.aunis.crystal_ender.name=Végzetkristály
-item.aunis.crystal_yellow.name=Fény Kristály
-item.aunis.crystal_white.name=Fehér Kristály
-item.aunis.crystal_blue_pegasus.name=Pegazus Kristály
+item.jsg.crystal_blue.name=Teleportációs Kristály
+item.jsg.crystal_red.name=Energiakristály
+item.jsg.crystal_ender.name=Végzetkristály
+item.jsg.crystal_yellow.name=Fény Kristály
+item.jsg.crystal_white.name=Fehér Kristály
+item.jsg.crystal_blue_pegasus.name=Pegazus Kristály
 
-item.aunis.circuit_control_base.name=Vezérlő Áramkör Alap
-item.aunis.circuit_control_naquadah.name=Nakvada Vezérlő Áramkör
-item.aunis.circuit_control_crystal.name=Kristály Vezérlő Áramkör
+item.jsg.circuit_control_base.name=Vezérlő Áramkör Alap
+item.jsg.circuit_control_naquadah.name=Nakvada Vezérlő Áramkör
+item.jsg.circuit_control_crystal.name=Kristály Vezérlő Áramkör
 
-item.aunis.crystal_control_dhd.name=Tárcsázó Irányítókristály
-item.aunis.crystal_control_pegasus_dhd.name=Pegazus Tárcsázó Irányítókristály
-item.aunis.raw_pegasus_dhd_crystal.name=Nyers Pegazus Tárcsázó Kristály
-item.aunis.crystal_glyph_dhd.name=Tárcsázó Szimbólumkristály
-item.aunis.crystal_glyph_stargate.name=Csillagkapu Szimbólumkristály
-item.aunis.crystal_glyph_milkyway.name=Tejútrendszeri Szimbólumkristály
-item.aunis.crystal_glyph_pegasus.name=Pegazusi Szimbólumkristály
-item.aunis.crystal_glyph_universe.name=Univerzum Szimbólumkristály
-item.aunis.crystal_glyph_goauld.name=Goa'uld Gyűrű Szimbólumkristály
-item.aunis.crystal_glyph_ori.name=Ori Gyűrű Szimbólumkristály
-item.aunis.crystal_glyph_ancient.name=Ős Gyűrű Szimbólumkristály
+item.jsg.crystal_control_dhd.name=Tárcsázó Irányítókristály
+item.jsg.crystal_control_pegasus_dhd.name=Pegazus Tárcsázó Irányítókristály
+item.jsg.raw_pegasus_dhd_crystal.name=Nyers Pegazus Tárcsázó Kristály
+item.jsg.crystal_glyph_dhd.name=Tárcsázó Szimbólumkristály
+item.jsg.crystal_glyph_stargate.name=Csillagkapu Szimbólumkristály
+item.jsg.crystal_glyph_milkyway.name=Tejútrendszeri Szimbólumkristály
+item.jsg.crystal_glyph_pegasus.name=Pegazusi Szimbólumkristály
+item.jsg.crystal_glyph_universe.name=Univerzum Szimbólumkristály
+item.jsg.crystal_glyph_goauld.name=Goa'uld Gyűrű Szimbólumkristály
+item.jsg.crystal_glyph_ori.name=Ori Gyűrű Szimbólumkristály
+item.jsg.crystal_glyph_ancient.name=Ős Gyűrű Szimbólumkristály
 
 # dhd
-item.aunis.dhd_brb.name=Világos Piros Gomb
-item.aunis.dhd_bbb.name=Világos Kék Gomb
+item.jsg.dhd_brb.name=Világos Piros Gomb
+item.jsg.dhd_bbb.name=Világos Kék Gomb
 
 # rings fragments
-item.aunis.stargate_ring_fragment.name=Csillagkapu Gyűrű Töredék
-item.aunis.universe_ring_fragment.name=Univerzum Gyűrű Töredék
-item.aunis.transportrings_ring_fragment.name=Transzportgyűrű Töredék
+item.jsg.stargate_ring_fragment.name=Csillagkapu Gyűrű Töredék
+item.jsg.universe_ring_fragment.name=Univerzum Gyűrű Töredék
+item.jsg.transportrings_ring_fragment.name=Transzportgyűrű Töredék
 
 # holders
-item.aunis.holder_crystal.name=Kristálytartó
-item.aunis.holder_crystal_pegasus.name=Kristálytartó (Pegazus)
+item.jsg.holder_crystal.name=Kristálytartó
+item.jsg.holder_crystal_pegasus.name=Kristálytartó (Pegazus)
 
 # notebook
-item.aunis.page_notebook.name=Jegyzetoldal
+item.jsg.page_notebook.name=Jegyzetoldal
 
 # mysterious page
-item.aunis.page_mysterious.name=Titokzatos Oldal
-item.aunis.page_mysterious.empty=Üres
-item.aunis.page_mysterious.tooltip=Ki tudja, merre vezet
+item.jsg.page_mysterious.name=Titokzatos Oldal
+item.jsg.page_mysterious.empty=Üres
+item.jsg.page_mysterious.tooltip=Ki tudja, merre vezet
 
 # beamer
-item.aunis.beamer_crystal_power.name=Vetítő Áramkristály
-item.aunis.beamer_crystal_fluid.name=Vetítő Folyadék Kristály
-item.aunis.beamer_crystal_items.name=Vetítő Tárgykristály
+item.jsg.beamer_crystal_power.name=Vetítő Áramkristály
+item.jsg.beamer_crystal_fluid.name=Vetítő Folyadék Kristály
+item.jsg.beamer_crystal_items.name=Vetítő Tárgykristály
 
 # universe dialer
-item.aunis.universe_dialer.name=Univerzum Tárcsázó
-item.aunis.universe_dialer.broken.name=Univerzum Tárcsázó (Elromlott)
-item.aunis.universe_dialer.saved_gates=Elmentett kapuk: %s
-item.aunis.universe_dialer.not_linked=Nincs összekötve
-item.aunis.universe_dialer.gate_busy=Kapu használatban
-item.aunis.universe_dialer.mode_scan=Közelben
-item.aunis.universe_dialer.mode_saved=Memória
-item.aunis.universe_dialer.mode_rings=Transzportgyűrűk
-item.aunis.universe_dialer.mode_oc=OpnCom
-item.aunis.universe_dialer.mode_info=Státusz
-item.aunis.universe_dialer.aborting=Tárcsázás leállítása
-item.aunis.universe_dialer.abort=Leáll
-item.aunis.universe_dialer.dial_start=A kapu tárcsázása...
-item.aunis.universe_dialer.not_dialing=Nem tárcsáz
-item.aunis.universe_dialer.dialer_broke=Tárcsázó elromlott, hogy ne omoljon össze a Minecraft
-item.aunis.universe_dialer.oc_name=Név
-item.aunis.universe_dialer.oc_address=OpenComputers modem címe (Hagyd üresen, ha sugározni akarsz)
-item.aunis.universe_dialer.oc_port=Modem portja
-item.aunis.universe_dialer.oc_data=OpenComputers paraméterek (vesszővel elválasztva)
-item.aunis.universe_dialer.oc_save=Mentés
-item.aunis.universe_dialer.oc_port_invalid=Helytelen port
-item.aunis.universe_dialer.oc_message_received=Válasz érkezett:
-item.aunis.universe_dialer.toggle_fast_dial=Gyorstárcsázás bekapcsolása
-item.aunis.universe_dialer.fast_dail_false=Gyorstárcsázás kikapcsolva
-item.aunis.universe_dialer.fast_dail_true=Gyorstárcsázás bekapcsolva
+item.jsg.universe_dialer.name=Univerzum Tárcsázó
+item.jsg.universe_dialer.broken.name=Univerzum Tárcsázó (Elromlott)
+item.jsg.universe_dialer.saved_gates=Elmentett kapuk: %s
+item.jsg.universe_dialer.not_linked=Nincs összekötve
+item.jsg.universe_dialer.gate_busy=Kapu használatban
+item.jsg.universe_dialer.mode_scan=Közelben
+item.jsg.universe_dialer.mode_saved=Memória
+item.jsg.universe_dialer.mode_rings=Transzportgyűrűk
+item.jsg.universe_dialer.mode_oc=OpnCom
+item.jsg.universe_dialer.mode_info=Státusz
+item.jsg.universe_dialer.aborting=Tárcsázás leállítása
+item.jsg.universe_dialer.abort=Leáll
+item.jsg.universe_dialer.dial_start=A kapu tárcsázása...
+item.jsg.universe_dialer.not_dialing=Nem tárcsáz
+item.jsg.universe_dialer.dialer_broke=Tárcsázó elromlott, hogy ne omoljon össze a Minecraft
+item.jsg.universe_dialer.oc_name=Név
+item.jsg.universe_dialer.oc_address=OpenComputers modem címe (Hagyd üresen, ha sugározni akarsz)
+item.jsg.universe_dialer.oc_port=Modem portja
+item.jsg.universe_dialer.oc_data=OpenComputers paraméterek (vesszővel elválasztva)
+item.jsg.universe_dialer.oc_save=Mentés
+item.jsg.universe_dialer.oc_port_invalid=Helytelen port
+item.jsg.universe_dialer.oc_message_received=Válasz érkezett:
+item.jsg.universe_dialer.toggle_fast_dial=Gyorstárcsázás bekapcsolása
+item.jsg.universe_dialer.fast_dail_false=Gyorstárcsázás kikapcsolva
+item.jsg.universe_dialer.fast_dail_true=Gyorstárcsázás bekapcsolva
 
 # notebook
-item.aunis.notebook.name=Jegyzetfüzet
-item.aunis.notebook.rename_gui=Új név
-item.aunis.notebook.unnamed=<névtelen>
+item.jsg.notebook.name=Jegyzetfüzet
+item.jsg.notebook.rename_gui=Új név
+item.jsg.notebook.unnamed=<névtelen>
 
 # gdo
-item.aunis.gui.name=Név
-item.aunis.gui.address=Cím
-item.aunis.gui.rename=Rename
-item.aunis.gui.oc_address=Modem címe
-item.aunis.gui.oc_port=Port
-item.aunis.gui.oc_params=Paraméterek
-item.aunis.gui.oc_port_invalid=Helytelen port
-item.aunis.gdo.name=Garázsajtó Nyitó (GDO)
-item.aunis.gdo.not_linked=Nincs csatlakoztatva
-item.aunis.gdo.code_sender=Kód
-item.aunis.gdo.iris_opened=Írisz nyitva!
-item.aunis.gdo.iris_busy=Írisz mozog!
-item.aunis.gdo.code_accepted=Kód elfogadva! Írisz nyitása...
-item.aunis.gdo.code_rejected=Rossz kód!
-item.aunis.gdo.code_not_set=Be kell írnod egy kódot!
-item.aunis.gdo.computer_handled=Várakozás a számítógépre...
-item.aunis.gdo.mode_oc=OpnCom
-item.aunis.gdo.oc_name=Név
-item.aunis.gdo.oc_address=OpenComputers modem címe (Hagyd üresen, ha sugározni akarsz)
-item.aunis.gdo.oc_port=Modem portja
-item.aunis.gdo.oc_data=OpenComputers paraméterek (vesszővel elválasztva)
-item.aunis.gdo.oc_save=Mentés
-item.aunis.gdo.oc_port_invalid=Helytelen port
-item.aunis.gdo.oc_message_received=Válasz érkezett:
+item.jsg.gui.name=Név
+item.jsg.gui.address=Cím
+item.jsg.gui.rename=Rename
+item.jsg.gui.oc_address=Modem címe
+item.jsg.gui.oc_port=Port
+item.jsg.gui.oc_params=Paraméterek
+item.jsg.gui.oc_port_invalid=Helytelen port
+item.jsg.gdo.name=Garázsajtó Nyitó (GDO)
+item.jsg.gdo.not_linked=Nincs csatlakoztatva
+item.jsg.gdo.code_sender=Kód
+item.jsg.gdo.iris_opened=Írisz nyitva!
+item.jsg.gdo.iris_busy=Írisz mozog!
+item.jsg.gdo.code_accepted=Kód elfogadva! Írisz nyitása...
+item.jsg.gdo.code_rejected=Rossz kód!
+item.jsg.gdo.code_not_set=Be kell írnod egy kódot!
+item.jsg.gdo.computer_handled=Várakozás a számítógépre...
+item.jsg.gdo.mode_oc=OpnCom
+item.jsg.gdo.oc_name=Név
+item.jsg.gdo.oc_address=OpenComputers modem címe (Hagyd üresen, ha sugározni akarsz)
+item.jsg.gdo.oc_port=Modem portja
+item.jsg.gdo.oc_data=OpenComputers paraméterek (vesszővel elválasztva)
+item.jsg.gdo.oc_save=Mentés
+item.jsg.gdo.oc_port_invalid=Helytelen port
+item.jsg.gdo.oc_message_received=Válasz érkezett:
 
 # tools
-item.aunis.zat.name=Zat'nik'tel
-item.aunis.staff.name=Goa'uld Botfegyver
-item.aunis.energyWeapon.available_shots=Maradék lövések:
+item.jsg.zat.name=Zat'nik'tel
+item.jsg.staff.name=Goa'uld Botfegyver
+item.jsg.energyWeapon.available_shots=Maradék lövések:
 
 # -------------------
 
@@ -152,77 +152,77 @@ item.aunis.energyWeapon.available_shots=Maradék lövések:
 # TILE ENTITIES/BLOCKS
 
 # special blocks
-tile.aunis.invisible_block.name=Nem láthatsz engem blokk
+tile.jsg.invisible_block.name=Nem láthatsz engem blokk
 
 # ores and ore blocks
-tile.aunis.naquadah_ore.name=Nakvada Érc
-tile.aunis.naquadah_ore_stone.name=Nakvada Érc (Kő)
-tile.aunis.naquadah_block.name=Nakvada Tömb
-tile.aunis.naquadah_block_raw.name=Nyers Nakvada Tömb
-tile.aunis.trinium_ore.name=Trínium Érc
-tile.aunis.titanium_ore.name=Titánium Érc
-tile.aunis.trinium_block.name=Trínium Tömb
-tile.aunis.titanium_block.name=Titánium Tömb
+tile.jsg.naquadah_ore.name=Nakvada Érc
+tile.jsg.naquadah_ore_stone.name=Nakvada Érc (Kő)
+tile.jsg.naquadah_block.name=Nakvada Tömb
+tile.jsg.naquadah_block_raw.name=Nyers Nakvada Tömb
+tile.jsg.trinium_ore.name=Trínium Érc
+tile.jsg.titanium_ore.name=Titánium Érc
+tile.jsg.trinium_block.name=Trínium Tömb
+tile.jsg.titanium_block.name=Titánium Tömb
 
 # props
-prop.aunis.platform_ships_block.name=Gyűrű platform (Hajók)
+prop.jsg.platform_ships_block.name=Gyűrű platform (Hajók)
 
 # dhd
-tile.aunis.dhd_block.name=Tárcsázókészülék
-tile.aunis.dhd_block.incoming_wormhole_warn=Nem lehet bezárni a féregjáratot erről az oldalról
-tile.aunis.dhd_block.not_linked_warn=Nincs tárcsázó kötve a kapuhoz
-tile.aunis.dhd_block.no_crystal_warn=A tárcsázóban nem található kristály
-tile.aunis.dhd_block.no_enough_power=Legalább 10,000uI szükséges a tárcsázó működtetéséhez
-tile.aunis.dhd_block.computer_dial=Számítógépes tárcsázás folyamatban
-tile.aunis.dhd_block.not_enough_power=Nem elég áram
+tile.jsg.dhd_block.name=Tárcsázókészülék
+tile.jsg.dhd_block.incoming_wormhole_warn=Nem lehet bezárni a féregjáratot erről az oldalról
+tile.jsg.dhd_block.not_linked_warn=Nincs tárcsázó kötve a kapuhoz
+tile.jsg.dhd_block.no_crystal_warn=A tárcsázóban nem található kristály
+tile.jsg.dhd_block.no_enough_power=Legalább 10,000uI szükséges a tárcsázó működtetéséhez
+tile.jsg.dhd_block.computer_dial=Számítógépes tárcsázás folyamatban
+tile.jsg.dhd_block.not_enough_power=Nem elég áram
 
-tile.aunis.dhd_pegasus_block.name=Tárcsázókészülék (Pegazus)
-tile.aunis.dhd_pegasus_block.unknown_buttons=Ez a gomb nem működik
+tile.jsg.dhd_pegasus_block.name=Tárcsázókészülék (Pegazus)
+tile.jsg.dhd_pegasus_block.unknown_buttons=Ez a gomb nem működik
 
 # stargate - MW
-tile.aunis.stargate_milkyway_base_block.name=Csillagkapu Alap (Tejútrendszer)
-tile.aunis.stargate_milkyway_ring_block.name=Csillagkapu Gyűrű (Tejútrendszer)
-tile.aunis.stargate_milkyway_chevron_block.name=Csillagkapu Ékzár (Tejútrendszer)
+tile.jsg.stargate_milkyway_base_block.name=Csillagkapu Alap (Tejútrendszer)
+tile.jsg.stargate_milkyway_ring_block.name=Csillagkapu Gyűrű (Tejútrendszer)
+tile.jsg.stargate_milkyway_chevron_block.name=Csillagkapu Ékzár (Tejútrendszer)
 
 # stargate - ORLIN
-tile.aunis.stargate_orlin_base_block.open_count=Open count: %s / %s
-tile.aunis.stargate_orlin_base_block.name=Csillagkapu Alap (Orlin)
-tile.aunis.stargate_orlin_member_block.name=Csillagkapu Gyűrű (Orlin)
+tile.jsg.stargate_orlin_base_block.open_count=Open count: %s / %s
+tile.jsg.stargate_orlin_base_block.name=Csillagkapu Alap (Orlin)
+tile.jsg.stargate_orlin_member_block.name=Csillagkapu Gyűrű (Orlin)
 
 # stargate - UNI
-tile.aunis.stargate_universe_base_block.name=Csillagkapu Alap (Univerzum)
-tile.aunis.stargate_universe_chevron_block.name=Csillagkapu Ékzár (Univerzum)
-tile.aunis.stargate_universe_ring_block.name=Csillagkapu Gyűrű (Univerzum)
+tile.jsg.stargate_universe_base_block.name=Csillagkapu Alap (Univerzum)
+tile.jsg.stargate_universe_chevron_block.name=Csillagkapu Ékzár (Univerzum)
+tile.jsg.stargate_universe_ring_block.name=Csillagkapu Gyűrű (Univerzum)
 
 # stargate - PEG
-tile.aunis.stargate_pegasus_base_block.name=Csillagkapu Alap (Pegazus)
-tile.aunis.stargate_pegasus_ring_block.name=Csillagkapu Gyűrű (Pegazus)
-tile.aunis.stargate_pegasus_chevron_block.name=Csillagkapu Ékzár (Pegazus)
+tile.jsg.stargate_pegasus_base_block.name=Csillagkapu Alap (Pegazus)
+tile.jsg.stargate_pegasus_ring_block.name=Csillagkapu Gyűrű (Pegazus)
+tile.jsg.stargate_pegasus_chevron_block.name=Csillagkapu Ékzár (Pegazus)
 
 # capacitor
-tile.aunis.capacitor_block.name=Kondenzátor
-tile.aunis.capacitor_block_empty.name=Kondenzátor (Üres)
+tile.jsg.capacitor_block.name=Kondenzátor
+tile.jsg.capacitor_block_empty.name=Kondenzátor (Üres)
 
 # rings controller
-tile.aunis.transportrings_controller_goauld_block.name=Transzportgyűrű Irányító
-tile.aunis.transportrings_controller_block.not_linked=Irányító nincs csatlakoztatva
+tile.jsg.transportrings_controller_goauld_block.name=Transzportgyűrű Irányító
+tile.jsg.transportrings_controller_block.not_linked=Irányító nincs csatlakoztatva
 
 # rings
-tile.aunis.transportrings_goauld_block.name=Transzportgyűrű
-tile.aunis.transportrings_ori_block.name=Transzportgyűrű (Ori)
+tile.jsg.transportrings_goauld_block.name=Transzportgyűrű
+tile.jsg.transportrings_ori_block.name=Transzportgyűrű (Ori)
 
-tile.aunis.transportrings_block.non_existing_address=Cím nem elérhető
-tile.aunis.transportrings_block.wrong_distance=Helytelen távolság, -40 és 40 között kell lennie
-tile.aunis.transportrings_block.obstructed=Gyűrűk eltorlaszolva, legyen 5x5 blokknyi hely a gyűrűk számára
-tile.aunis.transportrings_block.obstructed_target=Cél gyűrűk eltorlaszolva, legyen 5x5 blokknyi hely a gyűrűk számára
-tile.aunis.transportrings_block.busy=Gyűrűk használatban
-tile.aunis.transportrings_block.busy_target=Cél gyűrűk használatban
-tile.aunis.transportrings_block.not_enough_power=Nincs elég áram a gyűrűk aktiválásához
-tile.aunis.transportrings_block.rings_name=Név
-tile.aunis.transportrings_block.rings_distance=Távolság
+tile.jsg.transportrings_block.non_existing_address=Cím nem elérhető
+tile.jsg.transportrings_block.wrong_distance=Helytelen távolság, -40 és 40 között kell lennie
+tile.jsg.transportrings_block.obstructed=Gyűrűk eltorlaszolva, legyen 5x5 blokknyi hely a gyűrűk számára
+tile.jsg.transportrings_block.obstructed_target=Cél gyűrűk eltorlaszolva, legyen 5x5 blokknyi hely a gyűrűk számára
+tile.jsg.transportrings_block.busy=Gyűrűk használatban
+tile.jsg.transportrings_block.busy_target=Cél gyűrűk használatban
+tile.jsg.transportrings_block.not_enough_power=Nincs elég áram a gyűrűk aktiválásához
+tile.jsg.transportrings_block.rings_name=Név
+tile.jsg.transportrings_block.rings_distance=Távolság
 
 # beamer
-tile.aunis.beamer_block.name=Vetítőblokk
+tile.jsg.beamer_block.name=Vetítőblokk
 
 # -------------------
 
@@ -305,140 +305,140 @@ death.attack.staffHit=%s-t elégette egy Goa'uld Botfegyver
 
 # RINGS
 # Ori Glyphs
-glyph.aunis.transportrings.ori.alpha=Alfa
-glyph.aunis.transportrings.ori.beta=Béta
-glyph.aunis.transportrings.ori.gamma=Gamma
-glyph.aunis.transportrings.ori.delta=Delta
-glyph.aunis.transportrings.ori.omega=Omega
-glyph.aunis.transportrings.ori.origin=Eredet
+glyph.jsg.transportrings.ori.alpha=Alfa
+glyph.jsg.transportrings.ori.beta=Béta
+glyph.jsg.transportrings.ori.gamma=Gamma
+glyph.jsg.transportrings.ori.delta=Delta
+glyph.jsg.transportrings.ori.omega=Omega
+glyph.jsg.transportrings.ori.origin=Eredet
 
 # Goa'uld Glyphs
-glyph.aunis.transportrings.goauld.amun=Ámon
-glyph.aunis.transportrings.goauld.serket=Szelket
-glyph.aunis.transportrings.goauld.khepri=Heper
-glyph.aunis.transportrings.goauld.ra=Ré
-glyph.aunis.transportrings.goauld.felluca=Felukka
-glyph.aunis.transportrings.goauld.cobra=Kobra
+glyph.jsg.transportrings.goauld.amun=Ámon
+glyph.jsg.transportrings.goauld.serket=Szelket
+glyph.jsg.transportrings.goauld.khepri=Heper
+glyph.jsg.transportrings.goauld.ra=Ré
+glyph.jsg.transportrings.goauld.felluca=Felukka
+glyph.jsg.transportrings.goauld.cobra=Kobra
 
 # STARGATE
 # Milkyway Glyphs
-glyph.aunis.milkyway.sculptor=Szobrász
-glyph.aunis.milkyway.scorpius=Skorpió
-glyph.aunis.milkyway.centaurus=Kentaur
-glyph.aunis.milkyway.monoceros=Egyszarvú
-glyph.aunis.milkyway.point_of_origin=Eredetpont
-glyph.aunis.milkyway.pegasus=Pegazus
-glyph.aunis.milkyway.andromeda=Androméda
-glyph.aunis.milkyway.serpens_caput=Kígyó
-glyph.aunis.milkyway.aries=Kos
-glyph.aunis.milkyway.libra=Mérleg
-glyph.aunis.milkyway.eridanus=Eridanus
-glyph.aunis.milkyway.leo_minor=Kis Oroszlán
-glyph.aunis.milkyway.hydra=Hydra
-glyph.aunis.milkyway.sagittarius=Nyilas
-glyph.aunis.milkyway.sextans=Szextáns
-glyph.aunis.milkyway.scutum=Pajzs
-glyph.aunis.milkyway.pisces=Halak
-glyph.aunis.milkyway.virgo=Szűz
-glyph.aunis.milkyway.bootes=Ökörhajcsár
-glyph.aunis.milkyway.auriga=Szekeres
-glyph.aunis.milkyway.corona_australis=Déli Korona
-glyph.aunis.milkyway.gemini=Ikrek
-glyph.aunis.milkyway.leo=Oroszlán
-glyph.aunis.milkyway.cetus=Cet
-glyph.aunis.milkyway.triangulum=Hátomszög
-glyph.aunis.milkyway.aquarius=Vízöntő
-glyph.aunis.milkyway.microscopium=Mikroszkóp
-glyph.aunis.milkyway.equuleus=Csikó
-glyph.aunis.milkyway.crater=Serleg
-glyph.aunis.milkyway.perseus=Perseus
-glyph.aunis.milkyway.cancer=Rák
-glyph.aunis.milkyway.norma=Szögmérő
-glyph.aunis.milkyway.taurus=Bika
-glyph.aunis.milkyway.canis_minor=Kis Kutya
-glyph.aunis.milkyway.capricornus=Bak
-glyph.aunis.milkyway.lynx=Hiúz
-glyph.aunis.milkyway.orion=Orion
-glyph.aunis.milkyway.piscis_austrinus=Déli Hal
-glyph.aunis.milkyway.bright_red_button=Nagy Piros Gomb
+glyph.jsg.milkyway.sculptor=Szobrász
+glyph.jsg.milkyway.scorpius=Skorpió
+glyph.jsg.milkyway.centaurus=Kentaur
+glyph.jsg.milkyway.monoceros=Egyszarvú
+glyph.jsg.milkyway.point_of_origin=Eredetpont
+glyph.jsg.milkyway.pegasus=Pegazus
+glyph.jsg.milkyway.andromeda=Androméda
+glyph.jsg.milkyway.serpens_caput=Kígyó
+glyph.jsg.milkyway.aries=Kos
+glyph.jsg.milkyway.libra=Mérleg
+glyph.jsg.milkyway.eridanus=Eridanus
+glyph.jsg.milkyway.leo_minor=Kis Oroszlán
+glyph.jsg.milkyway.hydra=Hydra
+glyph.jsg.milkyway.sagittarius=Nyilas
+glyph.jsg.milkyway.sextans=Szextáns
+glyph.jsg.milkyway.scutum=Pajzs
+glyph.jsg.milkyway.pisces=Halak
+glyph.jsg.milkyway.virgo=Szűz
+glyph.jsg.milkyway.bootes=Ökörhajcsár
+glyph.jsg.milkyway.auriga=Szekeres
+glyph.jsg.milkyway.corona_australis=Déli Korona
+glyph.jsg.milkyway.gemini=Ikrek
+glyph.jsg.milkyway.leo=Oroszlán
+glyph.jsg.milkyway.cetus=Cet
+glyph.jsg.milkyway.triangulum=Hátomszög
+glyph.jsg.milkyway.aquarius=Vízöntő
+glyph.jsg.milkyway.microscopium=Mikroszkóp
+glyph.jsg.milkyway.equuleus=Csikó
+glyph.jsg.milkyway.crater=Serleg
+glyph.jsg.milkyway.perseus=Perseus
+glyph.jsg.milkyway.cancer=Rák
+glyph.jsg.milkyway.norma=Szögmérő
+glyph.jsg.milkyway.taurus=Bika
+glyph.jsg.milkyway.canis_minor=Kis Kutya
+glyph.jsg.milkyway.capricornus=Bak
+glyph.jsg.milkyway.lynx=Hiúz
+glyph.jsg.milkyway.orion=Orion
+glyph.jsg.milkyway.piscis_austrinus=Déli Hal
+glyph.jsg.milkyway.bright_red_button=Nagy Piros Gomb
 
 # Pegasus Glyphs
-glyph.aunis.pegasus.acjesis=Acjesis
-glyph.aunis.pegasus.lenchan=Lenchan
-glyph.aunis.pegasus.alura=Alura
-glyph.aunis.pegasus.ca_po=Ca Po
-glyph.aunis.pegasus.laylox=Laylox
-glyph.aunis.pegasus.ecrumig=Ecrumig
-glyph.aunis.pegasus.avoniv=Avoniv
-glyph.aunis.pegasus.bydo=Bydo
-glyph.aunis.pegasus.aaxel=Aaxel
-glyph.aunis.pegasus.aldeni=Aldeni
-glyph.aunis.pegasus.setas=Setas
-glyph.aunis.pegasus.arami=Arami
-glyph.aunis.pegasus.danami=Danami
-glyph.aunis.pegasus.poco_re=Poco Re
-glyph.aunis.pegasus.robandus=Robandus
-glyph.aunis.pegasus.recktic=Recktic
-glyph.aunis.pegasus.zamilloz=Zamilloz
-glyph.aunis.pegasus.subido=Subido
-glyph.aunis.pegasus.dawnre=Dawnre
-glyph.aunis.pegasus.salma=Salma
-glyph.aunis.pegasus.hamlinto=Hamlinto
-glyph.aunis.pegasus.elenami=Elenami
-glyph.aunis.pegasus.tahnan=Tahnan
-glyph.aunis.pegasus.zeo=Zeo
-glyph.aunis.pegasus.roehi=Roehi
-glyph.aunis.pegasus.once_el=Once El
-glyph.aunis.pegasus.baselai=Baselai
-glyph.aunis.pegasus.sandovi=Sandovi
-glyph.aunis.pegasus.illume=Illume
-glyph.aunis.pegasus.amiwill=Amiwill
-glyph.aunis.pegasus.sibbron=Sibbron
-glyph.aunis.pegasus.gilltin=Gilltin
-glyph.aunis.pegasus.abrin=Abrin
-glyph.aunis.pegasus.ramnon=Ramnon
-glyph.aunis.pegasus.olavii=Olavii
-glyph.aunis.pegasus.hacemill=Hacemill
-glyph.aunis.pegasus.unknow1=Ismeretlen 1
-glyph.aunis.pegasus.unknow2=Ismeretlen 2
+glyph.jsg.pegasus.acjesis=Acjesis
+glyph.jsg.pegasus.lenchan=Lenchan
+glyph.jsg.pegasus.alura=Alura
+glyph.jsg.pegasus.ca_po=Ca Po
+glyph.jsg.pegasus.laylox=Laylox
+glyph.jsg.pegasus.ecrumig=Ecrumig
+glyph.jsg.pegasus.avoniv=Avoniv
+glyph.jsg.pegasus.bydo=Bydo
+glyph.jsg.pegasus.aaxel=Aaxel
+glyph.jsg.pegasus.aldeni=Aldeni
+glyph.jsg.pegasus.setas=Setas
+glyph.jsg.pegasus.arami=Arami
+glyph.jsg.pegasus.danami=Danami
+glyph.jsg.pegasus.poco_re=Poco Re
+glyph.jsg.pegasus.robandus=Robandus
+glyph.jsg.pegasus.recktic=Recktic
+glyph.jsg.pegasus.zamilloz=Zamilloz
+glyph.jsg.pegasus.subido=Subido
+glyph.jsg.pegasus.dawnre=Dawnre
+glyph.jsg.pegasus.salma=Salma
+glyph.jsg.pegasus.hamlinto=Hamlinto
+glyph.jsg.pegasus.elenami=Elenami
+glyph.jsg.pegasus.tahnan=Tahnan
+glyph.jsg.pegasus.zeo=Zeo
+glyph.jsg.pegasus.roehi=Roehi
+glyph.jsg.pegasus.once_el=Once El
+glyph.jsg.pegasus.baselai=Baselai
+glyph.jsg.pegasus.sandovi=Sandovi
+glyph.jsg.pegasus.illume=Illume
+glyph.jsg.pegasus.amiwill=Amiwill
+glyph.jsg.pegasus.sibbron=Sibbron
+glyph.jsg.pegasus.gilltin=Gilltin
+glyph.jsg.pegasus.abrin=Abrin
+glyph.jsg.pegasus.ramnon=Ramnon
+glyph.jsg.pegasus.olavii=Olavii
+glyph.jsg.pegasus.hacemill=Hacemill
+glyph.jsg.pegasus.unknow1=Ismeretlen 1
+glyph.jsg.pegasus.unknow2=Ismeretlen 2
 
 # Universe Glyphs
-glyph.aunis.universe.g1=Szimbólum 1
-glyph.aunis.universe.g2=Szimbólum 2
-glyph.aunis.universe.g3=Szimbólum 3
-glyph.aunis.universe.g4=Szimbólum 4
-glyph.aunis.universe.g5=Szimbólum 5
-glyph.aunis.universe.g6=Szimbólum 6
-glyph.aunis.universe.g7=Szimbólum 7
-glyph.aunis.universe.g8=Szimbólum 8
-glyph.aunis.universe.g9=Szimbólum 9
-glyph.aunis.universe.g10=Szimbólum 10
-glyph.aunis.universe.g11=Szimbólum 11
-glyph.aunis.universe.g12=Szimbólum 12
-glyph.aunis.universe.g13=Szimbólum 13
-glyph.aunis.universe.g14=Szimbólum 14
-glyph.aunis.universe.g15=Szimbólum 15
-glyph.aunis.universe.g16=Szimbólum 16
-glyph.aunis.universe.g17=Szimbólum 17
-glyph.aunis.universe.g18=Szimbólum 18
-glyph.aunis.universe.g19=Szimbólum 19
-glyph.aunis.universe.g20=Szimbólum 20
-glyph.aunis.universe.g21=Szimbólum 21
-glyph.aunis.universe.g22=Szimbólum 22
-glyph.aunis.universe.g23=Szimbólum 23
-glyph.aunis.universe.g24=Szimbólum 24
-glyph.aunis.universe.g25=Szimbólum 25
-glyph.aunis.universe.g26=Szimbólum 26
-glyph.aunis.universe.g27=Szimbólum 27
-glyph.aunis.universe.g28=Szimbólum 28
-glyph.aunis.universe.g29=Szimbólum 29
-glyph.aunis.universe.g30=Szimbólum 30
-glyph.aunis.universe.g31=Szimbólum 31
-glyph.aunis.universe.g32=Szimbólum 32
-glyph.aunis.universe.g33=Szimbólum 33
-glyph.aunis.universe.g34=Szimbólum 34
-glyph.aunis.universe.g35=Szimbólum 35
-glyph.aunis.universe.g36=Szimbólum 36
+glyph.jsg.universe.g1=Szimbólum 1
+glyph.jsg.universe.g2=Szimbólum 2
+glyph.jsg.universe.g3=Szimbólum 3
+glyph.jsg.universe.g4=Szimbólum 4
+glyph.jsg.universe.g5=Szimbólum 5
+glyph.jsg.universe.g6=Szimbólum 6
+glyph.jsg.universe.g7=Szimbólum 7
+glyph.jsg.universe.g8=Szimbólum 8
+glyph.jsg.universe.g9=Szimbólum 9
+glyph.jsg.universe.g10=Szimbólum 10
+glyph.jsg.universe.g11=Szimbólum 11
+glyph.jsg.universe.g12=Szimbólum 12
+glyph.jsg.universe.g13=Szimbólum 13
+glyph.jsg.universe.g14=Szimbólum 14
+glyph.jsg.universe.g15=Szimbólum 15
+glyph.jsg.universe.g16=Szimbólum 16
+glyph.jsg.universe.g17=Szimbólum 17
+glyph.jsg.universe.g18=Szimbólum 18
+glyph.jsg.universe.g19=Szimbólum 19
+glyph.jsg.universe.g20=Szimbólum 20
+glyph.jsg.universe.g21=Szimbólum 21
+glyph.jsg.universe.g22=Szimbólum 22
+glyph.jsg.universe.g23=Szimbólum 23
+glyph.jsg.universe.g24=Szimbólum 24
+glyph.jsg.universe.g25=Szimbólum 25
+glyph.jsg.universe.g26=Szimbólum 26
+glyph.jsg.universe.g27=Szimbólum 27
+glyph.jsg.universe.g28=Szimbólum 28
+glyph.jsg.universe.g29=Szimbólum 29
+glyph.jsg.universe.g30=Szimbólum 30
+glyph.jsg.universe.g31=Szimbólum 31
+glyph.jsg.universe.g32=Szimbólum 32
+glyph.jsg.universe.g33=Szimbólum 33
+glyph.jsg.universe.g34=Szimbólum 34
+glyph.jsg.universe.g35=Szimbólum 35
+glyph.jsg.universe.g36=Szimbólum 36
 
 # -------------------
 
@@ -544,77 +544,77 @@ gui.gdo.send_button=Kód küldése
 # -------------------
 # KEY BINDINGS
 
-config.aunis.mode_scroll=Univerzum tárcsázó mód: tekerés
-config.aunis.mode_up=Univerzum tárcsázó mód: fel
-config.aunis.mode_down=Univerzum tárcsázó mód: le
-config.aunis.address_scroll=Univerzum tárcsázó tekerés
-config.aunis.address_up=Univerzum tárcsázó fel
-config.aunis.address_down=Univerzum tárcsázó le
-config.aunis.address_edit=Címszerkesztő megnyitása
+config.jsg.mode_scroll=Univerzum tárcsázó mód: tekerés
+config.jsg.mode_up=Univerzum tárcsázó mód: fel
+config.jsg.mode_down=Univerzum tárcsázó mód: le
+config.jsg.address_scroll=Univerzum tárcsázó tekerés
+config.jsg.address_up=Univerzum tárcsázó fel
+config.jsg.address_down=Univerzum tárcsázó le
+config.jsg.address_edit=Címszerkesztő megnyitása
 
 # -------------------
 
 # -------------------
 # SUBTITLES
 
-aunis.subtitle.dhd_milkyway_press=DHD szimbólum megnyomva
-aunis.subtitle.dhd_milkyway_press_brb=DHD világos piros gomb megnyomva
-aunis.subtitle.gate_milkyway_open=Csillagkapu féregjárat megnyílik
-aunis.subtitle.gate_milkyway_close=Csillagkapu féregjárat bezárul
-aunis.subtitle.gate_milkyway_ring_roll=Csillagkapu gyűrű forog
-aunis.subtitle.gate_milkyway_dial_fail=Csillagkapu nem tud kapcsolódni
-aunis.subtitle.gate_orlin_broke=Csillagkapu elromlott
-aunis.subtitle.gate_orlin_dial_fail=Csillagkapu nem tud kapcsolódni
-aunis.subtitle.gate_milkyway_dial_fail_computer=Csillagkapu számítógép-tárcsázása meghiúsul
-aunis.subtitle.gate_milkyway_incoming=Csillagkapu ékzárak bezárnak
-aunis.subtitle.gate_milkyway_chevron_shut=Csillagkapu ékzár zárul
-aunis.subtitle.gate_milkyway_chevron_open=Csillagkapu ékzár nyílik
+jsg.subtitle.dhd_milkyway_press=DHD szimbólum megnyomva
+jsg.subtitle.dhd_milkyway_press_brb=DHD világos piros gomb megnyomva
+jsg.subtitle.gate_milkyway_open=Csillagkapu féregjárat megnyílik
+jsg.subtitle.gate_milkyway_close=Csillagkapu féregjárat bezárul
+jsg.subtitle.gate_milkyway_ring_roll=Csillagkapu gyűrű forog
+jsg.subtitle.gate_milkyway_dial_fail=Csillagkapu nem tud kapcsolódni
+jsg.subtitle.gate_orlin_broke=Csillagkapu elromlott
+jsg.subtitle.gate_orlin_dial_fail=Csillagkapu nem tud kapcsolódni
+jsg.subtitle.gate_milkyway_dial_fail_computer=Csillagkapu számítógép-tárcsázása meghiúsul
+jsg.subtitle.gate_milkyway_incoming=Csillagkapu ékzárak bezárnak
+jsg.subtitle.gate_milkyway_chevron_shut=Csillagkapu ékzár zárul
+jsg.subtitle.gate_milkyway_chevron_open=Csillagkapu ékzár nyílik
 
-aunis.subtitle.dhd_pegasus_press=DHD szimbólum megnyomva
-aunis.subtitle.dhd_pegasus_press_brb=DHD szimbólum megnyomva
-aunis.subtitle.gate_pegasus_open=Csillagkapu féregjárat megnyílik
-aunis.subtitle.gate_pegasus_close=Csillagkapu féregjárat bezárul
-aunis.subtitle.gate_pegasus_ring_roll=Csillagkapu gyűrű forog
-aunis.subtitle.gate_pegasus_dial_fail=Csillagkapu nem tud kapcsolódni
-aunis.subtitle.gate_pegasus_dial_fail_computer=Csillagkapu számítógép-tárcsázása meghiúsul
-aunis.subtitle.gate_pegasus_incoming=Csillagkapu ékzárak bezárnak
-aunis.subtitle.gate_pegasus_chevron_shut=Csillagkapu ékzár zárul
-aunis.subtitle.gate_pegasus_chevron_open=Csillagkapu ékzár nyílik
+jsg.subtitle.dhd_pegasus_press=DHD szimbólum megnyomva
+jsg.subtitle.dhd_pegasus_press_brb=DHD szimbólum megnyomva
+jsg.subtitle.gate_pegasus_open=Csillagkapu féregjárat megnyílik
+jsg.subtitle.gate_pegasus_close=Csillagkapu féregjárat bezárul
+jsg.subtitle.gate_pegasus_ring_roll=Csillagkapu gyűrű forog
+jsg.subtitle.gate_pegasus_dial_fail=Csillagkapu nem tud kapcsolódni
+jsg.subtitle.gate_pegasus_dial_fail_computer=Csillagkapu számítógép-tárcsázása meghiúsul
+jsg.subtitle.gate_pegasus_incoming=Csillagkapu ékzárak bezárnak
+jsg.subtitle.gate_pegasus_chevron_shut=Csillagkapu ékzár zárul
+jsg.subtitle.gate_pegasus_chevron_open=Csillagkapu ékzár nyílik
 
-aunis.subtitle.gate_orlin_dial=Orlin kapuja tárcsázik
+jsg.subtitle.gate_orlin_dial=Orlin kapuja tárcsázik
 
-aunis.subtitle.gate_universe_dial_start=Univerzum kapu tárcsázni kezd
-aunis.subtitle.gate_universe_roll=Univerzum kapu forog
-aunis.subtitle.gate_universe_chevron_lock=Univerzum kapu ékzára zárul
-aunis.subtitle.gate_universe_fail=Univerzum kapu nem tud kapcsolódni
-aunis.subtitle.gate_universe_chevron_top_lock=Univerzum kapu felső ékzára zárul
-aunis.subtitle.gate_universe_open=Univerzum kapu féregjárat nyílik
-aunis.subtitle.gate_universe_close=Univerzum kapu féregjárat zárul
+jsg.subtitle.gate_universe_dial_start=Univerzum kapu tárcsázni kezd
+jsg.subtitle.gate_universe_roll=Univerzum kapu forog
+jsg.subtitle.gate_universe_chevron_lock=Univerzum kapu ékzára zárul
+jsg.subtitle.gate_universe_fail=Univerzum kapu nem tud kapcsolódni
+jsg.subtitle.gate_universe_chevron_top_lock=Univerzum kapu felső ékzára zárul
+jsg.subtitle.gate_universe_open=Univerzum kapu féregjárat nyílik
+jsg.subtitle.gate_universe_close=Univerzum kapu féregjárat zárul
 
-aunis.subtitle.wormhole_loop=Féregjárat hullámzik
-aunis.subtitle.wormhole_go=Féregjáraton átlép egy entitás
-aunis.subtitle.wormhole_flicker=Féregjárat ingadozik
-aunis.subtitle.rings_transport=Transzportgyűrűk aktiválnak
-aunis.subtitle.rings_controller_button=Transzportgyűrű kontroller gombja megnyomva
+jsg.subtitle.wormhole_loop=Féregjárat hullámzik
+jsg.subtitle.wormhole_go=Féregjáraton átlép egy entitás
+jsg.subtitle.wormhole_flicker=Féregjárat ingadozik
+jsg.subtitle.rings_transport=Transzportgyűrűk aktiválnak
+jsg.subtitle.rings_controller_button=Transzportgyűrű kontroller gombja megnyomva
 
-aunis.subtitle.iris_hit=Valami nekiment az írisznek
-aunis.subtitle.iris_opening=Írisz nyílik
-aunis.subtitle.iris_closing=Írisz zárul
-aunis.subtitle.shield_hit=Valami nekiment a pajzsnak
-aunis.subtitle.shield_opening=Pajzs bekapcsol
-aunis.subtitle.shield_closing=Pajzs kikapcsol
+jsg.subtitle.iris_hit=Valami nekiment az írisznek
+jsg.subtitle.iris_opening=Írisz nyílik
+jsg.subtitle.iris_closing=Írisz zárul
+jsg.subtitle.shield_hit=Valami nekiment a pajzsnak
+jsg.subtitle.shield_opening=Pajzs bekapcsol
+jsg.subtitle.shield_closing=Pajzs kikapcsol
 
-aunis.subtitle.beamer_start=Vetítő beindul
-aunis.subtitle.beamer_stop=Vetítő megáll
-aunis.subtitle.beamer_loop=Vetítő vetít
-aunis.subtitle.page_flip=Lapoz
-aunis.subtitle.gdo_button_beep=GDO gombja megnyomva
-aunis.subtitle.universe_dialer_beep=Univerzum tárcsázó gombja megnyomva
-aunis.subtitle.universe_dialer_change_mode=Univerzum tárcsázó módja átállítva
-aunis.subtitle.universe_dialer_connect=Univerzum tárcsázó kapcsolódva
+jsg.subtitle.beamer_start=Vetítő beindul
+jsg.subtitle.beamer_stop=Vetítő megáll
+jsg.subtitle.beamer_loop=Vetítő vetít
+jsg.subtitle.page_flip=Lapoz
+jsg.subtitle.gdo_button_beep=GDO gombja megnyomva
+jsg.subtitle.universe_dialer_beep=Univerzum tárcsázó gombja megnyomva
+jsg.subtitle.universe_dialer_change_mode=Univerzum tárcsázó módja átállítva
+jsg.subtitle.universe_dialer_connect=Univerzum tárcsázó kapcsolódva
 
-aunis.subtitle.item_zat_shoot=Zat'nik'tel lő
-aunis.subtitle.item_staff_shoot=Goa'uld Botfegyver lő
+jsg.subtitle.item_zat_shoot=Zat'nik'tel lő
+jsg.subtitle.item_staff_shoot=Goa'uld Botfegyver lő
 
 # -------------------
 
@@ -629,7 +629,7 @@ chat.orlins.energyStored=Energia eltárolva: %s RF (Szükséges: %s RF, %s s)
 # -------------------
 # MAIN MENU
 
-menu.about=Aunis-ról
+menu.about=JSG-ról
 menu.gate_overlay=Kapu
 menu.music_toggle=Zene
 

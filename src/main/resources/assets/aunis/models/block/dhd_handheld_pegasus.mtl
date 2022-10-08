@@ -10,16 +10,16 @@ newmtl None_red256-bright3.png
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 d 1.000000
-map_Kd aunis:dhd_handheld_pegasus/bbb128
+map_Kd jsg:dhd_handheld_pegasus/bbb128
 
 newmtl None_symbol5.png
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 d 1.000000
-map_Kd aunis:dhd_handheld_pegasus/symbol64
+map_Kd jsg:dhd_handheld_pegasus/symbol64
 
 newmtl dhd512.png
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
 d 1.000000
-map_Kd aunis:dhd_handheld_pegasus/dhd512
+map_Kd jsg:dhd_handheld_pegasus/dhd512

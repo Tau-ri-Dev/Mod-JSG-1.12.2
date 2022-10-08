@@ -1,7 +1,7 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "aunis:stargate_orlin_member_block"
+		"model": "jsg:stargate_orlin_member_block"
 	},
 	"variants": {
 		"normal": [{}],

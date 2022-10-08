@@ -1,0 +1,127 @@
+package tauri.dev.jsg.loader.texture;
+
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.loader.FolderLoader;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.ProgressManager;
+import net.minecraftforge.fml.common.ProgressManager.ProgressBar;
+import org.apache.commons.io.IOUtils;
+
+import java.awt.image.BufferedImage;
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class TextureLoader {
+
+	public static final String TEXTURES_PATH = "assets/jsg/textures/tesr";
+	private static final Map<ResourceLocation, Texture> LOADED_TEXTURES = new HashMap<>();
+	
+	public static Texture getTexture(ResourceLocation resourceLocation) {
+		return LOADED_TEXTURES.get(resourceLocation);
+	}
+	
+	/**
+	 * Checks if the texture is loaded. If not, it probably doesn't exist.
+	 * 
+	 * @return True if the texture exists and it's loaded, False otherwise.
+	 */
+	public static boolean isTextureLoaded(ResourceLocation resourceLocation) {
+		return LOADED_TEXTURES.containsKey(resourceLocation);
+	}
+	
+	public static void reloadTextures(IResourceManager resourceManager) throws IOException {		
+		for (Texture texture : LOADED_TEXTURES.values())
+			texture.deleteTexture();
+		
+		List<String> texturePaths = FolderLoader.getAllFiles(TEXTURES_PATH, ".png", ".jpg");
+		ProgressBar progressBar = ProgressManager.push("JSG: Resurrection - Loading textures", texturePaths.size());
+		
+		long start = System.currentTimeMillis();
+
+		JSG.logger.info("Started loading textures...");
+
+		for (String texturePath : texturePaths) {
+			texturePath = texturePath.replaceFirst("assets/jsg/", "");
+			progressBar.step(texturePath.replaceFirst("textures/", ""));
+			
+			if (tauri.dev.jsg.config.JSGConfig.horizonConfig.disableAnimatedEventHorizon){
+				switch (texturePath){
+					case "textures/tesr/event_horizon_animated_unstable.jpg":
+					case "textures/tesr/event_horizon_animated.jpg":
+					case "textures/tesr/event_horizon_animated_kawoosh.jpg":
+					case "textures/tesr/event_horizon_animated_kawoosh_unstable.jpg":
+						if(tauri.dev.jsg.config.JSGConfig.debugConfig.logTexturesLoading)
+							JSG.logger.info("Skipping: " + texturePath);
+						continue;
+				}
+			}
+						
+			ResourceLocation resourceLocation = new ResourceLocation(JSG.MOD_ID, texturePath);
+			IResource resource = null;
+			
+			try {
+				resource = resourceManager.getResource(resourceLocation);
+				if(JSGConfig.debugConfig.logTexturesLoading)
+					JSG.logger.info("Loading texture: " + texturePath);
+				BufferedImage bufferedImage = TextureUtil.readBufferedImage(resource.getInputStream());
+				LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage, false));
+				
+				/*
+				Shit that lags PCs
+
+				if (texturePath.equals("textures/tesr/event_horizon_animated.jpg")){
+					LOADED_TEXTURES.put(new ResourceLocation(JSG.ModID, texturePath+"_desaturated"), new Texture(bufferedImage, true));
+				}*/
+			}
+			
+			catch (IOException e) {
+				JSG.logger.error("Failed to load texture " + texturePath);
+				e.printStackTrace();
+			}
+			
+			finally {
+	            IOUtils.closeQuietly((Closeable)resource);
+			}
+		}
+		
+		JSG.logger.info("Loaded "+texturePaths.size()+" textures in "+(System.currentTimeMillis()-start)+" ms");
+		
+		ProgressManager.pop(progressBar);
+	}
+
+	public static ResourceLocation getTextureResource(String texture) {
+		return new ResourceLocation(JSG.MOD_ID, "textures/tesr/" + texture);
+	}
+
+	public static ResourceLocation getBlockTexture(IBlockState blockState) {
+
+		Minecraft minecraft = Minecraft.getMinecraft();
+		BlockRendererDispatcher ren = minecraft.getBlockRendererDispatcher();
+		String blockTexture = ren.getModelForState(blockState).getQuads(blockState, EnumFacing.NORTH, 0).get(0).getSprite().getIconName();
+		String domain = "minecraft";
+		String path = blockTexture;
+		int domainSeparator = blockTexture.indexOf(':');
+
+		if (domainSeparator >= 0) {
+			path = blockTexture.substring(domainSeparator + 1);
+
+			if (domainSeparator > 1) {
+				domain = blockTexture.substring(0, domainSeparator);
+			}
+		}
+
+		String resourcePath = "textures/" + path + ".png";  // base path and PNG are hardcoded in Minecraft
+		return new ResourceLocation(domain.toLowerCase(), resourcePath);
+	}
+}

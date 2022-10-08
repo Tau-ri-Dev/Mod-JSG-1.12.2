@@ -1,150 +1,150 @@
 # itemGroups - creative tabs
-itemGroup.aunis_gates=Aunis: Gates
-itemGroup.aunis_items=Aunis: Items
-itemGroup.aunis_rings=Aunis: Rings
-itemGroup.aunis_ores=Aunis: Ores
-itemGroup.aunis_energy=Aunis: Energy
-itemGroup.aunis_tools=Aunis: Tools
-itemGroup.aunis_props=Aunis: Props
-itemGroup.aunis_machines=Aunis: Machines
+itemGroup.jsg_gates=JSG: Gates
+itemGroup.jsg_items=JSG: Items
+itemGroup.jsg_rings=JSG: Rings
+itemGroup.jsg_ores=JSG: Ores
+itemGroup.jsg_energy=JSG: Energy
+itemGroup.jsg_tools=JSG: Tools
+itemGroup.jsg_props=JSG: Props
+itemGroup.jsg_machines=JSG: Machines
 
 # sound categories
-soundCategory.aunis_sounds=Aunis
+soundCategory.jsg_sounds=JSG
 
 # -------------------
 # ITEMS
 
 # iris
-item.aunis.iris_blade.name=Hoja del Iris (Titanio)
-item.aunis.iris_blade_trinium.name=Hoja del Iris (Trinium)
-item.aunis.quad_iris_blade.name=Hoja cuádruple de iris (Titanio)
-item.aunis.quad_iris_blade_trinium.name=Hoja cuádruple de iris (Trinium)
-item.aunis.upgrade_iris.name=Mejora de Iris (Titanio)
-item.aunis.upgrade_iris_trinium.name=Mejora de Iris (Trinium)
-item.aunis.shield_emitter.name=Emisor de Escudo
-item.aunis.upgrade_shield.name=Mejora de Escudo
+item.jsg.iris_blade.name=Hoja del Iris (Titanio)
+item.jsg.iris_blade_trinium.name=Hoja del Iris (Trinium)
+item.jsg.quad_iris_blade.name=Hoja cuádruple de iris (Titanio)
+item.jsg.quad_iris_blade_trinium.name=Hoja cuádruple de iris (Trinium)
+item.jsg.upgrade_iris.name=Mejora de Iris (Titanio)
+item.jsg.upgrade_iris_trinium.name=Mejora de Iris (Trinium)
+item.jsg.shield_emitter.name=Emisor de Escudo
+item.jsg.upgrade_shield.name=Mejora de Escudo
 
 # ingots
-item.aunis.trinium_ingot.name=Lingote de Trinium
-item.aunis.titanium_ingot.name=Lingote de Titanio
-item.aunis.naquadah_shard.name=Fragmento de Naquadah
-item.aunis.naquadah_alloy.name=Lingote de Naquadah refinado
-item.aunis.naquadah_alloy_raw.name=Lingote de Naquadah
+item.jsg.trinium_ingot.name=Lingote de Trinium
+item.jsg.titanium_ingot.name=Lingote de Titanio
+item.jsg.naquadah_shard.name=Fragmento de Naquadah
+item.jsg.naquadah_alloy.name=Lingote de Naquadah refinado
+item.jsg.naquadah_alloy_raw.name=Lingote de Naquadah
 
 # crystals
-item.aunis.crystal_fragment.name=Semilla de cristal
+item.jsg.crystal_fragment.name=Semilla de cristal
 
-item.aunis.crystal_blue.name=Cristal de Teletransporte
-item.aunis.crystal_red.name=Cristal de Poder
-item.aunis.crystal_ender.name=Cristal Ender
-item.aunis.crystal_yellow.name=Cristal de Luz
-item.aunis.crystal_white.name=Cristal Blanco
-item.aunis.crystal_blue_pegasus.name=Cristal de Pegasus
+item.jsg.crystal_blue.name=Cristal de Teletransporte
+item.jsg.crystal_red.name=Cristal de Poder
+item.jsg.crystal_ender.name=Cristal Ender
+item.jsg.crystal_yellow.name=Cristal de Luz
+item.jsg.crystal_white.name=Cristal Blanco
+item.jsg.crystal_blue_pegasus.name=Cristal de Pegasus
 
-item.aunis.circuit_control_base.name=Base del Circuito de Control 
-item.aunis.circuit_control_naquadah.name=Circuito del Control de Naquadah
-item.aunis.circuit_control_crystal.name=Circuito del Cristal de Control 
+item.jsg.circuit_control_base.name=Base del Circuito de Control
+item.jsg.circuit_control_naquadah.name=Circuito del Control de Naquadah
+item.jsg.circuit_control_crystal.name=Circuito del Cristal de Control
 
-item.aunis.crystal_control_dhd.name=Cristal de Control
-item.aunis.crystal_control_pegasus_dhd.name=Cristal de control de Pegasus
-item.aunis.raw_pegasus_dhd_crystal.name=Cristal de control de Pegasus (sin procesar)
-item.aunis.crystal_glyph_dhd.name=Cristal de glifo DHD
-item.aunis.crystal_glyph_stargate.name=Cristal de glifo Stargate
-item.aunis.crystal_glyph_milkyway.name=Cristal de glifos de la Vía Láctea
-item.aunis.crystal_glyph_pegasus.name=Cristal de glifos de Pegaso
-item.aunis.crystal_glyph_universe.name=Cristal de glifos Universo
-item.aunis.crystal_glyph_goauld.name=Goa'uld Rings Glyphs Crystal
-item.aunis.crystal_glyph_ori.name=Ori Rings Glyphs Crystal
-item.aunis.crystal_glyph_ancient.name=Ancient Rings Glyphs Crystal
+item.jsg.crystal_control_dhd.name=Cristal de Control
+item.jsg.crystal_control_pegasus_dhd.name=Cristal de control de Pegasus
+item.jsg.raw_pegasus_dhd_crystal.name=Cristal de control de Pegasus (sin procesar)
+item.jsg.crystal_glyph_dhd.name=Cristal de glifo DHD
+item.jsg.crystal_glyph_stargate.name=Cristal de glifo Stargate
+item.jsg.crystal_glyph_milkyway.name=Cristal de glifos de la Vía Láctea
+item.jsg.crystal_glyph_pegasus.name=Cristal de glifos de Pegaso
+item.jsg.crystal_glyph_universe.name=Cristal de glifos Universo
+item.jsg.crystal_glyph_goauld.name=Goa'uld Rings Glyphs Crystal
+item.jsg.crystal_glyph_ori.name=Ori Rings Glyphs Crystal
+item.jsg.crystal_glyph_ancient.name=Ancient Rings Glyphs Crystal
 
 # dhd
-item.aunis.dhd_brb.name=Botón Brillante Rojo (BBR)
-item.aunis.dhd_bbb.name=Botón Brillante Azul (BBA)
+item.jsg.dhd_brb.name=Botón Brillante Rojo (BBR)
+item.jsg.dhd_bbb.name=Botón Brillante Azul (BBA)
 
 # rings fragments
-item.aunis.stargate_ring_fragment.name=Fragmento de Anillo de Stargate
-item.aunis.universe_ring_fragment.name=Fragmento de Anillo de Universo
-item.aunis.transportrings_ring_fragment.name=Fragmento de Anillo Transportador
+item.jsg.stargate_ring_fragment.name=Fragmento de Anillo de Stargate
+item.jsg.universe_ring_fragment.name=Fragmento de Anillo de Universo
+item.jsg.transportrings_ring_fragment.name=Fragmento de Anillo Transportador
 
 # holders
-item.aunis.holder_crystal.name=Soporte de cristal
-item.aunis.holder_crystal_pegasus.name=Soporte de cristal (Pegasus)
+item.jsg.holder_crystal.name=Soporte de cristal
+item.jsg.holder_crystal_pegasus.name=Soporte de cristal (Pegasus)
 
 # notebook
-item.aunis.page_notebook.name=Página de Cuaderno
+item.jsg.page_notebook.name=Página de Cuaderno
 
 # mysterious page
-item.aunis.page_mysterious.name=Página Misteriosa
-item.aunis.page_mysterious.empty=Vacío
-item.aunis.page_mysterious.tooltip=Who knows where it leads
+item.jsg.page_mysterious.name=Página Misteriosa
+item.jsg.page_mysterious.empty=Vacío
+item.jsg.page_mysterious.tooltip=Who knows where it leads
 
 # beamer
-item.aunis.beamer_crystal_power.name=Cristal beamer de poder
-item.aunis.beamer_crystal_fluid.name=Cristal beamer de fluidos
-item.aunis.beamer_crystal_items.name=Cristal beamer de items
+item.jsg.beamer_crystal_power.name=Cristal beamer de poder
+item.jsg.beamer_crystal_fluid.name=Cristal beamer de fluidos
+item.jsg.beamer_crystal_items.name=Cristal beamer de items
 
 # universe dialer
-item.aunis.universe_dialer.name=Control Antiguo
-item.aunis.universe_dialer.broken.name=Control Antiguo (Roto)
-item.aunis.universe_dialer.saved_gates=Portales guardados: %s
-item.aunis.universe_dialer.not_linked=No enlazado
-item.aunis.universe_dialer.gate_busy=El Portal está ocupado
-item.aunis.universe_dialer.mode_scan=Cercano
-item.aunis.universe_dialer.mode_saved=Memoria
-item.aunis.universe_dialer.mode_rings=Anillos
-item.aunis.universe_dialer.mode_oc=OpnCom
-item.aunis.universe_dialer.mode_info=Status
-item.aunis.universe_dialer.aborting=Cancelar Marcado
-item.aunis.universe_dialer.abort=Cancelar
-item.aunis.universe_dialer.dial_start=Dialing the gate...
-item.aunis.universe_dialer.not_dialing=No marcando
-item.aunis.universe_dialer.dialer_broke=El dial se ha roto para evitar que Minecraft se crasheara
-item.aunis.universe_dialer.oc_name=Nombre de la entrada
-item.aunis.universe_dialer.oc_address=Dirección del módem de OpenComputers (Dejar en blanco para transmitir)
-item.aunis.universe_dialer.oc_port=Puerto del módem
-item.aunis.universe_dialer.oc_data=Parámetros de OpenComputers (separados por coma)
-item.aunis.universe_dialer.oc_save=Guardar
-item.aunis.universe_dialer.oc_port_invalid=Puerto inválido
-item.aunis.universe_dialer.oc_message_received=Respuesta recibida: 
-item.aunis.universe_dialer.toggle_fast_dial=Toggle fast dialing
-item.aunis.universe_dialer.fast_dail_false=Fast dialing set to: False
-item.aunis.universe_dialer.fast_dail_true=Fast dialing set to: True
+item.jsg.universe_dialer.name=Control Antiguo
+item.jsg.universe_dialer.broken.name=Control Antiguo (Roto)
+item.jsg.universe_dialer.saved_gates=Portales guardados: %s
+item.jsg.universe_dialer.not_linked=No enlazado
+item.jsg.universe_dialer.gate_busy=El Portal está ocupado
+item.jsg.universe_dialer.mode_scan=Cercano
+item.jsg.universe_dialer.mode_saved=Memoria
+item.jsg.universe_dialer.mode_rings=Anillos
+item.jsg.universe_dialer.mode_oc=OpnCom
+item.jsg.universe_dialer.mode_info=Status
+item.jsg.universe_dialer.aborting=Cancelar Marcado
+item.jsg.universe_dialer.abort=Cancelar
+item.jsg.universe_dialer.dial_start=Dialing the gate...
+item.jsg.universe_dialer.not_dialing=No marcando
+item.jsg.universe_dialer.dialer_broke=El dial se ha roto para evitar que Minecraft se crasheara
+item.jsg.universe_dialer.oc_name=Nombre de la entrada
+item.jsg.universe_dialer.oc_address=Dirección del módem de OpenComputers (Dejar en blanco para transmitir)
+item.jsg.universe_dialer.oc_port=Puerto del módem
+item.jsg.universe_dialer.oc_data=Parámetros de OpenComputers (separados por coma)
+item.jsg.universe_dialer.oc_save=Guardar
+item.jsg.universe_dialer.oc_port_invalid=Puerto inválido
+item.jsg.universe_dialer.oc_message_received=Respuesta recibida:
+item.jsg.universe_dialer.toggle_fast_dial=Toggle fast dialing
+item.jsg.universe_dialer.fast_dail_false=Fast dialing set to: False
+item.jsg.universe_dialer.fast_dail_true=Fast dialing set to: True
 
 # notebook
-item.aunis.notebook.name=Cuaderno
-item.aunis.notebook.rename_gui=Nombre Nuevo
-item.aunis.notebook.unnamed=<sin nombre>
+item.jsg.notebook.name=Cuaderno
+item.jsg.notebook.rename_gui=Nombre Nuevo
+item.jsg.notebook.unnamed=<sin nombre>
 
 # gdo
-item.aunis.gui.name=Nombre
-item.aunis.gui.address=Dirección
-item.aunis.gui.rename=Renombrar
-item.aunis.gui.oc_address=Dirección del módem
-item.aunis.gui.oc_port=Puerto
-item.aunis.gui.oc_params=Parámetros
-item.aunis.gui.oc_port_invalid=Puerto Inválido
-item.aunis.gdo.name=Abrepuertas (GDO)
-item.aunis.gdo.not_linked=No vinculado
-item.aunis.gdo.code_sender=Código
-item.aunis.gdo.iris_opened=El Iris está abierto!
-item.aunis.gdo.iris_busy=El Iris está ocupado!
-item.aunis.gdo.code_accepted=Código aceptado! Abriendo Iris...
-item.aunis.gdo.code_rejected=Código incorrecto!
-item.aunis.gdo.code_not_set=Debes entrar un código!
-item.aunis.gdo.computer_handled=Esperando a la computadora...
-item.aunis.gdo.mode_oc=OpnCom
-item.aunis.gdo.oc_name=Nombre de Entrada
-item.aunis.gdo.oc_address=Dirección del módem de OpenComputers (Deje en blanco para transmit)
-item.aunis.gdo.oc_port=Puerto del módem
-item.aunis.gdo.oc_data=Parametros de OpenComputers (separados por coma)
-item.aunis.gdo.oc_save=Guardar
-item.aunis.gdo.oc_port_invalid=Puerto Inválido
-item.aunis.gdo.oc_message_received=Respuesta Recibida:
+item.jsg.gui.name=Nombre
+item.jsg.gui.address=Dirección
+item.jsg.gui.rename=Renombrar
+item.jsg.gui.oc_address=Dirección del módem
+item.jsg.gui.oc_port=Puerto
+item.jsg.gui.oc_params=Parámetros
+item.jsg.gui.oc_port_invalid=Puerto Inválido
+item.jsg.gdo.name=Abrepuertas (GDO)
+item.jsg.gdo.not_linked=No vinculado
+item.jsg.gdo.code_sender=Código
+item.jsg.gdo.iris_opened=El Iris está abierto!
+item.jsg.gdo.iris_busy=El Iris está ocupado!
+item.jsg.gdo.code_accepted=Código aceptado! Abriendo Iris...
+item.jsg.gdo.code_rejected=Código incorrecto!
+item.jsg.gdo.code_not_set=Debes entrar un código!
+item.jsg.gdo.computer_handled=Esperando a la computadora...
+item.jsg.gdo.mode_oc=OpnCom
+item.jsg.gdo.oc_name=Nombre de Entrada
+item.jsg.gdo.oc_address=Dirección del módem de OpenComputers (Deje en blanco para transmit)
+item.jsg.gdo.oc_port=Puerto del módem
+item.jsg.gdo.oc_data=Parametros de OpenComputers (separados por coma)
+item.jsg.gdo.oc_save=Guardar
+item.jsg.gdo.oc_port_invalid=Puerto Inválido
+item.jsg.gdo.oc_message_received=Respuesta Recibida:
 
 # tools
-item.aunis.zat.name=Zat'nik'tel
-item.aunis.staff.name=Goa'uld Staff weapon
-item.aunis.energyWeapon.available_shots=Available shots:
+item.jsg.zat.name=Zat'nik'tel
+item.jsg.staff.name=Goa'uld Staff weapon
+item.jsg.energyWeapon.available_shots=Available shots:
 
 # -------------------
 
@@ -152,77 +152,77 @@ item.aunis.energyWeapon.available_shots=Available shots:
 # TILE ENTITIES/BLOCKS
 
 # special blocks
-tile.aunis.invisible_block.name=No puedes verme
+tile.jsg.invisible_block.name=No puedes verme
 
 # ores and ore blocks
-tile.aunis.naquadah_ore.name=Mineral de Naquadah
-tile.aunis.naquadah_ore_stone.name=Mineral de Naquadah (Piedra)
-tile.aunis.naquadah_block.name=Bloque de Naquadah
-tile.aunis.naquadah_block_raw.name=Bloque de Naquadah (Sin procesar)
-tile.aunis.trinium_ore.name=Mineral de Trinium
-tile.aunis.titanium_ore.name=Mineral de Titanio
-tile.aunis.trinium_block.name=Bloque de Trinium
-tile.aunis.titanium_block.name=Bloque de Titanio
+tile.jsg.naquadah_ore.name=Mineral de Naquadah
+tile.jsg.naquadah_ore_stone.name=Mineral de Naquadah (Piedra)
+tile.jsg.naquadah_block.name=Bloque de Naquadah
+tile.jsg.naquadah_block_raw.name=Bloque de Naquadah (Sin procesar)
+tile.jsg.trinium_ore.name=Mineral de Trinium
+tile.jsg.titanium_ore.name=Mineral de Titanio
+tile.jsg.trinium_block.name=Bloque de Trinium
+tile.jsg.titanium_block.name=Bloque de Titanio
 
 # props
-prop.aunis.platform_ships_block.name=Rings platform (Ships)
+prop.jsg.platform_ships_block.name=Rings platform (Ships)
 
 # dhd
-tile.aunis.dhd_block.name=Dispositivo de Llamada a Casa (DHD)
-tile.aunis.dhd_block.incoming_wormhole_warn=Imposible cerrar el portal de este lado
-tile.aunis.dhd_block.not_linked_warn=El DHD no esta vinculado a este portal
-tile.aunis.dhd_block.no_crystal_warn=El DHD no tiene cristal de control
-tile.aunis.dhd_block.no_enough_power=El DHD requiere al menos 10,000uI para operar correctamente
-tile.aunis.dhd_block.computer_dial=La marcación por computadora está en progreso
-tile.aunis.dhd_block.not_enough_power=Enegía insuficiente
+tile.jsg.dhd_block.name=Dispositivo de Llamada a Casa (DHD)
+tile.jsg.dhd_block.incoming_wormhole_warn=Imposible cerrar el portal de este lado
+tile.jsg.dhd_block.not_linked_warn=El DHD no esta vinculado a este portal
+tile.jsg.dhd_block.no_crystal_warn=El DHD no tiene cristal de control
+tile.jsg.dhd_block.no_enough_power=El DHD requiere al menos 10,000uI para operar correctamente
+tile.jsg.dhd_block.computer_dial=La marcación por computadora está en progreso
+tile.jsg.dhd_block.not_enough_power=Enegía insuficiente
 
-tile.aunis.dhd_pegasus_block.name=Dispositivo de Llamada a Casa (DHD de Pegasus)
-tile.aunis.dhd_pegasus_block.unknown_buttons=This button isn't working
+tile.jsg.dhd_pegasus_block.name=Dispositivo de Llamada a Casa (DHD de Pegasus)
+tile.jsg.dhd_pegasus_block.unknown_buttons=This button isn't working
 
 # stargate - MW
-tile.aunis.stargate_milkyway_base_block.name=Base de Stargate (Vía Láctea)
-tile.aunis.stargate_milkyway_ring_block.name=Anillo de Stargate (Vía Láctea)
-tile.aunis.stargate_milkyway_chevron_block.name=Chevrón de Stargate (Vía Láctea)
+tile.jsg.stargate_milkyway_base_block.name=Base de Stargate (Vía Láctea)
+tile.jsg.stargate_milkyway_ring_block.name=Anillo de Stargate (Vía Láctea)
+tile.jsg.stargate_milkyway_chevron_block.name=Chevrón de Stargate (Vía Láctea)
 
 # stargate - ORLIN
-tile.aunis.stargate_orlin_base_block.open_count=Veces abierto: %s / %s
-tile.aunis.stargate_orlin_base_block.name=Base de Stargate (Orlin)
-tile.aunis.stargate_orlin_member_block.name=Anillo de Stargate (Orlin)
+tile.jsg.stargate_orlin_base_block.open_count=Veces abierto: %s / %s
+tile.jsg.stargate_orlin_base_block.name=Base de Stargate (Orlin)
+tile.jsg.stargate_orlin_member_block.name=Anillo de Stargate (Orlin)
 
 # stargate - UNI
-tile.aunis.stargate_universe_base_block.name=Base de Stargate (Universo)
-tile.aunis.stargate_universe_chevron_block.name=Chevrón de Stargate (Universo)
-tile.aunis.stargate_universe_ring_block.name=Anillo de Stargate (Universo)
+tile.jsg.stargate_universe_base_block.name=Base de Stargate (Universo)
+tile.jsg.stargate_universe_chevron_block.name=Chevrón de Stargate (Universo)
+tile.jsg.stargate_universe_ring_block.name=Anillo de Stargate (Universo)
 
 # stargate - PEG
-tile.aunis.stargate_pegasus_base_block.name=Base de Stargate (Pegasus)
-tile.aunis.stargate_pegasus_ring_block.name=Anillo de Stargate (Pegasus)
-tile.aunis.stargate_pegasus_chevron_block.name=Chevrón de Stargate (Pegasus)
+tile.jsg.stargate_pegasus_base_block.name=Base de Stargate (Pegasus)
+tile.jsg.stargate_pegasus_ring_block.name=Anillo de Stargate (Pegasus)
+tile.jsg.stargate_pegasus_chevron_block.name=Chevrón de Stargate (Pegasus)
 
 # capacitor
-tile.aunis.capacitor_block.name=Capacitor
-tile.aunis.capacitor_block_empty.name=Capacitor (Vacío)
+tile.jsg.capacitor_block.name=Capacitor
+tile.jsg.capacitor_block_empty.name=Capacitor (Vacío)
 
 # rings controller
-tile.aunis.transportrings_controller_goauld_block.name=Controlador del Anillo Transportador
-tile.aunis.transportrings_controller_block.not_linked=Controlador no vinculado
+tile.jsg.transportrings_controller_goauld_block.name=Controlador del Anillo Transportador
+tile.jsg.transportrings_controller_block.not_linked=Controlador no vinculado
 
 # rings
-tile.aunis.transportrings_goauld_block.name=Anillo Transportador
-tile.aunis.transportrings_ori_block.name=Transport rings (Ori)
+tile.jsg.transportrings_goauld_block.name=Anillo Transportador
+tile.jsg.transportrings_ori_block.name=Transport rings (Ori)
 
-tile.aunis.transportrings_block.non_existing_address=Imposible alcanzar esta dirección
-tile.aunis.transportrings_block.wrong_distance=Wrong distance, should be from -40 to 40
-tile.aunis.transportrings_block.obstructed=Anillos obstruidos, libera un area de 5x5 alrededor de los anillos
-tile.aunis.transportrings_block.obstructed_target=Anillos de destino obstruidos, libera un area de 5x5 alrededor de los anillos
-tile.aunis.transportrings_block.busy=Anillos Ocupados
-tile.aunis.transportrings_block.busy_target=Anillos de destino ocupados
-tile.aunis.transportrings_block.not_enough_power=Not enough power to activate rings
-tile.aunis.transportrings_block.rings_name=Nombre
-tile.aunis.transportrings_block.rings_distance=Distance
+tile.jsg.transportrings_block.non_existing_address=Imposible alcanzar esta dirección
+tile.jsg.transportrings_block.wrong_distance=Wrong distance, should be from -40 to 40
+tile.jsg.transportrings_block.obstructed=Anillos obstruidos, libera un area de 5x5 alrededor de los anillos
+tile.jsg.transportrings_block.obstructed_target=Anillos de destino obstruidos, libera un area de 5x5 alrededor de los anillos
+tile.jsg.transportrings_block.busy=Anillos Ocupados
+tile.jsg.transportrings_block.busy_target=Anillos de destino ocupados
+tile.jsg.transportrings_block.not_enough_power=Not enough power to activate rings
+tile.jsg.transportrings_block.rings_name=Nombre
+tile.jsg.transportrings_block.rings_distance=Distance
 
 # beamer
-tile.aunis.beamer_block.name=Bloque beamer
+tile.jsg.beamer_block.name=Bloque beamer
 
 # -------------------
 
@@ -305,140 +305,140 @@ death.attack.staffHit=%s was melted using Goa'uld Staff Weapon
 
 # RINGS
 # Ori Glyphs
-glyph.aunis.transportrings.ori.alpha=Alpha
-glyph.aunis.transportrings.ori.beta=Beta
-glyph.aunis.transportrings.ori.gamma=Gamma
-glyph.aunis.transportrings.ori.delta=Delta
-glyph.aunis.transportrings.ori.omega=Omega
-glyph.aunis.transportrings.ori.origin=Origin
+glyph.jsg.transportrings.ori.alpha=Alpha
+glyph.jsg.transportrings.ori.beta=Beta
+glyph.jsg.transportrings.ori.gamma=Gamma
+glyph.jsg.transportrings.ori.delta=Delta
+glyph.jsg.transportrings.ori.omega=Omega
+glyph.jsg.transportrings.ori.origin=Origin
 
 # Goa'uld Glyphs
-glyph.aunis.transportrings.goauld.amun=Amun
-glyph.aunis.transportrings.goauld.serket=Serket
-glyph.aunis.transportrings.goauld.khepri=Khepri
-glyph.aunis.transportrings.goauld.ra=Ra
-glyph.aunis.transportrings.goauld.felluca=Felluca
-glyph.aunis.transportrings.goauld.cobra=Cobra
+glyph.jsg.transportrings.goauld.amun=Amun
+glyph.jsg.transportrings.goauld.serket=Serket
+glyph.jsg.transportrings.goauld.khepri=Khepri
+glyph.jsg.transportrings.goauld.ra=Ra
+glyph.jsg.transportrings.goauld.felluca=Felluca
+glyph.jsg.transportrings.goauld.cobra=Cobra
 
 # STARGATE
 # Milkyway Glyphs
-glyph.aunis.milkyway.sculptor=Sculptor
-glyph.aunis.milkyway.scorpius=Scorpius
-glyph.aunis.milkyway.centaurus=Centaurus
-glyph.aunis.milkyway.monoceros=Monoceros
-glyph.aunis.milkyway.point_of_origin=Point of Origin
-glyph.aunis.milkyway.pegasus=Pegasus
-glyph.aunis.milkyway.andromeda=Andromeda
-glyph.aunis.milkyway.serpens_caput=Serpens Caput
-glyph.aunis.milkyway.aries=Aries
-glyph.aunis.milkyway.libra=Libra
-glyph.aunis.milkyway.eridanus=Eridanus
-glyph.aunis.milkyway.leo_minor=Leo Minor
-glyph.aunis.milkyway.hydra=Hydra
-glyph.aunis.milkyway.sagittarius=Sagittarius
-glyph.aunis.milkyway.sextans=Sextans
-glyph.aunis.milkyway.scutum=Scutum
-glyph.aunis.milkyway.pisces=Pisces
-glyph.aunis.milkyway.virgo=Virgo
-glyph.aunis.milkyway.bootes=Boötes
-glyph.aunis.milkyway.auriga=Auriga
-glyph.aunis.milkyway.corona_australis=Corona Australis
-glyph.aunis.milkyway.gemini=Gemini
-glyph.aunis.milkyway.leo=Leo
-glyph.aunis.milkyway.cetus=Cetus
-glyph.aunis.milkyway.triangulum=Triangulum
-glyph.aunis.milkyway.aquarius=Aquarius
-glyph.aunis.milkyway.microscopium=Microscopium
-glyph.aunis.milkyway.equuleus=Equuleus
-glyph.aunis.milkyway.crater=Crater
-glyph.aunis.milkyway.perseus=Perseus
-glyph.aunis.milkyway.cancer=Cancer
-glyph.aunis.milkyway.norma=Norma
-glyph.aunis.milkyway.taurus=Taurus
-glyph.aunis.milkyway.canis_minor=Canis Minor
-glyph.aunis.milkyway.capricornus=Capricornus
-glyph.aunis.milkyway.lynx=Lynx
-glyph.aunis.milkyway.orion=Orion
-glyph.aunis.milkyway.piscis_austrinus=Piscis Austrinus
-glyph.aunis.milkyway.bright_red_button=Bright Red Button
+glyph.jsg.milkyway.sculptor=Sculptor
+glyph.jsg.milkyway.scorpius=Scorpius
+glyph.jsg.milkyway.centaurus=Centaurus
+glyph.jsg.milkyway.monoceros=Monoceros
+glyph.jsg.milkyway.point_of_origin=Point of Origin
+glyph.jsg.milkyway.pegasus=Pegasus
+glyph.jsg.milkyway.andromeda=Andromeda
+glyph.jsg.milkyway.serpens_caput=Serpens Caput
+glyph.jsg.milkyway.aries=Aries
+glyph.jsg.milkyway.libra=Libra
+glyph.jsg.milkyway.eridanus=Eridanus
+glyph.jsg.milkyway.leo_minor=Leo Minor
+glyph.jsg.milkyway.hydra=Hydra
+glyph.jsg.milkyway.sagittarius=Sagittarius
+glyph.jsg.milkyway.sextans=Sextans
+glyph.jsg.milkyway.scutum=Scutum
+glyph.jsg.milkyway.pisces=Pisces
+glyph.jsg.milkyway.virgo=Virgo
+glyph.jsg.milkyway.bootes=Boötes
+glyph.jsg.milkyway.auriga=Auriga
+glyph.jsg.milkyway.corona_australis=Corona Australis
+glyph.jsg.milkyway.gemini=Gemini
+glyph.jsg.milkyway.leo=Leo
+glyph.jsg.milkyway.cetus=Cetus
+glyph.jsg.milkyway.triangulum=Triangulum
+glyph.jsg.milkyway.aquarius=Aquarius
+glyph.jsg.milkyway.microscopium=Microscopium
+glyph.jsg.milkyway.equuleus=Equuleus
+glyph.jsg.milkyway.crater=Crater
+glyph.jsg.milkyway.perseus=Perseus
+glyph.jsg.milkyway.cancer=Cancer
+glyph.jsg.milkyway.norma=Norma
+glyph.jsg.milkyway.taurus=Taurus
+glyph.jsg.milkyway.canis_minor=Canis Minor
+glyph.jsg.milkyway.capricornus=Capricornus
+glyph.jsg.milkyway.lynx=Lynx
+glyph.jsg.milkyway.orion=Orion
+glyph.jsg.milkyway.piscis_austrinus=Piscis Austrinus
+glyph.jsg.milkyway.bright_red_button=Bright Red Button
 
 # Pegasus Glyphs
-glyph.aunis.pegasus.acjesis=Acjesis
-glyph.aunis.pegasus.lenchan=Lenchan
-glyph.aunis.pegasus.alura=Alura
-glyph.aunis.pegasus.ca_po=Ca Po
-glyph.aunis.pegasus.laylox=Laylox
-glyph.aunis.pegasus.ecrumig=Ecrumig
-glyph.aunis.pegasus.avoniv=Avoniv
-glyph.aunis.pegasus.bydo=Bydo
-glyph.aunis.pegasus.aaxel=Aaxel
-glyph.aunis.pegasus.aldeni=Aldeni
-glyph.aunis.pegasus.setas=Setas
-glyph.aunis.pegasus.arami=Arami
-glyph.aunis.pegasus.danami=Danami
-glyph.aunis.pegasus.poco_re=Poco Re
-glyph.aunis.pegasus.robandus=Robandus
-glyph.aunis.pegasus.recktic=Recktic
-glyph.aunis.pegasus.zamilloz=Zamilloz
-glyph.aunis.pegasus.subido=Subido
-glyph.aunis.pegasus.dawnre=Dawnre
-glyph.aunis.pegasus.salma=Salma
-glyph.aunis.pegasus.hamlinto=Hamlinto
-glyph.aunis.pegasus.elenami=Elenami
-glyph.aunis.pegasus.tahnan=Tahnan
-glyph.aunis.pegasus.zeo=Zeo
-glyph.aunis.pegasus.roehi=Roehi
-glyph.aunis.pegasus.once_el=Once El
-glyph.aunis.pegasus.baselai=Baselai
-glyph.aunis.pegasus.sandovi=Sandovi
-glyph.aunis.pegasus.illume=Illume
-glyph.aunis.pegasus.amiwill=Amiwill
-glyph.aunis.pegasus.sibbron=Sibbron
-glyph.aunis.pegasus.gilltin=Gilltin
-glyph.aunis.pegasus.abrin=Abrin
-glyph.aunis.pegasus.ramnon=Ramnon
-glyph.aunis.pegasus.olavii=Olavii
-glyph.aunis.pegasus.hacemill=Hacemill
-glyph.aunis.pegasus.unknow1=Unknow 1
-glyph.aunis.pegasus.unknow2=Unknow 2
+glyph.jsg.pegasus.acjesis=Acjesis
+glyph.jsg.pegasus.lenchan=Lenchan
+glyph.jsg.pegasus.alura=Alura
+glyph.jsg.pegasus.ca_po=Ca Po
+glyph.jsg.pegasus.laylox=Laylox
+glyph.jsg.pegasus.ecrumig=Ecrumig
+glyph.jsg.pegasus.avoniv=Avoniv
+glyph.jsg.pegasus.bydo=Bydo
+glyph.jsg.pegasus.aaxel=Aaxel
+glyph.jsg.pegasus.aldeni=Aldeni
+glyph.jsg.pegasus.setas=Setas
+glyph.jsg.pegasus.arami=Arami
+glyph.jsg.pegasus.danami=Danami
+glyph.jsg.pegasus.poco_re=Poco Re
+glyph.jsg.pegasus.robandus=Robandus
+glyph.jsg.pegasus.recktic=Recktic
+glyph.jsg.pegasus.zamilloz=Zamilloz
+glyph.jsg.pegasus.subido=Subido
+glyph.jsg.pegasus.dawnre=Dawnre
+glyph.jsg.pegasus.salma=Salma
+glyph.jsg.pegasus.hamlinto=Hamlinto
+glyph.jsg.pegasus.elenami=Elenami
+glyph.jsg.pegasus.tahnan=Tahnan
+glyph.jsg.pegasus.zeo=Zeo
+glyph.jsg.pegasus.roehi=Roehi
+glyph.jsg.pegasus.once_el=Once El
+glyph.jsg.pegasus.baselai=Baselai
+glyph.jsg.pegasus.sandovi=Sandovi
+glyph.jsg.pegasus.illume=Illume
+glyph.jsg.pegasus.amiwill=Amiwill
+glyph.jsg.pegasus.sibbron=Sibbron
+glyph.jsg.pegasus.gilltin=Gilltin
+glyph.jsg.pegasus.abrin=Abrin
+glyph.jsg.pegasus.ramnon=Ramnon
+glyph.jsg.pegasus.olavii=Olavii
+glyph.jsg.pegasus.hacemill=Hacemill
+glyph.jsg.pegasus.unknow1=Unknow 1
+glyph.jsg.pegasus.unknow2=Unknow 2
 
 # Universe Glyphs
-glyph.aunis.universe.g1=Glyph 1
-glyph.aunis.universe.g2=Glyph 2
-glyph.aunis.universe.g3=Glyph 3
-glyph.aunis.universe.g4=Glyph 4
-glyph.aunis.universe.g5=Glyph 5
-glyph.aunis.universe.g6=Glyph 6
-glyph.aunis.universe.g7=Glyph 7
-glyph.aunis.universe.g8=Glyph 8
-glyph.aunis.universe.g9=Glyph 9
-glyph.aunis.universe.g10=Glyph 10
-glyph.aunis.universe.g11=Glyph 11
-glyph.aunis.universe.g12=Glyph 12
-glyph.aunis.universe.g13=Glyph 13
-glyph.aunis.universe.g14=Glyph 14
-glyph.aunis.universe.g15=Glyph 15
-glyph.aunis.universe.g16=Glyph 16
-glyph.aunis.universe.g17=Glyph 17
-glyph.aunis.universe.g18=Glyph 18
-glyph.aunis.universe.g19=Glyph 19
-glyph.aunis.universe.g20=Glyph 20
-glyph.aunis.universe.g21=Glyph 21
-glyph.aunis.universe.g22=Glyph 22
-glyph.aunis.universe.g23=Glyph 23
-glyph.aunis.universe.g24=Glyph 24
-glyph.aunis.universe.g25=Glyph 25
-glyph.aunis.universe.g26=Glyph 26
-glyph.aunis.universe.g27=Glyph 27
-glyph.aunis.universe.g28=Glyph 28
-glyph.aunis.universe.g29=Glyph 29
-glyph.aunis.universe.g30=Glyph 30
-glyph.aunis.universe.g31=Glyph 31
-glyph.aunis.universe.g32=Glyph 32
-glyph.aunis.universe.g33=Glyph 33
-glyph.aunis.universe.g34=Glyph 34
-glyph.aunis.universe.g35=Glyph 35
-glyph.aunis.universe.g36=Glyph 36
+glyph.jsg.universe.g1=Glyph 1
+glyph.jsg.universe.g2=Glyph 2
+glyph.jsg.universe.g3=Glyph 3
+glyph.jsg.universe.g4=Glyph 4
+glyph.jsg.universe.g5=Glyph 5
+glyph.jsg.universe.g6=Glyph 6
+glyph.jsg.universe.g7=Glyph 7
+glyph.jsg.universe.g8=Glyph 8
+glyph.jsg.universe.g9=Glyph 9
+glyph.jsg.universe.g10=Glyph 10
+glyph.jsg.universe.g11=Glyph 11
+glyph.jsg.universe.g12=Glyph 12
+glyph.jsg.universe.g13=Glyph 13
+glyph.jsg.universe.g14=Glyph 14
+glyph.jsg.universe.g15=Glyph 15
+glyph.jsg.universe.g16=Glyph 16
+glyph.jsg.universe.g17=Glyph 17
+glyph.jsg.universe.g18=Glyph 18
+glyph.jsg.universe.g19=Glyph 19
+glyph.jsg.universe.g20=Glyph 20
+glyph.jsg.universe.g21=Glyph 21
+glyph.jsg.universe.g22=Glyph 22
+glyph.jsg.universe.g23=Glyph 23
+glyph.jsg.universe.g24=Glyph 24
+glyph.jsg.universe.g25=Glyph 25
+glyph.jsg.universe.g26=Glyph 26
+glyph.jsg.universe.g27=Glyph 27
+glyph.jsg.universe.g28=Glyph 28
+glyph.jsg.universe.g29=Glyph 29
+glyph.jsg.universe.g30=Glyph 30
+glyph.jsg.universe.g31=Glyph 31
+glyph.jsg.universe.g32=Glyph 32
+glyph.jsg.universe.g33=Glyph 33
+glyph.jsg.universe.g34=Glyph 34
+glyph.jsg.universe.g35=Glyph 35
+glyph.jsg.universe.g36=Glyph 36
 
 # -------------------
 
@@ -544,77 +544,77 @@ gui.gdo.send_button=Enviar código
 # -------------------
 # KEY BINDINGS
 
-config.aunis.mode_scroll=Control Antiguo modo de desplazamiento
-config.aunis.mode_up=Control Antiguo arriba
-config.aunis.mode_down=Control Antiguo abajo
-config.aunis.address_scroll=Control Antiguo/Desplazamiento del cuaderno de direcciones
-config.aunis.address_up=Control Antiguo/Cuaderno de direcciones abajo
-config.aunis.address_down=Control Antiguo/Cuaderno de direcciones arriba
-config.aunis.address_edit=Abrir el menú de direcciones
+config.jsg.mode_scroll=Control Antiguo modo de desplazamiento
+config.jsg.mode_up=Control Antiguo arriba
+config.jsg.mode_down=Control Antiguo abajo
+config.jsg.address_scroll=Control Antiguo/Desplazamiento del cuaderno de direcciones
+config.jsg.address_up=Control Antiguo/Cuaderno de direcciones abajo
+config.jsg.address_down=Control Antiguo/Cuaderno de direcciones arriba
+config.jsg.address_edit=Abrir el menú de direcciones
 
 # -------------------
 
 # -------------------
 # SUBTITLES
 
-aunis.subtitle.dhd_milkyway_press=DHD símbolo presionado
-aunis.subtitle.dhd_milkyway_press_brb=DHD botón brillante rojo presionado
-aunis.subtitle.gate_milkyway_open=La astrovía se conecta
-aunis.subtitle.gate_milkyway_close=La astrovía se cierra
-aunis.subtitle.gate_milkyway_ring_roll=Anillo de Stargate girando
-aunis.subtitle.gate_milkyway_dial_fail=No se puede conectar la Stargate
-aunis.subtitle.gate_orlin_broke=Stargate has broken
-aunis.subtitle.gate_orlin_dial_fail=Stargate fails to connect
-aunis.subtitle.gate_milkyway_dial_fail_computer=Stargate computer dialing fails
-aunis.subtitle.gate_milkyway_incoming=Chevrón bloqueado
-aunis.subtitle.gate_milkyway_chevron_shut=El chevron de Stargate se cierra
-aunis.subtitle.gate_milkyway_chevron_open=El chevron de Stargate se abre
+jsg.subtitle.dhd_milkyway_press=DHD símbolo presionado
+jsg.subtitle.dhd_milkyway_press_brb=DHD botón brillante rojo presionado
+jsg.subtitle.gate_milkyway_open=La astrovía se conecta
+jsg.subtitle.gate_milkyway_close=La astrovía se cierra
+jsg.subtitle.gate_milkyway_ring_roll=Anillo de Stargate girando
+jsg.subtitle.gate_milkyway_dial_fail=No se puede conectar la Stargate
+jsg.subtitle.gate_orlin_broke=Stargate has broken
+jsg.subtitle.gate_orlin_dial_fail=Stargate fails to connect
+jsg.subtitle.gate_milkyway_dial_fail_computer=Stargate computer dialing fails
+jsg.subtitle.gate_milkyway_incoming=Chevrón bloqueado
+jsg.subtitle.gate_milkyway_chevron_shut=El chevron de Stargate se cierra
+jsg.subtitle.gate_milkyway_chevron_open=El chevron de Stargate se abre
 
-aunis.subtitle.dhd_pegasus_press=DHD símbolo presionado
-aunis.subtitle.dhd_pegasus_press_brb=DHD botón brillante azul presionado
-aunis.subtitle.gate_pegasus_open=La astrovía se conecta
-aunis.subtitle.gate_pegasus_close=Stargate wormhole closes
-aunis.subtitle.gate_pegasus_ring_roll=Anillo de Stargate girando
-aunis.subtitle.gate_pegasus_dial_fail=Imposible establecer una astrovía
-aunis.subtitle.gate_pegasus_dial_fail_computer=Stargate computer dialing fails
-aunis.subtitle.gate_pegasus_incoming=Chevrón bloqueado
-aunis.subtitle.gate_pegasus_chevron_shut=El chevron de Stargate se cierra
-aunis.subtitle.gate_pegasus_chevron_open=El chevron de Stargate se abre
+jsg.subtitle.dhd_pegasus_press=DHD símbolo presionado
+jsg.subtitle.dhd_pegasus_press_brb=DHD botón brillante azul presionado
+jsg.subtitle.gate_pegasus_open=La astrovía se conecta
+jsg.subtitle.gate_pegasus_close=Stargate wormhole closes
+jsg.subtitle.gate_pegasus_ring_roll=Anillo de Stargate girando
+jsg.subtitle.gate_pegasus_dial_fail=Imposible establecer una astrovía
+jsg.subtitle.gate_pegasus_dial_fail_computer=Stargate computer dialing fails
+jsg.subtitle.gate_pegasus_incoming=Chevrón bloqueado
+jsg.subtitle.gate_pegasus_chevron_shut=El chevron de Stargate se cierra
+jsg.subtitle.gate_pegasus_chevron_open=El chevron de Stargate se abre
 
-aunis.subtitle.gate_orlin_dial=Portal de Orlin empieza a marcar
+jsg.subtitle.gate_orlin_dial=Portal de Orlin empieza a marcar
 
-aunis.subtitle.gate_universe_dial_start=Portal Universal empieza a marcar
-aunis.subtitle.gate_universe_roll=Portal Universal gira
-aunis.subtitle.gate_universe_chevron_lock=Chevrón Universal se fija
-aunis.subtitle.gate_universe_fail=Portal Universal falla al marcar
-aunis.subtitle.gate_universe_chevron_top_lock=Universe gate top chevron locks
-aunis.subtitle.gate_universe_open=La astrovía Universal se conecta
-aunis.subtitle.gate_universe_close=La astrovía Universal se cierra
+jsg.subtitle.gate_universe_dial_start=Portal Universal empieza a marcar
+jsg.subtitle.gate_universe_roll=Portal Universal gira
+jsg.subtitle.gate_universe_chevron_lock=Chevrón Universal se fija
+jsg.subtitle.gate_universe_fail=Portal Universal falla al marcar
+jsg.subtitle.gate_universe_chevron_top_lock=Universe gate top chevron locks
+jsg.subtitle.gate_universe_open=La astrovía Universal se conecta
+jsg.subtitle.gate_universe_close=La astrovía Universal se cierra
 
-aunis.subtitle.wormhole_loop=Ondulaciones de astrovía
-aunis.subtitle.wormhole_go=La astrovía recive viajero
-aunis.subtitle.wormhole_flicker=La astrovía parpadea
-aunis.subtitle.rings_transport=Anillos de transporte activados
-aunis.subtitle.rings_controller_button=Botón del controlador de anillos de transporte pulsado
+jsg.subtitle.wormhole_loop=Ondulaciones de astrovía
+jsg.subtitle.wormhole_go=La astrovía recive viajero
+jsg.subtitle.wormhole_flicker=La astrovía parpadea
+jsg.subtitle.rings_transport=Anillos de transporte activados
+jsg.subtitle.rings_controller_button=Botón del controlador de anillos de transporte pulsado
 
-aunis.subtitle.iris_hit=Something hit the iris
-aunis.subtitle.iris_opening=Iris opening
-aunis.subtitle.iris_closing=Iris closing
-aunis.subtitle.shield_hit=Something hit the shield
-aunis.subtitle.shield_opening=Shield opening
-aunis.subtitle.shield_closing=Shield closing
+jsg.subtitle.iris_hit=Something hit the iris
+jsg.subtitle.iris_opening=Iris opening
+jsg.subtitle.iris_closing=Iris closing
+jsg.subtitle.shield_hit=Something hit the shield
+jsg.subtitle.shield_opening=Shield opening
+jsg.subtitle.shield_closing=Shield closing
 
-aunis.subtitle.beamer_start=Láser dispara
-aunis.subtitle.beamer_stop=Láser se detiene
-aunis.subtitle.beamer_loop=Sonido de láser
-aunis.subtitle.page_flip=Cambio de página
-aunis.subtitle.gdo_button_beep=Pressed GDO button
-aunis.subtitle.universe_dialer_beep=Pressed Universe Dialer button
-aunis.subtitle.universe_dialer_change_mode=Changed Universe Dialer mode
-aunis.subtitle.universe_dialer_connect=Universe Dialer connected
+jsg.subtitle.beamer_start=Láser dispara
+jsg.subtitle.beamer_stop=Láser se detiene
+jsg.subtitle.beamer_loop=Sonido de láser
+jsg.subtitle.page_flip=Cambio de página
+jsg.subtitle.gdo_button_beep=Pressed GDO button
+jsg.subtitle.universe_dialer_beep=Pressed Universe Dialer button
+jsg.subtitle.universe_dialer_change_mode=Changed Universe Dialer mode
+jsg.subtitle.universe_dialer_connect=Universe Dialer connected
 
-aunis.subtitle.item_zat_shoot=Zat'nik'tel shoot
-aunis.subtitle.item_staff_shoot=Goa'uld Staff Weapon shoot
+jsg.subtitle.item_zat_shoot=Zat'nik'tel shoot
+jsg.subtitle.item_staff_shoot=Goa'uld Staff Weapon shoot
 
 # -------------------
 
@@ -629,7 +629,7 @@ chat.orlins.energyStored=Energía almacenada: %s RF (Requerido: %s RF, %s s)
 # -------------------
 # MAIN MENU
 
-menu.about=Acerca de Aunis
+menu.about=Acerca de JSG
 menu.gate_overlay=Gate
 menu.music_toggle=Music
 

@@ -8,18 +8,18 @@
 	
 	"key": {
 		"A": {
-			"item": "aunis:shield_emitter"
+			"item": "jsg:shield_emitter"
 		},
 		"B": {
-			"item": "aunis:crystal_blue"
+			"item": "jsg:crystal_blue"
 		},
 		"C": {
-			"item": "aunis:circuit_control_crystal"
+			"item": "jsg:circuit_control_crystal"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:upgrade_shield",
+		"item": "jsg:upgrade_shield",
 		"count": 1
 	}
 }

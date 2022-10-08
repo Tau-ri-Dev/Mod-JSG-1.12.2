@@ -16,20 +16,20 @@
         },
         
 		"N": {
-			"item": "aunis:naquadah_alloy"
+			"item": "jsg:naquadah_alloy"
 		},
 		
 		"I": {
-			"item": "aunis:circuit_control_naquadah"
+			"item": "jsg:circuit_control_naquadah"
 		},
 		
 		"Y": {
-            "item": "aunis:crystal_yellow"
+            "item": "jsg:crystal_yellow"
         }
 	},
 	
 	"result": {
-		"item": "aunis:universe_dialer",
+		"item": "jsg:universe_dialer",
 		"count": 1,
 		"data": 0
 	}

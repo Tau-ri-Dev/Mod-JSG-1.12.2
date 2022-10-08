@@ -1,10 +1,10 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "normal": "aunis:blocks/box_side",
-    "up": "aunis:blocks/box_up",
-    "particle": "aunis:blocks/box_side",
-    "title": "aunis:blocks/box_titles/default"
+    "normal": "jsg:blocks/box_side",
+    "up": "jsg:blocks/box_up",
+    "particle": "jsg:blocks/box_side",
+    "title": "jsg:blocks/box_titles/default"
   },
   "elements": [
     {   "from": [ 0, 0, 0 ],

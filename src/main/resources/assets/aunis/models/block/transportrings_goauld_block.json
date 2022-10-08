@@ -1,10 +1,10 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"normal": "aunis:blocks/naquadah_block_dark",
-		"up": "aunis:blocks/transportrings_block_top",
-		"down": "aunis:blocks/transportrings_block_bottom",
-		"particle": "aunis:blocks/naquadah_block_dark"
+		"normal": "jsg:blocks/naquadah_block_dark",
+		"up": "jsg:blocks/transportrings_block_top",
+		"down": "jsg:blocks/transportrings_block_bottom",
+		"particle": "jsg:blocks/naquadah_block_dark"
 	},
 	"elements": [
 		{   "from": [ 0, 0, 0 ],

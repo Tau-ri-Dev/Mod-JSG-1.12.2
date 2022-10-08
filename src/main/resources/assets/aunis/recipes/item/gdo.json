@@ -24,12 +24,12 @@
 		},
 
 		"Y": {
-			"item": "aunis:crystal_red"
+			"item": "jsg:crystal_red"
 		}
 	},
 
 	"result": {
-		"item": "aunis:gdo",
+		"item": "jsg:gdo",
 		"count": 1
 	}
 }

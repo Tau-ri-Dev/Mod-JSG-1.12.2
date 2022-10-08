@@ -1,14 +1,14 @@
 [
   {
-    "modid": "aunis",
-    "name": "Aunis: Resurrection",
+    "modid": "jsg",
+    "name": "Just Stargate Mod",
     "description": "Stargate mod",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "https://github.com/MineDragonCZ/Aunis/",
+    "url": "https://justsgmod.eu",
     "updateUrl": "",
-    "authorList": [ "MrJake222", "MarcelMPL", "slava_110", "Harald De Luca", "MineDragonCZ_", "matousss"],
-    "credits": "Main thing by MrJake222. Updated by MineDragonCZ_ and matousss.",
+    "authorList": [ "MineDragonCZ_", "matousss", "MrJake222", "MarcelMPL", "slava_110", "Harald De Luca" ],
+    "credits": "Main thing by MrJake222 (Aunis). Updated by MineDragonCZ_ and matousss.",
     "logoFile": "pack.png",
     "screenshots": [
     ],

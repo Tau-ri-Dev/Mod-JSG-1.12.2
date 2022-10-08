@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "aunis:items/raw_pegasus_dhd_crystal"
+        "layer0": "jsg:items/raw_pegasus_dhd_crystal"
     }
 }

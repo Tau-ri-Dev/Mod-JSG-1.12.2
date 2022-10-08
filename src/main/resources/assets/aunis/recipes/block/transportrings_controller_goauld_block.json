@@ -12,7 +12,7 @@
 		},
 		
 		"N": {
-			"item": "aunis:naquadah_alloy"
+			"item": "jsg:naquadah_alloy"
 		},
 
 		"B": {
@@ -20,16 +20,16 @@
 		},
 		
 		"E": {
-			"item": "aunis:crystal_ender"
+			"item": "jsg:crystal_ender"
 		},
 		
 		"I": {
-			"item": "aunis:circuit_control_naquadah"
+			"item": "jsg:circuit_control_naquadah"
 		}		
 	},
 	
 	"result": {
-		"item": "aunis:transportrings_controller_goauld_block",
+		"item": "jsg:transportrings_controller_goauld_block",
 		"count": 1
 	}
 }

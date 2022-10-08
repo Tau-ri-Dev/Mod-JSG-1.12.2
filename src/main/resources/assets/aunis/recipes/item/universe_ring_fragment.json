@@ -8,12 +8,12 @@
 	
 	"key": {
 		"N": {
-			"item": "aunis:naquadah_alloy_raw"
+			"item": "jsg:naquadah_alloy_raw"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:universe_ring_fragment",
+		"item": "jsg:universe_ring_fragment",
 		"count": 4
 	}
 }

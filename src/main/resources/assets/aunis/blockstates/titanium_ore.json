@@ -1,11 +1,11 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "aunis:titanium_ore",
+		"model": "jsg:titanium_ore",
 		"textures": {
 			"normal": "minecraft:blocks/stone",
 			"particle": "minecraft:blocks/stone",
-			"overlay": "aunis:blocks/titanium_ore"
+			"overlay": "jsg:blocks/titanium_ore"
 		}
 	},
 	"variants": {

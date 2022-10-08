@@ -8,16 +8,16 @@
 	
 	"key": {
 		"N": {
-			"item": "aunis:naquadah_alloy"
+			"item": "jsg:naquadah_alloy"
 		},
 		
 		"R": {
-			"item": "aunis:crystal_red"
+			"item": "jsg:crystal_red"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:holder_crystal",
+		"item": "jsg:holder_crystal",
 		"count": 1
 	}
 }

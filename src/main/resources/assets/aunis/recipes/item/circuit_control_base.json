@@ -8,11 +8,11 @@
 	
 	"key": {
 		"Y": {
-			"item": "aunis:crystal_yellow"
+			"item": "jsg:crystal_yellow"
 		},
 
 		"B": {
-			"item": "aunis:crystal_blue"
+			"item": "jsg:crystal_blue"
 		},
 
 		"G": {
@@ -20,16 +20,16 @@
 		},
 
 		"E": {
-			"item": "aunis:crystal_ender"
+			"item": "jsg:crystal_ender"
 		},
 		
 		"R": {
-			"item": "aunis:crystal_red"
+			"item": "jsg:crystal_red"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:circuit_control_base",
+		"item": "jsg:circuit_control_base",
 		"count": 1
 	}
 }

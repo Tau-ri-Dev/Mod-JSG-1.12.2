@@ -8,20 +8,20 @@
 	
 	"key": {
 		"C": {
-			"item": "aunis:circuit_control_crystal"
+			"item": "jsg:circuit_control_crystal"
 		},
 		
 		"B": {
-			"item": "aunis:crystal_blue"
+			"item": "jsg:crystal_blue"
 		},
 		
 		"R": {
-			"item": "aunis:crystal_red"
+			"item": "jsg:crystal_red"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:crystal_glyph_pegasus",
+		"item": "jsg:crystal_glyph_pegasus",
 		"count": 1
 	}
 }

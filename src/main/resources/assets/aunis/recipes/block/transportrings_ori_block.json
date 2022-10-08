@@ -13,32 +13,32 @@
 		},
 	
 		"F": {
-			"item": "aunis:transportrings_ring_fragment"
+			"item": "jsg:transportrings_ring_fragment"
 		},
 		
 		"I": {
-			"item": "aunis:circuit_control_naquadah"
+			"item": "jsg:circuit_control_naquadah"
 		},
 		
 		"B": {
-			"item": "aunis:crystal_blue"
+			"item": "jsg:crystal_blue"
 		},
 		
 		"E": {
-			"item": "aunis:crystal_ender"
+			"item": "jsg:crystal_ender"
 		},
 		
 		"R": {
-			"item": "aunis:crystal_red"
+			"item": "jsg:crystal_red"
 		},
 		
 		"Y": {
-			"item": "aunis:crystal_yellow"
+			"item": "jsg:crystal_yellow"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:transportrings_ori_block",
+		"item": "jsg:transportrings_ori_block",
 		"count": 1
 	}
 }

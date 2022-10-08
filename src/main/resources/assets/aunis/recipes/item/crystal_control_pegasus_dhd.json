@@ -8,19 +8,19 @@
 	
 	"key": {
 		"R": {
-			"item": "aunis:crystal_blue"
+			"item": "jsg:crystal_blue"
 		},
 		
 		"S": {
-			"item": "aunis:crystal_ender"
+			"item": "jsg:crystal_ender"
 		},
 		"C": {
-			"item": "aunis:raw_pegasus_dhd_crystal"
+			"item": "jsg:raw_pegasus_dhd_crystal"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:crystal_control_pegasus_dhd",
+		"item": "jsg:crystal_control_pegasus_dhd",
 		"count": 1
 	}
 }

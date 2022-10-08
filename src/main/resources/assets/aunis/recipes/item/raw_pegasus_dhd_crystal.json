@@ -12,12 +12,12 @@
 		},
 		
 		"S": {
-			"item": "aunis:crystal_blue_pegasus"
+			"item": "jsg:crystal_blue_pegasus"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:raw_pegasus_dhd_crystal",
+		"item": "jsg:raw_pegasus_dhd_crystal",
 		"count": 1
 	}
 }

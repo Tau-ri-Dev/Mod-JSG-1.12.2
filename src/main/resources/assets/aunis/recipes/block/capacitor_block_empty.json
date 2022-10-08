@@ -8,24 +8,24 @@
 	
 	"key": {
 		"O": {
-			"item": "aunis:naquadah_block"
+			"item": "jsg:naquadah_block"
 		},
 	
 		"F": {
-			"item": "aunis:naquadah_alloy"
+			"item": "jsg:naquadah_alloy"
 		},
 		
 		"I": {
-			"item": "aunis:circuit_control_naquadah"
+			"item": "jsg:circuit_control_naquadah"
 		},
 		
 		"R": {
-			"item": "aunis:crystal_red"
+			"item": "jsg:crystal_red"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:capacitor_block_empty",
+		"item": "jsg:capacitor_block_empty",
 		"count": 1
 	}
 }

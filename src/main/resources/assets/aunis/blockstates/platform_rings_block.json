@@ -1,7 +1,7 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "aunis:platform_rings_block"
+		"model": "jsg:platform_rings_block"
 	},
 	"variants": {
 		"normal": [{}],

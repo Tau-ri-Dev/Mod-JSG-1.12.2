@@ -8,12 +8,12 @@
 	
 	"key": {
 		"N": {
-			"item": "aunis:naquadah_alloy"
+			"item": "jsg:naquadah_alloy"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:naquadah_block",
+		"item": "jsg:naquadah_block",
 		"count": 1
 	}
 }

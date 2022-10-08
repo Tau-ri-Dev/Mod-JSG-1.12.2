@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
     	"textures": {
-		"layer0": "aunis:items/shield_emitter"
+		"layer0": "jsg:items/shield_emitter"
 	}
 }

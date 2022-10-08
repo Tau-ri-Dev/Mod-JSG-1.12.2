@@ -8,32 +8,32 @@
 	
 	"key": {
 		"F": {
-			"item": "aunis:stargate_ring_fragment"
+			"item": "jsg:stargate_ring_fragment"
 		},
 
 		"N": {
-			"item": "aunis:naquadah_alloy"
+			"item": "jsg:naquadah_alloy"
 		},
 		
 		"I": {
-			"item": "aunis:circuit_control_naquadah"
+			"item": "jsg:circuit_control_naquadah"
 		},
 		
 		"B": {
-			"item": "aunis:crystal_blue"
+			"item": "jsg:crystal_blue"
 		},
 		
 		"E": {
-			"item": "aunis:crystal_ender"
+			"item": "jsg:crystal_ender"
 		},
 		
 		"Y": {
-			"item": "aunis:crystal_yellow"
+			"item": "jsg:crystal_yellow"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:stargate_pegasus_base_block",
+		"item": "jsg:stargate_pegasus_base_block",
 		"count": 1
 	}
 }

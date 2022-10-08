@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "aunis:items/naquadah_alloy_raw"
+        "layer0": "jsg:items/naquadah_alloy_raw"
     }
 }

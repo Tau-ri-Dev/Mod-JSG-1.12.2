@@ -1,12 +1,12 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "aunis:beamer_block"
+		"model": "jsg:beamer_block"
 	},
 	"variants": {
 		"normal": [{}],
 		"inventory": [{
-			"textures": { "front": "aunis:blocks/beamer_front_none" }
+			"textures": { "front": "jsg:blocks/beamer_front_none" }
 		}],
 		
 		"facing": {
@@ -17,10 +17,10 @@
 		},
 		
 		"mode": {
-			"power": { "textures": { "front": "aunis:blocks/beamer_front_power" } },
-			"fluid": { "textures": { "front": "aunis:blocks/beamer_front_fluid" } },
-			"items": { "textures": { "front": "aunis:blocks/beamer_front_items" } },
-			"none": { "textures": { "front": "aunis:blocks/beamer_front_none" } }
+			"power": { "textures": { "front": "jsg:blocks/beamer_front_power" } },
+			"fluid": { "textures": { "front": "jsg:blocks/beamer_front_fluid" } },
+			"items": { "textures": { "front": "jsg:blocks/beamer_front_items" } },
+			"none": { "textures": { "front": "jsg:blocks/beamer_front_none" } }
 		}
 	}
 }

@@ -1,12 +1,12 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "aunis:capacitor_block"
+		"model": "jsg:capacitor_block"
 	},
 	"variants": {
 		"normal": [{}],
 		"inventory": [{
-			"textures": { "overlay_front": "aunis:blocks/capacitor_block_front_10" }
+			"textures": { "overlay_front": "jsg:blocks/capacitor_block_front_10" }
 		}],
 		
 		"facing": {
@@ -17,17 +17,17 @@
 		},
 		
 		"level": {
-			"0": { "textures": { "overlay_front": "aunis:blocks/capacitor_block_front_0" } },
-			"1": { "textures": { "overlay_front": "aunis:blocks/capacitor_block_front_1" } },
-			"2": { "textures": { "overlay_front": "aunis:blocks/capacitor_block_front_2" } },
-			"3": { "textures": { "overlay_front": "aunis:blocks/capacitor_block_front_3" } },
-			"4": { "textures": { "overlay_front": "aunis:blocks/capacitor_block_front_4" } },
-			"5": { "textures": { "overlay_front": "aunis:blocks/capacitor_block_front_5" } },
-			"6": { "textures": { "overlay_front": "aunis:blocks/capacitor_block_front_6" } },
-			"7": { "textures": { "overlay_front": "aunis:blocks/capacitor_block_front_7" } },
-			"8": { "textures": { "overlay_front": "aunis:blocks/capacitor_block_front_8" } },
-			"9": { "textures": { "overlay_front": "aunis:blocks/capacitor_block_front_9" } },
-			"10": { "textures": { "overlay_front": "aunis:blocks/capacitor_block_front_10" } }
+			"0": { "textures": { "overlay_front": "jsg:blocks/capacitor_block_front_0" } },
+			"1": { "textures": { "overlay_front": "jsg:blocks/capacitor_block_front_1" } },
+			"2": { "textures": { "overlay_front": "jsg:blocks/capacitor_block_front_2" } },
+			"3": { "textures": { "overlay_front": "jsg:blocks/capacitor_block_front_3" } },
+			"4": { "textures": { "overlay_front": "jsg:blocks/capacitor_block_front_4" } },
+			"5": { "textures": { "overlay_front": "jsg:blocks/capacitor_block_front_5" } },
+			"6": { "textures": { "overlay_front": "jsg:blocks/capacitor_block_front_6" } },
+			"7": { "textures": { "overlay_front": "jsg:blocks/capacitor_block_front_7" } },
+			"8": { "textures": { "overlay_front": "jsg:blocks/capacitor_block_front_8" } },
+			"9": { "textures": { "overlay_front": "jsg:blocks/capacitor_block_front_9" } },
+			"10": { "textures": { "overlay_front": "jsg:blocks/capacitor_block_front_10" } }
 		}
 	}
 }

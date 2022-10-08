@@ -8,19 +8,19 @@
 	
 	"key": {
 		"A": {
-			"item": "aunis:circuit_control_crystal"
+			"item": "jsg:circuit_control_crystal"
 		},
 		"B": {
-			"item": "aunis:circuit_control_naquadah"
+			"item": "jsg:circuit_control_naquadah"
 		},
 		"C": {
-			"item": "aunis:crystal_red"
+			"item": "jsg:crystal_red"
 		},
 		"D": {
-			"item": "aunis:crystal_white"
+			"item": "jsg:crystal_white"
 		},
 		"E": {
-			"item": "aunis:crystal_ender"
+			"item": "jsg:crystal_ender"
 		},
 		"F": {
 			"item": "minecraft:redstone"
@@ -28,7 +28,7 @@
 	},
 	
 	"result": {
-		"item": "aunis:shield_emitter",
+		"item": "jsg:shield_emitter",
 		"count": 1
 	}
 }

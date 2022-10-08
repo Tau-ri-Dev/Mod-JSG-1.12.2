@@ -8,16 +8,16 @@
 	
 	"key": {
 		"C": {
-			"item": "aunis:circuit_control_crystal"
+			"item": "jsg:circuit_control_crystal"
 		},
 		
 		"R": {
-			"item": "aunis:crystal_red"
+			"item": "jsg:crystal_red"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:beamer_crystal_power",
+		"item": "jsg:beamer_crystal_power",
 		"count": 1
 	}
 }

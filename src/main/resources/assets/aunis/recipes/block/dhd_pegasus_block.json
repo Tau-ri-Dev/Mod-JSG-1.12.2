@@ -12,32 +12,32 @@
 		},
 
 		"G": {
-			"item": "aunis:dhd_bbb"
+			"item": "jsg:dhd_bbb"
 		},
 
 		"N": {
-			"item": "aunis:naquadah_alloy"
+			"item": "jsg:naquadah_alloy"
 		},
 		
 		"H": {
-			"item": "aunis:holder_crystal_pegasus"
+			"item": "jsg:holder_crystal_pegasus"
 		},
 		
 		"I": {
-			"item": "aunis:circuit_control_naquadah"
+			"item": "jsg:circuit_control_naquadah"
 		},
 		
 		"E": {
-			"item": "aunis:crystal_ender"
+			"item": "jsg:crystal_ender"
 		},
 		
 		"R": {
-			"item": "aunis:crystal_blue"
+			"item": "jsg:crystal_blue"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:dhd_pegasus_block",
+		"item": "jsg:dhd_pegasus_block",
 		"count": 1
 	}
 }

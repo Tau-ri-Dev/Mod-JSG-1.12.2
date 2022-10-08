@@ -8,7 +8,7 @@
 	
 	"key": {
 		"P": {
-			"item": "aunis:page_notebook",
+			"item": "jsg:page_notebook",
 			"data": 0
 		},
 		
@@ -19,7 +19,7 @@
 	},
 	
 	"result": {
-		"item": "aunis:page_mysterious",
+		"item": "jsg:page_mysterious",
 		"count": 1
 	}
 }

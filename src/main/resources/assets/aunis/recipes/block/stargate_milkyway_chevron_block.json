@@ -8,7 +8,7 @@
 	
 	"key": {
 		"R": {
-			"item": "aunis:stargate_ring_fragment"
+			"item": "jsg:stargate_ring_fragment"
 		},
 		
 		"G": {
@@ -16,20 +16,20 @@
 		},
 		
 		"N": {
-			"item": "aunis:naquadah_alloy"
+			"item": "jsg:naquadah_alloy"
 		},
 		
 		"Y": {
-			"item": "aunis:crystal_yellow"
+			"item": "jsg:crystal_yellow"
 		},
 		
 		"E": {
-			"item": "aunis:crystal_ender"
+			"item": "jsg:crystal_ender"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:stargate_milkyway_member_block",
+		"item": "jsg:stargate_milkyway_member_block",
 		"count": 2,
 		"data": 14
 	}

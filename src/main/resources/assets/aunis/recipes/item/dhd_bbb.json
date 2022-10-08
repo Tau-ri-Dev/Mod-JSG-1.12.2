@@ -12,16 +12,16 @@
 		},
 
 		"N": {
-			"item": "aunis:naquadah_alloy"
+			"item": "jsg:naquadah_alloy"
 		},
 		
 		"R": {
-			"item": "aunis:crystal_blue"
+			"item": "jsg:crystal_blue"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:dhd_bbb",
+		"item": "jsg:dhd_bbb",
 		"count": 1
 	}
 }

@@ -8,10 +8,10 @@
 	
 	"key": {
 		"T": {
-			"item": "aunis:quad_iris_blade_trinium"
+			"item": "jsg:quad_iris_blade_trinium"
 		},
 		"W": {
-			"item": "aunis:crystal_white"
+			"item": "jsg:crystal_white"
 		},
 		"R": {
 			"item": "minecraft:redstone_block"
@@ -19,7 +19,7 @@
 	},
 	
 	"result": {
-		"item": "aunis:upgrade_iris_trinium",
+		"item": "jsg:upgrade_iris_trinium",
 		"count": 1
 	}
 }

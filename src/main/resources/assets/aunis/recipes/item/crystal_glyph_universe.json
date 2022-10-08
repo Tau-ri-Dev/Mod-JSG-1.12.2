@@ -8,24 +8,24 @@
 	
 	"key": {
 		"C": {
-			"item": "aunis:circuit_control_naquadah"
+			"item": "jsg:circuit_control_naquadah"
 		},
 		
 		"Y": {
-			"item": "aunis:crystal_yellow"
+			"item": "jsg:crystal_yellow"
 		},
 
 		"W": {
-			"item": "aunis:crystal_white"
+			"item": "jsg:crystal_white"
 		},
 		
 		"R": {
-			"item": "aunis:crystal_red"
+			"item": "jsg:crystal_red"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:crystal_glyph_universe",
+		"item": "jsg:crystal_glyph_universe",
 		"count": 1
 	}
 }

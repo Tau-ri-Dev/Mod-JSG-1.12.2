@@ -8,16 +8,16 @@
 	
 	"key": {
 		"C": {
-			"item": "aunis:circuit_control_crystal"
+			"item": "jsg:circuit_control_crystal"
 		},
 		
 		"E": {
-			"item": "aunis:crystal_ender"
+			"item": "jsg:crystal_ender"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:crystal_glyph_dhd",
+		"item": "jsg:crystal_glyph_dhd",
 		"count": 1
 	}
 }

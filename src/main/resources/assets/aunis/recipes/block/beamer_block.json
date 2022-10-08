@@ -12,11 +12,11 @@
         },
 	
 		"O": {
-			"item": "aunis:naquadah_block"
+			"item": "jsg:naquadah_block"
 		},
 	
 		"F": {
-			"item": "aunis:naquadah_alloy"
+			"item": "jsg:naquadah_alloy"
 		},
 		
 		"A": {
@@ -24,20 +24,20 @@
 		},
 		
 		"R": {
-			"item": "aunis:crystal_red"
+			"item": "jsg:crystal_red"
 		},
 		
 		"B": {
-			"item": "aunis:crystal_blue"
+			"item": "jsg:crystal_blue"
 		},
 		
 		"I": {
-			"item": "aunis:circuit_control_naquadah"
+			"item": "jsg:circuit_control_naquadah"
 		}
 	},
 	
 	"result": {
-		"item": "aunis:beamer_block",
+		"item": "jsg:beamer_block",
 		"count": 1
 	}
 }
