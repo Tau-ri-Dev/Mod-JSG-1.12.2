@@ -1,7 +1,7 @@
 ---
-name: Bug report
+name: Bug report (Wiki)
 about: Create a report to help us improve
-title: 'Bug: '
+title: 'Bug (Wiki):'
 labels: Bug/Issue
 assignees: MineDragonCZ
 
@@ -23,8 +23,8 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Mod version**
-Version of mod you are using. (aunis-1.12.2-4.9.4.3)
+**Website language**
+Language of website you are using.
 
 **Additional context**
 Add any other context about the problem here.
