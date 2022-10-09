@@ -28,8 +28,8 @@ apply plugin: 'idea'
 
 
 version = "${mc_version}-${mod_version}"
-group = "mrjake.aunis"
-archivesBaseName = "aunis"
+group = "tauri.dev.jsg"
+archivesBaseName = "jsg"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -97,6 +97,10 @@ repositories {
         name = "ic2"
         url = "http://maven.ic2.player.to/"
     }
+
+    maven {
+        url 'https://jitpack.io'
+    }
 }
 
 dependencies {
@@ -104,6 +108,7 @@ dependencies {
 
     implementation fg.deobf("cofh:RedstoneFlux:${rf_mc_version}-${rf_version}:universal")
     implementation fg.deobf("cofh:CoFHCore:${mc_version}-${cofh_core_version}:universal")
+    implementation 'com.github.JnCrMx:discord-game-sdk4j:v0.5.5'
 
     compileOnly fg.deobf("mezz.jei:jei_${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei_${mc_version}:${jei_version}")
@@ -137,12 +142,12 @@ processResources {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "Aunis: Resurrection",
-                "Specification-Vendor"    : "Aunis: Resurrection",
+                "Specification-Title"     : "Just Stargate Mod",
+                "Specification-Vendor"    : "Just Stargate Mod",
                 "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : "${version}",
-                "Implementation-Vendor"   : "Aunis: Resurrection",
+                "Implementation-Vendor"   : "Just Stargate Mod",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
         ])
     }

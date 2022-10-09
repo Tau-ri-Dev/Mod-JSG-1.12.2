@@ -2,6 +2,7 @@ package tauri.dev.jsg.stargate.teleportation;
 
 import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateOrlinBaseTile;
 import tauri.dev.vector.Matrix2f;
 import net.minecraft.entity.Entity;
@@ -74,7 +75,7 @@ public class TeleportHelper {
 	
 	private static void translateToDest(Vector2f v, Vector2f dest) {
 		v.x += dest.x;
-		v.y += dest.y;
+		v.y += (dest.y + 0.5f);
 	}
 	
 	public static void teleportEntity(Entity entity, BlockPos sourceGatePos, StargatePos targetGatePos, float rotation, Vector2f motionVector) {		
@@ -167,7 +168,7 @@ public class TeleportHelper {
 	 * @return Vec3d
 	 */
 	public static Vec3d plusOneBlock(EnumFacing gateRotation, Vec3d pos){
-		float k = 0.5f;
+		float k = 1.5f;
 
 		switch (gateRotation) {
 			case NORTH:

@@ -112,6 +112,8 @@ public class StargateGenerator {
 
 				if (name.equals("base")) {
 					gatePos = dataPos.add(0, -3, 0);
+					System.out.println("name: " + templateName);
+					System.out.println("tile: " + (world.getTileEntity(gatePos) == null ? "null" : "yes"));
 
 					world.getTileEntity(gatePos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(4, new ItemStack(JSGBlocks.CAPACITOR_BLOCK), false);
 

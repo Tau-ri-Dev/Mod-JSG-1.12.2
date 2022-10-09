@@ -1,5 +1,6 @@
 package tauri.dev.jsg;
 
+import org.apache.logging.log4j.core.Core;
 import tauri.dev.jsg.command.JSGCommands;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.integration.OCWrapperInterface;

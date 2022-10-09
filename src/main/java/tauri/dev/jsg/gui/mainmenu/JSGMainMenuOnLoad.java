@@ -165,7 +165,7 @@ public class JSGMainMenuOnLoad extends JSGMainMenu {
         GlStateManager.enableTexture2D();
         GlStateManager.translate(screenCenterWidth, screenCenterHeight - 48, 0);
         GlStateManager.scale(4, 4, 4);
-        drawCenteredString(fontRenderer, "Just Stargate Mod", 0, 0, 0xffffff);
+        drawCenteredString(fontRenderer, "JSG Mod", 0, 0, 0xffffff);
         GlStateManager.disableTexture2D();
         GlStateManager.popMatrix();
 
@@ -173,7 +173,7 @@ public class JSGMainMenuOnLoad extends JSGMainMenu {
         GlStateManager.enableTexture2D();
         GlStateManager.translate(screenCenterWidth, screenCenterHeight - 48 + (81 - 48), 0);
         GlStateManager.scale(1.5f, 1.5f, 1.5f);
-        drawCenteredString(fontRenderer, "Extreme realistic stargate mod", 0, 0, 0xa4a4a4);
+        drawCenteredString(fontRenderer, "Just Stargate Mod", 0, 0, 0xa4a4a4);
         GlStateManager.disableTexture2D();
         GlStateManager.popMatrix();
 
