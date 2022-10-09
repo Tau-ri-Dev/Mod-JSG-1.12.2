@@ -168,7 +168,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 			return BeamerStatusEnum.INCOMING;
 		
 		switch (redstoneMode) {
-			case RedstoneModeEnum.AUTO:
+			case AUTO:
 				if (beamerRole == BeamerRoleEnum.RECEIVE && (beamerMode == BeamerModeEnum.POWER || beamerMode == BeamerModeEnum.FLUID)) {
 					float level = 0;
 					
@@ -1108,13 +1108,13 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 				BeamerRendererActionState rendererAction = (BeamerRendererActionState) state;
 				
 				switch (rendererAction.action) {
-					case BeamerRendererAction.BEAM_ON:
+					case BEAM_ON:
 						beamRadiusClient = 0;
 						beamRadiusWiden = true;
 						beamRadiusShrink = false;
 						break;
 				
-					case BeamerRendererAction.BEAM_OFF:
+					case BEAM_OFF:
 						beamRadiusClient = 0.1375f;
 						beamRadiusWiden = false;
 						beamRadiusShrink = true;

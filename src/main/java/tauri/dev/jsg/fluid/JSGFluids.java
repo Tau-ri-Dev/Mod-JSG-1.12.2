@@ -46,7 +46,7 @@ public class JSGFluids {
             "Trinium"
     );
     public static Map<String, JSGBlockFluid> blockFluidMap = new HashMap<>();
-    private static Fluid[] fluids = {
+    private static final Fluid[] FLUIDS = {
             moltenSiliconBlack,
             moltenSiliconRed,
             moltenSiliconBlue,
@@ -63,7 +63,7 @@ public class JSGFluids {
     };
 
     public static void registerFluids() {
-        registerFluids(fluids);
+        registerFluids(FLUIDS);
     }
 
     // -------------------

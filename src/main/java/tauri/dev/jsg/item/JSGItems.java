@@ -114,7 +114,7 @@ public class JSGItems {
     public static final ZatItem ZAT = new ZatItem();
     public static final StaffItem STAFF = new StaffItem();
 
-    private static final Item[] items = {
+    public static final Item[] ITEMS = {
             CRYSTAL_CONTROL_MILKYWAY_DHD,
             CRYSTAL_CONTROL_PEGASUS_DHD,
             CRYSTAL_RAW_PEGASUS_DHD,
@@ -180,12 +180,12 @@ public class JSGItems {
     };
 
     public static Item[] getItems() {
-        return items;
+        return ITEMS;
     }
 
     @SubscribeEvent
     public static void onRegisterItems(Register<Item> event) {
-        for (Item item : items) {
+        for (Item item : ITEMS) {
             if (item instanceof CustomModelItemInterface)
                 ((CustomModelItemInterface) item).setTEISR();
 
@@ -195,13 +195,11 @@ public class JSGItems {
 
     @SubscribeEvent
     public static void onModelRegistry(ModelRegistryEvent event) {
-        for (Item item : items) {
+        for (Item item : ITEMS) {
             if (item instanceof CustomModelItemInterface)
                 ((CustomModelItemInterface) item).setCustomModelLocation();
             else
                 ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
         }
-
-
     }
 }

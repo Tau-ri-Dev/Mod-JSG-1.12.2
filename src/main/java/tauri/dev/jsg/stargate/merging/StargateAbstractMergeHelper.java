@@ -105,7 +105,7 @@ public abstract class StargateAbstractMergeHelper {
   public abstract StargateAbstractMemberBlock getMemberBlock();
 
   /**
-   * Method searches for a {@link StargateMilkyWayBaseBlock} within {@link this#BASE_SEARCH_BOX}
+   * Method searches for a {@link StargateMilkyWayBaseBlock}
    * and returns it's {@link TileEntity}.
    *
    * @param blockAccess Usually {@link World}.
@@ -167,8 +167,7 @@ public abstract class StargateAbstractMergeHelper {
   }
 
   /**
-   * Updates merge status of the given block. Block is internally
-   * checked by {@link this#MEMBER_MATCHER}.
+   * Updates merge status of the given block.
    *
    * @param world          {@link World} instance.
    * @param checkPos       Position of the currently checked {@link StargateMilkyWayMemberBlock}.

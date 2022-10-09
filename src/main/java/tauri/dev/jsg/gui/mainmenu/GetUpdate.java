@@ -18,7 +18,7 @@ public class GetUpdate {
 
     public static final String ERROR_STRING = "Error was occurred while updating JSG!";
 
-    public static final String URL_BASE = "https://api.jsg.cz/?api=curseforge&version=" + JSG.MC_VERSION;
+    public static final String URL_BASE = "https://api.justsgmod.eu/?api=curseforge&version=" + JSG.MC_VERSION;
 
     public static final String GET_NAME_URL = URL_BASE + "&t=name";
     public static final String GET_DOWNLOAD_URL = URL_BASE + "?t=url";

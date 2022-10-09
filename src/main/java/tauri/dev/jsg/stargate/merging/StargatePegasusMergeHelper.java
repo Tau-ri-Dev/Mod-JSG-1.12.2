@@ -4,6 +4,7 @@ import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.stargate.StargatePegasusMemberBlock;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.stargate.EnumMemberVariant;
+import tauri.dev.jsg.tileentity.stargate.StargatePegasusBaseTile;
 import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
@@ -41,11 +42,11 @@ public class StargatePegasusMergeHelper extends StargateClassicMergeHelper {
   @Override
   public List<BlockPos> getRingBlocks() {
     switch (JSGConfig.stargateSize) {
-      case StargateSizeEnum.SMALL:
-      case StargateSizeEnum.MEDIUM:
+      case SMALL:
+      case MEDIUM:
         return RING_BLOCKS_SMALL;
 
-      case StargateSizeEnum.LARGE:
+      case LARGE:
         return RING_BLOCKS_LARGE;
 
       default:
@@ -56,11 +57,11 @@ public class StargatePegasusMergeHelper extends StargateClassicMergeHelper {
   @Override
   public List<BlockPos> getChevronBlocks() {
     switch (tauri.dev.jsg.config.JSGConfig.stargateSize) {
-      case StargateSizeEnum.SMALL:
-      case StargateSizeEnum.MEDIUM:
+      case SMALL:
+      case MEDIUM:
         return CHEVRON_BLOCKS_SMALL;
 
-      case StargateSizeEnum.LARGE:
+      case LARGE:
         return CHEVRON_BLOCKS_LARGE;
 
       default:
@@ -87,12 +88,12 @@ public class StargatePegasusMergeHelper extends StargateClassicMergeHelper {
 
   @Override
   public JSGAxisAlignedBB getBaseSearchBox() {
-    switch (tauri.dev.jsg.config.JSGConfig.stargateSize) {
-      case StargateSizeEnum.SMALL:
-      case StargateSizeEnum.MEDIUM:
+    switch (JSGConfig.stargateSize) {
+      case SMALL:
+      case MEDIUM:
         return BASE_SEARCH_BOX_SMALL;
 
-      case StargateSizeEnum.LARGE:
+      case LARGE:
         return BASE_SEARCH_BOX_LARGE;
 
       default:

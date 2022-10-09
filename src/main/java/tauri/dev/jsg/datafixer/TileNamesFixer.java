@@ -23,7 +23,7 @@ public class TileNamesFixer implements IFixableData {
 
 	@Override
 	public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-		Block newBlock = JSGBlocks.remapBlock(compound.getString("id"));
+		Block newBlock = JSGBlocks.remapBlock(compound.getString("id"), true);
 		
 		if (newBlock != null) {
 			JSG.logger.debug("Fixing block id " + compound.getString("id") + ", now: " + newBlock.getRegistryName().toString());

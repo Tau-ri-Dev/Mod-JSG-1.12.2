@@ -1,5 +1,26 @@
 package tauri.dev.jsg.block;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.RegistryEvent.Register;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.beamer.BeamerBlock;
 import tauri.dev.jsg.block.capacitor.CapacitorBlock;
 import tauri.dev.jsg.block.capacitor.CapacitorBlockEmpty;
@@ -10,36 +31,19 @@ import tauri.dev.jsg.block.invisible.IrisBlock;
 import tauri.dev.jsg.block.ore.NaquadahOreBlock;
 import tauri.dev.jsg.block.ore.TitaniumOreBlock;
 import tauri.dev.jsg.block.ore.TriniumOreBlock;
+import tauri.dev.jsg.block.props.TRPlatformBlock;
 import tauri.dev.jsg.block.stargate.*;
 import tauri.dev.jsg.block.transportrings.TRControllerGoauldBlock;
 import tauri.dev.jsg.block.transportrings.TransportRingsGoauldBlock;
 import tauri.dev.jsg.block.transportrings.TransportRingsOriBlock;
-import tauri.dev.jsg.block.props.TRPlatformBlock;
 import tauri.dev.jsg.item.linkable.gdo.GDOItem;
 import tauri.dev.jsg.tileentity.transportrings.TRControllerAbstractTile;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import tauri.dev.jsg.util.BlockHelpers;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.RegistryEvent.MissingMappings.Mapping;
-import net.minecraftforge.event.RegistryEvent.Register;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nullable;
-
 import java.util.Map;
+import java.util.Objects;
 
 import static tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler.jsgOresCreativeTab;
 
@@ -128,7 +132,7 @@ public class JSGBlocks {
     };
 
 
-    private static final JSGBlock[] blocks = {
+    private static final JSGBlock[] BLOCKS = {
             ORE_NAQUADAH_BLOCK,
             ORE_NAQUADAH_BLOCK_STONE,
             NAQUADAH_BLOCK,
@@ -185,9 +189,9 @@ public class JSGBlocks {
     public static void onRegisterBlocks(Register<Block> event) {
         IForgeRegistry<Block> registry = event.getRegistry();
 
-        registry.registerAll(blocks);
+        registry.registerAll(BLOCKS);
 
-        for (JSGBlock block : blocks) {
+        for (JSGBlock block : BLOCKS) {
             if (block.hasTileEntity(block.getDefaultState())) {
                 Class<? extends TileEntity> tileEntityClass = block.getTileEntityClass();
                 ResourceLocation key = block.getRegistryName();
@@ -201,26 +205,25 @@ public class JSGBlocks {
     public static void onRegisterItems(Register<Item> event) {
         IForgeRegistry<Item> registry = event.getRegistry();
 
-        for (JSGBlock block : blocks) {
+        for (JSGBlock block : BLOCKS) {
             if (block instanceof StargateClassicMemberBlock)
                 registry.register(((StargateClassicMemberBlock) block).getItemBlock());
             else if (block instanceof JSGAbstractCustomItemBlock)
                 registry.register(((JSGAbstractCustomItemBlock) block).getItemBlock());
-            else if(block.getRegistryName() != null)
+            else if (block.getRegistryName() != null)
                 registry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
         }
     }
 
     @SubscribeEvent
     public static void onModelRegistry(ModelRegistryEvent event) {
-        for (JSGBlock block : blocks) {
+        for (JSGBlock block : BLOCKS) {
             if (block instanceof StargateClassicMemberBlock) {
                 StargateClassicMemberBlock b = (StargateClassicMemberBlock) block;
                 Map<Integer, String> values = b.getAllMetaTypes();
                 for (Integer meta : values.keySet())
                     ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(b), meta, new ModelResourceLocation(values.get(meta)));
-            }
-            else if (block instanceof JSGAbstractCustomMetaItemBlock) {
+            } else if (block instanceof JSGAbstractCustomMetaItemBlock) {
                 JSGAbstractCustomMetaItemBlock b = (JSGAbstractCustomMetaItemBlock) block;
                 Map<Integer, String> values = b.getAllMetaTypes();
                 for (Integer meta : values.keySet())
@@ -232,52 +235,89 @@ public class JSGBlocks {
     }
 
     @Nullable
-    public static Block remapBlock(String oldBlockName) {
+    public static Block remapBlock(String oldBlockName, boolean searchInRegistry) {
         switch (oldBlockName) {
-            case "jsg:stargatebase_block":
+            case "aunis:stargatebase_block":
                 return STARGATE_MILKY_WAY_BASE_BLOCK;
 
-            case "jsg:stargate_member_block":
+            case "aunis:stargate_member_block":
                 return STARGATE_MILKY_WAY_MEMBER_BLOCK;
 
-            case "jsg:stargatebase_orlin_block":
+            case "aunis:stargatebase_orlin_block":
                 return STARGATE_ORLIN_BASE_BLOCK;
 
-            case "jsg:stargatemember_orlin_block":
+            case "aunis:stargatemember_orlin_block":
                 return STARGATE_ORLIN_MEMBER_BLOCK;
 
-            case "jsg:transportrings_block":
+            case "aunis:transportrings_block":
                 return TRANSPORT_RINGS_GOAULD_BLOCK;
 
-            case "jsg:transportrings_controller_block":
+            case "aunis:transportrings_controller_block":
                 return TR_CONTROLLER_GOAULD_BLOCK;
 
-            case "jsg:zpm":
-            case "jsg:zpmhub_block":
-            case "jsg:connector_zpm":
-            case "jsg:holder_zpm":
-            case "jsg:circuit_control_zpm":
+            case "aunis:zpm":
+            case "aunis:zpmhub_block":
+            case "aunis:connector_zpm":
+            case "aunis:holder_zpm":
+            case "aunis:circuit_control_zpm":
                 return Blocks.AIR;
 
             default:
-                return null;
+                break;
+        }
+        if(searchInRegistry){
+            if(oldBlockName.startsWith("aunis:")){
+                return ForgeRegistries.BLOCKS.getValue(new ResourceLocation(JSG.MOD_ID, oldBlockName.replaceAll("aunis:", "")));
+            }
+        }
+        return null;
+    }
+
+    // ----------------------------------------------------------
+    // MAPPINGS
+
+    @SubscribeEvent
+    public static void onMissingSoundMappings(RegistryEvent.MissingMappings<SoundEvent> event) {
+        for (RegistryEvent.MissingMappings.Mapping<SoundEvent> mapping : event.getAllMappings()){
+            if(mapping.key.toString().startsWith("aunis:")){
+                mapping.ignore();
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onMissingEntityMappings(RegistryEvent.MissingMappings<EntityEntry> event) {
+        for (RegistryEvent.MissingMappings.Mapping<EntityEntry> mapping : event.getAllMappings()){
+            if(mapping.key.toString().startsWith("aunis:")){
+                mapping.ignore();
+            }
         }
     }
 
     @SubscribeEvent
     public static void onMissingBlockMappings(RegistryEvent.MissingMappings<Block> event) {
-        for (Mapping<Block> mapping : event.getMappings()) {
-            Block newBlock = remapBlock(mapping.key.toString());
-
+        for (RegistryEvent.MissingMappings.Mapping<Block> mapping : event.getAllMappings()) {
+            Block newBlock = remapBlock(mapping.key.toString(), true);
             if (newBlock != null) mapping.remap(newBlock);
         }
     }
 
     @SubscribeEvent
     public static void onMissingItemMappings(RegistryEvent.MissingMappings<Item> event) {
-        for (Mapping<Item> mapping : event.getMappings()) {
-            Block newBlock = remapBlock(mapping.key.toString());
-            if (newBlock != null) mapping.remap(ItemBlock.getItemFromBlock(newBlock));
+        for (RegistryEvent.MissingMappings.Mapping<Item> mapping : event.getAllMappings()) {
+            String oldName = mapping.key.toString();
+            Item newItem = null;
+            if(oldName.startsWith("aunis:")){
+                newItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(JSG.MOD_ID, oldName.replaceAll("aunis:", "")));
+                if(newItem == null)
+                    newItem = ItemBlock.getItemFromBlock(Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(JSG.MOD_ID, oldName.replaceAll("aunis:", "")))));
+            }
+            else{
+                Block newBlock = remapBlock(oldName, false);
+                if(newBlock != null)
+                    newItem = ItemBlock.getItemFromBlock(newBlock);
+            }
+            if (newItem != null) mapping.remap(newItem);
         }
     }
 }
