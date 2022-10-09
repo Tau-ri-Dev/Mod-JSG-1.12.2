@@ -28,7 +28,9 @@ public class GetUpdate {
 
     public static String checkForUpdate(String currentVersion){
         if(!JSGConfig.enableAutoUpdater) return "false";
-        String gotVersion = getSiteContent(GET_NAME_URL).split("-")[2];
+        String[] got = getSiteContent(GET_NAME_URL).split("-");
+        if(got.length < 3) return "false";
+        String gotVersion = got[2];
         if(gotVersion.equals(ERROR_STRING)) return "false";
 
         String[] currentVersionSplit = currentVersion.split("\\.");
