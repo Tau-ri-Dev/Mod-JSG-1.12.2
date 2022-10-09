@@ -29,7 +29,7 @@ apply plugin: 'idea'
 
 version = "${mc_version}-${mod_version}"
 group = "tauri.dev.jsg"
-archivesBaseName = "jsg"
+archivesBaseName = "${build_extrapath}jsg"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
