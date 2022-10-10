@@ -9,12 +9,12 @@ import net.minecraft.server.MinecraftServer;
 public class CommandAgs extends CommandBase {
     @Override
     public String getName() {
-        return "sggetags";
+        return "ags";
     }
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/sggetags";
+        return "/ags";
     }
 
     @Override

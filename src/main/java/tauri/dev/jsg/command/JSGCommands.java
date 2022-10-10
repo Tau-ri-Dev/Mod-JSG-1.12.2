@@ -8,7 +8,7 @@ import java.util.List;
 
 public final class JSGCommands {
 
-  private static final List<CommandBase> commands = Arrays.asList(
+  private static final List<CommandBase> COMMANDS = Arrays.asList(
           new CommandStargateQuery(),
           new CommandPrepare(),
           new CommandStargateCloseAll(),
@@ -19,11 +19,12 @@ public final class JSGCommands {
           new CommandFix(),
           new CommandFixNether(),
           new CommandGenerateIncoming(),
-          new CommandAgs()
+          new CommandAgs(),
+          new CommandActiveAll()
   );
 
   public static void registerCommands(FMLServerStartingEvent event) {
-    for (CommandBase command : commands) {
+    for (CommandBase command : COMMANDS) {
       event.registerServerCommand(command);
     }
   }

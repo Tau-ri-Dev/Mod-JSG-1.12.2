@@ -45,7 +45,7 @@ public class TextureLoader {
 			texture.deleteTexture();
 		
 		List<String> texturePaths = FolderLoader.getAllFiles(TEXTURES_PATH, ".png", ".jpg");
-		ProgressBar progressBar = ProgressManager.push("JSG: Resurrection - Loading textures", texturePaths.size());
+		ProgressBar progressBar = ProgressManager.push("Just Stargate Mod - Loading textures", texturePaths.size());
 		
 		long start = System.currentTimeMillis();
 
