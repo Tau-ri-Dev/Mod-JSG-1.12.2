@@ -9,7 +9,7 @@ itemGroup.jsg_props=JSG: Props
 itemGroup.jsg_machines=JSG: Machines
 
 # sound categories
-soundCategory.jsg_sounds=JSG
+soundCategory.jsg_sounds=Just Stargate mod
 
 # -------------------
 # ITEMS
@@ -45,29 +45,29 @@ item.jsg.circuit_control_base.name=Control Circuit Base
 item.jsg.circuit_control_naquadah.name=Naquadah Control Circuit
 item.jsg.circuit_control_crystal.name=Crystal Control Circuit
 
-item.jsg.crystal_control_dhd.name=DHD Control Crystal
-item.jsg.crystal_control_pegasus_dhd.name=Pegasus DHD Control Crystal
-item.jsg.raw_pegasus_dhd_crystal.name=Pegasus DHD Raw Crystal
+item.jsg.crystal_control_dhd.name=DHD Control Crystal (Milky Way)
+item.jsg.crystal_control_pegasus_dhd.name=DHD Control Crystal (Pegasus)
+item.jsg.raw_pegasus_dhd_crystal.name=Raw DHD Crystal (Pegasus)
 item.jsg.crystal_glyph_dhd.name=DHD Glyph Crystal
 item.jsg.crystal_glyph_stargate.name=Stargate Glyph Crystal
 item.jsg.crystal_glyph_milkyway.name=Milky Way Glyphs Crystal
 item.jsg.crystal_glyph_pegasus.name=Pegasus Glyphs Crystal
 item.jsg.crystal_glyph_universe.name=Universe Glyphs Crystal
-item.jsg.crystal_glyph_goauld.name=Goa'uld Rings Glyphs Crystal
-item.jsg.crystal_glyph_ori.name=Ori Rings Glyphs Crystal
-item.jsg.crystal_glyph_ancient.name=Ancient Rings Glyphs Crystal
+item.jsg.crystal_glyph_goauld.name=Goa'uld Glyphs Crystal
+item.jsg.crystal_glyph_ori.name=Ori Glyphs Crystal
+item.jsg.crystal_glyph_ancient.name=Ancient Glyphs Crystal
 
 # dhd
 item.jsg.dhd_brb.name=Bright Red Button (BRB)
 item.jsg.dhd_bbb.name=Bright Blue Button (BBB)
 
-# rings fragments
+# fragments
 item.jsg.stargate_ring_fragment.name=Stargate Ring Fragment
 item.jsg.universe_ring_fragment.name=Universe Ring Fragment
-item.jsg.transportrings_ring_fragment.name=Transport rings fragment
+item.jsg.transportrings_ring_fragment.name=Transport Rings Fragment
 
 # holders
-item.jsg.holder_crystal.name=Crystal Holder
+item.jsg.holder_crystal.name=Crystal Holder (Milky Way)
 item.jsg.holder_crystal_pegasus.name=Crystal Holder (Pegasus)
 
 # notebook
@@ -168,7 +168,7 @@ tile.jsg.titanium_block.name=Titanium Block
 prop.jsg.platform_ships_block.name=Rings platform (Ships)
 
 # dhd
-tile.jsg.dhd_block.name=Dial Home Device (DHD)
+tile.jsg.dhd_block.name=Dial Home Device (Milky Way DHD)
 tile.jsg.dhd_block.incoming_wormhole_warn=Unable to close the gate on this end
 tile.jsg.dhd_block.not_linked_warn=DHD is not linked to the gate
 tile.jsg.dhd_block.no_crystal_warn=DHD has no control crystal
@@ -176,7 +176,7 @@ tile.jsg.dhd_block.no_enough_power=DHD requires at least 10,000uI to operate pro
 tile.jsg.dhd_block.computer_dial=Computer dial is in progress
 tile.jsg.dhd_block.not_enough_power=Insufficient power
 
-tile.jsg.dhd_pegasus_block.name=Pegasus Dial Home Device (Pegasus DHD)
+tile.jsg.dhd_pegasus_block.name=Dial Home Device (Pegasus DHD)
 tile.jsg.dhd_pegasus_block.unknown_buttons=This button isn't working
 
 # stargate - MW
@@ -204,12 +204,12 @@ tile.jsg.capacitor_block.name=Capacitor Bank
 tile.jsg.capacitor_block_empty.name=Capacitor Bank (Empty)
 
 # rings controller
-tile.jsg.transportrings_controller_goauld_block.name=Transport rings controller (Goa'uld)
+tile.jsg.transportrings_controller_goauld_block.name=Transport Rings Controller (Goa'uld)
 tile.jsg.transportrings_controller_block.not_linked=Controller not linked
 
 # rings
-tile.jsg.transportrings_goauld_block.name=Transport rings (Goa'uld)
-tile.jsg.transportrings_ori_block.name=Transport rings (Ori)
+tile.jsg.transportrings_goauld_block.name=Transport Rings (Goa'uld)
+tile.jsg.transportrings_ori_block.name=Transport Rings (Ori)
 
 tile.jsg.transportrings_block.non_existing_address=Unable to reach this address
 tile.jsg.transportrings_block.wrong_distance=Wrong distance, should be from -40 to 40
@@ -629,7 +629,7 @@ chat.orlins.energyStored=Energy stored: %s RF (Required: %s RF, %s s)
 # -------------------
 # MAIN MENU
 
-menu.about=About JSG
+menu.about=About JSG Mod
 menu.gate_overlay=Gate
 menu.music_toggle=Music
 

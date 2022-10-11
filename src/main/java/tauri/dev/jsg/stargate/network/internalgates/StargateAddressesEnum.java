@@ -33,6 +33,18 @@ public enum StargateAddressesEnum {
 
         this.address = new StargateInternalAddress(minAddressLength, maxAddressLength, addressToMatch);
     }
+    StargateAddressesEnum(int id, int minAddressLength, int maxAddressLength, SymbolTypeEnum symbolType, SymbolInterface[] symbols, SymbolInterface[] symbols2){
+        this.id = id;
+        StargateAddressDynamic addressToMatch = new StargateAddressDynamic(symbolType);
+        for(SymbolInterface symbol : symbols)
+            addressToMatch.addSymbol(symbol);
+
+        StargateAddressDynamic addressToReplace = new StargateAddressDynamic(symbolType);
+        for(SymbolInterface symbol : symbols2)
+            addressToReplace.addSymbol(symbol);
+
+        this.address = new StargateInternalAddress(minAddressLength, maxAddressLength, addressToMatch, addressToReplace);
+    }
 
     public static boolean tryDialInternal(StargateAbstractBaseTile sgTile, SymbolInterface symbolToEngage){
         StargateNetwork network = sgTile.getNetwork();

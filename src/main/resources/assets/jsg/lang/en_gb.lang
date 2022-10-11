@@ -9,7 +9,7 @@ itemGroup.jsg_props=JSG: Props
 itemGroup.jsg_machines=JSG: Machines
 
 # sound categories
-soundCategory.jsg_sounds=JSG
+soundCategory.jsg_sounds=Just Stargate mod
 
 # -------------------
 # ITEMS
@@ -45,29 +45,29 @@ item.jsg.circuit_control_base.name=Control Circuit Base
 item.jsg.circuit_control_naquadah.name=Naquadah Control Circuit
 item.jsg.circuit_control_crystal.name=Crystal Control Circuit
 
-item.jsg.crystal_control_dhd.name=DHD Control Crystal
-item.jsg.crystal_control_pegasus_dhd.name=Pegasus DHD Control Crystal
-item.jsg.raw_pegasus_dhd_crystal.name=Pegasus DHD Raw Crystal
+item.jsg.crystal_control_dhd.name=DHD Control Crystal (Milky Way)
+item.jsg.crystal_control_pegasus_dhd.name=DHD Control Crystal (Pegasus)
+item.jsg.raw_pegasus_dhd_crystal.name=Raw DHD Crystal (Pegasus)
 item.jsg.crystal_glyph_dhd.name=DHD Glyph Crystal
 item.jsg.crystal_glyph_stargate.name=Stargate Glyph Crystal
 item.jsg.crystal_glyph_milkyway.name=Milky Way Glyphs Crystal
 item.jsg.crystal_glyph_pegasus.name=Pegasus Glyphs Crystal
 item.jsg.crystal_glyph_universe.name=Universe Glyphs Crystal
-item.jsg.crystal_glyph_goauld.name=Goa'uld Rings Glyphs Crystal
-item.jsg.crystal_glyph_ori.name=Ori Rings Glyphs Crystal
-item.jsg.crystal_glyph_ancient.name=Ancient Rings Glyphs Crystal
+item.jsg.crystal_glyph_goauld.name=Goa'uld Glyphs Crystal
+item.jsg.crystal_glyph_ori.name=Ori Glyphs Crystal
+item.jsg.crystal_glyph_ancient.name=Ancient Glyphs Crystal
 
 # dhd
 item.jsg.dhd_brb.name=Bright Red Button (BRB)
 item.jsg.dhd_bbb.name=Bright Blue Button (BBB)
 
-# rings fragments
+# fragments
 item.jsg.stargate_ring_fragment.name=Stargate Ring Fragment
 item.jsg.universe_ring_fragment.name=Universe Ring Fragment
-item.jsg.transportrings_ring_fragment.name=Transport rings fragment
+item.jsg.transportrings_ring_fragment.name=Transport Rings Fragment
 
 # holders
-item.jsg.holder_crystal.name=Crystal Holder
+item.jsg.holder_crystal.name=Crystal Holder (Milky Way)
 item.jsg.holder_crystal_pegasus.name=Crystal Holder (Pegasus)
 
 # notebook

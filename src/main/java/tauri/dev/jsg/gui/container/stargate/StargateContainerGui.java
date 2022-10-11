@@ -398,6 +398,8 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
+		if(keyCode == 1 || mc.gameSettings.keyBindInventory.isActiveAndMatches(keyCode))
+			super.keyTyped(typedChar, keyCode);
 		for(Tab tab : tabs){
 			if(tab.isOpen() && tab.isVisible()){
 				tab.keyTyped(typedChar, keyCode);

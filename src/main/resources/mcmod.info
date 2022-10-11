@@ -6,11 +6,13 @@
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "https://justsgmod.eu",
-    "updateUrl": "",
+    "updateUrl": "https://www.curseforge.com/minecraft/mc-mods/jsg/files",
     "authorList": [ "MineDragonCZ_", "matousss", "MrJake222", "MarcelMPL", "slava_110", "Harald De Luca" ],
     "credits": "Main thing by MrJake222 (Aunis). Updated by MineDragonCZ_ and matousss.",
     "logoFile": "pack.png",
     "screenshots": [
+      "screenshots/1.png",
+      "screenshots/2.png"
     ],
     "parent":"",
     "dependencies": [

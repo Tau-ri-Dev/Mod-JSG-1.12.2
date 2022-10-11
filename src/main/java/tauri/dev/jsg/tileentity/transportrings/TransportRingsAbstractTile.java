@@ -93,6 +93,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     protected JSGAxisAlignedBB globalTeleportBox;
     protected List<Entity> teleportList = new ArrayList<>();
     protected BlockPos lastPos = BlockPos.ORIGIN;
+    private boolean addedToNetwork;
     // ---------------------------------------------------------------------------------
     // Teleportation
     protected BlockPos targetRingsPos = new BlockPos(0, 0, 0);
@@ -309,6 +310,14 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     @Override
     public void update() {
         if (!world.isRemote) {
+            // This cannot be done in onLoad because it makes
+            // Rings invisible to the network sometimes (same as gates)
+            if (!addedToNetwork) {
+                addedToNetwork = true;
+                JSG.ocWrapper.joinWirelessNetwork(this);
+                JSG.ocWrapper.joinOrCreateNetwork(this);
+            }
+
             initConfig();
             ScheduledTask.iterate(scheduledTasks, world.getTotalWorldTime());
             if (getRings().getAddresses() == null // if is null
@@ -421,7 +430,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
             updatePowerTier();
         }
-        JSG.ocWrapper.joinOrCreateNetwork(this);
     }
 
     public void onBreak() {

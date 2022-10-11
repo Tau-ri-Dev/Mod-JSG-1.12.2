@@ -35,7 +35,7 @@ public class JSGMainMenu extends GuiMainMenu {
     // ------------------------------------------
     // DEFINE VARIABLES
 
-    protected static final String WIKI_URL = "https://jsg.cz/wiki/";
+    protected static final String WIKI_URL = "https://justsgmod.eu/wiki/";
 
     // ---------------------------------------------------
     // VERSION
@@ -454,7 +454,7 @@ public class JSGMainMenu extends GuiMainMenu {
             GlStateManager.translate(0, 0, 0);
             drawString(fontRenderer, "Music credits: STARGATE SG-1 - Full Original Soundtrack OST", 0, 0, 0xffffff);
             GlStateManager.translate(0, 10, 0);
-            drawString(fontRenderer, "JSG mod by: MrJake, MineDragonCZ_ and Matousss", 0, 0, 0xffffff);
+            drawString(fontRenderer, "Just Stargate Mod by: MineDragonCZ_ and Matousss", 0, 0, 0xffffff);
             GlStateManager.translate(0, 10, 0);
             drawString(fontRenderer, versionInfo, 0, 0, 0xffffff);
             GlStateManager.translate(0, 10, 0);

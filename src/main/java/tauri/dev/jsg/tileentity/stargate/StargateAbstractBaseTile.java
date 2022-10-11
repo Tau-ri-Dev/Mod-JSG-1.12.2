@@ -855,6 +855,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     public void generateIncoming(int entities, int addressSize, int delay) {
+        if(!isMerged) return;
         if (this instanceof StargateUniverseBaseTile && !((stargateState.idle() || (stargateState.dialing() && !stargateState.dialingComputer())) && !randomIncomingIsActive))
             return;
         else if (!((stargateState.idle() || stargateState.dialing()) && !randomIncomingIsActive)) return;

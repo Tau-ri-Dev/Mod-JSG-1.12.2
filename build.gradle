@@ -108,13 +108,14 @@ dependencies {
 
     implementation fg.deobf("cofh:RedstoneFlux:${rf_mc_version}-${rf_version}:universal")
     implementation fg.deobf("cofh:CoFHCore:${mc_version}-${cofh_core_version}:universal")
-    implementation 'com.github.JnCrMx:discord-game-sdk4j:v0.5.5'
 
     compileOnly fg.deobf("mezz.jei:jei_${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei_${mc_version}:${jei_version}")
 
     compile "li.cil.oc:OpenComputers:MC1.12.2-1.7.5.213:api"
     compile 'net.industrial-craft:industrialcraft-2:2.1.470-experimental:api'
+    compile 'net.java.dev.jna:jna:5.4.0'
+    compile 'com.github.Vatuu:discord-rpc-binaries:3.4.0'
 }
 
 processResources {

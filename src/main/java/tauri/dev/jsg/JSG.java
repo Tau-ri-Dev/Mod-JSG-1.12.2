@@ -1,12 +1,5 @@
 package tauri.dev.jsg;
 
-import org.apache.logging.log4j.core.Core;
-import tauri.dev.jsg.command.JSGCommands;
-import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
-import tauri.dev.jsg.integration.OCWrapperInterface;
-import tauri.dev.jsg.proxy.IProxy;
-import tauri.dev.jsg.util.main.loader.JSGInit;
-import tauri.dev.jsg.util.main.loader.JSGPreInit;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -16,6 +9,13 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import org.apache.logging.log4j.Logger;
+import tauri.dev.discord.GameActivity;
+import tauri.dev.jsg.command.JSGCommands;
+import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
+import tauri.dev.jsg.integration.OCWrapperInterface;
+import tauri.dev.jsg.proxy.IProxy;
+import tauri.dev.jsg.util.main.loader.JSGInit;
+import tauri.dev.jsg.util.main.loader.JSGPreInit;
 
 import java.io.IOException;
 
@@ -95,7 +95,10 @@ public class JSG {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         JSGPreInit.preInit(event);
+        GameActivity.register();
         JSG.proxy.preInit(event);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(JSG::shutDown));
     }
 
     @EventHandler
@@ -106,11 +109,12 @@ public class JSG {
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        GameActivity.setActivity();
         proxy.postInit(event);
     }
 
     @EventHandler
-    public void loadComplete(FMLLoadCompleteEvent event){
+    public void loadComplete(FMLLoadCompleteEvent event) {
         JSG.info("JSG loaded!");
     }
 
@@ -128,6 +132,10 @@ public class JSG {
 
     @EventHandler
     public void serverStopped(FMLServerStoppedEvent event) {
-        JSG.info("Good bye! Thank you for using JSG: Resurrection :)");
+        JSG.info("Good bye! Thank you for using Just Stargate Mod :)");
+    }
+
+    public static void shutDown() {
+        GameActivity.clearActivity();
     }
 }
