@@ -11,3 +11,4 @@ Check out our youtube channel: https://www.youtube.com/channel/UChxSgOztJWUVqmw7
 > Created and coded by MineDragonCZ_ and matousss (Base of the mod by MrJake222)<br>
 > Models by MarcelMPL, **Harald de Luca** and from Aunis<br>
 > Checkout our official website: [JustSGMod.eu](https://justsgmod.eu)
+> *Big thanks to MrJake222 for making base of this mod*
