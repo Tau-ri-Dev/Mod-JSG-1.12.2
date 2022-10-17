@@ -10,4 +10,5 @@ public class JSGCreativeTabsHandler {
     public static final JSGEnergyCreativeTab jsgEnergyCreativeTab = new JSGEnergyCreativeTab();
     public static final JSGToolsCreativeTab jsgToolsCreativeTab = new JSGToolsCreativeTab();
     public static final JSGPropsCreativeTab jsgPropsCreativeTab = new JSGPropsCreativeTab();
+    public static final JSGMachinesCreativeTab jsgMachinesCreativeTab = new JSGMachinesCreativeTab();
 }

@@ -85,6 +85,17 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
     return null;
   }
 
+  public SymbolInterface getSymbolByAngleIndex(int angleIndex) {
+    switch (this) {
+      case GOAULD:
+        return SymbolGoauldEnum.getSymbolByAngleIndex(angleIndex);
+      case ORI:
+        return SymbolOriEnum.getSymbolByAngleIndex(angleIndex);
+    }
+
+    return null;
+  }
+
 
   public SymbolInterface fromEnglishName(String englishName) {
     switch (this) {

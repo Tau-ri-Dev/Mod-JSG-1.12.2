@@ -9,6 +9,7 @@ import li.cil.oc.api.network.Node;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
 import tauri.dev.jsg.block.props.TRPlatformBlock;
+import tauri.dev.jsg.block.transportrings.TRControllerAbstractBlock;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.sound.JSGSoundHelper;
@@ -314,7 +315,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             // Rings invisible to the network sometimes (same as gates)
             if (!addedToNetwork) {
                 addedToNetwork = true;
-                JSG.ocWrapper.joinWirelessNetwork(this);
+                //JSG.ocWrapper.joinWirelessNetwork(this);
                 JSG.ocWrapper.joinOrCreateNetwork(this);
             }
 
@@ -563,7 +564,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             case RINGS_CLEAR_OUT:
                 setBarrierBlocks(false, false);
                 setBusy(false);
-                clearButtonsDHD();
+                clearButtonsController();
 
                 TransportRingsAbstractTile targetRingsTile = (TransportRingsAbstractTile) world.getTileEntity(targetRingsPos);
                 if (targetRingsTile != null) targetRingsTile.setBusy(false);
@@ -644,7 +645,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         markDirty();
 
         NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
-        JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RINGS_START_ANIMATION, new TransportRingsStartAnimationRequest(rendererState.animationStart, rendererState.ringsDistance, rendererState.ringsConfig)), point);
+        JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.START_ANIMATION, new TransportRingsStartAnimationRequest(rendererState.animationStart, rendererState.ringsDistance, rendererState.ringsConfig)), point);
     }
 
     public TransportRingsRendererState getRendererState(){
@@ -661,12 +662,12 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             dialedAddress.setSymbolType(getSymbolType());
             dialedAddress.add(symbol);
             markDirty();
-            activateSymbolDHD(symbol);
-            playControllerPressSound(computer);
+            activateSymbolController(symbol);
+            playPressSoundController(computer, false);
             if (symbolWillLock()) {
                 TransportResult result = attemptTransportTo(dialedAddress, EnumScheduledTask.RINGS_START_ANIMATION.waitTicks);
                 if (!result.ok()) {
-                    clearButtonsDHD(7);
+                    clearButtonsController(7);
                     markDirty();
                     sendSignal(ocContext, "transportrings_symbol_engage_failed", result.toString());
                     return result;
@@ -676,30 +677,31 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             return TransportResult.ACTIVATED;
         }
         if(symbol.origin()) {
-            activateSymbolDHD(symbol);
-            clearButtonsDHD(7);
-            playControllerPressSound(computer);
+            activateSymbolController(symbol);
+            clearButtonsController(7);
+            playPressSoundController(computer, true);
             sendSignal(ocContext, "transportrings_symbol_engage_failed", TransportResult.NO_SUCH_ADDRESS.toString());
             return TransportResult.NO_SUCH_ADDRESS;
         }
         return TransportResult.ALREADY_ACTIVATED;
     }
 
-    public void playControllerPressSound(boolean computer){
+    public void playPressSoundController(boolean computer, boolean isFinal){
         TRControllerAbstractTile controller = getLinkedControllerTile(world);
         if((!computer || config.getOption(ENABLE_OC_PRESS_SOUND.id).getBooleanValue()) && isLinked() && controller != null)
-            JSGSoundHelper.playSoundEvent(world, controller.getPos(), SoundEventEnum.RINGS_CONTROLLER_BUTTON);
+            controller.playPressSound(isFinal);
     }
 
-    public void activateSymbolDHD(SymbolInterface symbol){
+    public void activateSymbolController(SymbolInterface symbol){
         NBTTagCompound compound = new NBTTagCompound();
         compound.setInteger("symbol", symbol.getId());
         sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbol));
         addTask(new ScheduledTask(EnumScheduledTask.RINGS_SYMBOL_DEACTIVATE, compound));
     }
 
-    public void clearButtonsDHD(){clearButtonsDHD(-1);}
-    public void clearButtonsDHD(int waitTicks){
+    public void clearButtonsController(){
+        clearButtonsController(-1);}
+    public void clearButtonsController(int waitTicks){
         if(waitTicks > -1)
             addTask(new ScheduledTask(EnumScheduledTask.RINGS_SYMBOL_DEACTIVATE, waitTicks));
         else
@@ -1114,7 +1116,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             case RENDERER_STATE:
                 return new TransportRingsRendererState();
 
-            case RINGS_START_ANIMATION:
+            case START_ANIMATION:
             case RINGS_DISTANCE_UPDATE:
                 return new TransportRingsStartAnimationRequest();
 
@@ -1143,7 +1145,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 rendererState = ((TransportRingsRendererState) state);
                 break;
 
-            case RINGS_START_ANIMATION:
+            case START_ANIMATION:
                 distance = ((TransportRingsStartAnimationRequest) state).ringsDistance;
                 animationStart = ((TransportRingsStartAnimationRequest) state).animationStart;
                 JSGSoundHelper.playSoundEventClientSide(world, getPosWithDistance(distance), SoundEventEnum.RINGS_TRANSPORT);
@@ -1254,10 +1256,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         }
     }
 
-
+    public abstract TRControllerAbstractBlock getControllerBlock();
 
     public void updateLinkStatus() {
-        BlockPos closestController = LinkingHelper.findClosestUnlinked(world, pos, new BlockPos(10, 5, 10), JSGBlocks.RINGS_CONTROLLERS, linkId);
+        BlockPos closestController = LinkingHelper.findClosestUnlinked(world, pos, new BlockPos(10, 5, 10), getControllerBlock(), linkId);
 
         int linkId = closestController == null ? -1 : LinkingHelper.getLinkId();
 

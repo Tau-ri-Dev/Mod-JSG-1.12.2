@@ -2,6 +2,7 @@ package tauri.dev.jsg.tileentity.transportrings;
 
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.block.transportrings.TransportRingsAbstractBlock;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
@@ -45,6 +46,7 @@ public abstract class TRControllerAbstractTile extends TileEntity implements ITi
     }
 
     public abstract SymbolTypeTransportRingsEnum getSymbolType();
+    public abstract void playPressSound(boolean isFinal);
 
     @Override
     public void onLoad() {
@@ -120,7 +122,11 @@ public abstract class TRControllerAbstractTile extends TileEntity implements ITi
         return linkId;
     }
 
+    public abstract TransportRingsAbstractBlock getTRBlock();
+
     public void updateLinkStatus() {
+        //todo(Mine): When ori controller finished, switch this
+        //BlockPos closestRings = LinkingHelper.findClosestUnlinked(world, pos, new BlockPos(10, 40, 10), getTRBlock(), linkId);
         BlockPos closestRings = LinkingHelper.findClosestUnlinked(world, pos, new BlockPos(10, 40, 10), JSGBlocks.RINGS_BLOCKS, linkId);
         int linkId = closestRings == null ? -1 : LinkingHelper.getLinkId();
 

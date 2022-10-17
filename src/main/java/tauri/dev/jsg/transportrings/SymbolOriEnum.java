@@ -115,11 +115,13 @@ public enum SymbolOriEnum implements SymbolInterface {
     }
 
     private static final Map<Integer, SymbolOriEnum> ID_MAP = new HashMap<>();
+    private static final Map<Integer, SymbolOriEnum> ANGLE_INDEX_MAP = new HashMap<>();
     private static final Map<String, SymbolOriEnum> ENGLISH_NAME_MAP = new HashMap<>();
 
     static {
         for (SymbolOriEnum symbol : values()) {
             ID_MAP.put(symbol.id, symbol);
+            ANGLE_INDEX_MAP.put(symbol.angleIndex, symbol);
             ENGLISH_NAME_MAP.put(symbol.englishName.toLowerCase(), symbol);
         }
     }
@@ -130,5 +132,9 @@ public enum SymbolOriEnum implements SymbolInterface {
 
     public static final SymbolOriEnum fromEnglishName(String englishName) {
         return ENGLISH_NAME_MAP.get(englishName.toLowerCase().replace("ö", "o"));
+    }
+
+    public static SymbolOriEnum getSymbolByAngleIndex(int index){
+        return ANGLE_INDEX_MAP.get(index);
     }
 }

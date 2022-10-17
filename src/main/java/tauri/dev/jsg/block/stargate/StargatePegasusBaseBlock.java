@@ -1,5 +1,8 @@
 package tauri.dev.jsg.block.stargate;
 
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import tauri.dev.jsg.renderer.stargate.StargateOrlinRenderer;
+import tauri.dev.jsg.renderer.stargate.StargatePegasusRenderer;
 import tauri.dev.jsg.tileentity.stargate.StargatePegasusBaseTile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
@@ -21,5 +24,10 @@ public final class StargatePegasusBaseBlock extends StargateClassicBaseBlock {
   @Override
   public Class<? extends TileEntity> getTileEntityClass() {
     return StargatePegasusBaseTile.class;
+  }
+
+  @Override
+  public TileEntitySpecialRenderer<? extends TileEntity> getTESR() {
+    return new StargatePegasusRenderer();
   }
 }

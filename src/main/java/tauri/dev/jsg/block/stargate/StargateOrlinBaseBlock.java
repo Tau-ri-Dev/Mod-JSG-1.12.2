@@ -1,7 +1,10 @@
 package tauri.dev.jsg.block.stargate;
 
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.renderer.machine.StargateAssemblerRenderer;
+import tauri.dev.jsg.renderer.stargate.StargateOrlinRenderer;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.stargate.merging.StargateOrlinMergeHelper;
 import tauri.dev.jsg.stargate.network.StargateNetwork;
@@ -160,6 +163,11 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 	@Override
 	public Class<? extends TileEntity> getTileEntityClass() {
 		return StargateOrlinBaseTile.class;
+	}
+
+	@Override
+	public TileEntitySpecialRenderer<? extends TileEntity> getTESR() {
+		return new StargateOrlinRenderer();
 	}
 	
 	// ------------------------------------------------------------------------

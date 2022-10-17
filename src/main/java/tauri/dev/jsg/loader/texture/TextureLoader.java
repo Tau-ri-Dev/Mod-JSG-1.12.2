@@ -50,10 +50,11 @@ public class TextureLoader {
 		long start = System.currentTimeMillis();
 
 		JSG.logger.info("Started loading textures...");
-
+		int i = 1;
 		for (String texturePath : texturePaths) {
 			texturePath = texturePath.replaceFirst("assets/jsg/", "");
-			progressBar.step(texturePath.replaceFirst("textures/", ""));
+			//progressBar.step(texturePath.replaceFirst("textures/", ""));
+			progressBar.step((i++) + "/" + texturePaths.size());
 			
 			if (tauri.dev.jsg.config.JSGConfig.horizonConfig.disableAnimatedEventHorizon){
 				switch (texturePath){

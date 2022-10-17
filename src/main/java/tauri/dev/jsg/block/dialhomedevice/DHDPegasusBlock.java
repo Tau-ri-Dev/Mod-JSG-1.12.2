@@ -1,10 +1,12 @@
 package tauri.dev.jsg.block.dialhomedevice;
 
-import tauri.dev.jsg.gui.GuiIdEnum;
-import tauri.dev.jsg.tileentity.dialhomedevice.DHDPegasusTile;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import tauri.dev.jsg.gui.GuiIdEnum;
+import tauri.dev.jsg.renderer.dialhomedevice.DHDPegasusRenderer;
+import tauri.dev.jsg.tileentity.dialhomedevice.DHDPegasusTile;
 
 public class DHDPegasusBlock extends DHDAbstractBlock {
 
@@ -22,6 +24,11 @@ public class DHDPegasusBlock extends DHDAbstractBlock {
     @Override
     public Class<? extends TileEntity> getTileEntityClass() {
         return DHDPegasusTile.class;
+    }
+
+    @Override
+    public TileEntitySpecialRenderer<? extends TileEntity> getTESR() {
+        return new DHDPegasusRenderer();
     }
 
     @Override

@@ -13,8 +13,8 @@ import java.util.Random;
 public enum SymbolGoauldEnum implements SymbolInterface {
     AMUN(0, 0, "Amun"),
     SERKET(1, 1, "Serket"),
-    KHEPRI(2, 2, "Khepri"),
-    RA(3, 3, "Ra"),
+    KHEPRI(2, 3, "Khepri"),
+    RA(3, 2, "Ra"),
     FELLUCA(4, 4, "Felluca"),
     COBRA(5, 5, "Cobra"),
     LIGHT(6, 6, "Light");
@@ -115,20 +115,26 @@ public enum SymbolGoauldEnum implements SymbolInterface {
     }
 
     private static final Map<Integer, SymbolGoauldEnum> ID_MAP = new HashMap<>();
+    private static final Map<Integer, SymbolGoauldEnum> ANGLE_INDEX_MAP = new HashMap<>();
     private static final Map<String, SymbolGoauldEnum> ENGLISH_NAME_MAP = new HashMap<>();
 
     static {
         for (SymbolGoauldEnum symbol : values()) {
             ID_MAP.put(symbol.id, symbol);
+            ANGLE_INDEX_MAP.put(symbol.angleIndex, symbol);
             ENGLISH_NAME_MAP.put(symbol.englishName.toLowerCase(), symbol);
         }
     }
 
-    public static final SymbolGoauldEnum valueOf(int id) {
+    public static SymbolGoauldEnum valueOf(int id) {
         return ID_MAP.get(id);
     }
 
-    public static final SymbolGoauldEnum fromEnglishName(String englishName) {
+    public static SymbolGoauldEnum fromEnglishName(String englishName) {
         return ENGLISH_NAME_MAP.get(englishName.toLowerCase().replace("ö", "o"));
+    }
+
+    public static SymbolGoauldEnum getSymbolByAngleIndex(int index){
+        return ANGLE_INDEX_MAP.get(index);
     }
 }

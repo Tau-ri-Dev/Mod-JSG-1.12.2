@@ -1,8 +1,11 @@
 package tauri.dev.jsg.tileentity.transportrings;
 
+import tauri.dev.jsg.block.transportrings.TransportRingsAbstractBlock;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.renderer.transportrings.TRControllerAbstractRendererState;
 import tauri.dev.jsg.renderer.transportrings.TRControllerGoauldRendererState;
+import tauri.dev.jsg.sound.JSGSoundHelper;
+import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.dialhomedevice.DHDActivateButtonState;
@@ -12,9 +15,18 @@ import tauri.dev.jsg.transportrings.TransportRingsAddress;
 
 import java.util.EnumSet;
 
+import static tauri.dev.jsg.block.JSGBlocks.TRANSPORT_RINGS_GOAULD_BLOCK;
+
 public class TRControllerGoauldTile extends TRControllerAbstractTile {
 
     public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST);
+
+    public void playPressSound(boolean isFinal){
+        if(!isFinal)
+            JSGSoundHelper.playSoundEvent(world, this.getPos(), SoundEventEnum.TR_CONTROLLER_GOAULD_BUTTON);
+        else
+            JSGSoundHelper.playSoundEvent(world, this.getPos(), SoundEventEnum.TR_CONTROLLER_GOAULD_BUTTON_FINAL);
+    }
 
     @Override
     public void onLoad() {
@@ -23,6 +35,10 @@ public class TRControllerGoauldTile extends TRControllerAbstractTile {
             setBiomeOverlay(BiomeOverlayEnum.updateBiomeOverlay(world, pos, getSupportedOverlays()));
         }
         super.onLoad();
+    }
+
+    public TransportRingsAbstractBlock getTRBlock(){
+        return TRANSPORT_RINGS_GOAULD_BLOCK;
     }
 
     @Override

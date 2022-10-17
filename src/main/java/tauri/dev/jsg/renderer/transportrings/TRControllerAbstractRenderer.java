@@ -1,5 +1,6 @@
 package tauri.dev.jsg.renderer.transportrings;
 
+import tauri.dev.jsg.block.transportrings.TRControllerAbstractBlock;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.tileentity.transportrings.TRControllerAbstractTile;
@@ -60,7 +61,7 @@ public abstract class TRControllerAbstractRenderer extends TileEntitySpecialRend
 	public void render(TRControllerAbstractTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		TRControllerAbstractRendererState rendererState = te.getRendererState();
 		if(rendererState == null) return;
-		if(!JSGBlocks.isInBlocksArray(te.getWorld().getBlockState(te.getPos()).getBlock(), JSGBlocks.RINGS_CONTROLLERS)) return;
+		if(!(te.getWorld().getBlockState(te.getPos()).getBlock() instanceof TRControllerAbstractBlock)) return;
 		rendererState.iterate(getWorld(), partialTicks);
 		IBlockState blockState = te.getWorld().getBlockState(te.getPos());
 		facing = blockState.getValue(JSGProps.FACING_HORIZONTAL);

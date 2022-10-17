@@ -202,11 +202,20 @@
       "jsg:transportrings/rings_transport"
     ]
   },
-  "rings_controller_button": {
+  "rings_controller_goauld_button": {
     "category": "ambient",
     "subtitle": "jsg.subtitle.rings_controller_button",
     "sounds": [
-      "jsg:transportrings/rings_controller_button"
+      "jsg:transportrings/goauld/rings_controller_button_1",
+      "jsg:transportrings/goauld/rings_controller_button_2",
+      "jsg:transportrings/goauld/rings_controller_button_3"
+    ]
+  },
+  "rings_controller_goauld_button_final": {
+    "category": "ambient",
+    "subtitle": "jsg.subtitle.rings_controller_button",
+    "sounds": [
+      "jsg:transportrings/goauld/rings_controller_button_final"
     ]
   },
   "gate_milkyway_chevron_shut": {

@@ -1,5 +1,7 @@
 package tauri.dev.jsg.block.stargate;
 
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import tauri.dev.jsg.renderer.stargate.StargateMilkyWayRenderer;
 import tauri.dev.jsg.tileentity.stargate.StargateMilkyWayBaseTile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
@@ -21,5 +23,10 @@ public final class StargateMilkyWayBaseBlock extends StargateClassicBaseBlock {
 	@Override
 	public Class<? extends TileEntity> getTileEntityClass() {
 		return StargateMilkyWayBaseTile.class;
+	}
+
+	@Override
+	public TileEntitySpecialRenderer<? extends TileEntity> getTESR(){
+		return new StargateMilkyWayRenderer();
 	}
 }

@@ -70,10 +70,11 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     // ----------------------------------------------------------
     // Ring transporter
     RINGS_TRANSPORT(100, "rings_transport", 0.5f),
-    RINGS_CONTROLLER_BUTTON(101, "rings_controller_button", 0.5f),
+    TR_CONTROLLER_GOAULD_BUTTON(101, "rings_controller_goauld_button", 0.5f),
+    TR_CONTROLLER_GOAULD_BUTTON_FINAL(102, "rings_controller_goauld_button_final", 0.5f),
 
-    RINGS_PLATFORM_SHIPS_OPEN(102, "platform_ships_open", 0.5f),
-    RINGS_PLATFORM_SHIPS_CLOSE(103, "platform_ships_close", 0.5f),
+    RINGS_PLATFORM_SHIPS_OPEN(105, "platform_ships_open", 0.5f),
+    RINGS_PLATFORM_SHIPS_CLOSE(106, "platform_ships_close", 0.5f),
 
     // ----------------------------------------------------------
     // Beamer

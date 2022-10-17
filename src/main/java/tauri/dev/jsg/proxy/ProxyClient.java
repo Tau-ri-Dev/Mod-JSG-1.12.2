@@ -1,5 +1,30 @@
 package tauri.dev.jsg.proxy;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import org.apache.commons.io.IOUtils;
+import org.lwjgl.opengl.Display;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.block.JSGBlock;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.stargate.StargateClassicMemberBlockColor;
 import tauri.dev.jsg.entity.friendly.TokraEntity;
@@ -12,45 +37,22 @@ import tauri.dev.jsg.item.color.PageMysteriousItemColor;
 import tauri.dev.jsg.item.color.PageNotebookItemColor;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
 import tauri.dev.jsg.loader.ReloadListener;
-import tauri.dev.jsg.renderer.BeamerRenderer;
-import tauri.dev.jsg.renderer.dialhomedevice.DHDMilkyWayRenderer;
-import tauri.dev.jsg.renderer.dialhomedevice.DHDPegasusRenderer;
-import tauri.dev.jsg.renderer.stargate.*;
-import tauri.dev.jsg.renderer.transportrings.TRControllerGoauldRenderer;
-import tauri.dev.jsg.renderer.transportrings.TransportRingsGoauldRenderer;
-import tauri.dev.jsg.renderer.transportrings.TransportRingsOriRenderer;
+import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
+import tauri.dev.jsg.renderer.stargate.StargateOrlinRenderer;
 import tauri.dev.jsg.sound.JSGSoundHelperClient;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
-import tauri.dev.jsg.tileentity.BeamerTile;
-import tauri.dev.jsg.tileentity.dialhomedevice.DHDMilkyWayTile;
-import tauri.dev.jsg.tileentity.dialhomedevice.DHDPegasusTile;
-import tauri.dev.jsg.tileentity.stargate.StargateMilkyWayBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateOrlinBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargatePegasusBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
-import tauri.dev.jsg.tileentity.transportrings.TRControllerGoauldTile;
-import tauri.dev.jsg.tileentity.transportrings.TransportRingsGoauldTile;
-import tauri.dev.jsg.tileentity.transportrings.TransportRingsOriTile;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.obj.OBJLoader;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+
+import static tauri.dev.jsg.block.JSGBlocks.BLOCKS;
+import static tauri.dev.jsg.util.JSGIconUtil.setWindowIcon;
 
 public class ProxyClient implements IProxy {
     public void preInit(FMLPreInitializationEvent event) {
+        //setWindowIcon();
+        Display.setTitle(JSG.MOD_NAME + " | " + JSG.MC_VERSION + " | " + JSG.MOD_VERSION.replaceAll(JSG.MC_VERSION  + "-", ""));
         registerRenderers();
         registerFluidRenderers();
 
@@ -75,18 +77,12 @@ public class ProxyClient implements IProxy {
     private void registerRenderers() {
         OBJLoader.INSTANCE.addDomain("jsg");
 
-        ClientRegistry.bindTileEntitySpecialRenderer(StargateMilkyWayBaseTile.class, new StargateMilkyWayRenderer());
-        ClientRegistry.bindTileEntitySpecialRenderer(StargateUniverseBaseTile.class, new StargateUniverseRenderer());
-        ClientRegistry.bindTileEntitySpecialRenderer(StargateOrlinBaseTile.class, new StargateOrlinRenderer());
-        ClientRegistry.bindTileEntitySpecialRenderer(StargatePegasusBaseTile.class, new StargatePegasusRenderer());
-        ClientRegistry.bindTileEntitySpecialRenderer(DHDMilkyWayTile.class, new DHDMilkyWayRenderer());
-        ClientRegistry.bindTileEntitySpecialRenderer(DHDPegasusTile.class, new DHDPegasusRenderer());
-
-        ClientRegistry.bindTileEntitySpecialRenderer(TransportRingsGoauldTile.class, new TransportRingsGoauldRenderer());
-        ClientRegistry.bindTileEntitySpecialRenderer(TransportRingsOriTile.class, new TransportRingsOriRenderer());
-        ClientRegistry.bindTileEntitySpecialRenderer(TRControllerGoauldTile.class, new TRControllerGoauldRenderer());
-
-        ClientRegistry.bindTileEntitySpecialRenderer(BeamerTile.class, new BeamerRenderer());
+        for (JSGBlock block : BLOCKS) {
+            Class<? extends TileEntity> tileClass = block.getTileEntityClass();
+            TileEntitySpecialRenderer renderer = block.getTESR();
+            if (tileClass != null && renderer != null)
+                ClientRegistry.bindTileEntitySpecialRenderer(tileClass, renderer);
+        }
         registerEntityRenderers();
     }
 

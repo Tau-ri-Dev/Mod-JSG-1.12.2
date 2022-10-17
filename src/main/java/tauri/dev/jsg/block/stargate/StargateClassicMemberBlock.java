@@ -1,5 +1,6 @@
 package tauri.dev.jsg.block.stargate;
 
+import net.minecraft.init.Items;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.block.JSGBlocks;
@@ -38,6 +39,8 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
 import java.util.Map;
+
+import static net.minecraft.init.Items.BUCKET;
 
 public abstract class StargateClassicMemberBlock extends StargateAbstractMemberBlock {
 
@@ -186,7 +189,7 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
             IBlockState camoBlockState = memberTile.getCamoState();
             if (!memberTile.isMerged() || heldBlock instanceof StargateClassicMemberBlock || heldBlock instanceof StargateClassicBaseBlock)
                 return false;
-            if (!(heldItem instanceof ItemBlock) && camoBlockState == null) {
+            if (!(heldItem instanceof ItemBlock) && heldItem != Items.WATER_BUCKET && camoBlockState == null) {
                 BlockPos basePos = memberTile.getBasePos();
                 if(basePos == null || world.getTileEntity(basePos) == null || !(world.getTileEntity(basePos) instanceof StargateClassicBaseTile)){
                     StargateAbstractBaseTile gateTile = getMergeHelper().findBaseTile(memberTile.getWorld(), memberTile.getPos(), blockState.getBaseState().getValue(JSGProps.FACING_HORIZONTAL));
@@ -250,7 +253,6 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
                 memberTile.setCamoState(null);
                 camoBlockState = null;
             }
-
             if (heldItem instanceof ItemBlock) {
                 Block block = null;
                 int meta;
@@ -268,11 +270,11 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
                     else if (blockSlab == Blocks.WOODEN_SLAB) block = Blocks.DOUBLE_WOODEN_SLAB;
 
                     else if (blockSlab == Blocks.PURPUR_SLAB) block = Blocks.PURPUR_DOUBLE_SLAB;
+                    if(block == null) return false;
                 } else {
                     if (camoBlockState != null && !player.capabilities.isCreativeMode) {
                         InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(camoBlockState.getBlock(), 1, camoBlockState.getBlock().getMetaFromState(camoBlockState)));
                     }
-
                     block = Block.getBlockFromItem(heldItemStack.getItem());
                     meta = heldItemStack.getMetadata();
                 }

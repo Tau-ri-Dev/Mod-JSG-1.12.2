@@ -1,10 +1,12 @@
 package tauri.dev.jsg.block.transportrings;
 
-import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
-import tauri.dev.jsg.tileentity.transportrings.TransportRingsGoauldTile;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import tauri.dev.jsg.renderer.transportrings.TransportRingsGoauldRenderer;
+import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
+import tauri.dev.jsg.tileentity.transportrings.TransportRingsGoauldTile;
 
 public class TransportRingsGoauldBlock extends TransportRingsAbstractBlock {
 
@@ -22,5 +24,10 @@ public class TransportRingsGoauldBlock extends TransportRingsAbstractBlock {
     @Override
     public Class<? extends TileEntity> getTileEntityClass() {
         return TransportRingsGoauldTile.class;
+    }
+
+    @Override
+    public TileEntitySpecialRenderer<? extends TileEntity> getTESR() {
+        return new TransportRingsGoauldRenderer();
     }
 }

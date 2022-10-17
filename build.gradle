@@ -97,10 +97,7 @@ repositories {
         name = "ic2"
         url = "http://maven.ic2.player.to/"
     }
-
-    maven {
-        url 'https://jitpack.io'
-    }
+    jcenter()
 }
 
 dependencies {
@@ -114,8 +111,7 @@ dependencies {
 
     compile "li.cil.oc:OpenComputers:MC1.12.2-1.7.5.213:api"
     compile 'net.industrial-craft:industrialcraft-2:2.1.470-experimental:api'
-    compile 'net.java.dev.jna:jna:5.4.0'
-    compile 'com.github.Vatuu:discord-rpc-binaries:3.4.0'
+    compile 'io.github.CDAGaming:DiscordIPC:0.6.0'
 }
 
 processResources {

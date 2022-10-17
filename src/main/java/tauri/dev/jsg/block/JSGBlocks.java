@@ -3,7 +3,6 @@ package tauri.dev.jsg.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -28,6 +27,7 @@ import tauri.dev.jsg.block.dialhomedevice.DHDBlock;
 import tauri.dev.jsg.block.dialhomedevice.DHDPegasusBlock;
 import tauri.dev.jsg.block.invisible.InvisibleBlock;
 import tauri.dev.jsg.block.invisible.IrisBlock;
+import tauri.dev.jsg.block.machine.StargateAssemblerBlock;
 import tauri.dev.jsg.block.ore.NaquadahOreBlock;
 import tauri.dev.jsg.block.ore.TitaniumOreBlock;
 import tauri.dev.jsg.block.ore.TriniumOreBlock;
@@ -36,6 +36,7 @@ import tauri.dev.jsg.block.stargate.*;
 import tauri.dev.jsg.block.transportrings.TRControllerGoauldBlock;
 import tauri.dev.jsg.block.transportrings.TransportRingsGoauldBlock;
 import tauri.dev.jsg.block.transportrings.TransportRingsOriBlock;
+import tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode;
 import tauri.dev.jsg.item.linkable.gdo.GDOItem;
 import tauri.dev.jsg.tileentity.transportrings.TRControllerAbstractTile;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
@@ -95,18 +96,16 @@ public class JSGBlocks {
 
     // -----------------------------------------------------------------------------
 
+    public static final StargateAssemblerBlock SG_ASSEMBLER = new StargateAssemblerBlock();
+
+    // -----------------------------------------------------------------------------
+
     /**
-     * Used in {@link TRControllerAbstractTile#updateLinkStatus()}
+     * Used in {@link UniverseDialerMode}, {@link TRControllerAbstractTile} and {@link TransportRingsAbstractTile}
      */
     public static final JSGBlock[] RINGS_BLOCKS = {
             TRANSPORT_RINGS_GOAULD_BLOCK,
             TRANSPORT_RINGS_ORI_BLOCK
-    };
-    /**
-     * Used in {@link TransportRingsAbstractTile#updateLinkStatus()}
-     */
-    public static final JSGBlock[] RINGS_CONTROLLERS = {
-            TR_CONTROLLER_GOAULD_BLOCK
     };
     /**
      * Used in {@link GDOItem#onUpdate}
@@ -132,7 +131,7 @@ public class JSGBlocks {
     };
 
 
-    private static final JSGBlock[] BLOCKS = {
+    public static final JSGBlock[] BLOCKS = {
             ORE_NAQUADAH_BLOCK,
             ORE_NAQUADAH_BLOCK_STONE,
             NAQUADAH_BLOCK,
@@ -174,6 +173,8 @@ public class JSGBlocks {
             INVISIBLE_BLOCK,
             IRIS_BLOCK,
 
+            SG_ASSEMBLER
+
     };
 
     public static boolean isInBlocksArray(Block block, Block[] array) {
@@ -184,6 +185,8 @@ public class JSGBlocks {
         }
         return false;
     }
+
+    public static void load(){}
 
     @SubscribeEvent
     public static void onRegisterBlocks(Register<Block> event) {
@@ -279,7 +282,7 @@ public class JSGBlocks {
     @SubscribeEvent
     public static void onMissingSoundMappings(RegistryEvent.MissingMappings<SoundEvent> event) {
         for (RegistryEvent.MissingMappings.Mapping<SoundEvent> mapping : event.getAllMappings()){
-            if(mapping.key.toString().startsWith("aunis:")){
+            if(mapping.key.toString().startsWith("aunis:") || mapping.key.toString().startsWith("jsg:")){
                 mapping.ignore();
             }
         }
@@ -288,7 +291,7 @@ public class JSGBlocks {
     @SubscribeEvent
     public static void onMissingEntityMappings(RegistryEvent.MissingMappings<EntityEntry> event) {
         for (RegistryEvent.MissingMappings.Mapping<EntityEntry> mapping : event.getAllMappings()){
-            if(mapping.key.toString().startsWith("aunis:")){
+            if(mapping.key.toString().startsWith("aunis:") || mapping.key.toString().startsWith("jsg:")){
                 mapping.ignore();
             }
         }

@@ -1,5 +1,6 @@
 package tauri.dev.jsg;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -9,7 +10,7 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import org.apache.logging.log4j.Logger;
-import tauri.dev.discord.GameActivity;
+import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.command.JSGCommands;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.integration.OCWrapperInterface;
@@ -28,7 +29,7 @@ public class JSG {
     public static final String MOD_ID = "jsg";
     public static final String MOD_NAME = "Just Stargate Mod";
     public static final String MOD_VERSION = "@VERSION@";
-    public static final int DATA_VERSION = 19;
+    public static final int DATA_VERSION = 20;
     public static final String CONFIG_VERSION = "1.0";
     public static final String MC_VERSION = "@MCVERSION@";
     public static final String CLIENT = "tauri.dev.jsg.proxy.ProxyClient";
@@ -94,8 +95,8 @@ public class JSG {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        JSGBlocks.load();
         JSGPreInit.preInit(event);
-        GameActivity.register();
         JSG.proxy.preInit(event);
 
         Runtime.getRuntime().addShutdownHook(new Thread(JSG::shutDown));
@@ -109,7 +110,6 @@ public class JSG {
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        GameActivity.setActivity();
         proxy.postInit(event);
     }
 
@@ -132,10 +132,9 @@ public class JSG {
 
     @EventHandler
     public void serverStopped(FMLServerStoppedEvent event) {
-        JSG.info("Good bye! Thank you for using Just Stargate Mod :)");
     }
 
     public static void shutDown() {
-        GameActivity.clearActivity();
+        JSG.info("Good bye! Thank you for using Just Stargate Mod :)");
     }
 }

@@ -64,9 +64,6 @@ public class StargateDimensionConfig {
 			);
 			return false;
 		}
-
-		//ToDo add debug-only stuff
-		//JSG.info("[from="+from+", to="+to+", isGroupEqual="+reqFrom.isGroupEqual(reqTo)+"]");
 		
 		return reqFrom.isGroupEqual(reqTo);
 	}

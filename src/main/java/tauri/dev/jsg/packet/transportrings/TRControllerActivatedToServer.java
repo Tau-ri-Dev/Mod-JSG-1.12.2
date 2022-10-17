@@ -1,7 +1,9 @@
 package tauri.dev.jsg.packet.transportrings;
 
 import io.netty.buffer.ByteBuf;
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.packet.PositionedPacket;
+import tauri.dev.jsg.stargate.network.SymbolInterface;
 import tauri.dev.jsg.tileentity.transportrings.TRControllerAbstractTile;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
@@ -14,17 +16,23 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+import java.util.Objects;
+
 public class TRControllerActivatedToServer extends PositionedPacket {
 	public TRControllerActivatedToServer() {}
 	
 	public int symbol;
 	public int symbolType;
 	
-	public TRControllerActivatedToServer(BlockPos pos, int symbol, SymbolTypeTransportRingsEnum symbolType) {
+	public TRControllerActivatedToServer(BlockPos pos, int angleIndex, SymbolTypeTransportRingsEnum symbolType) {
 		super(pos);
-		
-		this.symbol = symbol;
+
+		int i = angleIndex - 1;
+
 		this.symbolType = symbolType.id;
+		this.symbol = Objects.requireNonNull(SymbolTypeTransportRingsEnum.valueOf(this.symbolType).getSymbolByAngleIndex(i)).getId();
+		JSG.info("Pressed: " + (i));
+		JSG.info("Added: " + this.symbol);
 	}
 	
 	@Override
@@ -58,7 +66,7 @@ public class TRControllerActivatedToServer extends PositionedPacket {
 					TransportRingsAbstractTile ringsTile = controllerTile.getLinkedRingsTile(world);
 
 					if (ringsTile != null) {
-						TransportResult result = ringsTile.addSymbolToAddressInternal(SymbolTypeTransportRingsEnum.valueOf(message.symbolType).getSymbol(message.symbol-1), false);
+						TransportResult result = ringsTile.addSymbolToAddressInternal(SymbolTypeTransportRingsEnum.valueOf(message.symbolType).getSymbol(message.symbol), false);
 						// moved to tile entity
 						//if(result != TransportResult.ALREADY_ACTIVATED && result != TransportResult.BUSY)
 						//	JSGSoundHelper.playSoundEvent(world, message.pos, SoundEventEnum.RINGS_CONTROLLER_BUTTON);
