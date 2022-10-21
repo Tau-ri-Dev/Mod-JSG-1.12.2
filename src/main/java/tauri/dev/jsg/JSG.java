@@ -30,7 +30,7 @@ public class JSG {
     public static final String MOD_NAME = "Just Stargate Mod";
     public static final String MOD_VERSION = "@VERSION@";
     public static final int DATA_VERSION = 20;
-    public static final String CONFIG_VERSION = "1.0";
+    public static final String CONFIG_VERSION = "2.0";
     public static final String MC_VERSION = "@MCVERSION@";
     public static final String CLIENT = "tauri.dev.jsg.proxy.ProxyClient";
     public static final String SERVER = "tauri.dev.jsg.proxy.ProxyServer";

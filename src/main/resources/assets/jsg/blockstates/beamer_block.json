@@ -20,6 +20,7 @@
 			"power": { "textures": { "front": "jsg:blocks/beamer_front_power" } },
 			"fluid": { "textures": { "front": "jsg:blocks/beamer_front_fluid" } },
 			"items": { "textures": { "front": "jsg:blocks/beamer_front_items" } },
+			"laser": { "textures": { "front": "jsg:blocks/beamer_front_laser" } },
 			"none": { "textures": { "front": "jsg:blocks/beamer_front_none" } }
 		}
 	}

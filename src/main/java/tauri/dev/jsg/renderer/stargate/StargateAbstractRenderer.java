@@ -83,7 +83,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                     renderKawoosh(rendererState, partialTicks);
                     GlStateManager.popMatrix();
                 }
-                else{
+                else if(JSGConfig.avConfig.renderEHisTheyNot){
                     GlStateManager.pushMatrix();
                     preRenderKawoosh(rendererState, partialTicks);
                     GlStateManager.popMatrix();
@@ -91,7 +91,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
                 renderIris(partialTicks, getWorld(), rendererState, false);
 
-            } else {
+            } else if(JSGConfig.avConfig.renderStargateNotPlaced){
                 GlStateManager.enableBlend();
                 GlStateManager.blendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
                 GL14.glBlendColor(0, 0, 0, 0.7f);

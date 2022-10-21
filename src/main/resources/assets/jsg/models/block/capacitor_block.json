@@ -2,8 +2,8 @@
 	"parent": "block/cube_all",
 	"textures": {
 		"fluid": "jsg:fluids/silicon_molten_red_still",
-		"normal": "jsg:blocks/naquadah_block",
-		"particle": "jsg:blocks/naquadah_block"
+		"normal": "jsg:blocks/capacitor_block_sides",
+		"particle": "jsg:blocks/capacitor_block_sides"
 	},
     "elements": [
         {   "from": [ 0, 0, 0 ],

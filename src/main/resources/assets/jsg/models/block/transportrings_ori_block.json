@@ -1,10 +1,10 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"normal": "jsg:blocks/trinium_block",
-		"up": "jsg:blocks/transportrings_ori_block_top",
-		"down": "jsg:blocks/transportrings_ori_block_bottom",
-		"particle": "jsg:blocks/trinium_block"
+		"normal": "jsg:blocks/transportrings_ori_side",
+		"up": "jsg:blocks/transportrings_ori_top",
+		"down": "jsg:blocks/transportrings_ori_bottom",
+		"particle": "jsg:blocks/transportrings_ori_side"
 	},
 	"elements": [
 		{   "from": [ 0, 0, 0 ],

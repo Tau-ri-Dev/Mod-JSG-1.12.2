@@ -575,6 +575,7 @@ public class JSGConfig {
         public int itemTransfer = 4;
 
         @Name("Max gate-beamer distance")
+        @RangeInt(min = 3, max = 50)
         public int reach = 10;
 
         @Name("Should the beam be responsive to fluid color")
@@ -589,6 +590,12 @@ public class JSGConfig {
         @Name("JSG volume")
         @RangeDouble(min = 0, max = 1)
         public float volume = 1;
+
+        @Name("Render not placed blocks of s stargate")
+        public boolean renderStargateNotPlaced = true;
+
+        @Name("Render EHs even if they are not rendering")
+        public boolean renderEHisTheyNot = true;
     }
 
     public static class WorldOreGenerator {
@@ -781,7 +788,11 @@ public class JSGConfig {
 
     public static class DevConfig {
         @Name("x")
-        public float x = 1.4f;
+        public float x = 0f;
+        @Name("y")
+        public float y = 0f;
+        @Name("z")
+        public float z = 0f;
     }
 
     public static void resetCache() {

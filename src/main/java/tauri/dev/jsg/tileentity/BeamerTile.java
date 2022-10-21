@@ -9,9 +9,13 @@ import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.sound.JSGSoundHelper;
+import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.util.JSGAxisAlignedBB;
+import tauri.dev.jsg.util.LinkingHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.beamer.BeamerModeEnum;
 import tauri.dev.jsg.beamer.BeamerRendererAction;
@@ -76,6 +80,8 @@ import tauri.dev.jsg.state.StateTypeEnum;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static tauri.dev.jsg.block.JSGBlocks.BEAMER_BLOCK;
+
 @Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers")
 public class BeamerTile extends TileEntity implements ITickable, IUpgradable, StateProviderInterface, ScheduledTaskExecutorInterface, Environment {
 	
@@ -120,7 +126,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 		this.renderBoxOffsetted = this.renderBox.offset(pos);
 	}
 	
-	private static final BlockMatcher BEAMER_MATCHER = BlockMatcher.forBlock(JSGBlocks.BEAMER_BLOCK);
+	private static final BlockMatcher BEAMER_MATCHER = BlockMatcher.forBlock(BEAMER_BLOCK);
 	
 	private BeamerStatusEnum updateBeamerStatus() {
 		if (beamerMode == BeamerModeEnum.NONE)
@@ -257,7 +263,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 				comparatorOutput = updateComparatorOutput();
 				
 				if (lastComp != comparatorOutput) {
-					world.updateComparatorOutputLevel(pos, JSGBlocks.BEAMER_BLOCK);
+					world.updateComparatorOutputLevel(pos, BEAMER_BLOCK);
 				}
 				
 				if (isLinked()) {
@@ -498,6 +504,17 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 			}
 			
 			if (lastBeamerStatus != beamerStatus) {
+				if(isLinked() && targetBeamerWorld != null && targetBeamerPos != null && !(getLinkedGateTile().getStargateState().idle()) && !(getLinkedGateTile().getStargateState().incoming())){
+					BeamerTile targetTile = (BeamerTile) targetBeamerWorld.getTileEntity(targetBeamerPos);
+					if(targetTile != null){
+						StargateAbstractBaseTile targetGate = targetTile.getLinkedGateTile();
+						if(targetGate != null){
+							updateTargetBeamerData(targetGate.getNetwork().getStargate(targetGate.getStargateAddress(SymbolTypeEnum.MILKYWAY)));
+						}
+						else targetBeamerPos = null;
+					}
+					else targetBeamerPos = null;
+				}
 				syncToClient();
 				
 				if (beamerStatus == BeamerStatusEnum.OK) {
@@ -547,20 +564,30 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 	private void sendRenderingAction(BeamerRendererAction action) {
 		sendState(StateTypeEnum.RENDERER_ACTION, new BeamerRendererActionState(action));
 	}
-	
-	public void gateEngaged(StargatePos targetGatePos) {
+
+	public void updateTargetBeamerData(StargatePos targetGatePos){
 		BlockPos remoteBeamerPos = findTargetBeamerPos(targetGatePos);
-		
+
 		if (remoteBeamerPos != null) {
 			// Beamer found
 			targetBeamerWorld = targetGatePos.getWorld();
 			targetBeamerPos = remoteBeamerPos;
-			
-			// Link remote
+
 			BeamerTile remoteBeamerTile = (BeamerTile) targetBeamerWorld.getTileEntity(targetBeamerPos);
+			if(remoteBeamerTile == null) return;
+
+			//targetBeamerDistance = remoteBeamerTile.beamLengthServer;
+
+			// Link remote
 			remoteBeamerTile.targetBeamerWorld = this.world;
 			remoteBeamerTile.targetBeamerPos = this.pos;
+			//remoteBeamerTile.targetBeamerDistance = this.beamLengthServer;
 		}
+	}
+	
+	public void gateEngaged(StargatePos targetGatePos) {
+		updateTargetBeamerData(targetGatePos);
+		syncToClient();
 	}
 	
 	public void gateClosed() {
@@ -577,10 +604,41 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 		if(targetGatePos == null) return null;
 		World targetWorld = targetGatePos.getWorld();
 		EnumFacing targetFacing = targetWorld.getBlockState(targetGatePos.gatePos).getValue(JSGProps.FACING_HORIZONTAL);
-		Rotation rotation = FacingToRotation.get(targetFacing);
+		//Rotation rotation = FacingToRotation.get(targetFacing);
 		
-		BlockPos origVec = baseVect.rotate(rotation);
-		BlockPos startingVec = null;
+		//BlockPos origVec = baseVect.rotate(rotation);
+		BlockPos targetPos;
+		ArrayList<BlockPos> blacklist = new ArrayList<>();
+		int loop = 0;
+		do{
+			loop++;
+			targetPos = getNearest(world, targetGatePos.gatePos, blacklist);
+			if(targetPos == null)
+				break;
+
+
+			BeamerTile targetBeamer = (BeamerTile) world.getTileEntity(targetPos);
+
+			if (targetBeamer == null || !targetBeamer.isLinked()){
+				blacklist.add(targetPos);
+				continue;
+			}
+
+			if(targetBeamer.beamerMode.id != this.beamerMode.id){
+				blacklist.add(targetPos);
+				continue;
+			}
+
+			if(!(targetGatePos.gatePos.equals(targetBeamer.basePos))){
+				blacklist.add(targetPos);
+				continue;
+			}
+
+			return targetPos.toImmutable();
+		}while(loop < 100);
+		/*
+
+
 		
 		switch (targetFacing.getAxis()) {
 			case X:
@@ -614,8 +672,13 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 				// break;
 			}
 		}
-		
+		*/
 		return null;
+	}
+
+	public BlockPos getNearest(World world, BlockPos pos, ArrayList<BlockPos> blacklist){
+		Block[] blocks = {BEAMER_BLOCK};
+		return LinkingHelper.findClosestPos(world, pos, new BlockPos(JSGConfig.beamerConfig.reach, JSGConfig.beamerConfig.reach, JSGConfig.beamerConfig.reach), blocks, blacklist);
 	}
 	
 	public void clearTargetBeamerPos() {
@@ -633,6 +696,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 	private BeamerStatusEnum beamerStatus = BeamerStatusEnum.OBSTRUCTED;
 	private World targetBeamerWorld = null;
 	private BlockPos targetBeamerPos = null;
+	private int targetBeamerDistance = 0;
 	private int comparatorOutput;
 	private RedstoneModeEnum redstoneMode = RedstoneModeEnum.AUTO;
 	private int start = 10;
@@ -1010,8 +1074,10 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 	
 	@Nullable
 	public Fluid lastFluidTransferred;
-	
+
 	public int beamLengthClient;
+	public int beamOffsetFromTargetXClient;
+	public int beamOffsetFromTargetYClient;
 	public float beamRadiusClient;
 	private boolean beamRadiusWiden;
 	private boolean beamRadiusShrink;
@@ -1038,13 +1104,39 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 				
 			case RENDERER_STATE:
 				int distance = 0;
+				int d1 = 0;
+				int d2 = 0;
 				
 				if (baseVect != null) {
-					distance = baseVect.getZ();
-					if (distance < 0) distance = -distance;
+					d1 = baseVect.getZ();
+					if (d1 < 0) d1 = -d1;
+
+					if(targetBeamerWorld != null && targetBeamerPos != null){
+						BeamerTile tile = (BeamerTile) targetBeamerWorld.getTileEntity(targetBeamerPos);
+						if(tile != null && tile.isLinked() && tile.basePos != null && tile.baseVect != null){
+							d2 = tile.baseVect.getZ();
+							if (d2 < 0) d2 = -d2;
+
+							EnumFacing.Axis ax1 = targetBeamerWorld.getBlockState(tile.basePos).getValue(JSGProps.FACING_HORIZONTAL).getAxis();
+							EnumFacing.Axis ax2 = world.getBlockState(basePos).getValue(JSGProps.FACING_HORIZONTAL).getAxis();
+
+							int x1 = (ax1 == EnumFacing.Axis.Z ? (tile.basePos.getX() - tile.getPos().getX()) : (tile.basePos.getZ() - tile.getPos().getZ()));
+							int x2 = (ax2 == EnumFacing.Axis.Z ? (basePos.getX() - getPos().getX()) : (basePos.getZ() - getPos().getZ()));
+							beamOffsetFromTargetXClient = x1 - x2;
+							JSG.info("X: " + beamOffsetFromTargetXClient);
+
+							int y1 = (tile.basePos.getY() - tile.getPos().getY());
+							int y2 = (basePos.getY() - getPos().getY());
+							beamOffsetFromTargetYClient = y1 - y2;
+							JSG.info("Y: " + beamOffsetFromTargetYClient);
+						}
+					}
+
+					distance = d1 + d2;
+
 				}
 								
-				return new BeamerRendererState(beamerMode, beamerRole, beamerStatus, isObstructed, distance);
+				return new BeamerRendererState(beamerMode, beamerRole, beamerStatus, isObstructed, distance, beamOffsetFromTargetXClient, beamOffsetFromTargetYClient);
 		
 			case GUI_UPDATE:
 				return new BeamerContainerGuiUpdate(energyStorage.getEnergyStored(), energyTransferredLastTick, fluidHandler.getFluid(), beamerRole, redstoneMode, start, stop, inactivity);
@@ -1093,6 +1185,8 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 				beamerStatus = rendererState.beamerStatus;
 				isObstructed = rendererState.isObstructed;
 				beamLengthClient = rendererState.beamLength;
+				beamOffsetFromTargetXClient = rendererState.beamOffsetFromTargetXClient;
+				beamOffsetFromTargetYClient = rendererState.beamOffsetFromTargetYClient;
 				world.markBlockRangeForRenderUpdate(pos, pos);
 				break;
 				

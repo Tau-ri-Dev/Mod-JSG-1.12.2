@@ -1,12 +1,12 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"particle": "jsg:blocks/naquadah_block_dark",
+		"particle": "jsg:blocks/stargate_universe_sides",
 		"north": "jsg:blocks/stargate_universe_ring_front",
-		"south": "jsg:blocks/naquadah_block_dark",
-		"west": "jsg:blocks/naquadah_block_dark",
-		"east": "jsg:blocks/naquadah_block_dark",
-		"up": "jsg:blocks/naquadah_block_dark",
-		"down": "jsg:blocks/naquadah_block_dark"
+		"south": "jsg:blocks/stargate_universe_sides",
+		"west": "jsg:blocks/stargate_universe_sides",
+		"east": "jsg:blocks/stargate_universe_sides",
+		"up": "jsg:blocks/stargate_universe_sides",
+		"down": "jsg:blocks/stargate_universe_sides"
 	}
 }

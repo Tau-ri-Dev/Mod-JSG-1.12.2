@@ -1,12 +1,12 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"particle": "jsg:blocks/naquadah_block",
+		"particle": "jsg:blocks/stargate_milkyway_sides",
 		"north": "jsg:blocks/stargate_milkyway_chevron_front",
-		"south": "jsg:blocks/naquadah_block",
-		"west": "jsg:blocks/naquadah_block",
-		"east": "jsg:blocks/naquadah_block",
-		"up": "jsg:blocks/naquadah_block",
-		"down": "jsg:blocks/naquadah_block"
+		"south": "jsg:blocks/stargate_milkyway_sides",
+		"west": "jsg:blocks/stargate_milkyway_sides",
+		"east": "jsg:blocks/stargate_milkyway_sides",
+		"up": "jsg:blocks/stargate_milkyway_sides",
+		"down": "jsg:blocks/stargate_milkyway_sides"
 	}
 }

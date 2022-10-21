@@ -58,7 +58,8 @@ public class JSGItems {
 
     // transportrings
     public static final Item CRYSTAL_GLYPH_GOAULD = ItemHelper.createGenericItem("crystal_glyph_goauld", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CRYSTAL_GLYPH_ORI = ItemHelper.createGenericItem("crystal_glyph_ori", null); // todo(Mine): after ori panel is done, set this to items tab
+    public static final Item CRYSTAL_GLYPH_ORI = ItemHelper.createGenericItem("crystal_glyph_ori", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item CRYSTAL_GLYPH_ANCIENT = ItemHelper.createGenericItem("crystal_glyph_ancient", JSGCreativeTabsHandler.jsgItemsCreativeTab);
 
     /**
      * Diffrent Naquadah(main Stargate building material) stages of purity
@@ -107,6 +108,7 @@ public class JSGItems {
     public static final Item BEAMER_CRYSTAL_POWER = ItemHelper.createGenericItem("beamer_crystal_power", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item BEAMER_CRYSTAL_FLUID = ItemHelper.createGenericItem("beamer_crystal_fluid", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item BEAMER_CRYSTAL_ITEMS = ItemHelper.createGenericItem("beamer_crystal_items", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item BEAMER_CRYSTAL_LASER = ItemHelper.createGenericItem("beamer_crystal_laser", JSGCreativeTabsHandler.jsgItemsCreativeTab);
 
     /**
      * TOOLS
@@ -135,6 +137,7 @@ public class JSGItems {
             CRYSTAL_GLYPH_UNIVERSE,
             CRYSTAL_GLYPH_GOAULD,
             CRYSTAL_GLYPH_ORI,
+            CRYSTAL_GLYPH_ANCIENT,
 
             NAQUADAH_SHARD,
             NAQUADAH_ALLOY,
@@ -154,6 +157,7 @@ public class JSGItems {
             BEAMER_CRYSTAL_POWER,
             BEAMER_CRYSTAL_FLUID,
             BEAMER_CRYSTAL_ITEMS,
+            BEAMER_CRYSTAL_LASER,
 
             CIRCUIT_CONTROL_BASE,
             CIRCUIT_CONTROL_CRYSTAL,
