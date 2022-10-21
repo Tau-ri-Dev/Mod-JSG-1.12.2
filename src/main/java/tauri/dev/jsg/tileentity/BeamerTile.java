@@ -82,6 +82,8 @@ import java.util.*;
 
 import static tauri.dev.jsg.block.JSGBlocks.BEAMER_BLOCK;
 
+// Todo(Mine): Rework this whole class to make beamers more stable and cleaner
+
 @Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers")
 public class BeamerTile extends TileEntity implements ITickable, IUpgradable, StateProviderInterface, ScheduledTaskExecutorInterface, Environment {
 	

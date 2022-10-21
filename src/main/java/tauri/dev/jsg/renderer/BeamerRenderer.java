@@ -58,7 +58,7 @@ public class BeamerRenderer extends TileEntitySpecialRenderer<BeamerTile> {
             GlStateManager.rotate(JSGConfig.devConfig.y, 0, 1, 0);
             GlStateManager.rotate(JSGConfig.devConfig.z, 0, 0, 1);*/
 
-            GlStateManager.rotate((float) angY, 0, 1, 0);
+            GlStateManager.rotate(((float) angY) * -1, 0, 1, 0);
             GlStateManager.rotate(-90 + (((float) angX) * -1), 1, 0, 0);
 
             if(tick % 40 == 0){
