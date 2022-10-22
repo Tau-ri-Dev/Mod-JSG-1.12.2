@@ -15,16 +15,27 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.block.JSGAbstractCustomItemBlock;
 import tauri.dev.jsg.block.JSGBlock;
+import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.stargate.power.StargateItemEnergyStorage;
+import tauri.dev.jsg.tileentity.machine.AbstractAssemblerTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
+import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
+import tauri.dev.jsg.util.ItemHandlerHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
 
-public abstract class JSGMachineBlock extends JSGBlock {
+public abstract class JSGMachineBlock extends JSGAbstractCustomItemBlock {
     public JSGMachineBlock(String blockName) {
         super(Material.IRON);
 
@@ -80,37 +91,48 @@ public abstract class JSGMachineBlock extends JSGBlock {
     protected abstract void showGui(EntityPlayer player, EnumHand hand, World world, BlockPos pos);
 
     @Override
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        StargateAbstractEnergyStorage capacitorEnergyStorage = (StargateAbstractEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
+
+        ItemStack stack = new ItemStack(this);
+        ((StargateItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null)).setEnergyStored(capacitorEnergyStorage.getEnergyStored());
+
+        return Arrays.asList(stack);
+    }
+
+    @Override
     public void breakBlock(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
         if (!world.isRemote) {
-            /* tile = world.getTileEntity(pos);
-            tile.onBlockBroken();*/
+            AbstractAssemblerTile tile = (AbstractAssemblerTile) world.getTileEntity(pos);
+            if (tile != null) {
+                ItemHandlerHelper.dropInventoryItems(world, pos, tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null));
+            }
         }
+        super.breakBlock(world, pos, state);
     }
 
     @Override
-    public boolean removedByPlayer(@Nonnull IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (willHarvest) return true;
-        return super.removedByPlayer(state, world, pos, player, false);
+        return super.removedByPlayer(state, world, pos, player, willHarvest);
     }
 
     @Override
-    public void harvestBlock(@Nonnull World world, @Nonnull EntityPlayer player, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nullable TileEntity te, @Nonnull ItemStack tool) {
+    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack tool) {
         super.harvestBlock(world, player, pos, state, te, tool);
         world.setBlockToAir(pos);
     }
 
     @Override
     public void onBlockPlacedBy(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, EntityLivingBase placer, @Nonnull ItemStack stack) {
-        //StargateClassicBaseTile gateTile = (StargateClassicBaseTile) world.getTileEntity(pos);
         EnumFacing facing = placer.getHorizontalFacing().getOpposite();
+        state = state.withProperty(JSGProps.FACING_HORIZONTAL, facing);
+        world.setBlockState(pos, state);
 
-        if (!world.isRemote) {
-            state = state.withProperty(JSGProps.FACING_HORIZONTAL, facing);
+        IEnergyStorage energyStorage = stack.getCapability(CapabilityEnergy.ENERGY, null);
 
-            world.setBlockState(pos, state);
-
-            // gateTile.updateFacing(facing, true);
-        }
+        StargateAbstractEnergyStorage tileEnergyStorage = (StargateAbstractEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
+        tileEnergyStorage.setEnergyStored(energyStorage.getEnergyStored());
     }
 
 

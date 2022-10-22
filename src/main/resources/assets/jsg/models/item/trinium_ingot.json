@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "jsg:items/trinium_ingot"
+        "layer0": "jsg:items/ore/trinium_ingot"
     }
 }

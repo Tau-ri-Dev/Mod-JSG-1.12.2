@@ -1,5 +1,13 @@
 package tauri.dev.jsg.item;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.RegistryEvent.Register;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerItem;
 import tauri.dev.jsg.item.linkable.gdo.GDOItem;
@@ -10,14 +18,10 @@ import tauri.dev.jsg.item.stargate.PageMysteriousItem;
 import tauri.dev.jsg.item.stargate.UpgradeIris;
 import tauri.dev.jsg.item.tools.staff.StaffItem;
 import tauri.dev.jsg.item.tools.zat.ZatItem;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.event.RegistryEvent.Register;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
+
+import javax.annotation.Nullable;
+import java.util.Objects;
 
 @EventBusSubscriber
 public class JSGItems {
@@ -64,15 +68,28 @@ public class JSGItems {
     /**
      * Diffrent Naquadah(main Stargate building material) stages of purity
      */
-    public static final Item NAQUADAH_SHARD = ItemHelper.createGenericItem("naquadah_shard", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item NAQUADAH_ORE_IMPURE = ItemHelper.createGenericItem("naquadah_impure", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item NAQUADAH_ORE_PURIFIED = ItemHelper.createGenericItem("naquadah_purified", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item NAQUADAH_ORE_RAW = ItemHelper.createGenericItem("naquadah_raw", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item NAQUADAH_ALLOY_RAW = ItemHelper.createGenericItem("naquadah_alloy_raw", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item NAQUADAH_ALLOY = ItemHelper.createGenericItem("naquadah_alloy", JSGCreativeTabsHandler.jsgItemsCreativeTab);
 
     /**
      * Titanium & Trinium
      */
+    public static final Item TITANIUM_ORE_IMPURE = ItemHelper.createGenericItem("titanium_impure", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item TITANIUM_ORE_PURIFIED = ItemHelper.createGenericItem("titanium_purified", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item TITANIUM_ORE_RAW = ItemHelper.createGenericItem("titanium_raw", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item TITANIUM_INGOT = ItemHelper.createGenericItem("titanium_ingot", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item TITANIUM_DUST = ItemHelper.createGenericItem("titanium_dust", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item TITANIUM_NUGGET = ItemHelper.createGenericItem("titanium_nugget", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+
+    public static final Item TRINIUM_ORE_IMPURE = ItemHelper.createGenericItem("trinium_impure", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item TRINIUM_ORE_PURIFIED = ItemHelper.createGenericItem("trinium_purified", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item TRINIUM_ORE_RAW = ItemHelper.createGenericItem("trinium_raw", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item TRINIUM_INGOT = ItemHelper.createGenericItem("trinium_ingot", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item TRINIUM_DUST = ItemHelper.createGenericItem("trinium_dust", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item TRINIUM_NUGGET = ItemHelper.createGenericItem("trinium_nugget", JSGCreativeTabsHandler.jsgItemsCreativeTab);
 
     /**
      * Crafting items
@@ -89,9 +106,6 @@ public class JSGItems {
     public static final Item CIRCUIT_CONTROL_CRYSTAL = ItemHelper.createGenericItem("circuit_control_crystal", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item CIRCUIT_CONTROL_NAQUADAH = ItemHelper.createGenericItem("circuit_control_naquadah", JSGCreativeTabsHandler.jsgItemsCreativeTab);
 
-    public static final Item STARGATE_RING_FRAGMENT = ItemHelper.createGenericItem("stargate_ring_fragment", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item UNIVERSE_RING_FRAGMENT = ItemHelper.createGenericItem("universe_ring_fragment", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item TR_RING_FRAGMENT = ItemHelper.createGenericItem("transportrings_ring_fragment", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item HOLDER_CRYSTAL = ItemHelper.createGenericItem("holder_crystal", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item HOLDER_CRYSTAL_PEGASUS = ItemHelper.createGenericItem("holder_crystal_pegasus", JSGCreativeTabsHandler.jsgItemsCreativeTab);
 
@@ -116,6 +130,68 @@ public class JSGItems {
     public static final ZatItem ZAT = new ZatItem();
     public static final StaffItem STAFF = new StaffItem();
 
+    public static final Item JSG_HAMMER = ItemHelper.createDurabilityItem("hammer", JSGCreativeTabsHandler.jsgToolsCreativeTab, 500);
+    public static final Item JSG_SCREWDRIVER = ItemHelper.createDurabilityItem("screwdriver", JSGCreativeTabsHandler.jsgToolsCreativeTab, 500);
+    public static final Item JSG_WRENCH = ItemHelper.createDurabilityItem("wrench", JSGCreativeTabsHandler.jsgToolsCreativeTab, 500);
+
+    /**
+     * FRAGMENTS
+     */
+    public static final Item FRAGMENT_MILKYWAY = ItemHelper.createGenericItem("fragment_stargate_milkyway", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item FRAGMENT_PEGASUS = ItemHelper.createGenericItem("fragment_stargate_pegasus", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item FRAGMENT_UNIVERSE = ItemHelper.createGenericItem("fragment_stargate_universe", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+
+    public static final Item FRAGMENT_TR_GOAULD = ItemHelper.createGenericItem("fragment_transportrings_goauld", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item FRAGMENT_TR_ORI = ItemHelper.createGenericItem("fragment_transportrings_ori", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item FRAGMENT_TR_ANCIENT = ItemHelper.createGenericItem("fragment_transportrings_ancient", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+
+    /**
+     * GEARS
+     */
+    public static final Item GEAR_TITANIUM = ItemHelper.createGenericItem("gear_titanium", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item GEAR_TRINIUM = ItemHelper.createGenericItem("gear_trinium", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item GEAR_NAQUADAH_RAW = ItemHelper.createGenericItem("gear_naquadah_raw", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item GEAR_NAQUADAH = ItemHelper.createGenericItem("gear_naquadah", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+
+    /**
+     * PLATES
+     */
+    public static final Item PLATE_TITANIUM = ItemHelper.createGenericItem("plate_titanium", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item PLATE_TRINIUM = ItemHelper.createGenericItem("plate_trinium", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item PLATE_NAQUADAH_RAW = ItemHelper.createGenericItem("plate_naquadah_raw", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item PLATE_NAQUADAH = ItemHelper.createGenericItem("plate_naquadah", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+
+    /**
+     * SCHEMATICS
+     */
+    public static final Item SCHEMATIC_MILKYWAY = ItemHelper.createGenericItem("schematic_milkyway", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item SCHEMATIC_PEGASUS = ItemHelper.createGenericItem("schematic_pegasus", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item SCHEMATIC_UNIVERSE = ItemHelper.createGenericItem("schematic_universe", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+
+    public static final Item SCHEMATIC_TR_GOAULD = ItemHelper.createGenericItem("schematic_goauld", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item SCHEMATIC_TR_ORI = ItemHelper.createGenericItem("schematic_ori", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item SCHEMATIC_TR_ANCIENT = ItemHelper.createGenericItem("schematic_ancient", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+
+    public static final Item[] SG_SCHEMATICS_ITEMS = {
+            SCHEMATIC_MILKYWAY,
+            SCHEMATIC_PEGASUS,
+            SCHEMATIC_UNIVERSE
+    };
+    public static final Item[] TR_SCHEMATICS_ITEMS = {
+            SCHEMATIC_TR_GOAULD,
+            SCHEMATIC_TR_ORI,
+            SCHEMATIC_TR_ANCIENT
+    };
+
+    public static boolean isInItemsArray(Item block, Item[] array) {
+        for (Item b : array) {
+            if (block == b) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static final Item[] ITEMS = {
             CRYSTAL_CONTROL_MILKYWAY_DHD,
             CRYSTAL_CONTROL_PEGASUS_DHD,
@@ -139,12 +215,25 @@ public class JSGItems {
             CRYSTAL_GLYPH_ORI,
             CRYSTAL_GLYPH_ANCIENT,
 
-            NAQUADAH_SHARD,
-            NAQUADAH_ALLOY,
+            NAQUADAH_ORE_IMPURE,
+            NAQUADAH_ORE_PURIFIED,
+            NAQUADAH_ORE_RAW,
             NAQUADAH_ALLOY_RAW,
+            NAQUADAH_ALLOY,
 
+            TRINIUM_ORE_IMPURE,
+            TRINIUM_ORE_PURIFIED,
+            TRINIUM_ORE_RAW,
             TRINIUM_INGOT,
+            TRINIUM_DUST,
+            TRINIUM_NUGGET,
+
+            TITANIUM_ORE_IMPURE,
+            TITANIUM_ORE_PURIFIED,
+            TITANIUM_ORE_RAW,
             TITANIUM_INGOT,
+            TITANIUM_DUST,
+            TITANIUM_NUGGET,
 
             CRYSTAL_SEED,
             CRYSTAL_BLUE,
@@ -163,9 +252,13 @@ public class JSGItems {
             CIRCUIT_CONTROL_CRYSTAL,
             CIRCUIT_CONTROL_NAQUADAH,
 
-            STARGATE_RING_FRAGMENT,
-            UNIVERSE_RING_FRAGMENT,
-            TR_RING_FRAGMENT,
+            FRAGMENT_MILKYWAY,
+            FRAGMENT_PEGASUS,
+            FRAGMENT_UNIVERSE,
+
+            FRAGMENT_TR_GOAULD,
+            FRAGMENT_TR_ORI,
+            FRAGMENT_TR_ANCIENT,
 
             HOLDER_CRYSTAL,
             HOLDER_CRYSTAL_PEGASUS,
@@ -181,6 +274,26 @@ public class JSGItems {
 
             ZAT,
             STAFF,
+            JSG_HAMMER,
+            JSG_SCREWDRIVER,
+            JSG_WRENCH,
+
+            GEAR_TITANIUM,
+            GEAR_TRINIUM,
+            GEAR_NAQUADAH_RAW,
+            GEAR_NAQUADAH,
+
+            PLATE_TITANIUM,
+            PLATE_TRINIUM,
+            PLATE_NAQUADAH_RAW,
+            PLATE_NAQUADAH,
+
+            SCHEMATIC_MILKYWAY,
+            SCHEMATIC_PEGASUS,
+            SCHEMATIC_UNIVERSE,
+            SCHEMATIC_TR_GOAULD,
+            SCHEMATIC_TR_ORI,
+            SCHEMATIC_TR_ANCIENT
     };
 
     public static Item[] getItems() {
@@ -203,7 +316,32 @@ public class JSGItems {
             if (item instanceof CustomModelItemInterface)
                 ((CustomModelItemInterface) item).setCustomModelLocation();
             else
-                ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+                ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Objects.requireNonNull(item.getRegistryName()), "inventory"));
         }
+    }
+
+    @Nullable
+    public static Item remapItem(String oldName) {
+        switch (oldName) {
+            case "jsg:stargate_ring_fragment":
+            case "aunis:stargate_ring_fragment":
+                return FRAGMENT_MILKYWAY;
+
+            case "jsg:universe_ring_fragment":
+            case "aunis:universe_ring_fragment":
+                return FRAGMENT_UNIVERSE;
+
+            case "jsg:transportrings_ring_fragment":
+            case "aunis:transportrings_ring_fragment":
+                return FRAGMENT_TR_GOAULD;
+
+            case "jsg:naquadah_shard":
+            case "aunis:naquadah_shard":
+                return NAQUADAH_ORE_IMPURE;
+
+            default:
+                break;
+        }
+        return null;
     }
 }

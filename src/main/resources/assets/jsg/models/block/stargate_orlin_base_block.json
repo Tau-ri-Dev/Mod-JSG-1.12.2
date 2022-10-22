@@ -1,12 +1,12 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"particle": "jsg:blocks/stargate_orlin_sides",
-		"north": "jsg:blocks/stargate_orlin_base_front",
-		"south": "jsg:blocks/stargate_orlin_top",
-		"west": "jsg:blocks/stargate_orlin_sides",
-		"east": "jsg:blocks/stargate_orlin_sides",
-		"up": "jsg:blocks/stargate_orlin_top",
-		"down": "jsg:blocks/stargate_orlin_top"
+		"particle": "jsg:blocks/stargate/stargate_orlin_sides",
+		"north": "jsg:blocks/stargate/stargate_orlin_base_front",
+		"south": "jsg:blocks/stargate/stargate_orlin_top",
+		"west": "jsg:blocks/stargate/stargate_orlin_sides",
+		"east": "jsg:blocks/stargate/stargate_orlin_sides",
+		"up": "jsg:blocks/stargate/stargate_orlin_top",
+		"down": "jsg:blocks/stargate/stargate_orlin_top"
 	}
 }

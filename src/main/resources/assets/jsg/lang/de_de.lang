@@ -25,11 +25,30 @@ item.jsg.shield_emitter.name=Schild Emitter
 item.jsg.upgrade_shield.name=Schild Upgrade
 
 # ingots
-item.jsg.trinium_ingot.name=Triniumbarren
-item.jsg.titanium_ingot.name=Titaniumbarren
-item.jsg.naquadah_shard.name=Naquadah Splitter
-item.jsg.naquadah_alloy.name=Raffinierter Naquadahlegierungsbarren
-item.jsg.naquadah_alloy_raw.name=Naquadahlegierungsbarren
+item.jsg.trinium_impure.name=Impure Trinium Ore
+item.jsg.trinium_purified.name=Purified Trinium Ore
+item.jsg.trinium_raw.name=Raw Trinium Ore
+item.jsg.trinium_ingot.name=Trinium Ingot
+item.jsg.trinium_dust.name=Trinium Dust
+item.jsg.trinium_nugget.name=Trinium Nugget
+
+item.jsg.titanium_impure.name=Impure Titanium Ore
+item.jsg.titanium_purified.name=Purified Titanium Ore
+item.jsg.titanium_raw.name=Raw Titanium Ore
+item.jsg.titanium_ingot.name=Titanium Ingot
+item.jsg.titanium_dust.name=Titanium Dust
+item.jsg.titanium_nugget.name=Titanium Nugget
+
+item.jsg.naquadah_impure.name=Impure Naquadah Ore
+item.jsg.naquadah_purified.name=Purified Naquadah Ore
+item.jsg.naquadah_raw.name=Raw Naquadah Ore
+item.jsg.naquadah_alloy_raw.name=Raw Naquadah Alloy Ingot
+item.jsg.naquadah_raw_dust.name=Raw Naquadah Dust
+item.jsg.naquadah_raw_nugget.name=Raw Naquadah Nugget
+
+item.jsg.naquadah_alloy.name=Naquadah Alloy Ingot
+item.jsg.naquadah_dust.name=Naquadah Dust
+item.jsg.naquadah_nugget.name=Naquadah Nugget
 
 # crystals
 item.jsg.crystal_fragment.name=Kristallkeim
@@ -86,6 +105,7 @@ item.jsg.page_mysterious.tooltip=Wer weiß wohin es führt?
 item.jsg.beamer_crystal_power.name=Transporter Energiekristall
 item.jsg.beamer_crystal_fluid.name=Transporter Flüssigkeitskristall
 item.jsg.beamer_crystal_items.name=Transporter Item-Kristall
+item.jsg.beamer_crystal_laser.name=Beamer Laser Crystal
 
 # universe dialer
 item.jsg.universe_dialer.name=Universe Dialer

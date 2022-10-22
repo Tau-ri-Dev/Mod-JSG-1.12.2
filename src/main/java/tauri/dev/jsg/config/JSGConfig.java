@@ -787,12 +787,6 @@ public class JSGConfig {
     }
 
     public static class DevConfig {
-        @Name("x")
-        public float x = 0f;
-        @Name("y")
-        public float y = 0f;
-        @Name("z")
-        public float z = 0f;
     }
 
     public static void resetCache() {

@@ -1,9 +1,9 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"normal": "jsg:blocks/capacitor_block_sides",
-		"particle": "jsg:blocks/capacitor_block_sides",
-		"overlay_front": "jsg:blocks/capacitor_block_front_10"
+		"normal": "jsg:blocks/capacitor/capacitor_block_sides",
+		"particle": "jsg:blocks/capacitor/capacitor_block_sides",
+		"overlay_front": "jsg:blocks/capacitor/capacitor_block_front_10"
 	},
     "elements": [
         {   "from": [ 0, 0, 0 ],

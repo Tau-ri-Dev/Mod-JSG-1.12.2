@@ -24,14 +24,33 @@ item.jsg.upgrade_iris_trinium.name=Amélioration Iris (Trinium)
 item.jsg.shield_emitter.name=Émetteur de bouclier
 item.jsg.upgrade_shield.name=Mise à niveau du bouclier (Trinium)
 
-# Lingots de trinium
-item.jsg.trinium_ingot.name=Lingot de trinium
-item.jsg.titanium_ingot.name=Lingot de titane
-item.jsg.naquadah_shard.name=Éclat de naquadah
-item.jsg.naquadah_alloy.name=Lingot d'alliage de Naquadah raffiné
-item.jsg.naquadah_alloy_raw.name=Lingot d'alliage du Naquadah
+# ingots
+item.jsg.trinium_impure.name=Impure Trinium Ore
+item.jsg.trinium_purified.name=Purified Trinium Ore
+item.jsg.trinium_raw.name=Raw Trinium Ore
+item.jsg.trinium_ingot.name=Trinium Ingot
+item.jsg.trinium_dust.name=Trinium Dust
+item.jsg.trinium_nugget.name=Trinium Nugget
 
-# Cristaux
+item.jsg.titanium_impure.name=Impure Titanium Ore
+item.jsg.titanium_purified.name=Purified Titanium Ore
+item.jsg.titanium_raw.name=Raw Titanium Ore
+item.jsg.titanium_ingot.name=Titanium Ingot
+item.jsg.titanium_dust.name=Titanium Dust
+item.jsg.titanium_nugget.name=Titanium Nugget
+
+item.jsg.naquadah_impure.name=Impure Naquadah Ore
+item.jsg.naquadah_purified.name=Purified Naquadah Ore
+item.jsg.naquadah_raw.name=Raw Naquadah Ore
+item.jsg.naquadah_alloy_raw.name=Raw Naquadah Alloy Ingot
+item.jsg.naquadah_raw_dust.name=Raw Naquadah Dust
+item.jsg.naquadah_raw_nugget.name=Raw Naquadah Nugget
+
+item.jsg.naquadah_alloy.name=Naquadah Alloy Ingot
+item.jsg.naquadah_dust.name=Naquadah Dust
+item.jsg.naquadah_nugget.name=Naquadah Nugget
+
+# crystals
 item.jsg.crystal_fragment.name=Graine de cristal
 
 item.jsg.crystal_blue.name=Cristal de téléportation
@@ -85,6 +104,7 @@ item.jsg.page_mysterious.tooltip=Qui sait où cela mène
 item.jsg.beamer_crystal_power.name=Cristal de pouvoir de Beamer
 item.jsg.beamer_crystal_fluid.name=Cristal fluide de Beamer
 item.jsg.beamer_crystal_items.name=Cristal d'objets de Beamer
+item.jsg.beamer_crystal_laser.name=Beamer Laser Crystal
 
 # Numéroteur d'univers
 item.jsg.universe_dialer.name=Composteur universel
@@ -149,6 +169,22 @@ item.jsg.gdo.oc_message_received=Recevoir une réponse :
 item.jsg.zat.name=Zat'nik'tel
 item.jsg.staff.name=Arme à bâton Goa'uld
 item.jsg.energyWeapon.available_shots=Coups disponibles :
+
+item.jsg.hammer.name=JSG Hammer
+item.jsg.screwdriver.name=JSG Screwdriver
+item.jsg.wrench.name=JSG Wrench
+
+# gears
+item.jsg.gear_titanium.name=Gear (Titanium)
+item.jsg.gear_trinium.name=Gear (Trinium)
+item.jsg.gear_naquadah_raw.name=Gear (Raw Naquadah)
+item.jsg.gear_naquadah.name=Gear (Naquadah)
+
+# plates
+item.jsg.plate_titanium.name=Plate (Titanium)
+item.jsg.plate_trinium.name=Plate (Trinium)
+item.jsg.plate_naquadah_raw.name=Plate (Raw Naquadah)
+item.jsg.plate_naquadah.name=Plate (Naquadah)
 
 # -------------------
 

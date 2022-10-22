@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube_all",
+	"textures": {
+		"particle": "jsg:blocks/machines/stargate_assembler_sides",
+		"north": "jsg:blocks/machines/stargate_assembler_front",
+		"south": "jsg:blocks/machines/stargate_assembler_back",
+		"west": "jsg:blocks/machines/stargate_assembler_sides",
+		"east": "jsg:blocks/machines/stargate_assembler_sides",
+		"up": "jsg:blocks/machines/stargate_assembler_top",
+		"down": "jsg:blocks/machines/stargate_assembler_bottom"
+	}
+}

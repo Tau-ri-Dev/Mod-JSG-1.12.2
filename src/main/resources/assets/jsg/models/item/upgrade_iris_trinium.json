@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
     	"textures": {
-		"layer0": "jsg:items/upgrade_iris_trinium"
+		"layer0": "jsg:items/iris/upgrade_iris_trinium"
 	}
 }

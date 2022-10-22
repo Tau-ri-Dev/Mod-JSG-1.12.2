@@ -14,7 +14,7 @@ public class ContainerHelper {
 		slots.addAll(generateSlotRow(playerInventory, 0, 8, 18, yInventory+58)); // 144
 				
 		for (int row=0; row<3; row++) {
-			slots.addAll(generateSlotRow(playerInventory, 9*(row+1), 8, 18, 86 + 18*row)); // 86
+			slots.addAll(generateSlotRow(playerInventory, 9*(row+1), 8, 18, yInventory + 18*row)); // 86
 		}
 		
 		return slots;

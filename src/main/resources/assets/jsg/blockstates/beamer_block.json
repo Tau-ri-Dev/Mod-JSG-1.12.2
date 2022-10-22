@@ -6,7 +6,7 @@
 	"variants": {
 		"normal": [{}],
 		"inventory": [{
-			"textures": { "front": "jsg:blocks/beamer_front_none" }
+			"textures": { "front": "jsg:blocks/beamer/beamer_front_none" }
 		}],
 		
 		"facing": {
@@ -17,11 +17,11 @@
 		},
 		
 		"mode": {
-			"power": { "textures": { "front": "jsg:blocks/beamer_front_power" } },
-			"fluid": { "textures": { "front": "jsg:blocks/beamer_front_fluid" } },
-			"items": { "textures": { "front": "jsg:blocks/beamer_front_items" } },
-			"laser": { "textures": { "front": "jsg:blocks/beamer_front_laser" } },
-			"none": { "textures": { "front": "jsg:blocks/beamer_front_none" } }
+			"power": { "textures": { "front": "jsg:blocks/beamer/beamer_front_power" } },
+			"fluid": { "textures": { "front": "jsg:blocks/beamer/beamer_front_fluid" } },
+			"items": { "textures": { "front": "jsg:blocks/beamer/beamer_front_items" } },
+			"laser": { "textures": { "front": "jsg:blocks/beamer/beamer_front_laser" } },
+			"none": { "textures": { "front": "jsg:blocks/beamer/beamer_front_none" } }
 		}
 	}
 }

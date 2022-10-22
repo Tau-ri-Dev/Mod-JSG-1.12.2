@@ -5,7 +5,7 @@
 		"textures": {
 			"normal": "minecraft:blocks/end_stone",
 			"particle": "minecraft:blocks/end_stone",
-			"overlay": "jsg:blocks/trinium_ore"
+			"overlay": "jsg:blocks/ore/trinium_ore"
 		}
 	},
 	"variants": {

@@ -18,6 +18,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 
+import javax.annotation.Nonnull;
+
 public abstract class TransportRingsAbstractBlock extends JSGBlock {
 
     public TransportRingsAbstractBlock(String name) {
@@ -52,7 +54,7 @@ public abstract class TransportRingsAbstractBlock extends JSGBlock {
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World world, @Nonnull BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(pos);
 
         if (!world.isRemote) {
@@ -63,7 +65,7 @@ public abstract class TransportRingsAbstractBlock extends JSGBlock {
     }
 
     @Override
-    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+    public void breakBlock(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
         if (!world.isRemote) {
             TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(pos);
             if (ringsTile != null) {
@@ -78,10 +80,10 @@ public abstract class TransportRingsAbstractBlock extends JSGBlock {
 
     // ------------------------------------------------------------------------
     @Override
-    public boolean hasTileEntity(IBlockState state) {
+    public boolean hasTileEntity(@Nonnull IBlockState state) {
         return true;
     }
 
     @Override
-    public abstract TransportRingsAbstractTile createTileEntity(World world, IBlockState state);
+    public abstract TransportRingsAbstractTile createTileEntity(@Nonnull World world, @Nonnull IBlockState state);
 }

@@ -5,7 +5,7 @@
 		"textures": {
 			"normal": "minecraft:blocks/netherrack",
 			"particle": "minecraft:blocks/netherrack",
-			"overlay": "jsg:blocks/naquadah_ore"
+			"overlay": "jsg:blocks/ore/naquadah_ore"
 		}
 	},
 	"variants": {

@@ -38,7 +38,7 @@ public class ThermalIntegration {
 		// Naquadah
 		ThermalExpansionHelper.addCrucibleRecipe(defaultEnergy*12, new ItemStack(JSGBlocks.ORE_NAQUADAH_BLOCK), new FluidStack(JSGFluids.moltenNaquadahRaw, (oneIngot * 2)));
 		ThermalExpansionHelper.addCrucibleRecipe(defaultEnergy*12, new ItemStack(JSGBlocks.ORE_NAQUADAH_BLOCK_STONE), new FluidStack(JSGFluids.moltenNaquadahRaw, (oneIngot * 2)));
-		ThermalExpansionHelper.addCrucibleRecipe(defaultEnergy*2, new ItemStack(JSGItems.NAQUADAH_SHARD), new FluidStack(JSGFluids.moltenNaquadahRaw, (oneIngot/2)));
+		ThermalExpansionHelper.addCrucibleRecipe(defaultEnergy*2, new ItemStack(JSGItems.NAQUADAH_ORE_IMPURE), new FluidStack(JSGFluids.moltenNaquadahRaw, (oneIngot/2)));
 		ThermalExpansionHelper.addCrucibleRecipe(defaultEnergy*12, new ItemStack(JSGBlocks.NAQUADAH_BLOCK_RAW), new FluidStack(JSGFluids.moltenNaquadahRaw, (oneIngot * 2)));
 		ThermalExpansionHelper.addRefineryRecipe(defaultEnergy*2, new FluidStack(JSGFluids.moltenNaquadahRaw, (oneIngot)), new FluidStack(JSGFluids.moltenNaquadahRefined, (oneIngot)), ItemStack.EMPTY);
 		ThermalExpansionHelper.addTransposerFill(defaultEnergy*4, new ItemStack(Items.IRON_INGOT), new ItemStack(JSGItems.NAQUADAH_ALLOY_RAW, 2), new FluidStack(JSGFluids.moltenNaquadahRaw, oneIngot), true);

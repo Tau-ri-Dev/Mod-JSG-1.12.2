@@ -1,6 +1,6 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"all": "jsg:blocks/trinium_block"
+		"all": "jsg:blocks/ore/trinium_block"
 	}
 }

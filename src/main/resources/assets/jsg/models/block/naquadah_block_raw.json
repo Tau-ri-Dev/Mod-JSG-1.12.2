@@ -1,6 +1,6 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"all": "jsg:blocks/naquadah_block_raw"
+		"all": "jsg:blocks/ore/naquadah_block_raw"
 	}
 }

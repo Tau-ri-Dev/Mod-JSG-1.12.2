@@ -7,7 +7,7 @@ public enum BeamerModeEnum implements EnumKeyInterface<Integer> {
 	POWER(0, 0.68f, 0.25f, 0.26f),
 	FLUID(1, 0.25f, 0.49f, 0.68f),
 	ITEMS(2, 0.23f, 0.62f, 0.29f),
-	LASER(3, 0.23f, 0.62f, 0.29f),
+	LASER(3, 0.81f, 0.73f, 0.04f),
 	NONE(4, null);
 	
 	public int id;

@@ -70,25 +70,11 @@ public class StargateNetwork extends WorldSavedData {
         return getMapFromAddress(gateAddress).containsKey(gateAddress);
     }
 
-
-    // ---------------------------------------------------------------------------------------------------------
-    // Nether gate
-
-  /*public static StargateAddressDynamic EARTH_ADDRESS = new StargateAddressDynamic(SymbolTypeEnum.MILKYWAY);
-
-  static {
-    EARTH_ADDRESS.addSymbol(SymbolMilkyWayEnum.AURIGA);
-    EARTH_ADDRESS.addSymbol(SymbolMilkyWayEnum.CETUS);
-    EARTH_ADDRESS.addSymbol(SymbolMilkyWayEnum.CENTAURUS);
-    EARTH_ADDRESS.addSymbol(SymbolMilkyWayEnum.CANCER);
-    EARTH_ADDRESS.addSymbol(SymbolMilkyWayEnum.SCUTUM);
-    EARTH_ADDRESS.addSymbol(SymbolMilkyWayEnum.ERIDANUS);
-    EARTH_ADDRESS.addSymbol(SymbolMilkyWayEnum.SERPENSCAPUT);
-  }*/
-
     @Nullable
     public StargatePos getStargate(StargateAddress address) {
         if (address == null)
+            return null;
+        if (address.getSize() < 7)
             return null;
 
         return getMapFromAddress(address).get(address);

@@ -85,7 +85,7 @@ public class BeamerContainer extends Container {
         
 		// Transfering from player's inventory to Beamer
         else {
-        	if ((item == JSGItems.BEAMER_CRYSTAL_POWER || item == JSGItems.BEAMER_CRYSTAL_FLUID || item == JSGItems.BEAMER_CRYSTAL_ITEMS) && !slotCrystal.getHasStack()) {
+        	if ((item == JSGItems.BEAMER_CRYSTAL_POWER || item == JSGItems.BEAMER_CRYSTAL_LASER || item == JSGItems.BEAMER_CRYSTAL_FLUID || item == JSGItems.BEAMER_CRYSTAL_ITEMS) && !slotCrystal.getHasStack()) {
         		if (!slotCrystal.getHasStack()) {
         			ItemStack stack1 = stack.copy();
     				stack1.setCount(1);

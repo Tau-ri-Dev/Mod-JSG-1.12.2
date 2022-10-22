@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
     	"textures": {
-		"layer0": "jsg:items/iris_fragment_titanium"
+		"layer0": "jsg:items/iris/iris_fragment_titanium"
 	}
 }

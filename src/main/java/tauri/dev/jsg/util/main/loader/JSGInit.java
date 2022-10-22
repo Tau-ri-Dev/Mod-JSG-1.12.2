@@ -6,7 +6,7 @@ import tauri.dev.jsg.chunkloader.ChunkLoadingCallback;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.datafixer.TileNamesFixer;
-import tauri.dev.jsg.gui.base.JSGGuiHandler;
+import tauri.dev.jsg.gui.JSGGuiHandler;
 import tauri.dev.jsg.integration.OCWrapperInterface;
 import tauri.dev.jsg.integration.ThermalIntegration;
 import tauri.dev.jsg.worldgen.JSGOresGenerator;
@@ -63,7 +63,6 @@ public class JSGInit {
             JSG.info("Thermal Expansion found and connection is enabled... Connecting...");
 
             ThermalIntegration.registerRecipes();
-            JSG.isThermalLoaded = true;
             JSG.info("Successfully connected into Thermal Expansion!");
         }
     }

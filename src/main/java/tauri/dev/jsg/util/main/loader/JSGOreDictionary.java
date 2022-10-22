@@ -10,7 +10,7 @@ public class JSGOreDictionary {
     public static void registerOreDictionary(){
         regODOre("oreNaquadahRaw", JSGBlocks.ORE_NAQUADAH_BLOCK);
         regODOre("oreNaquadahRaw", JSGBlocks.ORE_NAQUADAH_BLOCK_STONE);
-        regODOre("gemNaquadahRaw", JSGItems.NAQUADAH_SHARD);
+        regODOre("gemNaquadahRaw", JSGItems.NAQUADAH_ORE_IMPURE);
         regODOre("ingotNaquadahRaw", JSGItems.NAQUADAH_ALLOY_RAW);
         regODOre("ingotNaquadahRefined", JSGItems.NAQUADAH_ALLOY);
         regODOre("blockNaquadahRefined", JSGBlocks.NAQUADAH_BLOCK);

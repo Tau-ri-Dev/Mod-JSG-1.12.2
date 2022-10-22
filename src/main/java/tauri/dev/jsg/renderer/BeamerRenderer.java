@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityBeaconRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.beamer.BeamerModeEnum;
@@ -38,36 +39,29 @@ public class BeamerRenderer extends TileEntitySpecialRenderer<BeamerTile> {
 
             GlStateManager.pushMatrix();
             GlStateManager.translate(x + 0.5, y + 0.5, z + 0.5);
-            GlStateManager.rotate(180-te.getFacing().getHorizontalAngle(), 0, 1, 0);
+            GlStateManager.rotate(180 - te.getFacing().getHorizontalAngle(), 0, 1, 0);
 
-			int a = te.beamLengthClient;
-			int b = te.beamOffsetFromTargetXClient;
-			int c = te.beamOffsetFromTargetYClient;
+            int a = te.beamLengthClient;
+            int b = te.beamOffsetFromTargetXClient;
+            int c = te.beamOffsetFromTargetYClient;
 
             double t1 = ((double) b) / ((double) a);
             double angY = Math.toDegrees(Math.atan(t1));
 
-			double beamerLengthTemp = (Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2)));
+            double beamerLengthTemp = (Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2)));
 
-            double t2 = ((double) c) / ((double) beamerLengthTemp);
+            double t2 = ((double) c) / (beamerLengthTemp);
             double angX = Math.toDegrees(Math.atan(t2));
 
-			double beamerLength = ((Math.sqrt(Math.pow(beamerLengthTemp, 2) + Math.pow(c, 2))) / 2);
+            double beamerLength = ((Math.sqrt(Math.pow(beamerLengthTemp, 2) + Math.pow(c, 2))) - te.beamLengthTargetClient);
 
-            /*GlStateManager.rotate(JSGConfig.devConfig.x, 1, 0, 0);
-            GlStateManager.rotate(JSGConfig.devConfig.y, 0, 1, 0);
-            GlStateManager.rotate(JSGConfig.devConfig.z, 0, 0, 1);*/
+            if (beamerLength < 0) beamerLength = -beamerLength;
 
-            GlStateManager.rotate(((float) angY) * -1, 0, 1, 0);
+            GlStateManager.rotate(((float) angY) * ((te.getFacing() == EnumFacing.SOUTH || te.getFacing() == EnumFacing.WEST) ? -1 : 1), 0, 1, 0);
             GlStateManager.rotate(-90 + (((float) angX) * -1), 1, 0, 0);
 
-            if(tick % 40 == 0){
-                JSG.info("beamerLengthTemp: " + beamerLengthTemp);
-                JSG.info("a: " + a);
-                JSG.info("b: " + b);
-                JSG.info("c: " + c);
-                JSG.info("x: " + angX);
-                JSG.info("y: " + angY);
+            if (tick % 40 == 0) {
+                JSG.info("beamerLength: " + beamerLength);
             }
 
             float[] colors = te.getMode().colors;
@@ -85,7 +79,7 @@ public class BeamerRenderer extends TileEntitySpecialRenderer<BeamerTile> {
             }
 
             float mul = 1;
-            renderBeamSegment(-0.5, -1.07, -0.5, partialTicks * mul, 1 + (te.getRole() == BeamerRoleEnum.TRANSMIT ? 1 : -1) - 1, getWorld().getTotalWorldTime() * mul, 1, beamerLength, colors, te.beamRadiusClient, te.beamRadiusClient + 0.05f);
+            BeamerRenderer.renderBeamSegment(-0.5, -0.3, -0.5, partialTicks * mul, (te.getRole() == BeamerRoleEnum.TRANSMIT ? 1 : -1), getWorld().getTotalWorldTime() * mul, 0, beamerLength + 0.2D, colors, (te.beamRadiusClient * 0.75), te.beamRadiusClient + 0.05f);
             GlStateManager.popMatrix();
             GlStateManager.enableCull();
         }
@@ -100,6 +94,8 @@ public class BeamerRenderer extends TileEntitySpecialRenderer<BeamerTile> {
     /**
      * This method is copy of Minecraft Beamer Render method
      */
+
+    //private static VertexFormat JSG_VERTEX_COLOR_POSITION = new VertexFormatElement(0, VertexFormatElement.EnumType.FLOAT, VertexFormatElement.EnumUsage.POSITION, 3);
     public static void renderBeamSegment(double x, double y, double z, double partialTicks, double textureScale, double totalWorldTime, double yOffset, double height, float[] colors, double beamRadius, double glowRadius) {
         double i = yOffset + height;
         GlStateManager.glTexParameteri(3553, 10242, 10497);
@@ -160,22 +156,22 @@ public class BeamerRenderer extends TileEntitySpecialRenderer<BeamerTile> {
         d10 = 0.5D + glowRadius;
         d14 = height * textureScale + d13;
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        bufferbuilder.pos(x + d3, y + i, z + d4).tex(1.0D, d14).color(f, f1, f2, 0.125F).endVertex();
-        bufferbuilder.pos(x + d3, y + yOffset, z + d4).tex(1.0D, d13).color(f, f1, f2, 0.125F).endVertex();
-        bufferbuilder.pos(x + d5, y + yOffset, z + d6).tex(0.0D, d13).color(f, f1, f2, 0.125F).endVertex();
-        bufferbuilder.pos(x + d5, y + i, z + d6).tex(0.0D, d14).color(f, f1, f2, 0.125F).endVertex();
-        bufferbuilder.pos(x + d9, y + i, z + d10).tex(1.0D, d14).color(f, f1, f2, 0.125F).endVertex();
-        bufferbuilder.pos(x + d9, y + yOffset, z + d10).tex(1.0D, d13).color(f, f1, f2, 0.125F).endVertex();
-        bufferbuilder.pos(x + d7, y + yOffset, z + d8).tex(0.0D, d13).color(f, f1, f2, 0.125F).endVertex();
-        bufferbuilder.pos(x + d7, y + i, z + d8).tex(0.0D, d14).color(f, f1, f2, 0.125F).endVertex();
-        bufferbuilder.pos(x + d5, y + i, z + d6).tex(1.0D, d14).color(f, f1, f2, 0.125F).endVertex();
-        bufferbuilder.pos(x + d5, y + yOffset, z + d6).tex(1.0D, d13).color(f, f1, f2, 0.125F).endVertex();
-        bufferbuilder.pos(x + d9, y + yOffset, z + d10).tex(0.0D, d13).color(f, f1, f2, 0.125F).endVertex();
-        bufferbuilder.pos(x + d9, y + i, z + d10).tex(0.0D, d14).color(f, f1, f2, 0.125F).endVertex();
-        bufferbuilder.pos(x + d7, y + i, z + d8).tex(1.0D, d14).color(f, f1, f2, 0.125F).endVertex();
-        bufferbuilder.pos(x + d7, y + yOffset, z + d8).tex(1.0D, d13).color(f, f1, f2, 0.125F).endVertex();
-        bufferbuilder.pos(x + d3, y + yOffset, z + d4).tex(0.0D, d13).color(f, f1, f2, 0.125F).endVertex();
-        bufferbuilder.pos(x + d3, y + i, z + d4).tex(0.0D, d14).color(f, f1, f2, 0.125F).endVertex();
+        bufferbuilder.pos(x + d3, y + i, z + d4).tex(1.0D, d14).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(x + d3, y + yOffset, z + d4).tex(1.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(x + d5, y + yOffset, z + d6).tex(0.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(x + d5, y + i, z + d6).tex(0.0D, d14).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(x + d9, y + i, z + d10).tex(1.0D, d14).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(x + d9, y + yOffset, z + d10).tex(1.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(x + d7, y + yOffset, z + d8).tex(0.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(x + d7, y + i, z + d8).tex(0.0D, d14).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(x + d5, y + i, z + d6).tex(1.0D, d14).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(x + d5, y + yOffset, z + d6).tex(1.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(x + d9, y + yOffset, z + d10).tex(0.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(x + d9, y + i, z + d10).tex(0.0D, d14).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(x + d7, y + i, z + d8).tex(1.0D, d14).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(x + d7, y + yOffset, z + d8).tex(1.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(x + d3, y + yOffset, z + d4).tex(0.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(x + d3, y + i, z + d4).tex(0.0D, d14).color(f, f1, f2, 0.25F).endVertex();
         tessellator.draw();
         GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();

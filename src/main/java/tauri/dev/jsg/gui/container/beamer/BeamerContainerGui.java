@@ -238,14 +238,16 @@ public class BeamerContainerGui extends GuiContainer implements TabbedContainerI
 		mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
 		GlStateManager.color(1, 1, 1, 1);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-		
+
+		StargateAbstractEnergyStorage energyStorage;
+		int width;
 		switch (container.beamerTile.getMode()) {
 			case POWER:
 				drawTexturedModalRect(guiLeft+81, guiTop+15, 176, 0, 27, 24);
 				drawTexturedModalRect(guiLeft+9, guiTop+60, 0, 168, 158, 8);
 				
-				StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.beamerTile.getCapability(CapabilityEnergy.ENERGY, null);
-				int width = Math.round((energyStorage.getEnergyStored()/(float)energyStorage.getMaxEnergyStored() * 156));
+				energyStorage = (StargateAbstractEnergyStorage) container.beamerTile.getCapability(CapabilityEnergy.ENERGY, null);
+				width = Math.round((energyStorage.getEnergyStored()/(float)energyStorage.getMaxEnergyStored() * 156));
 				drawGradientRect(guiLeft+10, guiTop+61, guiLeft+10+width, guiTop+61+6, 0xffcc2828, 0xff731616);
 				
 				break;
@@ -260,6 +262,16 @@ public class BeamerContainerGui extends GuiContainer implements TabbedContainerI
 				drawTexturedModalRect(guiLeft+81, guiTop+15, 203, 24, 27, 24);
 				drawTexturedModalRect(guiLeft+8, guiTop+17, 193, 48, 36, 36);
 				
+				break;
+
+			case LASER:
+				drawTexturedModalRect(guiLeft+81, guiTop+15, 230, 0, 26, 24);
+				drawTexturedModalRect(guiLeft+9, guiTop+60, 0, 168, 158, 8);
+
+				energyStorage = (StargateAbstractEnergyStorage) container.beamerTile.getCapability(CapabilityEnergy.ENERGY, null);
+				width = Math.round((energyStorage.getEnergyStored()/(float)energyStorage.getMaxEnergyStored() * 156));
+				drawGradientRect(guiLeft+10, guiTop+61, guiLeft+10+width, guiTop+61+6, 0xffcc2828, 0xff731616);
+
 				break;
 			
 			default:

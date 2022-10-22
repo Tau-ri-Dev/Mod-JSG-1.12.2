@@ -38,7 +38,7 @@ public class NaquadahOreBlock extends JSGBlock {
 		
 		int quantity = 5 + random.nextInt(4) + (fortune * random.nextInt(3));
 		
-		drops.add(new ItemStack(JSGItems.NAQUADAH_SHARD, quantity));
+		drops.add(new ItemStack(JSGItems.NAQUADAH_ORE_IMPURE, quantity));
 	}
 	
 	@Override

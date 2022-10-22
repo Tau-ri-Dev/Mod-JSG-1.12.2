@@ -1,12 +1,12 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"particle": "jsg:blocks/stargate_universe_sides",
-		"north": "jsg:blocks/stargate_universe_base_front",
-		"south": "jsg:blocks/stargate_universe_sides",
-		"west": "jsg:blocks/stargate_universe_sides",
-		"east": "jsg:blocks/stargate_universe_sides",
-		"up": "jsg:blocks/stargate_universe_sides",
-		"down": "jsg:blocks/stargate_universe_sides"
+		"particle": "jsg:blocks/stargate/stargate_universe_sides",
+		"north": "jsg:blocks/stargate/stargate_universe_base_front",
+		"south": "jsg:blocks/stargate/stargate_universe_sides",
+		"west": "jsg:blocks/stargate/stargate_universe_sides",
+		"east": "jsg:blocks/stargate/stargate_universe_sides",
+		"up": "jsg:blocks/stargate/stargate_universe_sides",
+		"down": "jsg:blocks/stargate/stargate_universe_sides"
 	}
 }

@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
     	"textures": {
-		"layer0": "jsg:items/iris_blade_trinium"
+		"layer0": "jsg:items/iris/iris_blade_trinium"
 	}
 }

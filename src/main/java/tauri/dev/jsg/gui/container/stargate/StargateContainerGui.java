@@ -38,7 +38,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_stargate.png");
 	
 	private final StargateContainer container;
-	private final List<Tab> tabs = new ArrayList<Tab>();;
+	private final List<Tab> tabs = new ArrayList<>();
 	
 	private TabAddress milkyWayAddressTab;
 	private TabAddress pegasusAddressTab;

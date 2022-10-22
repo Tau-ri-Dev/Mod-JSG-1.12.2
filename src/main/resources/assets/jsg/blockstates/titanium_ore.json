@@ -5,7 +5,7 @@
 		"textures": {
 			"normal": "minecraft:blocks/stone",
 			"particle": "minecraft:blocks/stone",
-			"overlay": "jsg:blocks/titanium_ore"
+			"overlay": "jsg:blocks/ore/titanium_ore"
 		}
 	},
 	"variants": {

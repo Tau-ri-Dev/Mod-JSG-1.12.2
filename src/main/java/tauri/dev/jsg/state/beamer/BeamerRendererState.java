@@ -14,15 +14,17 @@ public class BeamerRendererState extends State {
 	public BeamerStatusEnum beamerStatus;
 	public boolean isObstructed;
 	public int beamLength;
+	public int beamLengthTarget;
 	public int beamOffsetFromTargetXClient;
 	public int beamOffsetFromTargetYClient;
 
-	public BeamerRendererState(BeamerModeEnum beamerMode, BeamerRoleEnum beamerRole, BeamerStatusEnum beamerStatus, boolean isObstructed, int beamLength, int beamOffsetFromTargetXClient, int beamOffsetFromTargetYClient) {
+	public BeamerRendererState(BeamerModeEnum beamerMode, BeamerRoleEnum beamerRole, BeamerStatusEnum beamerStatus, boolean isObstructed, int beamLength, int beamLengthTarget, int beamOffsetFromTargetXClient, int beamOffsetFromTargetYClient) {
 		this.beamerMode = beamerMode;
 		this.beamerRole = beamerRole;
 		this.beamerStatus = beamerStatus;
 		this.isObstructed = isObstructed;
 		this.beamLength = beamLength;
+		this.beamLengthTarget = beamLengthTarget;
 		this.beamOffsetFromTargetXClient = beamOffsetFromTargetXClient;
 		this.beamOffsetFromTargetYClient = beamOffsetFromTargetYClient;
 	}
@@ -34,6 +36,7 @@ public class BeamerRendererState extends State {
 		buf.writeInt(beamerStatus.getKey());
 		buf.writeBoolean(isObstructed);
 		buf.writeInt(beamLength);
+		buf.writeInt(beamLengthTarget);
 		buf.writeInt(beamOffsetFromTargetXClient);
 		buf.writeInt(beamOffsetFromTargetYClient);
 	}
@@ -45,6 +48,7 @@ public class BeamerRendererState extends State {
 		beamerStatus = BeamerStatusEnum.valueOf(buf.readInt());
 		isObstructed = buf.readBoolean();
 		beamLength = buf.readInt();
+		beamLengthTarget = buf.readInt();
 		beamOffsetFromTargetXClient = buf.readInt();
 		beamOffsetFromTargetYClient = buf.readInt();
 	}

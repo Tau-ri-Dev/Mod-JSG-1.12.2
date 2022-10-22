@@ -36,6 +36,7 @@ import tauri.dev.jsg.block.stargate.*;
 import tauri.dev.jsg.block.transportrings.TRControllerGoauldBlock;
 import tauri.dev.jsg.block.transportrings.TransportRingsGoauldBlock;
 import tauri.dev.jsg.block.transportrings.TransportRingsOriBlock;
+import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode;
 import tauri.dev.jsg.item.linkable.gdo.GDOItem;
 import tauri.dev.jsg.tileentity.transportrings.TRControllerAbstractTile;
@@ -46,6 +47,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
+import static tauri.dev.jsg.item.JSGItems.FRAGMENT_TR_GOAULD;
 import static tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler.jsgOresCreativeTab;
 
 @EventBusSubscriber
@@ -258,6 +260,9 @@ public class JSGBlocks {
             case "aunis:transportrings_controller_block":
                 return TR_CONTROLLER_GOAULD_BLOCK;
 
+            case "jsg:stargate_assembler":
+                return SG_ASSEMBLER;
+
             case "aunis:zpm":
             case "aunis:zpmhub_block":
             case "aunis:connector_zpm":
@@ -319,6 +324,9 @@ public class JSGBlocks {
                 Block newBlock = remapBlock(oldName, false);
                 if(newBlock != null)
                     newItem = ItemBlock.getItemFromBlock(newBlock);
+                else{
+                    newItem = JSGItems.remapItem(oldName);
+                }
             }
             if (newItem != null) mapping.remap(newItem);
         }

@@ -1,6 +1,9 @@
 package tauri.dev.jsg.block.capacitor;
 
+import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.tileentity.machine.AbstractAssemblerTile;
+import tauri.dev.jsg.util.ItemHandlerHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.block.JSGAbstractCustomItemBlock;
 import tauri.dev.jsg.gui.GuiIdEnum;
@@ -27,6 +30,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
@@ -112,6 +116,17 @@ public class CapacitorBlock extends JSGAbstractCustomItemBlock {
 		((StargateItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null)).setEnergyStored(capacitorEnergyStorage.getEnergyStored());
 
 		return Arrays.asList(stack);
+	}
+
+	@Override
+	public void breakBlock(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+		if (!world.isRemote) {
+			CapacitorTile tile = (CapacitorTile) world.getTileEntity(pos);
+			if (tile != null) {
+				ItemHandlerHelper.dropInventoryItems(world, pos, tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null));
+			}
+		}
+		super.breakBlock(world, pos, state);
 	}
 	
 	@Override
