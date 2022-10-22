@@ -1,15 +1,15 @@
 # itemGroups - creative tabs
 itemGroup.jsg_gates=JSG: Gates
 itemGroup.jsg_items=JSG: Items
-itemGroup.jsg_rings=JSG: Rings
+itemGroup.jsg_rings=JSG: Ringe
 itemGroup.jsg_ores=JSG: Erze
 itemGroup.jsg_energy=JSG: Energie
 itemGroup.jsg_tools=JSG: Werkzeuge
 itemGroup.jsg_props=JSG: Props
-itemGroup.jsg_machines=JSG: Machines
+itemGroup.jsg_machines=JSG: Maschinen
 
 # sound categories
-soundCategory.jsg_sounds=Just Stargate mod
+soundCategory.jsg_sounds=Just Stargate Mod
 
 # -------------------
 # ITEMS
@@ -63,12 +63,12 @@ item.jsg.dhd_brb.name=Leuchtender Roter Knopf (BRB)
 item.jsg.dhd_bbb.name=Leuchtender Blauer Knopf (BBB)
 
 # fragments
-item.jsg.fragment_stargate_milkyway.name=Ring Fragment (Milky way)
+item.jsg.fragment_stargate_milkyway.name=Ring Fragment (Milchstraße)
 item.jsg.fragment_stargate_pegasus.name=Ring Fragment (Pegasus)
 item.jsg.fragment_stargate_universe.name=Ring Fragment (Universe)
 item.jsg.fragment_transportrings_goauld.name=Transporterring Fragment (Goauld)
 item.jsg.fragment_transportrings_ori.name=Transporterring Fragment (Ori)
-item.jsg.fragment_transportrings_ancient.name=Transporterring Fragment (Ancient)
+item.jsg.fragment_transportrings_ancient.name=Transportring Fragment (Antiker)
 
 # holders
 item.jsg.holder_crystal.name=Kristallhalter
@@ -99,10 +99,10 @@ item.jsg.universe_dialer.mode_rings=Ringe
 item.jsg.universe_dialer.mode_oc=OpnCom
 item.jsg.universe_dialer.mode_info=Status
 item.jsg.universe_dialer.aborting=Anwahl abbrechen
-item.jsg.universe_dialer.abort=Abort
-item.jsg.universe_dialer.dial_start=Dialing the gate...
+item.jsg.universe_dialer.abort=Abbruch
+item.jsg.universe_dialer.dial_start=Wähle das Gate...
 item.jsg.universe_dialer.not_dialing=Nicht wählend
-item.jsg.universe_dialer.dialer_broke=Dialer cracked to prevent minecraft from crash
+item.jsg.universe_dialer.dialer_broke=Fernbedienung ging kaputt um einen crash von MC zu vermeiden
 item.jsg.universe_dialer.oc_name=Eintrag Name
 item.jsg.universe_dialer.oc_address=OpenComputers Modem Adresse (Lasse leer für Ausstrahlung)
 item.jsg.universe_dialer.oc_port=Modem Port
@@ -147,8 +147,8 @@ item.jsg.gdo.oc_message_received=Antwort erhalten:
 
 # tools
 item.jsg.zat.name=Zat'nik'tel
-item.jsg.staff.name=Goa'uld Staff weapon
-item.jsg.energyWeapon.available_shots=Available shots:
+item.jsg.staff.name=Goa'uld Stabwaffe
+item.jsg.energyWeapon.available_shots=Verfügbare Schüsse:
 
 # -------------------
 
@@ -169,7 +169,7 @@ tile.jsg.trinium_block.name=Trinium Block
 tile.jsg.titanium_block.name=Titanium Block
 
 # props
-prop.jsg.platform_ships_block.name=Rings platform (Ships)
+prop.jsg.platform_ships_block.name=Ringplatform (Schiff)
 
 # dhd
 tile.jsg.dhd_block.name=Dial Home Device (DHD)
@@ -302,8 +302,8 @@ death.attack.eventHorizon=%s wurde durch das Kawoosh ausgelöscht
 death.attack.irisDeath=%s warf sich gegen eine Iris
 death.attack.wrongSide=%s hat das Gate auf der falschen Seite betreten
 
-death.attack.zatHit=%s was electrolyzed
-death.attack.staffHit=%s was melted using Goa'uld Staff Weapon
+death.attack.zatHit=%s wurde elektrisiert
+death.attack.staffHit=%s ist geschmolzen durch eine Goa'uld Stabwaffe
 
 # -------------------
 
@@ -347,7 +347,7 @@ glyph.jsg.milkyway.sextans=Sextans
 glyph.jsg.milkyway.scutum=Scutum
 glyph.jsg.milkyway.pisces=Pisces
 glyph.jsg.milkyway.virgo=Virgo
-glyph.jsg.milkyway.bootes=Boötes
+glyph.jsg.milkyway.bootes=Bootes
 glyph.jsg.milkyway.auriga=Auriga
 glyph.jsg.milkyway.corona_australis=Corona Australis
 glyph.jsg.milkyway.gemini=Gemini
@@ -453,7 +453,7 @@ glyph.jsg.universe.g36=Glyph 36
 # GUI
 
 gui.upgrades=Upgrades
-gui.configuration=Configuration
+gui.configuration=Konfiguration
 
 # dhd
 gui.dhd.fusion=Fusion
@@ -620,8 +620,8 @@ jsg.subtitle.universe_dialer_beep=Pressed Universe Dialer button
 jsg.subtitle.universe_dialer_change_mode=Universe Dialer Modus geändert
 jsg.subtitle.universe_dialer_connect=Universe Dialer verbunden
 
-jsg.subtitle.item_zat_shoot=Zat'nik'tel shoot
-jsg.subtitle.item_staff_shoot=Goa'uld Staff Weapon shoot
+jsg.subtitle.item_zat_shoot=Zat'nik'tel Schuss
+jsg.subtitle.item_staff_shoot=Goa'uld Stabwaffe Schuss
 
 # -------------------
 
