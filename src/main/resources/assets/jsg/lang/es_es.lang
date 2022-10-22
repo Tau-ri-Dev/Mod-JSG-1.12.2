@@ -61,10 +61,13 @@ item.jsg.crystal_glyph_ancient.name=Ancient Rings Glyphs Crystal
 item.jsg.dhd_brb.name=Botón Brillante Rojo (BBR)
 item.jsg.dhd_bbb.name=Botón Brillante Azul (BBA)
 
-# rings fragments
-item.jsg.stargate_ring_fragment.name=Fragmento de Anillo de Stargate
-item.jsg.universe_ring_fragment.name=Fragmento de Anillo de Universo
-item.jsg.transportrings_ring_fragment.name=Fragmento de Anillo Transportador
+# fragments
+item.jsg.fragment_stargate_milkyway.name=Ring Fragment (Milky way)
+item.jsg.fragment_stargate_pegasus.name=Ring Fragment (Pegasus)
+item.jsg.fragment_stargate_universe.name=Ring Fragment (Universe)
+item.jsg.fragment_transportrings_goauld.name=Transport Rings Fragment (Goauld)
+item.jsg.fragment_transportrings_ori.name=Transport Rings Fragment (Ori)
+item.jsg.fragment_transportrings_ancient.name=Transport Rings Fragment (Ancient)
 
 # holders
 item.jsg.holder_crystal.name=Soporte de cristal
@@ -223,6 +226,9 @@ tile.jsg.transportrings_block.rings_distance=Distance
 
 # beamer
 tile.jsg.beamer_block.name=Bloque beamer
+
+# machines
+tile.jsg.stargate_assembler_block.name=Stargate Assembler
 
 # -------------------
 

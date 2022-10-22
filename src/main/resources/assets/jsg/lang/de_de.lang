@@ -62,10 +62,13 @@ item.jsg.crystal_glyph_ancient.name=Antiker Ring Glyphenkristall
 item.jsg.dhd_brb.name=Leuchtender Roter Knopf (BRB)
 item.jsg.dhd_bbb.name=Leuchtender Blauer Knopf (BBB)
 
-# rings fragments
-item.jsg.stargate_ring_fragment.name=Stargate Ring Fragment
-item.jsg.universe_ring_fragment.name=Universe Ring Fragment
-item.jsg.transportrings_ring_fragment.name=Transporterring Fragment
+# fragments
+item.jsg.fragment_stargate_milkyway.name=Ring Fragment (Milky way)
+item.jsg.fragment_stargate_pegasus.name=Ring Fragment (Pegasus)
+item.jsg.fragment_stargate_universe.name=Ring Fragment (Universe)
+item.jsg.fragment_transportrings_goauld.name=Transporterring Fragment (Goauld)
+item.jsg.fragment_transportrings_ori.name=Transporterring Fragment (Ori)
+item.jsg.fragment_transportrings_ancient.name=Transporterring Fragment (Ancient)
 
 # holders
 item.jsg.holder_crystal.name=Kristallhalter
@@ -224,6 +227,9 @@ tile.jsg.transportrings_block.rings_distance=Entfernung
 
 # beamer
 tile.jsg.beamer_block.name=Transporter Block
+
+# machines
+tile.jsg.stargate_assembler_block.name=Stargate Assembler
 
 # -------------------
 

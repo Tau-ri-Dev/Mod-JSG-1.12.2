@@ -61,10 +61,13 @@ item.jsg.crystal_glyph_ancient.name=Ancient Rings Glyphs Crystal
 item.jsg.dhd_brb.name=亮红色的按钮(BRB)
 item.jsg.dhd_bbb.name=Bright Blue Button (BBB)
 
-# rings fragments
-item.jsg.stargate_ring_fragment.name=星门环方块碎片
-item.jsg.universe_ring_fragment.name=Universe Ring Fragment
-item.jsg.transportrings_ring_fragment.name=传送环碎片
+# fragments
+item.jsg.fragment_stargate_milkyway.name=Ring Fragment (Milky way)
+item.jsg.fragment_stargate_pegasus.name=Ring Fragment (Pegasus)
+item.jsg.fragment_stargate_universe.name=Ring Fragment (Universe)
+item.jsg.fragment_transportrings_goauld.name=Transport Rings Fragment (Goauld)
+item.jsg.fragment_transportrings_ori.name=Transport Rings Fragment (Ori)
+item.jsg.fragment_transportrings_ancient.name=Transport Rings Fragment (Ancient)
 
 # holders
 item.jsg.holder_crystal.name=水晶稳定器
@@ -223,6 +226,9 @@ tile.jsg.transportrings_block.rings_distance=Distance
 
 # beamer
 tile.jsg.beamer_block.name=Beamer Block
+
+# machines
+tile.jsg.stargate_assembler_block.name=Stargate Assembler
 
 # -------------------
 
