@@ -10,8 +10,7 @@ public enum GuiIdEnum {
 	GUI_BEAMER(3),
 	GUI_PEGASUS_DHD(4),
 	GUI_RINGS(5),
-	GUI_SG_ASSEMBLER(6),
-	GUI_TR_ASSEMBLER(7)
+	GUI_ASSEMBLER(6)
 	;
     public int id;
 	

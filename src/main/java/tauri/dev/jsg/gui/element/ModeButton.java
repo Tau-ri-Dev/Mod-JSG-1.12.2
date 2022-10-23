@@ -8,23 +8,15 @@ public class ModeButton extends GuiButton {
     public final int textureWidth;
     public final int textureHeight;
     public final int states;
-    public final int texU;
-    public final int texV;
     private final ResourceLocation texture;
     private int currentState = 0;
 
-    public ModeButton(int buttonId, int x, int y, int size, ResourceLocation texture, int textureWidth, int textureHeight, int states, int texU, int texV) {
+    public ModeButton(int buttonId, int x, int y, int size, ResourceLocation texture, int textureWidth, int textureHeight, int states) {
         super(buttonId, x, y, size, size, "");
         this.textureHeight = textureHeight;
         this.textureWidth = textureWidth;
         this.states = states;
         this.texture = texture;
-        this.texU = texU;
-        this.texV = texV;
-    }
-
-    public ModeButton(int buttonId, int x, int y, int size, ResourceLocation texture, int textureWidth, int textureHeight, int states) {
-        this(buttonId, x, y, size, texture, textureWidth, textureHeight, states, 0, size);
     }
 
 
@@ -36,11 +28,11 @@ public class ModeButton extends GuiButton {
 
             Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
             if (hovered) {
-                drawModalRectWithCustomSizedTexture(x, y, texU + width, texV, width, height, textureWidth, textureHeight);
+                drawModalRectWithCustomSizedTexture(x, y, width, height, width, height, textureWidth, textureHeight);
             } else {
-                drawModalRectWithCustomSizedTexture(x, y, texU, texV, width, height, textureWidth, textureHeight);
+                drawModalRectWithCustomSizedTexture(x, y, 0, height, width, height, textureWidth, textureHeight);
             }
-            drawModalRectWithCustomSizedTexture(x, y, texU + (currentState * width), texV, width, height, textureWidth, textureHeight);
+            drawModalRectWithCustomSizedTexture(x, y, currentState * width, 0, width, height, textureWidth, textureHeight);
         }
     }
 

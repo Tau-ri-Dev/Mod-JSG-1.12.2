@@ -11,6 +11,6 @@ public class JSGToolsCreativeTab extends JSGAbstractCreativeTab {
 
     @Override
     public ItemStack getTabIconItem() {
-        return new ItemStack(JSGItems.ZAT);
+        return new ItemStack(JSGItems.JSG_SCREWDRIVER);
     }
 }

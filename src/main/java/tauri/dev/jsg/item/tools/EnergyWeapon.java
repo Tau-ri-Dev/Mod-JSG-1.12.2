@@ -41,7 +41,7 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
         setRegistryName(new ResourceLocation(JSG.MOD_ID, this.itemName));
         setUnlocalizedName(JSG.MOD_ID + "." + this.itemName);
         setMaxStackSize(1);
-        setCreativeTab(JSGCreativeTabsHandler.jsgToolsCreativeTab);
+        setCreativeTab(JSGCreativeTabsHandler.jsgWeaponsCreativeTab);
     }
 
     private static void checkNBT(ItemStack stack) {

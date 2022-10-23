@@ -1,23 +1,27 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"pattern": [
-		"ICI",
-		"CRC",
-		"ICI"
+		"IBP",
+		"ITI",
+		"PWI"
 	],
 	
 	"key": {
+		"B": {
+			"item": "minecraft:iron_bars"
+		},
 		"I": {
 			"item": "minecraft:iron_ingot"
 		},
-		
-		"C": {
-			"type": "forge:ore_dict",
-      		"ore": "ingotCopper"
+		"P": {
+			"type" : "forge:ore_dict",
+			"ore": "plateTitanium"
 		},
-		
-		"R": {
-			"item": "minecraft:redstone_block"
+		"T": {
+			"item": "minecraft:redstone_torch"
+		},
+		"W": {
+			"item": "jsg:wrench"
 		}
 	},
 	

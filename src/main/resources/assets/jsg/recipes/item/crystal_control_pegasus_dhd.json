@@ -1,21 +1,17 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"pattern": [
-		"CRC",
+		" R ",
 		"RSR",
-		"CRC"
+		" R "
 	],
 	
 	"key": {
 		"R": {
 			"item": "jsg:crystal_blue"
 		},
-		
 		"S": {
-			"item": "jsg:crystal_ender"
-		},
-		"C": {
-			"item": "jsg:raw_pegasus_dhd_crystal"
+			"item": "jsg:crystal_blue_pegasus"
 		}
 	},
 	

@@ -2,22 +2,22 @@
 	"type": "minecraft:crafting_shaped",
 	"pattern": [
 		" R ",
-		"RSR",
+		" C ",
 		" R "
 	],
 	
 	"key": {
-		"S": {
-			"item": "jsg:crystal_white"
+		"C": {
+			"item": "jsg:circuit_control_crystal"
 		},
 		
 		"R": {
-			"item": "jsg:crystal_ender"
+			"item": "jsg:crystal_yellow"
 		}
 	},
 	
 	"result": {
-		"item": "jsg:crystal_blue_pegasus",
+		"item": "jsg:beamer_crystal_laser",
 		"count": 1
 	}
 }

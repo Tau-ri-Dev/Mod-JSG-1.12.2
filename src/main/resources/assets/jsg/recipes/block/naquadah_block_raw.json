@@ -1,17 +1,23 @@
 {
-	"type": "minecraft:crafting_shaped",
-	"pattern": [
-		"NN",
-		"NN"
-	],
-	
-	"key": {
-		"N": {
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
 			"type": "forge:ore_dict",
-			"ore": "gemNaquadah"
+			"ore": "gemNaquadahRaw"
+		},
+		{
+			"type": "forge:ore_dict",
+			"ore": "gemNaquadahRaw"
+		},
+		{
+			"type": "forge:ore_dict",
+			"ore": "gemNaquadahRaw"
+		},
+		{
+			"type": "forge:ore_dict",
+			"ore": "gemNaquadahRaw"
 		}
-	},
-	
+	],
 	"result": {
 		"item": "jsg:naquadah_block_raw",
 		"count": 1

@@ -12,8 +12,8 @@ import tauri.dev.jsg.gui.container.dhd.DHDMilkyWayContainer;
 import tauri.dev.jsg.gui.container.dhd.DHDMilkyWayContainerGui;
 import tauri.dev.jsg.gui.container.dhd.DHDPegasusContainer;
 import tauri.dev.jsg.gui.container.dhd.DHDPegasusContainerGui;
-import tauri.dev.jsg.gui.container.machine.sgassembler.SGAssemblerContainer;
-import tauri.dev.jsg.gui.container.machine.sgassembler.SGAssemblerGui;
+import tauri.dev.jsg.gui.container.machine.AssemblerContainer;
+import tauri.dev.jsg.gui.container.machine.AssemblerContainerGui;
 import tauri.dev.jsg.gui.container.stargate.StargateContainer;
 import tauri.dev.jsg.gui.container.stargate.StargateContainerGui;
 import tauri.dev.jsg.gui.container.transportrings.TRContainer;
@@ -43,8 +43,8 @@ public class JSGGuiHandler implements IGuiHandler {
             case GUI_RINGS:
                 return new TRContainer(player.inventory, world, x, y, z, isOp);
 
-            case GUI_SG_ASSEMBLER:
-                return new SGAssemblerContainer(player.inventory, world, x, y, z);
+            case GUI_ASSEMBLER:
+                return new AssemblerContainer(player.inventory, world, x, y, z);
         }
 
         return null;
@@ -72,8 +72,8 @@ public class JSGGuiHandler implements IGuiHandler {
             case GUI_RINGS:
                 return new TRGui(new BlockPos(x, y, z), new TRContainer(player.inventory, world, x, y, z, isOp));
 
-            case GUI_SG_ASSEMBLER:
-                return new SGAssemblerGui(new SGAssemblerContainer(player.inventory, world, x, y, z));
+            case GUI_ASSEMBLER:
+                return new AssemblerContainerGui(new AssemblerContainer(player.inventory, world, x, y, z));
 
         }
 

@@ -11,7 +11,8 @@
 			"item": "jsg:quad_iris_blade"
 		},
 		"W": {
-			"item": "jsg:crystal_white"
+			"type" : "forge:ore_dict",
+			"ore": "gearTitanium"
 		},
 		"R": {
 			"item": "minecraft:redstone_block"

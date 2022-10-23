@@ -206,9 +206,9 @@
     "category": "ambient",
     "subtitle": "jsg.subtitle.rings_controller_button",
     "sounds": [
-      "jsg:transportrings/goauld/rings_controller_button_1",
-      "jsg:transportrings/goauld/rings_controller_button_2",
-      "jsg:transportrings/goauld/rings_controller_button_3"
+      "jsg:transportrings/goauld/rings_controller_button1",
+      "jsg:transportrings/goauld/rings_controller_button2",
+      "jsg:transportrings/goauld/rings_controller_button3"
     ]
   },
   "rings_controller_goauld_button_final": {

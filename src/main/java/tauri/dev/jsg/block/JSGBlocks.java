@@ -27,7 +27,7 @@ import tauri.dev.jsg.block.dialhomedevice.DHDBlock;
 import tauri.dev.jsg.block.dialhomedevice.DHDPegasusBlock;
 import tauri.dev.jsg.block.invisible.InvisibleBlock;
 import tauri.dev.jsg.block.invisible.IrisBlock;
-import tauri.dev.jsg.block.machine.StargateAssemblerBlock;
+import tauri.dev.jsg.block.machine.AssemblerBlock;
 import tauri.dev.jsg.block.ore.NaquadahOreBlock;
 import tauri.dev.jsg.block.ore.TitaniumOreBlock;
 import tauri.dev.jsg.block.ore.TriniumOreBlock;
@@ -47,7 +47,6 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
-import static tauri.dev.jsg.item.JSGItems.FRAGMENT_TR_GOAULD;
 import static tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler.jsgOresCreativeTab;
 
 @EventBusSubscriber
@@ -98,7 +97,7 @@ public class JSGBlocks {
 
     // -----------------------------------------------------------------------------
 
-    public static final StargateAssemblerBlock SG_ASSEMBLER = new StargateAssemblerBlock();
+    public static final AssemblerBlock MACHINE_ASSEMBLER = new AssemblerBlock();
 
     // -----------------------------------------------------------------------------
 
@@ -175,7 +174,7 @@ public class JSGBlocks {
             INVISIBLE_BLOCK,
             IRIS_BLOCK,
 
-            SG_ASSEMBLER
+            MACHINE_ASSEMBLER
 
     };
 
@@ -261,7 +260,8 @@ public class JSGBlocks {
                 return TR_CONTROLLER_GOAULD_BLOCK;
 
             case "jsg:stargate_assembler":
-                return SG_ASSEMBLER;
+            case "jsg:stargate_assembler_block":
+                return MACHINE_ASSEMBLER;
 
             case "aunis:zpm":
             case "aunis:zpmhub_block":

@@ -1,6 +1,5 @@
 package tauri.dev.jsg.item;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -72,7 +71,12 @@ public class JSGItems {
     public static final Item NAQUADAH_ORE_PURIFIED = ItemHelper.createGenericItem("naquadah_purified", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item NAQUADAH_ORE_RAW = ItemHelper.createGenericItem("naquadah_raw", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item NAQUADAH_ALLOY_RAW = ItemHelper.createGenericItem("naquadah_alloy_raw", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item NAQUADAH_RAW_DUST = ItemHelper.createGenericItem("naquadah_raw_dust", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item NAQUADAH_RAW_NUGGET = ItemHelper.createGenericItem("naquadah_raw_nugget", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+
     public static final Item NAQUADAH_ALLOY = ItemHelper.createGenericItem("naquadah_alloy", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item NAQUADAH_DUST = ItemHelper.createGenericItem("naquadah_dust", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item NAQUADAH_NUGGET = ItemHelper.createGenericItem("naquadah_nugget", JSGCreativeTabsHandler.jsgItemsCreativeTab);
 
     /**
      * Titanium & Trinium
@@ -130,9 +134,9 @@ public class JSGItems {
     public static final ZatItem ZAT = new ZatItem();
     public static final StaffItem STAFF = new StaffItem();
 
-    public static final Item JSG_HAMMER = ItemHelper.createDurabilityItem("hammer", JSGCreativeTabsHandler.jsgToolsCreativeTab, 500);
-    public static final Item JSG_SCREWDRIVER = ItemHelper.createDurabilityItem("screwdriver", JSGCreativeTabsHandler.jsgToolsCreativeTab, 500);
-    public static final Item JSG_WRENCH = ItemHelper.createDurabilityItem("wrench", JSGCreativeTabsHandler.jsgToolsCreativeTab, 500);
+    public static final Item JSG_HAMMER = ItemHelper.createDurabilityItem("hammer", JSGCreativeTabsHandler.jsgToolsCreativeTab, 25, true).setMaxStackSize(1);
+    public static final Item JSG_SCREWDRIVER = ItemHelper.createDurabilityItem("screwdriver", JSGCreativeTabsHandler.jsgToolsCreativeTab, 150, true).setMaxStackSize(1);
+    public static final Item JSG_WRENCH = ItemHelper.createDurabilityItem("wrench", JSGCreativeTabsHandler.jsgToolsCreativeTab, 225, true).setMaxStackSize(1);
 
     /**
      * FRAGMENTS
@@ -172,17 +176,6 @@ public class JSGItems {
     public static final Item SCHEMATIC_TR_ORI = ItemHelper.createGenericItem("schematic_ori", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item SCHEMATIC_TR_ANCIENT = ItemHelper.createGenericItem("schematic_ancient", JSGCreativeTabsHandler.jsgItemsCreativeTab);
 
-    public static final Item[] SG_SCHEMATICS_ITEMS = {
-            SCHEMATIC_MILKYWAY,
-            SCHEMATIC_PEGASUS,
-            SCHEMATIC_UNIVERSE
-    };
-    public static final Item[] TR_SCHEMATICS_ITEMS = {
-            SCHEMATIC_TR_GOAULD,
-            SCHEMATIC_TR_ORI,
-            SCHEMATIC_TR_ANCIENT
-    };
-
     public static boolean isInItemsArray(Item block, Item[] array) {
         for (Item b : array) {
             if (block == b) {
@@ -218,8 +211,13 @@ public class JSGItems {
             NAQUADAH_ORE_IMPURE,
             NAQUADAH_ORE_PURIFIED,
             NAQUADAH_ORE_RAW,
+            NAQUADAH_RAW_DUST,
+            NAQUADAH_RAW_NUGGET,
+
             NAQUADAH_ALLOY_RAW,
             NAQUADAH_ALLOY,
+            NAQUADAH_DUST,
+            NAQUADAH_NUGGET,
 
             TRINIUM_ORE_IMPURE,
             TRINIUM_ORE_PURIFIED,

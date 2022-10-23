@@ -1,5 +1,6 @@
 package tauri.dev.jsg.item;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +14,8 @@ import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.creativetabs.JSGAbstractCreativeTab;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemHelper {
 
@@ -28,7 +31,7 @@ public class ItemHelper {
         return item;
     }
 
-    public static Item createDurabilityItem(String name, JSGAbstractCreativeTab tab, int maxDamage) {
+    public static Item createDurabilityItem(String name, JSGAbstractCreativeTab tab, int maxDamage, boolean shouldStayInCrafting) {
         Item item = new Item() {
             @Override
             public void setDamage(ItemStack stack, int damage) {
@@ -56,6 +59,11 @@ public class ItemHelper {
             @Override
             public int getMaxDamage(@Nonnull ItemStack stack) {
                 return maxDamage;
+            }
+
+            @Override
+            public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
+                tooltip.add(String.format("%.2f", (((double)(maxDamage - getDamage(stack))/((double) maxDamage))*100)) + "%");
             }
 
             @Override
@@ -117,6 +125,18 @@ public class ItemHelper {
             @Override
             public int getItemEnchantability() {
                 return 3;
+            }
+
+            @Override
+            public boolean hasContainerItem(@Nonnull ItemStack stack) {
+                return shouldStayInCrafting;
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack getContainerItem(ItemStack itemStack) {
+                itemStack.setItemDamage(itemStack.getItemDamage() + 1);
+                return (!shouldStayInCrafting) ? super.getContainerItem(itemStack) : itemStack;
             }
         };
 

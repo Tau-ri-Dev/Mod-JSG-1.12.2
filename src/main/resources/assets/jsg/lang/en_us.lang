@@ -272,7 +272,7 @@ tile.jsg.transportrings_block.rings_distance=Distance
 tile.jsg.beamer_block.name=Beamer Block
 
 # machines
-tile.jsg.stargate_assembler_block.name=Stargate Assembler
+tile.jsg.assembler_machine_block.name=Ancient Assembler
 
 # -------------------
 
@@ -588,6 +588,17 @@ gui.beamer.invalid=Invalid
 # gdo
 gui.gdo.send_code=Enter code:
 gui.gdo.send_button=Send code
+
+# assembler
+gui.assembler.name=Ancient Assembler
+
+gui.assembler.milkyway=Milky Way Items
+gui.assembler.pegasus=Pegasus Items
+gui.assembler.universe=Universe Items
+
+gui.assembler.goauld=Gould Items
+gui.assembler.ori=Ori Items
+gui.assembler.ancient=Ancient Items
 
 # -------------------
 

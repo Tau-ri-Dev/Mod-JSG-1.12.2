@@ -11,7 +11,8 @@
 			"item": "jsg:quad_iris_blade_trinium"
 		},
 		"W": {
-			"item": "jsg:crystal_white"
+			"type" : "forge:ore_dict",
+			"ore": "gearTrinium"
 		},
 		"R": {
 			"item": "minecraft:redstone_block"

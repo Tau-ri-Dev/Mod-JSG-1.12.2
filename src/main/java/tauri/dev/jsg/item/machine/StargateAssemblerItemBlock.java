@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.block.machine.StargateAssemblerBlock;
+import tauri.dev.jsg.block.machine.AssemblerBlock;
 import tauri.dev.jsg.capability.ItemCapabilityProvider;
 
 import javax.annotation.Nullable;
@@ -19,7 +19,7 @@ public class StargateAssemblerItemBlock extends ItemBlock {
     public StargateAssemblerItemBlock(Block block) {
         super(block);
 
-        setRegistryName(StargateAssemblerBlock.BLOCK_NAME);
+        setRegistryName(AssemblerBlock.BLOCK_NAME);
         setMaxStackSize(1);
         setHasSubtypes(true);
     }
@@ -31,6 +31,6 @@ public class StargateAssemblerItemBlock extends ItemBlock {
 
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new ItemCapabilityProvider(stack, nbt, StargateAssemblerBlock.MAX_ENERGY);
+        return new ItemCapabilityProvider(stack, nbt, AssemblerBlock.MAX_ENERGY);
     }
 }

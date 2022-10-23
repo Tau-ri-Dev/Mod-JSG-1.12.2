@@ -14,7 +14,8 @@
 			"item": "jsg:circuit_control_naquadah"
 		},
 		"C": {
-			"item": "jsg:crystal_red"
+			"type" : "forge:ore_dict",
+			"ore": "gearTrinium"
 		},
 		"D": {
 			"item": "jsg:crystal_white"

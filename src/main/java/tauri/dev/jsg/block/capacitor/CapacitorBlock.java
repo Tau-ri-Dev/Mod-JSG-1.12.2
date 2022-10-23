@@ -2,7 +2,6 @@ package tauri.dev.jsg.block.capacitor;
 
 import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.tileentity.machine.AbstractAssemblerTile;
 import tauri.dev.jsg.util.ItemHandlerHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.block.JSGAbstractCustomItemBlock;

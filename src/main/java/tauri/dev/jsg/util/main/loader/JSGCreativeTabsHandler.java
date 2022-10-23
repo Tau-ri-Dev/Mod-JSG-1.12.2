@@ -8,7 +8,8 @@ public class JSGCreativeTabsHandler {
     public static final JSGItemsCreativeTab jsgItemsCreativeTab = new JSGItemsCreativeTab();
     public static final JSGOresCreativeTab jsgOresCreativeTab = new JSGOresCreativeTab();
     public static final JSGEnergyCreativeTab jsgEnergyCreativeTab = new JSGEnergyCreativeTab();
-    public static final JSGToolsCreativeTab jsgToolsCreativeTab = new JSGToolsCreativeTab();
+    public static final JSGWeaponsCreativeTab jsgWeaponsCreativeTab = new JSGWeaponsCreativeTab();
     public static final JSGPropsCreativeTab jsgPropsCreativeTab = new JSGPropsCreativeTab();
     public static final JSGMachinesCreativeTab jsgMachinesCreativeTab = new JSGMachinesCreativeTab();
+    public static final JSGToolsCreativeTab jsgToolsCreativeTab = new JSGToolsCreativeTab();
 }

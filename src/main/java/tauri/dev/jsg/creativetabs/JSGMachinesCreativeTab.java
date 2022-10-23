@@ -1,7 +1,7 @@
 package tauri.dev.jsg.creativetabs;
 
 import net.minecraft.item.ItemStack;
-import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.block.JSGBlocks;
 
 public class JSGMachinesCreativeTab extends JSGAbstractCreativeTab {
 
@@ -11,6 +11,6 @@ public class JSGMachinesCreativeTab extends JSGAbstractCreativeTab {
 
     @Override
     public ItemStack getTabIconItem() {
-        return new ItemStack(JSGItems.DHD_BBB);
+        return new ItemStack(JSGBlocks.MACHINE_ASSEMBLER);
     }
 }

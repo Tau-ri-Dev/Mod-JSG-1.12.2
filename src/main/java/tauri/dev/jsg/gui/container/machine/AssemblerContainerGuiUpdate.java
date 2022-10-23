@@ -3,15 +3,15 @@ package tauri.dev.jsg.gui.container.machine;
 import io.netty.buffer.ByteBuf;
 import tauri.dev.jsg.state.State;
 
-public abstract class AbstractAssemblerContainerGuiUpdate extends State {
-    public AbstractAssemblerContainerGuiUpdate() {}
+public class AssemblerContainerGuiUpdate extends State {
+    public AssemblerContainerGuiUpdate() {}
 
     public int energyStored;
     public int energyTransferedLastTick;
     public long machineStart;
     public long machineEnd;
 
-    public AbstractAssemblerContainerGuiUpdate(int energyStored, int energyTransferedLastTick, long machineStart, long machineEnd) {
+    public AssemblerContainerGuiUpdate(int energyStored, int energyTransferedLastTick, long machineStart, long machineEnd) {
         this.energyStored = energyStored;
         this.energyTransferedLastTick = energyTransferedLastTick;
         this.machineStart = machineStart;

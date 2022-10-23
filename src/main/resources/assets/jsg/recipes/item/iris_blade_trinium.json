@@ -9,7 +9,7 @@
 	"key": {
 		"T": {
 			"type" : "forge:ore_dict",
-			"ore": "ingotTrinium"
+			"ore": "plateTrinium"
 		}
 	},
 	

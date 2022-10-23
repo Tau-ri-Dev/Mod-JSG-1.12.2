@@ -15,20 +15,22 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import tauri.dev.jsg.gui.container.OpenTabHolderInterface;
 import tauri.dev.jsg.gui.util.ContainerHelper;
+import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.state.StateTypeEnum;
-import tauri.dev.jsg.tileentity.machine.AbstractAssemblerTile;
+import tauri.dev.jsg.tileentity.machine.StargateAssemblerTile;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-import static tauri.dev.jsg.tileentity.machine.AbstractAssemblerTile.CONTAINER_SIZE;
+import static tauri.dev.jsg.tileentity.machine.StargateAssemblerTile.CONTAINER_SIZE;
+import static tauri.dev.jsg.tileentity.machine.StargateAssemblerTile.getAllowedSchematics;
 
-public abstract class AbstractAssemblerContainer extends Container implements OpenTabHolderInterface {
+public class AssemblerContainer extends Container implements OpenTabHolderInterface {
 
-    public AbstractAssemblerTile tile;
+    public StargateAssemblerTile tile;
     public ArrayList<Slot> slots = new ArrayList<>();
     private final BlockPos pos;
     private int lastEnergyStored;
@@ -43,9 +45,9 @@ public abstract class AbstractAssemblerContainer extends Container implements Op
         return true;
     }
 
-    public AbstractAssemblerContainer(IInventory playerInventory, World world, int x, int y, int z) {
+    public AssemblerContainer(IInventory playerInventory, World world, int x, int y, int z) {
         pos = new BlockPos(x, y, z);
-        tile = (AbstractAssemblerTile) world.getTileEntity(pos);
+        tile = (StargateAssemblerTile) world.getTileEntity(pos);
         if (tile != null) {
             IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
@@ -79,17 +81,23 @@ public abstract class AbstractAssemblerContainer extends Container implements Op
 
     @Nonnull
     @Override
-    public ItemStack transferStackInSlot(@Nonnull EntityPlayer playerIn, int index) {
-        Slot slot = getSlot(index);
-
+    public ItemStack transferStackInSlot(@Nonnull EntityPlayer playerIn, int slotId) {
+        Slot slot = getSlot(slotId);
         if (slot.getHasStack()) {
             ItemStack stack = slot.getStack();
 
-            if (index < CONTAINER_SIZE) {
-                if (!this.mergeItemStack(stack, CONTAINER_SIZE, this.inventorySlots.size(), true)) {
+            if(slotId == 0){
+                if(!(JSGItems.isInItemsArray(stack.getItem(), getAllowedSchematics()))) return ItemStack.EMPTY;
+            }
+
+            if (slotId < CONTAINER_SIZE) {
+                // to player
+                if (!this.mergeItemStack(stack, CONTAINER_SIZE-1, this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(stack, 0, CONTAINER_SIZE, true)) {
+            }
+            // from player
+            else if (!this.mergeItemStack(stack, 0, CONTAINER_SIZE, true)) {
                 return ItemStack.EMPTY;
             }
 
