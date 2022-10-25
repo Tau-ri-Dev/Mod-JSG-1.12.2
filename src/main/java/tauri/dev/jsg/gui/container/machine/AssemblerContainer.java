@@ -20,17 +20,17 @@ import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.state.StateTypeEnum;
-import tauri.dev.jsg.tileentity.machine.StargateAssemblerTile;
+import tauri.dev.jsg.tileentity.machine.AssemblerTile;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-import static tauri.dev.jsg.tileentity.machine.StargateAssemblerTile.CONTAINER_SIZE;
-import static tauri.dev.jsg.tileentity.machine.StargateAssemblerTile.getAllowedSchematics;
+import static tauri.dev.jsg.tileentity.machine.AssemblerTile.CONTAINER_SIZE;
+import static tauri.dev.jsg.tileentity.machine.AssemblerTile.getAllowedSchematics;
 
 public class AssemblerContainer extends Container implements OpenTabHolderInterface {
 
-    public StargateAssemblerTile tile;
+    public AssemblerTile tile;
     public ArrayList<Slot> slots = new ArrayList<>();
     private final BlockPos pos;
     private int lastEnergyStored;
@@ -47,7 +47,7 @@ public class AssemblerContainer extends Container implements OpenTabHolderInterf
 
     public AssemblerContainer(IInventory playerInventory, World world, int x, int y, int z) {
         pos = new BlockPos(x, y, z);
-        tile = (StargateAssemblerTile) world.getTileEntity(pos);
+        tile = (AssemblerTile) world.getTileEntity(pos);
         if (tile != null) {
             IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 

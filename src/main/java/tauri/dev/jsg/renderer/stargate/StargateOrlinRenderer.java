@@ -1,18 +1,16 @@
 package tauri.dev.jsg.renderer.stargate;
 
-import tauri.dev.jsg.util.main.JSGProps;
-import tauri.dev.jsg.loader.ElementEnum;
-import tauri.dev.jsg.particle.ParticleBlender;
-import tauri.dev.jsg.particle.ParticleBlender.RandomizeInterface;
-import tauri.dev.jsg.particle.ParticleBlender.SimpleVector;
-import tauri.dev.jsg.particle.ParticleBlenderSmoke;
-import tauri.dev.jsg.particle.ParticleBlenderSparks;
-import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import tauri.dev.jsg.loader.ElementEnum;
+import tauri.dev.jsg.particle.ParticleBlender;
+import tauri.dev.jsg.particle.ParticleBlenderSmoke;
+import tauri.dev.jsg.particle.ParticleBlenderSparks;
+import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
+import tauri.dev.jsg.util.main.JSGProps;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -75,14 +73,10 @@ public class StargateOrlinRenderer extends StargateAbstractRenderer<StargateAbst
 			new ParticleBlenderSmoke(-2.36438f,  0.644607f, 5.53441f, 5, 50, 0, -0.01f, true, (motion) -> { motion.x = -0.03f + Math.random()*0.06f; motion.z = -0.03f + Math.random()*-0.01f; }),
 			new ParticleBlenderSmoke(-1.26211f,  0.451610f, 1.12577f, 5, 50, 0, -0.01f, true, (motion) -> { motion.x = -0.03f + Math.random()*0.06f; motion.z = -0.03f + Math.random()*-0.01f; })
 	);
-	
-	private static final RandomizeInterface SPARK_RANDOMIZER = new RandomizeInterface() {
-		
-		@Override
-		public void randomize(SimpleVector motion) {
-			motion.x = 0.02 - Math.random()/25;
-			motion.z = 0.2 + Math.random()/10;
-		}
+
+	private static final ParticleBlender.RandomizeInterface SPARK_RANDOMIZER = motion -> {
+		motion.x = 0.02 - Math.random() / 25;
+		motion.z = 0.2 + Math.random() / 10;
 	};
 	
 	private static final List<ParticleBlender> SPARK_PARTICLES = Arrays.asList(

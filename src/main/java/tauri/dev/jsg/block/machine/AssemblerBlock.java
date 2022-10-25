@@ -1,18 +1,25 @@
 package tauri.dev.jsg.block.machine;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.gui.GuiIdEnum;
 import tauri.dev.jsg.item.machine.StargateAssemblerItemBlock;
-import tauri.dev.jsg.tileentity.machine.StargateAssemblerTile;
+import tauri.dev.jsg.renderer.machine.AssemblerRenderer;
+import tauri.dev.jsg.tileentity.machine.AssemblerTile;
+import tauri.dev.jsg.util.JSGAxisAlignedBB;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class AssemblerBlock extends JSGMachineBlock {
     public static final String BLOCK_NAME = "assembler_machine_block";
@@ -25,12 +32,16 @@ public class AssemblerBlock extends JSGMachineBlock {
 
     @Override
     public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
-        return new StargateAssemblerTile();
+        return new AssemblerTile();
     }
 
     @Override
     public Class<? extends TileEntity> getTileEntityClass() {
-        return StargateAssemblerTile.class;
+        return AssemblerTile.class;
+    }
+
+    public TileEntitySpecialRenderer<? extends TileEntity> getTESR() {
+        return new AssemblerRenderer();
     }
 
     @Override
@@ -41,5 +52,22 @@ public class AssemblerBlock extends JSGMachineBlock {
     @Override
     public ItemBlock getItemBlock() {
         return new StargateAssemblerItemBlock(this);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos) {
+        return new JSGAxisAlignedBB(0, 0, 0, 1, 0.8, 1);
+    }
+
+    @Nullable
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos) {
+        return new JSGAxisAlignedBB(0, 0, 0, 1, 0.8, 1);
+    }
+
+    @Nonnull
+    @Override
+    public EnumBlockRenderType getRenderType(@Nonnull IBlockState state) {
+        return EnumBlockRenderType.INVISIBLE;
     }
 }

@@ -22,7 +22,7 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGAbstractCustomItemBlock;
 import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.stargate.power.StargateItemEnergyStorage;
-import tauri.dev.jsg.tileentity.machine.StargateAssemblerTile;
+import tauri.dev.jsg.tileentity.machine.AssemblerTile;
 import tauri.dev.jsg.util.ItemHandlerHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
@@ -100,7 +100,7 @@ public abstract class JSGMachineBlock extends JSGAbstractCustomItemBlock {
     @Override
     public void breakBlock(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
         if (!world.isRemote) {
-            StargateAssemblerTile tile = (StargateAssemblerTile) world.getTileEntity(pos);
+            AssemblerTile tile = (AssemblerTile) world.getTileEntity(pos);
             if (tile != null) {
                 ItemHandlerHelper.dropInventoryItems(world, pos, tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null));
             }

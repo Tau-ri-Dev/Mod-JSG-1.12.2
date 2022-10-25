@@ -84,7 +84,7 @@ item.jsg.dhd_bbb.name=Большая Синяя Кнопка (BBB)
 item.jsg.fragment_stargate_milkyway.name=Ring Fragment (Milky way)
 item.jsg.fragment_stargate_pegasus.name=Ring Fragment (Pegasus)
 item.jsg.fragment_stargate_universe.name=Ring Fragment (Universe)
-item.jsg.fragment_transportrings_goauld.name=Transport Rings Fragment (Goauld)
+item.jsg.fragment_transportrings_goauld.name=Transport Rings Fragment (Goa'uld)
 item.jsg.fragment_transportrings_ori.name=Transport Rings Fragment (Ori)
 item.jsg.fragment_transportrings_ancient.name=Transport Rings Fragment (Ancient)
 
@@ -588,7 +588,7 @@ gui.assembler.milkyway=Milky Way Items
 gui.assembler.pegasus=Pegasus Items
 gui.assembler.universe=Universe Items
 
-gui.assembler.goauld=Gould Items
+gui.assembler.goauld=Goa'uld Items
 gui.assembler.ori=Ori Items
 gui.assembler.ancient=Ancient Items
 

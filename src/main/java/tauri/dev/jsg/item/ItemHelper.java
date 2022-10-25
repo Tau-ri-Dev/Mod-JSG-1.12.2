@@ -10,7 +10,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.creativetabs.JSGAbstractCreativeTab;
 
 import javax.annotation.Nonnull;
@@ -63,7 +62,7 @@ public class ItemHelper {
 
             @Override
             public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
-                tooltip.add(String.format("%.2f", (((double)(maxDamage - getDamage(stack))/((double) maxDamage))*100)) + "%");
+                tooltip.add(String.format("%.2f", (((double) (maxDamage - getDamage(stack)) / ((double) maxDamage)) * 100)) + "%");
             }
 
             @Override
@@ -103,7 +102,7 @@ public class ItemHelper {
                 stack.setTagCompound(nbt);
             }
 
-			@Override
+            @Override
             public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
                 if (this.isInCreativeTab(tab))
                     items.add(getDefaultInstance());
@@ -135,8 +134,9 @@ public class ItemHelper {
             @Nonnull
             @Override
             public ItemStack getContainerItem(ItemStack itemStack) {
-                itemStack.setItemDamage(itemStack.getItemDamage() + 1);
-                return (!shouldStayInCrafting) ? super.getContainerItem(itemStack) : itemStack;
+                ItemStack it = itemStack.copy();
+                it.setItemDamage(itemStack.getItemDamage() + 1);
+                return (!shouldStayInCrafting) ? super.getContainerItem(itemStack) : it;
             }
         };
 

@@ -26,6 +26,8 @@ public class JSGStructuresGenerator implements IWorldGenerator {
 
     public static final JSGStructure THE_END = new JSGStructure("desert", 0, true, false, 11, 11, 1);
 
+    public static final JSGStructure NAQUADAH_MINE = new JSGStructure("naquadah_mine", 9, false, false, 15, 15, 0);
+
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         ArrayList<Block> blocks = new ArrayList<>();
@@ -34,28 +36,40 @@ public class JSGStructuresGenerator implements IWorldGenerator {
                 blocks.add(Blocks.GRASS);
                 blocks.add(Blocks.DIRT);
                 blocks.add(Blocks.STONE);
-                if(JSGConfig.stargateGeneratorConfig.stargateRGChancePlains == 0) break;
-                this.generateStructure(
-                        PLAINS,
-                        world, random, chunkX, chunkZ,
-                        2000 - tauri.dev.jsg.config.JSGConfig.stargateGeneratorConfig.stargateRGChancePlains,
-                        blocks,
-                        BiomeForest.class, BiomePlains.class, BiomeSwamp.class, BiomeHills.class, BiomeSnow.class, BiomeTaiga.class,
-                        BiomeJungle.class, BiomeForestMutated.class, BiomeSavannaMutated.class, BiomeSavanna.class
+                if(JSGConfig.stargateGeneratorConfig.stargateRGChancePlains != 0) {
+                    this.generateStructure(
+                            PLAINS,
+                            world, random, chunkX, chunkZ,
+                            2000 - tauri.dev.jsg.config.JSGConfig.stargateGeneratorConfig.stargateRGChancePlains,
+                            blocks,
+                            BiomeForest.class, BiomePlains.class, BiomeSwamp.class, BiomeHills.class, BiomeSnow.class, BiomeTaiga.class,
+                            BiomeJungle.class, BiomeForestMutated.class, BiomeSavannaMutated.class, BiomeSavanna.class
 
+                    );
+                }
+
+                blocks.clear();
+                blocks.add(Blocks.GRASS);
+                this.generateStructure(
+                        NAQUADAH_MINE,
+                        world, random, chunkX, chunkZ,
+                        2000 - 100,
+                        blocks,
+                        BiomeForest.class, BiomePlains.class
                 );
 
                 blocks.clear();
                 blocks.add(Blocks.SAND);
                 blocks.add(Blocks.SANDSTONE);
-                if(tauri.dev.jsg.config.JSGConfig.stargateGeneratorConfig.stargateRGChanceDesert == 0) break;
-                this.generateStructure(
-                        DESERT,
-                        world, random, chunkX, chunkZ,
-                        2000 - tauri.dev.jsg.config.JSGConfig.stargateGeneratorConfig.stargateRGChanceDesert,
-                        blocks,
-                        BiomeDesert.class, BiomeMesa.class
-                );
+                if(tauri.dev.jsg.config.JSGConfig.stargateGeneratorConfig.stargateRGChanceDesert != 0) {
+                    this.generateStructure(
+                            DESERT,
+                            world, random, chunkX, chunkZ,
+                            2000 - tauri.dev.jsg.config.JSGConfig.stargateGeneratorConfig.stargateRGChanceDesert,
+                            blocks,
+                            BiomeDesert.class, BiomeMesa.class
+                    );
+                }
                 break;
             /*case NETHER:
                 blocks.add(Blocks.NETHERRACK);

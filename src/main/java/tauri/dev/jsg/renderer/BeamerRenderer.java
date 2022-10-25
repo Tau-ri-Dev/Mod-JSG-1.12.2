@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
-import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.beamer.BeamerModeEnum;
 import tauri.dev.jsg.beamer.BeamerRoleEnum;
 import tauri.dev.jsg.config.JSGConfig;
@@ -31,7 +30,7 @@ public class BeamerRenderer extends TileEntitySpecialRenderer<BeamerTile> {
         }
 
         if (te.getMode() != BeamerModeEnum.NONE && te.beamRadiusClient > 0) {
-            long tick = te.getWorld().getTotalWorldTime();
+            //long tick = te.getWorld().getTotalWorldTime();
 
             GlStateManager.alphaFunc(516, 0.1F);
             this.bindTexture(TileEntityBeaconRenderer.TEXTURE_BEACON_BEAM);
@@ -60,9 +59,9 @@ public class BeamerRenderer extends TileEntitySpecialRenderer<BeamerTile> {
             GlStateManager.rotate(((float) angY) * ((te.getFacing() == EnumFacing.SOUTH || te.getFacing() == EnumFacing.WEST) ? -1 : 1), 0, 1, 0);
             GlStateManager.rotate(-90 + (((float) angX) * -1), 1, 0, 0);
 
-            if (tick % 40 == 0) {
+            /*if (tick % 40 == 0) {
                 JSG.info("beamerLength: " + beamerLength);
-            }
+            }*/
 
             float[] colors = te.getMode().colors;
 

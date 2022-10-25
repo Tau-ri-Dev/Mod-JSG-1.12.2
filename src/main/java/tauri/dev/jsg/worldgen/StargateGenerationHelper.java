@@ -15,7 +15,7 @@ import java.util.Map;
 public class StargateGenerationHelper {
 	
 	public static class FreeSpace {
-		private Map<EnumFacing, DirectionResult> freeSpaceMap = new HashMap<EnumFacing, DirectionResult>();
+		private final Map<EnumFacing, DirectionResult> freeSpaceMap = new HashMap<EnumFacing, DirectionResult>();
 		private Map.Entry<EnumFacing, DirectionResult> maxFreeSpace;
 		
 		public void put(EnumFacing direction, DirectionResult distance, boolean ignoreInMaximum) {

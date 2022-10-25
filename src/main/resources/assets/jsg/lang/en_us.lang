@@ -84,7 +84,7 @@ item.jsg.dhd_bbb.name=Bright Blue Button (BBB)
 item.jsg.fragment_stargate_milkyway.name=Ring Fragment (Milky way)
 item.jsg.fragment_stargate_pegasus.name=Ring Fragment (Pegasus)
 item.jsg.fragment_stargate_universe.name=Ring Fragment (Universe)
-item.jsg.fragment_transportrings_goauld.name=Transport Rings Fragment (Goauld)
+item.jsg.fragment_transportrings_goauld.name=Transport Rings Fragment (Goa'uld)
 item.jsg.fragment_transportrings_ori.name=Transport Rings Fragment (Ori)
 item.jsg.fragment_transportrings_ancient.name=Transport Rings Fragment (Ancient)
 
@@ -189,7 +189,7 @@ item.jsg.plate_naquadah.name=Plate (Naquadah)
 item.jsg.schematic_milkyway.name=Schematic (Milky Way)
 item.jsg.schematic_pegasus.name=Schematic (Pegasus)
 item.jsg.schematic_universe.name=Schematic (Universe)
-item.jsg.schematic_goauld.name=Transport Rings Schematic (Goauld)
+item.jsg.schematic_goauld.name=Transport Rings Schematic (Goa'uld)
 item.jsg.schematic_ori.name=Transport Rings Schematic (Ori)
 item.jsg.schematic_ancient.name=Transport Rings Schematic (Ancient)
 
@@ -596,7 +596,7 @@ gui.assembler.milkyway=Milky Way Items
 gui.assembler.pegasus=Pegasus Items
 gui.assembler.universe=Universe Items
 
-gui.assembler.goauld=Gould Items
+gui.assembler.goauld=Goa'uld Items
 gui.assembler.ori=Ori Items
 gui.assembler.ancient=Ancient Items
 

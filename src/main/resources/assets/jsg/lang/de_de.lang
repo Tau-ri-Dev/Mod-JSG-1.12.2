@@ -72,7 +72,7 @@ item.jsg.crystal_glyph_stargate.name=Stargate Glyphenkristall
 item.jsg.crystal_glyph_milkyway.name=Milchstraßen Glyphenkristall
 item.jsg.crystal_glyph_pegasus.name=Pegasus Glyphenkristall
 item.jsg.crystal_glyph_universe.name=Universe Glyphenkristall
-item.jsg.crystal_glyph_goauld.name=Goauld Ring Glyphenkristall
+item.jsg.crystal_glyph_goauld.name=Goa'uld Ring Glyphenkristall
 item.jsg.crystal_glyph_ori.name=Ori Ring Glyphenkristall
 item.jsg.crystal_glyph_ancient.name=Antiker Ring Glyphenkristall
 
@@ -85,7 +85,7 @@ item.jsg.dhd_bbb.name=Leuchtender Blauer Knopf (BBB)
 item.jsg.fragment_stargate_milkyway.name=Ring Fragment (Milchstraße)
 item.jsg.fragment_stargate_pegasus.name=Ring Fragment (Pegasus)
 item.jsg.fragment_stargate_universe.name=Ring Fragment (Universe)
-item.jsg.fragment_transportrings_goauld.name=Transporterring Fragment (Goauld)
+item.jsg.fragment_transportrings_goauld.name=Transporterring Fragment (Goa'uld)
 item.jsg.fragment_transportrings_ori.name=Transporterring Fragment (Ori)
 item.jsg.fragment_transportrings_ancient.name=Transportring Fragment (Antiker)
 
@@ -232,7 +232,7 @@ tile.jsg.transportrings_controller_goauld_block.name=Transporterring Steuerung
 tile.jsg.transportrings_controller_block.not_linked=Steuerung nicht verbunden
 
 # rings
-tile.jsg.transportrings_goauld_block.name=Transportringe (Goauld)
+tile.jsg.transportrings_goauld_block.name=Transportringe (Goa'uld)
 tile.jsg.transportrings_ori_block.name=Transportringe (Ori)
 
 tile.jsg.transportrings_block.non_existing_address=Adresse existiert nicht
@@ -573,7 +573,7 @@ gui.assembler.milkyway=Milky Way Items
 gui.assembler.pegasus=Pegasus Items
 gui.assembler.universe=Universe Items
 
-gui.assembler.goauld=Gould Items
+gui.assembler.goauld=Goa'uld Items
 gui.assembler.ori=Ori Items
 gui.assembler.ancient=Ancient Items
 

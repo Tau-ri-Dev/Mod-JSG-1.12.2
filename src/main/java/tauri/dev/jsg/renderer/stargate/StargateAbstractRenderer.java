@@ -11,6 +11,7 @@ import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.JSGMinecraftHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -364,7 +365,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
      * @param mul      Multiplier of the horizon waving speed
      */
     protected void renderEventHorizon(double partialTicks, boolean white, Float alpha, boolean backOnly, float mul) {
-        float tick = (float) Math.floor((Minecraft.getSystemTime()/(double)1000)*20);
+        float tick = (float) JSGMinecraftHelper.getClientTick();
 
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.enableBlend();

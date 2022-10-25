@@ -2,22 +2,21 @@ package tauri.dev.jsg.renderer;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 
 public class BlockRenderer {
 
@@ -50,42 +49,51 @@ public class BlockRenderer {
     }
 
     public static void renderItemGUI(@Nullable ItemStack stack) {
-        if(stack == null) return;
-        float alpha = 1.0f;
+        renderItem(stack, ItemCameraTransforms.TransformType.GUI);
+    }
+
+    public static void renderItem(@Nullable ItemStack stack, ItemCameraTransforms.TransformType type) {
+        renderItem(stack, type, 1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    public static void renderItem(@Nullable ItemStack stack, ItemCameraTransforms.TransformType type, float red, float green, float blue, float alpha) {
+        if (stack == null) return;
         final ResourceLocation itemGlintTexture = new ResourceLocation("textures/misc/enchanted_item_glint.png");
         TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
         RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-        IBakedModel bakedmodel = renderItem.getItemModelWithOverrides(stack, null, null);
+        IBakedModel bakedModel = renderItem.getItemModelWithOverrides(stack, null, null);
         GlStateManager.pushMatrix();
         GlStateManager.enableAlpha();
-        //GlStateManager.alphaFunc(516, 0.1F);
-        GlStateManager.color(1, 1, 1, alpha);
+        GlStateManager.alphaFunc(516, 0.1F);
+        GlStateManager.color(red, green, 1, alpha);
         textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
         GlStateManager.enableRescaleNormal();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
-        GlStateManager.translate((float) 0, (float) 0, 100.0F);
-        GlStateManager.translate(8.0F, 8.0F, 0.0F);
+        GlStateManager.color(red, green, blue, alpha);
+        if (type == ItemCameraTransforms.TransformType.GUI) {
+            GlStateManager.translate((float) 0, (float) 0, 100.0F);
+            GlStateManager.translate(8.0F, 8.0F, 0.0F);
+        }
         GlStateManager.scale(1.0F, -1.0F, 1.0F);
         GlStateManager.scale(16.0F, 16.0F, 16.0F);
-        if (bakedmodel.isGui3d())
+        if (bakedModel.isGui3d())
             GlStateManager.enableLighting();
         else
             GlStateManager.disableLighting();
 
-        bakedmodel = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(bakedmodel, ItemCameraTransforms.TransformType.GUI, false);
+        bakedModel = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(bakedModel, type, false);
         if (!stack.isEmpty()) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(-0.5F, -0.5F, -0.5F);
 
-            if (bakedmodel.isBuiltInRenderer()) {
-                GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
+            if (bakedModel.isBuiltInRenderer()) {
+                GlStateManager.color(red, green, blue, alpha);
                 GlStateManager.enableRescaleNormal();
                 stack.getItem().getTileEntityItemStackRenderer().renderByItem(stack);
             } else {
-                renderItem.renderModel(bakedmodel, stack);
+                renderItem.renderModel(bakedModel, stack);
 
                 if (stack.hasEffect()) {
                     GlStateManager.depthMask(false);
@@ -99,16 +107,16 @@ public class BlockRenderer {
                     float f = (float) (Minecraft.getSystemTime() % 3000L) / 3000.0F / 8.0F;
                     GlStateManager.translate(f, 0.0F, 0.0F);
                     GlStateManager.rotate(-50.0F, 0.0F, 0.0F, 1.0F);
-                    GlStateManager.color(1, 1, 1, alpha);
-                    renderItem.renderModel(bakedmodel, -8372020);
+                    GlStateManager.color(red, green, blue, alpha);
+                    renderItem.renderModel(bakedModel, -8372020);
                     GlStateManager.popMatrix();
                     GlStateManager.pushMatrix();
                     GlStateManager.scale(8.0F, 8.0F, 8.0F);
                     float f1 = (float) (Minecraft.getSystemTime() % 4873L) / 4873.0F / 8.0F;
                     GlStateManager.translate(-f1, 0.0F, 0.0F);
                     GlStateManager.rotate(10.0F, 0.0F, 0.0F, 1.0F);
-                    GlStateManager.color(1, 1, 1, alpha);
-                    renderItem.renderModel(bakedmodel, -8372020);
+                    GlStateManager.color(red, green, blue, alpha);
+                    renderItem.renderModel(bakedModel, -8372020);
                     GlStateManager.popMatrix();
                     GlStateManager.matrixMode(5888);
                     GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -127,5 +135,53 @@ public class BlockRenderer {
         GlStateManager.popMatrix();
         textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+    }
+
+    public static void renderItemOnGround(ItemStack stack) {
+        renderItemOnGround(stack, 1, 1, 1, 1);
+    }
+    public static void renderItemOnGround(ItemStack stack, float red, float green, float blue, float alpha) {
+        if (stack == null) return;
+
+        int color = new Color(red, green, blue, alpha).hashCode();
+
+        GlStateManager.pushMatrix();
+        RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+
+        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        IBakedModel model = renderItem.getItemModelWithOverrides(stack, null, null);
+        model = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(model, ItemCameraTransforms.TransformType.GROUND, false);
+        if (!stack.isEmpty()) {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(-0.5F, -0.5F, -0.5F);
+
+            if (model.isBuiltInRenderer()) {
+                GlStateManager.color(red, green, blue, alpha);
+                GlStateManager.enableRescaleNormal();
+                stack.getItem().getTileEntityItemStackRenderer().renderByItem(stack);
+            } else {
+                if (net.minecraftforge.common.ForgeModContainer.allowEmissiveItems) {
+                    net.minecraftforge.client.ForgeHooksClient.renderLitItem(renderItem, model, color, stack);
+                    GlStateManager.popMatrix();
+                    GlStateManager.popMatrix();
+                    return;
+                }
+                Tessellator tessellator = Tessellator.getInstance();
+                BufferBuilder bufferbuilder = tessellator.getBuffer();
+                bufferbuilder.begin(7, DefaultVertexFormats.ITEM);
+
+                for (EnumFacing enumfacing : EnumFacing.values()) {
+                    GlStateManager.color(red, green, blue, alpha);
+                    renderItem.renderQuads(bufferbuilder, model.getQuads((IBlockState) null, enumfacing, 0L), color, stack);
+                }
+
+                GlStateManager.color(red, green, blue, alpha);
+                renderItem.renderQuads(bufferbuilder, model.getQuads((IBlockState) null, (EnumFacing) null, 0L), color, stack);
+                tessellator.draw();
+            }
+
+            GlStateManager.popMatrix();
+        }
+        GlStateManager.popMatrix();
     }
 }

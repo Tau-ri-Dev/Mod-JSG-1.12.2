@@ -1,5 +1,6 @@
 package tauri.dev.jsg.config;
 
+import net.minecraft.client.renderer.GlStateManager;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.config.stargate.StargateTimeLimitModeEnum;
@@ -787,6 +788,19 @@ public class JSGConfig {
     }
 
     public static class DevConfig {
+        @Name("x")
+        public float x = 0f;
+        @Name("y")
+        public float y = 0f;
+        @Name("z")
+        public float z = 0f;
+        @Name("s")
+        public float s = 1f;
+    }
+
+    public static void rescaleToConfig(){
+        GlStateManager.translate(JSGConfig.devConfig.x, JSGConfig.devConfig.y, JSGConfig.devConfig.z);
+        GlStateManager.scale(JSGConfig.devConfig.s, JSGConfig.devConfig.s, JSGConfig.devConfig.s);
     }
 
     public static void resetCache() {

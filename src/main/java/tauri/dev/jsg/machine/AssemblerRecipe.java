@@ -42,6 +42,7 @@ public abstract class AssemblerRecipe implements IRecipeWrapper {
         int i = 0;
         for (ItemStack s : getPattern()) {
             if (s != null) {
+                if (stacks.get(i).isEmpty()) return false;
                 if (stacks.get(i).getItem() != s.getItem()) return false;
                 if (stacks.get(i).getCount() < s.getCount()) return false;
             } else {
@@ -49,7 +50,7 @@ public abstract class AssemblerRecipe implements IRecipeWrapper {
             }
             i++;
         }
-        if (subStack.getItem() != getSubItemStack().getItem()) return false;
+        if (subStack.isEmpty() || subStack.getItem() != getSubItemStack().getItem()) return false;
         return subStack.getCount() >= getSubItemStack().getCount();
     }
 

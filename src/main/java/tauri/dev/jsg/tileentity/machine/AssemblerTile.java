@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.beamer.BeamerStatusEnum;
 import tauri.dev.jsg.block.machine.AssemblerBlock;
 import tauri.dev.jsg.gui.container.machine.AssemblerContainerGuiUpdate;
 import tauri.dev.jsg.item.JSGItems;
@@ -19,6 +20,12 @@ import tauri.dev.jsg.machine.AssemblerRecipe;
 import tauri.dev.jsg.machine.AssemblerRecipes;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
+import tauri.dev.jsg.renderer.machine.AssemblerRendererState;
+import tauri.dev.jsg.sound.JSGSoundHelper;
+import tauri.dev.jsg.sound.JSGSoundHelperClient;
+import tauri.dev.jsg.sound.SoundEventEnum;
+import tauri.dev.jsg.sound.SoundPositionedEnum;
+import tauri.dev.jsg.stargate.EnumScheduledTask;
 import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateProviderInterface;
@@ -31,7 +38,9 @@ import java.util.ArrayList;
 
 import static tauri.dev.jsg.item.JSGItems.*;
 
-public class StargateAssemblerTile extends TileEntity implements IUpgradable, StateProviderInterface, ITickable {
+public class AssemblerTile extends TileEntity implements IUpgradable, StateProviderInterface, ITickable {
+
+    public AssemblerRendererState rendererState = new AssemblerRendererState();
 
     public static final int CONTAINER_SIZE = 12;
 
@@ -67,6 +76,7 @@ public class StargateAssemblerTile extends TileEntity implements IUpgradable, St
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
+            sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             markDirty();
         }
     };
@@ -79,9 +89,11 @@ public class StargateAssemblerTile extends TileEntity implements IUpgradable, St
     protected int energyStoredLastTick = 0;
     protected int energyTransferedLastTick = 0;
     protected int machineProgress = 0;
+    protected int machineProgressLast = 0;
     protected long machineStart = -1;
     protected long machineEnd = -1;
     protected boolean isWorking = false;
+    protected boolean isWorkingLast = false;
 
     protected AssemblerRecipe currentRecipe = null;
 
@@ -95,8 +107,10 @@ public class StargateAssemblerTile extends TileEntity implements IUpgradable, St
 
     @Override
     public void onLoad() {
-        if (!world.isRemote)
+        if (!world.isRemote) {
             targetPoint = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
+            sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
+        }
     }
 
     public long getMachineStart() {
@@ -105,6 +119,10 @@ public class StargateAssemblerTile extends TileEntity implements IUpgradable, St
 
     public long getMachineEnd() {
         return machineEnd;
+    }
+
+    public int getMachineProgress() {
+        return machineProgress;
     }
 
     public AssemblerRecipe getRecipeIfPossible() {
@@ -127,7 +145,8 @@ public class StargateAssemblerTile extends TileEntity implements IUpgradable, St
         itemStackHandler.insertItem(11, currentRecipe.getResult(), false);
         for (int i = 1; i < 10; i++) {
             int amount = 0;
-            if (currentRecipe.getPattern().size() > (i - 1) && currentRecipe.getPattern().get(i - 1) != null) amount = currentRecipe.getPattern().get(i - 1).getCount();
+            if (currentRecipe.getPattern().size() > (i - 1) && currentRecipe.getPattern().get(i - 1) != null)
+                amount = currentRecipe.getPattern().get(i - 1).getCount();
             itemStackHandler.extractItem(i, amount, false);
         }
         if (currentRecipe.removeSubItem())
@@ -135,10 +154,19 @@ public class StargateAssemblerTile extends TileEntity implements IUpgradable, St
         else if (currentRecipe.removeDurabilitySubItem() && itemStackHandler.getStackInSlot(10).getItem().isDamageable())
             itemStackHandler.getStackInSlot(10).setItemDamage(itemStackHandler.getStackInSlot(10).getItemDamage() + 1);
 
-        currentRecipe = null;
-        machineStart = -1;
-        machineEnd = -1;
-        isWorking = false;
+        currentRecipe = getRecipeIfPossible();
+        if(currentRecipe != null){
+            machineStart = this.world.getTotalWorldTime();
+            machineEnd = this.world.getTotalWorldTime() + currentRecipe.getWorkingTime();
+            machineProgress = 0;
+            isWorking = true;
+        }
+        else{
+            machineStart = -1;
+            machineEnd = -1;
+            machineProgress = 0;
+            isWorking = false;
+        }
         markDirty();
     }
 
@@ -162,15 +190,16 @@ public class StargateAssemblerTile extends TileEntity implements IUpgradable, St
                     machineEnd = -1;
                     markDirty();
                     sendState(StateTypeEnum.GUI_UPDATE, getState(StateTypeEnum.GUI_UPDATE));
+                    JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.BEAMER_START);
                 } else {
                     if (machineStart == machineEnd) machineProgress = 0;
                     else
                         machineProgress = (int) Math.round((((double) (this.world.getTotalWorldTime() - machineStart)) / ((double) (machineEnd - machineStart))) * 100); // returns % of done work
                     energyStorage.extractEnergy(currentRecipe.getEnergyPerTick(), false);
 
-                    JSG.info("progress: " + machineProgress);
+                    /*JSG.info("progress: " + machineProgress);
                     JSG.info("start: " + machineStart);
-                    JSG.info("stop: " + machineEnd);
+                    JSG.info("stop: " + machineEnd);*/
 
                     if (machineProgress >= 100) {
                         workIsDone();
@@ -182,6 +211,13 @@ public class StargateAssemblerTile extends TileEntity implements IUpgradable, St
                 machineEnd = currentRecipe.getWorkingTime() + this.world.getTotalWorldTime();
                 markDirty();
                 sendState(StateTypeEnum.GUI_UPDATE, getState(StateTypeEnum.GUI_UPDATE));
+                JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.BEAMER_STOP);
+            }
+
+            if (isWorking != isWorkingLast || machineProgress != machineProgressLast) {
+                isWorkingLast = isWorking;
+                machineProgressLast = machineProgress;
+                sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             }
             markDirty();
         }
@@ -214,30 +250,50 @@ public class StargateAssemblerTile extends TileEntity implements IUpgradable, St
 
     @Override
     public State getState(StateTypeEnum stateType) {
-        if (stateType == StateTypeEnum.GUI_UPDATE) {
-            return new AssemblerContainerGuiUpdate(energyStorage.getEnergyStored(), energyTransferedLastTick, machineStart, machineEnd);
+        switch (stateType) {
+            case GUI_UPDATE:
+                return new AssemblerContainerGuiUpdate(energyStorage.getEnergyStored(), energyTransferedLastTick, machineStart, machineEnd);
+            case RENDERER_UPDATE:
+                //ItemStack stack = itemStackHandler.getStackInSlot(11);
+                ItemStack stack = currentRecipe != null ? currentRecipe.getResult() : null;
+                return new AssemblerRendererState(machineProgress, isWorking, stack);
         }
         return null;
     }
 
     @Override
     public State createState(StateTypeEnum stateType) {
-        if (stateType == StateTypeEnum.GUI_UPDATE) {
-            return new AssemblerContainerGuiUpdate();
+        switch (stateType) {
+            case GUI_UPDATE:
+                return new AssemblerContainerGuiUpdate();
+            case RENDERER_UPDATE:
+                return new AssemblerRendererState();
         }
         return null;
     }
 
     @Override
     public void setState(StateTypeEnum stateType, State state) {
-        if (stateType == StateTypeEnum.GUI_UPDATE) {
-            AssemblerContainerGuiUpdate guiUpdate = (AssemblerContainerGuiUpdate) state;
-            energyStorage.setEnergyStored(guiUpdate.energyStored);
-            energyTransferedLastTick = guiUpdate.energyTransferedLastTick;
-            machineStart = guiUpdate.machineStart;
-            machineEnd = guiUpdate.machineEnd;
-            markDirty();
+        switch (stateType) {
+            case GUI_UPDATE:
+                AssemblerContainerGuiUpdate guiUpdate = (AssemblerContainerGuiUpdate) state;
+                energyStorage.setEnergyStored(guiUpdate.energyStored);
+                energyTransferedLastTick = guiUpdate.energyTransferedLastTick;
+                machineStart = guiUpdate.machineStart;
+                machineEnd = guiUpdate.machineEnd;
+                markDirty();
+                break;
+            case RENDERER_UPDATE:
+                rendererState = (AssemblerRendererState) state;
+                this.machineProgress = rendererState.machineProgress;
+                this.isWorking = rendererState.isWorking;
+                JSGSoundHelperClient.playPositionedSoundClientSide(pos, SoundPositionedEnum.BEAMER_LOOP, isWorking);
+                break;
         }
+    }
+
+    public AssemblerRendererState getRendererState() {
+        return rendererState;
     }
 
     @Nonnull

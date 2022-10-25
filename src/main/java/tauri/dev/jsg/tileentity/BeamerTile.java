@@ -58,6 +58,7 @@ import tauri.dev.jsg.stargate.EnumScheduledTask;
 import tauri.dev.jsg.stargate.EnumStargateState;
 import tauri.dev.jsg.stargate.network.StargateAddressDynamic;
 import tauri.dev.jsg.stargate.network.StargatePos;
+import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateProviderInterface;
@@ -73,6 +74,7 @@ import tauri.dev.jsg.util.LinkingHelper;
 import tauri.dev.jsg.util.NBTHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -90,6 +92,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
     private TargetPoint targetPoint;
     private JSGAxisAlignedBB renderBox = new JSGAxisAlignedBB(0, 0, 0, 1, 1, 1); // To be replaced in updateFacing()
     private JSGAxisAlignedBB renderBoxOffsetted = renderBox;
+    private StargatePos targetGatePos;
 
     public EnumFacing getFacing() {
         return facing;
@@ -133,19 +136,26 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 
         StargateClassicBaseTile gateTile = getLinkedGateTile();
 
-        if (!gateTile.getStargateState().engaged())
+        if (!gateTile.getStargateState().engaged()) {
+            if(targetGatePos != null){
+                targetGatePos = null;
+                markDirty();
+            }
             return BeamerStatusEnum.CLOSED;
+        }
 
         if (isObstructed)
             return BeamerStatusEnum.OBSTRUCTED;
 
-        StargatePos targetGatePos = gateTile.getNetwork().getStargate(gateTile.getDialedAddress());
         updateTargetBeamerData(targetGatePos);
 
         if (targetBeamerWorld == null || targetBeamerPos == null || !BEAMER_MATCHER.apply(targetBeamerWorld.getBlockState(targetBeamerPos)))
             return BeamerStatusEnum.NO_BEAMER;
 
         BeamerTile targetBeamerTile = (BeamerTile) targetBeamerWorld.getTileEntity(targetBeamerPos);
+
+        if(targetBeamerTile == null)
+            return BeamerStatusEnum.NO_BEAMER;
 
         if (targetBeamerTile.isObstructed)
             return BeamerStatusEnum.OBSTRUCTED_TARGET;
@@ -236,8 +246,8 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
     private boolean addedToNetwork = false;
 
     private int powerTransferredSinceLastSignal = 0;
-    private List<FluidStack> fluidsTransferredSinceLastSignal = new ArrayList<>();
-    private List<ItemStack> itemsTransferredSinceLastSignal = new ArrayList<>();
+    private final List<FluidStack> fluidsTransferredSinceLastSignal = new ArrayList<>();
+    private final List<ItemStack> itemsTransferredSinceLastSignal = new ArrayList<>();
 
     private boolean firstCheck = true;
 
@@ -570,12 +580,16 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
     }
 
     public void gateEngaged(StargatePos targetGatePos) {
+        this.targetGatePos = targetGatePos;
+        markDirty();
         updateTargetBeamerData(targetGatePos);
         syncToClient();
     }
 
     public void gateClosed() {
         clearTargetBeamerPos();
+        this.targetGatePos = null;
+        markDirty();
     }
 
     /**
@@ -1211,8 +1225,9 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
     // ---------------------------------------------------------------------------------------------------
     // NBT
 
+    @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         if (baseVect != null && basePos != null) {
             compound.setLong("baseVect", baseVect.toLong());
             compound.setLong("basePos", basePos.toLong());
@@ -1247,11 +1262,16 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
         compound.setTag("fluidsTransferredSinceLastSignal", NBTHelper.serializeFluidStackList(fluidsTransferredSinceLastSignal));
         compound.setTag("itemsTransferredSinceLastSignal", NBTHelper.serializeItemStackList(itemsTransferredSinceLastSignal));
 
+        if(targetGatePos != null){
+            compound.setInteger("targetGatePosSymbolType", targetGatePos.symbolType.id);
+            compound.setTag("targetGatePos", targetGatePos.serializeNBT());
+        }
+
         return super.writeToNBT(compound);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         super.readFromNBT(compound);
 
         if (compound.hasKey("baseVect") && compound.hasKey("basePos")) {
@@ -1282,6 +1302,11 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
             node.load(compound.getCompoundTag("node"));
 
         ScheduledTask.deserializeList(compound.getCompoundTag("scheduledTasks"), scheduledTasks, this);
+
+        if(compound.hasKey("targetGatePos")){
+            SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf(compound.getInteger("targetGatePosSymbolType"));
+            targetGatePos = new StargatePos(symbolType, compound.getCompoundTag("targetGatePos"));
+        }
     }
 
 

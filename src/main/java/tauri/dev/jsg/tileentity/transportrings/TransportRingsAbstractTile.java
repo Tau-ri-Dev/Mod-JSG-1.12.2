@@ -237,6 +237,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return hasPlatformSpace(false, false);
     }
     public boolean hasPlatformSpace(boolean tryBuild, boolean removeBlocks){
+        if(getPlatform() == null) return false;
         BlockPos[] pattern = getPlatform().platformBlock.getPattern();
         boolean fromToPattern = getPlatform().platformBlock.getPlatform().fromToPattern;
 
