@@ -76,7 +76,7 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag) {
 		if (stack.getItemDamage() == 0) {			
-			tooltip.add(JSG.proxy.localize("item.jsg.page_mysterious.empty"));
+			tooltip.add(JSG.proxy.localize("item.jsg.page_notebook.empty"));
 		}
 		
 		else {			

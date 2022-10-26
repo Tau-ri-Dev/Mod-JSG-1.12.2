@@ -10,10 +10,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerItem;
 import tauri.dev.jsg.item.linkable.gdo.GDOItem;
+import tauri.dev.jsg.item.mysterious.PegasusPageMysteriousItem;
+import tauri.dev.jsg.item.mysterious.UniversePageMysteriousItem;
 import tauri.dev.jsg.item.notebook.NotebookItem;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
-import tauri.dev.jsg.item.stargate.PageMysteriousItem;
+import tauri.dev.jsg.item.mysterious.MilkyWayPageMysteriousItem;
 import tauri.dev.jsg.item.stargate.UpgradeIris;
 import tauri.dev.jsg.item.tools.staff.StaffItem;
 import tauri.dev.jsg.item.tools.zat.ZatItem;
@@ -118,7 +120,9 @@ public class JSGItems {
 
     public static final NotebookItem NOTEBOOK_ITEM = new NotebookItem();
     public static final PageNotebookItem PAGE_NOTEBOOK_ITEM = new PageNotebookItem();
-    public static final PageMysteriousItem PAGE_MYSTERIOUS_ITEM = new PageMysteriousItem();
+    public static final MilkyWayPageMysteriousItem PAGE_MYSTERIOUS_ITEM_MILKYWAY = new MilkyWayPageMysteriousItem();
+    public static final PegasusPageMysteriousItem PAGE_MYSTERIOUS_ITEM_PEGASUS = new PegasusPageMysteriousItem();
+    public static final UniversePageMysteriousItem PAGE_MYSTERIOUS_ITEM_UNIVERSE = new UniversePageMysteriousItem();
     public static final UniverseDialerItem UNIVERSE_DIALER = new UniverseDialerItem();
 
     public static final GDOItem GDO = new GDOItem();
@@ -265,7 +269,6 @@ public class JSGItems {
             DHD_BBB,
             NOTEBOOK_ITEM,
             PAGE_NOTEBOOK_ITEM,
-            PAGE_MYSTERIOUS_ITEM,
             UNIVERSE_DIALER,
 
             GDO,
@@ -291,7 +294,11 @@ public class JSGItems {
             SCHEMATIC_UNIVERSE,
             SCHEMATIC_TR_GOAULD,
             SCHEMATIC_TR_ORI,
-            SCHEMATIC_TR_ANCIENT
+            SCHEMATIC_TR_ANCIENT,
+
+            PAGE_MYSTERIOUS_ITEM_MILKYWAY,
+            PAGE_MYSTERIOUS_ITEM_PEGASUS,
+            PAGE_MYSTERIOUS_ITEM_UNIVERSE
     };
 
     public static Item[] getItems() {
@@ -336,6 +343,10 @@ public class JSGItems {
             case "jsg:naquadah_shard":
             case "aunis:naquadah_shard":
                 return NAQUADAH_ORE_IMPURE;
+
+            case "jsg:page_mysterious":
+            case "aunis:page_mysterious":
+                return PAGE_MYSTERIOUS_ITEM_MILKYWAY;
 
             default:
                 break;

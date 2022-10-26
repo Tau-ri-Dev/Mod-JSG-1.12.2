@@ -2,6 +2,6 @@
     "parent": "item/generated",
     "textures": {
         "layer0": "jsg:items/page_base",
-        "layer1": "jsg:items/page_mysterious_overlay"
+        "layer1": "jsg:items/mysterious_uni"
     }
 }

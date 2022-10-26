@@ -11,10 +11,10 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.gen.structure.template.TemplateManager;
-import net.minecraft.world.storage.loot.LootTableList;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
+import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -29,17 +29,17 @@ public class JSGStructure extends WorldGenerator implements IStructure {
     public String structureName;
     public int yNegativeOffset;
     boolean isStargateStructure;
-    boolean isPegasusGate;
+    SymbolTypeEnum symbolType;
     int dimensionToSpawn;
 
     public int structureSizeX;
     public int structureSizeZ;
 
-    public JSGStructure(String structureName, int yNegativeOffset, boolean isStargateStructure, boolean isPegasusGate, int structureSizeX, int structureSizeZ, int dimensionToSpawn) {
+    public JSGStructure(String structureName, int yNegativeOffset, boolean isStargateStructure, SymbolTypeEnum symbolType, int structureSizeX, int structureSizeZ, int dimensionToSpawn) {
         this.structureName = structureName;
         this.yNegativeOffset = yNegativeOffset;
         this.isStargateStructure = isStargateStructure;
-        this.isPegasusGate = isPegasusGate;
+        this.symbolType = symbolType;
         this.structureSizeX = structureSizeX;
         this.structureSizeZ = structureSizeZ;
         this.dimensionToSpawn = dimensionToSpawn;
@@ -53,14 +53,14 @@ public class JSGStructure extends WorldGenerator implements IStructure {
 
     public void generateStructure(World world, BlockPos pos, Random random) {
         pos = pos.down(yNegativeOffset);
-        WorldServer worldToSpawn = Objects.requireNonNull(world.getMinecraftServer()).getWorld(dimensionToSpawn);
         // generate stargate
         if (isStargateStructure) {
             if (JSGConfig.stargateGeneratorConfig.stargateRandomGeneratorEnabled) {
                 String size = tauri.dev.jsg.config.JSGConfig.stargateSize == StargateSizeEnum.LARGE ? "_large" : "_small";
-                generateStargate(world, pos, "sg_" + structureName + size, isPegasusGate, dimensionToSpawn);
+                generateStargate(world, pos, "sg_" + structureName + size, symbolType, dimensionToSpawn);
             }
         } else if (tauri.dev.jsg.config.JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled) {
+            WorldServer worldToSpawn = Objects.requireNonNull(world.getMinecraftServer()).getWorld(dimensionToSpawn);
 
             // else generate normal structure
             MinecraftServer mcServer = world.getMinecraftServer();
@@ -74,6 +74,8 @@ public class JSGStructure extends WorldGenerator implements IStructure {
 
             Map<BlockPos, String> datablocks = template.getDataBlocks(pos, defaultSettings);
             BlockPos lootPos;
+
+            JSG.info("Structure generated at " + pos);
 
             for (BlockPos dataPos : datablocks.keySet()) {
                 String name = datablocks.get(dataPos);
@@ -91,7 +93,7 @@ public class JSGStructure extends WorldGenerator implements IStructure {
                         TileEntity entity = world.getTileEntity(lootPos);
                         if (entity instanceof TileEntityChest) {
                             TileEntityChest chest = (TileEntityChest) entity;
-                            chest.setLootTable(LootTableList.CHESTS_NETHER_BRIDGE, random.nextLong());
+                            chest.setLootTable(new ResourceLocation(JSG.MOD_ID, "naquadah_mine_treasure"), random.nextLong());
                             chest.fillWithLoot(null);
                         }
                         world.setBlockToAir(dataPos);

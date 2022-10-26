@@ -92,13 +92,15 @@ item.jsg.fragment_transportrings_ancient.name=Transport Rings Fragment (Ancient)
 item.jsg.holder_crystal.name=Porte-cristal
 item.jsg.holder_crystal_pegasus.name=Porte-cristal (Pégase)
 
-# carnet de notes
-item.jsg.page_notebook.name=Page de carnet de notes
+# notebook
+item.jsg.page_notebook.name=Notebook Page
+item.jsg.page_notebook.empty=Empty
 
-# page mystérieuse
-item.jsg.page_mysterious.name=Page mystérieuse
-item.jsg.page_mysterious.empty=Empty
-item.jsg.page_mysterious.tooltip=Qui sait où cela mène
+# mysterious page
+item.jsg.page_mysterious_milkyway.name=Mysterious Page (Milky Way)
+item.jsg.page_mysterious_pegasus.name=Mysterious Page (Pegasus)
+item.jsg.page_mysterious_universe.name=Mysterious Page (Universe)
+item.jsg.page_mysterious.tooltip=Who knows where it leads
 
 # beamer
 item.jsg.beamer_crystal_power.name=Cristal de pouvoir de Beamer

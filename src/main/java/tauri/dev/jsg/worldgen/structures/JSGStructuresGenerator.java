@@ -12,6 +12,7 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,14 +20,12 @@ import java.util.List;
 import java.util.Random;
 
 public class JSGStructuresGenerator implements IWorldGenerator {
-    public static final JSGStructure PLAINS = new JSGStructure("plains", 0, true, false, 11, 11, 0);
-    public static final JSGStructure DESERT = new JSGStructure("desert", 0, true, false, 12, 13, 0);
+    public static final JSGStructure PLAINS = new JSGStructure("plains", 2, true, SymbolTypeEnum.MILKYWAY, 11, 11, 0);
+    public static final JSGStructure DESERT = new JSGStructure("desert", 0, true, SymbolTypeEnum.MILKYWAY, 12, 13, 0);
 
-    public static final JSGStructure NETHER = new JSGStructure("nether", 0, true, false, 8, 8, -1);
+    public static final JSGStructure THE_END = new JSGStructure("plains", 0, true, SymbolTypeEnum.UNIVERSE, 11, 11, 1);
 
-    public static final JSGStructure THE_END = new JSGStructure("desert", 0, true, false, 11, 11, 1);
-
-    public static final JSGStructure NAQUADAH_MINE = new JSGStructure("naquadah_mine", 9, false, false, 15, 15, 0);
+    public static final JSGStructure NAQUADAH_MINE = new JSGStructure("naquadah_mine", 8, false, null, 15, 15, 0);
 
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
@@ -71,19 +70,6 @@ public class JSGStructuresGenerator implements IWorldGenerator {
                     );
                 }
                 break;
-            /*case NETHER:
-                blocks.add(Blocks.NETHERRACK);
-                blocks.add(Blocks.SOUL_SAND);
-                blocks.add(Blocks.QUARTZ_ORE);
-                if(JSGConfig.stargateGeneratorConfig.stargateRGChanceNether == 0) break;
-                this.generateStructure(
-                        NETHER,
-                        world, random, chunkX, chunkZ,
-                        2000 - JSGConfig.stargateGeneratorConfig.stargateRGChanceNether,
-                        blocks,
-                        BiomeHell.class
-                );
-                break;*/
             case THE_END:
                 blocks.add(Blocks.END_STONE);
                 blocks.add(Blocks.END_BRICKS);
@@ -162,7 +148,7 @@ public class JSGStructuresGenerator implements IWorldGenerator {
         return null;
     }
 
-    private static boolean checkTopBlock(World world, int x, int z, List<Block> topBlocks){
+    public static boolean checkTopBlock(World world, int x, int z, List<Block> topBlocks){
         int y = world.getHeight();
         boolean found = false;
         while(y > 0 && !found){

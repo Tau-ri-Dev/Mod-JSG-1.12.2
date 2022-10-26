@@ -1,18 +1,7 @@
 package tauri.dev.jsg.worldgen;
 
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.block.JSGBlocks;
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.config.stargate.StargateSizeEnum;
-import tauri.dev.jsg.fluid.JSGFluids;
-import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.stargate.network.StargateAddress;
-import tauri.dev.jsg.stargate.network.StargatePos;
-import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
-import tauri.dev.jsg.tileentity.dialhomedevice.DHDAbstractTile;
-import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
-import tauri.dev.jsg.util.LinkingHelper;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumFacing;
@@ -32,233 +21,272 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.stargate.StargateSizeEnum;
+import tauri.dev.jsg.fluid.JSGFluids;
+import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.stargate.network.StargateAddress;
+import tauri.dev.jsg.stargate.network.StargatePos;
+import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.tileentity.dialhomedevice.DHDAbstractTile;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
+import tauri.dev.jsg.util.LinkingHelper;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
+
+import static tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator.checkTopBlock;
 
 
 /**
  * TODO Unify this and {@link StargateGeneratorNether} (replace this)
  *
  * @author MrJake222
+ * @editedby MineDragonCZ_
  */
 public class StargateGenerator {
 
-	public static GeneratedStargate generateStargate(World world) {
-		Random rand = new Random();
-		BlockPos pos;
-		int tries = 0;
-		WorldServer worldToSpawn = world.getMinecraftServer().getWorld(0);
-		int x;
-		int z;
-		do {
-			x = (int) (tauri.dev.jsg.config.JSGConfig.mysteriousConfig.minOverworldCoords + (rand.nextFloat() * (tauri.dev.jsg.config.JSGConfig.mysteriousConfig.maxOverworldCoords - tauri.dev.jsg.config.JSGConfig.mysteriousConfig.minOverworldCoords))) * (rand.nextBoolean() ? -1 : 1);
-			z = (int) (JSGConfig.mysteriousConfig.minOverworldCoords + (rand.nextFloat() * (tauri.dev.jsg.config.JSGConfig.mysteriousConfig.maxOverworldCoords - tauri.dev.jsg.config.JSGConfig.mysteriousConfig.minOverworldCoords))) * (rand.nextBoolean() ? -1 : 1);
+    public static GeneratedStargate generateStargate(World world, SymbolTypeEnum symbolType, int dimensionToSpawn) {
+        Random rand = new Random();
 
-			pos = StargateGenerator.checkForPlace(worldToSpawn, x/16, z/16);
-			tries++;
-		} while (pos == null && tries < 100);
-		if (tries == 100) {
-			JSG.logger.debug("StargateGenerator: Failed to find place - normal gate");
-			return null;
-		}
-		if (pos == null) {
-			JSG.logger.debug("StargateGenerator: Pos is null - normal gate");
-			return null;
-		}
+        ArrayList<Block> blocks = new ArrayList<>();
+        blocks.add(Blocks.GRASS);
+        blocks.add(Blocks.GRAVEL);
+        blocks.add(Blocks.DIRT);
+        blocks.add(Blocks.SAND);
+        blocks.add(Blocks.SANDSTONE);
+        blocks.add(Blocks.END_STONE);
 
+        BlockPos pos = null;
+        int tries = 0;
+        WorldServer worldToSpawn = world.getMinecraftServer().getWorld(dimensionToSpawn);
+        int x;
+        int z;
+        do {
+            x = (int) (tauri.dev.jsg.config.JSGConfig.mysteriousConfig.minOverworldCoords + (rand.nextFloat() * (tauri.dev.jsg.config.JSGConfig.mysteriousConfig.maxOverworldCoords - tauri.dev.jsg.config.JSGConfig.mysteriousConfig.minOverworldCoords))) * (rand.nextBoolean() ? -1 : 1);
+            z = (int) (JSGConfig.mysteriousConfig.minOverworldCoords + (rand.nextFloat() * (tauri.dev.jsg.config.JSGConfig.mysteriousConfig.maxOverworldCoords - tauri.dev.jsg.config.JSGConfig.mysteriousConfig.minOverworldCoords))) * (rand.nextBoolean() ? -1 : 1);
 
-		//boolean isPegasusGate = new Random().nextInt(100) < 50 && JSGConfig.devConfig.pegGatesMyst; // 50% chance && config
-		Biome biome = world.getBiome(pos);
-		boolean desert = biome.getRegistryName().getResourcePath().contains("desert");
-		String templateName = "sg_";
-		templateName += desert ? "desert" : "plains";
-		//if(isPegasusGate) templateName += "_pg";
-		templateName += tauri.dev.jsg.config.JSGConfig.stargateSize == StargateSizeEnum.LARGE ? "_large" : "_small";
-		return generateStargate(world, pos, templateName, false, 0);
-	}
+            if(checkTopBlock(worldToSpawn, x, z, blocks)) {
+                pos = StargateGenerator.checkForPlace(worldToSpawn, x / 16, z / 16);
+            }
+            tries++;
+        } while (pos == null && tries < 100);
+        if (tries == 100) {
+            JSG.logger.debug("StargateGenerator: Failed to find place - normal gate");
+            return null;
+        }
+        if (pos == null) {
+            JSG.logger.debug("StargateGenerator: Pos is null - normal gate");
+            return null;
+        }
 
-	public static GeneratedStargate generateStargate(World world, BlockPos pos, String templateName, boolean isPegasusGate, int dimToSpawn) {
-		WorldServer worldToSpawn = world.getMinecraftServer().getWorld(dimToSpawn);
+        Biome biome = world.getBiome(pos);
+        boolean desert = biome.getRegistryName().getResourcePath().contains("desert");
+        String templateName = "sg_";
+        templateName += desert ? "desert" : "plains";
+        templateName += tauri.dev.jsg.config.JSGConfig.stargateSize == StargateSizeEnum.LARGE ? "_large" : "_small";
 
-		EnumFacing facing = findOptimalRotation(worldToSpawn, pos);
-		Rotation rotation;
+        switch (symbolType) {
+            case PEGASUS:
+                templateName += "_peg";
+                break;
+            case UNIVERSE:
+                templateName += "_uni";
+                break;
+            default:
+                break;
+        }
+        return generateStargate(world, pos, templateName, symbolType, dimensionToSpawn);
+    }
 
-		switch (facing) {
-			case SOUTH: rotation = Rotation.CLOCKWISE_90; break;
-			case WEST:  rotation = Rotation.CLOCKWISE_180; break;
-			case NORTH: rotation = Rotation.COUNTERCLOCKWISE_90; break;
-			default:    rotation = Rotation.NONE; break;
-		}
+    public static GeneratedStargate generateStargate(World world, BlockPos pos, String templateName, SymbolTypeEnum symbolType, int dimToSpawn) {
+        final boolean isPegasusGate = symbolType == SymbolTypeEnum.PEGASUS;
+        final boolean isMilkyWayGate = symbolType == SymbolTypeEnum.MILKYWAY;
+        final boolean isUniverseGate = symbolType == SymbolTypeEnum.UNIVERSE;
 
-		WorldServer worldServer = (WorldServer) world;
-		MinecraftServer server = world.getMinecraftServer();
-		Biome biome = world.getBiome(pos);
-		TemplateManager templateManager = worldServer.getStructureTemplateManager();
-		Template template = templateManager.getTemplate(server, new ResourceLocation(JSG.MOD_ID, templateName));
+        WorldServer worldServer = Objects.requireNonNull(world.getMinecraftServer()).getWorld(dimToSpawn);
 
-		if (template != null) {
-			Random rand = new Random();
+        EnumFacing facing = findOptimalRotation(worldServer, pos);
+        Rotation rotation;
 
-			PlacementSettings settings = new PlacementSettings().setIgnoreStructureBlock(false).setRotation(rotation);
-			template.addBlocksToWorld(world, pos, settings);
+        switch (facing) {
+            case SOUTH:
+                rotation = Rotation.CLOCKWISE_90;
+                break;
+            case WEST:
+                rotation = Rotation.CLOCKWISE_180;
+                break;
+            case NORTH:
+                rotation = Rotation.COUNTERCLOCKWISE_90;
+                break;
+            default:
+                rotation = Rotation.NONE;
+                break;
+        }
 
-			Map<BlockPos, String> datablocks = template.getDataBlocks(pos, settings);
-			BlockPos gatePos = null;
-			BlockPos dhdPos = null;
+        MinecraftServer server = worldServer.getMinecraftServer();
+        Biome biome = worldServer.getBiome(pos);
+        TemplateManager templateManager = worldServer.getStructureTemplateManager();
+        Template template = templateManager.getTemplate(server, new ResourceLocation(JSG.MOD_ID, templateName));
 
-			for (BlockPos dataPos : datablocks.keySet()) {
-				String name = datablocks.get(dataPos);
+        if (template != null) {
+            Random rand = new Random();
 
-				if (name.equals("base")) {
-					gatePos = dataPos.add(0, -3, 0);
-					System.out.println("name: " + templateName);
-					System.out.println("tile: " + (world.getTileEntity(gatePos) == null ? "null" : "yes"));
+            PlacementSettings settings = new PlacementSettings().setIgnoreStructureBlock(false).setRotation(rotation);
+            template.addBlocksToWorld(worldServer, pos, settings);
 
-					world.getTileEntity(gatePos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(4, new ItemStack(JSGBlocks.CAPACITOR_BLOCK), false);
+            Map<BlockPos, String> datablocks = template.getDataBlocks(pos, settings);
+            BlockPos gatePos = null;
+            BlockPos dhdPos = null;
+            System.out.println("name: " + templateName);
 
-					((StargateAbstractBaseTile) world.getTileEntity(gatePos)).getMergeHelper().updateMembersBasePos(world, gatePos, facing);
+            for (BlockPos dataPos : datablocks.keySet()) {
+                String name = datablocks.get(dataPos);
 
-					world.setBlockToAir(dataPos);
-					world.setBlockToAir(dataPos.down()); // save block
-				}
+                if (name.equals("base")) {
+                    gatePos = dataPos.add(0, -3, 0);
+                    System.out.println("tile: " + (worldServer.getTileEntity(gatePos) == null ? "null" : "yes"));
 
-				else if (name.equals("dhd")) {
-					dhdPos = dataPos.down();
+                    if (!isUniverseGate || JSGConfig.powerConfig.universeCapacitors > 0)
+                        worldServer.getTileEntity(gatePos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(4, new ItemStack(JSGBlocks.CAPACITOR_BLOCK), false);
 
-					if (rand.nextFloat() < tauri.dev.jsg.config.JSGConfig.mysteriousConfig.despawnDhdChance) {
-						world.setBlockToAir(dhdPos);
-					}
+                    ((StargateAbstractBaseTile) worldServer.getTileEntity(gatePos)).getMergeHelper().updateMembersBasePos(worldServer, gatePos, facing);
 
-					else {
-						int fluid = tauri.dev.jsg.config.JSGConfig.powerConfig.stargateEnergyStorage / tauri.dev.jsg.config.JSGConfig.dhdConfig.energyPerNaquadah;
+                    worldServer.setBlockToAir(dataPos);
+                    worldServer.setBlockToAir(dataPos.down()); // save block
+                } else if (name.equals("dhd")) {
+                    dhdPos = dataPos.down();
 
-						DHDAbstractTile dhdTile = (DHDAbstractTile) world.getTileEntity(dhdPos);
+                    if (isUniverseGate || rand.nextFloat() < tauri.dev.jsg.config.JSGConfig.mysteriousConfig.despawnDhdChance) {
+                        worldServer.setBlockToAir(dhdPos);
+                    } else {
+                        int fluid = tauri.dev.jsg.config.JSGConfig.powerConfig.stargateEnergyStorage / tauri.dev.jsg.config.JSGConfig.dhdConfig.energyPerNaquadah;
 
-						ItemStack crystal = new ItemStack(isPegasusGate ? JSGItems.CRYSTAL_CONTROL_PEGASUS_DHD : JSGItems.CRYSTAL_CONTROL_MILKYWAY_DHD);
+                        DHDAbstractTile dhdTile = (DHDAbstractTile) worldServer.getTileEntity(dhdPos);
 
-						dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(0, crystal, false);
-						if(isPegasusGate) dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(1, new ItemStack(JSGItems.CRYSTAL_GLYPH_DHD), false);
-						((FluidTank) dhdTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)).fillInternal(new FluidStack(JSGFluids.moltenNaquadahRefined, fluid), true);
-					}
+                        ItemStack crystal = new ItemStack(isPegasusGate ? JSGItems.CRYSTAL_CONTROL_PEGASUS_DHD : JSGItems.CRYSTAL_CONTROL_MILKYWAY_DHD);
 
-					world.setBlockToAir(dataPos);
-				}
-			}
+                        dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(0, crystal, false);
+                        if (!isMilkyWayGate)
+                            dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(1, new ItemStack(JSGItems.CRYSTAL_GLYPH_DHD), false);
+                        ((FluidTank) dhdTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)).fillInternal(new FluidStack(JSGFluids.moltenNaquadahRefined, fluid), true);
+                    }
 
-			LinkingHelper.updateLinkedGate(world, gatePos, dhdPos);
-			StargateClassicBaseTile gateTile = (StargateClassicBaseTile) world.getTileEntity(gatePos);
-			gateTile.refresh();
-			gateTile.markDirty();
+                    worldServer.setBlockToAir(dataPos);
+                }
+            }
 
-			StargateAddress address = gateTile.getStargateAddress(SymbolTypeEnum.MILKYWAY);
+            LinkingHelper.updateLinkedGate(worldServer, gatePos, dhdPos);
+            StargateClassicBaseTile gateTile = (StargateClassicBaseTile) worldServer.getTileEntity(gatePos);
+            gateTile.refresh();
+            gateTile.getMergeHelper().updateMembersMergeStatus(worldServer, gateTile.getPos(), gateTile.getFacing(), true);
+            gateTile.markDirty();
 
-			if(address != null && !gateTile.getNetwork().isStargateInNetwork(address))
-				gateTile.getNetwork().addStargate(address, new StargatePos(world.provider.getDimensionType().getId(), gatePos, address));
+            StargateAddress address = gateTile.getStargateAddress(symbolType);
 
-			return new GeneratedStargate(address, biome.getRegistryName().getResourcePath(), isPegasusGate);
-		}
+            if (address != null && !gateTile.getNetwork().isStargateInNetwork(address))
+                gateTile.getNetwork().addStargate(address, new StargatePos(worldServer.provider.getDimensionType().getId(), gatePos, address));
 
-		else {
-			JSG.logger.error("template null");
-		}
+            return new GeneratedStargate(address, biome.getRegistryName().getResourcePath(), dimToSpawn != world.provider.getDimension());
+        } else {
+            JSG.logger.error("template null");
+        }
 
-		return null;
+        return null;
 
-	}
+    }
 
-	private static final int SG_SIZE_X = 12;
-	private static final int SG_SIZE_Z = 13;
+    private static final int SG_SIZE_X = 15;
+    private static final int SG_SIZE_Z = 15;
 
-	private static final int SG_SIZE_X_PLAINS = 11;
-	private static final int SG_SIZE_Z_PLAINS = 11;
+    private static final int SG_SIZE_X_PLAINS = 15;
+    private static final int SG_SIZE_Z_PLAINS = 15;
 
-	public static BlockPos checkForPlace(World world, int chunkX, int chunkZ) {
-		if (world.isChunkGeneratedAt(chunkX, chunkZ))
-			return null;
+    public static BlockPos checkForPlace(World world, int chunkX, int chunkZ) {
+        if (world.isChunkGeneratedAt(chunkX, chunkZ))
+            return null;
 
-		Chunk chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
+        Chunk chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
 
-		int y = chunk.getHeightValue(8, 8);
+        int y = chunk.getHeightValue(8, 8);
 
-		if (y > 240)
-			return null;
+        if (y > 240)
+            return null;
 
-		BlockPos pos = new BlockPos(chunkX*16, y, chunkZ*16);
-		String biomeName = chunk.getBiome(pos, world.getBiomeProvider()).getRegistryName().getResourcePath();
+        BlockPos pos = new BlockPos(chunkX * 16, y, chunkZ * 16);
+        String biomeName = chunk.getBiome(pos, world.getBiomeProvider()).getRegistryName().getResourcePath();
 
-		boolean desert = biomeName.contains("desert");
+        boolean desert = biomeName.contains("desert");
 
-		if (!biomeName.contains("ocean") && !biomeName.contains("river") && !biomeName.contains("beach")) {
-			int x = desert ? SG_SIZE_X : SG_SIZE_X_PLAINS;
-			int z = desert ? SG_SIZE_Z : SG_SIZE_Z_PLAINS;
+        if (!biomeName.contains("ocean") && !biomeName.contains("river") && !biomeName.contains("beach")) {
+            int x = desert ? SG_SIZE_X : SG_SIZE_X_PLAINS;
+            int z = desert ? SG_SIZE_Z : SG_SIZE_Z_PLAINS;
 
-			int y1 = chunk.getHeightValue(0, 0);
-			int y2 = chunk.getHeightValue(x, z);
+            int y1 = chunk.getHeightValue(0, 0);
+            int y2 = chunk.getHeightValue(x, z);
 
-			int y3 = chunk.getHeightValue(x, 0);
-			int y4 = chunk.getHeightValue(0, z);
+            int y3 = chunk.getHeightValue(x, 0);
+            int y4 = chunk.getHeightValue(0, z);
 
-			// No steep hill
-			if (Math.abs(y1 - y2) <= 1 && Math.abs(y3 - y4) <= 1) {
-				return pos.subtract(new BlockPos(0, 1, 0));
-			}
+            // No steep hill
+            if (Math.abs(y1 - y2) <= 2 && Math.abs(y3 - y4) <= 2) {
+                return pos.subtract(new BlockPos(0, 1, 0));
+            } else {
+                JSG.logger.debug("StargateGenerator: too steep");
+            }
+        } else {
+            JSG.logger.debug("StargateGenerator: failed, " + biomeName);
+        }
 
-			else {
-				JSG.logger.debug("StargateGenerator: too steep");
-			}
-		}
+        return null;
+    }
 
-		else {
-			JSG.logger.debug("StargateGenerator: failed, " + biomeName);
-		}
+    private static final int MAX_CHECK = 100;
 
-		return null;
-	}
+    private static EnumFacing findOptimalRotation(World world, BlockPos pos) {
+        BlockPos start = pos.add(0, 5, 5);
+        int max = -1;
+        EnumFacing maxFacing = EnumFacing.EAST;
 
-	private static final int MAX_CHECK = 100;
+        for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+            RayTraceResult rayTraceResult = world.rayTraceBlocks(new Vec3d(start), new Vec3d(start.offset(facing, MAX_CHECK)));
 
-	private static EnumFacing findOptimalRotation(World world, BlockPos pos) {
-		BlockPos start = pos.add(0, 5, 5);
-		int max = -1;
-		EnumFacing maxFacing = EnumFacing.EAST;
-
-		for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-			RayTraceResult rayTraceResult = world.rayTraceBlocks(new Vec3d(start), new Vec3d(start.offset(facing, MAX_CHECK)));
-
-			if (rayTraceResult != null && rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
-				int distance = (int) rayTraceResult.getBlockPos().distanceSq(start);
+            if (rayTraceResult != null && rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
+                int distance = (int) rayTraceResult.getBlockPos().distanceSq(start);
 //				JSG.info(facing.getName().toUpperCase() + ": distance: " + distance);
 
-				if (distance > max) {
-					max = distance;
-					maxFacing = facing;
-				}
-			}
-
-			else {
+                if (distance > max) {
+                    max = distance;
+                    maxFacing = facing;
+                }
+            } else {
 //				JSG.info(facing.getName().toUpperCase() + ": null");
 
-				max = 100000;
-				maxFacing = facing;
-			}
-		}
+                max = 100000;
+                maxFacing = facing;
+            }
+        }
 
 //		JSG.info("maxFacing: " + maxFacing.getName().toUpperCase());
-		return maxFacing;
-	}
+        return maxFacing;
+    }
 
-	public static class GeneratedStargate {
+    public static class GeneratedStargate {
 
-		public StargateAddress address;
-		public String path;
-		public boolean hasUpgrade;
+        public StargateAddress address;
+        public String path;
+        public boolean hasUpgrade;
 
-		public GeneratedStargate(StargateAddress address, String path, boolean upgrade) {
-			this.address = address;
-			this.path = path;
-			this.hasUpgrade = upgrade;
-		}
+        public GeneratedStargate(StargateAddress address, String path, boolean upgrade) {
+            this.address = address;
+            this.path = path;
+            this.hasUpgrade = upgrade;
+        }
 
-	}
+    }
 }

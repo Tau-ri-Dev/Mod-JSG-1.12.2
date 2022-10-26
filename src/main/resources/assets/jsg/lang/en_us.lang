@@ -94,10 +94,12 @@ item.jsg.holder_crystal_pegasus.name=Crystal Holder (Pegasus)
 
 # notebook
 item.jsg.page_notebook.name=Notebook Page
+item.jsg.page_notebook.empty=Empty
 
 # mysterious page
-item.jsg.page_mysterious.name=Mysterious Page
-item.jsg.page_mysterious.empty=Empty
+item.jsg.page_mysterious_milkyway.name=Mysterious Page (Milky Way)
+item.jsg.page_mysterious_pegasus.name=Mysterious Page (Pegasus)
+item.jsg.page_mysterious_universe.name=Mysterious Page (Universe)
 item.jsg.page_mysterious.tooltip=Who knows where it leads
 
 # beamer

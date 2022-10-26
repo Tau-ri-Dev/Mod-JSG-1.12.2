@@ -87,7 +87,6 @@ public class DHDPegasusButtonClickedToServer extends PositionedPacket {
 					}
 					else if ((gateState.idle() || gateState.dialing()) && !gateState.dialingComputer()) {
 						// Gate is idle, some glyph was pressed
-						JSG.info("LOL: " + message.symbol.getEnglishName());
 						gateTile.addSymbolToAddressDHD(message.symbol, player);
 					}
 

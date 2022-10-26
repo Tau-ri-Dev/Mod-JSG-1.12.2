@@ -1,0 +1,22 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "jsg:page_notebook"
+		},
+		{
+			"item": "minecraft:ender_pearl"
+		},
+		{
+			"item": "minecraft:ender_pearl"
+		},
+		{
+			"item": "minecraft:dye",
+			"data": 7
+		}
+	],
+	"result": {
+		"item": "jsg:page_mysterious_universe",
+		"count": 1
+	}
+}

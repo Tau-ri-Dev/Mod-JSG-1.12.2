@@ -76,6 +76,7 @@ import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOp
 public abstract class StargateAbstractBaseTile extends TileEntity implements StateProviderInterface, ITickable, ICapabilityProvider, ScheduledTaskExecutorInterface, Environment, WirelessEndpoint, PreparableInterface {
 
     public StargateNetwork getNetwork() {
+        if(network == null) network = StargateNetwork.get(world);
         return network;
     }
 
@@ -148,7 +149,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     public void onBlockBroken() {
         for (StargateAddress address : gateAddressMap.values())
-            network.removeStargate(address);
+            getNetwork().removeStargate(address);
     }
 
     protected void onGateBroken() {
@@ -283,9 +284,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             /* TODO Find a test case for resultTarget.targetVaild
 
              */
-            if (resultTarget.targetVaild && network.getStargate(dialedAddress) != null && network.getStargate(dialedAddress).getTileEntity() != null) {
+            if (resultTarget.targetVaild && getNetwork().getStargate(dialedAddress) != null && getNetwork().getStargate(dialedAddress).getTileEntity() != null) {
                 // We can call dialing failed on the target gate
-                network.getStargate(dialedAddress).getTileEntity().dialingFailed(StargateOpenResult.CALLER_HUNG_UP);
+                getNetwork().getStargate(dialedAddress).getTileEntity().dialingFailed(StargateOpenResult.CALLER_HUNG_UP);
             }
         }
 
@@ -304,7 +305,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         if (result.ok()) {
             targetValid = true;
 
-            StargatePos targetGatePos = network.getStargate(dialedAddress);
+            StargatePos targetGatePos = getNetwork().getStargate(dialedAddress);
             StargateAbstractBaseTile targetTile = targetGatePos.getTileEntity();
 
             if (new StargateOpeningEvent(this, targetGatePos.getTileEntity(), isInitiating).post()) {
@@ -338,7 +339,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         if (!canDialAddress(address)) return StargateOpenResult.ADDRESS_MALFORMED;
 
-        StargateAbstractBaseTile targetTile = network.getStargate(address).getTileEntity();
+        StargateAbstractBaseTile targetTile = getNetwork().getStargate(address).getTileEntity();
 
         if (!targetTile.canAcceptConnectionFrom(gatePosMap.get(getSymbolType()))) {
             return StargateOpenResult.ADDRESS_MALFORMED;
@@ -358,7 +359,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         if (!result.ok()) return result;
 
-        StargatePos targetGatePos = network.getStargate(address);
+        StargatePos targetGatePos = getNetwork().getStargate(address);
 
         if (!hasEnergyToDial(targetGatePos)) return StargateOpenResult.NOT_ENOUGH_POWER;
 
@@ -373,7 +374,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * @return {@code True} if the gate can be reached, {@code false} otherwise.
      */
     protected boolean canDialAddress(StargateAddressDynamic address) {
-        StargatePos targetGatePos = network.getStargate(address);
+        StargatePos targetGatePos = getNetwork().getStargate(address);
 
         if (targetGatePos == null) {
             return false;
@@ -456,12 +457,12 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     public void setGateAddress(SymbolTypeEnum symbolType, StargateAddress stargateAddress) {
-        network.removeStargate(gateAddressMap.get(symbolType));
+        getNetwork().removeStargate(gateAddressMap.get(symbolType));
 
         StargatePos gatePos = new StargatePos(world.provider.getDimension(), pos, stargateAddress);
         gateAddressMap.put(symbolType, stargateAddress);
         gatePosMap.put(symbolType, gatePos);
-        network.addStargate(stargateAddress, gatePos);
+        getNetwork().addStargate(stargateAddress, gatePos);
 
         markDirty();
     }
@@ -519,10 +520,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             if (dialedAddress.size() >= 6) {
                 dialedAddress.addOrigin();
 
-                if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate && !Objects.requireNonNull(network.getStargate(dialedAddress)).getTileEntity().stargateState.incoming()) {
+                if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate && !Objects.requireNonNull(getNetwork().getStargate(dialedAddress)).getTileEntity().stargateState.incoming()) {
                     connectingToGate = true;
                 } else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
-                    StargateAbstractBaseTile targetTile = Objects.requireNonNull(network.getStargate(dialedAddress)).getTileEntity();
+                    StargateAbstractBaseTile targetTile = Objects.requireNonNull(getNetwork().getStargate(dialedAddress)).getTileEntity();
                     if (targetTile != null) {
                         targetTile.disconnectGate(true);
                         targetTile.stargateState = EnumStargateState.IDLE;
@@ -571,7 +572,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         if (dialedAddress.size() >= 6 && (symbol == null || symbol.origin())) {
             dialedAddress.addOrigin();
 
-            StargatePos targetGatePos = network.getStargate(dialedAddress);
+            StargatePos targetGatePos = getNetwork().getStargate(dialedAddress);
             if (targetGatePos == null) return;
             StargateAbstractBaseTile targetGateTile = targetGatePos.getTileEntity();
             if (targetGateTile == null) return;
@@ -707,7 +708,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 if (this instanceof StargateClassicBaseTile)
                     dialedAddress.addSymbol(getSymbolType().getOrigin());
 
-                Objects.requireNonNull(network.getStargate(dialedAddress)).getTileEntity().disconnectGate();
+                Objects.requireNonNull(getNetwork().getStargate(dialedAddress)).getTileEntity().disconnectGate();
             }
 
             sendSignal(null, "stargate_failed", new Object[]{reason.toString().toLowerCase()});
@@ -947,7 +948,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
              */
             if (stargateState.initiating()) {
                 if (targetGatePos == null)
-                    targetGatePos = network.getStargate(this.getStargateAddress(SymbolTypeEnum.MILKYWAY));
+                    targetGatePos = getNetwork().getStargate(this.getStargateAddress(SymbolTypeEnum.MILKYWAY));
                 int energyStored = getEnergyStorage().getEnergyStored();
 
                 // Max Open Time

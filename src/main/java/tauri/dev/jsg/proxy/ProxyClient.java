@@ -9,8 +9,6 @@ import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -21,7 +19,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.Display;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
@@ -42,12 +39,7 @@ import tauri.dev.jsg.renderer.stargate.StargateOrlinRenderer;
 import tauri.dev.jsg.sound.JSGSoundHelperClient;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-
 import static tauri.dev.jsg.block.JSGBlocks.BLOCKS;
-import static tauri.dev.jsg.util.JSGIconUtil.setWindowIcon;
 
 public class ProxyClient implements IProxy {
     public void preInit(FMLPreInitializationEvent event) {
@@ -60,7 +52,6 @@ public class ProxyClient implements IProxy {
     }
 
     public void init(FMLInitializationEvent event) {
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new PageMysteriousItemColor(), JSGItems.PAGE_MYSTERIOUS_ITEM);
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new PageNotebookItemColor(), JSGItems.PAGE_NOTEBOOK_ITEM);
 
         Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new StargateClassicMemberBlockColor(), JSGBlocks.STARGATE_MILKY_WAY_MEMBER_BLOCK, JSGBlocks.STARGATE_UNIVERSE_MEMBER_BLOCK, JSGBlocks.STARGATE_PEGASUS_MEMBER_BLOCK);

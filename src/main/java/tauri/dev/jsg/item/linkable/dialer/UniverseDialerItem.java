@@ -100,7 +100,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
         }
     }
 
-    private static void initNBT(ItemStack stack) {
+    public static void initNBT(ItemStack stack) {
         NBTTagCompound compound = new NBTTagCompound();
         switch (UniverseDialerVariants.valueOf(stack.getItemDamage())) {
             case NORMAL:

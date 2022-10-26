@@ -79,7 +79,7 @@ public class JSGEventHandler {
 	public static void onLootTableLoad(LootTableLoadEvent event) {
 		if (event.getName().toString().equals("minecraft:chests/end_city_treasure")) {
 			LootEntry entry = new LootEntryTable(new ResourceLocation(JSG.MOD_ID, "end_city_treasure"), 1, 0, new LootCondition[]{}, "universe_dialer");
-			LootPool pool = new LootPool(new LootEntry[]{entry}, new LootCondition[]{}, new RandomValueRange(1), new RandomValueRange(0), "univese_dialer_pool");
+			LootPool pool = new LootPool(new LootEntry[]{entry}, new LootCondition[]{}, new RandomValueRange(1), new RandomValueRange(0), "universe_dialer_pool");
 
 			event.getTable().addPool(pool);
 		}

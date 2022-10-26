@@ -74,11 +74,4 @@ public class JSGEventHandlerClient {
       }
     }
   }
-
-  @SubscribeEvent
-  public static void onPlaySound(PlaySoundEvent event) {
-    if(event.getSound().getSoundLocation().toString() == "minecraft:music.menu") {
-      event.setCanceled(true);
-    }
-  }
 }
