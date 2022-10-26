@@ -2,11 +2,12 @@
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
 		{
-			"item": "jsg:titanium_block"
+			"type" : "forge:ore_dict",
+			"ore": "blockNaquadahRefined"
 		}
 	],
 	"result": {
-		"item": "jsg:titanium_ingot",
+		"item": "jsg:naquadah_alloy",
 		"count": 9
 	}
 }

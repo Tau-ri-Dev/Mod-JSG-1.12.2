@@ -5,18 +5,16 @@
 			"item": "jsg:page_notebook"
 		},
 		{
-			"item": "minecraft:ender_pearl"
-		},
-		{
-			"item": "minecraft:ender_pearl"
+			"item": "minecraft:ender_pearl",
+			"count": 2
 		},
 		{
 			"item": "minecraft:dye",
-			"data": 1
+			"data": 7
 		}
 	],
 	"result": {
-		"item": "jsg:page_mysterious_milkyway",
+		"item": "jsg:page_mysterious_universe",
 		"count": 1
 	}
 }

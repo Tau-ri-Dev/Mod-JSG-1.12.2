@@ -2,11 +2,12 @@
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
 		{
-			"item": "jsg:trinium_block"
+			"type" : "forge:ore_dict",
+			"ore": "ingotNaquadahRaw"
 		}
 	],
 	"result": {
-		"item": "jsg:trinium_ingot",
+		"item": "jsg:naquadah_raw_nugget",
 		"count": 9
 	}
 }

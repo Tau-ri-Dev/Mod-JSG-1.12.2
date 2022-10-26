@@ -36,7 +36,7 @@ public class AssemblerRenderer extends TileEntitySpecialRenderer<AssemblerTile> 
                 BlockRenderer.renderItemOnGround(rendererState.craftingStack);
                 GlStateManager.popMatrix();
                 for (int i = 0; i < 8; i++) {
-                    new ParticleBlenderSmoke(-0.2f - 1f + ((float) Math.random() * 2), -0.2f - 1f + ((float) Math.random() * 2), 5f, 3, 3, 0, 0, true, (motion) -> {
+                    new ParticleBlenderSmoke(-1f + ((float) Math.random() * 2), -1f + ((float) Math.random() * 2), 5f, 7, 7, 0, 0, true, (motion) -> {
                         motion.x = 0;//-0.1f + Math.random() * 0.1f;
                         motion.z = 0;//-0.1f + Math.random() * 0.1f;
                     }).spawn(te.getWorld(), te.getPos(), 90, true);

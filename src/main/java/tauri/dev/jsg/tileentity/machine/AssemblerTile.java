@@ -142,6 +142,7 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
     }
 
     protected void workIsDone() {
+        if(!isWorking) return;
         itemStackHandler.insertItem(11, currentRecipe.getResult(), false);
         for (int i = 1; i < 10; i++) {
             int amount = 0;
@@ -166,6 +167,7 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
             machineEnd = -1;
             machineProgress = 0;
             isWorking = false;
+            JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.BEAMER_STOP);
         }
         markDirty();
     }
@@ -190,7 +192,7 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
                     machineEnd = -1;
                     markDirty();
                     sendState(StateTypeEnum.GUI_UPDATE, getState(StateTypeEnum.GUI_UPDATE));
-                    JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.BEAMER_START);
+                    JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.BEAMER_STOP);
                 } else {
                     if (machineStart == machineEnd) machineProgress = 0;
                     else
@@ -211,7 +213,7 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
                 machineEnd = currentRecipe.getWorkingTime() + this.world.getTotalWorldTime();
                 markDirty();
                 sendState(StateTypeEnum.GUI_UPDATE, getState(StateTypeEnum.GUI_UPDATE));
-                JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.BEAMER_STOP);
+                JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.BEAMER_START);
             }
 
             if (isWorking != isWorkingLast || machineProgress != machineProgressLast) {

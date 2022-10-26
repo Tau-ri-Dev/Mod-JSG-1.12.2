@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " P ",
+    "P P",
+    " P "
+  ],
+  "key": {
+    "T": {
+      "type": "forge:ore_dict",
+      "ore": "plateNaquadahRaw"
+    },
+  },
+  "result": {
+    "item": "jsg:gear_naquadah_raw",
+    "count": 1
+  }
+}

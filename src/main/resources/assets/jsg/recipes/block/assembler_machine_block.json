@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WCW",
+    "TRT",
+    "NQN"
+  ],
+
+  "key": {
+    "W": {
+      "item": "jsg:crystal_white"
+    },
+    "R": {
+      "item": "jsg:crystal_red"
+    },
+    "C": {
+      "item": "jsg:circuit_control_crystal"
+    },
+    "T": {
+      "type": "forge:ore_dict",
+      "ore": "plateTrinium"
+    },
+    "N": {
+      "type": "forge:ore_dict",
+      "ore": "plateNaquadahRefined"
+    },
+    "Q": {
+      "type": "forge:ore_dict",
+      "ore": "plateNaquadahRaw"
+    }
+  },
+
+  "result": {
+    "item": "jsg:assembler_machine_block",
+    "count": 1
+  }
+}

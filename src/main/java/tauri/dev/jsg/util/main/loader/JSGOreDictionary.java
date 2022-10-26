@@ -15,7 +15,7 @@ public class JSGOreDictionary {
         regODOre("gemNaquadahRaw", JSGItems.NAQUADAH_ORE_RAW);
         regODOre("ingotNaquadahRaw", JSGItems.NAQUADAH_ALLOY_RAW);
         regODOre("blockNaquadahRaw", JSGBlocks.NAQUADAH_BLOCK_RAW);
-        regODOre("plateNaquadahRaq", JSGItems.PLATE_NAQUADAH_RAW);
+        regODOre("plateNaquadahRaw", JSGItems.PLATE_NAQUADAH_RAW);
         regODOre("nuggetNaquadahRaw", JSGItems.NAQUADAH_RAW_NUGGET);
         regODOre("dustNaquadahRaw", JSGItems.NAQUADAH_RAW_DUST);
 

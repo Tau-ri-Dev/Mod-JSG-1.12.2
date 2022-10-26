@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"type" : "forge:ore_dict",
+			"ore": "blockNaquadahRaw"
+		}
+	],
+	"result": {
+		"item": "jsg:naquadah_alloy_raw",
+		"count": 9
+	}
+}
+

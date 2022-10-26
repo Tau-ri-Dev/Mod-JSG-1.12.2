@@ -1,6 +1,7 @@
 package tauri.dev.jsg.item;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -347,6 +348,10 @@ public class JSGItems {
             case "jsg:page_mysterious":
             case "aunis:page_mysterious":
                 return PAGE_MYSTERIOUS_ITEM_MILKYWAY;
+
+            case "jsg:raw_pegasus_dhd_crystal":
+            case "aunis:raw_pegasus_dhd_crystal":
+                return CRYSTAL_BLUE_PEGASUS;
 
             default:
                 break;

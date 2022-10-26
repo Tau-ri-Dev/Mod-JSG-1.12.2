@@ -111,6 +111,8 @@ public class AssemblerContainerGui extends GuiContainer implements TabbedContain
                 .setIconTextureLocation(304, 18 * 2).build();
 
         goauldTab = (TabAssemblerRecipes) TabAssemblerRecipes.builder()
+                .addButton(102, 25, 25, BACKGROUND_TEXTURE, 246, 165, AssemblerRecipes.TR_GOAULD)
+                .addButton(103, 25, 25 + 18, BACKGROUND_TEXTURE, 281, 149, AssemblerRecipes.TR_GOAULD_CONTROLLER)
                 .setContainer(container)
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)
@@ -127,6 +129,7 @@ public class AssemblerContainerGui extends GuiContainer implements TabbedContain
                 .setIconTextureLocation(324, 0).build();
 
         oriTab = (TabAssemblerRecipes) TabAssemblerRecipes.builder()
+                .addButton(102, 25, 25, BACKGROUND_TEXTURE, 246, 149, AssemblerRecipes.TR_ORI)
                 .setContainer(container)
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)

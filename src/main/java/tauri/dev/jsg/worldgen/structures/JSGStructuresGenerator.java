@@ -52,7 +52,7 @@ public class JSGStructuresGenerator implements IWorldGenerator {
                 this.generateStructure(
                         NAQUADAH_MINE,
                         world, random, chunkX, chunkZ,
-                        2000 - 100,
+                        2000 - 200,
                         blocks,
                         BiomeForest.class, BiomePlains.class
                 );

@@ -3,12 +3,14 @@
 	"ingredients": [
 		{
 			"type": "forge:ore_dict",
-			"ore": "ingotNaquadahRaw",
-			"count": 9
+			"ore": "plateTitanium"
+		},
+		{
+			"item": "jsg:hammer"
 		}
 	],
 	"result": {
-		"item": "jsg:naquadah_block_raw",
+		"item": "jsg:titanium_dust",
 		"count": 1
 	}
 }

@@ -1,17 +1,12 @@
 {
-	"type": "minecraft:crafting_shaped",
-	"pattern": [
-		"NNN",
-		"NNN",
-		"NNN"
-	],
-	
-	"key": {
-		"N": {
-			"item": "jsg:naquadah_alloy"
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"type": "forge:ore_dict",
+			"ore": "ingotNaquadahRefined",
+			"count": 9
 		}
-	},
-	
+	],
 	"result": {
 		"item": "jsg:naquadah_block",
 		"count": 1

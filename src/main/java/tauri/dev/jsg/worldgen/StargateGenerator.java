@@ -17,6 +17,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.gen.structure.template.TemplateManager;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -40,6 +42,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
+import static tauri.dev.jsg.stargate.network.SymbolTypeEnum.PEGASUS;
 import static tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator.checkTopBlock;
 
 
@@ -64,14 +67,14 @@ public class StargateGenerator {
 
         BlockPos pos = null;
         int tries = 0;
-        WorldServer worldToSpawn = world.getMinecraftServer().getWorld(dimensionToSpawn);
+        WorldServer worldToSpawn = Objects.requireNonNull(world.getMinecraftServer()).getWorld(dimensionToSpawn);
         int x;
         int z;
         do {
             x = (int) (tauri.dev.jsg.config.JSGConfig.mysteriousConfig.minOverworldCoords + (rand.nextFloat() * (tauri.dev.jsg.config.JSGConfig.mysteriousConfig.maxOverworldCoords - tauri.dev.jsg.config.JSGConfig.mysteriousConfig.minOverworldCoords))) * (rand.nextBoolean() ? -1 : 1);
             z = (int) (JSGConfig.mysteriousConfig.minOverworldCoords + (rand.nextFloat() * (tauri.dev.jsg.config.JSGConfig.mysteriousConfig.maxOverworldCoords - tauri.dev.jsg.config.JSGConfig.mysteriousConfig.minOverworldCoords))) * (rand.nextBoolean() ? -1 : 1);
 
-            if(checkTopBlock(worldToSpawn, x, z, blocks)) {
+            if (checkTopBlock(worldToSpawn, x, z, blocks)) {
                 pos = StargateGenerator.checkForPlace(worldToSpawn, x / 16, z / 16);
             }
             tries++;
@@ -80,20 +83,39 @@ public class StargateGenerator {
             JSG.logger.debug("StargateGenerator: Failed to find place - normal gate");
             return null;
         }
-        if (pos == null) {
-            JSG.logger.debug("StargateGenerator: Pos is null - normal gate");
-            return null;
-        }
 
         Biome biome = world.getBiome(pos);
-        boolean desert = biome.getRegistryName().getResourcePath().contains("desert");
-        String templateName = "sg_";
-        templateName += desert ? "desert" : "plains";
+        boolean desert = false;
+        boolean frost = false;
+        boolean mossy = false;
+
+        desert = Objects.requireNonNull(biome.getRegistryName()).getResourcePath().contains("desert");
+        desert |= biome.getRegistryName().getResourcePath().contains("mesa");
+
+        frost = biome.getRegistryName().getResourcePath().contains("ice");
+        frost |= biome.getRegistryName().getResourcePath().contains("frozen");
+        frost |= biome.getRegistryName().getResourcePath().contains("cold");
+
+        mossy = biome.getRegistryName().getResourcePath().contains("taiga");
+        if (symbolType != PEGASUS) {
+            mossy |= biome.getRegistryName().getResourcePath().contains("jungle");
+            mossy |= biome.getRegistryName().getResourcePath().contains("swamp");
+            mossy |= biome.getRegistryName().getResourcePath().contains("mushroom");
+        }
+        String templateName = "sg";
+        if (desert)
+            templateName += "_desert";
+        else if (frost)
+            templateName += "_frost";
+        else if (mossy)
+            templateName += "_mossy";
+        else
+            templateName += "_plains";
         templateName += tauri.dev.jsg.config.JSGConfig.stargateSize == StargateSizeEnum.LARGE ? "_large" : "_small";
 
         switch (symbolType) {
             case PEGASUS:
-                templateName += "_peg";
+                templateName += "_pg";
                 break;
             case UNIVERSE:
                 templateName += "_uni";
@@ -105,7 +127,7 @@ public class StargateGenerator {
     }
 
     public static GeneratedStargate generateStargate(World world, BlockPos pos, String templateName, SymbolTypeEnum symbolType, int dimToSpawn) {
-        final boolean isPegasusGate = symbolType == SymbolTypeEnum.PEGASUS;
+        final boolean isPegasusGate = symbolType == PEGASUS;
         final boolean isMilkyWayGate = symbolType == SymbolTypeEnum.MILKYWAY;
         final boolean isUniverseGate = symbolType == SymbolTypeEnum.UNIVERSE;
 
@@ -134,70 +156,71 @@ public class StargateGenerator {
         TemplateManager templateManager = worldServer.getStructureTemplateManager();
         Template template = templateManager.getTemplate(server, new ResourceLocation(JSG.MOD_ID, templateName));
 
-        if (template != null) {
-            Random rand = new Random();
+        Random rand = new Random();
 
-            PlacementSettings settings = new PlacementSettings().setIgnoreStructureBlock(false).setRotation(rotation);
-            template.addBlocksToWorld(worldServer, pos, settings);
+        PlacementSettings settings = new PlacementSettings().setIgnoreStructureBlock(false).setRotation(rotation);
+        template.addBlocksToWorld(worldServer, pos, settings);
 
-            Map<BlockPos, String> datablocks = template.getDataBlocks(pos, settings);
-            BlockPos gatePos = null;
-            BlockPos dhdPos = null;
-            System.out.println("name: " + templateName);
+        Map<BlockPos, String> datablocks = template.getDataBlocks(pos, settings);
+        BlockPos gatePos = null;
+        BlockPos dhdPos = null;
+        System.out.println("name: " + templateName);
 
-            for (BlockPos dataPos : datablocks.keySet()) {
-                String name = datablocks.get(dataPos);
+        for (BlockPos dataPos : datablocks.keySet()) {
+            String name = datablocks.get(dataPos);
 
-                if (name.equals("base")) {
-                    gatePos = dataPos.add(0, -3, 0);
-                    System.out.println("tile: " + (worldServer.getTileEntity(gatePos) == null ? "null" : "yes"));
+            if (name.equals("base")) {
+                gatePos = dataPos.add(0, -3, 0);
+                System.out.println("tile: " + (worldServer.getTileEntity(gatePos) == null ? "null" : "yes"));
 
-                    if (!isUniverseGate || JSGConfig.powerConfig.universeCapacitors > 0)
-                        worldServer.getTileEntity(gatePos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(4, new ItemStack(JSGBlocks.CAPACITOR_BLOCK), false);
-
-                    ((StargateAbstractBaseTile) worldServer.getTileEntity(gatePos)).getMergeHelper().updateMembersBasePos(worldServer, gatePos, facing);
-
-                    worldServer.setBlockToAir(dataPos);
-                    worldServer.setBlockToAir(dataPos.down()); // save block
-                } else if (name.equals("dhd")) {
-                    dhdPos = dataPos.down();
-
-                    if (isUniverseGate || rand.nextFloat() < tauri.dev.jsg.config.JSGConfig.mysteriousConfig.despawnDhdChance) {
-                        worldServer.setBlockToAir(dhdPos);
-                    } else {
-                        int fluid = tauri.dev.jsg.config.JSGConfig.powerConfig.stargateEnergyStorage / tauri.dev.jsg.config.JSGConfig.dhdConfig.energyPerNaquadah;
-
-                        DHDAbstractTile dhdTile = (DHDAbstractTile) worldServer.getTileEntity(dhdPos);
-
-                        ItemStack crystal = new ItemStack(isPegasusGate ? JSGItems.CRYSTAL_CONTROL_PEGASUS_DHD : JSGItems.CRYSTAL_CONTROL_MILKYWAY_DHD);
-
-                        dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(0, crystal, false);
-                        if (!isMilkyWayGate)
-                            dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).insertItem(1, new ItemStack(JSGItems.CRYSTAL_GLYPH_DHD), false);
-                        ((FluidTank) dhdTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)).fillInternal(new FluidStack(JSGFluids.moltenNaquadahRefined, fluid), true);
+                if (!isUniverseGate || JSGConfig.powerConfig.universeCapacitors > 0) {
+                    ItemStack capacitor = new ItemStack(JSGBlocks.CAPACITOR_BLOCK);
+                    if (isUniverseGate) {
+                        IEnergyStorage storage = capacitor.getCapability(CapabilityEnergy.ENERGY, null);
+                        if (storage != null)
+                            storage.receiveEnergy(((int) (storage.getEnergyStored() * 0.75)), false);
                     }
-
-                    worldServer.setBlockToAir(dataPos);
+                    Objects.requireNonNull(Objects.requireNonNull(worldServer.getTileEntity(gatePos)).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)).insertItem(4, capacitor, false);
                 }
+
+                ((StargateAbstractBaseTile) Objects.requireNonNull(worldServer.getTileEntity(gatePos))).getMergeHelper().updateMembersBasePos(worldServer, gatePos, facing);
+
+                worldServer.setBlockToAir(dataPos);
+                worldServer.setBlockToAir(dataPos.down()); // save block
+            } else if (name.equals("dhd")) {
+                dhdPos = dataPos.down();
+
+                if (isUniverseGate || rand.nextFloat() < JSGConfig.mysteriousConfig.despawnDhdChance) {
+                    worldServer.setBlockToAir(dhdPos);
+                } else {
+                    int fluid = JSGConfig.powerConfig.stargateEnergyStorage / JSGConfig.dhdConfig.energyPerNaquadah;
+
+                    DHDAbstractTile dhdTile = (DHDAbstractTile) worldServer.getTileEntity(dhdPos);
+
+                    ItemStack crystal = new ItemStack(isPegasusGate ? JSGItems.CRYSTAL_CONTROL_PEGASUS_DHD : JSGItems.CRYSTAL_CONTROL_MILKYWAY_DHD);
+
+                    Objects.requireNonNull(Objects.requireNonNull(dhdTile).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)).insertItem(0, crystal, false);
+                    if (!isMilkyWayGate)
+                        Objects.requireNonNull(dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)).insertItem(1, new ItemStack(JSGItems.CRYSTAL_GLYPH_DHD), false);
+                    ((FluidTank) Objects.requireNonNull(dhdTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null))).fillInternal(new FluidStack(JSGFluids.moltenNaquadahRefined, fluid), true);
+                }
+
+                worldServer.setBlockToAir(dataPos);
             }
-
-            LinkingHelper.updateLinkedGate(worldServer, gatePos, dhdPos);
-            StargateClassicBaseTile gateTile = (StargateClassicBaseTile) worldServer.getTileEntity(gatePos);
-            gateTile.refresh();
-            gateTile.getMergeHelper().updateMembersMergeStatus(worldServer, gateTile.getPos(), gateTile.getFacing(), true);
-            gateTile.markDirty();
-
-            StargateAddress address = gateTile.getStargateAddress(symbolType);
-
-            if (address != null && !gateTile.getNetwork().isStargateInNetwork(address))
-                gateTile.getNetwork().addStargate(address, new StargatePos(worldServer.provider.getDimensionType().getId(), gatePos, address));
-
-            return new GeneratedStargate(address, biome.getRegistryName().getResourcePath(), dimToSpawn != world.provider.getDimension());
-        } else {
-            JSG.logger.error("template null");
         }
 
-        return null;
+        LinkingHelper.updateLinkedGate(worldServer, gatePos, dhdPos);
+        StargateClassicBaseTile gateTile = (StargateClassicBaseTile) worldServer.getTileEntity(Objects.requireNonNull(gatePos));
+        Objects.requireNonNull(gateTile).refresh();
+        gateTile.getMergeHelper().updateMembersMergeStatus(worldServer, gateTile.getPos(), gateTile.getFacing(), true);
+        gateTile.markDirty();
+
+        StargateAddress address = gateTile.getStargateAddress(symbolType);
+
+        if (address != null && !gateTile.getNetwork().isStargateInNetwork(address))
+            gateTile.getNetwork().addStargate(address, new StargatePos(worldServer.provider.getDimensionType().getId(), gatePos, address));
+
+        return new GeneratedStargate(address, Objects.requireNonNull(biome.getRegistryName()).getResourcePath(), dimToSpawn != world.provider.getDimension());
 
     }
 
@@ -219,7 +242,7 @@ public class StargateGenerator {
             return null;
 
         BlockPos pos = new BlockPos(chunkX * 16, y, chunkZ * 16);
-        String biomeName = chunk.getBiome(pos, world.getBiomeProvider()).getRegistryName().getResourcePath();
+        String biomeName = Objects.requireNonNull(chunk.getBiome(pos, world.getBiomeProvider()).getRegistryName()).getResourcePath();
 
         boolean desert = biomeName.contains("desert");
 

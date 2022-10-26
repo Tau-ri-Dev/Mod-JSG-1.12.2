@@ -1,28 +1,21 @@
 {
-	"type": "minecraft:crafting_shaped",
-	"pattern": [
-		"PI",
-		" F"
-	],
-	
-	"key": {
-		"P": {
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
 			"item": "minecraft:paper"
 		},
-		
-		"I": {
+		{
 			"type": "forge:ore_dict",
 			"ore": "dyeBlack"
 		},
-		
-		"F": {
+		{
 			"item": "minecraft:feather"
 		}
-	},
-	
+	],
 	"result": {
 		"item": "jsg:page_notebook",
 		"count": 1,
 		"data": 0
 	}
 }
+

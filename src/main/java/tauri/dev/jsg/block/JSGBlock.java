@@ -2,6 +2,7 @@ package tauri.dev.jsg.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -16,5 +17,9 @@ public class JSGBlock extends Block {
 
     public TileEntitySpecialRenderer<? extends TileEntity> getTESR() {
         return null;
+    }
+
+    public boolean renderHighlight(IBlockState blockState){
+        return true;
     }
 }

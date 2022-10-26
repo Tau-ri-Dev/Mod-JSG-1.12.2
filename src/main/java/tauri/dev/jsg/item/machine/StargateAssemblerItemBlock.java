@@ -25,11 +25,6 @@ public class StargateAssemblerItemBlock extends ItemBlock {
     }
 
     @Override
-    public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(JSG.getInProgress());
-    }
-
-    @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
         return new ItemCapabilityProvider(stack, nbt, AssemblerBlock.MAX_ENERGY);
     }

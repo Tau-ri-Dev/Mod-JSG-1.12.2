@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"type" : "forge:ore_dict",
+			"ore": "ingotTitanium"
+		}
+	],
+	"result": {
+		"item": "jsg:titanium_nugget",
+		"count": 9
+	}
+}
+

@@ -1,0 +1,14 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"type" : "forge:ore_dict",
+			"ore": "blockTrinium"
+		}
+	],
+	"result": {
+		"item": "jsg:trinium_ingot",
+		"count": 9
+	}
+}
+

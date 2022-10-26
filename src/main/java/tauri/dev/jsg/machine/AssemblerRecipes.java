@@ -1,6 +1,7 @@
 package tauri.dev.jsg.machine;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import tauri.dev.jsg.block.JSGBlocks;
@@ -662,6 +663,185 @@ public class AssemblerRecipes {
         }
     };
 
+    public static AssemblerRecipe TR_GOAULD = new AssemblerRecipe() {
+        @Override
+        public String getUnlocalizedName() {
+            return "tile.jsg.transportrings_goauld_block.name";
+        }
+
+        @Override
+        public int getWorkingTime() {
+            return 540;
+        }
+
+        @Override
+        public boolean removeSubItem() {
+            return false;
+        }
+
+        @Override
+        public boolean removeDurabilitySubItem() {
+            return true;
+        }
+
+        @Override
+        public int getEnergyPerTick() {
+            return 1048;
+        }
+
+        @Override
+        public Item getSchematic() {
+            return JSGItems.SCHEMATIC_TR_GOAULD;
+        }
+
+        @Override
+        public ArrayList<ItemStack> getPattern() {
+            ArrayList<ItemStack> array = new ArrayList<>();
+
+            array.add(new ItemStack(JSGItems.FRAGMENT_TR_GOAULD));
+            array.add(new ItemStack(JSGItems.CRYSTAL_YELLOW));
+            array.add(new ItemStack(JSGItems.FRAGMENT_TR_GOAULD));
+
+            array.add(new ItemStack(JSGItems.CRYSTAL_BLUE));
+            array.add(new ItemStack(JSGItems.CIRCUIT_CONTROL_NAQUADAH));
+            array.add(new ItemStack(JSGItems.CRYSTAL_ENDER));
+
+            array.add(new ItemStack(JSGItems.NAQUADAH_ALLOY));
+            array.add(new ItemStack(JSGItems.CRYSTAL_RED));
+            array.add(new ItemStack(JSGItems.NAQUADAH_ALLOY));
+            return array;
+        }
+
+        @Override
+        public ItemStack getSubItemStack() {
+            return new ItemStack(JSGItems.JSG_HAMMER);
+        }
+
+        @Override
+        public ItemStack getResult() {
+            return new ItemStack(JSGBlocks.TRANSPORT_RINGS_GOAULD_BLOCK);
+        }
+    };
+    public static AssemblerRecipe TR_ORI = new AssemblerRecipe() {
+        @Override
+        public String getUnlocalizedName() {
+            return "tile.jsg.transportrings_ori_block.name";
+        }
+
+        @Override
+        public int getWorkingTime() {
+            return 600;
+        }
+
+        @Override
+        public boolean removeSubItem() {
+            return false;
+        }
+
+        @Override
+        public boolean removeDurabilitySubItem() {
+            return true;
+        }
+
+        @Override
+        public int getEnergyPerTick() {
+            return 1248;
+        }
+
+        @Override
+        public Item getSchematic() {
+            return JSGItems.SCHEMATIC_TR_ORI;
+        }
+
+        @Override
+        public ArrayList<ItemStack> getPattern() {
+            ArrayList<ItemStack> array = new ArrayList<>();
+
+            array.add(new ItemStack(JSGItems.FRAGMENT_TR_ORI));
+            array.add(new ItemStack(JSGItems.CRYSTAL_YELLOW));
+            array.add(new ItemStack(JSGItems.FRAGMENT_TR_ORI));
+
+            array.add(new ItemStack(JSGItems.CRYSTAL_BLUE));
+            array.add(new ItemStack(JSGItems.CIRCUIT_CONTROL_NAQUADAH));
+            array.add(new ItemStack(JSGItems.CRYSTAL_ENDER));
+
+            array.add(new ItemStack(JSGItems.TRINIUM_INGOT));
+            array.add(new ItemStack(JSGItems.CRYSTAL_RED));
+            array.add(new ItemStack(JSGItems.TRINIUM_INGOT));
+            return array;
+        }
+
+        @Override
+        public ItemStack getSubItemStack() {
+            return new ItemStack(JSGItems.JSG_HAMMER);
+        }
+
+        @Override
+        public ItemStack getResult() {
+            return new ItemStack(JSGBlocks.TRANSPORT_RINGS_ORI_BLOCK);
+        }
+    };
+
+    public static AssemblerRecipe TR_GOAULD_CONTROLLER = new AssemblerRecipe() {
+        @Override
+        public String getUnlocalizedName() {
+            return "tile.jsg.transportrings_controller_goauld_block.name";
+        }
+
+        @Override
+        public int getWorkingTime() {
+            return 200;
+        }
+
+        @Override
+        public boolean removeSubItem() {
+            return false;
+        }
+
+        @Override
+        public boolean removeDurabilitySubItem() {
+            return true;
+        }
+
+        @Override
+        public int getEnergyPerTick() {
+            return 1248;
+        }
+
+        @Override
+        public Item getSchematic() {
+            return JSGItems.SCHEMATIC_TR_GOAULD;
+        }
+
+        @Override
+        public ArrayList<ItemStack> getPattern() {
+            ArrayList<ItemStack> array = new ArrayList<>();
+
+            array.add(new ItemStack(Blocks.STONE_BUTTON));
+            array.add(new ItemStack(Items.GOLD_INGOT));
+            array.add(new ItemStack(Blocks.STONE_BUTTON));
+
+            array.add(new ItemStack(Items.GOLD_INGOT));
+            array.add(new ItemStack(JSGItems.CIRCUIT_CONTROL_NAQUADAH));
+            array.add(new ItemStack(Items.GOLD_INGOT));
+
+            array.add(new ItemStack(JSGItems.NAQUADAH_ALLOY));
+            array.add(new ItemStack(JSGItems.CRYSTAL_ENDER));
+            array.add(new ItemStack(JSGItems.NAQUADAH_ALLOY));
+            return array;
+        }
+
+        @Override
+        public ItemStack getSubItemStack() {
+            return new ItemStack(JSGItems.JSG_SCREWDRIVER);
+        }
+
+        @Override
+        public ItemStack getResult() {
+            return new ItemStack(JSGBlocks.TR_CONTROLLER_GOAULD_BLOCK);
+        }
+    };
+
     public static AssemblerRecipe[] RECIPES = {
             SG_MW_BASE_BLOCK,
             SG_MW_CHEVRON_BLOCK,
@@ -675,7 +855,11 @@ public class AssemblerRecipes {
 
             SG_UNI_BASE_BLOCK,
             SG_UNI_CHEVRON_BLOCK,
-            SG_UNI_RING_BLOCK
+            SG_UNI_RING_BLOCK,
+
+            TR_GOAULD,
+            TR_ORI,
+            TR_GOAULD_CONTROLLER
     };
 
 }
