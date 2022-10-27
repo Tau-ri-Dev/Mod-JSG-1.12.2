@@ -1,4 +1,4 @@
-package tauri.dev.jsg.integration.jei;
+package tauri.dev.jsg.integration.jei.recipe;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;

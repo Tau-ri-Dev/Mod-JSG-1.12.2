@@ -98,17 +98,6 @@ public abstract class JSGMachineBlock extends JSGAbstractCustomItemBlock {
     }
 
     @Override
-    public void breakBlock(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
-        if (!world.isRemote) {
-            AssemblerTile tile = (AssemblerTile) world.getTileEntity(pos);
-            if (tile != null) {
-                ItemHandlerHelper.dropInventoryItems(world, pos, tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null));
-            }
-        }
-        super.breakBlock(world, pos, state);
-    }
-
-    @Override
     public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (willHarvest) return true;
         return super.removedByPlayer(state, world, pos, player, willHarvest);
@@ -130,6 +119,17 @@ public abstract class JSGMachineBlock extends JSGAbstractCustomItemBlock {
 
         StargateAbstractEnergyStorage tileEnergyStorage = (StargateAbstractEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
         tileEnergyStorage.setEnergyStored(energyStorage.getEnergyStored());
+    }
+
+    @Override
+    public void breakBlock(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+        if (!world.isRemote) {
+            TileEntity tile = world.getTileEntity(pos);
+            if (tile != null) {
+                ItemHandlerHelper.dropInventoryItems(world, pos, tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null));
+            }
+        }
+        super.breakBlock(world, pos, state);
     }
 
 

@@ -95,6 +95,7 @@ public enum ElementEnum {
     // Machines
 
     ASSEMBLER_MACHINE("machine/assembler/assembler.obj", "machine/assembler/assembler_on.png", false);
+    //CRYSTAL_CHAMBER("machine/assembler/chamber.obj", "machine/assembler/chamber.png", false);
 
     // --------------------------------------------------------------------------------------------
 

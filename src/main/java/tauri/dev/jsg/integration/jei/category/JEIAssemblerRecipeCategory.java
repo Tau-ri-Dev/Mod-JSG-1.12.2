@@ -1,4 +1,4 @@
-package tauri.dev.jsg.integration.jei;
+package tauri.dev.jsg.integration.jei.category;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;

@@ -6,10 +6,10 @@
     " P "
   ],
   "key": {
-    "T": {
+    "P": {
       "type": "forge:ore_dict",
       "ore": "plateNaquadahRaw"
-    },
+    }
   },
   "result": {
     "item": "jsg:gear_naquadah_raw",

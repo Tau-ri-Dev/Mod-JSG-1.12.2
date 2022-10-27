@@ -28,6 +28,7 @@ import tauri.dev.jsg.block.dialhomedevice.DHDPegasusBlock;
 import tauri.dev.jsg.block.invisible.InvisibleBlock;
 import tauri.dev.jsg.block.invisible.IrisBlock;
 import tauri.dev.jsg.block.machine.AssemblerBlock;
+import tauri.dev.jsg.block.machine.CrystalChamberBlock;
 import tauri.dev.jsg.block.ore.NaquadahOreBlock;
 import tauri.dev.jsg.block.ore.TitaniumOreBlock;
 import tauri.dev.jsg.block.ore.TriniumOreBlock;
@@ -98,6 +99,7 @@ public class JSGBlocks {
     // -----------------------------------------------------------------------------
 
     public static final AssemblerBlock MACHINE_ASSEMBLER = new AssemblerBlock();
+    public static final CrystalChamberBlock MACHINE_CHAMBER = new CrystalChamberBlock();
 
     // -----------------------------------------------------------------------------
 
@@ -174,7 +176,8 @@ public class JSGBlocks {
             INVISIBLE_BLOCK,
             IRIS_BLOCK,
 
-            MACHINE_ASSEMBLER
+            MACHINE_ASSEMBLER,
+            MACHINE_CHAMBER
 
     };
 

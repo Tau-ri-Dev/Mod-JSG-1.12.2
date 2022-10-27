@@ -275,6 +275,7 @@ tile.jsg.beamer_block.name=Beamer Block
 
 # machines
 tile.jsg.assembler_machine_block.name=Ancient Assembler
+tile.jsg.crystal_chamber_block.name=Crystal Chamber
 
 # -------------------
 

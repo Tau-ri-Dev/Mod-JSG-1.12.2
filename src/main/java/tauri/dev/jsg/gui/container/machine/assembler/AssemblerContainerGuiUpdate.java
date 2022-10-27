@@ -1,4 +1,4 @@
-package tauri.dev.jsg.gui.container.machine;
+package tauri.dev.jsg.gui.container.machine.assembler;
 
 import io.netty.buffer.ByteBuf;
 import tauri.dev.jsg.state.State;

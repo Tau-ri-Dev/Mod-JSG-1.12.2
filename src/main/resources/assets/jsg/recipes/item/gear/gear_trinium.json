@@ -6,10 +6,10 @@
     " P "
   ],
   "key": {
-    "T": {
+    "P": {
       "type": "forge:ore_dict",
       "ore": "plateTrinium"
-    },
+    }
   },
   "result": {
     "item": "jsg:gear_trinium",

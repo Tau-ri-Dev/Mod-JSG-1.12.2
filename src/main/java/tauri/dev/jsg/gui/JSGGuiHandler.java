@@ -12,8 +12,10 @@ import tauri.dev.jsg.gui.container.dhd.DHDMilkyWayContainer;
 import tauri.dev.jsg.gui.container.dhd.DHDMilkyWayContainerGui;
 import tauri.dev.jsg.gui.container.dhd.DHDPegasusContainer;
 import tauri.dev.jsg.gui.container.dhd.DHDPegasusContainerGui;
-import tauri.dev.jsg.gui.container.machine.AssemblerContainer;
-import tauri.dev.jsg.gui.container.machine.AssemblerContainerGui;
+import tauri.dev.jsg.gui.container.machine.assembler.AssemblerContainer;
+import tauri.dev.jsg.gui.container.machine.assembler.AssemblerContainerGui;
+import tauri.dev.jsg.gui.container.machine.crystalchamber.CrystalChamberContainer;
+import tauri.dev.jsg.gui.container.machine.crystalchamber.CrystalChamberContainerGui;
 import tauri.dev.jsg.gui.container.stargate.StargateContainer;
 import tauri.dev.jsg.gui.container.stargate.StargateContainerGui;
 import tauri.dev.jsg.gui.container.transportrings.TRContainer;
@@ -45,6 +47,9 @@ public class JSGGuiHandler implements IGuiHandler {
 
             case GUI_ASSEMBLER:
                 return new AssemblerContainer(player.inventory, world, x, y, z);
+
+            case GUI_CRYSTAL_CHAMBER:
+                return new CrystalChamberContainer(player.inventory, world, x, y, z);
         }
 
         return null;
@@ -74,6 +79,9 @@ public class JSGGuiHandler implements IGuiHandler {
 
             case GUI_ASSEMBLER:
                 return new AssemblerContainerGui(new AssemblerContainer(player.inventory, world, x, y, z));
+
+            case GUI_CRYSTAL_CHAMBER:
+                return new CrystalChamberContainerGui(new CrystalChamberContainer(player.inventory, world, x, y, z));
 
         }
 

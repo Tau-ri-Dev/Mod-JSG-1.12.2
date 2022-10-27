@@ -1,6 +1,5 @@
 package tauri.dev.jsg.tileentity.machine;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -8,18 +7,20 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.block.machine.AssemblerBlock;
-import tauri.dev.jsg.gui.container.machine.assembler.AssemblerContainerGuiUpdate;
-import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.machine.AssemblerRecipe;
-import tauri.dev.jsg.machine.AssemblerRecipes;
+import tauri.dev.jsg.block.machine.CrystalChamberBlock;
+import tauri.dev.jsg.gui.container.machine.crystalchamber.CrystalChamberContainerGuiUpdate;
+import tauri.dev.jsg.machine.CrystalChamberRecipe;
+import tauri.dev.jsg.machine.CrystalChamberRecipes;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
-import tauri.dev.jsg.renderer.machine.AssemblerRendererState;
+import tauri.dev.jsg.renderer.machine.CrystalChamberRendererState;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.JSGSoundHelperClient;
 import tauri.dev.jsg.sound.SoundEventEnum;
@@ -32,42 +33,29 @@ import tauri.dev.jsg.tileentity.util.IUpgradable;
 import tauri.dev.jsg.util.JSGItemStackHandler;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 
-import static tauri.dev.jsg.item.JSGItems.*;
+import static tauri.dev.jsg.item.JSGItems.CRYSTAL_SEED;
 
-public class AssemblerTile extends TileEntity implements IUpgradable, StateProviderInterface, ITickable {
+public class CrystalChamberTile extends TileEntity implements IUpgradable, StateProviderInterface, ITickable {
 
-    public AssemblerRendererState rendererState = new AssemblerRendererState();
+    public CrystalChamberRendererState rendererState = new CrystalChamberRendererState();
 
-    public static final int CONTAINER_SIZE = 12;
-
-    public static Item[] getAllowedSchematics() {
-        return new Item[]{
-                SCHEMATIC_MILKYWAY,
-                SCHEMATIC_PEGASUS,
-                SCHEMATIC_UNIVERSE,
-                SCHEMATIC_TR_GOAULD,
-                SCHEMATIC_TR_ORI,
-                SCHEMATIC_TR_ANCIENT
-        };
-    }
+    public static final int CONTAINER_SIZE = 2;
 
     protected NetworkRegistry.TargetPoint targetPoint;
     protected final ItemStackHandler itemStackHandler = new JSGItemStackHandler(CONTAINER_SIZE) {
 
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            if (slot == 11) return false; // output slot
+            if (slot == 1) return false; // output slot
             if (slot == 0) {
-                return JSGItems.isInItemsArray(stack.getItem(), getAllowedSchematics());
+                return stack.getItem() == CRYSTAL_SEED;
             }
             return true;
         }
 
         @Override
         protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
-            if (slot == 0) return 1;
             return 64;
         }
 
@@ -78,9 +66,20 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
             markDirty();
         }
     };
-    protected final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(AssemblerBlock.MAX_ENERGY, AssemblerBlock.MAX_ENERGY_TRANSFER) {
+    protected final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(CrystalChamberBlock.MAX_ENERGY, CrystalChamberBlock.MAX_ENERGY_TRANSFER) {
         @Override
         protected void onEnergyChanged() {
+            markDirty();
+        }
+    };
+    protected final FluidTank fluidHandler = new FluidTank(CrystalChamberBlock.FLUID_CAPACITY) {
+        @Override
+        public boolean canFillFluidType(FluidStack fluid) {
+            return fluid != null;
+        }
+
+        @Override
+        protected void onContentsChanged() {
             markDirty();
         }
     };
@@ -93,7 +92,7 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
     protected boolean isWorking = false;
     protected boolean isWorkingLast = false;
 
-    protected AssemblerRecipe currentRecipe = null;
+    protected CrystalChamberRecipe currentRecipe = null;
 
     public int getEnergyTransferedLastTick() {
         return energyTransferedLastTick;
@@ -130,44 +129,28 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
         return machineProgress;
     }
 
-    public AssemblerRecipe getRecipeIfPossible() {
-        ArrayList<ItemStack> stacks = new ArrayList<>();
-        for (int i = 1; i < 10; i++)
-            stacks.add(itemStackHandler.getStackInSlot(i));
-
-        Item scheme = itemStackHandler.getStackInSlot(0).getItem();
-        ItemStack subStack = itemStackHandler.getStackInSlot(10);
-
-        for (AssemblerRecipe recipe : AssemblerRecipes.RECIPES) {
-            if (itemStackHandler.insertItem(11, recipe.getResult(), true).equals(recipe.getResult())) continue;
-            if (recipe.isOk(energyStorage.getEnergyStored(), scheme, stacks, subStack)) return recipe;
+    public CrystalChamberRecipe getRecipeIfPossible() {
+        for (CrystalChamberRecipe recipe : CrystalChamberRecipes.RECIPES) {
+            if (itemStackHandler.insertItem(1, recipe.getResult(), true).equals(recipe.getResult())) continue;
+            if (fluidHandler.getFluid() == null) continue;
+            if (recipe.isOk(energyStorage.getEnergyStored(), new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()), itemStackHandler.getStackInSlot(0)))
+                return recipe;
         }
-
         return null;
     }
 
     protected void workIsDone() {
-        if(!isWorking) return;
-        itemStackHandler.insertItem(11, currentRecipe.getResult(), false);
-        for (int i = 1; i < 10; i++) {
-            int amount = 0;
-            if (currentRecipe.getPattern().size() > (i - 1) && currentRecipe.getPattern().get(i - 1) != null)
-                amount = currentRecipe.getPattern().get(i - 1).getCount();
-            itemStackHandler.extractItem(i, amount, false);
-        }
-        if (currentRecipe.removeSubItem())
-            itemStackHandler.extractItem(10, currentRecipe.getSubItemStack().getCount(), false);
-        else if (currentRecipe.removeDurabilitySubItem() && itemStackHandler.getStackInSlot(10).getItem().isDamageable())
-            itemStackHandler.getStackInSlot(10).setItemDamage(itemStackHandler.getStackInSlot(10).getItemDamage() + 1);
-
+        if (!isWorking) return;
+        itemStackHandler.insertItem(1, currentRecipe.getResult(), false);
+        itemStackHandler.extractItem(0, currentRecipe.getNeededSeeds(), false);
+        fluidHandler.drainInternal(currentRecipe.getSubFluidStack().amount, true);
         currentRecipe = getRecipeIfPossible();
-        if(currentRecipe != null){
+        if (currentRecipe != null) {
             machineStart = this.world.getTotalWorldTime();
             machineEnd = this.world.getTotalWorldTime() + currentRecipe.getWorkingTime();
             machineProgress = 0;
             isWorking = true;
-        }
-        else{
+        } else {
             machineStart = -1;
             machineEnd = -1;
             machineProgress = 0;
@@ -204,10 +187,6 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
                         machineProgress = (int) Math.round((((double) (this.world.getTotalWorldTime() - machineStart)) / ((double) (machineEnd - machineStart))) * 100); // returns % of done work
                     energyStorage.extractEnergy(currentRecipe.getEnergyPerTick(), false);
 
-                    /*JSG.info("progress: " + machineProgress);
-                    JSG.info("start: " + machineStart);
-                    JSG.info("stop: " + machineEnd);*/
-
                     if (machineProgress >= 100) {
                         workIsDone();
                     }
@@ -241,7 +220,10 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
-        return (capability == CapabilityEnergy.ENERGY) || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+        return (capability == CapabilityEnergy.ENERGY)
+                || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+                || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
+                || super.hasCapability(capability, facing);
     }
 
     @Override
@@ -252,6 +234,9 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemStackHandler);
 
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(fluidHandler);
+
         return super.getCapability(capability, facing);
     }
 
@@ -259,11 +244,10 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
     public State getState(StateTypeEnum stateType) {
         switch (stateType) {
             case GUI_UPDATE:
-                return new AssemblerContainerGuiUpdate(energyStorage.getEnergyStored(), energyTransferedLastTick, machineStart, machineEnd);
+                return new CrystalChamberContainerGuiUpdate(energyStorage.getEnergyStored(), (fluidHandler.getFluid() != null ? new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()) : null), energyTransferedLastTick, machineStart, machineEnd);
             case RENDERER_UPDATE:
-                //ItemStack stack = itemStackHandler.getStackInSlot(11);
-                ItemStack stack = currentRecipe != null ? currentRecipe.getResult() : itemStackHandler.getStackInSlot(11);
-                return new AssemblerRendererState(machineProgress, isWorking, stack);
+                ItemStack stack = currentRecipe != null ? currentRecipe.getResult() : itemStackHandler.getStackInSlot(1);
+                return new CrystalChamberRendererState(machineProgress, isWorking, stack);
         }
         return null;
     }
@@ -272,9 +256,9 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
     public State createState(StateTypeEnum stateType) {
         switch (stateType) {
             case GUI_UPDATE:
-                return new AssemblerContainerGuiUpdate();
+                return new CrystalChamberContainerGuiUpdate();
             case RENDERER_UPDATE:
-                return new AssemblerRendererState();
+                return new CrystalChamberRendererState();
         }
         return null;
     }
@@ -283,15 +267,16 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
     public void setState(StateTypeEnum stateType, State state) {
         switch (stateType) {
             case GUI_UPDATE:
-                AssemblerContainerGuiUpdate guiUpdate = (AssemblerContainerGuiUpdate) state;
+                CrystalChamberContainerGuiUpdate guiUpdate = (CrystalChamberContainerGuiUpdate) state;
                 energyStorage.setEnergyStored(guiUpdate.energyStored);
                 energyTransferedLastTick = guiUpdate.energyTransferedLastTick;
                 machineStart = guiUpdate.machineStart;
                 machineEnd = guiUpdate.machineEnd;
+                fluidHandler.setFluid(guiUpdate.fluidStack);
                 markDirty();
                 break;
             case RENDERER_UPDATE:
-                rendererState = (AssemblerRendererState) state;
+                rendererState = (CrystalChamberRendererState) state;
                 this.machineProgress = rendererState.machineProgress;
                 this.isWorking = rendererState.isWorking;
                 JSGSoundHelperClient.playPositionedSoundClientSide(pos, SoundPositionedEnum.BEAMER_LOOP, isWorking);
@@ -299,7 +284,7 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
         }
     }
 
-    public AssemblerRendererState getRendererState() {
+    public CrystalChamberRendererState getRendererState() {
         return rendererState;
     }
 
@@ -314,6 +299,10 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
         compound.setLong("machineEnd", machineEnd);
         compound.setInteger("progress", machineProgress);
 
+        NBTTagCompound fluidHandlerCompound = new NBTTagCompound();
+        fluidHandler.writeToNBT(fluidHandlerCompound);
+        compound.setTag("fluidHandler", fluidHandlerCompound);
+
         return super.writeToNBT(compound);
     }
 
@@ -326,6 +315,8 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
         machineStart = compound.getLong("machineStart");
         machineEnd = compound.getLong("machineEnd");
         machineProgress = compound.getInteger("machineProgress");
+
+        fluidHandler.readFromNBT(compound.getCompoundTag("fluidHandler"));
 
         super.readFromNBT(compound);
     }

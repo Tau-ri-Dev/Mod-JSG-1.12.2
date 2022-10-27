@@ -1,4 +1,4 @@
-package tauri.dev.jsg.gui.container.machine;
+package tauri.dev.jsg.gui.container.machine.assembler;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

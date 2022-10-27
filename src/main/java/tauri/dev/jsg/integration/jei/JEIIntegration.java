@@ -9,8 +9,15 @@ import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.integration.jei.category.JEIAssemblerRecipeCategory;
+import tauri.dev.jsg.integration.jei.category.JEIChamberRecipeCategory;
+import tauri.dev.jsg.integration.jei.recipe.JEINotebookCloneRecipe;
+import tauri.dev.jsg.integration.jei.recipe.JEINotebookRecipe;
+import tauri.dev.jsg.integration.jei.recipe.JEIUniverseDialerCloneRecipe;
+import tauri.dev.jsg.integration.jei.recipe.JEIUniverseDialerRepairRecipe;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.machine.AssemblerRecipes;
+import tauri.dev.jsg.machine.CrystalChamberRecipes;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -44,10 +51,15 @@ public final class JEIIntegration implements IModPlugin {
         recipes.clear();
         recipes.addAll(Arrays.asList(AssemblerRecipes.RECIPES));
         registry.addRecipes(recipes, JEIAssemblerRecipeCategory.UID);
+
+        recipes.clear();
+        recipes.addAll(Arrays.asList(CrystalChamberRecipes.RECIPES));
+        registry.addRecipes(recipes, JEIChamberRecipeCategory.UID);
     }
 
     @Override
     public void registerCategories(@Nonnull IRecipeCategoryRegistration registry) {
         registry.addRecipeCategories(new JEIAssemblerRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
+        registry.addRecipeCategories(new JEIChamberRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
     }
 }

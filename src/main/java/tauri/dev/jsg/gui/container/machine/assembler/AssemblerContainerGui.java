@@ -1,4 +1,4 @@
-package tauri.dev.jsg.gui.container.machine;
+package tauri.dev.jsg.gui.container.machine.assembler;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
@@ -213,7 +213,7 @@ public class AssemblerContainerGui extends GuiContainer implements TabbedContain
         long start = container.tile.getMachineStart();
         long end = container.tile.getMachineEnd();
         double progress = (start == -1 || end == -1 || start == end) ? 0 : ((double) (container.tile.getWorld().getTotalWorldTime() - start)) / ((double) (end - start));
-        drawModalRectWithCustomSizedTexture(guiLeft + 95, guiTop + 65, 176, 128, ((int) ((216 - 176) * progress)), 142 - 128, 512, 512);
+        drawModalRectWithCustomSizedTexture(guiLeft + 95, guiTop + 65, 176, 128, ((int) ((216 - 176) * progress)), 143 - 128, 512, 512);
 
         StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.tile.getCapability(CapabilityEnergy.ENERGY, null);
 

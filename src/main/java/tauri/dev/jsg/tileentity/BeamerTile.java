@@ -80,8 +80,6 @@ import java.util.*;
 
 import static tauri.dev.jsg.block.JSGBlocks.BEAMER_BLOCK;
 
-// Todo(Mine): Rework this whole class to make beamers more stable and cleaner
-
 @Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers")
 public class BeamerTile extends TileEntity implements ITickable, IUpgradable, StateProviderInterface, ScheduledTaskExecutorInterface, Environment {
 
@@ -1095,12 +1093,12 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
                             int x1 = (ax1 == EnumFacing.Axis.Z ? (tile.basePos.getX() - tile.getPos().getX()) : (tile.basePos.getZ() - tile.getPos().getZ()));
                             int x2 = (ax2 == EnumFacing.Axis.Z ? (basePos.getX() - getPos().getX()) : (basePos.getZ() - getPos().getZ()));
                             beamOffsetFromTargetXClient = x1 - x2;
-                            JSG.info("X: " + beamOffsetFromTargetXClient);
+                            //JSG.info("X: " + beamOffsetFromTargetXClient);
 
                             int y1 = (tile.basePos.getY() - tile.getPos().getY());
                             int y2 = (basePos.getY() - getPos().getY());
                             beamOffsetFromTargetYClient = y1 - y2;
-                            JSG.info("Y: " + beamOffsetFromTargetYClient);
+                            //JSG.info("Y: " + beamOffsetFromTargetYClient);
                         }
                     }
 
