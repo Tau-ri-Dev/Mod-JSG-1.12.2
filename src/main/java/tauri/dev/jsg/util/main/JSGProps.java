@@ -1,7 +1,7 @@
 package tauri.dev.jsg.util.main;
 
 import tauri.dev.jsg.block.beamer.BeamerBlock;
-import tauri.dev.jsg.block.capacitor.CapacitorBlock;
+import tauri.dev.jsg.block.energy.capacitor.CapacitorBlock;
 import tauri.dev.jsg.block.dialhomedevice.DHDBlock;
 import tauri.dev.jsg.block.invisible.InvisibleBlock;
 import tauri.dev.jsg.block.stargate.StargateMilkyWayMemberBlock;

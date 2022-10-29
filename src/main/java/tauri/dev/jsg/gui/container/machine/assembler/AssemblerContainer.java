@@ -82,9 +82,11 @@ public class AssemblerContainer extends Container implements OpenTabHolderInterf
     @Nonnull
     @Override
     public ItemStack transferStackInSlot(@Nonnull EntityPlayer playerIn, int slotId) {
+        ItemStack returnStack = ItemStack.EMPTY;
         Slot slot = getSlot(slotId);
         if (slot.getHasStack()) {
             ItemStack stack = slot.getStack();
+            returnStack = stack.copy();
 
             if(slotId == 0){
                 if(!(JSGItems.isInItemsArray(stack.getItem(), getAllowedSchematics()))) return ItemStack.EMPTY;
@@ -92,7 +94,7 @@ public class AssemblerContainer extends Container implements OpenTabHolderInterf
 
             if (slotId < CONTAINER_SIZE) {
                 // to player
-                if (!this.mergeItemStack(stack, CONTAINER_SIZE-1, this.inventorySlots.size(), true)) {
+                if (!this.mergeItemStack(stack, CONTAINER_SIZE, this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             }
@@ -107,7 +109,7 @@ public class AssemblerContainer extends Container implements OpenTabHolderInterf
                 slot.onSlotChanged();
             }
         }
-        return slot.getStack();
+        return returnStack;
     }
 
     @Override

@@ -298,7 +298,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * This performs all the checks.
      */
     protected ResultTargetValid attemptOpenDialed() {
-
         boolean targetValid = false;
         StargateOpenResult result = checkAddressAndEnergy(dialedAddress);
 
@@ -361,7 +360,15 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         StargatePos targetGatePos = getNetwork().getStargate(address);
 
+        if(targetGatePos == null) return StargateOpenResult.ADDRESS_MALFORMED;
         if (!hasEnergyToDial(targetGatePos)) return StargateOpenResult.NOT_ENOUGH_POWER;
+
+        StargateAbstractBaseTile targetTile = targetGatePos.getTileEntity();
+        if(targetTile instanceof StargateClassicBaseTile) {
+            StargateClassicBaseTile classicTile = (StargateClassicBaseTile) targetTile;
+            if (classicTile.isGateBurried())
+                return StargateOpenResult.GATE_BURRIED;
+        }
 
         return StargateOpenResult.OK;
     }
@@ -852,7 +859,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public boolean randomIncomingIsActive = false;
 
     public void generateIncoming(int entities, int addressSize) {
-        generateIncoming(entities, addressSize, 80);
+        generateIncoming(entities, addressSize, 80 + (new Random().nextInt(120)));
     }
 
     public void generateIncoming(int entities, int addressSize, int delay) {

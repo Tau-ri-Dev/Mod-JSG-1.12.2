@@ -1,4 +1,4 @@
-package tauri.dev.jsg.machine;
+package tauri.dev.jsg.machine.chamber;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;

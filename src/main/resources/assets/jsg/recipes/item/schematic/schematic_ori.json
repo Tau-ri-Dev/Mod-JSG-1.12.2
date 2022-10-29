@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "paper"
+    },
+    {
+      "item": "jsg:schematic_ori"
+    }
+  ],
+  "result": {
+    "item": "jsg:schematic_ori",
+    "count": 2
+  }
+}

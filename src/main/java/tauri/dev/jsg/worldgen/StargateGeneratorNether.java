@@ -187,7 +187,7 @@ public class StargateGeneratorNether {
 						world.setBlockToAir(datablock.getKey());
 						
 						int fluid = (int) (6000 + Math.random() * 3000);
-						((FluidTank) world.getTileEntity(dhdPos).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)).fillInternal(new FluidStack(JSGFluids.moltenNaquadahRefined, fluid), true);
+						((FluidTank) world.getTileEntity(dhdPos).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)).fillInternal(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, fluid), true);
 						
 						itemHandler = world.getTileEntity(dhdPos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 						itemHandler.insertItem(0, new ItemStack(JSGItems.CRYSTAL_CONTROL_MILKYWAY_DHD), false);

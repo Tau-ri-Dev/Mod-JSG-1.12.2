@@ -94,8 +94,14 @@ public enum ElementEnum {
     // --------------------------------------------------------------------------------------------
     // Machines
 
-    ASSEMBLER_MACHINE("machine/assembler/assembler.obj", "machine/assembler/assembler_on.png", false);
-    //CRYSTAL_CHAMBER("machine/assembler/chamber.obj", "machine/assembler/chamber.png", false);
+    ASSEMBLER_MACHINE("machine/assembler/assembler.obj", "machine/assembler/assembler_on.png", false),
+
+    // --------------------------------------------------------------------------------------------
+    // ZPM
+
+    ZPM("zpm/zpm.obj", "zpm/zpm0.png", false),
+    ZPM_HUB("zpm/hub.obj", "zpm/hub.png", false),
+    ZPM_SLOT("zpm/slot.obj", "zpm/slot.png", false);
 
     // --------------------------------------------------------------------------------------------
 

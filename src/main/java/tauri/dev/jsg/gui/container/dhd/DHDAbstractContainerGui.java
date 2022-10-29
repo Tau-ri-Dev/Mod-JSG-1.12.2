@@ -46,7 +46,7 @@ public abstract class DHDAbstractContainerGui extends GuiContainer implements Ta
 		this.ySize = 168;
 				
 		this.container = container;
-		container.tankNaquadah.setFluid(new FluidStack(JSGFluids.moltenNaquadahRefined, 0));
+		container.tankNaquadah.setFluid(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, 0));
 		this.tank = new FluidTankElement(this, 151, 18, 16, 54, container.tankNaquadah);
 		
 		diodes.add(new Diode(this, 8, 55, I18n.format("gui.dhd.crystalStatus")).setDiodeStatus(DiodeStatus.OFF)
@@ -154,7 +154,7 @@ public abstract class DHDAbstractContainerGui extends GuiContainer implements Ta
 		GlStateManager.color(1, 1, 1, 1);
 		
 		if (container.dhdTile.getReactorState() == ReactorStateEnum.ONLINE) {
-			TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(JSGFluids.moltenNaquadahRefined.getStill().toString());
+			TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(JSGFluids.NAQUADAH_MOLTEN_REFINED.getStill().toString());
 			
 			// Top duct Naquadah
 			for (int i=0; i<3; i++)

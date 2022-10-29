@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
-import tauri.dev.jsg.machine.AssemblerRecipe;
+import tauri.dev.jsg.machine.assembler.AssemblerRecipe;
 
 import javax.annotation.Nonnull;
 

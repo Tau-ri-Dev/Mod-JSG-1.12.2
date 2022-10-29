@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 public class JSGStructuresGenerator implements IWorldGenerator {
-    public static final JSGStructure PLAINS = new JSGStructure("plains", 2, true, SymbolTypeEnum.MILKYWAY, 11, 11, 0);
+    public static final JSGStructure PLAINS = new JSGStructure("plains", 0, true, SymbolTypeEnum.MILKYWAY, 11, 11, 0);
     public static final JSGStructure DESERT = new JSGStructure("desert", 0, true, SymbolTypeEnum.MILKYWAY, 12, 13, 0);
 
     public static final JSGStructure THE_END = new JSGStructure("plains", 0, true, SymbolTypeEnum.UNIVERSE, 11, 11, 1);

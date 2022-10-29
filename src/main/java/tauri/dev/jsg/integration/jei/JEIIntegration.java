@@ -16,8 +16,8 @@ import tauri.dev.jsg.integration.jei.recipe.JEINotebookRecipe;
 import tauri.dev.jsg.integration.jei.recipe.JEIUniverseDialerCloneRecipe;
 import tauri.dev.jsg.integration.jei.recipe.JEIUniverseDialerRepairRecipe;
 import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.machine.AssemblerRecipes;
-import tauri.dev.jsg.machine.CrystalChamberRecipes;
+import tauri.dev.jsg.machine.assembler.AssemblerRecipes;
+import tauri.dev.jsg.machine.chamber.CrystalChamberRecipes;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;

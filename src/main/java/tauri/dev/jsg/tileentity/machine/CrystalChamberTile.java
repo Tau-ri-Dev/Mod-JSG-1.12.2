@@ -16,8 +16,8 @@ import net.minecraftforge.items.ItemStackHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.machine.CrystalChamberBlock;
 import tauri.dev.jsg.gui.container.machine.crystalchamber.CrystalChamberContainerGuiUpdate;
-import tauri.dev.jsg.machine.CrystalChamberRecipe;
-import tauri.dev.jsg.machine.CrystalChamberRecipes;
+import tauri.dev.jsg.machine.chamber.CrystalChamberRecipe;
+import tauri.dev.jsg.machine.chamber.CrystalChamberRecipes;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.renderer.machine.CrystalChamberRendererState;
@@ -110,11 +110,11 @@ public class CrystalChamberTile extends TileEntity implements IUpgradable, State
         }
     }
 
-    public void onBreak(){
+    public void onBreak() {
         isWorking = false;
         currentRecipe = null;
         markDirty();
-        sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
+        JSGSoundHelper.playPositionedSound(world, pos, SoundPositionedEnum.BEAMER_LOOP, false);
     }
 
     public long getMachineStart() {
@@ -123,10 +123,6 @@ public class CrystalChamberTile extends TileEntity implements IUpgradable, State
 
     public long getMachineEnd() {
         return machineEnd;
-    }
-
-    public int getMachineProgress() {
-        return machineProgress;
     }
 
     public CrystalChamberRecipe getRecipeIfPossible() {
@@ -203,6 +199,7 @@ public class CrystalChamberTile extends TileEntity implements IUpgradable, State
             if (isWorking != isWorkingLast || machineProgress != machineProgressLast) {
                 isWorkingLast = isWorking;
                 machineProgressLast = machineProgress;
+                JSGSoundHelper.playPositionedSound(world, pos, SoundPositionedEnum.BEAMER_LOOP, isWorking);
                 sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             }
             markDirty();
@@ -279,7 +276,6 @@ public class CrystalChamberTile extends TileEntity implements IUpgradable, State
                 rendererState = (CrystalChamberRendererState) state;
                 this.machineProgress = rendererState.machineProgress;
                 this.isWorking = rendererState.isWorking;
-                JSGSoundHelperClient.playPositionedSoundClientSide(pos, SoundPositionedEnum.BEAMER_LOOP, isWorking);
                 break;
         }
     }

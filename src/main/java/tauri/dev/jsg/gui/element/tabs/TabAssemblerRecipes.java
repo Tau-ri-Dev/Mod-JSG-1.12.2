@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import tauri.dev.jsg.gui.element.BetterButton;
-import tauri.dev.jsg.machine.AssemblerRecipe;
+import tauri.dev.jsg.machine.assembler.AssemblerRecipe;
 import tauri.dev.jsg.renderer.BlockRenderer;
 
 import java.util.Collections;

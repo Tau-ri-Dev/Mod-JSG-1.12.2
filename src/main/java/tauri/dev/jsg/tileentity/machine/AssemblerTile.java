@@ -15,8 +15,8 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.machine.AssemblerBlock;
 import tauri.dev.jsg.gui.container.machine.assembler.AssemblerContainerGuiUpdate;
 import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.machine.AssemblerRecipe;
-import tauri.dev.jsg.machine.AssemblerRecipes;
+import tauri.dev.jsg.machine.assembler.AssemblerRecipe;
+import tauri.dev.jsg.machine.assembler.AssemblerRecipes;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.renderer.machine.AssemblerRendererState;
@@ -111,11 +111,11 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
         }
     }
 
-    public void onBreak(){
+    public void onBreak() {
         isWorking = false;
         currentRecipe = null;
         markDirty();
-        sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
+        JSGSoundHelper.playPositionedSound(world, pos, SoundPositionedEnum.BEAMER_LOOP, false);
     }
 
     public long getMachineStart() {
@@ -124,10 +124,6 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
 
     public long getMachineEnd() {
         return machineEnd;
-    }
-
-    public int getMachineProgress() {
-        return machineProgress;
     }
 
     public AssemblerRecipe getRecipeIfPossible() {
@@ -147,7 +143,7 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
     }
 
     protected void workIsDone() {
-        if(!isWorking) return;
+        if (!isWorking) return;
         itemStackHandler.insertItem(11, currentRecipe.getResult(), false);
         for (int i = 1; i < 10; i++) {
             int amount = 0;
@@ -161,13 +157,12 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
             itemStackHandler.getStackInSlot(10).setItemDamage(itemStackHandler.getStackInSlot(10).getItemDamage() + 1);
 
         currentRecipe = getRecipeIfPossible();
-        if(currentRecipe != null){
+        if (currentRecipe != null) {
             machineStart = this.world.getTotalWorldTime();
             machineEnd = this.world.getTotalWorldTime() + currentRecipe.getWorkingTime();
             machineProgress = 0;
             isWorking = true;
-        }
-        else{
+        } else {
             machineStart = -1;
             machineEnd = -1;
             machineProgress = 0;
@@ -204,10 +199,6 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
                         machineProgress = (int) Math.round((((double) (this.world.getTotalWorldTime() - machineStart)) / ((double) (machineEnd - machineStart))) * 100); // returns % of done work
                     energyStorage.extractEnergy(currentRecipe.getEnergyPerTick(), false);
 
-                    /*JSG.info("progress: " + machineProgress);
-                    JSG.info("start: " + machineStart);
-                    JSG.info("stop: " + machineEnd);*/
-
                     if (machineProgress >= 100) {
                         workIsDone();
                     }
@@ -224,6 +215,7 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
             if (isWorking != isWorkingLast || machineProgress != machineProgressLast) {
                 isWorkingLast = isWorking;
                 machineProgressLast = machineProgress;
+                JSGSoundHelper.playPositionedSound(world, pos, SoundPositionedEnum.BEAMER_LOOP, isWorking);
                 sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             }
             markDirty();
@@ -294,7 +286,6 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
                 rendererState = (AssemblerRendererState) state;
                 this.machineProgress = rendererState.machineProgress;
                 this.isWorking = rendererState.isWorking;
-                JSGSoundHelperClient.playPositionedSoundClientSide(pos, SoundPositionedEnum.BEAMER_LOOP, isWorking);
                 break;
         }
     }

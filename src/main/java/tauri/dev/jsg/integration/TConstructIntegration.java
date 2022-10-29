@@ -20,11 +20,11 @@ public class TConstructIntegration {
     @Optional.Method(modid = "tconstruct")
     public static void initFluids() {
         List<MoltenMaterial> fluidList = new ArrayList<>();
-        fluidList.add(JSGFluids.moltenTitanium);
-        fluidList.add(JSGFluids.moltenTrinium);
+        fluidList.add(JSGFluids.MOLTEN_TITANIUM);
+        fluidList.add(JSGFluids.MOLTEN_TRINIUM);
 
-        fluidList.add(JSGFluids.moltenNaquadahRefined);
-        fluidList.add(JSGFluids.moltenNaquadahAlloy);
+        fluidList.add(JSGFluids.NAQUADAH_MOLTEN_REFINED);
+        fluidList.add(JSGFluids.MOLTEN_NAQUADAH_ALLOY);
 
         fluids = fluidList.toArray(new Fluid[0]);
         for (MoltenMaterial mm:fluidList){
@@ -32,7 +32,6 @@ public class TConstructIntegration {
             tag.setString("fluid", mm.getName());
             tag.setString("ore", mm.ORE_DICT);
             tag.setBoolean("toolforge", mm.TOOL_FORGE);
-//tag.setTag("alloy", alloysTagList); // you can also send an alloy with the registration (see below)
 
             FMLInterModComms.sendMessage("tconstruct", "integrateSmeltery", tag);
         }

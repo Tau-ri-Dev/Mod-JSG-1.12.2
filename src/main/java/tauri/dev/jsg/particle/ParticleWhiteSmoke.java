@@ -11,7 +11,6 @@ public class ParticleWhiteSmoke extends ParticleExplosion {
 		super(world, x, y, z, 0, 0, 0);
 		
 		this.motionX = motionX;
-//		this.motionY = 0.05;
 		this.motionZ = motionZ;
 		
 		this.falling = falling;

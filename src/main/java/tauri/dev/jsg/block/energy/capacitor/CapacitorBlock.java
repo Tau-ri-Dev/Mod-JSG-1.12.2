@@ -1,4 +1,4 @@
-package tauri.dev.jsg.block.capacitor;
+package tauri.dev.jsg.block.energy.capacitor;
 
 import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
@@ -6,7 +6,7 @@ import tauri.dev.jsg.util.ItemHandlerHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.block.JSGAbstractCustomItemBlock;
 import tauri.dev.jsg.gui.GuiIdEnum;
-import tauri.dev.jsg.item.stargate.CapacitorItemBlock;
+import tauri.dev.jsg.item.energy.CapacitorItemBlock;
 import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.stargate.power.StargateItemEnergyStorage;
 import tauri.dev.jsg.tileentity.energy.CapacitorTile;

@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Config(modid = "jsg", name = "jsgConfig_" + JSG.CONFIG_VERSION)
+@Config(modid = "jsg", name = "jsg/jsgConfig_" + JSG.CONFIG_VERSION)
 public class JSGConfig {
 
     @Name("Stargate size")
@@ -86,13 +86,13 @@ public class JSGConfig {
     @Name("Random incoming config")
     public static RandomIncomingConfig randomIncoming = new RandomIncomingConfig();
 
-    @Name("Recipes options")
-    public static RecipesConfig recipesConfig = new RecipesConfig();
-
     @Name("Development config")
     public static DevConfig devConfig = new DevConfig();
 
     public static class StargateConfig {
+        @Name("Disable burried state for gates")
+        public boolean bypassBurriedState = false;
+
         @Name("Orlin's gate max open count")
         @RangeInt(min = 0)
         public int stargateOrlinMaxOpenCount = 2;
@@ -411,6 +411,13 @@ public class JSGConfig {
                 "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
         })
         public int universeCapacitors = 0;
+
+        @Name("ZPM capacity (RF)")
+        public int zpmCapacity = 2_000_000_000;
+
+        @Name("ZPMHub's max power throughput")
+        @RangeInt(min = 1)
+        public int zpmHubMaxEnergyTransfer = 104360;
     }
 
     public static class RingsConfig {
@@ -733,7 +740,7 @@ public class JSGConfig {
         @Comment({
                 "WARNING! - Requires reloading!"
         })
-        public boolean tExpansionIntegration = true;
+        public boolean tExpansionIntegration = false;
     }
 
     public static class RandomIncomingConfig {
@@ -763,28 +770,6 @@ public class JSGConfig {
                 "minecraft:zombie",
                 "minecraft:skeleton"
         };
-    }
-
-    public static class RecipesConfig {
-
-        @RequiresMcRestart
-        @Name("Convert thermal recipes to normal ones")
-        @Comment({
-                "When Thermal expansion is not loaded, then",
-                "register converted Thermal recipes into",
-                "normal ones.",
-                "WARNING! - Requires reloading!"
-        })
-        public boolean convertThermal = true;
-
-        @RequiresMcRestart
-        @Name("Allow bypass thermal recipes")
-        @Comment({
-                "Even when thermal expansion is loaded, register",
-                "converted recipes.",
-                "WARNING! - Requires reloading!"
-        })
-        public boolean bypassThermal = false;
     }
 
     public static class DevConfig {

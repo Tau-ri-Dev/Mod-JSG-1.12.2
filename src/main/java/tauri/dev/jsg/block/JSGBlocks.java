@@ -21,8 +21,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.beamer.BeamerBlock;
-import tauri.dev.jsg.block.capacitor.CapacitorBlock;
-import tauri.dev.jsg.block.capacitor.CapacitorBlockEmpty;
+import tauri.dev.jsg.block.energy.ZPMBlock;
+import tauri.dev.jsg.block.energy.capacitor.CapacitorBlock;
+import tauri.dev.jsg.block.energy.capacitor.CapacitorBlockEmpty;
 import tauri.dev.jsg.block.dialhomedevice.DHDBlock;
 import tauri.dev.jsg.block.dialhomedevice.DHDPegasusBlock;
 import tauri.dev.jsg.block.invisible.InvisibleBlock;
@@ -103,6 +104,10 @@ public class JSGBlocks {
 
     // -----------------------------------------------------------------------------
 
+    public static final ZPMBlock ZPM = new ZPMBlock();
+
+    // -----------------------------------------------------------------------------
+
     /**
      * Used in {@link UniverseDialerMode}, {@link TRControllerAbstractTile} and {@link TransportRingsAbstractTile}
      */
@@ -177,7 +182,9 @@ public class JSGBlocks {
             IRIS_BLOCK,
 
             MACHINE_ASSEMBLER,
-            MACHINE_CHAMBER
+            MACHINE_CHAMBER,
+
+            ZPM
 
     };
 

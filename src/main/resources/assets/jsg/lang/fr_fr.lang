@@ -7,6 +7,7 @@ itemGroup.jsg_energy=JSG : Énergie
 itemGroup.jsg_tools=JSG : Outils
 itemGroup.jsg_props=JSG: Props
 itemGroup.jsg_machines=JSG: Machines
+itemGroup.jsg_weapons=JSG: Weapons
 
 # Catégories de sons
 soundCategory.jsg_sounds=Just Stargate mod
@@ -81,7 +82,7 @@ item.jsg.dhd_brb.name=Bouton rouge vif (BRB)
 item.jsg.dhd_bbb.name=Bouton bleu brillant (BBB)
 
 # fragments
-item.jsg.fragment_stargate_milkyway.name=Ring Fragment (Milky way)
+item.jsg.fragment_stargate_milkyway.name=Ring Fragment (Milky Way)
 item.jsg.fragment_stargate_pegasus.name=Ring Fragment (Pegasus)
 item.jsg.fragment_stargate_universe.name=Ring Fragment (Universe)
 item.jsg.fragment_transportrings_goauld.name=Transport Rings Fragment (Goa'uld)

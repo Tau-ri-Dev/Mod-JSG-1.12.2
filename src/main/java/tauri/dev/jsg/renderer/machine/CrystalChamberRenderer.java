@@ -34,16 +34,13 @@ public class CrystalChamberRenderer extends TileEntitySpecialRenderer<CrystalCha
                 BlockRenderer.renderItemOnGround(rendererState.craftingStack);
                 GlStateManager.popMatrix();
                 if(rendererState.isWorking) {
-                    for (int i = 0; i < 2; i++) {
-                        new ParticleBlenderSmoke(-1f + ((float) Math.random() * 2), -1f + ((float) Math.random() * 2), 2f, 7, 7, 0, 0, true, (motion) -> {
-                            motion.x = 0;//-0.1f + Math.random() * 0.1f;
-                            motion.z = 0;//-0.1f + Math.random() * 0.1f;
-                        }).spawn(te.getWorld(), te.getPos(), 90, true);
-                    }
+                    new ParticleBlenderSmoke(-1f + ((float) Math.random() * 2), -1f + ((float) Math.random() * 2), 2f, 7, 9, 0, 0, true, (motion) -> {
+                        motion.x = 0;
+                        motion.z = 0;
+                    }).spawn(te.getWorld(), te.getPos(), 90, true);
                 }
 
             }
-            //ElementEnum.CRYSTAL_CHAMBER.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
             GlStateManager.popMatrix();
         }
     }

@@ -137,6 +137,17 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         sendRenderingUpdate(StargateRendererActionState.EnumGateAction.CLEAR_CHEVRONS, dialedAddress.size(), isFinalActive);
     }
 
+    public boolean isGateBurried(){
+        if(JSGConfig.stargateConfig.bypassBurriedState) return false;
+        for (BlockPos targetPos : Objects.requireNonNull(StargateSizeEnum.getIrisBLocksPatter(getStargateSize()))) {
+            BlockPos newPos = pos.add(targetPos.rotate(FacingToRotation.get(facing)));
+            IBlockState state = world.getBlockState(newPos);
+            if (state.getMaterial() == Material.AIR || state.getBlock() == JSGBlocks.IRIS_BLOCK || state.getBlock() == JSGBlocks.INVISIBLE_BLOCK)
+                return false;
+        }
+        return true;
+    }
+
     @Override
     protected void failGate() {
         super.failGate();
@@ -159,6 +170,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             return new ResultTargetValid(StargateOpenResult.CALLER_HUNG_UP, targetValid);
         if(!(connectedToGatePos.getTileEntity().stargateState.incoming()))
             return new ResultTargetValid(StargateOpenResult.CALLER_HUNG_UP, targetValid);
+        if(this.isGateBurried())
+            return new ResultTargetValid(StargateOpenResult.GATE_BURRIED, targetValid);
         return super.attemptOpenDialed();
     }
 
@@ -189,6 +202,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void generateIncoming(int entities, int addressSize, int delay){
+        if(this.isGateBurried()) return;
+        super.generateIncoming(entities, addressSize, delay);
     }
 
     public abstract void addSymbolToAddressDHD(SymbolInterface symbol);
@@ -1672,9 +1691,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     executeTask(EnumScheduledTask.STARGATE_HORIZON_LIGHT_BLOCK, null);
                 if (world.getBlockState(newPos).getBlock() == JSGBlocks.IRIS_BLOCK) world.setBlockToAir(newPos);
             }
-
         }
-
     }
 
     @Nonnull

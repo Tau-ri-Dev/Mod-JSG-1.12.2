@@ -78,7 +78,7 @@ public class StargateDimensionConfig {
 	
 	public static void load(File modConfigDir) {
 		dimensionMap = null;
-		dimensionConfigFile = new File(modConfigDir, "jsg_dimensions.json");
+		dimensionConfigFile = new File(modConfigDir, "jsg/jsg_dimensions.json");
 		
 		try {			
 			Type typeOfHashMap = new TypeToken<Map<String, StargateDimensionConfigEntry>>() { }.getType();

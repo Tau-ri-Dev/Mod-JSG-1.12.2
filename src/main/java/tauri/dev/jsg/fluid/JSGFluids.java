@@ -8,68 +8,42 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JSGFluids {
-    public static MoltenFluid moltenSiliconBlack = new MoltenFluid(
-            "silicon_molten_black"
-    );
-    public static MoltenFluid moltenSiliconRed = new MoltenFluid(
-            "silicon_molten_red"
-    );
-    public static MoltenFluid moltenSiliconBlue = new MoltenFluid(
-            "silicon_molten_blue"
-    );
-    public static MoltenFluid moltenSiliconEnder = new MoltenFluid(
-            "silicon_molten_ender"
-    );
-    public static MoltenFluid moltenSiliconYellow = new MoltenFluid(
-            "silicon_molten_yellow"
-    );
-    public static MoltenFluid moltenSiliconWhite = new MoltenFluid(
-            "silicon_molten_white"
-    );
-    public static MoltenFluid moltenNaquadahRaw = new MoltenFluid(
-            "naquadah_molten_raw"
-    );
-    public static MoltenMaterial moltenNaquadahRefined = new MoltenMaterial(
-            "naquadah_molten_refined",
-            "NaquadahRaw"
-    );
-    public static MoltenMaterial moltenNaquadahAlloy = new MoltenMaterial(
-            "naquadah_molten_alloy",
-            "NaquadahRefined"
-    );
-    public static MoltenMaterial moltenTitanium = new MoltenMaterial(
-            "titanium_molten",
-            "Titanium"
-    );
-    public static MoltenMaterial moltenTrinium = new MoltenMaterial(
-            "trinium_molten",
-            "Trinium"
-    );
-    public static Map<String, JSGBlockFluid> blockFluidMap = new HashMap<>();
+    public static final MoltenFluid SILICON_MOLTEN_BLACK = new MoltenFluid("silicon_molten_black");
+    public static final MoltenFluid SILICON_MOLTEN_RED = new MoltenFluid("silicon_molten_red");
+    public static final MoltenFluid SILICON_MOLTEN_BLUE = new MoltenFluid("silicon_molten_blue");
+    public static final MoltenFluid SILICON_MOLTEN_ENDER = new MoltenFluid("silicon_molten_ender");
+    public static final MoltenFluid SILICON_MOLTEN_PEGASUS = new MoltenFluid("silicon_molten_pegasus");
+    public static final MoltenFluid SILICON_MOLTEN_YELLOW = new MoltenFluid("silicon_molten_yellow");
+    public static final MoltenFluid SILICON_MOLTEN_WHITE = new MoltenFluid("silicon_molten_white");
+    public static final MoltenFluid NAQUADAH_MOLTEN_RAW = new MoltenFluid("naquadah_molten_raw");
+    public static final MoltenMaterial NAQUADAH_MOLTEN_REFINED = new MoltenMaterial("naquadah_molten_refined", "liquidNaquadahRefined");
+    public static final MoltenMaterial MOLTEN_NAQUADAH_ALLOY = new MoltenMaterial("naquadah_molten_alloy", "liquidNaquadahAlloy");
+    public static final MoltenMaterial MOLTEN_TITANIUM = new MoltenMaterial("titanium_molten", "liquidTitanium");
+    public static final MoltenMaterial MOLTEN_TRINIUM = new MoltenMaterial("trinium_molten", "liquidTrinium");
+
+    public static final Map<String, JSGBlockFluid> blockFluidMap = new HashMap<>();
     private static final Fluid[] FLUIDS = {
-            moltenSiliconBlack,
-            moltenSiliconRed,
-            moltenSiliconBlue,
-            moltenSiliconEnder,
-            moltenSiliconYellow,
-            moltenSiliconWhite,
+            SILICON_MOLTEN_BLACK,
+            SILICON_MOLTEN_RED,
+            SILICON_MOLTEN_BLUE,
+            SILICON_MOLTEN_ENDER,
+            SILICON_MOLTEN_PEGASUS,
+            SILICON_MOLTEN_YELLOW,
+            SILICON_MOLTEN_WHITE,
 
-            moltenNaquadahRaw,
-            moltenNaquadahRefined,
-            moltenNaquadahAlloy,
+            NAQUADAH_MOLTEN_RAW,
+            NAQUADAH_MOLTEN_REFINED,
+            MOLTEN_NAQUADAH_ALLOY,
 
-            moltenTitanium,
-            moltenTrinium
+            MOLTEN_TITANIUM,
+            MOLTEN_TRINIUM
     };
 
     public static void registerFluids() {
         registerFluids(FLUIDS);
     }
 
-    // -------------------
-    // WATER LOGGING - preparation for 1.13 and higher
-
-    public static void registerFluids(Fluid[] fluids) {
+    private static void registerFluids(Fluid[] fluids) {
         for (Fluid fluid : fluids) {
             FluidRegistry.registerFluid(fluid);
             FluidRegistry.addBucketForFluid(fluid);

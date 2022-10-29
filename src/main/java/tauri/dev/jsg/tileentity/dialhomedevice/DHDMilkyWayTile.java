@@ -190,7 +190,7 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
 
                 int energy = tagList.getCompoundTagAt(0).getCompoundTag("ForgeCaps").getCompoundTag("Parent").getInteger("energy");
                 int fluidAmount = energy / JSGConfig.dhdConfig.energyPerNaquadah;
-                fluidHandler.fillInternal(new FluidStack(JSGFluids.moltenNaquadahRefined, fluidAmount), true);
+                fluidHandler.fillInternal(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, fluidAmount), true);
             }
         }
 

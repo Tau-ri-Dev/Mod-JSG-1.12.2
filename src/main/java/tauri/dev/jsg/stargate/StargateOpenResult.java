@@ -6,7 +6,8 @@ public enum StargateOpenResult {
 	ADDRESS_MALFORMED,
 	ABORTED,
 	ABORTED_BY_EVENT,
-	CALLER_HUNG_UP;
+	CALLER_HUNG_UP,
+	GATE_BURRIED;
 	
 	public boolean ok() {
 		return this == OK;

@@ -22,14 +22,13 @@ import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.state.StateTypeEnum;
-import tauri.dev.jsg.tileentity.machine.AssemblerTile;
 import tauri.dev.jsg.tileentity.machine.CrystalChamberTile;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-import static tauri.dev.jsg.tileentity.machine.AssemblerTile.CONTAINER_SIZE;
-import static tauri.dev.jsg.tileentity.machine.AssemblerTile.getAllowedSchematics;
+import static tauri.dev.jsg.tileentity.machine.CrystalChamberTile.CONTAINER_SIZE;
+
 
 public class CrystalChamberContainer extends Container implements OpenTabHolderInterface {
 
@@ -82,17 +81,19 @@ public class CrystalChamberContainer extends Container implements OpenTabHolderI
     @Nonnull
     @Override
     public ItemStack transferStackInSlot(@Nonnull EntityPlayer playerIn, int slotId) {
+        ItemStack returnStack = ItemStack.EMPTY;
         Slot slot = getSlot(slotId);
         if (slot.getHasStack()) {
             ItemStack stack = slot.getStack();
+            returnStack = stack.copy();
 
-            if(slotId == 0){
-                if(stack.getItem() != JSGItems.CRYSTAL_SEED) return ItemStack.EMPTY;
+            if (slotId == 0) {
+                if (stack.getItem() != JSGItems.CRYSTAL_SEED) return ItemStack.EMPTY;
             }
 
             if (slotId < CONTAINER_SIZE) {
                 // to player
-                if (!this.mergeItemStack(stack, CONTAINER_SIZE-1, this.inventorySlots.size(), true)) {
+                if (!this.mergeItemStack(stack, CONTAINER_SIZE, this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             }
@@ -107,7 +108,7 @@ public class CrystalChamberContainer extends Container implements OpenTabHolderI
                 slot.onSlotChanged();
             }
         }
-        return slot.getStack();
+        return returnStack;
     }
 
     @Override

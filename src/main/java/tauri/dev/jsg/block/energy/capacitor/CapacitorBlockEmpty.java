@@ -1,4 +1,4 @@
-package tauri.dev.jsg.block.capacitor;
+package tauri.dev.jsg.block.energy.capacitor;
 
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.util.main.JSGProps;

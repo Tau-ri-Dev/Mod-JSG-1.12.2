@@ -1,6 +1,7 @@
-package tauri.dev.jsg.state;
+package tauri.dev.jsg.state.energy;
 
 import io.netty.buffer.ByteBuf;
+import tauri.dev.jsg.state.State;
 
 public class CapacitorPowerLevelUpdate extends State {
 	public CapacitorPowerLevelUpdate() {}

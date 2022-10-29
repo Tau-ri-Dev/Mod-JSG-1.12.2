@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.machine.CrystalChamberBlock;
-import tauri.dev.jsg.machine.CrystalChamberRecipe;
+import tauri.dev.jsg.machine.chamber.CrystalChamberRecipe;
 
 import javax.annotation.Nonnull;
 

@@ -1,4 +1,4 @@
-package tauri.dev.jsg.machine;
+package tauri.dev.jsg.machine.assembler;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;

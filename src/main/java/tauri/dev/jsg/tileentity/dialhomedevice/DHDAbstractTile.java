@@ -68,13 +68,13 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.SOOTY, BiomeOverlayEnum.AGED);
     public static final List<Item> SUPPORTED_UPGRADES = Arrays.asList(JSGItems.CRYSTAL_GLYPH_DHD);
     public static final int BIOME_OVERRIDE_SLOT = 5;
-    protected final FluidTank fluidHandler = new FluidTank(new FluidStack(JSGFluids.moltenNaquadahRefined, 0), tauri.dev.jsg.config.JSGConfig.dhdConfig.fluidCapacity) {
+    protected final FluidTank fluidHandler = new FluidTank(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, 0), tauri.dev.jsg.config.JSGConfig.dhdConfig.fluidCapacity) {
 
         @Override
         public boolean canFillFluidType(FluidStack fluid) {
             if (fluid == null) return false;
 
-            return fluid.getFluid() == JSGFluids.moltenNaquadahRefined;
+            return fluid.getFluid() == JSGFluids.NAQUADAH_MOLTEN_REFINED;
         }
 
         protected void onContentsChanged() {
@@ -393,7 +393,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
         if (stateType == StateTypeEnum.GUI_UPDATE) {
             DHDContainerGuiUpdate guiState = (DHDContainerGuiUpdate) state;
 
-            fluidHandler.setFluid(new FluidStack(JSGFluids.moltenNaquadahRefined, guiState.fluidAmount));
+            fluidHandler.setFluid(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, guiState.fluidAmount));
             fluidHandler.setCapacity(guiState.tankCapacity);
             reactorState = guiState.reactorState;
             isLinkedClient = guiState.isLinked;

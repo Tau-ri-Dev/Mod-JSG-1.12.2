@@ -12,7 +12,7 @@ import tauri.dev.jsg.gui.element.tabs.TabAssemblerRecipes;
 import tauri.dev.jsg.gui.element.tabs.TabSideEnum;
 import tauri.dev.jsg.gui.element.tabs.TabbedContainerInterface;
 import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.machine.AssemblerRecipes;
+import tauri.dev.jsg.machine.assembler.AssemblerRecipes;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.SetOpenTabToServer;
 import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;

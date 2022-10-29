@@ -64,6 +64,8 @@ public class StargateGenerator {
         blocks.add(Blocks.SAND);
         blocks.add(Blocks.SANDSTONE);
         blocks.add(Blocks.END_STONE);
+        blocks.add(Blocks.SNOW_LAYER);
+        blocks.add(Blocks.SNOW);
 
         BlockPos pos = null;
         int tries = 0;
@@ -202,7 +204,7 @@ public class StargateGenerator {
                     Objects.requireNonNull(Objects.requireNonNull(dhdTile).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)).insertItem(0, crystal, false);
                     if (!isMilkyWayGate)
                         Objects.requireNonNull(dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)).insertItem(1, new ItemStack(JSGItems.CRYSTAL_GLYPH_DHD), false);
-                    ((FluidTank) Objects.requireNonNull(dhdTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null))).fillInternal(new FluidStack(JSGFluids.moltenNaquadahRefined, fluid), true);
+                    ((FluidTank) Objects.requireNonNull(dhdTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null))).fillInternal(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, fluid), true);
                 }
 
                 worldServer.setBlockToAir(dataPos);

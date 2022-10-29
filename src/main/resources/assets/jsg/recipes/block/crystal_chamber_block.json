@@ -1,0 +1,45 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NTN",
+    "GRG",
+    "LKM"
+  ],
+
+  "key": {
+    "N": {
+      "type": "forge:ore_dict",
+      "ore": "plateNaquadahRefined"
+    },
+    "T": {
+      "type": "forge:ore_dict",
+      "ore": "plateTrinium"
+    },
+    "G": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlass"
+    },
+    "R": {
+      "type": "forge:ore_dict",
+      "ore": "blockRedstone"
+    },
+    "M": {
+      "type": "forge:ore_dict",
+      "ore": "gearNaquadahRefined"
+    },
+    "K": {
+      "type": "forge:ore_dict",
+      "ore": "plateNaquadahRaw"
+    },
+    "L": {
+      "type": "forge:ore_dict",
+      "ore": "gearTitanium"
+    }
+  },
+
+  "result": {
+    "item": "jsg:crystal_chamber_block",
+    "data": 0,
+    "count": 1
+  }
+}

@@ -1,6 +1,6 @@
-package tauri.dev.jsg.item.stargate;
+package tauri.dev.jsg.item.energy;
 
-import tauri.dev.jsg.block.capacitor.CapacitorBlock;
+import tauri.dev.jsg.block.energy.capacitor.CapacitorBlock;
 import tauri.dev.jsg.capability.ItemCapabilityProvider;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.stargate.power.StargateItemEnergyStorage;
