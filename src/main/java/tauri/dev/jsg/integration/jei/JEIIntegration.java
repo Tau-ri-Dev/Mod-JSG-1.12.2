@@ -9,6 +9,7 @@ import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.integration.jei.category.JEIAssemblerRecipeCategory;
@@ -79,6 +80,11 @@ public final class JEIIntegration implements IModPlugin {
 
         for(CrystalChamberRecipe recipe : CrystalChamberRecipes.RECIPES){
             AbstractJEIRecipe newRecipe = new AbstractJEIRecipe(){
+                @Override
+                public FluidStack getSubFluidStack() {
+                    return recipe.getSubFluidStack();
+                }
+
                 @Override
                 public void getIngredients(@Nonnull IIngredients iIngredients) {
                     iIngredients.setInput(VanillaTypes.ITEM, new ItemStack(JSGItems.CRYSTAL_SEED, recipe.getNeededSeeds()));

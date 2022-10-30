@@ -4,7 +4,7 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraftforge.fluids.FluidStack;
 
 public abstract class AbstractJEIRecipe implements IRecipeWrapper {
-    public FluidStack getSubFluidStack(){
+    public FluidStack getSubFluidStack() {
         return null;
     }
 }
