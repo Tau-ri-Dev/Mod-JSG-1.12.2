@@ -245,6 +245,10 @@ tile.jsg.stargate_pegasus_chevron_block.name=Chevrón de Stargate (Pegasus)
 tile.jsg.capacitor_block.name=Capacitor
 tile.jsg.capacitor_block_empty.name=Capacitor (Vacío)
 
+# zpm
+tile.jsg.zpm.name=Zero Point Module (ZPM)
+tile.jsg.zpm_hub_block.name=ZPM Hub (Ancient)
+
 # rings controller
 tile.jsg.transportrings_controller_goauld_block.name=Controlador del Anillo Transportador
 tile.jsg.transportrings_controller_block.not_linked=Controlador no vinculado

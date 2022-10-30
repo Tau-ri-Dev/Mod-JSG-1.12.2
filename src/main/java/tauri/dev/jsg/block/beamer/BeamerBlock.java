@@ -16,6 +16,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.beamer.BeamerLinkingHelper;
@@ -28,6 +30,8 @@ import tauri.dev.jsg.tileentity.BeamerTile;
 import tauri.dev.jsg.util.ItemHandlerHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
+
+import javax.annotation.Nonnull;
 
 public class BeamerBlock extends JSGBlock {
 
@@ -109,7 +113,7 @@ public class BeamerBlock extends JSGBlock {
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, EntityLivingBase placer, @Nonnull ItemStack stack) {
         EnumFacing facing = placer.getHorizontalFacing().getOpposite();
         state = state.withProperty(JSGProps.FACING_HORIZONTAL, facing);
         world.setBlockState(pos, state);
@@ -157,6 +161,7 @@ public class BeamerBlock extends JSGBlock {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public TileEntitySpecialRenderer<? extends TileEntity> getTESR() {
         return new BeamerRenderer();
     }

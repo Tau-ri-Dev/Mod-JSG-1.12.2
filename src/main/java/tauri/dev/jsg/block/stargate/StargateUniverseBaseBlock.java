@@ -1,6 +1,8 @@
 package tauri.dev.jsg.block.stargate;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.renderer.stargate.StargateOrlinRenderer;
 import tauri.dev.jsg.renderer.stargate.StargateUniverseRenderer;
 import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
@@ -28,6 +30,7 @@ public final class StargateUniverseBaseBlock extends StargateClassicBaseBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public TileEntitySpecialRenderer<? extends TileEntity> getTESR() {
 		return new StargateUniverseRenderer();
 	}

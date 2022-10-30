@@ -17,10 +17,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StargateOrlinMergeHelper extends StargateAbstractMergeHelper {
 
@@ -135,7 +132,7 @@ public class StargateOrlinMergeHelper extends StargateAbstractMergeHelper {
 			
 			if (MEMBER_MATCHER.apply(world.getBlockState(pos))) {
 				StargateOrlinMemberTile memberTile = (StargateOrlinMemberTile) world.getTileEntity(pos);
-				memberTile.incrementOpenCount();
+				Objects.requireNonNull(memberTile).incrementOpenCount();
 			}
 		}
 	}	

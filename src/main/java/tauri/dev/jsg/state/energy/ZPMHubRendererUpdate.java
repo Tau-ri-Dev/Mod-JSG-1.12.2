@@ -12,14 +12,16 @@ public class ZPMHubRendererUpdate extends State {
     public int zpm1Level;
     public int zpm2Level;
     public int zpm3Level;
+    public float facing;
 
-    public ZPMHubRendererUpdate(long animationStart, boolean isAnimating, boolean slidingUp, int zpm1Level, int zpm2Level, int zpm3Level){
+    public ZPMHubRendererUpdate(long animationStart, boolean isAnimating, boolean slidingUp, int zpm1Level, int zpm2Level, int zpm3Level, float facing){
         this.animationStart = animationStart;
         this.isAnimating = isAnimating;
         this.slidingUp = slidingUp;
         this.zpm1Level = zpm1Level;
         this.zpm2Level = zpm2Level;
         this.zpm3Level = zpm3Level;
+        this.facing = facing;
     }
 
     @Override
@@ -30,6 +32,7 @@ public class ZPMHubRendererUpdate extends State {
         buf.writeInt(zpm1Level);
         buf.writeInt(zpm2Level);
         buf.writeInt(zpm3Level);
+        buf.writeFloat(facing);
     }
 
     @Override
@@ -40,5 +43,6 @@ public class ZPMHubRendererUpdate extends State {
         this.zpm1Level = buf.readInt();
         this.zpm2Level = buf.readInt();
         this.zpm3Level = buf.readInt();
+        this.facing = buf.readFloat();
     }
 }

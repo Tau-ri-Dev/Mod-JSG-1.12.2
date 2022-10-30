@@ -3,6 +3,8 @@ package tauri.dev.jsg.integration.jei;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
@@ -16,12 +18,15 @@ import tauri.dev.jsg.integration.jei.recipe.JEINotebookRecipe;
 import tauri.dev.jsg.integration.jei.recipe.JEIUniverseDialerCloneRecipe;
 import tauri.dev.jsg.integration.jei.recipe.JEIUniverseDialerRepairRecipe;
 import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.machine.assembler.AssemblerRecipe;
 import tauri.dev.jsg.machine.assembler.AssemblerRecipes;
+import tauri.dev.jsg.machine.chamber.CrystalChamberRecipe;
 import tauri.dev.jsg.machine.chamber.CrystalChamberRecipes;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @JEIPlugin
@@ -49,11 +54,39 @@ public final class JEIIntegration implements IModPlugin {
         registry.addRecipes(recipes, VanillaRecipeCategoryUid.CRAFTING);
 
         recipes.clear();
-        recipes.addAll(Arrays.asList(AssemblerRecipes.RECIPES));
+
+        for(AssemblerRecipe recipe : AssemblerRecipes.RECIPES){
+            AbstractJEIRecipe newRecipe = new AbstractJEIRecipe(){
+                @Override
+                public void getIngredients(@Nonnull IIngredients iIngredients) {
+                    List<List<ItemStack>> list = new ArrayList<>();
+
+                    list.add(Collections.singletonList(new ItemStack(recipe.getSchematic(), 1)));
+                    for (ItemStack s : recipe.getPattern())
+                        list.add(Collections.singletonList(s));
+                    list.add(Collections.singletonList(recipe.getSubItemStack()));
+
+                    iIngredients.setInputLists(VanillaTypes.ITEM, list);
+
+                    iIngredients.setOutput(VanillaTypes.ITEM, recipe.getResult());
+                }
+            };
+            recipes.add(newRecipe);
+        }
         registry.addRecipes(recipes, JEIAssemblerRecipeCategory.UID);
 
         recipes.clear();
-        recipes.addAll(Arrays.asList(CrystalChamberRecipes.RECIPES));
+
+        for(CrystalChamberRecipe recipe : CrystalChamberRecipes.RECIPES){
+            AbstractJEIRecipe newRecipe = new AbstractJEIRecipe(){
+                @Override
+                public void getIngredients(@Nonnull IIngredients iIngredients) {
+                    iIngredients.setInput(VanillaTypes.ITEM, new ItemStack(JSGItems.CRYSTAL_SEED, recipe.getNeededSeeds()));
+                    iIngredients.setOutput(VanillaTypes.ITEM, recipe.getResult());
+                }
+            };
+            recipes.add(newRecipe);
+        }
         registry.addRecipes(recipes, JEIChamberRecipeCategory.UID);
     }
 

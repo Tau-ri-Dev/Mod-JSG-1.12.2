@@ -246,6 +246,10 @@ tile.jsg.stargate_pegasus_chevron_block.name=Stargate Chevron (Pegasus)
 tile.jsg.capacitor_block.name=Banque de condensateurs
 tile.jsg.capacitor_block_empty.name=Banque de condensateurs (vide)
 
+# zpm
+tile.jsg.zpm.name=Zero Point Module (ZPM)
+tile.jsg.zpm_hub_block.name=ZPM Hub (Ancient)
+
 # contrôleur d'anneaux
 tile.jsg.transportrings_controller_goauld_block.name=Contrôleur d'anneaux de transport (Goa'uld)
 tile.jsg.transportrings_controller_block.not_linked=Contrôleur non lié

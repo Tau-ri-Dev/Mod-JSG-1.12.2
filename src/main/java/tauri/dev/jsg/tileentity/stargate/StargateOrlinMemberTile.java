@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.util.main.JSGProps;
 
 import java.util.List;
 import java.util.Random;
@@ -23,6 +24,9 @@ public class StargateOrlinMemberTile extends StargateAbstractMemberTile {
 	
 	public void incrementOpenCount() {
 		openCount++;
+		if(openCount >= JSGConfig.stargateConfig.stargateOrlinMaxOpenCount){
+			world.setBlockState(pos, world.getBlockState(pos).withProperty(JSGProps.ORLIN_BROKEN, true));
+		}
 		markDirty();
 	}
 	

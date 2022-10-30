@@ -10,6 +10,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.gui.GuiIdEnum;
 import tauri.dev.jsg.item.machine.CrystalChamberItemBlock;
@@ -38,6 +40,8 @@ public class CrystalChamberBlock extends JSGMachineBlock {
         return CrystalChamberTile.class;
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
     public TileEntitySpecialRenderer<? extends TileEntity> getTESR() {
         return new CrystalChamberRenderer();
     }

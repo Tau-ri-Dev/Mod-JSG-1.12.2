@@ -6,6 +6,9 @@ import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.Environment;
 import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
 import tauri.dev.jsg.block.props.TRPlatformBlock;
@@ -13,6 +16,7 @@ import tauri.dev.jsg.block.transportrings.TRControllerAbstractBlock;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.sound.JSGSoundHelper;
+import tauri.dev.jsg.tileentity.util.PreparableInterface;
 import tauri.dev.jsg.transportrings.*;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.block.JSGBlocks;
@@ -75,7 +79,7 @@ import static tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile
 import static tauri.dev.jsg.transportrings.TransportRingsAddress.MAX_SYMBOLS;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
-public abstract class TransportRingsAbstractTile extends TileEntity implements ITickable, StateProviderInterface, ScheduledTaskExecutorInterface, ILinkable, Environment, IUpgradable, ITileConfig {
+public abstract class TransportRingsAbstractTile extends TileEntity implements ITickable, StateProviderInterface, ScheduledTaskExecutorInterface, ILinkable, Environment, IUpgradable, ITileConfig, PreparableInterface {
     public static final int FADE_OUT_TOTAL_TIME = 2 * 20; // 2s
     public static final int TIMEOUT_TELEPORT = FADE_OUT_TOTAL_TIME / 2;
     public static final int TIMEOUT_FADE_OUT = (int) (30 + TransportRingsAbstractRenderer.INTERVAL_UPRISING * TransportRingsAbstractRenderer.RING_COUNT + TransportRingsAbstractRenderer.ANIMATION_SPEED_DIVISOR * Math.PI);
@@ -1467,6 +1471,21 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
             JSG.logger.debug("Updated to power tier: " + powerTier);
         }
+    }
+
+    // Prepare
+    @Override
+    public boolean prepare(ICommandSender sender, ICommand command) {
+        if (isBusy()) {
+            CommandBase.notifyCommandListener(sender, command, "Stop any rings activity before preparation.");
+            return false;
+        }
+
+        dialedAddress.clear();
+        scheduledTasks.clear();
+        getRings().getAddresses().clear();
+
+        return true;
     }
 
     public static enum TransportRingsUpgradeEnum implements EnumKeyInterface<Item> {

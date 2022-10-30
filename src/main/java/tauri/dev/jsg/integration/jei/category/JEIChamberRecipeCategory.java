@@ -13,11 +13,12 @@ import net.minecraft.util.ResourceLocation;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.machine.CrystalChamberBlock;
+import tauri.dev.jsg.integration.jei.AbstractJEIRecipe;
 import tauri.dev.jsg.machine.chamber.CrystalChamberRecipe;
 
 import javax.annotation.Nonnull;
 
-public class JEIChamberRecipeCategory implements IRecipeCategory<CrystalChamberRecipe> {
+public class JEIChamberRecipeCategory implements IRecipeCategory<AbstractJEIRecipe> {
 
     public static final String UID = "jsg_chamber";
     public static final ResourceLocation BACK_TEXTURE = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_chamber_jei.png");
@@ -70,7 +71,7 @@ public class JEIChamberRecipeCategory implements IRecipeCategory<CrystalChamberR
     }
 
     @Override
-    public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull CrystalChamberRecipe crystalChamberRecipe, @Nonnull IIngredients ingredients) {
+    public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull AbstractJEIRecipe crystalChamberRecipe, @Nonnull IIngredients ingredients) {
         // input slots
         recipeLayout.getItemStacks().init(0, true, 33, 32);
         // output slot

@@ -1,17 +1,11 @@
 package tauri.dev.jsg.machine.assembler;
 
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.ingredients.VanillaTypes;
-import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
-public abstract class AssemblerRecipe implements IRecipeWrapper {
+public abstract class AssemblerRecipe {
     public abstract int getWorkingTime(); // in ticks
 
     public abstract int getEnergyPerTick();
@@ -50,19 +44,5 @@ public abstract class AssemblerRecipe implements IRecipeWrapper {
         }
         if (subStack.isEmpty() || subStack.getItem() != getSubItemStack().getItem()) return false;
         return subStack.getCount() >= getSubItemStack().getCount();
-    }
-
-    @Override
-    public void getIngredients(@Nonnull IIngredients iIngredients) {
-        List<List<ItemStack>> list = new ArrayList<>();
-
-        list.add(Collections.singletonList(new ItemStack(getSchematic(), 1)));
-        for (ItemStack s : getPattern())
-            list.add(Collections.singletonList(s));
-        list.add(Collections.singletonList(getSubItemStack()));
-
-        iIngredients.setInputLists(VanillaTypes.ITEM, list);
-
-        iIngredients.setOutput(VanillaTypes.ITEM, getResult());
     }
 }

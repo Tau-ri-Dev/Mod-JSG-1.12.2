@@ -1,16 +1,20 @@
 package tauri.dev.jsg.util.main.loader;
 
+import net.minecraft.util.SoundCategory;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.entity.EntityRegister;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.integration.TConstructIntegration;
+import tauri.dev.jsg.machine.assembler.AssemblerRecipe;
+import tauri.dev.jsg.machine.assembler.AssemblerRecipes;
+import tauri.dev.jsg.machine.chamber.CrystalChamberRecipe;
+import tauri.dev.jsg.machine.chamber.CrystalChamberRecipes;
 import tauri.dev.jsg.packet.JSGPacketHandler;
-import net.minecraft.util.SoundCategory;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
 
@@ -45,7 +49,7 @@ public class JSGPreInit {
         JSG.info("Successfully registered Entities!");
     }
 
-    public static void registerTIC(){
+    public static void registerTIC() {
         if (Loader.isModLoaded("tconstruct") && JSGConfig.integrationsConfig.tConstructIntegration) {
             JSG.info("TConstruct found and connection is enabled... Connecting...");
             TConstructIntegration.initFluids();

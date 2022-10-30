@@ -1,5 +1,7 @@
 package tauri.dev.jsg.tileentity.transportrings;
 
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
 import tauri.dev.jsg.block.transportrings.TRControllerAbstractBlock;
 
 import static tauri.dev.jsg.block.JSGBlocks.TR_CONTROLLER_GOAULD_BLOCK;

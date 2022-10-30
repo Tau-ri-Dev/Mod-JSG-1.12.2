@@ -14,7 +14,6 @@ import tauri.dev.jsg.util.FacingToRotation;
 import tauri.dev.jsg.util.JSGMinecraftHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -42,6 +41,16 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
     protected static final String EV_HORIZON_DESATURATED_TEXTURE = "textures/tesr/event_horizon_unstable.jpg";
     private static final float VORTEX_START = 5.275f;
     private static final float SPEED_FACTOR = 6f;
+
+    private static final Map<ResourceLocation, Boolean> EH_RENDERED = new HashMap<>();
+    static{
+        EH_RENDERED.put(new ResourceLocation(JSG.MOD_ID, EV_HORIZON_NORMAL_TEXTURE_ANIMATED), false);
+        EH_RENDERED.put(new ResourceLocation(JSG.MOD_ID, EV_HORIZON_KAWOOSH_TEXTURE_ANIMATED), false);
+        EH_RENDERED.put(new ResourceLocation(JSG.MOD_ID, EV_HORIZON_DESATURATED_KAWOOSH_TEXTURE_ANIMATED), false);
+        EH_RENDERED.put(new ResourceLocation(JSG.MOD_ID, EV_HORIZON_DESATURATED_TEXTURE_ANIMATED), false);
+        EH_RENDERED.put(new ResourceLocation(JSG.MOD_ID, EV_HORIZON_NORMAL_TEXTURE), false);
+        EH_RENDERED.put(new ResourceLocation(JSG.MOD_ID, EV_HORIZON_DESATURATED_TEXTURE), false);
+    }
 
     @Override
     public void render(StargateAbstractBaseTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -84,7 +93,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                     renderKawoosh(rendererState, partialTicks);
                     GlStateManager.popMatrix();
                 }
-                else if(JSGConfig.avConfig.renderEHisTheyNot){
+                else if(JSGConfig.avConfig.renderEHifTheyNot) {
                     GlStateManager.pushMatrix();
                     preRenderKawoosh(rendererState, partialTicks);
                     GlStateManager.popMatrix();
@@ -165,6 +174,9 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
             return;
         }
 
+        ResourceLocation ehTextureRes = getEventHorizonTextureResource(rendererState);
+        if(!render && EH_RENDERED.get(ehTextureRes)) return;
+
         GlStateManager.disableLighting();
         GlStateManager.enableCull();
 
@@ -176,7 +188,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         }
 
         // set default texture
-        Texture ehTexture = TextureLoader.getTexture(getEventHorizonTextureResource(rendererState));
+        Texture ehTexture = TextureLoader.getTexture(ehTextureRes);
 
         // SET THE TEXTURE TO KAWOOSH TEXTURE
         if (rendererState.vortexState == EnumVortexState.FORMING

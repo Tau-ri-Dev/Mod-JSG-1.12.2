@@ -12,11 +12,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.integration.jei.AbstractJEIRecipe;
 import tauri.dev.jsg.machine.assembler.AssemblerRecipe;
 
 import javax.annotation.Nonnull;
 
-public class JEIAssemblerRecipeCategory implements IRecipeCategory<AssemblerRecipe> {
+public class JEIAssemblerRecipeCategory implements IRecipeCategory<AbstractJEIRecipe> {
 
     public static final String UID = "jsg_assembler";
     public static final ResourceLocation BACK_TEXTURE = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_assembler_jei.png");
@@ -66,7 +67,7 @@ public class JEIAssemblerRecipeCategory implements IRecipeCategory<AssemblerReci
     }
 
     @Override
-    public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull AssemblerRecipe assemblerRecipe, @Nonnull IIngredients ingredients) {
+    public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull AbstractJEIRecipe assemblerRecipe, @Nonnull IIngredients ingredients) {
         // input slots
         recipeLayout.getItemStacks().init(0, true, 9, 64);
         int i = 0;

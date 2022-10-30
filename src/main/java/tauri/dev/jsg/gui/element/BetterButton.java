@@ -40,4 +40,8 @@ public class BetterButton extends GuiButton {
     public void drawButton(int mouseX, int mouseY) {
         drawButton(mouseX, mouseY, false);
     }
+
+    public boolean isMouseOnButton(int mouseX, int mouseY) {
+        return GuiHelper.isPointInRegion(x, y, width, height, mouseX, mouseY);
+    }
 }

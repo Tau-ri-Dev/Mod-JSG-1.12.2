@@ -85,4 +85,6 @@ public class JSGProps {
 
 
 	public static final PropertyInteger PROP_VARIANT = PropertyInteger.create("prop_variant", 0, 15);
+
+	public static final PropertyBool ORLIN_BROKEN = PropertyBool.create("orlin_broken");
 }

@@ -15,6 +15,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGAbstractCustomItemBlock;
@@ -136,6 +138,7 @@ public class ZPMBlock extends JSGAbstractCustomItemBlock {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public TileEntitySpecialRenderer<? extends TileEntity> getTESR() {
         return new ZPMRenderer();
     }

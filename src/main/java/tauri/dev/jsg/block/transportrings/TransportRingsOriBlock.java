@@ -4,6 +4,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.renderer.transportrings.TransportRingsOriRenderer;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsOriTile;
@@ -27,6 +29,7 @@ public class TransportRingsOriBlock extends TransportRingsAbstractBlock {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public TileEntitySpecialRenderer<? extends TileEntity> getTESR() {
         return new TransportRingsOriRenderer();
     }

@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube_all",
+	"textures": {
+		"particle": "jsg:blocks/stargate/stargate_orlin_sides",
+		"north": "jsg:blocks/stargate/stargate_orlin_member_block_front_broken",
+		"south": "jsg:blocks/stargate/stargate_orlin_top",
+		"west": "jsg:blocks/stargate/stargate_orlin_sides",
+		"east": "jsg:blocks/stargate/stargate_orlin_sides",
+		"up": "jsg:blocks/stargate/stargate_orlin_top",
+		"down": "jsg:blocks/stargate/stargate_orlin_top"
+	}
+}

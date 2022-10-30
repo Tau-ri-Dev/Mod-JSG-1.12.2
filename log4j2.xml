@@ -43,7 +43,7 @@
             <filters>
                 <MarkerFilter marker="NETWORK_PACKETS" onMatch="DENY" onMismatch="NEUTRAL"/>
 			    <MapFilter onMatch="DENY" onMismatch="NEUTRAL">
-				  <KeyValuePair key="name" value="aunis"/>
+				  <KeyValuePair key="name" value="jsg"/>
 			    </MapFilter>
             </filters>
             <AppenderRef ref="SysOut" level="${sys:forge.logging.console.level:-info}"/>
@@ -52,7 +52,7 @@
             <AppenderRef ref="DebugFile" level="${sys:forge.logging.debugFile.level:-trace}"/>
         </Root>
         
-        <Logger level="debug" name="aunis" additivity="false">
+        <Logger level="debug" name="jsg" additivity="false">
 			<AppenderRef ref="SysOut" />
 		</Logger>
     </Loggers>

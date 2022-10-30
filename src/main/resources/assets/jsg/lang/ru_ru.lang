@@ -245,6 +245,10 @@ tile.jsg.stargate_pegasus_chevron_block.name=Шеврон Звёздных Вр�
 tile.jsg.capacitor_block.name=Конденсатор
 tile.jsg.capacitor_block_empty.name=Конденсатор (Пустой)
 
+# zpm
+tile.jsg.zpm.name=Zero Point Module (ZPM)
+tile.jsg.zpm_hub_block.name=ZPM Hub (Ancient)
+
 # rings controller
 tile.jsg.transportrings_controller_goauld_block.name=Панель Транспортных Колец
 tile.jsg.transportrings_controller_block.not_linked=Панель не подключена

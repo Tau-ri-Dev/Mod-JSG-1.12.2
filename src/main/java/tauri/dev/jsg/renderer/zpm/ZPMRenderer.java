@@ -16,9 +16,18 @@ public class ZPMRenderer extends TileEntitySpecialRenderer<ZPMTile> {
         int level = te.getPowerLevel();
         if (level > 5) level = 5;
         if (level < 0) level = 0;
-        GlStateManager.translate(0.27, 0.4, 0.43);
-        TextureLoader.getTexture(TextureLoader.getTextureResource("zpm/zpm" + level + ".png")).bindTexture();
-        ElementEnum.ZPM.render();
+        GlStateManager.translate(0.32, 0.27, 0.43);
+        renderZPM(level, 0.8f);
         GlStateManager.popMatrix();
+    }
+
+    public static void renderZPM(int powerLevel, float size) {
+        renderZPM(powerLevel, size, false);
+    }
+    public static void renderZPM(int powerLevel, float size, boolean on) {
+        if (powerLevel < 0) return;
+        GlStateManager.scale(size, size, size);
+        TextureLoader.getTexture(TextureLoader.getTextureResource("zpm/zpm" + powerLevel + (on ? "" : "_off") + ".png")).bindTexture();
+        ElementEnum.ZPM.render();
     }
 }

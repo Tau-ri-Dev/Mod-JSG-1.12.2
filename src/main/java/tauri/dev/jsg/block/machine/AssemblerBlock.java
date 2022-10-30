@@ -11,6 +11,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.gui.GuiIdEnum;
 import tauri.dev.jsg.item.machine.AssemblerItemBlock;
@@ -42,6 +44,8 @@ public class AssemblerBlock extends JSGMachineBlock {
         return AssemblerTile.class;
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
     public TileEntitySpecialRenderer<? extends TileEntity> getTESR() {
         return new AssemblerRenderer();
     }

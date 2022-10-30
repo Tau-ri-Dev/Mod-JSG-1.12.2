@@ -19,6 +19,13 @@
 		"render_block": {
 			"true": {},
 			"false": {}
+		},
+
+		"orlin_broken": {
+			"true": {
+				"model": "jsg:stargate_orlin_member_block_broken"
+			},
+			"false": {}
 		}
 	}
 }

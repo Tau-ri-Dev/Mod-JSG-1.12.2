@@ -20,6 +20,8 @@ import tauri.dev.jsg.gui.container.stargate.StargateContainer;
 import tauri.dev.jsg.gui.container.stargate.StargateContainerGui;
 import tauri.dev.jsg.gui.container.transportrings.TRContainer;
 import tauri.dev.jsg.gui.container.transportrings.TRGui;
+import tauri.dev.jsg.gui.container.zpmhub.ZPMHubContainer;
+import tauri.dev.jsg.gui.container.zpmhub.ZPMHubContainerGui;
 
 public class JSGGuiHandler implements IGuiHandler {
 
@@ -50,6 +52,9 @@ public class JSGGuiHandler implements IGuiHandler {
 
             case GUI_CRYSTAL_CHAMBER:
                 return new CrystalChamberContainer(player.inventory, world, x, y, z);
+
+            case GUI_ZPM_HUB:
+                return new ZPMHubContainer(player.inventory, world, x, y, z);
         }
 
         return null;
@@ -82,6 +87,9 @@ public class JSGGuiHandler implements IGuiHandler {
 
             case GUI_CRYSTAL_CHAMBER:
                 return new CrystalChamberContainerGui(new CrystalChamberContainer(player.inventory, world, x, y, z));
+
+            case GUI_ZPM_HUB:
+                return new ZPMHubContainerGui(new ZPMHubContainer(player.inventory, world, x, y, z));
 
         }
 

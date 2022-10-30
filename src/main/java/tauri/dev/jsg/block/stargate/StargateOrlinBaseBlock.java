@@ -1,6 +1,8 @@
 package tauri.dev.jsg.block.stargate;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.renderer.stargate.StargateOrlinRenderer;
@@ -98,8 +100,7 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 
 	@Override
 	protected IBlockState createMemberState(IBlockState memberState, EnumFacing facing, int meta) {
-		return memberState.withProperty(JSGProps.RENDER_BLOCK, true)
-				.withProperty(JSGProps.ORLIN_VARIANT, facing);
+		return memberState.withProperty(JSGProps.RENDER_BLOCK, true).withProperty(JSGProps.ORLIN_VARIANT, facing);
 	}
 
 	@Override
@@ -108,8 +109,7 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 		EnumFacing facing = placer.getHorizontalFacing().getOpposite();
 		
 		if (!world.isRemote) {
-			state = state.withProperty(JSGProps.FACING_HORIZONTAL, facing)
-					.withProperty(JSGProps.RENDER_BLOCK, true);
+			state = state.withProperty(JSGProps.FACING_HORIZONTAL, facing).withProperty(JSGProps.RENDER_BLOCK, true);
 		
 			world.setBlockState(pos, state);
 			gateTile.initializeFromItemStack(stack);
@@ -165,6 +165,7 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public TileEntitySpecialRenderer<? extends TileEntity> getTESR() {
 		return new StargateOrlinRenderer();
 	}

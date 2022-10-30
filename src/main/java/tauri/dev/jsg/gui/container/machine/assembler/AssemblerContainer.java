@@ -131,5 +131,4 @@ public class AssemblerContainer extends Container implements OpenTabHolderInterf
             machineEnd = tile.getMachineEnd();
         }
     }
-
 }

@@ -33,7 +33,8 @@ public final class StargateOrlinMemberBlock extends StargateAbstractMemberBlock 
 
 		setDefaultState(blockState.getBaseState()
 				.withProperty(JSGProps.RENDER_BLOCK, true)
-				.withProperty(JSGProps.ORLIN_VARIANT, EnumFacing.DOWN));
+				.withProperty(JSGProps.ORLIN_VARIANT, EnumFacing.DOWN)
+				.withProperty(JSGProps.ORLIN_BROKEN, false));
 		
 		setLightOpacity(0);
 		setResistance(16.0f);
@@ -77,20 +78,22 @@ public final class StargateOrlinMemberBlock extends StargateAbstractMemberBlock 
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, JSGProps.RENDER_BLOCK, JSGProps.ORLIN_VARIANT);
+		return new BlockStateContainer(this, JSGProps.RENDER_BLOCK, JSGProps.ORLIN_VARIANT, JSGProps.ORLIN_BROKEN);
 	}
 	
 	@Override
 	public int getMetaFromState(IBlockState state) {		
 		return (state.getValue(JSGProps.RENDER_BLOCK) ? 0x08 : 0) |
-				state.getValue(JSGProps.ORLIN_VARIANT).getIndex();
+				state.getValue(JSGProps.ORLIN_VARIANT).getIndex() |
+				(state.getValue(JSGProps.ORLIN_BROKEN) ? 0x06 : 0);
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {		
 		return getDefaultState()
 				.withProperty(JSGProps.RENDER_BLOCK, (meta & 0x08) != 0)
-				.withProperty(JSGProps.ORLIN_VARIANT, EnumFacing.getFront(meta & 0x07));
+				.withProperty(JSGProps.ORLIN_VARIANT, EnumFacing.getFront(meta & 0x07))
+				.withProperty(JSGProps.ORLIN_BROKEN, (meta & 0x06) != 0);
 	}
 	
 	
@@ -103,8 +106,17 @@ public final class StargateOrlinMemberBlock extends StargateAbstractMemberBlock 
 		StargateOrlinMemberTile memberTile = (StargateOrlinMemberTile) world.getTileEntity(pos);
 		
 		if (!world.isRemote) {
+			boolean broken = false;
+			NBTTagCompound compound = stack.getTagCompound();
+			if(compound != null){
+				if(compound.hasKey("openCount")){
+					if(compound.getInteger("openCount") >= JSGConfig.stargateConfig.stargateOrlinMaxOpenCount)
+						broken = true;
+				}
+			}
 			state = state.withProperty(JSGProps.RENDER_BLOCK, true)
-					.withProperty(JSGProps.ORLIN_VARIANT, facing);
+					.withProperty(JSGProps.ORLIN_VARIANT, facing)
+					.withProperty(JSGProps.ORLIN_BROKEN, broken);
 		
 			world.setBlockState(pos, state, 0);
 			memberTile.initializeFromItemStack(stack);

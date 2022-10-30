@@ -42,6 +42,7 @@ public class JSG {
     public static Logger logger;
     public static OCWrapperInterface ocWrapper;
     public static String clientModPath;
+    public static boolean forceDisableEHAnimated = false;
 
     // --------------------------------------------
     // PROXY

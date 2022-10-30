@@ -603,7 +603,7 @@ public class JSGConfig {
         public boolean renderStargateNotPlaced = true;
 
         @Name("Render EHs even if they are not rendering")
-        public boolean renderEHisTheyNot = true;
+        public boolean renderEHifTheyNot = true;
     }
 
     public static class WorldOreGenerator {

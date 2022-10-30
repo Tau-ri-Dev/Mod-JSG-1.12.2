@@ -6,6 +6,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.raycaster.RaycasterRingsGoauldController;
 import tauri.dev.jsg.renderer.transportrings.TRControllerGoauldRenderer;
 import tauri.dev.jsg.tileentity.transportrings.TRControllerAbstractTile;
@@ -35,6 +37,7 @@ public class TRControllerGoauldBlock extends TRControllerAbstractBlock {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public TileEntitySpecialRenderer<? extends TileEntity> getTESR() {
         return new TRControllerGoauldRenderer();
     }

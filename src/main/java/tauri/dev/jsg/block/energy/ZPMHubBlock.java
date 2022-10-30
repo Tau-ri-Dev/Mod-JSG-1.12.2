@@ -2,6 +2,7 @@ package tauri.dev.jsg.block.energy;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,18 +10,21 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
+import tauri.dev.jsg.gui.GuiIdEnum;
 import tauri.dev.jsg.renderer.zpm.ZPMHubRenderer;
-import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.tileentity.energy.ZPMHubTile;
 import tauri.dev.jsg.util.ItemHandlerHelper;
+import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 
 import javax.annotation.Nonnull;
@@ -33,28 +37,42 @@ public class ZPMHubBlock extends JSGBlock {
     public static final String BLOCK_NAME = "zpm_hub_block";
 
     public ZPMHubBlock() {
-        super(Material.GLASS);
+        super(Material.IRON);
         setRegistryName(JSG.MOD_ID + ":" + BLOCK_NAME);
         setUnlocalizedName(JSG.MOD_ID + "." + BLOCK_NAME);
 
-        setSoundType(SoundType.GLASS);
+        setSoundType(SoundType.METAL);
         setCreativeTab(JSGCreativeTabsHandler.jsgEnergyCreativeTab);
+
+        setDefaultState(blockState.getBaseState()
+                .withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.NORTH));
 
         setHardness(3.0f);
         setHarvestLevel("pickaxe", 3);
     }
 
     // ------------------------------------------------------------------------
-    // Block actions
+    // Block states
 
+    @Nonnull
     @Override
-    public void onBlockPlacedBy(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EntityLivingBase placer, ItemStack stack) {
-        IEnergyStorage energyStorage = stack.getCapability(CapabilityEnergy.ENERGY, null);
-
-        StargateAbstractEnergyStorage capacitorEnergyStorage = (StargateAbstractEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
-        capacitorEnergyStorage.setEnergyStored(energyStorage.getEnergyStored());
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, JSGProps.FACING_HORIZONTAL);
     }
 
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(JSGProps.FACING_HORIZONTAL).getHorizontalIndex();
+    }
+
+    @Nonnull
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.getHorizontal(meta));
+    }
+
+    // ------------------------------------------------------------------------
+    // Block actions
 
     @Nonnull
     @Override
@@ -75,22 +93,37 @@ public class ZPMHubBlock extends JSGBlock {
     }
 
     @Override
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        if (willHarvest) return true; //If it will harvest, delay deletion of the block until after getDrops
+    public void onBlockPlacedBy(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, EntityLivingBase placer, @Nonnull ItemStack stack) {
+        EnumFacing facing = placer.getHorizontalFacing().getOpposite();
+        state = state.withProperty(JSGProps.FACING_HORIZONTAL, facing);
+        world.setBlockState(pos, state);
+    }
+
+    @Override
+    public boolean removedByPlayer(@Nonnull IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest) {
+        if (willHarvest) return true;
         return super.removedByPlayer(state, world, pos, player, willHarvest);
     }
 
     @Override
-    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack tool) {
+    public void harvestBlock(@Nonnull World world, @Nonnull EntityPlayer player, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nullable TileEntity te, @Nonnull ItemStack tool) {
         super.harvestBlock(world, player, pos, state, te, tool);
         world.setBlockToAir(pos);
+    }
+
+    @Override
+    public boolean onBlockActivated(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, EntityPlayer player, @Nonnull EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!player.isSneaking())
+            player.openGui(JSG.instance, GuiIdEnum.GUI_ZPM_HUB.id, world, pos.getX(), pos.getY(), pos.getZ());
+
+        return !player.isSneaking();
     }
 
     // ------------------------------------------------------------------------
     // Tile Entity
 
     @Override
-    public boolean hasTileEntity(IBlockState state) {
+    public boolean hasTileEntity(@Nonnull IBlockState state) {
         return true;
     }
 
@@ -100,7 +133,7 @@ public class ZPMHubBlock extends JSGBlock {
     }
 
     @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
+    public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
         return new ZPMHubTile();
     }
 
@@ -135,6 +168,7 @@ public class ZPMHubBlock extends JSGBlock {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public TileEntitySpecialRenderer<? extends TileEntity> getTESR() {
         return new ZPMHubRenderer();
     }

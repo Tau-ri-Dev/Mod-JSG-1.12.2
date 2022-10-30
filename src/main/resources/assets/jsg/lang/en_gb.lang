@@ -245,6 +245,10 @@ tile.jsg.stargate_pegasus_chevron_block.name=Stargate Chevron (Pegasus)
 tile.jsg.capacitor_block.name=Capacitor Bank
 tile.jsg.capacitor_block_empty.name=Capacitor Bank (Empty)
 
+# zpm
+tile.jsg.zpm.name=Zero Point Module (ZPM)
+tile.jsg.zpm_hub_block.name=ZPM Hub (Ancient)
+
 # rings controller
 tile.jsg.transportrings_controller_goauld_block.name=Transport rings controller
 tile.jsg.transportrings_controller_block.not_linked=Controller not linked

@@ -22,6 +22,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.beamer.BeamerBlock;
 import tauri.dev.jsg.block.energy.ZPMBlock;
+import tauri.dev.jsg.block.energy.ZPMHubBlock;
 import tauri.dev.jsg.block.energy.capacitor.CapacitorBlock;
 import tauri.dev.jsg.block.energy.capacitor.CapacitorBlockEmpty;
 import tauri.dev.jsg.block.dialhomedevice.DHDBlock;
@@ -105,6 +106,7 @@ public class JSGBlocks {
     // -----------------------------------------------------------------------------
 
     public static final ZPMBlock ZPM = new ZPMBlock();
+    public static final ZPMHubBlock ZPM_HUB = new ZPMHubBlock();
 
     // -----------------------------------------------------------------------------
 
@@ -184,7 +186,8 @@ public class JSGBlocks {
             MACHINE_ASSEMBLER,
             MACHINE_CHAMBER,
 
-            ZPM
+            ZPM,
+            ZPM_HUB
 
     };
 
