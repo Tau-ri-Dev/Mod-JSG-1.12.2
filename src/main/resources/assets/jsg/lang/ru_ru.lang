@@ -294,6 +294,7 @@ fluid.silicon_molten_red=Энергитическая Смесь
 fluid.silicon_molten_blue=Телепортационная Смесь
 fluid.silicon_molten_ender=Эндер Смесь
 fluid.silicon_molten_yellow=Световая Смесь
+fluid.silicon_molten_pegasus=Pegasus Blend
 
 # naquadah
 fluid.naquadah_molten_raw=Расплавленный Наквадах

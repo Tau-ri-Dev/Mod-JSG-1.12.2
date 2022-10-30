@@ -294,6 +294,7 @@ fluid.silicon_molten_red=能量混合物
 fluid.silicon_molten_blue=传送混合物
 fluid.silicon_molten_ender=末影混合物
 fluid.silicon_molten_yellow=光能混合物
+fluid.silicon_molten_pegasus=Pegasus Blend
 
 # naquadah
 fluid.naquadah_molten_raw=液体Naquadah

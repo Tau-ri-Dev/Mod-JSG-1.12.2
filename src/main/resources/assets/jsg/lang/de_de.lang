@@ -279,6 +279,7 @@ fluid.silicon_molten_red=Energiemischung
 fluid.silicon_molten_blue=Teleportierende Mischung
 fluid.silicon_molten_ender=Endermischung
 fluid.silicon_molten_yellow=Leuchtende Mischung
+fluid.silicon_molten_pegasus=Pegasus Blend
 
 # naquadah
 fluid.naquadah_molten_raw=Flüssiges Naquadah
