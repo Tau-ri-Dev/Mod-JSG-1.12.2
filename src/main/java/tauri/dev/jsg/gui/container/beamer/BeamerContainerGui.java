@@ -144,6 +144,7 @@ public class BeamerContainerGui extends GuiContainer implements TabbedContainerI
 						case INCOMING:
 						case BEAMER_DISABLED_BY_LOGIC:
 						case BEAMER_DISABLED_BY_LOGIC_TARGET:
+						case NO_POWER:
 							return DiodeStatus.WARN;
 							
 						case OK:
@@ -169,7 +170,8 @@ public class BeamerContainerGui extends GuiContainer implements TabbedContainerI
 						case INCOMING: return I18n.format("gui.beamer.incoming");
 						case BEAMER_DISABLED_BY_LOGIC: return I18n.format("gui.beamer.disabled_by_logic");
 						case BEAMER_DISABLED_BY_LOGIC_TARGET: return I18n.format("gui.beamer.disabled_by_logic_target");
-							
+						case NO_POWER: return I18n.format("gui.beamer.no_power");
+
 						case OK: return I18n.format("gui.beamer.running");
 					}
 					
@@ -303,6 +305,7 @@ public class BeamerContainerGui extends GuiContainer implements TabbedContainerI
         
         switch (container.beamerTile.getMode()) {
 	        case POWER:
+	        case LASER:
 				StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.beamerTile.getCapability(CapabilityEnergy.ENERGY, null);
 		        
 				int energyStored = energyStorage.getEnergyStored();

@@ -499,7 +499,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
             playSoundEvent(StargateSoundEventEnum.INCOMING);
             super.resetIncomingAnimation();
             isIncoming = false;
-            if (irisMode == EnumIrisMode.AUTO && isOpened()) {
+            if (irisMode == EnumIrisMode.AUTO && isIrisOpened()) {
                 toggleIris();
             }
         } else {
@@ -510,7 +510,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
                 playSoundEvent(StargateSoundEventEnum.INCOMING);
                 super.resetIncomingAnimation();
                 isIncoming = false;
-                if (irisMode == EnumIrisMode.AUTO && isOpened()) {
+                if (irisMode == EnumIrisMode.AUTO && isIrisOpened()) {
                     toggleIris();
                 }
             } else if (isIncoming && !stargateState.engaged())

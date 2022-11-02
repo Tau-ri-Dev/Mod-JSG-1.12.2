@@ -9,6 +9,7 @@ import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -74,6 +75,12 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
             markDirty();
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
+
+        @Override
+        public int receiveEnergy(int maxReceive, boolean simulate) {
+            // We don't want to have ZPMs rechargeable... Obvious...
+            return 0;
+        }
     };
 
     protected int energyStoredLastTick = 0;
@@ -138,6 +145,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
 
             energyTransferedLastTick = energyStorage.getEnergyStored() - energyStoredLastTick;
             energyStoredLastTick = energyStorage.getEnergyStored();
+            markDirty();
 
             if (isAnimating) {
                 if ((animationStart + SLIDING_ANIMATION_LENGTH) < this.world.getTotalWorldTime()) {

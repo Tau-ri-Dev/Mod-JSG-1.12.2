@@ -24,6 +24,7 @@ import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public abstract class StargateAbstractBaseBlock extends JSGBlock {
     // Explosions
 
     @Override
-    public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn) {
+    public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, @Nonnull Explosion explosionIn) {
         worldIn.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 30, true, true).doExplosionA();
     }
 

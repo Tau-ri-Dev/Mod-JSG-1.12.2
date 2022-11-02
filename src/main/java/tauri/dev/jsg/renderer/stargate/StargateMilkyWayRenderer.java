@@ -22,6 +22,7 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
 
   @Override
   protected void renderGate(StargateMilkyWayRendererState rendererState, double partialTicks) {
+    setGateHeatColor(rendererState);
     renderRing(rendererState, partialTicks);
 //    GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
     renderChevrons(rendererState, partialTicks);

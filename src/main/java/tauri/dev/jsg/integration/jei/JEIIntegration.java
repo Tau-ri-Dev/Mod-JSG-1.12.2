@@ -37,17 +37,18 @@ public final class JEIIntegration implements IModPlugin {
 
     @Override
     public void register(IModRegistry registry) {
-        // Hide invisible blocks in JEI
+        // Hide things in JEI
         registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(JSGBlocks.INVISIBLE_BLOCK, 1, OreDictionary.WILDCARD_VALUE));
         registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(JSGBlocks.IRIS_BLOCK, 1, OreDictionary.WILDCARD_VALUE));
-
-        // Hide Notebook from JEI
         registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(JSGItems.NOTEBOOK_ITEM, 1));
+        registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(JSGBlocks.ORE_NAQUADAH_BLOCK_STONE, 1));
 
         // Tab handling
         registry.addAdvancedGuiHandlers(new JEIAdvancedGuiHandler());
 
         List<IRecipeWrapper> recipes = new ArrayList<>(JEINotebookRecipe.genAll());
+
+        // Crafting recipes with NBT tags (usually)
         recipes.add(new JEIUniverseDialerCloneRecipe());
         recipes.add(new JEINotebookCloneRecipe());
         recipes.add(new JEIUniverseDialerRepairRecipe());
@@ -55,7 +56,7 @@ public final class JEIIntegration implements IModPlugin {
         registry.addRecipes(recipes, VanillaRecipeCategoryUid.CRAFTING);
 
         recipes.clear();
-
+        // Assembler recipes
         for(AssemblerRecipe recipe : AssemblerRecipes.RECIPES){
             AbstractJEIRecipe newRecipe = new AbstractJEIRecipe(){
                 @Override
@@ -77,7 +78,7 @@ public final class JEIIntegration implements IModPlugin {
         registry.addRecipes(recipes, JEIAssemblerRecipeCategory.UID);
 
         recipes.clear();
-
+        // Chamber recipes
         for(CrystalChamberRecipe recipe : CrystalChamberRecipes.RECIPES){
             AbstractJEIRecipe newRecipe = new AbstractJEIRecipe(){
                 @Override

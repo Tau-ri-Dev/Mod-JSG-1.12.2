@@ -3,9 +3,11 @@ package tauri.dev.jsg.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -21,12 +23,12 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.beamer.BeamerBlock;
+import tauri.dev.jsg.block.dialhomedevice.DHDBlock;
+import tauri.dev.jsg.block.dialhomedevice.DHDPegasusBlock;
 import tauri.dev.jsg.block.energy.ZPMBlock;
 import tauri.dev.jsg.block.energy.ZPMHubBlock;
 import tauri.dev.jsg.block.energy.capacitor.CapacitorBlock;
 import tauri.dev.jsg.block.energy.capacitor.CapacitorBlockEmpty;
-import tauri.dev.jsg.block.dialhomedevice.DHDBlock;
-import tauri.dev.jsg.block.dialhomedevice.DHDPegasusBlock;
 import tauri.dev.jsg.block.invisible.InvisibleBlock;
 import tauri.dev.jsg.block.invisible.IrisBlock;
 import tauri.dev.jsg.block.machine.AssemblerBlock;
@@ -54,59 +56,90 @@ import static tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler.jsgOresCreat
 
 @EventBusSubscriber
 public class JSGBlocks {
-    public static final NaquadahOreBlock ORE_NAQUADAH_BLOCK = new NaquadahOreBlock("naquadah_ore");
-    public static final NaquadahOreBlock ORE_NAQUADAH_BLOCK_STONE = new NaquadahOreBlock("naquadah_ore_stone");
-    public static final JSGBlock NAQUADAH_BLOCK = BlockHelpers.createSimpleBlock("naquadah_block", Material.IRON, jsgOresCreativeTab);
+    // -----------------------------------------------------------------------------
+    // INVISIBLE BLOCKS
+
+    public static final InvisibleBlock INVISIBLE_BLOCK = new InvisibleBlock();
+    public static final IrisBlock IRIS_BLOCK = new IrisBlock();
+
+    // -----------------------------------------------------------------------------
+    // ORES
+
+    public static final NaquadahOreBlock ORE_NAQUADAH_BLOCK = new NaquadahOreBlock("naquadah_ore", true);
+    public static final NaquadahOreBlock ORE_NAQUADAH_BLOCK_STONE = new NaquadahOreBlock("naquadah_ore_stone", false);
 
     public static final TriniumOreBlock ORE_TRINIUM_BLOCK = new TriniumOreBlock("trinium_ore");
     public static final TitaniumOreBlock ORE_TITANIUM_BLOCK = new TitaniumOreBlock("titanium_ore");
 
     // -----------------------------------------------------------------------------
+    // ORE BLOCKS
 
     public static final JSGBlock NAQUADAH_BLOCK_RAW = (JSGBlock) BlockHelpers.createSimpleBlock("naquadah_block_raw", Material.IRON, jsgOresCreativeTab).setHardness(3);
-    public static final JSGBlock TRINIUM_BLOCK = BlockHelpers.createSimpleBlock("trinium_block", Material.IRON, jsgOresCreativeTab);
-    public static final JSGBlock TITANIUM_BLOCK = BlockHelpers.createSimpleBlock("titanium_block", Material.IRON, jsgOresCreativeTab);
+    public static final JSGBlock NAQUADAH_BLOCK = (JSGBlock) BlockHelpers.createSimpleBlock("naquadah_block", Material.IRON, jsgOresCreativeTab).setHardness(3);
+    public static final JSGBlock TRINIUM_BLOCK = (JSGBlock) BlockHelpers.createSimpleBlock("trinium_block", Material.IRON, jsgOresCreativeTab).setHardness(3);
+    public static final JSGBlock TITANIUM_BLOCK = (JSGBlock) BlockHelpers.createSimpleBlock("titanium_block", Material.IRON, jsgOresCreativeTab).setHardness(3);
 
     // -----------------------------------------------------------------------------
+    // GATES
 
     public static final StargateMilkyWayBaseBlock STARGATE_MILKY_WAY_BASE_BLOCK = new StargateMilkyWayBaseBlock();
     public static final StargateUniverseBaseBlock STARGATE_UNIVERSE_BASE_BLOCK = new StargateUniverseBaseBlock();
     public static final StargateOrlinBaseBlock STARGATE_ORLIN_BASE_BLOCK = new StargateOrlinBaseBlock();
     public static final StargatePegasusBaseBlock STARGATE_PEGASUS_BASE_BLOCK = new StargatePegasusBaseBlock();
 
+    // -----------------------------------------------------------------------------
+    // DHDs
+
     public static final DHDBlock DHD_BLOCK = new DHDBlock();
     public static final DHDPegasusBlock DHD_PEGASUS_BLOCK = new DHDPegasusBlock();
+
+    // -----------------------------------------------------------------------------
+    // RINGS
 
     public static final TransportRingsGoauldBlock TRANSPORT_RINGS_GOAULD_BLOCK = new TransportRingsGoauldBlock();
     public static final TransportRingsOriBlock TRANSPORT_RINGS_ORI_BLOCK = new TransportRingsOriBlock();
     public static final TRControllerGoauldBlock TR_CONTROLLER_GOAULD_BLOCK = new TRControllerGoauldBlock();
-    public static final InvisibleBlock INVISIBLE_BLOCK = new InvisibleBlock();
-    public static final IrisBlock IRIS_BLOCK = new IrisBlock();
 
     // -----------------------------------------------------------------------------
+    // GATES - members
 
     public static final StargateMilkyWayMemberBlock STARGATE_MILKY_WAY_MEMBER_BLOCK = new StargateMilkyWayMemberBlock();
     public static final StargateUniverseMemberBlock STARGATE_UNIVERSE_MEMBER_BLOCK = new StargateUniverseMemberBlock();
     public static final StargateOrlinMemberBlock STARGATE_ORLIN_MEMBER_BLOCK = new StargateOrlinMemberBlock();
     public static final StargatePegasusMemberBlock STARGATE_PEGASUS_MEMBER_BLOCK = new StargatePegasusMemberBlock();
 
+    // -----------------------------------------------------------------------------
+    // CAPACITORS & BEAMER
+
     public static final CapacitorBlockEmpty CAPACITOR_BLOCK_EMPTY = new CapacitorBlockEmpty();
     public static final CapacitorBlock CAPACITOR_BLOCK = new CapacitorBlock();
     public static final BeamerBlock BEAMER_BLOCK = new BeamerBlock();
 
     // -----------------------------------------------------------------------------
+    // PLATFORMS & RAMPS
 
     public static final TRPlatformBlock TR_PLATFORM_BLOCK = new TRPlatformBlock();
 
     // -----------------------------------------------------------------------------
+    // MACHINES
 
     public static final AssemblerBlock MACHINE_ASSEMBLER = new AssemblerBlock();
     public static final CrystalChamberBlock MACHINE_CHAMBER = new CrystalChamberBlock();
 
     // -----------------------------------------------------------------------------
+    // ZPM stuff
 
     public static final ZPMBlock ZPM = new ZPMBlock();
     public static final ZPMHubBlock ZPM_HUB = new ZPMHubBlock();
+
+    // -----------------------------------------------------------------------------
+    // DECOR BLOCKS
+
+    public static final JSGBlock DECOR_CRYSTAL_BLOCK = (JSGBlock) BlockHelpers.createSimpleBlock("tokra_crystal_block", Material.ROCK, CreativeTabs.BUILDING_BLOCKS, JSGItems.CRYSTAL_TOKRA, 2, 4, 3).setHardness(1.5f).setLightLevel(11f);
+
+    // -----------------------------------------------------------------------------
+
+
 
     // -----------------------------------------------------------------------------
 
@@ -137,21 +170,45 @@ public class JSGBlocks {
             TR_CONTROLLER_GOAULD_BLOCK,
             TRANSPORT_RINGS_GOAULD_BLOCK,
             TRANSPORT_RINGS_ORI_BLOCK,
-            BEAMER_BLOCK
+            TR_PLATFORM_BLOCK,
+            BEAMER_BLOCK,
+            MACHINE_ASSEMBLER,
+            MACHINE_CHAMBER,
+            ZPM,
+            ZPM_HUB
+    };
+    /**
+     * Used in {@link tauri.dev.jsg.beamer.BeamerBeam}
+     */
+    public static final JSGBlock[] BEAMER_BREAK_BLACKLIST = {
+            DHD_PEGASUS_BLOCK,
+            DHD_BLOCK,
+            BEAMER_BLOCK,
+
+            STARGATE_MILKY_WAY_BASE_BLOCK,
+            STARGATE_MILKY_WAY_MEMBER_BLOCK,
+
+            STARGATE_UNIVERSE_BASE_BLOCK,
+            STARGATE_UNIVERSE_MEMBER_BLOCK,
+
+            STARGATE_PEGASUS_BASE_BLOCK,
+            STARGATE_PEGASUS_MEMBER_BLOCK,
+
+            STARGATE_ORLIN_BASE_BLOCK,
+            STARGATE_ORLIN_MEMBER_BLOCK
     };
 
 
     public static final JSGBlock[] BLOCKS = {
-            ORE_NAQUADAH_BLOCK,
             ORE_NAQUADAH_BLOCK_STONE,
-            NAQUADAH_BLOCK,
-            NAQUADAH_BLOCK_RAW,
-
-            ORE_TRINIUM_BLOCK,
-            TRINIUM_BLOCK,
-
+            ORE_NAQUADAH_BLOCK,
             ORE_TITANIUM_BLOCK,
+            ORE_TRINIUM_BLOCK,
+
+            NAQUADAH_BLOCK_RAW,
+            NAQUADAH_BLOCK,
             TITANIUM_BLOCK,
+            TRINIUM_BLOCK,
 
             STARGATE_MILKY_WAY_BASE_BLOCK,
             STARGATE_MILKY_WAY_MEMBER_BLOCK,
@@ -187,7 +244,9 @@ public class JSGBlocks {
             MACHINE_CHAMBER,
 
             ZPM,
-            ZPM_HUB
+            ZPM_HUB,
+
+            DECOR_CRYSTAL_BLOCK
 
     };
 
@@ -200,7 +259,8 @@ public class JSGBlocks {
         return false;
     }
 
-    public static void load(){}
+    public static void load() {
+    }
 
     @SubscribeEvent
     public static void onRegisterBlocks(Register<Block> event) {
@@ -246,7 +306,7 @@ public class JSGBlocks {
                 for (Integer meta : values.keySet())
                     ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(b), meta, new ModelResourceLocation(values.get(meta)));
             } else {
-                ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName(), "inventory"));
+                ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(block), 0, new ModelResourceLocation(Objects.requireNonNull(block.getRegistryName()), "inventory"));
             }
         }
     }
@@ -286,8 +346,8 @@ public class JSGBlocks {
             default:
                 break;
         }
-        if(searchInRegistry){
-            if(oldBlockName.startsWith("aunis:")){
+        if (searchInRegistry) {
+            if (oldBlockName.startsWith("aunis:")) {
                 return ForgeRegistries.BLOCKS.getValue(new ResourceLocation(JSG.MOD_ID, oldBlockName.replaceAll("aunis:", "")));
             }
         }
@@ -299,8 +359,8 @@ public class JSGBlocks {
 
     @SubscribeEvent
     public static void onMissingSoundMappings(RegistryEvent.MissingMappings<SoundEvent> event) {
-        for (RegistryEvent.MissingMappings.Mapping<SoundEvent> mapping : event.getAllMappings()){
-            if(mapping.key.toString().startsWith("aunis:") || mapping.key.toString().startsWith("jsg:")){
+        for (RegistryEvent.MissingMappings.Mapping<SoundEvent> mapping : event.getAllMappings()) {
+            if (mapping.key.toString().startsWith("aunis:") || mapping.key.toString().startsWith("jsg:")) {
                 mapping.ignore();
             }
         }
@@ -308,8 +368,8 @@ public class JSGBlocks {
 
     @SubscribeEvent
     public static void onMissingEntityMappings(RegistryEvent.MissingMappings<EntityEntry> event) {
-        for (RegistryEvent.MissingMappings.Mapping<EntityEntry> mapping : event.getAllMappings()){
-            if(mapping.key.toString().startsWith("aunis:") || mapping.key.toString().startsWith("jsg:")){
+        for (RegistryEvent.MissingMappings.Mapping<EntityEntry> mapping : event.getAllMappings()) {
+            if (mapping.key.toString().startsWith("aunis:") || mapping.key.toString().startsWith("jsg:")) {
                 mapping.ignore();
             }
         }
@@ -327,17 +387,16 @@ public class JSGBlocks {
     public static void onMissingItemMappings(RegistryEvent.MissingMappings<Item> event) {
         for (RegistryEvent.MissingMappings.Mapping<Item> mapping : event.getAllMappings()) {
             String oldName = mapping.key.toString();
-            Item newItem = null;
-            if(oldName.startsWith("aunis:")){
+            Item newItem;
+            if (oldName.startsWith("aunis:")) {
                 newItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(JSG.MOD_ID, oldName.replaceAll("aunis:", "")));
-                if(newItem == null)
+                if (newItem == null)
                     newItem = ItemBlock.getItemFromBlock(Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(JSG.MOD_ID, oldName.replaceAll("aunis:", "")))));
-            }
-            else{
+            } else {
                 Block newBlock = remapBlock(oldName, false);
-                if(newBlock != null)
+                if (newBlock != null)
                     newItem = ItemBlock.getItemFromBlock(newBlock);
-                else{
+                else {
                     newItem = JSGItems.remapItem(oldName);
                 }
             }

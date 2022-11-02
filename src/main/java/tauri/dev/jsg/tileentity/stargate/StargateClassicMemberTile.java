@@ -28,8 +28,6 @@ import tauri.dev.jsg.state.StateTypeEnum;
 /**
  * TileEntity for ring blocks and chevron blocks
  * 
- * Holds the camouflage block in {@link ItemStackHandler}, providing it into {@link Block#getExtendedState()}
- * 
  * @author MrJake
  */
 public abstract class StargateClassicMemberTile extends StargateAbstractMemberTile implements StateProviderInterface {

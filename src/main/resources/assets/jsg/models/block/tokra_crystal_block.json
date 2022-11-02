@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "jsg:blocks/decor/tokra_crystal_block"
+  }
+}

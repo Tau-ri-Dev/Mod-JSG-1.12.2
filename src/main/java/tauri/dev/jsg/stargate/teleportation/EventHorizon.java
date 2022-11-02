@@ -72,7 +72,7 @@ public class EventHorizon {
     public void scheduleTeleportation(StargatePos targetGate, boolean teleport) {
         if(targetGate == null) return;
         boolean closedIris = false;
-        if (world.getTileEntity(pos) instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) world.getTileEntity(pos)).isClosed()) {
+        if (world.getTileEntity(pos) instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) world.getTileEntity(pos)).isIrisClosed()) {
             teleport = false;
             closedIris = true;
         }
@@ -135,7 +135,7 @@ public class EventHorizon {
             // Not cancelled
             StargatePos targetGatePos = packet.getTargetGatePos();
             if (targetGatePos.getTileEntity() instanceof StargateClassicBaseTile
-                    && ((StargateClassicBaseTile) targetGatePos.getTileEntity()).isClosed()) {
+                    && ((StargateClassicBaseTile) targetGatePos.getTileEntity()).isIrisClosed()) {
 
                 if (packet.getEntity() instanceof IProjectile) {
                     Entity projectile = packet.getEntity();
@@ -167,16 +167,17 @@ public class EventHorizon {
                 }
 
 
-                if (((StargateClassicBaseTile) targetGatePos.getTileEntity()).isPhysicalIris()) {
+                StargateClassicBaseTile classicTargetGate = ((StargateClassicBaseTile) targetGatePos.getTileEntity());
+                if (classicTargetGate.isPhysicalIris()) {
                     JSGSoundHelper.playSoundEvent(packet.getTargetGatePos().getWorld(),
-                            targetGatePos.getTileEntity().getGateCenterPos(),
+                            classicTargetGate.getGateCenterPos(),
                             SoundEventEnum.IRIS_HIT);
-                } else if (((StargateClassicBaseTile) packet.getTargetGatePos().getTileEntity()).isShieldIris()) {
+                } else if (classicTargetGate.isShieldIris()) {
                     JSGSoundHelper.playSoundEvent(packet.getTargetGatePos().getWorld(),
-                            targetGatePos.getTileEntity().getGateCenterPos(),
+                            classicTargetGate.getGateCenterPos(),
                             SoundEventEnum.SHIELD_HIT);
                 }
-                ItemStack irisItem = ((StargateClassicBaseTile) targetGatePos.getTileEntity()).getItemHandler().getStackInSlot(11);
+                ItemStack irisItem = classicTargetGate.getItemHandler().getStackInSlot(11);
                 if (irisItem.getItem() instanceof UpgradeIris) {
                     // different damages per source
                     int chance = EnchantmentHelper.getEnchantments(irisItem).containsKey(Enchantments.UNBREAKING) ? (tauri.dev.jsg.config.JSGConfig.irisConfig.unbreakingChance * EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, irisItem)) : 0;
@@ -186,16 +187,17 @@ public class EventHorizon {
                         irisItem.getItem().setDamage(irisItem, irisItem.getItem().getDamage(irisItem) + 1);
                     }
                     if (irisItem.getCount() == 0) {
-                        ((StargateClassicBaseTile) targetGatePos.getTileEntity()).updateIrisType();
+                        classicTargetGate.updateIrisType();
                     }
+                    classicTargetGate.tryHeatUp(true, false, 2);
                 }
                 else {
-                    IEnergyStorage energyStorage = targetGatePos.getTileEntity().getCapability(CapabilityEnergy.ENERGY, null);
+                    IEnergyStorage energyStorage = classicTargetGate.getCapability(CapabilityEnergy.ENERGY, null);
                     if (energyStorage != null) {
                         energyStorage.extractEnergy(500, false);
                     }
                 }
-                targetGatePos.getTileEntity().sendSignal(null, "stargate_event_iris_hit", new Object[]{"Something just hit the IRIS!"});
+                classicTargetGate.sendSignal(null, "stargate_event_iris_hit", new Object[]{"Something just hit the IRIS!"});
 
             } else {
                 JSGSoundHelper.playSoundEvent(world, gateCenter, SoundEventEnum.WORMHOLE_GO);

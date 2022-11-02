@@ -108,6 +108,7 @@ public class JSGItems {
     public static final Item CRYSTAL_YELLOW = ItemHelper.createGenericItem("crystal_yellow", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item CRYSTAL_WHITE = ItemHelper.createGenericItem("crystal_white", JSGCreativeTabsHandler.jsgItemsCreativeTab);
 
+    public static final Item CRYSTAL_TOKRA = ItemHelper.createGenericItem("crystal_tokra", JSGCreativeTabsHandler.jsgItemsCreativeTab);
 
     public static final Item CIRCUIT_CONTROL_BASE = ItemHelper.createGenericItem("circuit_control_base", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item CIRCUIT_CONTROL_CRYSTAL = ItemHelper.createGenericItem("circuit_control_crystal", JSGCreativeTabsHandler.jsgItemsCreativeTab);
@@ -299,7 +300,9 @@ public class JSGItems {
 
             PAGE_MYSTERIOUS_ITEM_MILKYWAY,
             PAGE_MYSTERIOUS_ITEM_PEGASUS,
-            PAGE_MYSTERIOUS_ITEM_UNIVERSE
+            PAGE_MYSTERIOUS_ITEM_UNIVERSE,
+
+            CRYSTAL_TOKRA
     };
 
     public static Item[] getItems() {

@@ -26,6 +26,7 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
 
   @Override
   protected void renderGate(StargateUniverseRendererState rendererState, double partialTicks) {
+    setGateHeatColor(rendererState);
     GlStateManager.rotate(-rendererState.horizontalRotation, 0, 1, 0);
     float angularRotation = rendererState.spinHelper.getCurrentSymbol().getAngle();
 

@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Config(modid = "jsg", name = "jsg/jsgConfig_" + JSG.CONFIG_VERSION)
+@Config(modid = JSG.MOD_ID, name = "jsg/jsgConfig_" + JSG.CONFIG_VERSION)
 public class JSGConfig {
 
     @Name("Stargate size")
@@ -153,7 +153,6 @@ public class JSGConfig {
         // ---------------------------------------------------------------------------------------
         // Jungle biomes
         @Name("Biome overlay biome matches")
-        @SuppressWarnings("serial")
         @Comment({
                 "This check comes last (after block is directly under sky (except Nether) and temperature is high enough).",
                 "You can disable the temperature check by setting it to a negative value.",
@@ -195,7 +194,6 @@ public class JSGConfig {
         // Biome overlay override blocks
 
         @Name("Biome overlay override blocks")
-        @SuppressWarnings("serial")
         @Comment({
                 "Format: \"modid:blockid[:meta]\", for example: ",
                 "\"minecraft:wool:7\"",
@@ -245,6 +243,19 @@ public class JSGConfig {
 
             return cachedBiomeOverrideBlocksReverse;
         }
+
+        @Name("Enable gate overheat with explosion")
+        @Comment({
+                "Should gate explode when its overheated?"
+        })
+        public boolean enableGateOverHeatExplosion = true;
+
+        @RequiresMcRestart
+        @Name("Max stargate heat")
+        public double gateMaxHeat = 83400;
+
+        @Name("Chance of lighting strike that charge a gate")
+        public float lightingBoldChance = 0.005f;
 
     }
 
@@ -359,6 +370,20 @@ public class JSGConfig {
         @Comment({"0 - disables unbreaking on iris", "100 - unbreaking makes iris unbreakable"})
         @RangeInt(min = 0, max = 100)
         public int unbreakingChance = 10;
+
+        @Name("Enable iris overheat collapse")
+        @Comment({
+                "Should iris break when its overheated?"
+        })
+        public boolean enableIrisOverHeatCollapse = true;
+
+        @RequiresMcRestart
+        @Name("Max titanium iris heat")
+        public double irisTitaniumMaxHeat = 1668;
+
+        @RequiresMcRestart
+        @Name("Max trinium iris heat")
+        public double irisTriniumMaxHeat = 3336;
     }
 
     public static class PowerConfig {
@@ -592,6 +617,10 @@ public class JSGConfig {
         @Name("Interval of signals being send to OC about transfers (in ticks)")
         @RangeInt(min = 1)
         public int signalIntervalTicks = 20;
+
+        @Name("Energy/tick needed to keep laser alive")
+        @RangeInt(min = 1)
+        public int laserEnergy = 7050;
     }
 
     public static class AudioVideoConfig {
@@ -666,10 +695,6 @@ public class JSGConfig {
         @Name("Chance of generating Desert gate")
         @RangeInt(min = 0, max = 1500)
         public int stargateRGChanceDesert = 420;
-
-        //@Name("Chance of generating Nether gate")
-        //@RangeInt(min = 0, max = 1500)
-        //public int stargateRGChanceNether = 750;
 
         @Name("Chance of generating End gate")
         @RangeInt(min = 0, max = 1500)
@@ -760,7 +785,6 @@ public class JSGConfig {
         public int chance = 1;
 
         @Name("Entities to spawn")
-        @SuppressWarnings("serial")
         @Comment({
                 "Format: \"modid:entityid\", for example: ",
                 "\"minecraft:zombie\"",

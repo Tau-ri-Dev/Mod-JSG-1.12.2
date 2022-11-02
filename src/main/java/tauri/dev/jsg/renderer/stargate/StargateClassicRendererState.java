@@ -57,6 +57,10 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
   public EnumIrisState irisState;
   public long irisAnimation;
 
+  // Heat
+  public double irisHeat = 0;
+  public double gateHeat = 0;
+
   @Override
   public BiomeOverlayEnum getBiomeOverlay() {
     if (biomeOverride != null) return biomeOverride;
@@ -85,6 +89,8 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     buf.writeByte(irisState.id);
     buf.writeByte(irisType.id);
     buf.writeLong(irisAnimation);
+    buf.writeDouble(irisHeat);
+    buf.writeDouble(gateHeat);
     super.toBytes(buf);
   }
 
@@ -111,6 +117,8 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     irisState = EnumIrisState.getValue(buf.readByte());
     irisType = EnumIrisType.byId(buf.readByte());
     irisAnimation = buf.readLong();
+    irisHeat = buf.readDouble();
+    gateHeat = buf.readDouble();
     super.fromBytes(buf);
   }
 

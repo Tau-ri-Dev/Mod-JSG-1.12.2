@@ -28,6 +28,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
     @Override
     protected void renderGate(StargatePegasusRendererState rendererState, double partialTicks) {
+        setGateHeatColor(rendererState);
         renderRing(rendererState, partialTicks);
         renderChevrons(rendererState, partialTicks);
 

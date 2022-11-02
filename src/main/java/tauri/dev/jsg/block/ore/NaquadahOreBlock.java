@@ -19,14 +19,15 @@ import java.util.Random;
 
 public class NaquadahOreBlock extends JSGBlock {
 		
-	public NaquadahOreBlock(String blockName) {
+	public NaquadahOreBlock(String blockName, boolean isInTab) {
 		super(Material.ROCK);
 		
 		setRegistryName(JSG.MOD_ID + ":" + blockName);
 		setUnlocalizedName(JSG.MOD_ID + "." + blockName);
 		
-		setSoundType(SoundType.STONE); 
-		setCreativeTab(JSGCreativeTabsHandler.jsgOresCreativeTab);
+		setSoundType(SoundType.STONE);
+		if(!isInTab)
+			setCreativeTab(JSGCreativeTabsHandler.jsgOresCreativeTab);
 		
 		setHardness(4.5f);
 		setHarvestLevel("pickaxe", 3);
@@ -36,7 +37,7 @@ public class NaquadahOreBlock extends JSGBlock {
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		Random random = world instanceof World ? ((World)world).rand : RANDOM;
 		
-		int quantity = 5 + random.nextInt(4) + (fortune * random.nextInt(3));
+		int quantity = 1 + random.nextInt(2) + (fortune * random.nextInt(3));
 		
 		drops.add(new ItemStack(JSGItems.NAQUADAH_ORE_IMPURE, quantity));
 	}

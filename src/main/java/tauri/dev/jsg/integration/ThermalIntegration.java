@@ -25,16 +25,16 @@ public class ThermalIntegration {
 		ThermalExpansionHelper.addRefineryRecipe(defaultEnergy, new FluidStack(JSGFluids.SILICON_MOLTEN_BLACK, oneIngot/4), new FluidStack(JSGFluids.SILICON_MOLTEN_WHITE, oneIngot/4), ItemStack.EMPTY);
 
 		
-		/*// Crystals
-		ThermalExpansionHelper.addCompactorRecipe(defaultEnergy*5, new ItemStack(Items.QUARTZ, 3), new ItemStack(JSGItems.CRYSTAL_SEED));
+		// Crystals
+		ThermalExpansionHelper.addCompactorRecipe(defaultEnergy*5, new ItemStack(Items.QUARTZ, 4), new ItemStack(JSGItems.CRYSTAL_SEED));
 		
-		ThermalExpansionHelper.addTransposerFill(defaultEnergy*7, new ItemStack(JSGItems.CRYSTAL_SEED), new ItemStack(JSGItems.CRYSTAL_RED), new FluidStack(JSGFluids.moltenSiliconRed, oneIngot), false);
-		ThermalExpansionHelper.addTransposerFill(defaultEnergy*7, new ItemStack(JSGItems.CRYSTAL_SEED), new ItemStack(JSGItems.CRYSTAL_BLUE), new FluidStack(JSGFluids.moltenSiliconBlue, oneIngot), false);
-		ThermalExpansionHelper.addTransposerFill(defaultEnergy*7, new ItemStack(JSGItems.CRYSTAL_SEED), new ItemStack(JSGItems.CRYSTAL_ENDER), new FluidStack(JSGFluids.moltenSiliconEnder, oneIngot), false);
-		ThermalExpansionHelper.addTransposerFill(defaultEnergy*7, new ItemStack(JSGItems.CRYSTAL_SEED), new ItemStack(JSGItems.CRYSTAL_YELLOW), new FluidStack(JSGFluids.moltenSiliconYellow, oneIngot), false);
-		ThermalExpansionHelper.addTransposerFill(defaultEnergy*7, new ItemStack(JSGItems.CRYSTAL_SEED), new ItemStack(JSGItems.CRYSTAL_WHITE), new FluidStack(JSGFluids.moltenSiliconWhite, oneIngot), false);
-		*/
-		
+		ThermalExpansionHelper.addTransposerFill(defaultEnergy*7, new ItemStack(JSGItems.CRYSTAL_SEED), new ItemStack(JSGItems.CRYSTAL_RED), new FluidStack(JSGFluids.SILICON_MOLTEN_RED, oneIngot), false);
+		ThermalExpansionHelper.addTransposerFill(defaultEnergy*7, new ItemStack(JSGItems.CRYSTAL_SEED), new ItemStack(JSGItems.CRYSTAL_BLUE), new FluidStack(JSGFluids.SILICON_MOLTEN_BLUE, oneIngot), false);
+		ThermalExpansionHelper.addTransposerFill(defaultEnergy*7, new ItemStack(JSGItems.CRYSTAL_SEED), new ItemStack(JSGItems.CRYSTAL_ENDER), new FluidStack(JSGFluids.SILICON_MOLTEN_ENDER, oneIngot), false);
+		ThermalExpansionHelper.addTransposerFill(defaultEnergy*7, new ItemStack(JSGItems.CRYSTAL_SEED), new ItemStack(JSGItems.CRYSTAL_YELLOW), new FluidStack(JSGFluids.SILICON_MOLTEN_YELLOW, oneIngot), false);
+		ThermalExpansionHelper.addTransposerFill(defaultEnergy*7, new ItemStack(JSGItems.CRYSTAL_SEED), new ItemStack(JSGItems.CRYSTAL_WHITE), new FluidStack(JSGFluids.SILICON_MOLTEN_WHITE, oneIngot), false);
+		ThermalExpansionHelper.addTransposerFill(defaultEnergy*7, new ItemStack(JSGItems.CRYSTAL_SEED), new ItemStack(JSGItems.CRYSTAL_BLUE_PEGASUS), new FluidStack(JSGFluids.SILICON_MOLTEN_PEGASUS, oneIngot), false);
+
 		// Naquadah
 		ThermalExpansionHelper.addCrucibleRecipe(defaultEnergy*12, new ItemStack(JSGBlocks.ORE_NAQUADAH_BLOCK), new FluidStack(JSGFluids.NAQUADAH_MOLTEN_RAW, (oneIngot * 2)));
 		ThermalExpansionHelper.addCrucibleRecipe(defaultEnergy*12, new ItemStack(JSGBlocks.ORE_NAQUADAH_BLOCK_STONE), new FluidStack(JSGFluids.NAQUADAH_MOLTEN_RAW, (oneIngot * 2)));

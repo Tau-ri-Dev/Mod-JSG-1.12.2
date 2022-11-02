@@ -19,7 +19,8 @@ public enum BeamerStatusEnum implements EnumKeyInterface<Integer> {
 	TWO_TRANSMITTERS(12),
 	TWO_RECEIVERS(13),
 	BEAMER_DISABLED_BY_LOGIC(14),
-	BEAMER_DISABLED_BY_LOGIC_TARGET(15);
+	BEAMER_DISABLED_BY_LOGIC_TARGET(15),
+	NO_POWER(16);
 	
 	
 	public int id;

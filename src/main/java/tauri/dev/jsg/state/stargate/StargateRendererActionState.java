@@ -26,10 +26,11 @@ public class StargateRendererActionState extends State {
         CHEVRON_DIM(12),
         IRIS_UPDATE(13),
 
-        ACTIVATE_GLYPH(14);
+        ACTIVATE_GLYPH(14),
+        HEAT_UPDATE(15);
 
-        public int actionID;
-        private static Map<Integer, EnumGateAction> map = new HashMap<Integer, EnumGateAction>();
+        public final int actionID;
+        private static final Map<Integer, EnumGateAction> map = new HashMap<Integer, EnumGateAction>();
 
         private EnumGateAction(int actionID) {
             this.actionID = actionID;
@@ -50,12 +51,13 @@ public class StargateRendererActionState extends State {
     }
 
     public EnumGateAction action;
-    //	public boolean computer;
-    public int chevronCount;
-    public boolean modifyFinal;
+    public int chevronCount = 0;
+    public boolean modifyFinal = false;
     public EnumIrisState irisState = null;
     public EnumIrisType irisType = null;
     public long irisAnimation = 0;
+    public double irisHeat = 0;
+    public double gateHeat = 0;
 
     public StargateRendererActionState(EnumGateAction action) {
         this.action = action;
@@ -63,14 +65,18 @@ public class StargateRendererActionState extends State {
 
     public StargateRendererActionState(EnumGateAction action, int chevronCount, boolean modifyFinal) {
         this.action = action;
-//		this.computer = computer;
         this.chevronCount = chevronCount;
         this.modifyFinal = modifyFinal;
     }
 
+    public StargateRendererActionState(double irisHeat, double gateHeat) {
+        this.action = EnumGateAction.HEAT_UPDATE;
+        this.irisHeat = irisHeat;
+        this.gateHeat = gateHeat;
+    }
+
     public StargateRendererActionState(EnumGateAction action, int chevronCount, boolean modifyFinal, EnumIrisType irisType, EnumIrisState irisState, long irisAnimation) {
         this.action = action;
-//		this.computer = computer;
         this.chevronCount = chevronCount;
         this.modifyFinal = modifyFinal;
         this.irisState = irisState;
@@ -81,7 +87,6 @@ public class StargateRendererActionState extends State {
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(action.actionID);
-//		buf.writeBoolean(computer);
         buf.writeInt(chevronCount);
         buf.writeBoolean(modifyFinal);
         if (irisType != null) {
@@ -90,12 +95,13 @@ public class StargateRendererActionState extends State {
             buf.writeByte(irisType.id);
             buf.writeLong(irisAnimation);
         } else buf.writeBoolean(false);
+        buf.writeDouble(irisHeat);
+        buf.writeDouble(gateHeat);
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         action = EnumGateAction.valueOf(buf.readInt());
-//		computer = buf.readBoolean();
         chevronCount = buf.readInt();
         modifyFinal = buf.readBoolean();
         if (buf.readBoolean()) {
@@ -103,6 +109,8 @@ public class StargateRendererActionState extends State {
             irisType = EnumIrisType.byId(buf.readByte());
             irisAnimation = buf.readLong();
         }
+        irisHeat = buf.readDouble();
+        gateHeat = buf.readDouble();
     }
 
 }

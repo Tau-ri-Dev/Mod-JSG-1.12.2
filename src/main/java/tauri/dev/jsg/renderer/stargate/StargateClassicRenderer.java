@@ -1,16 +1,5 @@
 package tauri.dev.jsg.renderer.stargate;
 
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.util.main.JSGProps;
-import tauri.dev.jsg.loader.ElementEnum;
-import tauri.dev.jsg.loader.texture.Texture;
-import tauri.dev.jsg.loader.texture.TextureLoader;
-import tauri.dev.jsg.stargate.EnumIrisState;
-import tauri.dev.jsg.stargate.EnumIrisType;
-import tauri.dev.jsg.stargate.EnumMemberVariant;
-import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
-import tauri.dev.jsg.stargate.merging.StargateMilkyWayMergeHelper;
-import tauri.dev.jsg.util.FacingToRotation;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -19,6 +8,18 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.loader.ElementEnum;
+import tauri.dev.jsg.loader.texture.Texture;
+import tauri.dev.jsg.loader.texture.TextureLoader;
+import tauri.dev.jsg.stargate.EnumIrisState;
+import tauri.dev.jsg.stargate.EnumIrisType;
+import tauri.dev.jsg.stargate.EnumMemberVariant;
+import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
+import tauri.dev.jsg.stargate.merging.StargateMilkyWayMergeHelper;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
+import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.main.JSGProps;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -134,6 +135,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             GlStateManager.popMatrix();
         }
         if ((irisType == EnumIrisType.IRIS_TITANIUM || irisType == EnumIrisType.IRIS_TRINIUM) && backOnly) {
+            setIrisHeatColor(rendererState);
             irisAnimationStage *= 1.7f / PHYSICAL_IRIS_ANIMATION_LENGTH;
             if (irisAnimationStage > 1.7f) irisAnimationStage = 1.7f;
             if (irisAnimationStage < 0) irisAnimationStage = 0;
@@ -150,5 +152,17 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
                 GlStateManager.popMatrix();
             }
         }
+    }
+
+    public void setIrisHeatColor(StargateClassicRendererState rendererState) {
+        if (rendererState.irisHeat == -1) return;
+        float red = (float) (rendererState.irisHeat / (rendererState.irisType == EnumIrisType.IRIS_TITANIUM ? StargateClassicBaseTile.IRIS_MAX_HEAT_TITANIUM : StargateClassicBaseTile.IRIS_MAX_HEAT_TRINIUM));
+        GlStateManager.color(1 + (red * 2.5F), 1, 1);
+    }
+
+    public void setGateHeatColor(StargateClassicRendererState rendererState) {
+        if (rendererState.gateHeat == -1) return;
+        float red = (float) (rendererState.gateHeat / StargateClassicBaseTile.GATE_MAX_HEAT);
+        GlStateManager.color(1 + red, 1, 1);
     }
 }

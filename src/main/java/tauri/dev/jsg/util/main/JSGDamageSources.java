@@ -11,6 +11,8 @@ public class JSGDamageSources {
 			.setDamageIsAbsolute().setDamageBypassesArmor();
 	public static final DamageSource DAMAGE_EVENT_IRIS_CREATIVE = new DamageSource("irisDeath")
 			.setDamageIsAbsolute().setDamageBypassesArmor().setDamageAllowedInCreativeMode();
+	public static final DamageSource DAMAGE_BEAMER = new DamageSource("beamer")
+			.setDamageIsAbsolute().setDamageBypassesArmor();
 
 	public static DamageSource getDamageSourceZat(Entity source, Entity attacker){
 		return new EntityDamageSourceIndirect("zatHit", source, attacker)
