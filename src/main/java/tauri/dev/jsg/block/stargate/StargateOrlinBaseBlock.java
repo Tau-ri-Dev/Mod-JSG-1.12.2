@@ -11,7 +11,6 @@ import tauri.dev.jsg.stargate.merging.StargateOrlinMergeHelper;
 import tauri.dev.jsg.stargate.network.StargateNetwork;
 import tauri.dev.jsg.stargate.power.StargateEnergyRequired;
 import tauri.dev.jsg.tileentity.stargate.StargateOrlinBaseTile;
-import tauri.dev.jsg.worldgen.StargateGeneratorNether;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -122,7 +121,8 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 				StargateNetwork network = StargateNetwork.get(world);
 				
 				if (!network.hasNetherGate()) {
-					network.setNetherGate(StargateGeneratorNether.place(world.getMinecraftServer().getWorld(DimensionType.NETHER.getId()), new BlockPos(pos.getX()/8, 32, pos.getZ()/8)));
+					StargateOrlinBaseTile.setNetherGate(network, world, pos);
+					//network.setNetherGate(StargateGeneratorNether.place(world.getMinecraftServer().getWorld(DimensionType.NETHER.getId()), new BlockPos(pos.getX()/8, 32, pos.getZ()/8)));
 				}
 				
 				gateTile.updateNetherAddress();

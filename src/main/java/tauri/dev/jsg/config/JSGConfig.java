@@ -675,12 +675,14 @@ public class JSGConfig {
 
     public static class WorldStargateGenerator {
         @Name("Enable random stargate generator")
+        @RequiresMcRestart
         @Comment({
                 "Generate stargate in world random.",
         })
         public boolean stargateRandomGeneratorEnabled = true;
 
         @Name("Enable random structures generator")
+        @RequiresMcRestart
         @Comment({
                 "Enable generation of structures in the world.",
                 "This will not disable the stargate generation!",
@@ -688,17 +690,15 @@ public class JSGConfig {
         public boolean structuresRandomGeneratorEnabled = true;
 
 
-        @Name("Chance of generating Plains gate")
-        @RangeInt(min = 0, max = 1500)
-        public int stargateRGChancePlains = 540;
+        @Name("Chance of generating stargates in Overworld")
+        @RequiresMcRestart
+        @RangeDouble(min = 0, max = 1f)
+        public float stargateRGChanceOverworld = 0.008f;
 
-        @Name("Chance of generating Desert gate")
-        @RangeInt(min = 0, max = 1500)
-        public int stargateRGChanceDesert = 420;
-
-        @Name("Chance of generating End gate")
-        @RangeInt(min = 0, max = 1500)
-        public int stargateRGChanceTheEnd = 0;
+        @Name("Chance of generating stargates in End")
+        @RequiresMcRestart
+        @RangeDouble(min = 0, max = 1f)
+        public float stargateRGChanceTheEnd = 0.01f;
 
     }
 

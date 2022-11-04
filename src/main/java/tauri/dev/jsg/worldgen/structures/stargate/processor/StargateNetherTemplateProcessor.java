@@ -1,4 +1,4 @@
-package tauri.dev.jsg.worldgen;
+package tauri.dev.jsg.worldgen.structures.stargate.processor;
 
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.stargate.merging.StargateMilkyWayMergeHelper;
@@ -9,10 +9,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.ITemplateProcessor;
 import net.minecraft.world.gen.structure.template.Template.BlockInfo;
 
+import javax.annotation.Nonnull;
+
 public class StargateNetherTemplateProcessor implements ITemplateProcessor {
 
 	@Override
-	public BlockInfo processBlock(World world, BlockPos pos, BlockInfo blockInfoIn) {
+	public BlockInfo processBlock(@Nonnull World world, @Nonnull BlockPos pos, BlockInfo blockInfoIn) {
 		if (StargateMilkyWayMergeHelper.BASE_MATCHER.apply(blockInfoIn.blockState) ||
 			StargateMilkyWayMergeHelper.MEMBER_MATCHER.apply(blockInfoIn.blockState) ||
 			blockInfoIn.blockState.getBlock() == JSGBlocks.DHD_BLOCK)

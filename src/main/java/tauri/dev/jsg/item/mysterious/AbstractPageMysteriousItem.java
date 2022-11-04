@@ -16,8 +16,8 @@ import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
-import tauri.dev.jsg.worldgen.StargateGenerator;
-import tauri.dev.jsg.worldgen.StargateGenerator.GeneratedStargate;
+import tauri.dev.jsg.worldgen.structures.stargate.GeneratedStargate;
+import tauri.dev.jsg.worldgen.structures.stargate.StargateGenerator;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -47,7 +47,7 @@ public abstract class AbstractPageMysteriousItem extends Item {
     public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
 
         if (!world.isRemote) {
-            GeneratedStargate stargate = StargateGenerator.generateStargate(world, symbolType, dimensionToSpawn);
+            GeneratedStargate stargate = StargateGenerator.mystPageGeneration(world, symbolType, dimensionToSpawn);
 
             if (stargate != null) {
                 NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(stargate.address, stargate.hasUpgrade, stargate.path);

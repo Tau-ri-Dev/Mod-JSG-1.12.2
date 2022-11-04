@@ -1,4 +1,4 @@
-package tauri.dev.jsg.worldgen;
+package tauri.dev.jsg.worldgen.structures.stargate;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;

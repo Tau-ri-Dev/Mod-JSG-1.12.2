@@ -13,7 +13,8 @@ import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerItem;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
-import tauri.dev.jsg.worldgen.StargateGenerator;
+import tauri.dev.jsg.worldgen.structures.stargate.GeneratedStargate;
+import tauri.dev.jsg.worldgen.structures.stargate.StargateGenerator;
 
 import javax.annotation.Nonnull;
 
@@ -27,7 +28,7 @@ public class UniversePageMysteriousItem extends AbstractPageMysteriousItem {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         if (!world.isRemote) {
-            StargateGenerator.GeneratedStargate stargate = StargateGenerator.generateStargate(world, symbolType, dimensionToSpawn);
+            GeneratedStargate stargate = StargateGenerator.mystPageGeneration(world, symbolType, dimensionToSpawn);
 
             if (stargate != null) {
                 ItemStack stack = new ItemStack(JSGItems.UNIVERSE_DIALER);
