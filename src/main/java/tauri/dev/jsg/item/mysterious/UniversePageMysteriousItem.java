@@ -28,7 +28,8 @@ public class UniversePageMysteriousItem extends AbstractPageMysteriousItem {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         if (!world.isRemote) {
-            GeneratedStargate stargate = StargateGenerator.mystPageGeneration(world, symbolType, dimensionToSpawn);
+            sendPlayerMessageAboutGeneration(player, true, false);
+            GeneratedStargate stargate = StargateGenerator.mystPageGeneration(world, symbolType, dimensionToSpawn, player);
 
             if (stargate != null) {
                 ItemStack stack = new ItemStack(JSGItems.UNIVERSE_DIALER);
@@ -54,7 +55,9 @@ public class UniversePageMysteriousItem extends AbstractPageMysteriousItem {
 
                 if (JSGConfig.mysteriousConfig.pageCooldown > 0)
                     player.getCooldownTracker().setCooldown(this, JSGConfig.mysteriousConfig.pageCooldown);
-            }
+                sendPlayerMessageAboutGeneration(player, false, true);
+            } else
+                sendPlayerMessageAboutGeneration(player, false, false);
         }
 
         return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));

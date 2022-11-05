@@ -9,13 +9,12 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.gui.element.BetterButton;
-import tauri.dev.jsg.gui.element.tabs.Tab;
 import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.packet.SetOpenTabToServer;
 import tauri.dev.jsg.packet.ZPMHubAnimationToServer;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ZPMHubContainerGui extends GuiContainer {
@@ -23,7 +22,7 @@ public class ZPMHubContainerGui extends GuiContainer {
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_zpmhub.png");
 
     private final ZPMHubContainer container;
-	private BetterButton button;
+    private BetterButton button;
 
     public ZPMHubContainerGui(ZPMHubContainer container) {
         super(container);
@@ -33,11 +32,11 @@ public class ZPMHubContainerGui extends GuiContainer {
         this.ySize = 168;
     }
 
-	@Override
-	public void initGui() {
-		super.initGui();
-		button = new BetterButton(0, 10 + guiLeft, 38 + guiTop, 16, BACKGROUND_TEXTURE, 256, 256, 176, 0);
-	}
+    @Override
+    public void initGui() {
+        super.initGui();
+        button = new BetterButton(0, 10 + guiLeft, 38 + guiTop, 16, BACKGROUND_TEXTURE, 256, 256, 176, 0);
+    }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -106,16 +105,20 @@ public class ZPMHubContainerGui extends GuiContainer {
                     transferredFormatting + transferredSign + String.format("%,d RF/t", transferred));
             drawHoveringText(power, mouseX - guiLeft, mouseY - guiTop);
         }
+        if (isPointInRegion(10, 38, 16, 16, mouseX, mouseY)) {
+            List<String> power = Collections.singletonList((container.hubTile.isAnimating ? I18n.format("gui.zpmhub.inProgress") : (container.hubTile.isSlidingUp ? I18n.format("gui.zpmhub.slideDown") : I18n.format("gui.zpmhub.slideUp"))));
+            drawHoveringText(power, mouseX - guiLeft, mouseY - guiTop);
+        }
     }
 
-	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		super.mouseClicked(mouseX, mouseY, mouseButton);
-		if(button.isMouseOnButton(mouseX, mouseY)){
-			startAnimation();
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+        if (button.isMouseOnButton(mouseX, mouseY)) {
+            startAnimation();
             button.playPressSound(Minecraft.getMinecraft().getSoundHandler());
-		}
-	}
+        }
+    }
 
     public void startAnimation() {
         JSGPacketHandler.INSTANCE.sendToServer(new ZPMHubAnimationToServer(container.hubTile.getPos()));

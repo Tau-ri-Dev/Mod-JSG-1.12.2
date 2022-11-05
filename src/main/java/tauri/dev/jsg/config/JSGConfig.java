@@ -693,12 +693,18 @@ public class JSGConfig {
         @Name("Chance of generating stargates in Overworld")
         @RequiresMcRestart
         @RangeDouble(min = 0, max = 1f)
-        public float stargateRGChanceOverworld = 0.008f;
+        public float stargateRGChanceOverworld = 0.0008f;
 
         @Name("Chance of generating stargates in End")
         @RequiresMcRestart
         @RangeDouble(min = 0, max = 1f)
-        public float stargateRGChanceTheEnd = 0.01f;
+        public float stargateRGChanceTheEnd = 0.0009f;
+
+
+        @Name("Chance of generating stargates in Nether")
+        @RequiresMcRestart
+        @RangeDouble(min = 0, max = 1f)
+        public float stargateRGChanceNether = 0.0007f;
 
     }
 

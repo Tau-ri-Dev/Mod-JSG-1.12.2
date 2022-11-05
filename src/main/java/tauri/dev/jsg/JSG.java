@@ -2,12 +2,14 @@ package tauri.dev.jsg;
 
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Logger;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.command.JSGCommands;
@@ -16,6 +18,7 @@ import tauri.dev.jsg.integration.OCWrapperInterface;
 import tauri.dev.jsg.proxy.IProxy;
 import tauri.dev.jsg.util.main.loader.JSGInit;
 import tauri.dev.jsg.util.main.loader.JSGPreInit;
+import tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator;
 
 import java.io.IOException;
 

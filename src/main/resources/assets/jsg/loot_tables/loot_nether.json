@@ -1,0 +1,70 @@
+{
+  "pools": [
+    {
+      "name": "main",
+      "rolls": 15,
+      "entries": [
+        {
+          "type": "item",
+          "name": "jsg:naquadah_alloy",
+          "weight": 8
+        },
+        {
+          "type": "item",
+          "name": "jsg:naquadah_dust",
+          "weight": 15
+        },
+        {
+          "type": "item",
+          "name": "jsg:naquadah_raw_dust",
+          "weight": 26
+        },
+        {
+          "type": "item",
+          "name": "jsg:naquadah_raw",
+          "weight": 21
+        },
+        {
+          "type": "item",
+          "name": "jsg:naquadah_alloy_raw",
+          "weight": 5
+        },
+        {
+          "type": "item",
+          "name": "jsg:schematic_milkyway",
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "jsg:schematic_pegasus",
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "jsg:schematic_universe",
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "jsg:schematic_goauld",
+          "weight": 3
+        },
+        {
+          "type": "item",
+          "name": "minecraft:web",
+          "weight": 10
+        },
+        {
+          "type": "item",
+          "name": "minecraft:netherrack",
+          "weight": 5
+        },
+        {
+          "type": "item",
+          "name": "minecraft:nether_brick",
+          "weight": 4
+        }
+      ]
+    }
+  ]
+}

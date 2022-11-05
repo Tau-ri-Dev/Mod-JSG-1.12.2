@@ -104,6 +104,10 @@ item.jsg.page_mysterious_pegasus.name=Mysterious Page (Pegasus)
 item.jsg.page_mysterious_universe.name=Mysterious Page (Universe)
 item.jsg.page_mysterious.tooltip=Who knows where it leads
 
+item.jsg.page_mysterious.generation.start=Starting new stargate generation...
+item.jsg.page_mysterious.generation.success=Stargate generated successfully!
+item.jsg.page_mysterious.generation.failed=Stargate generation FAILED!
+
 # beamer
 item.jsg.beamer_crystal_power.name=Transporter Energiekristall
 item.jsg.beamer_crystal_fluid.name=Transporter Flüssigkeitskristall
@@ -525,6 +529,11 @@ gui.stargate.energyBuffer=Energiespeicher
 
 gui.stargate.state.closed=Stargate closed!
 gui.stargate.state.opened=Open time:
+
+# zpmhub
+gui.zpmhub.inProgress=ZPMs are not locked!
+gui.zpmhub.slideDown=Engage ZPMs
+gui.zpmhub.slideUp=Disengage ZPMs
 
 # capacitor
 gui.capacitor.name=Kondensatorbatterie

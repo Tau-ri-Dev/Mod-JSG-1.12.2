@@ -11,7 +11,7 @@ import net.minecraft.world.gen.structure.template.Template.BlockInfo;
 
 import javax.annotation.Nonnull;
 
-public class StargateNetherTemplateProcessor implements ITemplateProcessor {
+public class NetherProcessor implements ITemplateProcessor {
 
 	@Override
 	public BlockInfo processBlock(@Nonnull World world, @Nonnull BlockPos pos, BlockInfo blockInfoIn) {

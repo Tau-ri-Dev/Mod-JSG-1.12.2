@@ -143,8 +143,8 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 	}
 
 	public static void setNetherGate(StargateNetwork network, World world, BlockPos pos){
-		GeneratedStargate stargate = JSGStructuresGenerator.generateStructure(EnumStructures.NETHER_MW, world.getMinecraftServer().getWorld(EnumStructures.NETHER_MW.structure.dimensionToSpawn), new Random(), pos.getX()/16/8, pos.getZ()/16/8, true, true);
-		//EnumStructures.NETHER_MW.structure.generate(world, new BlockPos(pos.getX()/8, 32, pos.getZ()/8), new Random(), null);
+		JSG.info("Orlin gate requested building of new nether gate... Build started...");
+		GeneratedStargate stargate = JSGStructuresGenerator.generateStructure(EnumStructures.NETHER_MW, world, new Random(), pos.getX()/16/8, pos.getZ()/16/8, true);
 		if(stargate != null)
 			network.setNetherGate(stargate.address);
 	}
@@ -154,12 +154,12 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 		if(!network.hasNetherGate() || !network.isStargateInNetwork(network.getNetherGate()) || network.getStargate(network.getNetherGate()) == null){
 			if(!world.isRemote && world.provider.getDimensionType() == DimensionType.OVERWORLD) {
 				setNetherGate(network, world, pos);
-				JSG.info("Orlin gate requested building of new nether gate... Build started...");
 			}
 		}
-
-		dialedAddress.addAll(network.getNetherGate().subList(0, StargateDimensionConfig.netherOverworld8thSymbol() ? 7 : 6));
-		dialedAddress.addSymbol(SymbolMilkyWayEnum.ORIGIN);
+		if(network.hasNetherGate()) {
+			dialedAddress.addAll(network.getNetherGate().subList(0, StargateDimensionConfig.netherOverworld8thSymbol() ? 7 : 6));
+			dialedAddress.addSymbol(SymbolMilkyWayEnum.ORIGIN);
+		}
 		markDirty();
 
 		JSG.logger.debug("Orlin's dialed address: " + dialedAddress);

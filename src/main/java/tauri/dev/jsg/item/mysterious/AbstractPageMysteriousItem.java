@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
@@ -47,7 +48,8 @@ public abstract class AbstractPageMysteriousItem extends Item {
     public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
 
         if (!world.isRemote) {
-            GeneratedStargate stargate = StargateGenerator.mystPageGeneration(world, symbolType, dimensionToSpawn);
+            sendPlayerMessageAboutGeneration(player, true, false);
+            GeneratedStargate stargate = StargateGenerator.mystPageGeneration(world, symbolType, dimensionToSpawn, player);
 
             if (stargate != null) {
                 NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(stargate.address, stargate.hasUpgrade, stargate.path);
@@ -68,9 +70,20 @@ public abstract class AbstractPageMysteriousItem extends Item {
 
                 if (JSGConfig.mysteriousConfig.pageCooldown > 0)
                     player.getCooldownTracker().setCooldown(this, JSGConfig.mysteriousConfig.pageCooldown);
-            }
+                sendPlayerMessageAboutGeneration(player, false, true);
+            } else
+                sendPlayerMessageAboutGeneration(player, false, false);
         }
 
         return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+    }
+
+    protected void sendPlayerMessageAboutGeneration(@Nonnull EntityPlayer player, boolean generationStart, boolean generationSuccess) {
+        if (generationStart)
+            player.sendStatusMessage(new TextComponentTranslation("item.jsg.page_mysterious.generation.start"), true);
+        else if (generationSuccess)
+            player.sendStatusMessage(new TextComponentTranslation("item.jsg.page_mysterious.generation.success"), true);
+        else
+            player.sendStatusMessage(new TextComponentTranslation("item.jsg.page_mysterious.generation.failed"), true);
     }
 }

@@ -33,11 +33,6 @@ public class JSGItems {
      */
     public static final Item CRYSTAL_CONTROL_MILKYWAY_DHD = ItemHelper.createGenericItem("crystal_control_dhd", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item CRYSTAL_CONTROL_PEGASUS_DHD = ItemHelper.createGenericItem("crystal_control_pegasus_dhd", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    /**
-     * DHD Pegasus control crystal crafting
-     */
-    public static final Item CRYSTAL_RAW_PEGASUS_DHD = ItemHelper.createGenericItem("raw_pegasus_dhd_crystal", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CRYSTAL_BLUE_PEGASUS = ItemHelper.createGenericItem("crystal_blue_pegasus", JSGCreativeTabsHandler.jsgItemsCreativeTab);
 
     /**
      * Iris/Shield upgrade
@@ -107,6 +102,7 @@ public class JSGItems {
     public static final Item CRYSTAL_ENDER = ItemHelper.createGenericItem("crystal_ender", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item CRYSTAL_YELLOW = ItemHelper.createGenericItem("crystal_yellow", JSGCreativeTabsHandler.jsgItemsCreativeTab);
     public static final Item CRYSTAL_WHITE = ItemHelper.createGenericItem("crystal_white", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item CRYSTAL_BLUE_PEGASUS = ItemHelper.createGenericItem("crystal_blue_pegasus", JSGCreativeTabsHandler.jsgItemsCreativeTab);
 
     public static final Item CRYSTAL_TOKRA = ItemHelper.createGenericItem("crystal_tokra", JSGCreativeTabsHandler.jsgItemsCreativeTab);
 
@@ -194,7 +190,6 @@ public class JSGItems {
     public static final Item[] ITEMS = {
             CRYSTAL_CONTROL_MILKYWAY_DHD,
             CRYSTAL_CONTROL_PEGASUS_DHD,
-            CRYSTAL_RAW_PEGASUS_DHD,
 
             IRIS_BLADE,
             QUAD_IRIS_BLADE,
