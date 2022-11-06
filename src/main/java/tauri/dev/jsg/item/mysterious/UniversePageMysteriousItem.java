@@ -24,42 +24,27 @@ public class UniversePageMysteriousItem extends AbstractPageMysteriousItem {
         super("universe", SymbolTypeEnum.UNIVERSE, 1);
     }
 
-    @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
-        if (!world.isRemote) {
-            sendPlayerMessageAboutGeneration(player, true, false);
-            GeneratedStargate stargate = StargateGenerator.mystPageGeneration(world, symbolType, dimensionToSpawn, player);
+    public void givePlayerPage(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, GeneratedStargate stargate){
+        ItemStack stack = new ItemStack(JSGItems.UNIVERSE_DIALER);
+        UniverseDialerItem.initNBT(stack);
 
-            if (stargate != null) {
-                ItemStack stack = new ItemStack(JSGItems.UNIVERSE_DIALER);
-                UniverseDialerItem.initNBT(stack);
-
-                if (stack.getTagCompound() != null) {
-                    NBTTagList saved = stack.getTagCompound().getTagList("saved", Constants.NBT.TAG_COMPOUND);
-                    NBTTagCompound compound = stargate.address.serializeNBT();
-                    compound.setBoolean("hasUpgrade", stargate.hasUpgrade);
-                    saved.appendTag(compound);
-                }
-
-                ItemStack held = player.getHeldItem(hand);
-                held.shrink(1);
-
-                if (held.isEmpty())
-                    player.setHeldItem(hand, stack);
-
-                else {
-                    player.setHeldItem(hand, held);
-                    player.addItemStackToInventory(stack);
-                }
-
-                if (JSGConfig.mysteriousConfig.pageCooldown > 0)
-                    player.getCooldownTracker().setCooldown(this, JSGConfig.mysteriousConfig.pageCooldown);
-                sendPlayerMessageAboutGeneration(player, false, true);
-            } else
-                sendPlayerMessageAboutGeneration(player, false, false);
+        if (stack.getTagCompound() != null) {
+            NBTTagList saved = stack.getTagCompound().getTagList("saved", Constants.NBT.TAG_COMPOUND);
+            NBTTagCompound compound = stargate.address.serializeNBT();
+            compound.setBoolean("hasUpgrade", stargate.hasUpgrade);
+            saved.appendTag(compound);
         }
 
-        return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+        ItemStack held = player.getHeldItem(hand);
+        held.shrink(1);
+
+        if (held.isEmpty())
+            player.setHeldItem(hand, stack);
+
+        else {
+            player.setHeldItem(hand, held);
+            player.addItemStackToInventory(stack);
+        }
     }
 }

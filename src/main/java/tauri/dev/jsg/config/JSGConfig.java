@@ -461,11 +461,11 @@ public class JSGConfig {
     public static class DHDConfig {
         @Name("DHD range's radius horizontal")
         @RangeInt(min = 1)
-        public int rangeFlat = 10;
+        public int rangeFlat = 25;
 
         @Name("DHD range's radius vertical")
         @RangeInt(min = 1)
-        public int rangeVertical = 5;
+        public int rangeVertical = 15;
 
         @Name("Pegasus DHD do dial animation")
         @Comment({
@@ -699,12 +699,6 @@ public class JSGConfig {
         @RequiresMcRestart
         @RangeDouble(min = 0, max = 1f)
         public float stargateRGChanceTheEnd = 0.0009f;
-
-
-        @Name("Chance of generating stargates in Nether")
-        @RequiresMcRestart
-        @RangeDouble(min = 0, max = 1f)
-        public float stargateRGChanceNether = 0.0007f;
 
     }
 

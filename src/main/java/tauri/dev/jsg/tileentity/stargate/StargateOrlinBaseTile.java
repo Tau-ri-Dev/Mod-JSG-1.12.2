@@ -142,18 +142,12 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 		return super.canAcceptConnectionFrom(targetGatePos) && targetGatePos.dimensionID == DimensionType.NETHER.getId() && !isBroken();
 	}
 
-	public static void setNetherGate(StargateNetwork network, World world, BlockPos pos){
-		JSG.info("Orlin gate requested building of new nether gate... Build started...");
-		GeneratedStargate stargate = JSGStructuresGenerator.generateStructure(EnumStructures.NETHER_MW, world, new Random(), pos.getX()/16/8, pos.getZ()/16/8, true);
-		if(stargate != null)
-			network.setNetherGate(stargate.address);
-	}
-
 	public void updateNetherAddress() {
 		dialedAddress.clear();
 		if(!network.hasNetherGate() || !network.isStargateInNetwork(network.getNetherGate()) || network.getStargate(network.getNetherGate()) == null){
 			if(!world.isRemote && world.provider.getDimensionType() == DimensionType.OVERWORLD) {
-				setNetherGate(network, world, pos);
+				JSG.info("Orlin gate requested building of new nether gate... Build started...");
+				StargateNetwork.generateNetherGate(network, world, pos);
 			}
 		}
 		if(network.hasNetherGate()) {
@@ -249,8 +243,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 
 			case ADDRESS_MALFORMED:
 				if(!world.isRemote && world.provider.getDimensionType() == DimensionType.OVERWORLD) {
-					setNetherGate(network, world, pos);
-					//network.setNetherGate(StargateGeneratorNether.place(Objects.requireNonNull(world.getMinecraftServer()).getWorld(DimensionType.NETHER.getId()), new BlockPos(pos.getX() / 8, 32, pos.getZ() / 8)));
+					StargateNetwork.generateNetherGate(network, world, pos);
 					JSG.info("Orlin gate requested building of new nether gate... Build started...");
 				}
 				beginOpening();

@@ -56,6 +56,7 @@ public class DHDPegasusTile extends DHDAbstractTile {
 
     public void activateSymbol(SymbolInterface symbolInt) {
         StargateAbstractBaseTile gateTile = getLinkedGate(world);
+        if(gateTile == null) return;
 
         SymbolPegasusEnum symbol = SymbolPegasusEnum.valueOf(symbolInt.getId());
 

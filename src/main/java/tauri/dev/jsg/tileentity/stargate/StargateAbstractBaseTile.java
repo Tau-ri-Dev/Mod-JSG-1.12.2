@@ -476,6 +476,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     public void refresh() {
         this.setGateAddress(this.getSymbolType(), this.getStargateAddress(this.getSymbolType()));
+        updateFacing(this.world.getBlockState(this.pos).getValue(JSGProps.FACING_HORIZONTAL), true);
     }
 
     public StargateAddressDynamic getDialedAddress() {

@@ -37,12 +37,14 @@ import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.stargate.power.StargateClassicEnergyStorage;
 import tauri.dev.jsg.tileentity.dialhomedevice.DHDAbstractTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
+import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import tauri.dev.jsg.util.FacingToRotation;
 import tauri.dev.jsg.util.LinkingHelper;
 import tauri.dev.jsg.worldgen.structures.stargate.GeneratedStargate;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
@@ -56,6 +58,7 @@ public class JSGStructure extends WorldGenerator {
     public int yNegativeOffset;
     public int dimensionToSpawn;
     boolean isStargateStructure;
+    boolean isRingsStructure;
     SymbolTypeEnum symbolType;
     boolean findOptimalRotation;
 
@@ -69,10 +72,16 @@ public class JSGStructure extends WorldGenerator {
     public final ITemplateProcessor templateProcessor;
     public final Rotation rotationToNorth;
 
-    public JSGStructure(String structureName, int yNegativeOffset, boolean isStargateStructure, SymbolTypeEnum symbolType, int structureSizeX, int structureSizeZ, int dimensionToSpawn, boolean findOptimalRotation, @Nullable ITemplateProcessor templateProcessor, Rotation rotationToNorth) {
+    public double terrainFlatPercents;
+    public double topBlockMatchPercent;
+
+    public EnumGenerationHeight genHeight;
+
+    public JSGStructure(String structureName, int yNegativeOffset, boolean isStargateStructure, boolean isRingsStructure, SymbolTypeEnum symbolType, int structureSizeX, int structureSizeZ, int dimensionToSpawn, boolean findOptimalRotation, @Nullable ITemplateProcessor templateProcessor, Rotation rotationToNorth, double terrainFlatPercents, double topBlockMatchPercent, @Nonnull EnumGenerationHeight genHeight) {
         this.structureName = structureName + (isStargateStructure ? (tauri.dev.jsg.config.JSGConfig.stargateSize == StargateSizeEnum.LARGE ? "_large" : "_small") : "");
         this.yNegativeOffset = yNegativeOffset;
         this.isStargateStructure = isStargateStructure;
+        this.isRingsStructure = isRingsStructure;
         this.symbolType = symbolType;
         this.structureSizeX = structureSizeX;
         this.structureSizeZ = structureSizeZ;
@@ -80,6 +89,10 @@ public class JSGStructure extends WorldGenerator {
         this.findOptimalRotation = findOptimalRotation;
         this.templateProcessor = templateProcessor;
         this.rotationToNorth = rotationToNorth;
+        this.terrainFlatPercents = terrainFlatPercents;
+        this.topBlockMatchPercent = topBlockMatchPercent;
+        this.genHeight = genHeight;
+
 
         this.isMilkyWayGate = (symbolType == SymbolTypeEnum.MILKYWAY);
         this.isPegasusGate = (symbolType == SymbolTypeEnum.PEGASUS);
@@ -98,7 +111,7 @@ public class JSGStructure extends WorldGenerator {
         JSG.info("Structure " + structureName + " generation started!");
         if (mcServer == null) return null;
         worldToSpawn = (worldToSpawn == null ? mcServer.getWorld(dimensionToSpawn) : worldToSpawn);
-        worldToSpawn.getChunkProvider().loadChunk(pos.getX()/16, pos.getZ()/16);
+        worldToSpawn.getChunkProvider().loadChunk(pos.getX() / 16, pos.getZ() / 16);
         TemplateManager manager = worldToSpawn.getStructureTemplateManager();
         ResourceLocation resourceLocation = new ResourceLocation(JSG.MOD_ID, structureName);
         Template template = manager.getTemplate(mcServer, resourceLocation);
@@ -117,6 +130,7 @@ public class JSGStructure extends WorldGenerator {
         BlockPos gatePos = null;
         BlockPos dhdPos = null;
         StargateClassicBaseTile gateTile = null;
+        ArrayList<TransportRingsAbstractTile> ringsTiles = new ArrayList<>();
 
         boolean hasUpgrade = (dimensionToSpawn != executedInWorld.provider.getDimension());
 
@@ -148,20 +162,20 @@ public class JSGStructure extends WorldGenerator {
                             if (hasUpgrade)
                                 gateContainer.insertItem(1, new ItemStack(JSGItems.CRYSTAL_GLYPH_STARGATE), false);
                         }
-                        // insert power to the gate itself
-                        IEnergyStorage gateEnergy = gateTile.getCapability(CapabilityEnergy.ENERGY, null);
-                        if (gateEnergy != null)
-                            gateEnergy.receiveEnergy(((int) (((StargateClassicEnergyStorage) gateEnergy).getMaxEnergyStoredInternally() * 0.75)), false);
                     }
+                    // insert power to the gate itself
+                    IEnergyStorage gateEnergy = gateTile.getCapability(CapabilityEnergy.ENERGY, null);
+                    if (gateEnergy != null)
+                        gateEnergy.receiveEnergy(((int) (((StargateClassicEnergyStorage) gateEnergy).getMaxEnergyStoredInternally() * 0.75)), false);
                     gateTile.getMergeHelper().updateMembersBasePos(worldToSpawn, gatePos, facing);
                     break;
                 case "dhd":
-                    worldToSpawn.setBlockToAir(dataPos);
+                    worldToSpawn.setBlockState(dataPos, worldToSpawn.getBlockState(dataPos.east()));
                     dhdPos = dataPos.down();
 
                     // set the DHD to the topBlock
-                    JSGWorldTopBlock topBlock = JSGWorldTopBlock.getTopBlock(worldToSpawn, dhdPos.getX(), dhdPos.getZ(), 0, worldToSpawn.provider.getDimension());
-                    if(topBlock != null && (topBlock.y != dhdPos.getY())){
+                    JSGWorldTopBlock topBlock = JSGWorldTopBlock.getTopBlock(worldToSpawn, dhdPos.getX(), dhdPos.getZ(), 3, worldToSpawn.provider.getDimension());
+                    if (topBlock != null && (topBlock.y != dhdPos.getY()) && (Math.abs(topBlock.y - dhdPos.getY()) < 12)) {
                         IBlockState dhd = worldToSpawn.getBlockState(dhdPos);
                         worldToSpawn.setBlockState(dhdPos, topBlock.topBlockState, 3);
                         dhdPos = new BlockPos(dhdPos.getX(), (topBlock.y + 1), dhdPos.getZ());
@@ -188,6 +202,32 @@ public class JSGStructure extends WorldGenerator {
 
                     if (dhdFluidTank instanceof FluidTank)
                         ((FluidTank) dhdFluidTank).fillInternal(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, fluid), true);
+                    break;
+                // rings
+                case "rings":
+                case "rings_top":
+                    boolean top = (name.equals("rings_top"));
+
+                    worldToSpawn.setBlockToAir(dataPos);
+                    BlockPos ringsPos = dataPos.down(2);
+
+                    if(top){
+                        JSGWorldTopBlock trTopBlock = JSGWorldTopBlock.getTopBlock(worldToSpawn, ringsPos.getX(), ringsPos.getZ(), 3, worldToSpawn.provider.getDimension());
+                        if (trTopBlock != null && (trTopBlock.y != ringsPos.getY()) && (Math.abs(trTopBlock.y - ringsPos.getY()) < 12)) {
+                            IBlockState bState = worldToSpawn.getBlockState(ringsPos);
+                            worldToSpawn.setBlockState(ringsPos, trTopBlock.topBlockState, 3);
+                            ringsPos = new BlockPos(ringsPos.getX(), (trTopBlock.y - 1), ringsPos.getZ());
+                            worldToSpawn.setBlockState(ringsPos, bState, 3);
+                        }
+                    }
+
+                    TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) worldToSpawn.getTileEntity(ringsPos);
+                    if (ringsTile == null) break;
+                    IEnergyStorage ringsEnergy = ringsTile.getCapability(CapabilityEnergy.ENERGY, null);
+                    if (ringsEnergy != null)
+                        ringsEnergy.receiveEnergy(((int) (((StargateClassicEnergyStorage) ringsEnergy).getMaxEnergyStoredInternally() * 0.75)), false);
+
+                    ringsTiles.add(ringsTile);
                     break;
                 // global
                 case "structure":
@@ -222,6 +262,16 @@ public class JSGStructure extends WorldGenerator {
 
             ResourceLocation biomePath = biome.getRegistryName();
             return new GeneratedStargate(address, (biomePath == null ? null : biomePath.getResourcePath()), hasUpgrade);
+        }
+        if (isRingsStructure && ringsTiles.size() > 0) {
+            for (TransportRingsAbstractTile ringsTile : ringsTiles) {
+                ringsTile.generateAddress(true);
+                ringsTile.updateLinkStatus();
+                ringsTile.updatePlatformStatus();
+                ringsTile.updateRingsDistance();
+                ringsTile.markDirty();
+                ringsTile.setBarrierBlocks(false, false, true);
+            }
         }
         return null;
     }

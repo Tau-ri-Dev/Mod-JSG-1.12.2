@@ -1,5 +1,6 @@
 package tauri.dev.jsg.stargate.network;
 
+import net.minecraft.util.math.BlockPos;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.datafixer.StargateNetworkReader18;
 import tauri.dev.jsg.stargate.network.internalgates.StargateInternalAddress;
@@ -12,11 +13,15 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants.NBT;
 import tauri.dev.jsg.stargate.network.internalgates.StargateAddressesEnum;
+import tauri.dev.jsg.worldgen.structures.EnumStructures;
+import tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator;
+import tauri.dev.jsg.worldgen.structures.stargate.GeneratedStargate;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class StargateNetwork extends WorldSavedData {
@@ -112,6 +117,14 @@ public class StargateNetwork extends WorldSavedData {
     public void setNetherGate(StargateAddress address) {
         netherGateAddress = address;
         markDirty();
+    }
+
+    public static GeneratedStargate generateNetherGate(StargateNetwork network, World world, BlockPos pos){
+        GeneratedStargate stargate = JSGStructuresGenerator.generateStructure(EnumStructures.NETHER_MW, world, new Random(), pos.getX()/16/8, pos.getZ()/16/8, true);
+        if(stargate != null)
+            network.setNetherGate(stargate.address);
+
+        return stargate;
     }
 
     public StargateInternalAddress getInternalAddress(int id) {

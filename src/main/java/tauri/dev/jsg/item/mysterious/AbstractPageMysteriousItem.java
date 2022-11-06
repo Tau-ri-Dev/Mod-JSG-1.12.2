@@ -46,36 +46,40 @@ public abstract class AbstractPageMysteriousItem extends Item {
     @Nonnull
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
-
         if (!world.isRemote) {
             sendPlayerMessageAboutGeneration(player, true, false);
+            if (JSGConfig.mysteriousConfig.pageCooldown > 0)
+                player.getCooldownTracker().setCooldown(this, JSGConfig.mysteriousConfig.pageCooldown);
             GeneratedStargate stargate = StargateGenerator.mystPageGeneration(world, symbolType, dimensionToSpawn, player);
 
             if (stargate != null) {
-                NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(stargate.address, stargate.hasUpgrade, stargate.path);
-
-                ItemStack stack = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 1, 1);
-                stack.setTagCompound(compound);
-
-                ItemStack held = player.getHeldItem(hand);
-                held.shrink(1);
-
-                if (held.isEmpty())
-                    player.setHeldItem(hand, stack);
-
-                else {
-                    player.setHeldItem(hand, held);
-                    player.addItemStackToInventory(stack);
-                }
-
-                if (JSGConfig.mysteriousConfig.pageCooldown > 0)
-                    player.getCooldownTracker().setCooldown(this, JSGConfig.mysteriousConfig.pageCooldown);
+                givePlayerPage(player, hand, stargate);
                 sendPlayerMessageAboutGeneration(player, false, true);
-            } else
+            } else {
+                player.getCooldownTracker().setCooldown(this, 0);
                 sendPlayerMessageAboutGeneration(player, false, false);
+            }
         }
 
         return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+    }
+
+    public void givePlayerPage(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, GeneratedStargate stargate){
+        NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(stargate.address, stargate.hasUpgrade, stargate.path);
+
+        ItemStack stack = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 1, 1);
+        stack.setTagCompound(compound);
+
+        ItemStack held = player.getHeldItem(hand);
+        held.shrink(1);
+
+        if (held.isEmpty())
+            player.setHeldItem(hand, stack);
+
+        else {
+            player.setHeldItem(hand, held);
+            player.addItemStackToInventory(stack);
+        }
     }
 
     protected void sendPlayerMessageAboutGeneration(@Nonnull EntityPlayer player, boolean generationStart, boolean generationSuccess) {

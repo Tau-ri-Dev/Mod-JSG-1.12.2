@@ -821,7 +821,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return this.pos.getY() + ringsDistance < 0;
     }
 
-    protected void setBarrierBlocks(boolean set, boolean passable) {
+    public void setBarrierBlocks(boolean set, boolean passable) {
+        setBarrierBlocks(set, passable, false);
+    }
+    public void setBarrierBlocks(boolean set, boolean passable, boolean force) {
         IBlockState invBlockState = JSGBlocks.INVISIBLE_BLOCK.getDefaultState();
 
         if (passable) invBlockState = invBlockState.withProperty(JSGProps.HAS_COLLISIONS, false);
@@ -833,7 +836,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                     if (set) world.setBlockState(newPos, invBlockState, 3);
                     else {
-                        if (world.getBlockState(newPos).getBlock() == JSGBlocks.INVISIBLE_BLOCK)
+                        if (force || world.getBlockState(newPos).getBlock() == JSGBlocks.INVISIBLE_BLOCK)
                             world.setBlockToAir(newPos);
                     }
                 }

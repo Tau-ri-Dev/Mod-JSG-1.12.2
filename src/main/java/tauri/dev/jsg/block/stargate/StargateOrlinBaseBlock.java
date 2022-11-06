@@ -33,6 +33,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import tauri.dev.jsg.worldgen.structures.stargate.GeneratedStargate;
 
 import java.util.List;
 
@@ -121,8 +122,12 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 				StargateNetwork network = StargateNetwork.get(world);
 				
 				if (!network.hasNetherGate()) {
-					StargateOrlinBaseTile.setNetherGate(network, world, pos);
+					GeneratedStargate stargate = StargateNetwork.generateNetherGate(network, world, pos);
 					//network.setNetherGate(StargateGeneratorNether.place(world.getMinecraftServer().getWorld(DimensionType.NETHER.getId()), new BlockPos(pos.getX()/8, 32, pos.getZ()/8)));
+					if(stargate == null && placer instanceof EntityPlayer){
+						((EntityPlayer) placer).sendStatusMessage(new TextComponentTranslation("item.jsg.page_mysterious.generation.failed"), true);
+						((EntityPlayer) placer).sendStatusMessage(new TextComponentTranslation("item.jsg.page_mysterious.generation.failed"), false);
+					}
 				}
 				
 				gateTile.updateNetherAddress();

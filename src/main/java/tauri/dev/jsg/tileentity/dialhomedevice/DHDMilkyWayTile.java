@@ -56,6 +56,7 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
 
     public void activateSymbol(SymbolInterface symbolInt) {
         StargateAbstractBaseTile gateTile = getLinkedGate(world);
+        if(gateTile == null) return;
 
         SymbolMilkyWayEnum symbol = SymbolMilkyWayEnum.valueOf(symbolInt.getId());
 
