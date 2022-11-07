@@ -8,7 +8,8 @@ import net.minecraft.world.chunk.Chunk;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.worldgen.structures.EnumStructures;
-import tauri.dev.jsg.worldgen.structures.JSGStructurePos;
+import tauri.dev.jsg.worldgen.util.GeneratedStargate;
+import tauri.dev.jsg.worldgen.util.JSGStructurePos;
 import tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator;
 
 import javax.annotation.Nonnull;
@@ -78,7 +79,6 @@ public class StargateGenerator {
             String biomeName = Objects.requireNonNull(worldToSpawn.getBiome(new BlockPos(x, y, z)).getRegistryName()).getResourcePath();
             structure = EnumStructures.getStargateStructureByBiome(biomeName, symbolType, dimensionToSpawn);
             if (structure != null) {
-                JSG.info("Checking for place: cX:" + chunkX + "; cZ:" + chunkZ);
                 structurePos = JSGStructuresGenerator.checkForPlace(worldToSpawn, chunkX, chunkZ, structure, dimensionToSpawn);
             }
             if(structurePos != null && structurePos.bestAttemptPos != null)

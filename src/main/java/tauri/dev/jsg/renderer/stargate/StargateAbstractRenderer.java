@@ -144,7 +144,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
     protected ResourceLocation getEventHorizonTextureResource(StargateAbstractRendererState rendererState, boolean kawoosh) {
         String texture = (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE_ANIMATED : (kawoosh ? EV_HORIZON_KAWOOSH_TEXTURE_ANIMATED : EV_HORIZON_NORMAL_TEXTURE_ANIMATED));
-        if (tauri.dev.jsg.config.JSGConfig.horizonConfig.disableAnimatedEventHorizon || !TextureLoader.isTextureLoaded(new ResourceLocation(JSG.MOD_ID, texture)))
+        if (tauri.dev.jsg.config.JSGConfig.horizonConfig.disableAnimatedEventHorizon || TextureLoader.isNotTextureLoaded(new ResourceLocation(JSG.MOD_ID, texture)))
             texture = (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE : EV_HORIZON_NORMAL_TEXTURE);
 
         return new ResourceLocation(JSG.MOD_ID, texture);

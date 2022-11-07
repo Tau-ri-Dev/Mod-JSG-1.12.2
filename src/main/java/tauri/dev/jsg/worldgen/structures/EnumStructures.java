@@ -8,6 +8,7 @@ import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.worldgen.structures.stargate.processor.NetherProcessor;
 import tauri.dev.jsg.worldgen.structures.stargate.processor.OverworldProcessor;
+import tauri.dev.jsg.worldgen.util.EnumGenerationHeight;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -66,7 +67,7 @@ public enum EnumStructures {
                 add(Blocks.GRASS);
                 add(Blocks.DIRT);
                 add(Blocks.STONE);
-            }}, null, 35, Rotation.CLOCKWISE_90, 0.5, 0.8, EnumGenerationHeight.MIDDLE),
+            }}, null, 35, Rotation.CLOCKWISE_90, 0.8, 0.8, EnumGenerationHeight.MIDDLE),
     DESERT_PG("sg_desert_pegasus", 0, true, false, SymbolTypeEnum.PEGASUS, 13, 13, 0, true, JSGConfig.stargateGeneratorConfig.stargateRandomGeneratorEnabled, JSGConfig.stargateGeneratorConfig.stargateRGChanceOverworld, new OverworldProcessor(),
             new ArrayList<Block>() {{
                 add(Blocks.SAND);
@@ -75,7 +76,7 @@ public enum EnumStructures {
             new ArrayList<String>() {{
                 add("desert");
                 add("mesa");
-            }}, 35, Rotation.CLOCKWISE_90, 0.5, 0.8, EnumGenerationHeight.MIDDLE),
+            }}, 35, Rotation.CLOCKWISE_90, 0.7, 0.8, EnumGenerationHeight.MIDDLE),
     MOSSY_PG("sg_mossy_pegasus", 0, true, false, SymbolTypeEnum.PEGASUS, 13, 13, 0, true, JSGConfig.stargateGeneratorConfig.stargateRandomGeneratorEnabled, JSGConfig.stargateGeneratorConfig.stargateRGChanceOverworld, new OverworldProcessor(),
             new ArrayList<Block>() {{
                 add(Blocks.GRASS);
@@ -84,7 +85,7 @@ public enum EnumStructures {
             }},
             new ArrayList<String>() {{
                 add("taiga");
-            }}, 35, Rotation.CLOCKWISE_90, 0.5, 0.8, EnumGenerationHeight.MIDDLE),
+            }}, 35, Rotation.CLOCKWISE_90, 0.7, 0.8, EnumGenerationHeight.MIDDLE),
     FROST_PG("sg_frosty_pegasus", 0, true, false, SymbolTypeEnum.PEGASUS, 13, 13, 0, true, JSGConfig.stargateGeneratorConfig.stargateRandomGeneratorEnabled, JSGConfig.stargateGeneratorConfig.stargateRGChanceOverworld, new OverworldProcessor(),
             new ArrayList<Block>() {{
                 add(Blocks.SNOW);
@@ -97,7 +98,7 @@ public enum EnumStructures {
                 add("ice");
                 add("frozen");
                 add("cold");
-            }}, 35, Rotation.CLOCKWISE_90, 0.5, 0.8, EnumGenerationHeight.MIDDLE),
+            }}, 35, Rotation.CLOCKWISE_90, 0.7, 0.8, EnumGenerationHeight.MIDDLE),
     // Universe
     END_UNI("sg_end_universe", 0, true, false, SymbolTypeEnum.UNIVERSE, 10, 10, 1, true, JSGConfig.stargateGeneratorConfig.stargateRandomGeneratorEnabled, JSGConfig.stargateGeneratorConfig.stargateRGChanceTheEnd, new OverworldProcessor(),
             new ArrayList<Block>() {{
@@ -116,12 +117,12 @@ public enum EnumStructures {
     // ---------------------------------------------------------------------------
     // GENERAL STRUCTURES
 
-    NAQUADAH_MINE("naquadah_mine", 8, false, false, null, 15, 15, 0, false, JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled, 0.001f, null,
+    NAQUADAH_MINE("naquadah_mine", 8, false, false, null, 15, 15, 0, false, JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled, 0.0005f, null,
             new ArrayList<Block>() {{
                 add(Blocks.GRASS);
             }}, null, 35, Rotation.NONE, 0.8, 0.8, EnumGenerationHeight.MIDDLE),
 
-    TOKRA_TUNNEL("tr_tokra", 21, false, true, null, 5, 5, 0, false, JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled, 0.001f, null,
+    TOKRA_TUNNEL("tr_tokra", 21, false, true, null, 5, 5, 0, false, JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled, 0.0005f, null,
             new ArrayList<Block>() {{
                 add(Blocks.SAND);
                 add(Blocks.GRASS);

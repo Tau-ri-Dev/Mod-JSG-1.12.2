@@ -621,6 +621,12 @@ public class JSGConfig {
         @Name("Energy/tick needed to keep laser alive")
         @RangeInt(min = 1)
         public int laserEnergy = 7050;
+
+        @Name("Damage entities in a beam")
+        public boolean damageEntities = true;
+
+        @Name("Destroy blocks in a beam")
+        public boolean destroyBlocks = true;
     }
 
     public static class AudioVideoConfig {
@@ -693,12 +699,12 @@ public class JSGConfig {
         @Name("Chance of generating stargates in Overworld")
         @RequiresMcRestart
         @RangeDouble(min = 0, max = 1f)
-        public float stargateRGChanceOverworld = 0.0008f;
+        public float stargateRGChanceOverworld = 0.0001f;
 
         @Name("Chance of generating stargates in End")
         @RequiresMcRestart
         @RangeDouble(min = 0, max = 1f)
-        public float stargateRGChanceTheEnd = 0.0009f;
+        public float stargateRGChanceTheEnd = 0.00007f;
 
     }
 
@@ -797,6 +803,8 @@ public class JSGConfig {
     }
 
     public static class DevConfig {
+        @Name("Dev mode")
+        public boolean enableDevMode = false;
         @Name("x")
         public float x = 0f;
         @Name("y")

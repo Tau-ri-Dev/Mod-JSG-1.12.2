@@ -65,6 +65,7 @@ public class ZPMHubContainerGui extends GuiContainer {
         int width = Math.round((energyStored / ((float) maxEnergyStored) * 156));
         drawGradientRect(guiLeft + 10, guiTop + 61, guiLeft + 10 + width, guiTop + 61 + 6, 0xffcc2828, 0xff731616);
 
+        button.setEnabled(!container.hubTile.isAnimating);
         button.drawButton(mouseX, mouseY);
     }
 

@@ -132,7 +132,7 @@ public enum ElementEnum {
     }
 
     public void bindTexture(BiomeOverlayEnum biomeOverlay, ResourceLocation resourceLocation) {
-        if (!TextureLoader.isTextureLoaded(resourceLocation)) {
+        if (TextureLoader.isNotTextureLoaded(resourceLocation)) {
             // Probably doesn't exist
 
             if (!nonExistingReported.contains(biomeOverlay)) {

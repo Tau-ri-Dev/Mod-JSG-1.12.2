@@ -17,7 +17,7 @@ import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
-import tauri.dev.jsg.worldgen.structures.stargate.GeneratedStargate;
+import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 import tauri.dev.jsg.worldgen.structures.stargate.StargateGenerator;
 
 import javax.annotation.Nonnull;

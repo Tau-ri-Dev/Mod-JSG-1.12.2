@@ -1,4 +1,4 @@
-package tauri.dev.jsg.worldgen.structures.stargate;
+package tauri.dev.jsg.worldgen.util;
 
 import tauri.dev.jsg.stargate.network.StargateAddress;
 

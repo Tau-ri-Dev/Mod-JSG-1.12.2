@@ -1,6 +1,7 @@
 package tauri.dev.jsg.renderer.transportrings;
 
 import tauri.dev.jsg.block.props.TRPlatformBlock;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
@@ -221,7 +222,7 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
                 }
             }
         }
-        if (platformBase != null) {
+        if (JSGConfig.devConfig.enableDevMode && platformBase != null) {
             if (state.ringsConfig.getOption(TransportRingsAbstractTile.ConfigOptions.RENDER_PLATFORM_BASE.id).getBooleanValue()) {
 
                 GlStateManager.pushMatrix();

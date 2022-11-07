@@ -20,6 +20,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.tileentity.BeamerTile;
 import tauri.dev.jsg.util.FacingToRotation;
 import tauri.dev.jsg.util.FluidColors;
@@ -70,6 +71,8 @@ public class BeamerBeam {
     }
 
     public static boolean isSomethingInBeam(BeamerTile beamer, boolean destroyBlocks, boolean hitEntities) {
+        if(!JSGConfig.beamerConfig.damageEntities) hitEntities = false;
+        if(!JSGConfig.beamerConfig.destroyBlocks) destroyBlocks = false;
         BlockPos pos = beamer.getPos();
         World world = beamer.getWorld();
         EnumFacing facing = beamer.getFacing();

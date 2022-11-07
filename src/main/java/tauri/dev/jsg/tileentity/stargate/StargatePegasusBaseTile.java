@@ -666,10 +666,10 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
             targetRingSymbol = targetSymbol;
             spinDirection = spinDirection.opposite();
 
-            ChevronEnum targetChevron = stargateWillLock(targetSymbol) ? ChevronEnum.getFinal() : ChevronEnum.valueOf(dialedAddress.size());
+            ChevronEnum targetChevron = stargateWillLock(targetSymbol, true) ? ChevronEnum.getFinal() : ChevronEnum.valueOf(dialedAddress.size());
             ChevronEnum currentChevron = dialedAddress.size() == 0 ? ChevronEnum.C1 : ChevronEnum.valueOf(targetChevron.index - 1);
 
-            if (stargateWillLock(targetSymbol) && dialedAddress.size() == 6) currentChevron = ChevronEnum.C6;
+            if (stargateWillLock(targetSymbol, true) && dialedAddress.size() == 6) currentChevron = ChevronEnum.C6;
 
             int indexDiff = slotFromChevron(currentChevron) - slotFromChevron(targetChevron);
 

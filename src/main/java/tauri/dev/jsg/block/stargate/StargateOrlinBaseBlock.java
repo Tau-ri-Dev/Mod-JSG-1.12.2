@@ -33,7 +33,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import tauri.dev.jsg.worldgen.structures.stargate.GeneratedStargate;
+import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 
 import java.util.List;
 
