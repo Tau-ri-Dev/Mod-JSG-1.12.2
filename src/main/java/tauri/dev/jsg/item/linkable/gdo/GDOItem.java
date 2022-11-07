@@ -52,6 +52,7 @@ public class GDOItem extends Item implements CustomModelItemInterface {
     // MrJake: Capabilities are meh in 1.12. Hope they've fixed them in 1.16.
     // matousss: lmao
     // MineDragonCZ was here
+    // so was Fredyman_95
     private static void checkNBT(ItemStack stack) {
         if (!stack.hasTagCompound()) {
             initNBT(stack);
