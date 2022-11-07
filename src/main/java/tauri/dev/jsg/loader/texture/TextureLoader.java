@@ -78,7 +78,7 @@ public class TextureLoader {
 
         // ----------------------------------
         // LOAD EVENT HORIZONS
-        if (!JSGConfig.horizonConfig.disableAnimatedEventHorizon) {
+        if (!JSGConfig.horizonConfig.disableAnimatedEventHorizon && !JSGConfig.devConfig.enableDevMode) {
             progressBar = ProgressManager.push("JSG - Animated textures", ehPaths.size());
 			start = System.currentTimeMillis();
 			JSG.info("Started loading event horizon textures...");

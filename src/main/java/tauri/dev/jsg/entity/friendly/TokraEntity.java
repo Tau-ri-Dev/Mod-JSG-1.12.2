@@ -3,6 +3,7 @@ package tauri.dev.jsg.entity.friendly;
 import tauri.dev.jsg.entity.JSGEnergyProjectile;
 import tauri.dev.jsg.entity.JSGTradeableEntity;
 import tauri.dev.jsg.entity.ai.JSGLookAtTradePlayerAI;
+import tauri.dev.jsg.entity.ai.JSGTokraLookForRingsAI;
 import tauri.dev.jsg.entity.ai.JSGTradePlayerAI;
 import tauri.dev.jsg.entity.trading.ITradeList;
 import tauri.dev.jsg.item.JSGItems;
@@ -83,6 +84,7 @@ public class TokraEntity extends JSGTradeableEntity implements IRangedAttackMob,
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
         this.tasks.addTask(1, new JSGTradePlayerAI(this));
         this.tasks.addTask(1, new JSGLookAtTradePlayerAI(this));
+        this.tasks.addTask(1, new JSGTokraLookForRingsAI(this));
         this.tasks.addTask(2, new EntityAIMoveIndoors(this));
         this.tasks.addTask(3, new EntityAIRestrictOpenDoor(this));
         this.tasks.addTask(4, new EntityAIOpenDoor(this, true));

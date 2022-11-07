@@ -210,6 +210,9 @@ tile.jsg.titanium_ore.name=Титановая Руда
 tile.jsg.trinium_block.name=Блок Триниума
 tile.jsg.titanium_block.name=Блок Титана
 
+# decor blocks
+tile.jsg.tokra_crystal_block.name=Tokra's Crystal Block
+
 # props
 prop.jsg.platform_ships_block.name=Rings platform (Ships)
 

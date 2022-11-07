@@ -64,7 +64,7 @@ public class JSGEventHandlerClient {
 
     @SubscribeEvent
     public static void onGuiOpen(GuiOpenEvent event) {
-        if (!JSGConfig.mainMenuConfig.disableJSGMainMenu) {
+        if (!JSGConfig.mainMenuConfig.disableJSGMainMenu && !JSGConfig.devConfig.enableDevMode) {
             if (!event.isCanceled() && event.getGui() instanceof GuiMainMenu && !(event.getGui() instanceof JSGMainMenu) && !(event.getGui() instanceof JSGMainMenuOnLoad)) {
                 event.setCanceled(true);
                 //Minecraft.getMinecraft().displayGuiScreen(new JSGMainMenu());

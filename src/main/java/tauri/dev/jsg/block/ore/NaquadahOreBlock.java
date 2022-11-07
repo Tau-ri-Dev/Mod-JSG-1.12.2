@@ -26,7 +26,7 @@ public class NaquadahOreBlock extends JSGBlock {
 		setUnlocalizedName(JSG.MOD_ID + "." + blockName);
 		
 		setSoundType(SoundType.STONE);
-		if(!isInTab)
+		if(isInTab)
 			setCreativeTab(JSGCreativeTabsHandler.jsgOresCreativeTab);
 		
 		setHardness(4.5f);

@@ -195,6 +195,9 @@ tile.jsg.titanium_ore.name=Titanium Erz
 tile.jsg.trinium_block.name=Trinium Block
 tile.jsg.titanium_block.name=Titanium Block
 
+# decor blocks
+tile.jsg.tokra_crystal_block.name=Tokra's Crystal Block
+
 # props
 prop.jsg.platform_ships_block.name=Ringplatform (Schiff)
 

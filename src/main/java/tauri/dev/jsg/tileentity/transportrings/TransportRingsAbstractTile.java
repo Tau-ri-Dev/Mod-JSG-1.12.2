@@ -661,6 +661,43 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     // -------------------------------
     // Engaging symbols
 
+    public TransportResult dialNearestRings(boolean dial){
+        for (TransportRings rings : ringsMap.values()) {
+            if (!rings.isInGrid()) return TransportResult.NO_SUCH_ADDRESS;
+
+            BlockPos targetRingsPos = rings.getPos();
+            TransportRingsAbstractTile targetRingsTile = (TransportRingsAbstractTile) world.getTileEntity(targetRingsPos);
+
+            if (targetRingsTile == null || targetRingsTile.checkIfObstructed()) {
+                return TransportResult.OBSTRUCTED_TARGET;
+            }
+
+            if (targetRingsTile.isBusy()) {
+                return TransportResult.BUSY_TARGET;
+            }
+
+            // power
+            StargateEnergyRequired energyRequired = getEnergyRequiredToDial(rings);
+            int extracted = getEnergyStorage().extractEnergy((energyRequired.keepAlive*20), true);
+            if(extracted < (energyRequired.keepAlive*20)) // *20 because rings should be active more than 1 second
+                return TransportResult.NOT_ENOUGH_POWER;
+
+            if(dial) {
+                keepAliveEnergyPerTick = energyRequired.keepAlive;
+                // ------
+
+                this.setBusy(true);
+                targetRingsTile.setBusy(true);
+
+                List<Entity> excludedFromReceivingSite = world.getEntitiesWithinAABB(Entity.class, globalTeleportBox);
+                List<Entity> excludedEntities = targetRingsTile.startAnimationAndTeleport(pos, excludedFromReceivingSite, EnumScheduledTask.RINGS_START_ANIMATION.waitTicks, false);
+                startAnimationAndTeleport(targetRingsPos, excludedEntities, EnumScheduledTask.RINGS_START_ANIMATION.waitTicks, true);
+            }
+            return TransportResult.OK;
+        }
+        return TransportResult.NO_SUCH_ADDRESS;
+    }
+
     public TransportResult addSymbolToAddressInternal(SymbolInterface symbol, boolean computer) {
         if(isBusy()) return TransportResult.BUSY;
         if (canAddSymbol(symbol)) {

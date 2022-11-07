@@ -25,7 +25,7 @@ public class ModelLoader {
 		LOADED_MODELS.clear();
 		
 		List<String> modelPaths = FolderLoader.getAllFiles(MODELS_PATH, ".obj");
-		ProgressBar progressBar = ProgressManager.push("Just Stargate Mod - Loading models", modelPaths.size());
+		ProgressBar progressBar = ProgressManager.push("JSG - General models", modelPaths.size());
 		
 		long start = System.currentTimeMillis();
 
