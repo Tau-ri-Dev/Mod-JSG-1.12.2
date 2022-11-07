@@ -2,7 +2,7 @@
     "pools": [
         {
             "name": "main",
-            "rolls": 20,
+            "rolls": 12,
             "entries": [
                 {
                     "type": "item",

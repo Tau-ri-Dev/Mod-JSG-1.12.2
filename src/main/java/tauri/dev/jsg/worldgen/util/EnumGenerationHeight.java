@@ -1,4 +1,4 @@
-package tauri.dev.jsg.worldgen.structures;
+package tauri.dev.jsg.worldgen.util;
 
 public enum EnumGenerationHeight {
     LOW,

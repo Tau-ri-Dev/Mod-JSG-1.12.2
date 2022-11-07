@@ -15,7 +15,7 @@ import net.minecraftforge.common.util.Constants.NBT;
 import tauri.dev.jsg.stargate.network.internalgates.StargateAddressesEnum;
 import tauri.dev.jsg.worldgen.structures.EnumStructures;
 import tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator;
-import tauri.dev.jsg.worldgen.structures.stargate.GeneratedStargate;
+import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;

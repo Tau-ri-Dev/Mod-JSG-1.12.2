@@ -14,13 +14,15 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.util.FacingToRotation;
-import tauri.dev.jsg.worldgen.structures.stargate.GeneratedStargate;
+import tauri.dev.jsg.worldgen.util.GeneratedStargate;
+import tauri.dev.jsg.worldgen.util.JSGStructurePos;
+import tauri.dev.jsg.worldgen.util.JSGWorldTopBlock;
 
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 
-import static tauri.dev.jsg.worldgen.structures.JSGWorldTopBlock.getTopBlock;
+import static tauri.dev.jsg.worldgen.util.JSGWorldTopBlock.getTopBlock;
 
 public class JSGStructuresGenerator implements IWorldGenerator {
     @Override
@@ -45,7 +47,7 @@ public class JSGStructuresGenerator implements IWorldGenerator {
         JSGStructurePos structurePos = checkForPlace(worldToSpawn, chunkX, chunkZ, structure, structure.structure.dimensionToSpawn);
         if (notRandomGen) {
             int tries = 0;
-            while ((structurePos == null || structurePos.foundPos == null) && tries < 25) {
+            while ((structurePos == null || structurePos.foundPos == null) && tries < 50) {
                 if (structurePos != null && structurePos.bestAttemptPos != null) {
                     x = structurePos.bestAttemptPos.getX();
                     z = structurePos.bestAttemptPos.getZ();
@@ -67,10 +69,8 @@ public class JSGStructuresGenerator implements IWorldGenerator {
 
                 chunkX = x / 16;
                 chunkZ = z / 16;
-                //JSG.info("Checking for place: cX:" + chunkX + "; cZ:" + chunkZ);
 
                 structurePos = JSGStructuresGenerator.checkForPlace(worldToSpawn, chunkX, chunkZ, structure, structure.structure.dimensionToSpawn);
-                //JSG.info("Result: " + structurePos);
                 tries++;
             }
         }
@@ -94,7 +94,7 @@ public class JSGStructuresGenerator implements IWorldGenerator {
                     }
                 }
             }
-        } else {
+        } else if(notRandomGen){
             JSG.error("Can not generate structure " + structure.structure.structureName + "; StPos: " + structurePos);
         }
         return null;
@@ -123,26 +123,20 @@ public class JSGStructuresGenerator implements IWorldGenerator {
                 BlockPos newPos = pos.add((new BlockPos(xx, 0, zz).rotate(rotation)));
                 if (world.getChunkProvider().isChunkGeneratedAt(newPos.getX() / 16, newPos.getZ() / 16)) {
                     JSGWorldTopBlock topBlock = getTopBlock(world, newPos.getX(), newPos.getZ(), structure.airCountUp, dimensionId);
-                    //JSG.info("Checking pos: " + newPos);
                     if (topBlock != null) {
-                        //JSG.info("Top Block != null");
                         if (topBlock.y < lowestY) lowestY = topBlock.y;
                         if (topBlock.y > highestY) highestY = topBlock.y;
                         int step = Math.abs(topBlock.y - lowestY);
                         if (structure.allowedOnBlocks == null || structure.allowedOnBlocks.contains(topBlock.topBlock)) {
-                            //JSG.info("Top Block: OK");
                             topBlocksOk++;
                             if (step <= 4) {
-                                //JSG.info("Step <= 4");
                                 bestPositions.add(newPos);
                             } else if (step >= 15)
                                 return null;
                         }
                     }
-                } else {
-                    //JSG.info("Chunk not generated: " + newPos);
+                } else
                     world.getChunkProvider().provideChunk(newPos.getX() / 16, newPos.getZ() / 16);
-                }
             }
         }
 

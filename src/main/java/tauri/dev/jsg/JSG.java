@@ -131,8 +131,8 @@ public class JSG {
         WorldServer nether = event.getServer().getWorld(-1);
         StargateNetwork network = StargateNetwork.get(nether);
         if(!network.hasNetherGate()){
-            StargateNetwork.generateNetherGate(network, nether, new BlockPos(0, 0, 0));
             JSG.info("Started generating new Nether Gate!");
+            StargateNetwork.generateNetherGate(network, nether, new BlockPos(0, 0, 0));
         }
     }
 

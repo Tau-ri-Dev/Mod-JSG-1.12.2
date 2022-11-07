@@ -40,7 +40,9 @@ import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import tauri.dev.jsg.util.FacingToRotation;
 import tauri.dev.jsg.util.LinkingHelper;
-import tauri.dev.jsg.worldgen.structures.stargate.GeneratedStargate;
+import tauri.dev.jsg.worldgen.util.GeneratedStargate;
+import tauri.dev.jsg.worldgen.util.EnumGenerationHeight;
+import tauri.dev.jsg.worldgen.util.JSGWorldTopBlock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

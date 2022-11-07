@@ -487,12 +487,15 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         return 7;
     }
 
-    protected boolean stargateWillLock(SymbolInterface symbol) {
-        if (dialedAddress.size() == getMaxChevrons()) return true;
+    protected boolean stargateWillLock(SymbolInterface symbol, boolean notAddedYet) {
+        if ((dialedAddress.size() + (notAddedYet ? 1 : 0)) == getMaxChevrons()) return true;
 
-        if (dialedAddress.size() >= 7 && symbol.origin()) return true;
+        if ((dialedAddress.size() + (notAddedYet ? 1 : 0)) >= 7 && symbol.origin()) return true;
 
         return false;
+    }
+    protected boolean stargateWillLock(SymbolInterface symbol) {
+        return stargateWillLock(symbol, false);
     }
 
     /**

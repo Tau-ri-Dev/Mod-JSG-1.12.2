@@ -4,17 +4,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerItem;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
-import tauri.dev.jsg.worldgen.structures.stargate.GeneratedStargate;
-import tauri.dev.jsg.worldgen.structures.stargate.StargateGenerator;
+import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 
 import javax.annotation.Nonnull;
 
