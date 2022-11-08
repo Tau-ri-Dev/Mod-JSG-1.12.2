@@ -1,14 +1,5 @@
 package tauri.dev.jsg.entity.friendly;
 
-import tauri.dev.jsg.entity.JSGEnergyProjectile;
-import tauri.dev.jsg.entity.JSGTradeableEntity;
-import tauri.dev.jsg.entity.ai.JSGLookAtTradePlayerAI;
-import tauri.dev.jsg.entity.ai.JSGTokraLookForRingsAI;
-import tauri.dev.jsg.entity.ai.JSGTradePlayerAI;
-import tauri.dev.jsg.entity.trading.ITradeList;
-import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.item.tools.EnergyWeapon;
-import tauri.dev.jsg.util.JSGItemStackHandler;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -40,6 +31,15 @@ import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import tauri.dev.jsg.entity.JSGEnergyProjectile;
+import tauri.dev.jsg.entity.JSGTradeableEntity;
+import tauri.dev.jsg.entity.ai.JSGLookAtTradePlayerAI;
+import tauri.dev.jsg.entity.ai.JSGTokraLookForRingsAI;
+import tauri.dev.jsg.entity.ai.JSGTradePlayerAI;
+import tauri.dev.jsg.entity.trading.ITradeList;
+import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.item.tools.EnergyWeapon;
+import tauri.dev.jsg.util.JSGItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -62,9 +62,12 @@ public class TokraEntity extends JSGTradeableEntity implements IRangedAttackMob,
     @Nullable
     private EntityPlayer buyingPlayer;
 
+    private final float MOVEMENT_SPEED = 0.4f;
+
     public TokraEntity(World worldIn) {
         super(worldIn);
         this.setSize(0.6F, 1.95F);
+        this.setAIMoveSpeed(MOVEMENT_SPEED);
         ((PathNavigateGround) this.getNavigator()).setBreakDoors(true);
         this.setCanPickUpLoot(true);
         initTokra();
@@ -80,23 +83,30 @@ public class TokraEntity extends JSGTradeableEntity implements IRangedAttackMob,
     @Override
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIAttackRanged(this, 0.5D, 20, 10.0F));
-        this.tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
+        this.tasks.addTask(1, new EntityAIAttackRanged(this, MOVEMENT_SPEED, 20, 10.0F));
+        this.tasks.addTask(1, new EntityAIAttackMelee(this, MOVEMENT_SPEED, false));
         this.tasks.addTask(1, new JSGTradePlayerAI(this));
         this.tasks.addTask(1, new JSGLookAtTradePlayerAI(this));
         this.tasks.addTask(1, new JSGTokraLookForRingsAI(this));
         this.tasks.addTask(2, new EntityAIMoveIndoors(this));
         this.tasks.addTask(3, new EntityAIRestrictOpenDoor(this));
         this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
-        this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 0.6D));
+        this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, MOVEMENT_SPEED));
         this.tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 3.0F, 1.0F));
-        this.tasks.addTask(9, new EntityAIWanderAvoidWater(this, 0.6D));
+        this.tasks.addTask(9, new EntityAIWanderAvoidWater(this, MOVEMENT_SPEED));
         this.tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
-        this.tasks.addTask(12, new EntityAIWanderAvoidWater(this, 0.8D));
+        this.tasks.addTask(12, new EntityAIWanderAvoidWater(this, MOVEMENT_SPEED));
         this.tasks.addTask(15, new EntityAILookIdle(this));
 
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, TokraEntity.class));
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityLiving.class, 10, true, false, IMob.MOB_SELECTOR));
+    }
+
+    public void moveFromRingsPlatform(){
+        BlockPos pos = new BlockPos(Math.random()*25, this.posY, Math.random()*25);
+
+        this.getLookHelper().setLookPosition(pos.getX(), (pos.getY() + 3), pos.getZ(), 10.0F, this.getVerticalFaceSpeed());
+        this.getNavigator().tryMoveToXYZ(pos.getX(), (pos.getY() + 2), pos.getZ(), MOVEMENT_SPEED*1.2f);
     }
 
     @Override
@@ -137,10 +147,6 @@ public class TokraEntity extends JSGTradeableEntity implements IRangedAttackMob,
     @Nullable
     public IEntityLivingData onInitialSpawn(@Nonnull DifficultyInstance difficulty, @Nullable IEntityLivingData livingData) {
         return livingData;
-    }
-
-    @Override
-    protected void updateAITasks() {
     }
 
     @Nonnull
@@ -309,14 +315,16 @@ public class TokraEntity extends JSGTradeableEntity implements IRangedAttackMob,
         }
     }
 
+    @Nonnull
     @Override
     public World getWorld() {
-        return null;
+        return this.world;
     }
 
+    @Nonnull
     @Override
     public BlockPos getPos() {
-        return null;
+        return new BlockPos(this.posX, this.posY, this.posZ);
     }
 
     @Override

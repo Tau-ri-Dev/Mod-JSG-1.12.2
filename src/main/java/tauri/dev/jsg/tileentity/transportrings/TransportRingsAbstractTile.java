@@ -14,6 +14,7 @@ import tauri.dev.jsg.block.JSGBlock;
 import tauri.dev.jsg.block.props.TRPlatformBlock;
 import tauri.dev.jsg.block.transportrings.TRControllerAbstractBlock;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.entity.friendly.TokraEntity;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.tileentity.util.PreparableInterface;
@@ -554,6 +555,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                             BlockPos ePos = entity.getPosition().add(teleportVector);
                             double y = targetRingsPos.getY() + targetRingsHeight;
                             entity.setPositionAndUpdate(ePos.getX(), y, ePos.getZ());
+
+                            if(entity instanceof TokraEntity) // move tokra away from the rings platform
+                                ((TokraEntity) entity).moveFromRingsPlatform();
                         }
                     }
                 }
