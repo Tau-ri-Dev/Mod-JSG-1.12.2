@@ -19,7 +19,13 @@ import java.util.List;
 
 public class ZPMHubContainerGui extends GuiContainer {
 
-    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_zpmhub.png");
+    public ResourceLocation getBackground(){
+        return new ResourceLocation(JSG.MOD_ID, "textures/gui/container_zpmhub.png");
+    }
+
+    public String getGuiUnlocalizedName(){
+        return "tile.jsg.zpm_hub_block.name";
+    }
 
     private final ZPMHubContainer container;
     private BetterButton button;
@@ -35,7 +41,7 @@ public class ZPMHubContainerGui extends GuiContainer {
     @Override
     public void initGui() {
         super.initGui();
-        button = new BetterButton(0, 10 + guiLeft, 38 + guiTop, 16, BACKGROUND_TEXTURE, 256, 256, 176, 0);
+        button = new BetterButton(0, 10 + guiLeft, 38 + guiTop, 16, getBackground(), 256, 256, 176, 0);
     }
 
     @Override
@@ -48,7 +54,7 @@ public class ZPMHubContainerGui extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
+        mc.getTextureManager().bindTexture(getBackground());
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
         long energyStored = 0;
@@ -71,12 +77,12 @@ public class ZPMHubContainerGui extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        fontRenderer.drawString(I18n.format("tile.jsg.zpm_hub_block.name"), 7, 6, 4210752);
+        fontRenderer.drawString(I18n.format(getGuiUnlocalizedName()), 7, 6, 4210752);
         fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
         long energyStored = 0;
         long maxEnergyStored = 0;
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < container.hubTile.getContainerSize(); i++) {
             IEnergyStorage energyStorage = container.getSlot(i).getStack().getCapability(CapabilityEnergy.ENERGY, null);
             if (energyStorage == null)
                 continue;

@@ -36,10 +36,10 @@ public class ZPMHubBlock extends JSGBlock {
 
     public static final String BLOCK_NAME = "zpm_hub_block";
 
-    public ZPMHubBlock() {
+    public ZPMHubBlock(String blockName) {
         super(Material.IRON);
-        setRegistryName(JSG.MOD_ID + ":" + BLOCK_NAME);
-        setUnlocalizedName(JSG.MOD_ID + "." + BLOCK_NAME);
+        setRegistryName(JSG.MOD_ID + ":" + blockName);
+        setUnlocalizedName(JSG.MOD_ID + "." + blockName);
 
         setSoundType(SoundType.METAL);
         setCreativeTab(JSGCreativeTabsHandler.jsgEnergyCreativeTab);
@@ -49,6 +49,10 @@ public class ZPMHubBlock extends JSGBlock {
 
         setHardness(3.0f);
         setHarvestLevel("pickaxe", 3);
+
+    }
+    public ZPMHubBlock() {
+        this(BLOCK_NAME);
     }
 
     // ------------------------------------------------------------------------

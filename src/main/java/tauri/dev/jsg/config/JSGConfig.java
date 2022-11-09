@@ -813,6 +813,12 @@ public class JSGConfig {
         public float z = 0f;
         @Name("s")
         public float s = 1f;
+        @Name("sz")
+        public float sz = 0.4f;
+        @Name("yz")
+        public float yz = 0.9f;
+        @Name("tz")
+        public float tz = 1f;
     }
 
     public static void rescaleToConfig(){

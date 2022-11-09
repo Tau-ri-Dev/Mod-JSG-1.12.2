@@ -27,6 +27,7 @@ import tauri.dev.jsg.block.dialhomedevice.DHDBlock;
 import tauri.dev.jsg.block.dialhomedevice.DHDPegasusBlock;
 import tauri.dev.jsg.block.energy.ZPMBlock;
 import tauri.dev.jsg.block.energy.ZPMHubBlock;
+import tauri.dev.jsg.block.energy.ZPMSlotBlock;
 import tauri.dev.jsg.block.energy.capacitor.CapacitorBlock;
 import tauri.dev.jsg.block.energy.capacitor.CapacitorBlockEmpty;
 import tauri.dev.jsg.block.invisible.InvisibleBlock;
@@ -131,6 +132,7 @@ public class JSGBlocks {
 
     public static final ZPMBlock ZPM = new ZPMBlock();
     public static final ZPMHubBlock ZPM_HUB = new ZPMHubBlock();
+    public static final ZPMSlotBlock ZPM_SLOT = new ZPMSlotBlock();
 
     // -----------------------------------------------------------------------------
     // DECOR BLOCKS
@@ -245,6 +247,7 @@ public class JSGBlocks {
 
             ZPM,
             ZPM_HUB,
+            ZPM_SLOT,
 
             DECOR_CRYSTAL_BLOCK
 

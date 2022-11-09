@@ -26,10 +26,19 @@ import java.util.ArrayList;
 public class ZPMHubContainer extends Container {
 
     public ZPMHubTile hubTile;
-    public ArrayList<Slot> slots = new ArrayList<>();
+    public ArrayList<Slot> slots;
     private final BlockPos pos;
     private int lastEnergyStored;
     private int energyTransferedLastTick;
+
+    @Nonnull
+    public ArrayList<Slot> getSlots(IItemHandler itemHandler){
+        ArrayList<Slot> slots = new ArrayList<>();
+        slots.add(new SlotItemHandler(itemHandler, 0, 80, 17));
+        slots.add(new SlotItemHandler(itemHandler, 1, 62, 38));
+        slots.add(new SlotItemHandler(itemHandler, 2, 98, 38));
+        return slots;
+    }
 
     public ZPMHubContainer(IInventory playerInventory, World world, int x, int y, int z) {
         pos = new BlockPos(x, y, z);
@@ -39,9 +48,8 @@ public class ZPMHubContainer extends Container {
             itemHandler = hubTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
         }
 
-        slots.add(new SlotItemHandler(itemHandler, 0, 80, 17));
-        slots.add(new SlotItemHandler(itemHandler, 1, 62, 38));
-        slots.add(new SlotItemHandler(itemHandler, 2, 98, 38));
+        slots = getSlots(itemHandler);
+
         for (Slot slot : slots)
             addSlotToContainer(slot);
 
@@ -63,14 +71,14 @@ public class ZPMHubContainer extends Container {
             ItemStack stack = slot.getStack();
             returnStack = stack.copy();
 
-            if (slotId < 3) {
+            if (slotId < slots.size()) {
                 // to player
-                if (!this.mergeItemStack(stack, 3, this.inventorySlots.size(), true)) {
+                if (!this.mergeItemStack(stack, slots.size(), this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             }
             // from player
-            else if (!this.mergeItemStack(stack, 0, 3, true)) {
+            else if (!this.mergeItemStack(stack, 0, slots.size(), true)) {
                 return ItemStack.EMPTY;
             }
 

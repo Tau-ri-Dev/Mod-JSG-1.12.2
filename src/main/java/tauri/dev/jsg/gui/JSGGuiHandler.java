@@ -22,6 +22,8 @@ import tauri.dev.jsg.gui.container.transportrings.TRContainer;
 import tauri.dev.jsg.gui.container.transportrings.TRGui;
 import tauri.dev.jsg.gui.container.zpmhub.ZPMHubContainer;
 import tauri.dev.jsg.gui.container.zpmhub.ZPMHubContainerGui;
+import tauri.dev.jsg.gui.container.zpmslot.ZPMSlotContainer;
+import tauri.dev.jsg.gui.container.zpmslot.ZPMSlotContainerGui;
 
 public class JSGGuiHandler implements IGuiHandler {
 
@@ -55,6 +57,9 @@ public class JSGGuiHandler implements IGuiHandler {
 
             case GUI_ZPM_HUB:
                 return new ZPMHubContainer(player.inventory, world, x, y, z);
+
+            case GUI_ZPM_SLOT:
+                return new ZPMSlotContainer(player.inventory, world, x, y, z);
         }
 
         return null;
@@ -90,6 +95,9 @@ public class JSGGuiHandler implements IGuiHandler {
 
             case GUI_ZPM_HUB:
                 return new ZPMHubContainerGui(new ZPMHubContainer(player.inventory, world, x, y, z));
+
+            case GUI_ZPM_SLOT:
+                return new ZPMSlotContainerGui(new ZPMSlotContainer(player.inventory, world, x, y, z));
 
         }
 

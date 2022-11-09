@@ -9,7 +9,6 @@ import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -33,9 +32,17 @@ import java.util.Objects;
 
 public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProvider, StateProviderInterface {
 
-    public static final int SLIDING_ANIMATION_LENGTH = 50;// int ticks
+    private static final int SLIDING_ANIMATION_LENGTH = 50;// int ticks
 
-    protected final ItemStackHandler itemStackHandler = new JSGItemStackHandler(3) {
+    public int getAnimationLength(){
+        return SLIDING_ANIMATION_LENGTH;
+    }
+
+    public int getContainerSize() {
+        return 3;
+    }
+
+    protected final ItemStackHandler itemStackHandler = new JSGItemStackHandler(getContainerSize()) {
 
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
@@ -148,7 +155,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
             markDirty();
 
             if (isAnimating) {
-                if ((animationStart + SLIDING_ANIMATION_LENGTH) < this.world.getTotalWorldTime()) {
+                if ((animationStart + getAnimationLength()) < this.world.getTotalWorldTime()) {
                     isAnimating = false;
                     animationStart = -1;
                     sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
@@ -160,10 +167,10 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
 
     private int currentPowerTier;
 
-    private void updatePowerTier() {
+    protected void updatePowerTier() {
         int powerTier = 1;
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < getContainerSize(); i++) {
             if (!itemStackHandler.getStackInSlot(i).isEmpty()) {
                 powerTier++;
             }
@@ -173,7 +180,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
             currentPowerTier = powerTier;
             energyStorage.clearStorages();
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < getContainerSize(); i++) {
                 ItemStack stack = itemStackHandler.getStackInSlot(i);
 
                 if (!stack.isEmpty()) {
@@ -249,9 +256,9 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     public State getState(StateTypeEnum stateType) {
         switch (stateType) {
             case RENDERER_UPDATE:
-                ItemStack stack1 = itemStackHandler.getStackInSlot(0);
-                ItemStack stack2 = itemStackHandler.getStackInSlot(1);
-                ItemStack stack3 = itemStackHandler.getStackInSlot(2);
+                ItemStack stack1 = getContainerSize() > 0 ? itemStackHandler.getStackInSlot(0) : ItemStack.EMPTY;
+                ItemStack stack2 = getContainerSize() > 1 ? itemStackHandler.getStackInSlot(1) : ItemStack.EMPTY;
+                ItemStack stack3 = getContainerSize() > 2 ? itemStackHandler.getStackInSlot(2) : ItemStack.EMPTY;
 
                 int zpm1Level = stack1.isEmpty() ? -1 : getZPMPowerLevel(Objects.requireNonNull(stack1.getCapability(CapabilityEnergy.ENERGY, null)).getEnergyStored(), Objects.requireNonNull(stack1.getCapability(CapabilityEnergy.ENERGY, null)).getMaxEnergyStored());
                 int zpm2Level = stack2.isEmpty() ? -1 : getZPMPowerLevel(Objects.requireNonNull(stack2.getCapability(CapabilityEnergy.ENERGY, null)).getEnergyStored(), Objects.requireNonNull(stack2.getCapability(CapabilityEnergy.ENERGY, null)).getMaxEnergyStored());
