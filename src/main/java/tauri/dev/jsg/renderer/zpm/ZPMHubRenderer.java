@@ -3,8 +3,10 @@ package tauri.dev.jsg.renderer.zpm;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import tauri.dev.jsg.loader.ElementEnum;
+import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.tileentity.energy.ZPMHubTile;
+import tauri.dev.jsg.util.JSGMinecraftHelper;
 
 import javax.annotation.Nonnull;
 
@@ -26,7 +28,7 @@ public class ZPMHubRenderer extends TileEntitySpecialRenderer<ZPMHubTile> {
         GlStateManager.translate(0.5, 0, 0.5);
         GlStateManager.rotate(te.facingAngle, 0, 1, 0);
 
-        renderMainObject();
+        renderMainObject(te);
 
         for (int i = 0; i < 3; i++) {
             renderZPM(i, te, plusY);
@@ -34,10 +36,14 @@ public class ZPMHubRenderer extends TileEntitySpecialRenderer<ZPMHubTile> {
         GlStateManager.popMatrix();
     }
 
-    protected void renderMainObject(){
+    protected void renderMainObject(ZPMHubTile tile){
         GlStateManager.pushMatrix();
         GlStateManager.scale(0.025, 0.025, 0.025);
         ElementEnum.ZPM_HUB.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
+        int zpmHubLights = (int) Math.round(Math.sin(JSGMinecraftHelper.getClientTick()) * 5);
+        if((tile.zpm1Level == -1) && (tile.zpm2Level == -1) && (tile.zpm3Level == -1)) zpmHubLights = 0;
+        TextureLoader.getTexture(TextureLoader.getTextureResource("zpm/hub/pg_lights" + zpmHubLights + ".jpg")).bindTexture();
+        ElementEnum.ZPM_HUB_LIGHTS.render();
         GlStateManager.popMatrix();
     }
 

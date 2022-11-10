@@ -1,17 +1,14 @@
 package tauri.dev.jsg.renderer.zpm;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.tileentity.energy.ZPMHubTile;
-import tauri.dev.jsg.tileentity.energy.ZPMSlotTile;
 
 public class ZPMSlotRenderer extends ZPMHubRenderer {
 
     @Override
-    protected void renderMainObject() {
+    protected void renderMainObject(ZPMHubTile tile) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(-0.42, 0, -0.5);
         GlStateManager.scale(0.85, 0.85, 0.85);
