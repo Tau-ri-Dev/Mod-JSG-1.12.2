@@ -1,7 +1,9 @@
 package tauri.dev.jsg.renderer.stargate;
 
 import tauri.dev.jsg.loader.ElementEnum;
+import tauri.dev.jsg.loader.model.ModelLoader;
 import tauri.dev.jsg.loader.texture.TextureLoader;
+import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
 import tauri.dev.jsg.util.math.MathFunction;
 import tauri.dev.jsg.util.math.MathFunctionImpl;
 import tauri.dev.jsg.util.math.MathRange;
@@ -46,6 +48,7 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
     GlStateManager.translate(-RING_LOC.x, -RING_LOC.z, -RING_LOC.y);
 
     ElementEnum.MILKYWAY_RING.bindTextureAndRender(rendererState.getBiomeOverlay());
+    ModelLoader.getModel(((SymbolMilkyWayEnum) SymbolMilkyWayEnum.getOrigin()).getModelResource(rendererState.biomeOverride, getWorld().provider.getDimension())).render();
 
     GlStateManager.popMatrix();
   }
@@ -54,24 +57,24 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
   // ----------------------------------------------------------------------------------------
   // Chevrons
 
-  private static MathRange chevronOpenRange = new MathRange(0, 1.57f);
-  private static MathFunction chevronOpenFunction = new MathFunctionImpl(x -> x * x * x * x / 80f);
+  private static final MathRange CHEVRON_OPEN_RANGE = new MathRange(0, 1.57f);
+  private static final MathFunction CHEVRON_OPEN_FUNCTION = new MathFunctionImpl(x -> x * x * x * x / 80f);
 
-  private static MathRange chevronCloseRange = new MathRange(0, 1.428f);
-  private static MathFunction chevronCloseFunction = new MathFunctionImpl(x0 -> MathHelper.cos(x0 * 1.1f) / 12f);
+  private static final MathRange CHEVRON_CLOSE_RANGE = new MathRange(0, 1.428f);
+  private static final MathFunction CHEVRON_CLOSE_FUNCTION = new MathFunctionImpl(x0 -> MathHelper.cos(x0 * 1.1f) / 12f);
 
   private float calculateTopChevronOffset(StargateMilkyWayRendererState rendererState, double partialTicks) {
     float tick = (float) (getWorld().getTotalWorldTime() - rendererState.chevronActionStart + partialTicks);
     float x = tick / 6.0f;
 
     if (rendererState.chevronOpening) {
-      if (chevronOpenRange.test(x)) return chevronOpenFunction.apply(x);
+      if (CHEVRON_OPEN_RANGE.test(x)) return CHEVRON_OPEN_FUNCTION.apply(x);
       else {
         rendererState.chevronOpen = true;
         rendererState.chevronOpening = false;
       }
     } else if (rendererState.chevronClosing) {
-      if (chevronCloseRange.test(x)) return chevronCloseFunction.apply(x);
+      if (CHEVRON_CLOSE_RANGE.test(x)) return CHEVRON_CLOSE_FUNCTION.apply(x);
       else {
         rendererState.chevronOpen = false;
         rendererState.chevronClosing = false;

@@ -4,6 +4,7 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.model.ModelLoader;
 import net.minecraft.util.ResourceLocation;
+import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,8 +60,8 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
 	
 	public String englishName;
 	public String translationKey;
-	public ResourceLocation iconResource;
-	public ResourceLocation modelResource;
+	private ResourceLocation iconResource;
+	private ResourceLocation modelResource;
 	
 	SymbolMilkyWayEnum(int id, int angleIndex, String englishName, String model) {
 		this.id = id;
@@ -112,6 +113,42 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
 	@Override
 	public ResourceLocation getIconResource() {
 		return iconResource;
+	}
+
+	public ResourceLocation getModelResource(BiomeOverlayEnum overlay, int dimensionId) {
+		if(this == ORIGIN){
+			int pooId = 0;
+			/*
+			IDS:
+			0- normal - overworld
+			1- end
+			2- sooty - nether
+			0- mossy
+			0- aged
+			3- frosty
+			4- sandy
+			 */
+			if (dimensionId == -1)
+				pooId = 2; // nether
+			if(dimensionId == 1)
+				pooId = 1; // end
+			if(dimensionId == 0){
+				switch (overlay){
+					case SOOTY:
+						pooId = 1;
+						break;
+					case FROST:
+						pooId = 3;
+						break;
+					case SANDY:
+						pooId = 4;
+						break;
+				}
+			}
+			return ModelLoader.getModelResource("milkyway/origin" + pooId + ".obj");
+		}
+
+		return modelResource;
 	}
 	
 	@Override

@@ -19,7 +19,7 @@ public class DHDMilkyWayRenderer extends DHDAbstractRenderer {
         for (SymbolMilkyWayEnum symbol : SymbolMilkyWayEnum.values()) {
             setColorByAddress(te, rendererState, compound, SymbolTypeEnum.MILKYWAY, symbol);
             rendererDispatcher.renderEngine.bindTexture(((DHDMilkyWayRendererState) rendererState).getButtonTexture(symbol, rendererState.getBiomeOverlay()));
-            ModelLoader.getModel(symbol.modelResource).render();
+            ModelLoader.getModel(symbol.getModelResource(rendererState.biomeOverlay, te.getWorld().provider.getDimension())).render();
         }
     }
 
