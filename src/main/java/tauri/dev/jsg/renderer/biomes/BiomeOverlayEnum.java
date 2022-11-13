@@ -11,27 +11,41 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 
 public enum BiomeOverlayEnum {
-	NORMAL("", TextFormatting.GRAY),
-	FROST("_frost", TextFormatting.DARK_AQUA),
-	MOSSY("_mossy", TextFormatting.DARK_GREEN),
-	AGED("_aged", TextFormatting.GRAY),
-	SOOTY("_sooty", TextFormatting.DARK_GRAY),
-	SANDY("_sandy", TextFormatting.YELLOW),
+	NORMAL(0, "", TextFormatting.GRAY),
+	FROST(1, "_frost", TextFormatting.DARK_AQUA),
+	MOSSY(2, "_mossy", TextFormatting.DARK_GREEN),
+	AGED(3, "_aged", TextFormatting.GRAY),
+	SOOTY(4, "_sooty", TextFormatting.DARK_GRAY),
+	SANDY(5, "_sandy", TextFormatting.YELLOW),
 
 	// for transport rings
-	TR_NORMAL("", TextFormatting.GOLD)
+	TR_NORMAL(10, "", TextFormatting.GOLD)
 	;
 	
-	public String suffix;
+	public final String suffix;
+	public final int id;
 	private final TextFormatting color;
 	private final String unlocalizedName;
 
-	BiomeOverlayEnum(String suffix, TextFormatting color) {
+	BiomeOverlayEnum(int id, String suffix, TextFormatting color) {
+		this.id = id;
 		this.suffix = suffix;
 		this.color = color;
 		this.unlocalizedName = "gui.stargate.biome_overlay." + name().toLowerCase();
+	}
+
+	private static final HashMap<Integer, BiomeOverlayEnum> ID_MAP = new HashMap<>();
+	static{
+		for(BiomeOverlayEnum overlay : BiomeOverlayEnum.values()){
+			ID_MAP.put(overlay.id, overlay);
+		}
+	}
+
+	public static BiomeOverlayEnum byId(int id){
+		return ID_MAP.get(id);
 	}
 	
 	public String getLocalizedColorizedName() {

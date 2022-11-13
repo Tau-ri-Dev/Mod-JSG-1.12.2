@@ -3,6 +3,7 @@ package tauri.dev.jsg.item.notebook;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.item.renderer.JSGFontRenderer;
 import tauri.dev.jsg.item.renderer.ItemRenderHelper;
+import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.stargate.network.StargateAddress;
 import tauri.dev.jsg.stargate.network.SymbolInterface;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
@@ -20,13 +21,13 @@ import java.util.Objects;
 
 public class PageRenderer {
 
-	public static void renderSymbol(float x, float y, float w, float h, SymbolInterface symbol) {
+	public static void renderSymbol(float x, float y, float w, float h, SymbolInterface symbol, int originId) {
 		float z = 0.011f;
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableBlend();
 		GlStateManager.color(0, 0, 0, (float) JSGConfig.notebookOptions.glyphTransparency);
 		
-		Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource());		
+		Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource(originId));
 		GL11.glBegin(GL11.GL_QUADS);
 		
 		GL11.glTexCoord2f(0, 1); GL11.glVertex3f(0.04f + x, 0.79f - y, z);
@@ -78,6 +79,10 @@ public class PageRenderer {
 			StargateAddress stargateAddress = new StargateAddress(compound.getCompoundTag("address"));
 			int maxSymbols = symbolType.getMaxSymbolsDisplay(compound.getBoolean("hasUpgrade"));
 
+			int originId = 0;
+			if(compound.hasKey("originId"))
+				originId = compound.getInteger("originId");
+
 			for (int i=0; i<maxSymbols; i++) {
 				float x = 0.21f*(i%3);
 				float y = 0.20f*((int) Math.floor((float) i/3)) + 0.14f;
@@ -85,10 +90,10 @@ public class PageRenderer {
 				if (symbolType == SymbolTypeEnum.UNIVERSE) {
 					y = 0.20f*(i/3) + 0.18f;
 					x += 0.04f;
-					renderSymbol(x, y, 0.095f, 0.2f, stargateAddress.get(i));
+					renderSymbol(x, y, 0.095f, 0.2f, stargateAddress.get(i), 0);
 				}
 				else {
-					renderSymbol(x, y, 0.2f, 0.2f, stargateAddress.get(i));
+					renderSymbol(x, y, 0.2f, 0.2f, stargateAddress.get(i), originId);
 				}
 			}
 
@@ -100,7 +105,7 @@ public class PageRenderer {
 				x = 0.10f * 2.5f;
 			}
 
-			renderSymbol(x, y, w, 0.2f, Objects.requireNonNull(symbolType.getOrigin()));
+			renderSymbol(x, y, w, 0.2f, Objects.requireNonNull(symbolType.getOrigin()), originId);
 		}
 	    else{
 	    	// render tr address
@@ -110,13 +115,13 @@ public class PageRenderer {
 			for (int i=0; i<address.size(); i++) {
 				float x = 0.21f*(i%3);
 				float y = 0.20f*((int) Math.floor((float) i/3)) + 0.14f;
-				renderSymbol(x, y, 0.2f, 0.2f, address.get(i));
+				renderSymbol(x, y, 0.2f, 0.2f, address.get(i), 0);
 			}
 
 			float x = 0.10f * 2;
 			float y = 0.20f*(3) + 0.14f;
 			float w = 0.2f;
-			renderSymbol(x, y, w, 0.2f, Objects.requireNonNull(symbolType.getOrigin()));
+			renderSymbol(x, y, w, 0.2f, Objects.requireNonNull(symbolType.getOrigin()), 0);
 		}
 		
 		String name = PageNotebookItem.getNameFromCompound(compound);

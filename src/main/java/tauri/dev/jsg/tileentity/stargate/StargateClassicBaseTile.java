@@ -1265,7 +1265,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
         switch (scheduledTask) {
             case STARGATE_HORIZON_LIGHT_BLOCK:
-                if (irisType == EnumIrisType.NULL || !isIrisClosed()) {
+                if (irisType == EnumIrisType.NULL || irisType == EnumIrisType.SHIELD || !isIrisClosed()) {
                     super.executeTask(scheduledTask, customData);
                 } else if (isIrisClosed()) {
                     world.getBlockState(getGateCenterPos()).getBlock().setLightLevel(.7f);
@@ -1303,6 +1303,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     NBTTagList saved = stack.getTagCompound().getTagList("saved", NBT.TAG_COMPOUND);
                     NBTTagCompound compound = gateAddressMap.get(symbolType).serializeNBT();
                     compound.setBoolean("hasUpgrade", hasUpgrade(StargateUpgradeEnum.CHEVRON_UPGRADE));
+                    setOriginId(compound);
                     saved.appendTag(compound);
                 } else {
                     JSG.logger.debug("Giving Notebook page of address " + symbolType);
@@ -1325,6 +1326,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 super.executeTask(scheduledTask, customData);
         }
     }
+
+    public void setOriginId(NBTTagCompound compound){}
 
 
     // ------------------------------------------------------------------------

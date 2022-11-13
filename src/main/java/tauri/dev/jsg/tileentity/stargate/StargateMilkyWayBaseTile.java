@@ -38,6 +38,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -45,6 +46,7 @@ import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOp
 
 
 public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements ILinkable {
+    @Nonnull
     @Override
     public StargateSizeEnum getStargateSize() {
         return stargateSize;
@@ -57,14 +59,14 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     protected void disconnectGate() {
         super.disconnectGate();
 
-        if (isLinkedAndDHDOperational()) getLinkedDHD(world).clearSymbols();
+        if (isLinkedAndDHDOperational()) Objects.requireNonNull(getLinkedDHD(world)).clearSymbols();
     }
 
     @Override
     protected void failGate() {
         super.failGate();
 
-        if (isLinkedAndDHDOperational()) getLinkedDHD(world).clearSymbols();
+        if (isLinkedAndDHDOperational()) Objects.requireNonNull(getLinkedDHD(world)).clearSymbols();
     }
 
     @Override
@@ -82,19 +84,19 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         super.openGate(targetGatePos, isInitiating);
 
         if (isLinkedAndDHDOperational()) {
-            getLinkedDHD(world).activateSymbol(SymbolMilkyWayEnum.BRB);
+            Objects.requireNonNull(getLinkedDHD(world)).activateSymbol(SymbolMilkyWayEnum.BRB);
         }
     }
 
     @Override
     public void activateDHDSymbolBRB(){
         if (isLinkedAndDHDOperational()) {
-            getLinkedDHD(world).activateSymbol(SymbolMilkyWayEnum.BRB);
+            Objects.requireNonNull(getLinkedDHD(world)).activateSymbol(SymbolMilkyWayEnum.BRB);
         }
     }
 
     public void clearDHDSymbols(){
-        if (isLinkedAndDHDOperational()) getLinkedDHD(world).clearSymbols();
+        if (isLinkedAndDHDOperational()) Objects.requireNonNull(getLinkedDHD(world)).clearSymbols();
     }
 
     // ------------------------------------------------------------------------
@@ -516,6 +518,11 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         }
 
         super.setState(stateType, state);
+    }
+
+    @Override
+    public void setOriginId(NBTTagCompound compound){
+        compound.setInteger("originId", SymbolMilkyWayEnum.getOriginId(BiomeOverlayEnum.updateBiomeOverlay(world, pos, getSupportedOverlays()), world.provider.getDimension()));
     }
 
 

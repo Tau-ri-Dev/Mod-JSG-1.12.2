@@ -1,14 +1,13 @@
 package tauri.dev.jsg.renderer.stargate;
 
+import net.minecraft.client.renderer.*;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.texture.Texture;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.stargate.network.SymbolPegasusEnum;
+import tauri.dev.jsg.util.JSGTextureLightningHelper;
 import tauri.dev.jsg.util.math.NumberUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
@@ -53,6 +52,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
             renderGlyph(rendererState.slotToGlyphMap.get(i), i, false); // for incoming and locked chevrons
         }
+        JSGTextureLightningHelper.resetLight(getWorld(), rendererState.pos);
 
 
         ElementEnum.PEGASUS_GATE.bindTextureAndRender(rendererState.getBiomeOverlay());
@@ -63,6 +63,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
     private void renderRing(StargatePegasusRendererState rendererState, double partialTicks) {
         GlStateManager.pushMatrix();
+        setGateHeatColor(rendererState);
 
         if (rendererState.horizontalRotation == 90 || rendererState.horizontalRotation == 270) {
             GlStateManager.translate(RING_LOC.y, RING_LOC.z, RING_LOC.x);
@@ -87,12 +88,13 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
     // Chevrons
 
     @Override
-    protected void renderChevron(StargatePegasusRendererState rendererState, double partialTicks, ChevronEnum chevron) {
+    protected void renderChevron(StargatePegasusRendererState rendererState, double partialTicks, ChevronEnum chevron, boolean onlyLight) {
         GlStateManager.pushMatrix();
 
         GlStateManager.rotate(chevron.rotation, 0, 0, 1);
+        setGateHeatColor(rendererState);
 
-        Texture chevronTexture = TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron));
+        Texture chevronTexture = TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron, onlyLight));
         if(chevronTexture != null) {
             chevronTexture.bindTexture();
 
@@ -113,8 +115,10 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
                 ElementEnum.PEGASUS_CHEVRON_LIGHT.render();
             }
 
-            ElementEnum.PEGASUS_CHEVRON_FRAME.bindTextureAndRender(rendererState.getBiomeOverlay());
-            ElementEnum.PEGASUS_CHEVRON_BACK.render();
+            if(!onlyLight) {
+                ElementEnum.PEGASUS_CHEVRON_FRAME.bindTextureAndRender(rendererState.getBiomeOverlay());
+                ElementEnum.PEGASUS_CHEVRON_BACK.render();
+            }
 
 
             GlStateManager.popMatrix();
@@ -139,6 +143,12 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         GlStateManager.enableAlpha();
         GlStateManager.enableTexture2D();
         GlStateManager.disableLighting();
+
+        GlStateManager.color(1, 1, 1);
+
+        if(!deactivated){
+            JSGTextureLightningHelper.lightUpTexture(1f);
+        }
 
         double[] slotPos = getPositionInRingAtIndex((GATE_DIAMETER / 2) - 0.85, slot);
 

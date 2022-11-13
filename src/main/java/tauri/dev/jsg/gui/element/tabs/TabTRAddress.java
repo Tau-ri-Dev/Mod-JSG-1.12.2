@@ -1,6 +1,7 @@
 package tauri.dev.jsg.gui.element.tabs;
 
 import tauri.dev.jsg.gui.element.GuiHelper;
+import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
 import net.minecraft.client.Minecraft;
@@ -45,7 +46,7 @@ public class TabTRAddress extends Tab {
             int shadow = 2;
             float color = 1.0f;
             for (int i = 0; i < 4; i++) {
-                Minecraft.getMinecraft().getTextureManager().bindTexture(trTile.getRings().getAddress(symbolType).get(i).getIconResource());
+                Minecraft.getMinecraft().getTextureManager().bindTexture(trTile.getRings().getAddress(symbolType).get(i).getIconResource(BiomeOverlayEnum.NORMAL, 0));
 
                 SymbolCoords symbolCoords = getSymbolCoords(i);
                 GuiHelper.drawTexturedRectWithShadow(symbolCoords.x, symbolCoords.y, shadow, shadow, symbolType.iconWidht, symbolType.iconHeight, color);

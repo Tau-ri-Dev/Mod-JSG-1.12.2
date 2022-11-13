@@ -7,6 +7,7 @@ import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.gui.entry.EntryActionEnum;
 import tauri.dev.jsg.packet.gui.entry.EntryActionToServer;
 import tauri.dev.jsg.packet.gui.entry.EntryDataTypeEnum;
+import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.stargate.network.SymbolInterface;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -177,7 +178,6 @@ public abstract class AbstractEntry {
 	}
 	
 	protected abstract int getHeight();
-//	protected abstract int getButtonOffset();
 	protected abstract int getMaxNameLength();
 	protected abstract EntryDataTypeEnum getEntryDataType();
 	
@@ -187,7 +187,7 @@ public abstract class AbstractEntry {
 		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
 		GlStateManager.color(0.77f, 0.77f, 0.77f, 1);
 		
-		Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource());		
+		Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource(BiomeOverlayEnum.NORMAL, 0));
 
 		Gui.drawScaledCustomSizeModalRect(x, y, 0, 0, 256, 256, sizeX, sizeY, 256, 256);
 		

@@ -1,6 +1,7 @@
 package tauri.dev.jsg.transportrings;
 
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.stargate.network.SymbolInterface;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import net.minecraft.util.ResourceLocation;
@@ -69,7 +70,7 @@ public enum SymbolOriEnum implements SymbolInterface {
     }
 
     @Override
-    public ResourceLocation getIconResource() {
+    public ResourceLocation getIconResource(BiomeOverlayEnum overlay, int dimId) {
         return iconResource;
     }
 

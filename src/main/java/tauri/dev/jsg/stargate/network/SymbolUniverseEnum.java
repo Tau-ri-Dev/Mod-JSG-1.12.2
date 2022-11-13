@@ -4,6 +4,7 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.model.ModelLoader;
 import net.minecraft.util.ResourceLocation;
+import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 
 import java.util.HashMap;
 import java.util.List;
@@ -105,7 +106,7 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 	}
 	
 	@Override
-	public ResourceLocation getIconResource() {
+	public ResourceLocation getIconResource(BiomeOverlayEnum overlay, int dimensionId) {
 		return iconResource;
 	}
 

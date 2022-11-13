@@ -1,5 +1,6 @@
 package tauri.dev.jsg.renderer.dialhomedevice;
 
+import net.minecraft.client.renderer.GlStateManager;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.model.ModelLoader;
@@ -10,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import tauri.dev.jsg.util.JSGTextureLightningHelper;
 
 public class DHDMilkyWayRenderer extends DHDAbstractRenderer {
     @Override
@@ -17,15 +19,20 @@ public class DHDMilkyWayRenderer extends DHDAbstractRenderer {
         NBTTagCompound compound = getNoteBookPage();
 
         for (SymbolMilkyWayEnum symbol : SymbolMilkyWayEnum.values()) {
+            GlStateManager.pushMatrix();
+            JSGTextureLightningHelper.lightUpTexture((rendererState.isButtonActive(symbol) ? 0.9f : 0));
             setColorByAddress(te, rendererState, compound, SymbolTypeEnum.MILKYWAY, symbol);
             rendererDispatcher.renderEngine.bindTexture(((DHDMilkyWayRendererState) rendererState).getButtonTexture(symbol, rendererState.getBiomeOverlay()));
-            ModelLoader.getModel(symbol.getModelResource(rendererState.biomeOverlay, te.getWorld().provider.getDimension())).render();
+            ModelLoader.getModel(symbol.getModelResource(rendererState.biomeOverlay, te.getWorld().provider.getDimension(), true)).render();
+            JSGTextureLightningHelper.resetLight(getWorld(), rendererState.pos);
+            GlStateManager.popMatrix();
         }
     }
 
     @Override
-    public void renderDHD(DHDAbstractRendererState rendererState) {
+    public void renderDHD(DHDAbstractRendererState rendererState, DHDAbstractTile te) {
         ElementEnum.MILKYWAY_DHD.bindTextureAndRender(rendererState.getBiomeOverlay());
+        ModelLoader.getModel(((SymbolMilkyWayEnum) SymbolMilkyWayEnum.getOrigin()).getModelResource(rendererState.biomeOverlay, te.getWorld().provider.getDimension(), true)).render();
     }
 
     @Override

@@ -42,6 +42,10 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
     private static final float VORTEX_START = 5.275f;
     private static final float SPEED_FACTOR = 6f;
 
+    public static boolean isEhAnimatedLoaded(){
+        return !TextureLoader.isNotTextureLoaded(new ResourceLocation(JSG.MOD_ID, EV_HORIZON_NORMAL_TEXTURE_ANIMATED));
+    }
+
     private static final Map<ResourceLocation, Boolean> EH_RENDERED = new HashMap<>();
     static{
         EH_RENDERED.put(new ResourceLocation(JSG.MOD_ID, EV_HORIZON_NORMAL_TEXTURE_ANIMATED), false);
@@ -144,7 +148,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
     protected ResourceLocation getEventHorizonTextureResource(StargateAbstractRendererState rendererState, boolean kawoosh) {
         String texture = (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE_ANIMATED : (kawoosh ? EV_HORIZON_KAWOOSH_TEXTURE_ANIMATED : EV_HORIZON_NORMAL_TEXTURE_ANIMATED));
-        if (tauri.dev.jsg.config.JSGConfig.horizonConfig.disableAnimatedEventHorizon || TextureLoader.isNotTextureLoaded(new ResourceLocation(JSG.MOD_ID, texture)))
+        if (tauri.dev.jsg.config.JSGConfig.horizonConfig.disableAnimatedEventHorizon || !isEhAnimatedLoaded())
             texture = (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE : EV_HORIZON_NORMAL_TEXTURE);
 
         return new ResourceLocation(JSG.MOD_ID, texture);

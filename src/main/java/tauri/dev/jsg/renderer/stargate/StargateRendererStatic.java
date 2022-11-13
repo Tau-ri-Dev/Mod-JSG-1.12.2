@@ -1,12 +1,16 @@
 package tauri.dev.jsg.renderer.stargate;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.loader.texture.TextureLoader;
 
 import java.util.*;
 
 import static org.lwjgl.opengl.GL11.*;
+import static tauri.dev.jsg.renderer.stargate.StargateAbstractRenderer.isEhAnimatedLoaded;
 
 public class StargateRendererStatic {
 	static final float eventHorizonRadius = 3.790975f;
@@ -92,7 +96,7 @@ public class StargateRendererStatic {
 			render(tick, white, alpha, mul, (byte) 0);
 		}
 		public void render(float tick, boolean white, Float alpha, float mul, byte animationOverride) {
-			boolean animated = !JSGConfig.horizonConfig.disableAnimatedEventHorizon;
+			boolean animated = !JSGConfig.horizonConfig.disableAnimatedEventHorizon && isEhAnimatedLoaded();
 			if (animationOverride == -1) animated = false;
 			if (animationOverride == 1) animated = true;
 
@@ -216,7 +220,7 @@ public class StargateRendererStatic {
 		}
 		
 		public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul, boolean reversed, boolean red, byte animationOverride) {
-			boolean animate = !tauri.dev.jsg.config.JSGConfig.horizonConfig.disableAnimatedEventHorizon;
+			boolean animate = !tauri.dev.jsg.config.JSGConfig.horizonConfig.disableAnimatedEventHorizon && isEhAnimatedLoaded();
 			if (animationOverride == -1) animate = false;
 			if (animationOverride == 1) animate = true;
 

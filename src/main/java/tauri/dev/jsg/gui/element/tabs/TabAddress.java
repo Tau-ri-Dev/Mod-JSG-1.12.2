@@ -1,6 +1,8 @@
 package tauri.dev.jsg.gui.element.tabs;
 
 import tauri.dev.jsg.gui.element.GuiHelper;
+import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
+import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import net.minecraft.client.Minecraft;
@@ -11,6 +13,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.items.SlotItemHandler;
 
 import java.awt.*;
+import java.util.Objects;
 
 public class TabAddress extends Tab {
 
@@ -59,7 +62,7 @@ public class TabAddress extends Tab {
                     break;
             }
             for (int i = 0; i < maxSymbols; i++) {
-                Minecraft.getMinecraft().getTextureManager().bindTexture(gateTile.getStargateAddress(symbolType).get(i).getIconResource());
+                Minecraft.getMinecraft().getTextureManager().bindTexture(Objects.requireNonNull(gateTile.getStargateAddress(symbolType)).get(i).getIconResource(SymbolMilkyWayEnum.getOriginId(BiomeOverlayEnum.updateBiomeOverlay(gateTile.getWorld(), gateTile.getPos(), gateTile.getSupportedOverlays()), gateTile.getWorld().provider.getDimension())));
 
                 SymbolCoords symbolCoords = getSymbolCoords(i);
                 GuiHelper.drawTexturedRectWithShadow(symbolCoords.x, symbolCoords.y, shadow, shadow, symbolType.iconWidht, symbolType.iconHeight, color);

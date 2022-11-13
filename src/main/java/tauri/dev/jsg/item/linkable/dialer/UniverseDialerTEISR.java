@@ -6,6 +6,7 @@ import tauri.dev.jsg.item.oc.ItemOCMessage;
 import tauri.dev.jsg.item.renderer.JSGFontRenderer;
 import tauri.dev.jsg.item.renderer.ItemRenderHelper;
 import tauri.dev.jsg.loader.ElementEnum;
+import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.stargate.EnumStargateState;
 import tauri.dev.jsg.stargate.network.*;
@@ -24,6 +25,7 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+import tauri.dev.jsg.util.JSGTextureLightningHelper;
 
 import java.awt.*;
 
@@ -133,7 +135,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
         if (!is9Chevron)
             x += 0.09f;
 
-        Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource());
+        Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource(BiomeOverlayEnum.NORMAL, 0));
         GlStateManager.enableTexture2D();
         GlStateManager.enableBlend();
 

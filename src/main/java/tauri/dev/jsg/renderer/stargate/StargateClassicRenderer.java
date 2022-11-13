@@ -19,6 +19,7 @@ import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import tauri.dev.jsg.stargate.merging.StargateMilkyWayMergeHelper;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.JSGTextureLightningHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 
 import java.util.HashMap;
@@ -63,11 +64,21 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     // ----------------------------------------------------------------------------------------
     // Chevrons
 
-    protected abstract void renderChevron(S rendererState, double partialTicks, ChevronEnum chevron);
+    protected abstract void renderChevron(S rendererState, double partialTicks, ChevronEnum chevron, boolean onlyLight);
 
     protected void renderChevrons(S rendererState, double partialTicks) {
-        for (ChevronEnum chevron : ChevronEnum.values())
-            renderChevron(rendererState, partialTicks, chevron);
+
+        for (ChevronEnum chevron : ChevronEnum.values()) {
+            GlStateManager.pushMatrix();
+            // not emissive
+            renderChevron(rendererState, partialTicks, chevron, false);
+
+            // emissive layer
+            JSGTextureLightningHelper.lightUpTexture(rendererState.chevronTextureList.CHEVRON_STATE_MAP.get(chevron)/10f);
+            renderChevron(rendererState, partialTicks, chevron, true);
+            JSGTextureLightningHelper.resetLight(getWorld(), rendererState.pos);
+            GlStateManager.popMatrix();
+        }
 
         rendererState.chevronTextureList.iterate(getWorld(), partialTicks);
     }
@@ -163,6 +174,6 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     public void setGateHeatColor(StargateClassicRendererState rendererState) {
         if (rendererState.gateHeat == -1) return;
         float red = (float) (rendererState.gateHeat / StargateClassicBaseTile.GATE_MAX_HEAT);
-        GlStateManager.color(1 + red, 1, 1);
+        GlStateManager.color(1 + (red * 1.75F), 1, 1);
     }
 }

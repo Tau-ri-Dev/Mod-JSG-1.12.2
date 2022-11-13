@@ -10,6 +10,8 @@ import net.minecraft.world.World;
 
 import java.util.*;
 
+import static tauri.dev.jsg.stargate.EnumMemberVariant.CHEVRON;
+
 public class ChevronTextureList {
 
   //	private String chevronTextureBase;
@@ -20,16 +22,18 @@ public class ChevronTextureList {
   //	private boolean isFinalActive;
 
   // Not saved
-  private Map<ChevronEnum, Integer> CHEVRON_STATE_MAP = new HashMap<>(9);
+  public Map<ChevronEnum, Integer> CHEVRON_STATE_MAP = new HashMap<>(9);
   private List<Activation<ChevronEnum>> activationList = new ArrayList<>();
 
   private final Map<BiomeOverlayEnum, Map<Integer, ResourceLocation>> CHEVRON_RESOURCE_MAP = new HashMap<>();
+  private final Map<Integer, ResourceLocation> CHEVRON_LIGHT_RESOURCE_MAP = new HashMap<>();
 
   public ChevronTextureList(String chevronTextureBase) {
     for (BiomeOverlayEnum biomeOverlay : BiomeOverlayEnum.values()) {
       Map<Integer, ResourceLocation> map = new HashMap<>();
 
       for (int i = 0; i <= 10; i++) {
+        CHEVRON_LIGHT_RESOURCE_MAP.put(i, TextureLoader.getTextureResource(chevronTextureBase + i + "_emissive.png"));
         map.put(i, TextureLoader.getTextureResource(chevronTextureBase + i + biomeOverlay.suffix + ".jpg"));
       }
 
@@ -122,7 +126,9 @@ public class ChevronTextureList {
     });
   }
 
-  public ResourceLocation get(BiomeOverlayEnum overlayEnum, ChevronEnum chevron) {
+  public ResourceLocation get(BiomeOverlayEnum overlayEnum, ChevronEnum chevron, boolean onlyLight) {
+    if(onlyLight)
+      return CHEVRON_LIGHT_RESOURCE_MAP.get(CHEVRON_STATE_MAP.get(chevron));
     return CHEVRON_RESOURCE_MAP.get(overlayEnum).get(CHEVRON_STATE_MAP.get(chevron));
   }
 

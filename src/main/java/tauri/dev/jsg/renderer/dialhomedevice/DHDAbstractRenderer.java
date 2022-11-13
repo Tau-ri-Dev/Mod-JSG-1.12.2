@@ -42,7 +42,7 @@ public abstract class DHDAbstractRenderer extends TileEntitySpecialRenderer<DHDA
             GlStateManager.translate(0.5, 0, 0.5);
             GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
 
-            renderDHD(rendererState);
+            renderDHD(rendererState, te);
             renderSymbols(te, rendererState, te.getWorld(), new BlockPos(x, y, z));
 
             GlStateManager.popMatrix();
@@ -53,7 +53,7 @@ public abstract class DHDAbstractRenderer extends TileEntitySpecialRenderer<DHDA
 
     public abstract void renderSymbols(DHDAbstractTile te, DHDAbstractRendererState rendererState, World world, BlockPos lightPos);
 
-    public abstract void renderDHD(DHDAbstractRendererState rendererState);
+    public abstract void renderDHD(DHDAbstractRendererState rendererState, DHDAbstractTile te);
 
     public abstract Block getDHDBlock();
 
