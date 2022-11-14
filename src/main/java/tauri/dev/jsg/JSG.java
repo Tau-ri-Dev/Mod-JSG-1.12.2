@@ -120,7 +120,7 @@ public class JSG {
 
     @EventHandler
     public void loadComplete(FMLLoadCompleteEvent event) {
-        JSG.info("JSG loaded!");
+        JSG.info("Just Stargate Mod loading completed!");
     }
 
     @EventHandler

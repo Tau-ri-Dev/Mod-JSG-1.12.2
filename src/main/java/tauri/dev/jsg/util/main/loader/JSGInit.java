@@ -1,6 +1,7 @@
 package tauri.dev.jsg.util.main.loader;
 
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.advancements.JSGAdvancements;
 import tauri.dev.jsg.capability.endpoint.ItemEndpointCapability;
 import tauri.dev.jsg.chunkloader.ChunkLoadingCallback;
 import tauri.dev.jsg.config.JSGConfig;
@@ -36,6 +37,9 @@ public class JSGInit {
         ForgeChunkManager.setForcedChunkLoadingCallback(JSG.instance, ChunkLoadingCallback.INSTANCE);
         JSGOreDictionary.registerOreDictionary();
         JSG.info("Successfully registered OreDictionary!");
+
+        // Advancements
+        JSGAdvancements.register();
 
         // ThermalExpansion
         registerThermal();

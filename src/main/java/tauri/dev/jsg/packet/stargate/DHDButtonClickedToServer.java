@@ -1,6 +1,7 @@
 package tauri.dev.jsg.packet.stargate;
 
 import io.netty.buffer.ByteBuf;
+import tauri.dev.jsg.advancements.JSGAdvancements;
 import tauri.dev.jsg.packet.PositionedPacket;
 import tauri.dev.jsg.stargate.EnumStargateState;
 import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
@@ -80,6 +81,9 @@ public class DHDButtonClickedToServer extends PositionedPacket {
 							// BRB pressed on idling gate, attempt to open
 
 							StargateOpenResult openResult = gateTile.attemptOpenAndFail();
+
+							if(openResult.ok())
+								JSGAdvancements.CHEVRON_SEVEN_LOCKED.trigger(player);
 
 							if (openResult == StargateOpenResult.NOT_ENOUGH_POWER) {
 								player.sendStatusMessage(new TextComponentTranslation("tile.jsg.dhd_block.not_enough_power"), true);

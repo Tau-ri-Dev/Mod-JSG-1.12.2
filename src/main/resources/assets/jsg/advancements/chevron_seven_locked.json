@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "jsg:stargate_milkyway_member_block",
+      "data": 14
+    },
+    "title": {
+      "translate": "advancements.chevron_seven_locked.title"
+    },
+    "description": {
+      "translate": "advancements.chevron_seven_locked.description"
+    },
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "chevron_seven_locked": {
+      "trigger": "jsg:chevron_seven_locked"
+    }
+  }
+}
