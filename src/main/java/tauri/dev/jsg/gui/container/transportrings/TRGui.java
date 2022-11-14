@@ -45,6 +45,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
     private List<Tab> tabs;
     private TabTRAddress goauldAddressTab;
     private TabTRAddress oriAddressTab;
+    private TabTRAddress ancientAddressTab;
     private TabConfig configTab;
     private int energyStored;
     private int maxEnergyStored;
@@ -107,6 +108,24 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setIconSize(20, 18)
                 .setIconTextureLocation(304, 18).build();
 
+        ancientAddressTab = (TabTRAddress) TabTRAddress.builder()
+                .setTile(container.trTile)
+                .setSymbolType(SymbolTypeTransportRingsEnum.ANCIENT)
+                .setProgressColor(0x90E0F9)
+                .setGuiSize(xSize, ySize)
+                .setGuiPosition(guiLeft, guiTop)
+                .setTabPosition(-21, 2+(22*2))
+                .setOpenX(-128)
+                .setHiddenX(-6)
+                .setTabSize(128, 113)
+                .setTabTitle(I18n.format("gui.transportrings.ancient_address"))
+                .setTabSide(TabSideEnum.LEFT)
+                .setTexture(BACKGROUND_TEXTURE, 512)
+                .setBackgroundTextureLocation(176, 0)
+                .setIconRenderPos(1, 7)
+                .setIconSize(20, 18)
+                .setIconTextureLocation(304, 36).build();
+
         configTab = (TabConfig) TabConfig.builder()
                 .setConfig(container.trTile.getConfig())
                 .setGuiSize(xSize, ySize)
@@ -125,6 +144,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
         tabs.add(goauldAddressTab);
         tabs.add(oriAddressTab);
+        tabs.add(ancientAddressTab);
         tabs.add(configTab);
 
         configTab.setOnTabClose(this::saveConfig);
@@ -133,6 +153,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
         container.inventorySlots.set(7, goauldAddressTab.createSlot((SlotItemHandler) container.getSlot(7)));
         container.inventorySlots.set(8, oriAddressTab.createSlot((SlotItemHandler) container.getSlot(8)));
+        container.inventorySlots.set(9, ancientAddressTab.createSlot((SlotItemHandler) container.getSlot(9)));
 
         textFields.clear();
         int y = 14;
@@ -175,6 +196,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
         boolean hasGoauldUpgrade = false;
         boolean hasOriUpgrade = false;
+        boolean hasAncientUpgrade = false;
 
         for (int i = 0; i < 4; i++) {
             ItemStack itemStack = container.getSlot(i).getStack();
@@ -189,12 +211,16 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                     case ORI_UPGRADE:
                         hasOriUpgrade = true;
                         break;
+                    case ANCIENT_UPGRADE:
+                        hasAncientUpgrade = true;
+                        break;
                 }
             }
         }
 
         goauldAddressTab.setVisible(hasGoauldUpgrade);
         oriAddressTab.setVisible(hasOriUpgrade);
+        ancientAddressTab.setVisible(hasAncientUpgrade);
 
         Tab.updatePositions(tabs);
 

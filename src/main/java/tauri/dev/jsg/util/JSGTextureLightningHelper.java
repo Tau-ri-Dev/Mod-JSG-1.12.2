@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import tauri.dev.jsg.config.JSGConfig;
 
 public class JSGTextureLightningHelper {
     public static void lightUpTexture(World world, BlockPos pos, float lightIntensity){
@@ -15,6 +16,7 @@ public class JSGTextureLightningHelper {
      * @param lightIntensity Is 0-1F when 0 is the lowest light
      */
     public static void lightUpTexture(float lightIntensity){
+        if(!JSGConfig.avConfig.renderEmissive) return;
         RenderHelper.enableStandardItemLighting();
         if(lightIntensity > 1) lightIntensity = 1;
         if(lightIntensity < 0) lightIntensity = 0;
@@ -29,6 +31,7 @@ public class JSGTextureLightningHelper {
      * @param pos Is pos of the tile entity
      */
     public static void resetLight(World world, BlockPos pos){
+        if(!JSGConfig.avConfig.renderEmissive) return;
         RenderHelper.enableStandardItemLighting();
         int i = world.getCombinedLight(pos, 0);
         int j = i % 65536;

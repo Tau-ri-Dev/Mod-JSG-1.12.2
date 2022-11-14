@@ -20,13 +20,13 @@ public enum SymbolOriEnum implements SymbolInterface {
     ORIGIN(5, 5, "Origin"),
     LIGHT(6, 6, "Light");
 
-    public int id;
-    public int angleIndex;
+    public final int id;
+    public final int angleIndex;
 
-    public String englishName;
-    public String translationKey;
-    public ResourceLocation iconResource;
-    public ResourceLocation modelResource;
+    public final String englishName;
+    public final String translationKey;
+    public final ResourceLocation iconResource;
+    public final ResourceLocation modelResource;
 
     SymbolOriEnum(int id, int angleIndex, String englishName) {
         this.id = id;
@@ -84,12 +84,8 @@ public enum SymbolOriEnum implements SymbolInterface {
         return null;
     }
 
-    public SymbolTypeTransportRingsEnum getTRSymbolType() {
-        return SymbolTypeTransportRingsEnum.ORI;
-    }
-
     public static SymbolOriEnum getRandomSymbol(Random random) {
-        int id = 0;
+        int id;
         do {
             id = random.nextInt(5);
         } while (id == ORIGIN.id || id == LIGHT.id);
@@ -101,10 +97,7 @@ public enum SymbolOriEnum implements SymbolInterface {
         if (address.size() < 5)
             return false;
 
-        if (!address.get(address.size()-1).origin())
-            return false;
-
-        return true;
+        return address.get(address.size() - 1).origin();
     }
 
     public static List<SymbolInterface> stripOrigin(List<SymbolInterface> dialedAddress) {
@@ -127,11 +120,11 @@ public enum SymbolOriEnum implements SymbolInterface {
         }
     }
 
-    public static final SymbolOriEnum valueOf(int id) {
+    public static SymbolOriEnum valueOf(int id) {
         return ID_MAP.get(id);
     }
 
-    public static final SymbolOriEnum fromEnglishName(String englishName) {
+    public static SymbolOriEnum fromEnglishName(String englishName) {
         return ENGLISH_NAME_MAP.get(englishName.toLowerCase().replace("ö", "o"));
     }
 

@@ -8,12 +8,11 @@
 
 	"key": {
 		"X": {
-			"type" : "forge:ore_dict",
-			"ore": "ingotNaquadahRaw"
+			"item" : "jsg:crystal_tokra"
 		}
 	},
 	"result": {
-		"item": "jsg:naquadah_block_raw",
+		"item": "jsg:tokra_crystal_block",
 		"count": 1
 	}
 }

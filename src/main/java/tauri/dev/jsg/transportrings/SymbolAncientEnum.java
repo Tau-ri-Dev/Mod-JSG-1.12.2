@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public enum SymbolGoauldEnum implements SymbolInterface {
-    AMUN(0, 0, "Amun"),
-    SERKET(1, 1, "Serket"),
-    KHEPRI(2, 3, "Khepri"),
-    RA(3, 2, "Ra"),
-    FELLUCA(4, 4, "Felluca"),
-    COBRA(5, 5, "Cobra"),
+public enum SymbolAncientEnum implements SymbolInterface {
+    ALPHA(0, 0, "Alpha"),
+    BETA(1, 1, "Beta"),
+    GAMMA(2, 2, "Gamma"),
+    DELTA(3, 3, "Delta"),
+    OMEGA(4, 4, "Omega"),
+    ORIGIN(5, 5, "Origin"),
     LIGHT(6, 6, "Light");
 
     public final int id;
@@ -28,24 +28,20 @@ public enum SymbolGoauldEnum implements SymbolInterface {
     public final ResourceLocation iconResource;
     public final ResourceLocation modelResource;
 
-    SymbolGoauldEnum(int id, int angleIndex, String englishName) {
+    SymbolAncientEnum(int id, int angleIndex, String englishName) {
         this.id = id;
 
         this.angleIndex = angleIndex;
 
         this.englishName = englishName;
-        this.translationKey = "glyph.jsg.transportrings.goauld." + englishName.toLowerCase().replace(" ", "_");
-        this.iconResource = new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/transportrings/goauld/" + englishName.toLowerCase() + ".png");
-        this.modelResource = new ResourceLocation(JSG.MOD_ID, "models/tesr/transportrings/controller/goauld/goauld_button_" + (id + 1) + ".obj");
-    }
-
-    public static SymbolGoauldEnum getOrigin() {
-        return COBRA;
+        this.translationKey = "glyph.jsg.transportrings.ancient." + englishName.toLowerCase().replace(" ", "_");
+        this.iconResource = new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/transportrings/ancient/" + englishName.toLowerCase() + ".png");
+        this.modelResource = new ResourceLocation(JSG.MOD_ID, "models/tesr/transportrings/controller/ancient/ancient_button_" + (id+1) + ".obj");
     }
 
     @Override
     public boolean origin() {
-        return this == getOrigin();
+        return this == ORIGIN;
     }
 
     @Override
@@ -88,11 +84,11 @@ public enum SymbolGoauldEnum implements SymbolInterface {
         return null;
     }
 
-    public static SymbolGoauldEnum getRandomSymbol(Random random) {
+    public static SymbolAncientEnum getRandomSymbol(Random random) {
         int id;
         do {
             id = random.nextInt(5);
-        } while (id == getOrigin().id || id == LIGHT.id);
+        } while (id == ORIGIN.id || id == LIGHT.id);
 
         return valueOf(id);
     }
@@ -105,30 +101,34 @@ public enum SymbolGoauldEnum implements SymbolInterface {
     }
 
     public static List<SymbolInterface> stripOrigin(List<SymbolInterface> dialedAddress) {
-        return dialedAddress.subList(0, dialedAddress.size() - 1);
+        return dialedAddress.subList(0, dialedAddress.size()-1);
     }
 
-    private static final Map<Integer, SymbolGoauldEnum> ID_MAP = new HashMap<>();
-    private static final Map<Integer, SymbolGoauldEnum> ANGLE_INDEX_MAP = new HashMap<>();
-    private static final Map<String, SymbolGoauldEnum> ENGLISH_NAME_MAP = new HashMap<>();
+    public static SymbolAncientEnum getOrigin() {
+        return ORIGIN;
+    }
+
+    private static final Map<Integer, SymbolAncientEnum> ID_MAP = new HashMap<>();
+    private static final Map<Integer, SymbolAncientEnum> ANGLE_INDEX_MAP = new HashMap<>();
+    private static final Map<String, SymbolAncientEnum> ENGLISH_NAME_MAP = new HashMap<>();
 
     static {
-        for (SymbolGoauldEnum symbol : values()) {
+        for (SymbolAncientEnum symbol : values()) {
             ID_MAP.put(symbol.id, symbol);
             ANGLE_INDEX_MAP.put(symbol.angleIndex, symbol);
             ENGLISH_NAME_MAP.put(symbol.englishName.toLowerCase(), symbol);
         }
     }
 
-    public static SymbolGoauldEnum valueOf(int id) {
+    public static SymbolAncientEnum valueOf(int id) {
         return ID_MAP.get(id);
     }
 
-    public static SymbolGoauldEnum fromEnglishName(String englishName) {
+    public static SymbolAncientEnum fromEnglishName(String englishName) {
         return ENGLISH_NAME_MAP.get(englishName.toLowerCase().replace("ö", "o"));
     }
 
-    public static SymbolGoauldEnum getSymbolByAngleIndex(int index) {
+    public static SymbolAncientEnum getSymbolByAngleIndex(int index){
         return ANGLE_INDEX_MAP.get(index);
     }
 }

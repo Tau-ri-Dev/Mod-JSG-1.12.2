@@ -60,6 +60,7 @@ item.jsg.crystal_ender.name=末影水晶
 item.jsg.crystal_yellow.name=光能水晶
 item.jsg.crystal_white.name=白色水晶
 item.jsg.crystal_blue_pegasus.name=Pegasus Crystal
+item.jsg.crystal_tokra.name=Tokra's Crystal
 
 item.jsg.circuit_control_base.name=控制电路基础
 item.jsg.circuit_control_naquadah.name=Naquadah控制电路
@@ -255,6 +256,7 @@ tile.jsg.capacitor_block_empty.name=Capacitor Bank (Empty)
 # zpm
 tile.jsg.zpm.name=Zero Point Module (ZPM)
 tile.jsg.zpm_hub_block.name=ZPM Hub (Ancient)
+tile.jsg.zpm_slot_block.name=ZPM Slot (Tau'ri)
 
 # rings controller
 tile.jsg.transportrings_controller_goauld_block.name=传送环控制器

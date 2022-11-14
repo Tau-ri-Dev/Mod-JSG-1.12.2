@@ -136,7 +136,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     private final Node node = JSG.ocWrapper.createNode(this, "transportrings");
     private int currentPowerTier = 1;
     public int itemStackHandlerSlotsCount = 9;
-    private final JSGItemStackHandler itemStackHandler = new JSGItemStackHandler(9) {
+    private final JSGItemStackHandler itemStackHandler = new JSGItemStackHandler(10) {
 
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
@@ -158,6 +158,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                 case 7:
                 case 8:
+                case 9:
                     return item == JSGItems.PAGE_NOTEBOOK_ITEM;
                 default:
                     return true;
@@ -1534,10 +1535,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     public static enum TransportRingsUpgradeEnum implements EnumKeyInterface<Item> {
         GOAULD_UPGRADE(JSGItems.CRYSTAL_GLYPH_GOAULD),
-        ORI_UPGRADE(JSGItems.CRYSTAL_GLYPH_ORI);
+        ORI_UPGRADE(JSGItems.CRYSTAL_GLYPH_ORI),
+        ANCIENT_UPGRADE(JSGItems.CRYSTAL_GLYPH_ANCIENT);
 
         private static final EnumKeyMap<Item, TransportRingsAbstractTile.TransportRingsUpgradeEnum> idMap = new EnumKeyMap<>(values());
-        public Item item;
+        public final Item item;
 
         private TransportRingsUpgradeEnum(Item item) {
             this.item = item;

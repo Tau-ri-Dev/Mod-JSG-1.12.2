@@ -31,28 +31,32 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         renderRing(rendererState, partialTicks);
         renderChevrons(rendererState, partialTicks);
 
-        if (rendererState.spinHelper.getIsSpinning()) {
-            int index = (int) rendererState.spinHelper.apply(getWorld().getTotalWorldTime() + partialTicks);
-            if (!rendererState.slotToGlyphMap.containsKey(index)) {
-                renderGlyph(rendererState.spinHelper.getTargetSymbol().getId(), index, false);
-            }
-        }
+        GlStateManager.pushMatrix();
+            JSGTextureLightningHelper.lightUpTexture(1f);
 
-
-        for (int i = 0; i < GLYPHS_COUNT + 2; i++) { // +2 for incoming bug
-            if (!rendererState.slotToGlyphMap.containsKey(i) && i < GLYPHS_COUNT) { // here is fixed
-                // Don't show the faded out glyphs when the gate is dialing.
-                if (!rendererState.spinHelper.getIsSpinning() && rendererState.slotToGlyphMap.size() == 0) {
-                    renderGlyph(i, i, true);
+            if (rendererState.spinHelper.getIsSpinning()) {
+                int index = (int) rendererState.spinHelper.apply(getWorld().getTotalWorldTime() + partialTicks);
+                if (!rendererState.slotToGlyphMap.containsKey(index)) {
+                    renderGlyph(rendererState.spinHelper.getTargetSymbol().getId(), index, false);
                 }
-                continue;
             }
-            else if (!rendererState.slotToGlyphMap.containsKey(i) && i >= GLYPHS_COUNT)
-                continue;
 
-            renderGlyph(rendererState.slotToGlyphMap.get(i), i, false); // for incoming and locked chevrons
-        }
-        JSGTextureLightningHelper.resetLight(getWorld(), rendererState.pos);
+
+            for (int i = 0; i < GLYPHS_COUNT + 2; i++) { // +2 for incoming bug
+                if (!rendererState.slotToGlyphMap.containsKey(i) && i < GLYPHS_COUNT) { // here is fixed
+                    // Don't show the faded out glyphs when the gate is dialing.
+                    if (!rendererState.spinHelper.getIsSpinning() && rendererState.slotToGlyphMap.size() == 0) {
+                        renderGlyph(i, i, true);
+                    }
+                    continue;
+                }
+                else if (!rendererState.slotToGlyphMap.containsKey(i) && i >= GLYPHS_COUNT)
+                    continue;
+
+                renderGlyph(rendererState.slotToGlyphMap.get(i), i, false); // for incoming and locked chevrons
+            }
+            JSGTextureLightningHelper.resetLight(getWorld(), rendererState.pos);
+        GlStateManager.popMatrix();
 
 
         ElementEnum.PEGASUS_GATE.bindTextureAndRender(rendererState.getBiomeOverlay());
@@ -145,10 +149,6 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         GlStateManager.disableLighting();
 
         GlStateManager.color(1, 1, 1);
-
-        if(!deactivated){
-            JSGTextureLightningHelper.lightUpTexture(1f);
-        }
 
         double[] slotPos = getPositionInRingAtIndex((GATE_DIAMETER / 2) - 0.85, slot);
 

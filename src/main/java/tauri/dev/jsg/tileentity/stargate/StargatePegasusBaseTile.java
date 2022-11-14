@@ -352,7 +352,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         }
 
         super.readFromNBT(compound);
-        if (stargateState.engaged()) {
+        if (stargateState.engaged() || stargateState.incoming() || stargateState.unstable()) {
             for (int i = 0; i < 36; i++) {
                 sendRenderingUpdate(StargateRendererActionState.EnumGateAction.ACTIVATE_GLYPH, i, false);
             }

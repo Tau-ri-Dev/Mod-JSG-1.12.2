@@ -60,6 +60,7 @@ item.jsg.crystal_ender.name=Cristal Ender
 item.jsg.crystal_yellow.name=Cristal de Luz
 item.jsg.crystal_white.name=Cristal Blanco
 item.jsg.crystal_blue_pegasus.name=Cristal de Pegasus
+item.jsg.crystal_tokra.name=Tokra's Crystal
 
 item.jsg.circuit_control_base.name=Base del Circuito de Control
 item.jsg.circuit_control_naquadah.name=Circuito del Control de Naquadah
@@ -255,6 +256,7 @@ tile.jsg.capacitor_block_empty.name=Capacitor (Vacío)
 # zpm
 tile.jsg.zpm.name=Zero Point Module (ZPM)
 tile.jsg.zpm_hub_block.name=ZPM Hub (Ancient)
+tile.jsg.zpm_slot_block.name=ZPM Slot (Tau'ri)
 
 # rings controller
 tile.jsg.transportrings_controller_goauld_block.name=Controlador del Anillo Transportador

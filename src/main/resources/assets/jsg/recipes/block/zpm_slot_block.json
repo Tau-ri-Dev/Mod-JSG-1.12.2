@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "YTR",
+    "TCT",
+    "RTW"
+  ],
+
+  "key": {
+    "C": {
+      "item": "jsg:circuit_control_crystal"
+    },
+    "T": {
+      "type": "forge:ore_dict",
+      "ore": "plateTitanium"
+    },
+    "R": {
+      "item": "jsg:crystal_red"
+    },
+    "W": {
+      "item": "jsg:crystal_white"
+    },
+    "Y": {
+      "item": "jsg:crystal_yellow"
+    }
+  },
+
+  "result": {
+    "item": "jsg:zpm_slot_block",
+    "data": 0,
+    "count": 1
+  }
+}

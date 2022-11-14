@@ -640,6 +640,13 @@ public class JSGConfig {
 
         @Name("Render EHs even if they are not rendering")
         public boolean renderEHifTheyNot = true;
+
+        @Name("Render emissive textures")
+        @Comment({
+                "Render light of some textures.",
+                "Disable this if it causes lags."
+        })
+        public boolean renderEmissive = true;
     }
 
     public static class WorldOreGenerator {

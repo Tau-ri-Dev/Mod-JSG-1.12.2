@@ -49,7 +49,7 @@ public class TabTRAddress extends Tab {
                 Minecraft.getMinecraft().getTextureManager().bindTexture(trTile.getRings().getAddress(symbolType).get(i).getIconResource(BiomeOverlayEnum.NORMAL, 0));
 
                 SymbolCoords symbolCoords = getSymbolCoords(i);
-                GuiHelper.drawTexturedRectWithShadow(symbolCoords.x, symbolCoords.y, shadow, shadow, symbolType.iconWidht, symbolType.iconHeight, color);
+                GuiHelper.drawTexturedRectWithShadow(symbolCoords.x, symbolCoords.y, shadow, shadow, symbolType.iconWidth, symbolType.iconHeight, color);
             }
 
             GlStateManager.enableBlend();
@@ -75,7 +75,7 @@ public class TabTRAddress extends Tab {
             for (int i = 0; i < 4; i++) {
                 SymbolCoords symbolCoords = getSymbolCoords(i);
 
-                if (GuiHelper.isPointInRegion(symbolCoords.x, symbolCoords.y, symbolType.iconWidht, symbolType.iconHeight, mouseX, mouseY)) {
+                if (GuiHelper.isPointInRegion(symbolCoords.x, symbolCoords.y, symbolType.iconWidth, symbolType.iconHeight, mouseX, mouseY)) {
                     screen.drawHoveringText(trTile.getRings().getAddress(symbolType).get(i).localize(), mouseX - guiLeft, mouseY - guiTop);
                 }
             }
