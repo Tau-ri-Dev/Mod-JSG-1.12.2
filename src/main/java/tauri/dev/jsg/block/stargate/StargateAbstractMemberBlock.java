@@ -22,6 +22,7 @@ import tauri.dev.jsg.tileentity.stargate.StargateClassicMemberTile;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class StargateAbstractMemberBlock extends JSGBlock {
@@ -46,7 +47,7 @@ public abstract class StargateAbstractMemberBlock extends JSGBlock {
     // Explosions
 
     @Override
-    public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn) {
+    public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, @Nonnull Explosion explosionIn) {
         worldIn.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 20, true, true).doExplosionA();
     }
 
@@ -57,11 +58,11 @@ public abstract class StargateAbstractMemberBlock extends JSGBlock {
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         StargateAbstractMemberTile memberTile = (StargateAbstractMemberTile) world.getTileEntity(pos);
+        if (memberTile == null) return;
         StargateAbstractBaseTile gateTile = memberTile.getBaseTile(world);
 
-        if (gateTile != null) {
-            gateTile.updateMergeState(false, world.getBlockState(gateTile.getPos()).getValue(JSGProps.FACING_HORIZONTAL));
-        }
+        if (gateTile == null) return;
+        gateTile.updateMergeState(false, world.getBlockState(gateTile.getPos()).getValue(JSGProps.FACING_HORIZONTAL));
     }
 
     @Override
