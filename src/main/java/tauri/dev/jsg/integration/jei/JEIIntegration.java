@@ -8,6 +8,7 @@ import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -18,6 +19,7 @@ import tauri.dev.jsg.integration.jei.recipe.JEINotebookCloneRecipe;
 import tauri.dev.jsg.integration.jei.recipe.JEINotebookRecipe;
 import tauri.dev.jsg.integration.jei.recipe.JEIUniverseDialerCloneRecipe;
 import tauri.dev.jsg.integration.jei.recipe.JEIUniverseDialerRepairRecipe;
+import tauri.dev.jsg.item.JSGIconItem;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.machine.assembler.AssemblerRecipe;
 import tauri.dev.jsg.machine.assembler.AssemblerRecipes;
@@ -45,6 +47,12 @@ public final class JEIIntegration implements IModPlugin {
 
         // Tab handling
         registry.addAdvancedGuiHandlers(new JEIAdvancedGuiHandler());
+
+        // Hide icons in JEI
+        for(Item i : JSGItems.ITEMS){
+            if(i instanceof JSGIconItem)
+                registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(i, 1));
+        }
 
         List<IRecipeWrapper> recipes = new ArrayList<>(JEINotebookRecipe.genAll());
 

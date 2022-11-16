@@ -1,0 +1,27 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.zpm_slot.title",
+      "color": "gray",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.zpm_slot.desc"
+    },
+    "icon": {
+      "item": "jsg:zpm_slot_block"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "jsg:util/first_zpm",
+  "criteria": {
+    "test": {
+      "trigger": "jsg:zpm_slot"
+    }
+  }
+}

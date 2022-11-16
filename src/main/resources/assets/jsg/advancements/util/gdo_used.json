@@ -1,0 +1,27 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.gdo_used.title",
+      "color": "gray",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.gdo_used.desc"
+    },
+    "icon": {
+      "item": "jsg:gdo"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "jsg:gate/merged_milkyway",
+  "criteria": {
+    "test": {
+      "trigger": "jsg:gdo_used"
+    }
+  }
+}

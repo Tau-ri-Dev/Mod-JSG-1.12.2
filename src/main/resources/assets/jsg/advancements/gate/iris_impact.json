@@ -1,0 +1,27 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.iris_impact.title",
+      "color": "gold",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.iris_impact.desc"
+    },
+    "icon": {
+      "item": "jsg:upgrade_iris"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "jsg:gate/merged_milkyway",
+  "criteria": {
+    "test": {
+      "trigger": "jsg:iris_impact"
+    }
+  }
+}

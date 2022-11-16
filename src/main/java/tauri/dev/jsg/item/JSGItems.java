@@ -297,7 +297,16 @@ public class JSGItems {
             PAGE_MYSTERIOUS_ITEM_PEGASUS,
             PAGE_MYSTERIOUS_ITEM_UNIVERSE,
 
-            CRYSTAL_TOKRA
+            CRYSTAL_TOKRA,
+
+
+            // ----------------------
+            // ICONS
+            new JSGIconItem("main"),
+            new JSGIconItem("mw_poo"),
+            new JSGIconItem("pg_poo"),
+            new JSGIconItem("uni_poo")
+
     };
 
     public static Item[] getItems() {

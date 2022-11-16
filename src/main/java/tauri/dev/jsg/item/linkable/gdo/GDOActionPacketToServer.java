@@ -2,6 +2,7 @@ package tauri.dev.jsg.item.linkable.gdo;
 
 import io.netty.buffer.ByteBuf;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.advancements.JSGAdvancements;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.stargate.codesender.PlayerCodeSender;
 import tauri.dev.jsg.stargate.network.StargateNetwork;
@@ -80,7 +81,9 @@ public class GDOActionPacketToServer implements IMessage {
 									if (gateTile.getStargateState().initiating() || gateTile.getStargateState().engaged()) {
 										targetGate = StargateNetwork.get(world).getStargate(gateTile.getDialedAddress()).getTileEntity();
 										if (targetGate != null && targetGate instanceof StargateClassicBaseTile) {
-											((StargateClassicBaseTile) targetGate).receiveIrisCode(new PlayerCodeSender(player), message.code);
+											if(((StargateClassicBaseTile) targetGate).receiveIrisCode(new PlayerCodeSender(player), message.code)) {
+												JSGAdvancements.GDO_USED.trigger(player);
+											}
 										}
 									}
 								}

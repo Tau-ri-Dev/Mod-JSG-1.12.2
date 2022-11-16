@@ -1,0 +1,27 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.merged_universe.title",
+      "color": "white",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.merged_universe.desc"
+    },
+    "icon": {
+      "item": "jsg:stargate_universe_base_block"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "jsg:gate/merged_pegasus",
+  "criteria": {
+    "test": {
+      "trigger": "jsg:merged_universe"
+    }
+  }
+}

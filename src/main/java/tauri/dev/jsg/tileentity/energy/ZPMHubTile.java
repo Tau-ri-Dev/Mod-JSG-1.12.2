@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.advancements.JSGAdvancements;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.gui.container.zpmhub.ZPMHubContainerGuiUpdate;
@@ -24,11 +25,14 @@ import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateProviderInterface;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.energy.ZPMHubRendererUpdate;
+import tauri.dev.jsg.util.JSGAdvancementsUtil;
 import tauri.dev.jsg.util.JSGItemStackHandler;
 import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
+
+import static tauri.dev.jsg.util.JSGAdvancementsUtil.tryTriggerRangedAdvancement;
 
 public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProvider, StateProviderInterface {
 
@@ -40,6 +44,13 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
 
     public int getContainerSize() {
         return 3;
+    }
+
+    public void triggerAdvancement(){
+        if(itemStackHandler.getStackInSlot(0).isEmpty()) return;
+        if(itemStackHandler.getStackInSlot(1).isEmpty()) return;
+        if(itemStackHandler.getStackInSlot(2).isEmpty()) return;
+        tryTriggerRangedAdvancement(this, JSGAdvancementsUtil.EnumAdvancementType.ZPM_HUB);
     }
 
     protected final ItemStackHandler itemStackHandler = new JSGItemStackHandler(getContainerSize()) {
@@ -72,6 +83,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             updatePowerTier();
             markDirty();
+            triggerAdvancement();
         }
     };
 

@@ -1,0 +1,27 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.wormhole_go.title",
+      "color": "blue",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.wormhole_go.desc"
+    },
+    "icon": {
+      "item": "jsg:page_notebook"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "jsg:gate/merged_orlin",
+  "criteria": {
+    "test": {
+      "trigger": "jsg:wormhole_go"
+    }
+  }
+}

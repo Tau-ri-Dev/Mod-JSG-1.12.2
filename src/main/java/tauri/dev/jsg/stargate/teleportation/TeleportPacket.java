@@ -1,5 +1,7 @@
 package tauri.dev.jsg.stargate.teleportation;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import tauri.dev.jsg.advancements.JSGAdvancements;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.stargate.network.StargatePos;
@@ -14,12 +16,12 @@ import javax.vecmath.Vector2f;
  * @author MrJake222
  */
 public class TeleportPacket {
-	private BlockPos sourceGatePos;
-	private StargatePos targetGatePos;
+	private final BlockPos sourceGatePos;
+	private final StargatePos targetGatePos;
 	
-	private Entity entity;
+	private final Entity entity;
 
-	private float rotation;
+	private final float rotation;
 	private Vector2f motionVector;
 	
 	public TeleportPacket(Entity entity, BlockPos source, StargatePos target, float rotation) {
@@ -42,9 +44,11 @@ public class TeleportPacket {
 		teleport(true);
 	}
 	public void teleport(boolean playSound) {
+		if(entity instanceof EntityPlayerMP)
+			JSGAdvancements.WORMHOLE_GO.trigger((EntityPlayerMP) entity);
 		TeleportHelper.teleportEntity(entity, sourceGatePos, targetGatePos, rotation, motionVector);
 		if (playSound)
-		JSGSoundHelper.playSoundEvent(targetGatePos.getWorld(), targetGatePos.getTileEntity().getGateCenterPos(), SoundEventEnum.WORMHOLE_GO);
+			JSGSoundHelper.playSoundEvent(targetGatePos.getWorld(), targetGatePos.getTileEntity().getGateCenterPos(), SoundEventEnum.WORMHOLE_GO);
 	}
 
 	public TeleportPacket setMotion(Vector2f motion) {

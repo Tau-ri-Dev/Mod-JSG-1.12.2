@@ -1,0 +1,27 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.chevron_nine_locked.title",
+      "color": "dark_purple",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.chevron_nine_locked.desc"
+    },
+    "icon": {
+      "item": "jsg:icon_uni_poo"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "jsg:gate/chevron_eight_locked",
+  "criteria": {
+    "test": {
+      "trigger": "jsg:chevron_nine_locked"
+    }
+  }
+}

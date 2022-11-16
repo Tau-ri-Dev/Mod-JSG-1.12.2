@@ -109,7 +109,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
         EnumIrisState irisState = rendererState.irisState;
         EnumIrisType irisType = rendererState.irisType;
         if (irisType == null || irisState == null) {
-            JSG.logger.debug("Iris state/type was null");
+            //JSG.logger.debug("Iris state/type was null");
             return;
         }
         if (irisState == EnumIrisState.OPENED) return;
@@ -168,12 +168,12 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     public void setIrisHeatColor(StargateClassicRendererState rendererState) {
         if (rendererState.irisHeat == -1) return;
         float red = (float) (rendererState.irisHeat / (rendererState.irisType == EnumIrisType.IRIS_TITANIUM ? StargateClassicBaseTile.IRIS_MAX_HEAT_TITANIUM : StargateClassicBaseTile.IRIS_MAX_HEAT_TRINIUM));
-        GlStateManager.color(1 + (red * 2.5F), 1, 1);
+        GlStateManager.color(1 + (red * 3F), 1, 1);
     }
 
     public void setGateHeatColor(StargateClassicRendererState rendererState) {
         if (rendererState.gateHeat == -1) return;
         float red = (float) (rendererState.gateHeat / StargateClassicBaseTile.GATE_MAX_HEAT);
-        GlStateManager.color(1 + (red * 1.75F), 1, 1);
+        GlStateManager.color(1 + (red * 2.7F), 1, 1);
     }
 }

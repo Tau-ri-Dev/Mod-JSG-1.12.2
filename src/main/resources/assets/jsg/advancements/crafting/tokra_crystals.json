@@ -1,0 +1,34 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.tokra_crystal.title",
+      "color": "light_purple",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.tokra_crystal.desc"
+    },
+    "icon": {
+      "item": "jsg:crystal_tokra"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "jsg:root",
+  "criteria": {
+    "test": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "jsg:crystal_tokra"
+          }
+        ]
+      }
+    }
+  }
+}

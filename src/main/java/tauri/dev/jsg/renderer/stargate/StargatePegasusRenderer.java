@@ -30,6 +30,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         setGateHeatColor(rendererState);
         renderRing(rendererState, partialTicks);
         renderChevrons(rendererState, partialTicks);
+        ElementEnum.PEGASUS_GATE.bindTextureAndRender(rendererState.getBiomeOverlay());
 
         GlStateManager.pushMatrix();
             JSGTextureLightningHelper.lightUpTexture(1f);
@@ -58,8 +59,6 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
             JSGTextureLightningHelper.resetLight(getWorld(), rendererState.pos);
         GlStateManager.popMatrix();
 
-
-        ElementEnum.PEGASUS_GATE.bindTextureAndRender(rendererState.getBiomeOverlay());
     }
 
     // ----------------------------------------------------------------------------------------
@@ -67,7 +66,6 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
     private void renderRing(StargatePegasusRendererState rendererState, double partialTicks) {
         GlStateManager.pushMatrix();
-        setGateHeatColor(rendererState);
 
         if (rendererState.horizontalRotation == 90 || rendererState.horizontalRotation == 270) {
             GlStateManager.translate(RING_LOC.y, RING_LOC.z, RING_LOC.x);
@@ -96,7 +94,6 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         GlStateManager.pushMatrix();
 
         GlStateManager.rotate(chevron.rotation, 0, 0, 1);
-        setGateHeatColor(rendererState);
 
         Texture chevronTexture = TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron, onlyLight));
         if(chevronTexture != null) {

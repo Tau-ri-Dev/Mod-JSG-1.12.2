@@ -84,6 +84,7 @@ import static tauri.dev.jsg.stargate.EnumSpinDirection.CLOCKWISE;
 import static tauri.dev.jsg.stargate.EnumSpinDirection.COUNTER_CLOCKWISE;
 import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_INCOMING;
 import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_RIG;
+import static tauri.dev.jsg.util.JSGAdvancementsUtil.tryTriggerRangedAdvancement;
 
 /**
  * This class wraps common behavior for the fully-functional Stargates i.e.
@@ -653,6 +654,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                                             getGateCenterPos(),
                                             SoundEventEnum.SHIELD_HIT);
                                 }
+                                tryTriggerRangedAdvancement(this, JSGAdvancementsUtil.EnumAdvancementType.IRIS_IMPACT);
                                 ItemStack irisItem = getItemHandler().getStackInSlot(11);
                                 if (irisItem.getItem() instanceof UpgradeIris) {
                                     // different damages per source
@@ -1740,12 +1742,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     protected CodeSender codeSender;
 
-    public void receiveIrisCode(CodeSender sender, int code) {
+    public boolean receiveIrisCode(CodeSender sender, int code) {
         sendSignal(null, "received_code", code);
         if (irisMode != EnumIrisMode.AUTO) {
             sender.sendMessage(GDOMessages.SEND_TO_COMPUTER.textComponent);
             codeSender = sender;
-            return;
+            return false;
         }
         if (code == this.irisCode) {
             switch (this.irisState) {
@@ -1766,9 +1768,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             }
         } else {
             sender.sendMessage(GDOMessages.CODE_REJECTED.textComponent);
+            return false;
         }
         markDirty();
-
+        return true;
     }
 
     public void setIrisCode(int code) {

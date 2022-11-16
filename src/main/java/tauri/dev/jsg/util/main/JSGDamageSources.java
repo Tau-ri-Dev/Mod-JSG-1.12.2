@@ -7,6 +7,8 @@ import net.minecraft.util.EntityDamageSourceIndirect;
 public class JSGDamageSources {
 	public static final DamageSource DAMAGE_EVENT_HORIZON = new DamageSource("eventHorizon")
 			.setDamageIsAbsolute().setDamageBypassesArmor();
+	public static final DamageSource UNSTABLE_EH_KILL = new DamageSource("unstableEventHorizon")
+			.setDamageIsAbsolute().setDamageBypassesArmor();
 	public static final DamageSource DAMAGE_WRONG_SIDE = new DamageSource("wrongSide")
 			.setDamageIsAbsolute().setDamageBypassesArmor();
 	public static final DamageSource DAMAGE_EVENT_IRIS_CREATIVE = new DamageSource("irisDeath")

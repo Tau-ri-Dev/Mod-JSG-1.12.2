@@ -10,6 +10,7 @@ import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
+import tauri.dev.jsg.JSG;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -22,12 +23,7 @@ public class JSGAdvancement implements ICriterionTrigger<JSGAdvancement.Instance
 
     public JSGAdvancement(String parString) {
         super();
-        RL = new ResourceLocation(parString);
-    }
-
-    public JSGAdvancement(ResourceLocation parRL) {
-        super();
-        RL = parRL;
+        RL = new ResourceLocation(JSG.MOD_ID, parString);
     }
 
     @Nonnull

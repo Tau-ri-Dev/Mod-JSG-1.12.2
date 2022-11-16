@@ -25,6 +25,7 @@ import tauri.dev.jsg.tileentity.BeamerTile;
 import tauri.dev.jsg.util.FacingToRotation;
 import tauri.dev.jsg.util.FluidColors;
 import tauri.dev.jsg.util.JSGAxisAlignedBB;
+import tauri.dev.jsg.util.JSGTextureLightningHelper;
 import tauri.dev.jsg.util.main.JSGDamageSources;
 
 import javax.annotation.Nonnull;
@@ -159,6 +160,8 @@ public class BeamerBeam {
      * - edited some ints to doubles
      */
     public static void renderBeamSegment(double x, double y, double z, double partialTicks, double textureScale, double totalWorldTime, double yOffset, double height, float[] colors, double beamRadius, double glowRadius) {
+        GlStateManager.pushMatrix();
+        JSGTextureLightningHelper.lightUpTexture(1f);
         double i = yOffset + height;
         GlStateManager.glTexParameteri(3553, 10242, 10497);
         GlStateManager.glTexParameteri(3553, 10243, 10497);
@@ -238,5 +241,6 @@ public class BeamerBeam {
         GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();
         GlStateManager.depthMask(true);
+        GlStateManager.popMatrix();
     }
 }

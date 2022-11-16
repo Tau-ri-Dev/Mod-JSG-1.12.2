@@ -1,0 +1,34 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.beamer.title",
+      "color": "red",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.beamer.desc"
+    },
+    "icon": {
+      "item": "jsg:beamer_block"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "jsg:gate/merged_milkyway",
+  "criteria": {
+    "test": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "jsg:beamer_block"
+          }
+        ]
+      }
+    }
+  }
+}

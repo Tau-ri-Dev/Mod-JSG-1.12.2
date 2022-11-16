@@ -1,0 +1,27 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.unstable_eh_survive.title",
+      "color": "blue",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.unstable_eh_survive.desc"
+    },
+    "icon": {
+      "item": "jsg:capacitor_block"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "jsg:gate/merged_orlin",
+  "criteria": {
+    "test": {
+      "trigger": "jsg:unstable_eh_survive"
+    }
+  }
+}

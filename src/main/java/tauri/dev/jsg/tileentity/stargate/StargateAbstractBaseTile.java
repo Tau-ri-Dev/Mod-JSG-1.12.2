@@ -35,6 +35,7 @@ import tauri.dev.jsg.state.stargate.StargateVaporizeBlockParticlesRequest;
 import tauri.dev.jsg.tileentity.util.PreparableInterface;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
 import tauri.dev.jsg.tileentity.util.ScheduledTaskExecutorInterface;
+import tauri.dev.jsg.util.JSGAdvancementsUtil;
 import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.main.JSGProps;
 import net.minecraft.block.state.IBlockState;
@@ -71,6 +72,7 @@ import java.util.*;
 
 import static tauri.dev.jsg.stargate.network.internalgates.StargateAddressesEnum.tryDialInternal;
 import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_INCOMING;
+import static tauri.dev.jsg.util.JSGAdvancementsUtil.tryTriggerRangedAdvancement;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
 public abstract class StargateAbstractBaseTile extends TileEntity implements StateProviderInterface, ITickable, ICapabilityProvider, ScheduledTaskExecutorInterface, Environment, WirelessEndpoint, PreparableInterface {
@@ -314,6 +316,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
             if (!targetTile.canAcceptConnectionFrom(gatePosMap.get(getSymbolType())))
                 return new ResultTargetValid(StargateOpenResult.ADDRESS_MALFORMED, targetValid);
+
+            tryTriggerRangedAdvancement(this, JSGAdvancementsUtil.EnumAdvancementType.GATE_OPEN);
 
             openGate(targetGatePos, true);
             targetTile.openGate(gatePosMap.get(targetGatePos.symbolType), false);
@@ -1319,6 +1323,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 targetGatePos.getTileEntity().closeGate(StargateClosedReasonEnum.CONNECTION_LOST);
             }
         } else {
+            tryTriggerRangedAdvancement(this, JSGAdvancementsUtil.EnumAdvancementType.GATE_MERGE);
             onGateMerged();
         }
 
@@ -1370,7 +1375,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     private int flashIndex = 0;
-    private boolean isCurrentlyUnstable = false;
+    public boolean isCurrentlyUnstable = false;
 
     private void resetFlashingSequence() {
         flashIndex = 0;
@@ -1574,6 +1579,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                     flashIndex++;
 
                     if (flashIndex == 1 && targetGatePos != null) {
+                        tryTriggerRangedAdvancement(this, JSGAdvancementsUtil.EnumAdvancementType.GATE_FLICKER);
                         JSGSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.WORMHOLE_FLICKER);
                         JSGSoundHelper.playSoundEvent(targetGatePos.getWorld(), targetGatePos.getTileEntity().getGateCenterPos(), SoundEventEnum.WORMHOLE_FLICKER);
                     }

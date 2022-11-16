@@ -1,0 +1,27 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.kawoosh_cremation.title",
+      "color": "gold",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.kawoosh_cremation.desc"
+    },
+    "icon": {
+      "item": "minecraft:leather_boots"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "jsg:gate/merged_orlin",
+  "criteria": {
+    "test": {
+      "trigger": "jsg:kawoosh_cremation"
+    }
+  }
+}

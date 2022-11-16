@@ -101,7 +101,6 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
     @Override
     protected void renderChevron(StargateUniverseRendererState rendererState, double partialTicks, ChevronEnum chevron, boolean onlyLight) {
         GlStateManager.pushMatrix();
-        setGateHeatColor(rendererState);
 
         GlStateManager.rotate(-chevron.rotation, 0, 1, 0);
 

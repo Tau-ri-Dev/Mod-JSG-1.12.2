@@ -1,0 +1,27 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.merged_milkyway.title",
+      "color": "dark_red",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.merged_milkyway.desc"
+    },
+    "icon": {
+      "item": "jsg:stargate_milkyway_base_block"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "jsg:gate/merged_orlin",
+  "criteria": {
+    "test": {
+      "trigger": "jsg:merged_milkyway"
+    }
+  }
+}

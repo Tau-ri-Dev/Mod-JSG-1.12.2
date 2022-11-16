@@ -1,0 +1,27 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.three_zpms.title",
+      "color": "yellow",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.three_zpms.desc"
+    },
+    "icon": {
+      "item": "jsg:zpm_hub_block"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "jsg:util/first_zpm",
+  "criteria": {
+    "test": {
+      "trigger": "jsg:three_zpms"
+    }
+  }
+}

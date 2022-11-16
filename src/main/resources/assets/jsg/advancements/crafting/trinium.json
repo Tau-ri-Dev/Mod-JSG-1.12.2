@@ -1,0 +1,35 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.trinium.title",
+      "color": "white",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.trinium.desc"
+    },
+    "icon": {
+      "item": "jsg:trinium_ore"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "jsg:gate/merged_milkyway",
+  "criteria": {
+    "test": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "type": "forge:ore_dict",
+            "ore": "impureTrinium"
+          }
+        ]
+      }
+    }
+  }
+}

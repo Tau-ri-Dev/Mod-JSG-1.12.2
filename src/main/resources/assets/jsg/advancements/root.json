@@ -1,0 +1,27 @@
+{
+  "display": {
+    "title": {
+      "text": "Just Stargate Mod",
+      "color": "dark_aqua",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "text": "Just Stargate Mod (JSG) is a Stargate-based Minecraft mod. It aims to closely resemble the franchise and be the most immersive Stargate mod out there."
+    },
+    "icon": {
+      "item": "jsg:icon_main"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+  },
+  "criteria": {
+    "test": {
+      "trigger": "minecraft:tick"
+    }
+  }
+}

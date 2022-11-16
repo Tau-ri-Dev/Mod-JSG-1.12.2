@@ -40,7 +40,6 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
 
     private void renderRing(StargateMilkyWayRendererState rendererState, double partialTicks) {
         GlStateManager.pushMatrix();
-        setGateHeatColor(rendererState);
         JSGTextureLightningHelper.resetLight(getWorld(), rendererState.pos);
         float angularRotation = rendererState.spinHelper.getCurrentSymbol().getAngle();
 
@@ -92,7 +91,6 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
     @Override
     protected void renderChevron(StargateMilkyWayRendererState rendererState, double partialTicks, ChevronEnum chevron, boolean onlyLight) {
         GlStateManager.pushMatrix();
-        setGateHeatColor(rendererState);
 
         GlStateManager.rotate(chevron.rotation, 0, 0, 1);
 

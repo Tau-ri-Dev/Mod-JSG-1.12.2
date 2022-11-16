@@ -1,0 +1,27 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.merged_orlin.title",
+      "color": "gray",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.merged_orlin.desc"
+    },
+    "icon": {
+      "item": "jsg:stargate_orlin_base_block"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "jsg:root",
+  "criteria": {
+    "test": {
+      "trigger": "jsg:merged_orlin"
+    }
+  }
+}

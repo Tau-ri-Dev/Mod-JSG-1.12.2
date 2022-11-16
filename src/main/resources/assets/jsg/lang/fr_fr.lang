@@ -9,6 +9,71 @@ itemGroup.jsg_props=JSG: Props
 itemGroup.jsg_machines=JSG: Machines
 itemGroup.jsg_weapons=JSG: Weapons
 
+# -------------------
+# ADVANCEMENTS
+
+advancement.wormhole_go.title=What wormhole? And why worm?
+advancement.wormhole_go.desc=Enter event Horizon of a Stargate
+
+advancement.merged_orlin.title=You're going to need a new toaster
+advancement.merged_orlin.desc=Build a Orlin´s stargate
+
+advancement.merged_milkyway.title=Pyramid with the sun directly above it
+advancement.merged_milkyway.desc=Build a Milky Way stargate
+
+advancement.merged_pegasus.title=Jumper is not included
+advancement.merged_pegasus.desc=Build a Pegasus stargate
+
+advancement.merged_universe.title=Ancient, in both meanings
+advancement.merged_universe.desc=Build Universe stargate
+
+advancement.chevron_seven_locked.title=Chevron 7 locked!
+advancement.chevron_seven_locked.desc=Dial existing 7-symbols address
+
+advancement.chevron_eight_locked.title=Address is not incorrect, but incomplete.
+advancement.chevron_eight_locked.desc=Dial existing 8-symbols address
+
+advancement.chevron_nine_locked.title=Several billion light years from home
+advancement.chevron_nine_locked.desc=Dial existing 9-symbols address
+
+advancement.iris_impact.title=Knock, knock... Who's there?
+advancement.iris_impact.desc=Witness an object hit the iris
+
+advancement.gdo_used.title=Code accepted - Opening Iris
+advancement.gdo_used.desc=Use GDO to send code
+
+advancement.kawoosh_cremation.title=Escaping Hadante
+advancement.kawoosh_cremation.desc=Experience Kawoosh cremation on yourself
+
+advancement.first_zpm.title=What? ZPM, he is Canadian
+advancement.first_zpm.desc=Obtain a Zero Point Module
+
+advancement.three_zpms.title=I can't believe my eyes: Three ZPMs
+advancement.three_zpms.desc=Use ZPM hub with three ZPMs in
+
+advancement.zpm_slot.title=Oh yeah
+advancement.zpm_slot.desc=Use ZPM slot
+
+advancement.upgrade_shield.title=Using power, using power...
+advancement.upgrade_shield.desc=Obtain stargate shield
+
+advancement.beamer.title=Beamers gonna beam
+advancement.beamer.desc=Obtain a beamer
+
+advancement.trinium.title=Did you ask Xe´ls and T´akaya?!
+advancement.trinium.desc=Obtain a trinium ore
+
+advancement.unstable_eh_survive.title=For a moment there I thought we were in trouble
+advancement.unstable_eh_survive.desc=Enter an unstable wormhole and survive
+
+advancement.tokra_crystal.title=They live underground
+advancement.tokra_crystal.desc=Obtain tokra crystals
+
+advancement.beamer_crystal_laser.title=A particle accelerator firing through a Stargate?
+advancement.beamer_crystal_laser.desc=Obtain a beamer laser crystal
+
+# -------------------
+
 # Catégories de sons
 soundCategory.jsg_sounds=Just Stargate mod
 

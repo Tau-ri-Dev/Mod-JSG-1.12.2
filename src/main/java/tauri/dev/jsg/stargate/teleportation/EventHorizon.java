@@ -1,18 +1,5 @@
 package tauri.dev.jsg.stargate.teleportation;
 
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.sound.JSGSoundHelper;
-import tauri.dev.jsg.util.JSGAxisAlignedBB;
-import tauri.dev.jsg.util.main.JSGDamageSources;
-import tauri.dev.jsg.util.main.JSGProps;
-import tauri.dev.jsg.api.event.StargateTeleportEntityEvent;
-import tauri.dev.jsg.item.stargate.UpgradeIris;
-import tauri.dev.jsg.packet.stargate.StargateMotionToClient;
-import tauri.dev.jsg.sound.SoundEventEnum;
-import tauri.dev.jsg.stargate.network.StargatePos;
-import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IProjectile;
@@ -25,12 +12,29 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import tauri.dev.jsg.advancements.JSGAdvancements;
+import tauri.dev.jsg.api.event.StargateTeleportEntityEvent;
+import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.item.stargate.UpgradeIris;
+import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.packet.stargate.StargateMotionToClient;
+import tauri.dev.jsg.sound.JSGSoundHelper;
+import tauri.dev.jsg.sound.SoundEventEnum;
+import tauri.dev.jsg.stargate.network.StargatePos;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
+import tauri.dev.jsg.util.JSGAdvancementsUtil;
+import tauri.dev.jsg.util.JSGAxisAlignedBB;
+import tauri.dev.jsg.util.main.JSGDamageSources;
+import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.vecmath.Vector2f;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import static tauri.dev.jsg.util.JSGAdvancementsUtil.tryTriggerRangedAdvancement;
 
 public class EventHorizon {
     private World world;
@@ -70,7 +74,7 @@ public class EventHorizon {
     private Map<Integer, Integer> timeoutMap = new HashMap<>();
 
     public void scheduleTeleportation(StargatePos targetGate, boolean teleport) {
-        if(targetGate == null) return;
+        if (targetGate == null) return;
         boolean closedIris = false;
         if (world.getTileEntity(pos) instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) world.getTileEntity(pos)).isIrisClosed()) {
             teleport = false;
@@ -78,7 +82,7 @@ public class EventHorizon {
         }
         List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, globalBox);
 
-        if(teleport) {
+        if (teleport) {
             for (int entityId : timeoutMap.keySet())
                 timeoutMap.put(entityId, timeoutMap.get(entityId) - 1);
             timeoutMap.entrySet().removeIf(entry -> entry.getValue() < 0);
@@ -108,7 +112,7 @@ public class EventHorizon {
 
                         scheduledTeleportMap.put(entityId, packet.setMotion(motion));
                         teleportEntity(entityId);
-                    } else if(!closedIris && !teleport && front && tauri.dev.jsg.config.JSGConfig.horizonConfig.wrongSideKilling)
+                    } else if (!closedIris && !teleport && front && tauri.dev.jsg.config.JSGConfig.horizonConfig.wrongSideKilling)
                         wrongSideKill(entity);
                     //if(!front && JSGConfig.horizonConfig.backSideKilling)
                     //    wrongSideKill(entity);
@@ -122,16 +126,23 @@ public class EventHorizon {
     }
 
     public void horizonKill(Entity e) {
+        if (e instanceof EntityPlayerMP)
+            JSGAdvancements.KAWOOSH_CREMATION.trigger((EntityPlayerMP) e);
         e.attackEntityFrom(JSGDamageSources.DAMAGE_EVENT_HORIZON, Float.MAX_VALUE);
     }
 
-    public void wrongSideKill(Entity e){
+    public void wrongSideKill(Entity e) {
         e.attackEntityFrom(JSGDamageSources.DAMAGE_WRONG_SIDE, Float.MAX_VALUE);
+    }
+
+    public void unstableEhKill(Entity e) {
+        e.attackEntityFrom(JSGDamageSources.UNSTABLE_EH_KILL, Float.MAX_VALUE);
     }
 
     public void teleportEntity(int entityId) {
         TeleportPacket packet = scheduledTeleportMap.get(entityId);
-        if (!new StargateTeleportEntityEvent((StargateAbstractBaseTile) world.getTileEntity(pos), packet.getTargetGatePos().getTileEntity(), packet.getEntity()).post()) {
+        StargateAbstractBaseTile baseTile = (StargateAbstractBaseTile) world.getTileEntity(pos);
+        if (!new StargateTeleportEntityEvent(baseTile, packet.getTargetGatePos().getTileEntity(), packet.getEntity()).post()) {
             // Not cancelled
             StargatePos targetGatePos = packet.getTargetGatePos();
             if (targetGatePos.getTileEntity() instanceof StargateClassicBaseTile
@@ -177,6 +188,7 @@ public class EventHorizon {
                             classicTargetGate.getGateCenterPos(),
                             SoundEventEnum.SHIELD_HIT);
                 }
+                tryTriggerRangedAdvancement(classicTargetGate, JSGAdvancementsUtil.EnumAdvancementType.IRIS_IMPACT);
                 ItemStack irisItem = classicTargetGate.getItemHandler().getStackInSlot(11);
                 if (irisItem.getItem() instanceof UpgradeIris) {
                     // different damages per source
@@ -190,8 +202,7 @@ public class EventHorizon {
                         classicTargetGate.updateIrisType();
                     }
                     classicTargetGate.tryHeatUp(true, false, 2);
-                }
-                else {
+                } else {
                     IEnergyStorage energyStorage = classicTargetGate.getCapability(CapabilityEnergy.ENERGY, null);
                     if (energyStorage != null) {
                         energyStorage.extractEnergy(500, false);
@@ -201,7 +212,16 @@ public class EventHorizon {
 
             } else {
                 JSGSoundHelper.playSoundEvent(world, gateCenter, SoundEventEnum.WORMHOLE_GO);
-                packet.teleport();
+                if (baseTile != null && baseTile.isCurrentlyUnstable)
+                    if (Math.random() < JSGConfig.horizonConfig.ehDeathChance)
+                        unstableEhKill(packet.getEntity());
+                    else {
+                        packet.teleport();
+                        if (packet.getEntity() instanceof EntityPlayerMP)
+                            JSGAdvancements.UNSTABLE_SURVIVE.trigger((EntityPlayerMP) packet.getEntity());
+                    }
+                else
+                    packet.teleport();
             }
         }
 

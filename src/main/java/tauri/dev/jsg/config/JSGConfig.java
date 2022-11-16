@@ -1,19 +1,19 @@
 package tauri.dev.jsg.config;
 
-import net.minecraft.client.renderer.GlStateManager;
-import tauri.dev.jsg.block.JSGBlocks;
-import tauri.dev.jsg.config.stargate.StargateSizeEnum;
-import tauri.dev.jsg.config.stargate.StargateTimeLimitModeEnum;
-import tauri.dev.jsg.config.parsers.BiomeParser;
-import tauri.dev.jsg.config.parsers.BlockMetaParser;
-import tauri.dev.jsg.config.parsers.ItemMetaParser;
-import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
-import tauri.dev.jsg.util.ItemMetaPair;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.*;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.config.parsers.BiomeParser;
+import tauri.dev.jsg.config.parsers.BlockMetaParser;
+import tauri.dev.jsg.config.parsers.ItemMetaParser;
+import tauri.dev.jsg.config.stargate.StargateSizeEnum;
+import tauri.dev.jsg.config.stargate.StargateTimeLimitModeEnum;
+import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
+import tauri.dev.jsg.util.ItemMetaPair;
 
 import java.util.HashMap;
 import java.util.List;
@@ -86,6 +86,9 @@ public class JSGConfig {
     @Name("Random incoming config")
     public static RandomIncomingConfig randomIncoming = new RandomIncomingConfig();
 
+    @Name("Advancements config")
+    public static AdvancementsConfig advancementsConfig = new AdvancementsConfig();
+
     @Name("Development config")
     public static DevConfig devConfig = new DevConfig();
 
@@ -138,12 +141,12 @@ public class JSGConfig {
 
         public boolean canKawooshDestroyBlock(IBlockState state) {
             if (state.getBlock() == JSGBlocks.IRIS_BLOCK) return false;
-            if(state.getBlock() == JSGBlocks.INVISIBLE_BLOCK) return false;
+            if (state.getBlock() == JSGBlocks.INVISIBLE_BLOCK) return false;
 
             if (cachedInvincibleBlocks == null) {
                 cachedInvincibleBlocks = BlockMetaParser.parseConfig(kawooshInvincibleBlocks);
             }
-            if(cachedInvincibleBlocks.get(state.getBlock().getDefaultState()) != null && cachedInvincibleBlocks.get(state.getBlock().getDefaultState())){
+            if (cachedInvincibleBlocks.get(state.getBlock().getDefaultState()) != null && cachedInvincibleBlocks.get(state.getBlock().getDefaultState())) {
                 return false;
             }
             return cachedInvincibleBlocks.get(state) == null;
@@ -271,6 +274,9 @@ public class JSGConfig {
 
         @Name("Enable wrong side killing")
         public boolean wrongSideKilling = true;
+
+        @Name("Unstable Event Horizon chance of death")
+        public float ehDeathChance = 0.07f;
     }
 
     public static class DialingConfig {
@@ -810,6 +816,14 @@ public class JSGConfig {
         };
     }
 
+    public static class AdvancementsConfig {
+        @Name("Ranged Advancements radius")
+        @Comment({
+                "Players in this radius around triggered pos will get Advancement."
+        })
+        public int radius = 25;
+    }
+
     public static class DevConfig {
         @Name("Dev mode")
         public boolean enableDevMode = false;
@@ -829,7 +843,7 @@ public class JSGConfig {
         public float tz = 1f;
     }
 
-    public static void rescaleToConfig(){
+    public static void rescaleToConfig() {
         GlStateManager.translate(JSGConfig.devConfig.x, JSGConfig.devConfig.y, JSGConfig.devConfig.z);
         GlStateManager.scale(JSGConfig.devConfig.s, JSGConfig.devConfig.s, JSGConfig.devConfig.s);
     }

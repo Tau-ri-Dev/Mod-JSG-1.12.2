@@ -72,8 +72,8 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
             });
         }
 
-        // Page slots (index 7-8)
-        for (int i = 0; i < 2; i++) {
+        // Page slots (index 7-9)
+        for (int i = 0; i < 3; i++) {
             addSlotToContainer(new SlotItemHandler(itemHandler, i + 7, -22, 89 + 22 * i));
         }
         for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 86))

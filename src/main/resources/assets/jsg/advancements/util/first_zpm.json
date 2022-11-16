@@ -1,0 +1,34 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.first_zpm.title",
+      "color": "gold",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.first_zpm.desc"
+    },
+    "icon": {
+      "item": "jsg:zpm"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "jsg:root",
+  "criteria": {
+    "test": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "jsg:zpm"
+          }
+        ]
+      }
+    }
+  }
+}

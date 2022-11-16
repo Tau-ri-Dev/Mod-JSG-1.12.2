@@ -1,0 +1,34 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.upgrade_shield.title",
+      "color": "aqua",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.upgrade_shield.desc"
+    },
+    "icon": {
+      "item": "jsg:upgrade_shield"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "jsg:gate/merged_pegasus",
+  "criteria": {
+    "test": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "jsg:upgrade_shield"
+          }
+        ]
+      }
+    }
+  }
+}
