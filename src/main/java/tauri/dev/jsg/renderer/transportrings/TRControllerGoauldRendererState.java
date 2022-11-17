@@ -41,7 +41,7 @@ public class TRControllerGoauldRendererState extends TRControllerAbstractRendere
 
     // Symbols
     // Not saved
-    private final Map<Integer, Integer> BUTTON_STATE_MAP = new HashMap<>(7);
+    public final Map<Integer, Integer> BUTTON_STATE_MAP = new HashMap<>(7);
     public List<Activation<SymbolInterface>> activationList = new ArrayList<>();
 
     public TRControllerGoauldRendererState(TransportRingsAddress addressDialed, BiomeOverlayEnum biomeOverride, boolean ringsAreConnected) {

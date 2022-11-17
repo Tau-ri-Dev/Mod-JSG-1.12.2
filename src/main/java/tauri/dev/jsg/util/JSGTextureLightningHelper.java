@@ -11,7 +11,25 @@ import java.util.ArrayList;
 
 public class JSGTextureLightningHelper {
     public static void lightUpTexture(World world, BlockPos pos, float lightIntensity) {
-        lightUpTexture((world.getCombinedLight(pos, (int) (lightIntensity * 16))) / 16f);
+        lightUpTexture(world, new ArrayList<BlockPos>() {{
+            add(pos);
+        }}, lightIntensity);
+    }
+
+    public static void lightUpTexture(World world, ArrayList<BlockPos> poses, float lightIntensity) {
+        final int count = poses.size();
+        int skyLight = 0;
+        int blockLight = 0;
+
+        for (BlockPos pos : poses) {
+            skyLight += world.getLightFor(EnumSkyBlock.SKY, pos);
+            blockLight += world.getLightFor(EnumSkyBlock.BLOCK, pos);
+        }
+
+        skyLight /= count;
+        blockLight /= count;
+        float i = ((float) (((((int) (lightIntensity*16)) << 4) % 65536)));
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, Math.max(blockLight*16, i), Math.max(skyLight*16, i));
     }
 
     /**
@@ -26,7 +44,7 @@ public class JSGTextureLightningHelper {
         if (lightIntensity < 0) lightIntensity = 0;
         int i = Math.round(lightIntensity * 16);
         if (i < 1) return;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, ((float) ((i << 4) % 65536)), (float) 0);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, ((float) ((i << 4) % 65536)), ((float) ((i << 4) % 65536)));
     }
 
     /**
