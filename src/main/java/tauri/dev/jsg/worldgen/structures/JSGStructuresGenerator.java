@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.worldgen.structures.stargate.nether.JSGNetherStructure;
 import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 import tauri.dev.jsg.worldgen.util.JSGStructurePos;
 import tauri.dev.jsg.worldgen.util.JSGWorldTopBlock;
@@ -44,6 +45,10 @@ public class JSGStructuresGenerator implements IWorldGenerator {
 
         int x = (chunkX * 16) + random.nextInt(15);
         int z = (chunkZ * 16) + random.nextInt(15);
+
+        if(structure.structure instanceof JSGNetherStructure){
+            return structure.structure.generateStructure(world, new BlockPos(x, 15, z), random, worldToSpawn);
+        }
         JSGStructurePos structurePos = checkForPlace(worldToSpawn, chunkX, chunkZ, structure, structure.structure.dimensionToSpawn);
         if (notRandomGen) {
             int tries = 0;
@@ -122,7 +127,7 @@ public class JSGStructuresGenerator implements IWorldGenerator {
             for (int zz = -1; zz <= (structureSizeZ + 1); zz++) {
                 BlockPos newPos = pos.add((new BlockPos(xx, 0, zz).rotate(rotation)));
                 if (world.getChunkProvider().isChunkGeneratedAt(newPos.getX() / 16, newPos.getZ() / 16)) {
-                    JSGWorldTopBlock topBlock = getTopBlock(world, newPos.getX(), newPos.getZ(), structure.airCountUp, dimensionId);
+                    JSGWorldTopBlock topBlock = getTopBlock(world, newPos.getX(), newPos.getZ(), structure.structure.airUp, dimensionId);
                     if (topBlock != null) {
                         if (topBlock.y < lowestY) lowestY = topBlock.y;
                         if (topBlock.y > highestY) highestY = topBlock.y;

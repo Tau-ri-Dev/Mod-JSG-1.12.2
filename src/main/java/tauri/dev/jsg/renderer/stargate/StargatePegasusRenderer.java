@@ -30,7 +30,11 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         setGateHeatColor(rendererState);
         renderRing(rendererState, partialTicks);
         renderChevrons(rendererState, partialTicks);
+
+        GlStateManager.pushMatrix();
+        applyLightMap(rendererState, partialTicks);
         ElementEnum.PEGASUS_GATE.bindTextureAndRender(rendererState.getBiomeOverlay());
+        GlStateManager.popMatrix();
 
         GlStateManager.pushMatrix();
             JSGTextureLightningHelper.lightUpTexture(1f);
@@ -56,7 +60,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
                 renderGlyph(rendererState.slotToGlyphMap.get(i), i, false); // for incoming and locked chevrons
             }
-            JSGTextureLightningHelper.resetLight(getWorld(), rendererState.pos);
+        applyLightMap(rendererState, partialTicks);
         GlStateManager.popMatrix();
 
     }

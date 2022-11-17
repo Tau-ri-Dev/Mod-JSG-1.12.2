@@ -3,39 +3,57 @@ package tauri.dev.jsg.util;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import tauri.dev.jsg.config.JSGConfig;
 
+import java.util.ArrayList;
+
 public class JSGTextureLightningHelper {
-    public static void lightUpTexture(World world, BlockPos pos, float lightIntensity){
-        lightUpTexture((world.getCombinedLight(pos, (int) (lightIntensity * 15)))/15f);
+    public static void lightUpTexture(World world, BlockPos pos, float lightIntensity) {
+        lightUpTexture((world.getCombinedLight(pos, (int) (lightIntensity * 16))) / 16f);
     }
 
     /**
      * Set light of texture
+     *
      * @param lightIntensity Is 0-1F when 0 is the lowest light
      */
-    public static void lightUpTexture(float lightIntensity){
-        if(!JSGConfig.avConfig.renderEmissive) return;
+    public static void lightUpTexture(float lightIntensity) {
+        if (!JSGConfig.avConfig.renderEmissive) return;
         RenderHelper.enableStandardItemLighting();
-        if(lightIntensity > 1) lightIntensity = 1;
-        if(lightIntensity < 0) lightIntensity = 0;
-        int i = Math.round(lightIntensity * 15);
-        if(i < 1) return;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, ((float) ((i << 4) % 65536)), (float)0);
+        if (lightIntensity > 1) lightIntensity = 1;
+        if (lightIntensity < 0) lightIntensity = 0;
+        int i = Math.round(lightIntensity * 16);
+        if (i < 1) return;
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, ((float) ((i << 4) % 65536)), (float) 0);
     }
 
     /**
      * Reset the light of the texture to light of other things in the world
+     *
      * @param world Is world of the tile entity
-     * @param pos Is pos of the tile entity
+     * @param pos   Is pos of the tile entity
      */
-    public static void resetLight(World world, BlockPos pos){
-        if(!JSGConfig.avConfig.renderEmissive) return;
+    public static void resetLight(World world, BlockPos pos) {
+        resetLight(world, new ArrayList<BlockPos>() {{
+            add(pos);
+        }});
+    }
+
+    public static void resetLight(World world, ArrayList<BlockPos> poses) {
+        final int count = poses.size();
+        int skyLight = 0;
+        int blockLight = 0;
+
+        for (BlockPos pos : poses) {
+            skyLight += world.getLightFor(EnumSkyBlock.SKY, pos);
+            blockLight += world.getLightFor(EnumSkyBlock.BLOCK, pos);
+        }
+
+        skyLight /= count;
+        blockLight /= count;
         RenderHelper.enableStandardItemLighting();
-        int i = world.getCombinedLight(pos, 0);
-        int j = i % 65536;
-        int k = i / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (blockLight * 16), (skyLight * 16));
     }
 }

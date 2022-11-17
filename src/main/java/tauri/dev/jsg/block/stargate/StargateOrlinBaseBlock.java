@@ -123,7 +123,7 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 				
 				if (!network.hasNetherGate()) {
 					GeneratedStargate stargate = StargateNetwork.generateNetherGate(network, world, pos);
-					//network.setNetherGate(StargateGeneratorNether.place(world.getMinecraftServer().getWorld(DimensionType.NETHER.getId()), new BlockPos(pos.getX()/8, 32, pos.getZ()/8)));
+					//network.setNetherGate(JSGNetherStructure.place(world.getMinecraftServer().getWorld(DimensionType.NETHER.getId()), new BlockPos(pos.getX()/8, 32, pos.getZ()/8)));
 					if(stargate == null && placer instanceof EntityPlayer){
 						((EntityPlayer) placer).sendStatusMessage(new TextComponentTranslation("item.jsg.page_mysterious.generation.failed"), true);
 						((EntityPlayer) placer).sendStatusMessage(new TextComponentTranslation("item.jsg.page_mysterious.generation.failed"), false);

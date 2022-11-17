@@ -37,9 +37,16 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
         GlStateManager.rotate(rendererState.horizontalRotation - 90, 1, 0, 0);
         GlStateManager.rotate((float) angularRotation + 0.6f, 0, 1, 0);
 
-        GlStateManager.disableLighting();
-        ElementEnum.UNIVERSE_CHEVRON.bindTexture(rendererState.getBiomeOverlay());
+        // render
+        applyLightMap(rendererState, partialTicks);
+        GlStateManager.pushMatrix();
+        ElementEnum.UNIVERSE_GATE.bindTextureAndRender(rendererState.getBiomeOverlay());
+        GlStateManager.popMatrix();
 
+        renderChevrons(rendererState, partialTicks);
+
+        ElementEnum.UNIVERSE_CHEVRON.bindTexture(rendererState.getBiomeOverlay());
+        GlStateManager.disableLighting();
         for (SymbolUniverseEnum symbol : SymbolUniverseEnum.values()) {
             if (symbol.modelResource != null) {
                 float color = rendererState.getSymbolColor(symbol) + 0.25f;
@@ -48,15 +55,11 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
 
                 GlStateManager.color(color, color, color);
                 ModelLoader.getModel(symbol.modelResource).render();
-                JSGTextureLightningHelper.resetLight(getWorld(), rendererState.pos);
+                applyLightMap(rendererState, partialTicks);
                 GlStateManager.popMatrix();
             }
         }
         GlStateManager.enableLighting();
-
-        renderChevrons(rendererState, partialTicks);
-
-        ElementEnum.UNIVERSE_GATE.bindTextureAndRender(rendererState.getBiomeOverlay());
 
         rendererState.iterate(getWorld(), partialTicks);
     }
@@ -81,7 +84,7 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
 
     }
 
-    private static final float DARKNESS = 0.6f;
+    private static final float IRIS_DARK_COLOR = 0.6f;
 
     @Override
     public void renderIris(double partialTicks, World world, StargateUniverseRendererState rendererState, boolean backOnly) {
@@ -89,8 +92,6 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
         GlStateManager.translate(0, -0.05f, 0);
         GlStateManager.rotate(90, 1, 0, 0);
         GlStateManager.scale(0.887f, 0.887f, 0.887f);
-        if (rendererState.irisType == EnumIrisType.SHIELD) GlStateManager.color(1, 1, 1);
-        else GlStateManager.color(DARKNESS, DARKNESS, DARKNESS);
         super.renderIris(partialTicks, world, rendererState, backOnly);
         GlStateManager.popMatrix();
     }
@@ -101,12 +102,16 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
     @Override
     protected void renderChevron(StargateUniverseRendererState rendererState, double partialTicks, ChevronEnum chevron, boolean onlyLight) {
         GlStateManager.pushMatrix();
-
         GlStateManager.rotate(-chevron.rotation, 0, 1, 0);
 
         TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron, onlyLight)).bindTexture();
         ElementEnum.UNIVERSE_CHEVRON.render();
 
         GlStateManager.popMatrix();
+    }
+
+    @Override
+    public void setIrisHeatColor(StargateClassicRendererState rendererState, float red) {
+        GlStateManager.color(IRIS_DARK_COLOR + (red * 2F), IRIS_DARK_COLOR, IRIS_DARK_COLOR);
     }
 }

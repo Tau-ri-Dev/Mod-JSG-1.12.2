@@ -79,7 +79,7 @@ public class JSGAdvancement implements ICriterionTrigger<JSGAdvancement.Instance
         JSGAdvancement.Listeners listeners1 = listeners.get(parPlayer.getAdvancements());
 
         if (listeners1 != null) {
-            listeners1.trigger(parPlayer);
+            listeners1.trigger();
         }
     }
 
@@ -151,10 +151,8 @@ public class JSGAdvancement implements ICriterionTrigger<JSGAdvancement.Instance
 
         /**
          * Trigger.
-         *
-         * @param player the player
          */
-        public void trigger(EntityPlayerMP player) {
+        public void trigger() {
             ArrayList<ICriterionTrigger.Listener<JSGAdvancement.Instance>> list = null;
 
             for (ICriterionTrigger.Listener<JSGAdvancement.Instance> listener : listeners) {

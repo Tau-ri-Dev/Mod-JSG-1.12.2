@@ -6,6 +6,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.world.gen.structure.template.ITemplateProcessor;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.worldgen.structures.stargate.nether.JSGNetherStructure;
 import tauri.dev.jsg.worldgen.structures.stargate.processor.NetherProcessor;
 import tauri.dev.jsg.worldgen.structures.stargate.processor.OverworldProcessor;
 import tauri.dev.jsg.worldgen.util.EnumGenerationHeight;
@@ -134,17 +135,18 @@ public enum EnumStructures {
     public final float chance;
     public final List<String> allowedInBiomes;
     public final List<Block> allowedOnBlocks;
-    public final int airCountUp;
 
     EnumStructures(String structureName, int yNegativeOffset, boolean isStargateStructure, boolean isRingsStructure, SymbolTypeEnum symbolType, int structureSizeX, int structureSizeZ, int dimensionToSpawn, boolean findOptimalRotation, boolean randomGenEnable, float chanceToGenerateRandom, ITemplateProcessor templateProcessor, @Nullable List<Block> allowedOnBlocks, @Nullable List<String> allowedInBiomes, int airCountUp, Rotation rotationToNorth, double terrainFlatPercents, double topBlockMatchPercent, @Nonnull EnumGenerationHeight genHeight) {
-        this.structure = new JSGStructure(structureName, yNegativeOffset, isStargateStructure, isRingsStructure, symbolType, structureSizeX, structureSizeZ, dimensionToSpawn, findOptimalRotation, templateProcessor, rotationToNorth, terrainFlatPercents, topBlockMatchPercent, genHeight);
+        if (dimensionToSpawn == -1)
+            this.structure = new JSGNetherStructure(structureName, yNegativeOffset, isStargateStructure, isRingsStructure, symbolType, structureSizeX, structureSizeZ, airCountUp, dimensionToSpawn, findOptimalRotation, templateProcessor, rotationToNorth, terrainFlatPercents, topBlockMatchPercent, genHeight);
+        else
+            this.structure = new JSGStructure(structureName, yNegativeOffset, isStargateStructure, isRingsStructure, symbolType, structureSizeX, structureSizeZ, airCountUp, dimensionToSpawn, findOptimalRotation, templateProcessor, rotationToNorth, terrainFlatPercents, topBlockMatchPercent, genHeight);
 
         this.randomGenEnable = randomGenEnable;
         this.chance = chanceToGenerateRandom;
 
         this.allowedInBiomes = allowedInBiomes;
         this.allowedOnBlocks = allowedOnBlocks;
-        this.airCountUp = airCountUp;
     }
 
     @Nullable

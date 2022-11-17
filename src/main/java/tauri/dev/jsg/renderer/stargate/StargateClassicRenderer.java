@@ -22,6 +22,7 @@ import tauri.dev.jsg.util.FacingToRotation;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,20 +32,11 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     @Override
     protected void applyLightMap(StargateClassicRendererState rendererState, double partialTicks) {
         final int chevronCount = 6;
-        int skyLight = 0;
-        int blockLight = 0;
-
+        ArrayList<BlockPos> list = new ArrayList<>();
         for (int i = 0; i < chevronCount; i++) {
-            BlockPos blockPos = StargateMilkyWayMergeHelper.INSTANCE.getChevronBlocks().get(i).rotate(FacingToRotation.get(rendererState.facing)).add(rendererState.pos);
-
-            skyLight += getWorld().getLightFor(EnumSkyBlock.SKY, blockPos);
-            blockLight += getWorld().getLightFor(EnumSkyBlock.BLOCK, blockPos);
+            list.add(StargateMilkyWayMergeHelper.INSTANCE.getChevronBlocks().get(i).rotate(FacingToRotation.get(rendererState.facing)).add(rendererState.pos));
         }
-
-        skyLight /= chevronCount;
-        blockLight /= chevronCount;
-
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, blockLight * 16, skyLight * 16);
+        JSGTextureLightningHelper.resetLight(getWorld(), list);
     }
 
     @Override
@@ -76,7 +68,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             // emissive layer
             JSGTextureLightningHelper.lightUpTexture(rendererState.chevronTextureList.CHEVRON_STATE_MAP.get(chevron)/10f);
             renderChevron(rendererState, partialTicks, chevron, true);
-            JSGTextureLightningHelper.resetLight(getWorld(), rendererState.pos);
+            applyLightMap(rendererState, partialTicks);
             GlStateManager.popMatrix();
         }
 
@@ -165,15 +157,25 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
         }
     }
 
-    public void setIrisHeatColor(StargateClassicRendererState rendererState) {
-        if (rendererState.irisHeat == -1) return;
-        float red = (float) (rendererState.irisHeat / (rendererState.irisType == EnumIrisType.IRIS_TITANIUM ? StargateClassicBaseTile.IRIS_MAX_HEAT_TITANIUM : StargateClassicBaseTile.IRIS_MAX_HEAT_TRINIUM));
+    public void setIrisHeatColor(StargateClassicRendererState rendererState, float red) {
         GlStateManager.color(1 + (red * 3F), 1, 1);
+    }
+    public void setIrisHeatColor(StargateClassicRendererState rendererState) {
+        if (rendererState.irisHeat == -1){
+            setIrisHeatColor(rendererState, 0); // for universe gate
+            return;
+        }
+        float red = (float) (rendererState.irisHeat / (rendererState.irisType == EnumIrisType.IRIS_TITANIUM ? StargateClassicBaseTile.IRIS_MAX_HEAT_TITANIUM : StargateClassicBaseTile.IRIS_MAX_HEAT_TRINIUM));
+        setIrisHeatColor(rendererState, red);
+        //.if(red > 0)
+        //    JSGTextureLightningHelper.lightUpTexture(getWorld(), rendererState.pos, red);
     }
 
     public void setGateHeatColor(StargateClassicRendererState rendererState) {
         if (rendererState.gateHeat == -1) return;
         float red = (float) (rendererState.gateHeat / StargateClassicBaseTile.GATE_MAX_HEAT);
         GlStateManager.color(1 + (red * 2.7F), 1, 1);
+        //.if(red > 0)
+        //    JSGTextureLightningHelper.lightUpTexture(getWorld(), rendererState.pos, red);
     }
 }

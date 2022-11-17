@@ -54,7 +54,7 @@ import static tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator.findOptim
 
 
 public class JSGStructure extends WorldGenerator {
-    private final PlacementSettings defaultSettings = new PlacementSettings().setIgnoreStructureBlock(false).setRotation(Rotation.NONE).setIgnoreEntities(false);
+    protected final PlacementSettings defaultSettings = new PlacementSettings().setIgnoreStructureBlock(false).setRotation(Rotation.NONE).setIgnoreEntities(false);
 
     public String structureName;
     public int yNegativeOffset;
@@ -70,6 +70,7 @@ public class JSGStructure extends WorldGenerator {
 
     public int structureSizeX;
     public int structureSizeZ;
+    public int airUp;
 
     public final ITemplateProcessor templateProcessor;
     public final Rotation rotationToNorth;
@@ -79,7 +80,7 @@ public class JSGStructure extends WorldGenerator {
 
     public EnumGenerationHeight genHeight;
 
-    public JSGStructure(String structureName, int yNegativeOffset, boolean isStargateStructure, boolean isRingsStructure, SymbolTypeEnum symbolType, int structureSizeX, int structureSizeZ, int dimensionToSpawn, boolean findOptimalRotation, @Nullable ITemplateProcessor templateProcessor, Rotation rotationToNorth, double terrainFlatPercents, double topBlockMatchPercent, @Nonnull EnumGenerationHeight genHeight) {
+    public JSGStructure(String structureName, int yNegativeOffset, boolean isStargateStructure, boolean isRingsStructure, SymbolTypeEnum symbolType, int structureSizeX, int structureSizeZ, int airUp, int dimensionToSpawn, boolean findOptimalRotation, @Nullable ITemplateProcessor templateProcessor, Rotation rotationToNorth, double terrainFlatPercents, double topBlockMatchPercent, @Nonnull EnumGenerationHeight genHeight) {
         this.structureName = structureName + (isStargateStructure ? (tauri.dev.jsg.config.JSGConfig.stargateSize == StargateSizeEnum.LARGE ? "_large" : "_small") : "");
         this.yNegativeOffset = yNegativeOffset;
         this.isStargateStructure = isStargateStructure;
@@ -94,6 +95,7 @@ public class JSGStructure extends WorldGenerator {
         this.terrainFlatPercents = terrainFlatPercents;
         this.topBlockMatchPercent = topBlockMatchPercent;
         this.genHeight = genHeight;
+        this.airUp = airUp;
 
 
         this.isMilkyWayGate = (symbolType == SymbolTypeEnum.MILKYWAY);

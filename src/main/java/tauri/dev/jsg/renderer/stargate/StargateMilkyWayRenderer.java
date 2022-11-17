@@ -30,7 +30,7 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
         renderChevrons(rendererState, partialTicks);
 
         GlStateManager.pushMatrix();
-        JSGTextureLightningHelper.resetLight(getWorld(), rendererState.pos);
+        applyLightMap(rendererState, partialTicks);
         ElementEnum.MILKYWAY_GATE.bindTextureAndRender(rendererState.getBiomeOverlay());
         GlStateManager.popMatrix();
     }
@@ -40,7 +40,7 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
 
     private void renderRing(StargateMilkyWayRendererState rendererState, double partialTicks) {
         GlStateManager.pushMatrix();
-        JSGTextureLightningHelper.resetLight(getWorld(), rendererState.pos);
+        applyLightMap(rendererState, partialTicks);
         float angularRotation = rendererState.spinHelper.getCurrentSymbol().getAngle();
 
         if (rendererState.spinHelper.getIsSpinning())
@@ -114,7 +114,7 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
         }
 
         if(!onlyLight) {
-            JSGTextureLightningHelper.resetLight(getWorld(), rendererState.pos);
+            applyLightMap(rendererState, partialTicks);
             ElementEnum.MILKYWAY_CHEVRON_FRAME.bindTextureAndRender(rendererState.getBiomeOverlay());
             ElementEnum.MILKYWAY_CHEVRON_BACK.render();
         }

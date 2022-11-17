@@ -82,9 +82,7 @@ public class StargateUniverseRendererState extends StargateClassicRendererState 
 	}
 	
 	public void iterate(World world, double partialTicks) {
-		Activation.iterate(activationList, world.getTotalWorldTime(), partialTicks, (index, stage) -> {
-			symbolStateMap.put(index, stage);
-		});
+		Activation.iterate(activationList, world.getTotalWorldTime(), partialTicks, symbolStateMap::put);
 	}
 	
 	public float getSymbolColor(SymbolUniverseEnum symbol) {
