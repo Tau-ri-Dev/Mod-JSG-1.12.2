@@ -21,10 +21,16 @@ public class JSGAdvancements {
     public static final JSGAdvancement GDO_USED = new JSGAdvancement("gdo_used");
     public static final JSGAdvancement KAWOOSH_CREMATION = new JSGAdvancement("kawoosh_cremation");
     public static final JSGAdvancement UNSTABLE_SURVIVE = new JSGAdvancement("unstable_eh_survive");
+    public static final JSGAdvancement MYST_PAGE = new JSGAdvancement("myst_page");
 
     /* ZPM */
     public static final JSGAdvancement THREE_ZPMS = new JSGAdvancement("three_zpms");
     public static final JSGAdvancement ZPM_SLOT = new JSGAdvancement("zpm_slot");
+
+    /* RINGS */
+    public static final JSGAdvancement TR_GOAULD = new JSGAdvancement("tr_goauld");
+    public static final JSGAdvancement TR_ORI = new JSGAdvancement("tr_ori");
+    public static final JSGAdvancement TR_ANCIENT = new JSGAdvancement("tr_ancient");
 
     public static final JSGAdvancement[] TRIGGER_ARRAY = new JSGAdvancement[]{
             MERGED_ORLIN,
@@ -41,9 +47,14 @@ public class JSGAdvancements {
             GDO_USED,
             KAWOOSH_CREMATION,
             UNSTABLE_SURVIVE,
+            MYST_PAGE,
 
             THREE_ZPMS,
-            ZPM_SLOT
+            ZPM_SLOT,
+
+            TR_GOAULD,
+            TR_ORI,
+            TR_ANCIENT
     };
 
     public static void register() {

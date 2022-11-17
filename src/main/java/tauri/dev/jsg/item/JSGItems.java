@@ -241,6 +241,7 @@ public class JSGItems {
             CRYSTAL_YELLOW,
             CRYSTAL_WHITE,
             CRYSTAL_BLUE_PEGASUS,
+            CRYSTAL_TOKRA,
 
             BEAMER_CRYSTAL_POWER,
             BEAMER_CRYSTAL_FLUID,
@@ -296,8 +297,6 @@ public class JSGItems {
             PAGE_MYSTERIOUS_ITEM_MILKYWAY,
             PAGE_MYSTERIOUS_ITEM_PEGASUS,
             PAGE_MYSTERIOUS_ITEM_UNIVERSE,
-
-            CRYSTAL_TOKRA,
 
 
             // ----------------------

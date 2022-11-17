@@ -1,24 +1,24 @@
 {
   "display": {
     "title": {
-      "translate": "advancement.trinium.title",
-      "color": "white",
+      "translate": "advancement.naquadah_raw.title",
+      "color": "dark_green",
       "bold": true,
       "underlined": false,
       "strikethrough": false
     },
     "description": {
-      "translate": "advancement.trinium.desc"
+      "translate": "advancement.naquadah_raw.desc"
     },
     "icon": {
-      "item": "jsg:trinium_ingot"
+      "item": "jsg:naquadah_alloy_raw"
     },
     "frame": "goal",
     "show_toast": true,
     "announce_to_chat": false,
     "hidden": false
   },
-  "parent": "jsg:crafting/naquadah_alloy",
+  "parent": "jsg:crafting/titanium",
   "criteria": {
     "test": {
       "trigger": "minecraft:inventory_changed",
@@ -26,7 +26,7 @@
         "items": [
           {
             "type": "forge:ore_dict",
-            "ore": "ingotTrinium"
+            "ore": "ingotNaquadahRaw"
           }
         ]
       }

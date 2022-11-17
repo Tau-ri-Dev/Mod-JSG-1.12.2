@@ -1,6 +1,7 @@
 package tauri.dev.jsg.renderer.dialhomedevice;
 
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.util.JSGTextureLightningHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.item.notebook.NotebookItem;
 import tauri.dev.jsg.renderer.BlockRenderer;
@@ -86,6 +87,7 @@ public abstract class DHDAbstractRenderer extends TileEntitySpecialRenderer<DHDA
                         GlStateManager.color(0.5f, 1, 1, 1);
                     else
                         GlStateManager.color(0.5f, 1, 0.5f, 1);
+                    JSGTextureLightningHelper.lightUpTexture(getWorld(), rendererState.pos, 0.5f);
                 }
             }
         }

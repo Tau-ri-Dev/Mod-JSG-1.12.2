@@ -2,6 +2,7 @@ package tauri.dev.jsg.item.mysterious;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,13 +13,14 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.advancements.JSGAdvancements;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
-import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 import tauri.dev.jsg.worldgen.structures.stargate.StargateGenerator;
+import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -55,6 +57,8 @@ public abstract class AbstractPageMysteriousItem extends Item {
             if (stargate != null) {
                 givePlayerPage(player, hand, stargate);
                 sendPlayerMessageAboutGeneration(player, false, true);
+                if (player instanceof EntityPlayerMP)
+                    JSGAdvancements.MYST_PAGE.trigger((EntityPlayerMP) player);
             } else {
                 player.getCooldownTracker().setCooldown(this, 0);
                 sendPlayerMessageAboutGeneration(player, false, false);
@@ -64,7 +68,7 @@ public abstract class AbstractPageMysteriousItem extends Item {
         return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
     }
 
-    public void givePlayerPage(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, GeneratedStargate stargate){
+    public void givePlayerPage(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, GeneratedStargate stargate) {
         NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(stargate.address, stargate.hasUpgrade, stargate.path);
 
         ItemStack stack = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 1, 1);

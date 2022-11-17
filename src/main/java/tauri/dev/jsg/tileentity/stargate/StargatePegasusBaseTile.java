@@ -390,7 +390,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
             case CLOSE:
                 return SoundEventEnum.GATE_MILKYWAY_CLOSE;
             case DIAL_FAILED:
-                return stargateState.dialingComputer() ? SoundEventEnum.GATE_PEGASUS_DIAL_FAILED : SoundEventEnum.GATE_PEGASUS_DIAL_FAILED;
+                return SoundEventEnum.GATE_PEGASUS_DIAL_FAILED;
             case INCOMING:
                 return SoundEventEnum.GATE_PEGASUS_INCOMING;
             case CHEVRON_OPEN:
@@ -659,8 +659,6 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
             return;
         }
         if (getConfig().getOption(ConfigOptions.PEG_DIAL_ANIMATION.id).getBooleanValue()) {
-
-            Object context = null;
             stargateState = EnumStargateState.DIALING;
 
             targetRingSymbol = targetSymbol;
@@ -698,12 +696,14 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
             isSpinning = true;
             spinStartTime = world.getTotalWorldTime();
 
-            ringSpinContext = context;
-            sendSignal(context, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), stargateWillLock(targetRingSymbol), targetSymbol.getEnglishName()});
+            ringSpinContext = null;
+            sendSignal(null, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), stargateWillLock(targetRingSymbol), targetSymbol.getEnglishName()});
 
         } else {
             addSymbolToAddress(targetSymbol);
             stargateState = EnumStargateState.DIALING;
+            targetRingSymbol = targetSymbol;
+            JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, true, 0)), targetPoint);
 
             if (stargateWillLock(targetSymbol)) {
                 isFinalActive = true;

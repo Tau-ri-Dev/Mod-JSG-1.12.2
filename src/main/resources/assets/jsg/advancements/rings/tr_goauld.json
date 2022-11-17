@@ -1,0 +1,27 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.transportrings_goauld.title",
+      "color": "gold",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.transportrings_goauld.desc"
+    },
+    "icon": {
+      "item": "jsg:transportrings_goauld_block"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "jsg:root",
+  "criteria": {
+    "test": {
+      "trigger": "jsg:tr_goauld"
+    }
+  }
+}

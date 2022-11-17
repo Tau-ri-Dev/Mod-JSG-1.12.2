@@ -40,7 +40,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
             JSGTextureLightningHelper.lightUpTexture(1f);
 
             if (rendererState.spinHelper.getIsSpinning()) {
-                int index = (int) rendererState.spinHelper.apply(getWorld().getTotalWorldTime() + partialTicks);
+                int index = Math.round(rendererState.spinHelper.apply(getWorld().getTotalWorldTime() + partialTicks));
                 if (!rendererState.slotToGlyphMap.containsKey(index)) {
                     renderGlyph(rendererState.spinHelper.getTargetSymbol().getId(), index, false);
                 }

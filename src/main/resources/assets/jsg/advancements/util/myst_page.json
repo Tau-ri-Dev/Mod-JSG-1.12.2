@@ -1,0 +1,27 @@
+{
+  "display": {
+    "title": {
+      "translate": "advancement.myst_page.title",
+      "color": "gold",
+      "bold": true,
+      "underlined": false,
+      "strikethrough": false
+    },
+    "description": {
+      "translate": "advancement.myst_page.desc"
+    },
+    "icon": {
+      "item": "jsg:page_mysterious_milkyway"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "jsg:gate/merged_orlin",
+  "criteria": {
+    "test": {
+      "trigger": "jsg:myst_page"
+    }
+  }
+}

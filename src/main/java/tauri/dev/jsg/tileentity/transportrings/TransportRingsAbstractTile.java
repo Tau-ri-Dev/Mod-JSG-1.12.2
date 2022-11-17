@@ -559,6 +559,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                             if(entity instanceof TokraEntity) // move tokra away from the rings platform
                                 ((TokraEntity) entity).moveFromRingsPlatform();
+
+                            if(entity instanceof EntityPlayerMP)
+                                triggerTeleportAdvancement((EntityPlayerMP) entity);
                         }
                     }
                 }
@@ -617,6 +620,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 throw new UnsupportedOperationException("EnumScheduledTask." + scheduledTask.name() + " not implemented on " + this.getClass().getName());
         }
     }
+
+    public abstract void triggerTeleportAdvancement(EntityPlayerMP playerIn);
 
     public boolean isBusy() {
         return busy;

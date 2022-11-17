@@ -17,6 +17,7 @@ public class JSGTextureLightningHelper {
     }
 
     public static void lightUpTexture(World world, ArrayList<BlockPos> poses, float lightIntensity) {
+        if (!JSGConfig.avConfig.renderEmissive) return;
         final int count = poses.size();
         int skyLight = 0;
         int blockLight = 0;

@@ -1,32 +1,31 @@
 {
   "display": {
     "title": {
-      "translate": "advancement.trinium.title",
-      "color": "white",
+      "translate": "advancement.chamber.title",
+      "color": "red",
       "bold": true,
       "underlined": false,
       "strikethrough": false
     },
     "description": {
-      "translate": "advancement.trinium.desc"
+      "translate": "advancement.chamber.desc"
     },
     "icon": {
-      "item": "jsg:trinium_ingot"
+      "item": "jsg:crystal_chamber_block"
     },
     "frame": "goal",
     "show_toast": true,
     "announce_to_chat": false,
     "hidden": false
   },
-  "parent": "jsg:crafting/naquadah_alloy",
+  "parent": "jsg:crafting/machines/root",
   "criteria": {
     "test": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "type": "forge:ore_dict",
-            "ore": "ingotTrinium"
+            "item": "jsg:crystal_chamber_block"
           }
         ]
       }
