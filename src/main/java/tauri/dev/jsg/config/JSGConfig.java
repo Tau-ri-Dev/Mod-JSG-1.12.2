@@ -277,6 +277,10 @@ public class JSGConfig {
 
         @Name("Unstable Event Horizon chance of death")
         public float ehDeathChance = 0.07f;
+
+        @Name("Disable new kawoosh model (from 4.11.0.0)")
+        @RequiresMcRestart
+        public boolean disableNewKawoosh = false;
     }
 
     public static class DialingConfig {

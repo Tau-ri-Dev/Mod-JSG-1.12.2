@@ -25,6 +25,7 @@ import java.util.Map;
 public class TextureLoader {
 
     public static final String TEXTURES_PATH = "assets/jsg/textures/tesr";
+    private static final int EH_ANIMATED_TEXTURE_SUB_TEXTURES = 185;
     private static final Map<ResourceLocation, Texture> LOADED_TEXTURES = new HashMap<>();
 
     public static Texture getTexture(ResourceLocation resourceLocation) {
@@ -80,12 +81,20 @@ public class TextureLoader {
         // LOAD EVENT HORIZONS
         if (!JSGConfig.horizonConfig.disableAnimatedEventHorizon && !JSGConfig.devConfig.enableDevMode) {
             progressBar = ProgressManager.push("JSG - Animated textures", ehPaths.size());
-			start = System.currentTimeMillis();
-			JSG.info("Started loading event horizon textures...");
+            start = System.currentTimeMillis();
+            JSG.info("Started loading event horizon textures...");
             for (String texturePath : ehPaths) {
-                loadTexture(progressBar, texturePath, resourceManager);
+                switch (texturePath) {
+                    case "textures/tesr/event_horizon_animated_kawoosh.jpg":
+                    case "textures/tesr/event_horizon_animated_kawoosh_unstable.jpg":
+                        loadEH(progressBar, texturePath, resourceManager);
+                        break;
+                    default:
+                        loadTexture(progressBar, texturePath, resourceManager);
+                        break;
+                }
             }
-			JSG.info("Loaded " + ehPaths.size() + " textures in " + (System.currentTimeMillis() - start) + " ms");
+            JSG.info("Loaded " + ehPaths.size() + " textures in " + (System.currentTimeMillis() - start) + " ms");
             ProgressManager.pop(progressBar);
         } else {
             if (tauri.dev.jsg.config.JSGConfig.debugConfig.logTexturesLoading)
@@ -104,6 +113,46 @@ public class TextureLoader {
                 JSG.info("Loading texture: " + texturePath);
             BufferedImage bufferedImage = TextureUtil.readBufferedImage(resource.getInputStream());
             LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage, false));
+        } catch (IOException e) {
+            JSG.error("Failed to load texture " + texturePath);
+            e.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(resource);
+        }
+    }
+
+    private static void loadEH(ProgressBar progressBar, String texturePath, IResourceManager resourceManager) {
+        progressBar.step(texturePath.replaceFirst("textures/tesr/", ""));
+        ResourceLocation resourceLocation = new ResourceLocation(JSG.MOD_ID, texturePath);
+        IResource resource = null;
+        try {
+            resource = resourceManager.getResource(resourceLocation);
+            if (JSGConfig.debugConfig.logTexturesLoading)
+                JSG.info("Loading texture: " + texturePath);
+
+            BufferedImage bufferedImage = TextureUtil.readBufferedImage(resource.getInputStream());
+
+            LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage, false));
+
+            ProgressBar subProgressBar = ProgressManager.push("JSG - Event Horizon Sub-Textures", EH_ANIMATED_TEXTURE_SUB_TEXTURES);
+
+            final int onePiece = bufferedImage.getWidth() / 14;
+
+            for (int i = 0; i < EH_ANIMATED_TEXTURE_SUB_TEXTURES; i++) {
+                int texIndex = (i % EH_ANIMATED_TEXTURE_SUB_TEXTURES);
+                int x = texIndex % 14;
+                int y = texIndex / 14;
+                String subPath = (texturePath + "_" + x + "." + y);
+
+                subProgressBar.step(x + ":" + y);
+                if (JSGConfig.debugConfig.logTexturesLoading)
+                    JSG.info("Loading sub-texture: " + subPath);
+
+                BufferedImage texturePart = bufferedImage.getSubimage(x * onePiece, y * onePiece, onePiece, onePiece);
+                LOADED_TEXTURES.put(new ResourceLocation(JSG.MOD_ID, subPath), new Texture(texturePart, false));
+            }
+
+            ProgressManager.pop(subProgressBar);
         } catch (IOException e) {
             JSG.error("Failed to load texture " + texturePath);
             e.printStackTrace();

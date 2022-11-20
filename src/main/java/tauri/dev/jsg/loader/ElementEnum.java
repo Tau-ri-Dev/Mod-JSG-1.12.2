@@ -13,6 +13,8 @@ import java.util.Map;
 
 public enum ElementEnum {
 
+    KAWOOSH("kawoosh.obj", "kawoosh.png", false), // kawoosh.png does not exist, but different texture is binding instead of it! - MineDragonCZ_
+
     // --------------------------------------------------------------------------------------------
     // Main Menu
 

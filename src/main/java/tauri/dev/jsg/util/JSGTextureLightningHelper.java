@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 import tauri.dev.jsg.config.JSGConfig;
 
 import java.util.ArrayList;
@@ -29,8 +30,8 @@ public class JSGTextureLightningHelper {
 
         skyLight /= count;
         blockLight /= count;
-        float i = ((float) (((((int) (lightIntensity*16)) << 4) % 65536)));
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, Math.max(blockLight*16, i), Math.max(skyLight*16, i));
+        float i = (lightIntensity * 15);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, Math.max(blockLight * 16, i), Math.max(skyLight * 16, i));
     }
 
     /**
@@ -43,9 +44,9 @@ public class JSGTextureLightningHelper {
         RenderHelper.enableStandardItemLighting();
         if (lightIntensity > 1) lightIntensity = 1;
         if (lightIntensity < 0) lightIntensity = 0;
-        int i = Math.round(lightIntensity * 16);
+        int i = Math.round(lightIntensity * 15);
         if (i < 1) return;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, ((float) ((i << 4) % 65536)), ((float) ((i << 4) % 65536)));
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, i * 16, i * 16);
     }
 
     /**
@@ -61,6 +62,7 @@ public class JSGTextureLightningHelper {
     }
 
     public static void resetLight(World world, ArrayList<BlockPos> poses) {
+        //if (!Loader.isModLoaded("optifine")) return;
         final int count = poses.size();
         int skyLight = 0;
         int blockLight = 0;
