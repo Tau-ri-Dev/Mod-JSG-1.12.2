@@ -26,6 +26,7 @@ import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.JSGMinecraftHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -213,7 +214,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
         long kawooshStart = rendererState.gateWaitStart + 44 - 24;
         float tick = (float) (getWorld().getTotalWorldTime() - kawooshStart + partialTicks);
-        float mul = 1;
+        float mul;
 
         float inner = StargateRendererStatic.eventHorizonRadius - tick / 3.957f;
 
@@ -281,7 +282,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                         // Rendering the vortex
                         if (rendererState instanceof StargateClassicRendererState) {
                             StargateClassicRendererState casted = (StargateClassicRendererState) rendererState;
-                            // disable mul while shield is closed
+                            // disable mul while iris/shield is closed
                             if (casted.irisState == EnumIrisState.CLOSED && casted.irisType != EnumIrisType.NULL) {
                                 mul = 0;
                                 renderWortex = false;
@@ -295,7 +296,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                                     GlStateManager.rotate(180, 0, 1, 0);
 
                                     float factor = Math.abs(mul);
-                                    float xyFactor = Math.max(factor, 0.5f);
+                                    float xyFactor = 0.7f; //Math.max(factor, 0.5f);
 
                                     GlStateManager.scale(xyFactor, xyFactor, factor);
 
@@ -453,7 +454,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
     }
 
     @Override
-    public boolean isGlobalRenderer(StargateAbstractBaseTile te) {
+    public boolean isGlobalRenderer(@Nonnull StargateAbstractBaseTile te) {
         return true;
     }
 
@@ -468,7 +469,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         CLOSING(4),
         SHRINKING(5);
 
-        private static Map<Integer, EnumVortexState> map = new HashMap<Integer, EnumVortexState>();
+        private static final Map<Integer, EnumVortexState> map = new HashMap<>();
 
         static {
             for (EnumVortexState packet : EnumVortexState.values()) {
@@ -476,7 +477,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
             }
         }
 
-        public int index;
+        public final int index;
 
         EnumVortexState(int index) {
             this.index = index;
