@@ -1,7 +1,6 @@
 package tauri.dev.jsg.item;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -20,10 +19,12 @@ import tauri.dev.jsg.item.mysterious.MilkyWayPageMysteriousItem;
 import tauri.dev.jsg.item.stargate.UpgradeIris;
 import tauri.dev.jsg.item.tools.staff.StaffItem;
 import tauri.dev.jsg.item.tools.zat.ZatItem;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
+
+import static tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler.JSG_ITEMS_CREATIVE_TAB;
+import static tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler.JSG_TOOLS_CREATIVE_TAB;
 
 @EventBusSubscriber
 public class JSGItems {
@@ -31,90 +32,90 @@ public class JSGItems {
     /**
      * DHD power/control crystal
      */
-    public static final Item CRYSTAL_CONTROL_MILKYWAY_DHD = ItemHelper.createGenericItem("crystal_control_dhd", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CRYSTAL_CONTROL_PEGASUS_DHD = ItemHelper.createGenericItem("crystal_control_pegasus_dhd", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item CRYSTAL_CONTROL_MILKYWAY_DHD = ItemHelper.createGenericItem("crystal_control_dhd", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CRYSTAL_CONTROL_PEGASUS_DHD = ItemHelper.createGenericItem("crystal_control_pegasus_dhd", JSG_ITEMS_CREATIVE_TAB);
 
     /**
      * Iris/Shield upgrade
      */
-    public static final Item IRIS_BLADE = ItemHelper.createGenericItem("iris_blade", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item QUAD_IRIS_BLADE = ItemHelper.createGenericItem("quad_iris_blade", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item IRIS_BLADE = ItemHelper.createGenericItem("iris_blade", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item QUAD_IRIS_BLADE = ItemHelper.createGenericItem("quad_iris_blade", JSG_ITEMS_CREATIVE_TAB);
     public static final Item UPGRADE_IRIS = new UpgradeIris("upgrade_iris", tauri.dev.jsg.config.JSGConfig.irisConfig.titaniumIrisDurability);
 
-    public static final Item IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("iris_blade_trinium", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item QUAD_IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("quad_iris_blade_trinium", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("iris_blade_trinium", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item QUAD_IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("quad_iris_blade_trinium", JSG_ITEMS_CREATIVE_TAB);
     public static final Item UPGRADE_IRIS_TRINIUM = new UpgradeIris("upgrade_iris_trinium", JSGConfig.irisConfig.triniumIrisDurability);
 
-    public static final Item UPGRADE_SHIELD = ItemHelper.createGenericItem("upgrade_shield", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item SHIELD_EMITTER = ItemHelper.createGenericItem("shield_emitter", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item UPGRADE_SHIELD = ItemHelper.createGenericItem("upgrade_shield", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item SHIELD_EMITTER = ItemHelper.createGenericItem("shield_emitter", JSG_ITEMS_CREATIVE_TAB);
 
     /**
      * These allow for dialing 8th glyph(cross dimension travel) and show different address spaces
      */
-    public static final Item CRYSTAL_GLYPH_DHD = ItemHelper.createGenericItem("crystal_glyph_dhd", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CRYSTAL_GLYPH_STARGATE = ItemHelper.createGenericItem("crystal_glyph_stargate", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CRYSTAL_GLYPH_MILKYWAY = ItemHelper.createGenericItem("crystal_glyph_milkyway", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CRYSTAL_GLYPH_PEGASUS = ItemHelper.createGenericItem("crystal_glyph_pegasus", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CRYSTAL_GLYPH_UNIVERSE = ItemHelper.createGenericItem("crystal_glyph_universe", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item CRYSTAL_GLYPH_DHD = ItemHelper.createGenericItem("crystal_glyph_dhd", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CRYSTAL_GLYPH_STARGATE = ItemHelper.createGenericItem("crystal_glyph_stargate", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CRYSTAL_GLYPH_MILKYWAY = ItemHelper.createGenericItem("crystal_glyph_milkyway", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CRYSTAL_GLYPH_PEGASUS = ItemHelper.createGenericItem("crystal_glyph_pegasus", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CRYSTAL_GLYPH_UNIVERSE = ItemHelper.createGenericItem("crystal_glyph_universe", JSG_ITEMS_CREATIVE_TAB);
 
     // transportrings
-    public static final Item CRYSTAL_GLYPH_GOAULD = ItemHelper.createGenericItem("crystal_glyph_goauld", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CRYSTAL_GLYPH_ORI = ItemHelper.createGenericItem("crystal_glyph_ori", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CRYSTAL_GLYPH_ANCIENT = ItemHelper.createGenericItem("crystal_glyph_ancient", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item CRYSTAL_GLYPH_GOAULD = ItemHelper.createGenericItem("crystal_glyph_goauld", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CRYSTAL_GLYPH_ORI = ItemHelper.createGenericItem("crystal_glyph_ori", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CRYSTAL_GLYPH_ANCIENT = ItemHelper.createGenericItem("crystal_glyph_ancient", JSG_ITEMS_CREATIVE_TAB);
 
     /**
      * Diffrent Naquadah(main Stargate building material) stages of purity
      */
-    public static final Item NAQUADAH_ORE_IMPURE = ItemHelper.createGenericItem("naquadah_impure", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item NAQUADAH_ORE_PURIFIED = ItemHelper.createGenericItem("naquadah_purified", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item NAQUADAH_ORE_RAW = ItemHelper.createGenericItem("naquadah_raw", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item NAQUADAH_ALLOY_RAW = ItemHelper.createGenericItem("naquadah_alloy_raw", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item NAQUADAH_RAW_DUST = ItemHelper.createGenericItem("naquadah_raw_dust", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item NAQUADAH_RAW_NUGGET = ItemHelper.createGenericItem("naquadah_raw_nugget", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item NAQUADAH_ORE_IMPURE = ItemHelper.createGenericItem("naquadah_impure", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item NAQUADAH_ORE_PURIFIED = ItemHelper.createGenericItem("naquadah_purified", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item NAQUADAH_ORE_RAW = ItemHelper.createGenericItem("naquadah_raw", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item NAQUADAH_ALLOY_RAW = ItemHelper.createGenericItem("naquadah_alloy_raw", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item NAQUADAH_RAW_DUST = ItemHelper.createGenericItem("naquadah_raw_dust", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item NAQUADAH_RAW_NUGGET = ItemHelper.createGenericItem("naquadah_raw_nugget", JSG_ITEMS_CREATIVE_TAB);
 
-    public static final Item NAQUADAH_ALLOY = ItemHelper.createGenericItem("naquadah_alloy", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item NAQUADAH_DUST = ItemHelper.createGenericItem("naquadah_dust", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item NAQUADAH_NUGGET = ItemHelper.createGenericItem("naquadah_nugget", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item NAQUADAH_ALLOY = ItemHelper.createGenericItem("naquadah_alloy", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item NAQUADAH_DUST = ItemHelper.createGenericItem("naquadah_dust", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item NAQUADAH_NUGGET = ItemHelper.createGenericItem("naquadah_nugget", JSG_ITEMS_CREATIVE_TAB);
 
     /**
      * Titanium & Trinium
      */
-    public static final Item TITANIUM_ORE_IMPURE = ItemHelper.createGenericItem("titanium_impure", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item TITANIUM_ORE_PURIFIED = ItemHelper.createGenericItem("titanium_purified", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item TITANIUM_ORE_RAW = ItemHelper.createGenericItem("titanium_raw", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item TITANIUM_INGOT = ItemHelper.createGenericItem("titanium_ingot", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item TITANIUM_DUST = ItemHelper.createGenericItem("titanium_dust", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item TITANIUM_NUGGET = ItemHelper.createGenericItem("titanium_nugget", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item TITANIUM_ORE_IMPURE = ItemHelper.createGenericItem("titanium_impure", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item TITANIUM_ORE_PURIFIED = ItemHelper.createGenericItem("titanium_purified", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item TITANIUM_ORE_RAW = ItemHelper.createGenericItem("titanium_raw", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item TITANIUM_INGOT = ItemHelper.createGenericItem("titanium_ingot", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item TITANIUM_DUST = ItemHelper.createGenericItem("titanium_dust", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item TITANIUM_NUGGET = ItemHelper.createGenericItem("titanium_nugget", JSG_ITEMS_CREATIVE_TAB);
 
-    public static final Item TRINIUM_ORE_IMPURE = ItemHelper.createGenericItem("trinium_impure", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item TRINIUM_ORE_PURIFIED = ItemHelper.createGenericItem("trinium_purified", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item TRINIUM_ORE_RAW = ItemHelper.createGenericItem("trinium_raw", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item TRINIUM_INGOT = ItemHelper.createGenericItem("trinium_ingot", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item TRINIUM_DUST = ItemHelper.createGenericItem("trinium_dust", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item TRINIUM_NUGGET = ItemHelper.createGenericItem("trinium_nugget", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item TRINIUM_ORE_IMPURE = ItemHelper.createGenericItem("trinium_impure", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item TRINIUM_ORE_PURIFIED = ItemHelper.createGenericItem("trinium_purified", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item TRINIUM_ORE_RAW = ItemHelper.createGenericItem("trinium_raw", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item TRINIUM_INGOT = ItemHelper.createGenericItem("trinium_ingot", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item TRINIUM_DUST = ItemHelper.createGenericItem("trinium_dust", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item TRINIUM_NUGGET = ItemHelper.createGenericItem("trinium_nugget", JSG_ITEMS_CREATIVE_TAB);
 
     /**
      * Crafting items
      */
-    public static final Item CRYSTAL_SEED = ItemHelper.createGenericItem("crystal_fragment", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CRYSTAL_BLUE = ItemHelper.createGenericItem("crystal_blue", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CRYSTAL_RED = ItemHelper.createGenericItem("crystal_red", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CRYSTAL_ENDER = ItemHelper.createGenericItem("crystal_ender", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CRYSTAL_YELLOW = ItemHelper.createGenericItem("crystal_yellow", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CRYSTAL_WHITE = ItemHelper.createGenericItem("crystal_white", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CRYSTAL_BLUE_PEGASUS = ItemHelper.createGenericItem("crystal_blue_pegasus", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item CRYSTAL_SEED = ItemHelper.createGenericItem("crystal_fragment", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CRYSTAL_BLUE = ItemHelper.createGenericItem("crystal_blue", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CRYSTAL_RED = ItemHelper.createGenericItem("crystal_red", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CRYSTAL_ENDER = ItemHelper.createGenericItem("crystal_ender", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CRYSTAL_YELLOW = ItemHelper.createGenericItem("crystal_yellow", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CRYSTAL_WHITE = ItemHelper.createGenericItem("crystal_white", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CRYSTAL_BLUE_PEGASUS = ItemHelper.createGenericItem("crystal_blue_pegasus", JSG_ITEMS_CREATIVE_TAB);
 
-    public static final Item CRYSTAL_TOKRA = ItemHelper.createGenericItem("crystal_tokra", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item CRYSTAL_TOKRA = ItemHelper.createGenericItem("crystal_tokra", JSG_ITEMS_CREATIVE_TAB);
 
-    public static final Item CIRCUIT_CONTROL_BASE = ItemHelper.createGenericItem("circuit_control_base", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CIRCUIT_CONTROL_CRYSTAL = ItemHelper.createGenericItem("circuit_control_crystal", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item CIRCUIT_CONTROL_NAQUADAH = ItemHelper.createGenericItem("circuit_control_naquadah", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item CIRCUIT_CONTROL_BASE = ItemHelper.createGenericItem("circuit_control_base", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CIRCUIT_CONTROL_CRYSTAL = ItemHelper.createGenericItem("circuit_control_crystal", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CIRCUIT_CONTROL_NAQUADAH = ItemHelper.createGenericItem("circuit_control_naquadah", JSG_ITEMS_CREATIVE_TAB);
 
-    public static final Item HOLDER_CRYSTAL = ItemHelper.createGenericItem("holder_crystal", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item HOLDER_CRYSTAL_PEGASUS = ItemHelper.createGenericItem("holder_crystal_pegasus", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item HOLDER_CRYSTAL = ItemHelper.createGenericItem("holder_crystal", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item HOLDER_CRYSTAL_PEGASUS = ItemHelper.createGenericItem("holder_crystal_pegasus", JSG_ITEMS_CREATIVE_TAB);
 
-    public static final Item DHD_BRB = ItemHelper.createGenericItem("dhd_brb", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item DHD_BBB = ItemHelper.createGenericItem("dhd_bbb", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item DHD_BRB = ItemHelper.createGenericItem("dhd_brb", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item DHD_BBB = ItemHelper.createGenericItem("dhd_bbb", JSG_ITEMS_CREATIVE_TAB);
 
     public static final NotebookItem NOTEBOOK_ITEM = new NotebookItem();
     public static final PageNotebookItem PAGE_NOTEBOOK_ITEM = new PageNotebookItem();
@@ -125,10 +126,10 @@ public class JSGItems {
 
     public static final GDOItem GDO = new GDOItem();
 
-    public static final Item BEAMER_CRYSTAL_POWER = ItemHelper.createGenericItem("beamer_crystal_power", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item BEAMER_CRYSTAL_FLUID = ItemHelper.createGenericItem("beamer_crystal_fluid", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item BEAMER_CRYSTAL_ITEMS = ItemHelper.createGenericItem("beamer_crystal_items", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item BEAMER_CRYSTAL_LASER = ItemHelper.createGenericItem("beamer_crystal_laser", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item BEAMER_CRYSTAL_POWER = ItemHelper.createGenericItem("beamer_crystal_power", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item BEAMER_CRYSTAL_FLUID = ItemHelper.createGenericItem("beamer_crystal_fluid", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item BEAMER_CRYSTAL_ITEMS = ItemHelper.createGenericItem("beamer_crystal_items", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item BEAMER_CRYSTAL_LASER = ItemHelper.createGenericItem("beamer_crystal_laser", JSG_ITEMS_CREATIVE_TAB);
 
     /**
      * TOOLS
@@ -136,47 +137,47 @@ public class JSGItems {
     public static final ZatItem ZAT = new ZatItem();
     public static final StaffItem STAFF = new StaffItem();
 
-    public static final Item JSG_HAMMER = ItemHelper.createDurabilityItem("hammer", JSGCreativeTabsHandler.jsgToolsCreativeTab, 25, true).setMaxStackSize(1);
-    public static final Item JSG_SCREWDRIVER = ItemHelper.createDurabilityItem("screwdriver", JSGCreativeTabsHandler.jsgToolsCreativeTab, 150, true).setMaxStackSize(1);
-    public static final Item JSG_WRENCH = ItemHelper.createDurabilityItem("wrench", JSGCreativeTabsHandler.jsgToolsCreativeTab, 225, true).setMaxStackSize(1);
+    public static final Item JSG_HAMMER = ItemHelper.createDurabilityItem("hammer", JSG_TOOLS_CREATIVE_TAB, 25, true).setMaxStackSize(1);
+    public static final Item JSG_SCREWDRIVER = ItemHelper.createDurabilityItem("screwdriver", JSG_TOOLS_CREATIVE_TAB, 150, true).setMaxStackSize(1);
+    public static final Item JSG_WRENCH = ItemHelper.createDurabilityItem("wrench", JSG_TOOLS_CREATIVE_TAB, 225, true).setMaxStackSize(1);
 
     /**
      * FRAGMENTS
      */
-    public static final Item FRAGMENT_MILKYWAY = ItemHelper.createGenericItem("fragment_stargate_milkyway", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item FRAGMENT_PEGASUS = ItemHelper.createGenericItem("fragment_stargate_pegasus", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item FRAGMENT_UNIVERSE = ItemHelper.createGenericItem("fragment_stargate_universe", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item FRAGMENT_MILKYWAY = ItemHelper.createGenericItem("fragment_stargate_milkyway", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item FRAGMENT_PEGASUS = ItemHelper.createGenericItem("fragment_stargate_pegasus", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item FRAGMENT_UNIVERSE = ItemHelper.createGenericItem("fragment_stargate_universe", JSG_ITEMS_CREATIVE_TAB);
 
-    public static final Item FRAGMENT_TR_GOAULD = ItemHelper.createGenericItem("fragment_transportrings_goauld", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item FRAGMENT_TR_ORI = ItemHelper.createGenericItem("fragment_transportrings_ori", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item FRAGMENT_TR_ANCIENT = ItemHelper.createGenericItem("fragment_transportrings_ancient", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item FRAGMENT_TR_GOAULD = ItemHelper.createGenericItem("fragment_transportrings_goauld", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item FRAGMENT_TR_ORI = ItemHelper.createGenericItem("fragment_transportrings_ori", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item FRAGMENT_TR_ANCIENT = ItemHelper.createGenericItem("fragment_transportrings_ancient", JSG_ITEMS_CREATIVE_TAB);
 
     /**
      * GEARS
      */
-    public static final Item GEAR_TITANIUM = ItemHelper.createGenericItem("gear_titanium", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item GEAR_TRINIUM = ItemHelper.createGenericItem("gear_trinium", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item GEAR_NAQUADAH_RAW = ItemHelper.createGenericItem("gear_naquadah_raw", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item GEAR_NAQUADAH = ItemHelper.createGenericItem("gear_naquadah", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item GEAR_TITANIUM = ItemHelper.createGenericItem("gear_titanium", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item GEAR_TRINIUM = ItemHelper.createGenericItem("gear_trinium", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item GEAR_NAQUADAH_RAW = ItemHelper.createGenericItem("gear_naquadah_raw", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item GEAR_NAQUADAH = ItemHelper.createGenericItem("gear_naquadah", JSG_ITEMS_CREATIVE_TAB);
 
     /**
      * PLATES
      */
-    public static final Item PLATE_TITANIUM = ItemHelper.createGenericItem("plate_titanium", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item PLATE_TRINIUM = ItemHelper.createGenericItem("plate_trinium", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item PLATE_NAQUADAH_RAW = ItemHelper.createGenericItem("plate_naquadah_raw", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item PLATE_NAQUADAH = ItemHelper.createGenericItem("plate_naquadah", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item PLATE_TITANIUM = ItemHelper.createGenericItem("plate_titanium", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item PLATE_TRINIUM = ItemHelper.createGenericItem("plate_trinium", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item PLATE_NAQUADAH_RAW = ItemHelper.createGenericItem("plate_naquadah_raw", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item PLATE_NAQUADAH = ItemHelper.createGenericItem("plate_naquadah", JSG_ITEMS_CREATIVE_TAB);
 
     /**
      * SCHEMATICS
      */
-    public static final Item SCHEMATIC_MILKYWAY = ItemHelper.createGenericItem("schematic_milkyway", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item SCHEMATIC_PEGASUS = ItemHelper.createGenericItem("schematic_pegasus", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item SCHEMATIC_UNIVERSE = ItemHelper.createGenericItem("schematic_universe", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item SCHEMATIC_MILKYWAY = ItemHelper.createGenericItem("schematic_milkyway", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item SCHEMATIC_PEGASUS = ItemHelper.createGenericItem("schematic_pegasus", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item SCHEMATIC_UNIVERSE = ItemHelper.createGenericItem("schematic_universe", JSG_ITEMS_CREATIVE_TAB);
 
-    public static final Item SCHEMATIC_TR_GOAULD = ItemHelper.createGenericItem("schematic_goauld", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item SCHEMATIC_TR_ORI = ItemHelper.createGenericItem("schematic_ori", JSGCreativeTabsHandler.jsgItemsCreativeTab);
-    public static final Item SCHEMATIC_TR_ANCIENT = ItemHelper.createGenericItem("schematic_ancient", JSGCreativeTabsHandler.jsgItemsCreativeTab);
+    public static final Item SCHEMATIC_TR_GOAULD = ItemHelper.createGenericItem("schematic_goauld", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item SCHEMATIC_TR_ORI = ItemHelper.createGenericItem("schematic_ori", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item SCHEMATIC_TR_ANCIENT = ItemHelper.createGenericItem("schematic_ancient", JSG_ITEMS_CREATIVE_TAB);
 
     public static boolean isInItemsArray(Item block, Item[] array) {
         for (Item b : array) {

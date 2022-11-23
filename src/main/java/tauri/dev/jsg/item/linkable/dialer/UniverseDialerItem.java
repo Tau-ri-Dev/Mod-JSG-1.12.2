@@ -1,29 +1,5 @@
 package tauri.dev.jsg.item.linkable.dialer;
 
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.block.JSGBlocks;
-import tauri.dev.jsg.capability.endpoint.ItemEndpointCapability;
-import tauri.dev.jsg.capability.endpoint.ItemEndpointInterface;
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.item.linkable.LinkAbleCapabilityProvider;
-import tauri.dev.jsg.item.oc.ItemOCMessage;
-import tauri.dev.jsg.item.renderer.CustomModel;
-import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
-import tauri.dev.jsg.sound.JSGSoundHelper;
-import tauri.dev.jsg.sound.SoundEventEnum;
-import tauri.dev.jsg.stargate.EnumStargateState;
-import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
-import tauri.dev.jsg.stargate.network.*;
-import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
-import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
-import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
-import tauri.dev.jsg.transportrings.TransportRings;
-import tauri.dev.jsg.util.EnumKeyInterface;
-import tauri.dev.jsg.util.EnumKeyMap;
-import tauri.dev.jsg.util.LinkingHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -49,7 +25,31 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.capability.endpoint.ItemEndpointCapability;
+import tauri.dev.jsg.capability.endpoint.ItemEndpointInterface;
+import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
+import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.item.linkable.LinkAbleCapabilityProvider;
+import tauri.dev.jsg.item.oc.ItemOCMessage;
+import tauri.dev.jsg.item.renderer.CustomModel;
+import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
+import tauri.dev.jsg.sound.JSGSoundHelper;
+import tauri.dev.jsg.sound.SoundEventEnum;
+import tauri.dev.jsg.stargate.EnumStargateState;
+import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
+import tauri.dev.jsg.stargate.network.*;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
+import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
+import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
+import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
+import tauri.dev.jsg.transportrings.TransportRings;
+import tauri.dev.jsg.util.EnumKeyInterface;
+import tauri.dev.jsg.util.EnumKeyMap;
+import tauri.dev.jsg.util.LinkingHelper;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -88,7 +88,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
         setUnlocalizedName(JSG.MOD_ID + "." + ITEM_NAME);
         setHasSubtypes(true);
         setMaxDamage(0);
-        setCreativeTab(JSGCreativeTabsHandler.jsgToolsCreativeTab);
+        setCreativeTab(JSGCreativeTabsHandler.JSG_TOOLS_CREATIVE_TAB);
         // setMaxStackSize(1);
     }
 
@@ -183,7 +183,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
         }
     }
 
-    public BlockPos getNearest(World world, BlockPos pos, ArrayList<BlockPos> blacklist, UniverseDialerMode mode){
+    public BlockPos getNearest(World world, BlockPos pos, ArrayList<BlockPos> blacklist, UniverseDialerMode mode) {
         return LinkingHelper.findClosestPos(world, pos, new BlockPos(JSGConfig.stargateConfig.universeDialerReach, 40, tauri.dev.jsg.config.JSGConfig.stargateConfig.universeDialerReach), mode.matchBlocks, blacklist);
     }
 
@@ -197,8 +197,8 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
             NBTTagCompound compound = stack.getTagCompound();
 
             boolean switchState = false;
-            if(world.getTotalWorldTime() % 40 == 0 && isSelected && compound != null){
-                if(compound.hasKey("switchState"))
+            if (world.getTotalWorldTime() % 40 == 0 && isSelected && compound != null) {
+                if (compound.hasKey("switchState"))
                     switchState = compound.getBoolean("switchState");
 
                 switchState = !switchState;
@@ -231,9 +231,9 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                     BlockPos targetPos;
                     ArrayList<BlockPos> blacklist = new ArrayList<>();
                     int loop = 0;
-                    do{
+                    do {
                         targetPos = getNearest(world, pos, blacklist, mode);
-                        if(targetPos == null)
+                        if (targetPos == null)
                             break;
 
                         switch (mode) {
@@ -241,7 +241,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                             case NEARBY:
                                 StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(targetPos);
 
-                                if (gateTile == null || !gateTile.isMerged()){
+                                if (gateTile == null || !gateTile.isMerged()) {
                                     blacklist.add(targetPos);
                                     continue;
                                 }
@@ -301,7 +301,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                             case RINGS:
                                 TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(targetPos);
-                                if(ringsTile == null){
+                                if (ringsTile == null) {
                                     blacklist.add(targetPos);
                                     continue;
                                 }
@@ -318,8 +318,8 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                             case GATE_INFO:
                                 StargateAbstractBaseTile tile = (StargateAbstractBaseTile) world.getTileEntity(targetPos);
-                                if(tile != null) {
-                                    if(tile instanceof StargateClassicBaseTile) {
+                                if (tile != null) {
+                                    if (tile instanceof StargateClassicBaseTile) {
                                         StargateClassicBaseTile t = (StargateClassicBaseTile) tile;
 
                                         compound.setBoolean("serverSideEnabledFastDial", t.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ALLOW_FAST_DIAL.id).getBooleanValue());
@@ -328,7 +328,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                         compound.setString("gateIrisState", t.hasIris() ? t.getIrisState().toString() : "MISSING");
                                         compound.setString("gateLastSymbol", (t.getDialedAddress().size() > 0) ? t.getDialedAddress().get(t.getDialedAddress().size() - 1).toString() + " (" + t.getDialedAddress().size() + ")" : "-- (0)");
 
-                                        if(t.getStargateState().notInitiating())
+                                        if (t.getStargateState().notInitiating())
                                             compound.setString("gateLastSymbol", "INCOMING");
 
                                         compound.setLong(mode.tagPosName, targetPos.toLong());
@@ -346,7 +346,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                 JSGSoundHelper.playSoundEventClientSide(entity.getEntityWorld(), entity.getPosition(), SoundEventEnum.UNIVERSE_DIALER_CONNECTED);
                         }
                         loop++;
-                    }while(!found && loop < 100);
+                    } while (!found && loop < 100);
                 }
             }
 
@@ -397,7 +397,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                 case MEMORY:
                 case NEARBY:
                     StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
-                    if(gateTile == null) break;
+                    if (gateTile == null) break;
                     switch (gateTile.getStargateState()) {
                         case IDLE:
                             int maxSymbols = SymbolUniverseEnum.getMaxSymbolsDisplay(selectedCompound.getBoolean("hasUpgrade"));
@@ -415,7 +415,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                         default:
                             if (gateTile.getStargateState() == EnumStargateState.DIALING) {
-                                if(gateTile.abortDialingSequence()) {
+                                if (gateTile.abortDialingSequence()) {
                                     player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.aborting"), true);
                                     break;
                                 }
@@ -428,7 +428,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                 case GATE_INFO:
                     StargateUniverseBaseTile tile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
-                    if(tile == null) break;
+                    if (tile == null) break;
                     switch (tile.getStargateState()) {
                         case IDLE:
                             break;
@@ -442,7 +442,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                         default:
                             if (tile.getStargateState() == EnumStargateState.DIALING) {
-                                if(tile.abortDialingSequence()) {
+                                if (tile.abortDialingSequence()) {
                                     player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.aborting"), true);
                                     break;
                                 }
@@ -455,7 +455,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                 case RINGS:
                     TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(linkedPos);
-                    if(ringsTile == null) break;
+                    if (ringsTile == null) break;
                     ringsTile.attemptTransportTo(new TransportRings(selectedCompound).getAddress(SymbolTypeTransportRingsEnum.GOAULD), 5).sendMessageIfFailed(player);
 
                     break;

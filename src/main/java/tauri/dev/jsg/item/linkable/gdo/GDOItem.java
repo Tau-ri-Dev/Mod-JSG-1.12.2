@@ -5,6 +5,7 @@ import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.capability.endpoint.ItemEndpointCapability;
 import tauri.dev.jsg.capability.endpoint.ItemEndpointInterface;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.linkable.LinkAbleCapabilityProvider;
 import tauri.dev.jsg.item.oc.ItemOCMessage;
@@ -12,7 +13,6 @@ import tauri.dev.jsg.item.renderer.CustomModel;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.util.LinkingHelper;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.creativetab.CreativeTabs;
@@ -45,7 +45,7 @@ public class GDOItem extends Item implements CustomModelItemInterface {
         setRegistryName(new ResourceLocation(JSG.MOD_ID, ITEM_NAME));
         setUnlocalizedName(JSG.MOD_ID + "." + ITEM_NAME);
 
-        setCreativeTab(JSGCreativeTabsHandler.jsgToolsCreativeTab);
+        setCreativeTab(JSGCreativeTabsHandler.JSG_TOOLS_CREATIVE_TAB);
     }
 
     // TODO replace with capabilities. If item will have NBT like "display:Name" it will not init custom NBT! -- slava110

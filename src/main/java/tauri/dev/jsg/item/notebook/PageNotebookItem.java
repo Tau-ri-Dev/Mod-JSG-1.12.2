@@ -1,6 +1,7 @@
 package tauri.dev.jsg.item.notebook;
 
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.item.renderer.CustomModel;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
 import tauri.dev.jsg.stargate.network.StargateAddress;
@@ -22,7 +23,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 		setRegistryName(JSG.MOD_ID + ":" + ITEM_NAME);
 		setUnlocalizedName(JSG.MOD_ID + "." + ITEM_NAME);
 		
-		setCreativeTab(JSGCreativeTabsHandler.jsgItemsCreativeTab);
+		setCreativeTab(JSGCreativeTabsHandler.JSG_ITEMS_CREATIVE_TAB);
 		
 		setHasSubtypes(true);
 		setMaxDamage(0);

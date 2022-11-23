@@ -1,27 +1,21 @@
 package tauri.dev.jsg;
 
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Logger;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.command.JSGCommands;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.integration.OCWrapperInterface;
 import tauri.dev.jsg.proxy.IProxy;
-import tauri.dev.jsg.stargate.network.StargateNetwork;
 import tauri.dev.jsg.util.main.loader.JSGInit;
 import tauri.dev.jsg.util.main.loader.JSGPreInit;
-import tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator;
 
 import java.io.IOException;
 
@@ -126,13 +120,6 @@ public class JSG {
     public void serverStarting(FMLServerStartingEvent event) {
         JSGCommands.registerCommands(event);
         JSG.info("Successfully registered Commands!");
-
-        WorldServer nether = event.getServer().getWorld(-1);
-        StargateNetwork network = StargateNetwork.get(nether);
-        if(!network.hasNetherGate()){
-            JSG.info("Started generating new Nether Gate!");
-            StargateNetwork.generateNetherGate(network, nether, new BlockPos(0, 0, 0));
-        }
     }
 
     @EventHandler

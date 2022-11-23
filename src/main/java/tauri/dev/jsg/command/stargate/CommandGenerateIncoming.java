@@ -1,7 +1,8 @@
-package tauri.dev.jsg.command;
+package tauri.dev.jsg.command.stargate;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.RayTraceResult;
+import tauri.dev.jsg.command.JSGCommands;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -56,12 +57,8 @@ public class CommandGenerateIncoming extends CommandBase {
             entities        = ((args[0] != null) ? parseInt(args[0]) : 5);
             addressLength   = ((args[1] != null) ? parseInt(args[1]) : 7);
 
-            EntityPlayerMP player = (EntityPlayerMP) sender;
-            RayTraceResult rayTraceResult = player.rayTrace(8, 0);
-            if (rayTraceResult != null && rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
-                tileEntity = sender.getEntityWorld().getTileEntity(rayTraceResult.getBlockPos());
-            }
-            else
+            tileEntity = JSGCommands.rayTraceTileEntity((EntityPlayerMP) sender);
+            if(tileEntity == null)
                 throw new WrongUsageException("commands.sggenincoming.usage");
         }
         else

@@ -1,4 +1,4 @@
-package tauri.dev.jsg.command;
+package tauri.dev.jsg.command.stargate;
 
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.stargate.StargateClosedReasonEnum;

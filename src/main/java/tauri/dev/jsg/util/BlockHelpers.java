@@ -7,14 +7,12 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
-import tauri.dev.jsg.creativetabs.JSGAbstractCreativeTab;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import tauri.dev.jsg.item.JSGItems;
 
 import javax.annotation.Nonnull;
 import java.util.List;

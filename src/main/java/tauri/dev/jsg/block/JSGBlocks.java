@@ -7,7 +7,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -53,7 +52,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
-import static tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler.jsgOresCreativeTab;
+import static tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler.JSG_ORES_CREATIVE_TAB;
 
 @EventBusSubscriber
 public class JSGBlocks {
@@ -75,10 +74,10 @@ public class JSGBlocks {
     // -----------------------------------------------------------------------------
     // ORE BLOCKS
 
-    public static final JSGBlock NAQUADAH_BLOCK_RAW = (JSGBlock) BlockHelpers.createSimpleBlock("naquadah_block_raw", Material.IRON, jsgOresCreativeTab).setHardness(3);
-    public static final JSGBlock NAQUADAH_BLOCK = (JSGBlock) BlockHelpers.createSimpleBlock("naquadah_block", Material.IRON, jsgOresCreativeTab).setHardness(3);
-    public static final JSGBlock TRINIUM_BLOCK = (JSGBlock) BlockHelpers.createSimpleBlock("trinium_block", Material.IRON, jsgOresCreativeTab).setHardness(3);
-    public static final JSGBlock TITANIUM_BLOCK = (JSGBlock) BlockHelpers.createSimpleBlock("titanium_block", Material.IRON, jsgOresCreativeTab).setHardness(3);
+    public static final JSGBlock NAQUADAH_BLOCK_RAW = (JSGBlock) BlockHelpers.createSimpleBlock("naquadah_block_raw", Material.IRON, JSG_ORES_CREATIVE_TAB).setHardness(3);
+    public static final JSGBlock NAQUADAH_BLOCK = (JSGBlock) BlockHelpers.createSimpleBlock("naquadah_block", Material.IRON, JSG_ORES_CREATIVE_TAB).setHardness(3);
+    public static final JSGBlock TRINIUM_BLOCK = (JSGBlock) BlockHelpers.createSimpleBlock("trinium_block", Material.IRON, JSG_ORES_CREATIVE_TAB).setHardness(3);
+    public static final JSGBlock TITANIUM_BLOCK = (JSGBlock) BlockHelpers.createSimpleBlock("titanium_block", Material.IRON, JSG_ORES_CREATIVE_TAB).setHardness(3);
 
     // -----------------------------------------------------------------------------
     // GATES

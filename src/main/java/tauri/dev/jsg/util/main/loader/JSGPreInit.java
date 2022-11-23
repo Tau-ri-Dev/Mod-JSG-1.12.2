@@ -10,10 +10,6 @@ import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.entity.EntityRegister;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.integration.TConstructIntegration;
-import tauri.dev.jsg.machine.assembler.AssemblerRecipe;
-import tauri.dev.jsg.machine.assembler.AssemblerRecipes;
-import tauri.dev.jsg.machine.chamber.CrystalChamberRecipe;
-import tauri.dev.jsg.machine.chamber.CrystalChamberRecipes;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 
 import java.io.File;
@@ -28,6 +24,7 @@ public class JSGPreInit {
         File source = event.getSourceFile();
         JSG.clientModPath = source.getAbsolutePath();
 
+        //JSG.JSG_SOUNDS = JSGSoundCategory.add("jsg");
         JSG.JSG_SOUNDS = SoundCategory.BLOCKS;
 
         JSG.info("Started loading JSG mod in " + JSG.clientModPath);

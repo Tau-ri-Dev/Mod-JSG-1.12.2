@@ -107,6 +107,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     private int irisMaxDurability = 0;
     protected boolean isFinalActive;
 
+    protected StargateAddressDynamic lastDialedAddress = new StargateAddressDynamic(getSymbolType());
+
     protected double lastIrisHeat;
     protected double lastGateHeat;
     public double irisHeat;
@@ -398,7 +400,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     /**
      * Try to light up chevron/symbol
      */
-    public void lightUpChevronByIncoming(boolean disableAnimation) {
+    protected void lightUpChevronByIncoming(boolean disableAnimation) {
         if (!isIncoming) {
             if (incomingPeriod != -1) stargateState = EnumStargateState.IDLE;
             sendRenderingUpdate(StargateRendererActionState.EnumGateAction.CLEAR_CHEVRONS, 9, true);
@@ -515,22 +517,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (!world.isRemote) {
             initConfig();
 
-            // Load entities
-            String[] entityListString = tauri.dev.jsg.config.JSGConfig.randomIncoming.entitiesToSpawn;
-            List<Entity> entityList = new ArrayList<Entity>();
-            for (String entityString : entityListString) {
-                String[] entityTemporallyList = entityString.split(":");
-                if (entityTemporallyList.length < 2) continue; // prevents from Ticking block entity null pointer
-                String entityStringNew =
-                        (
-                                (entityTemporallyList[0].equals("minecraft"))
-                                        ? entityTemporallyList[1]
-                                        : entityTemporallyList[0] + ":" + entityTemporallyList[1]
-                        );
-                ResourceLocation rlString = new ResourceLocation(entityStringNew);
-                entityList.add(EntityList.createEntityByIDFromName(rlString, world));
-            }
-
             Random rand = new Random();
             if (config.getOption(ALLOW_RIG.id).getBooleanValue() && world.isAreaLoaded(pos, 10)) {
                 if (world.getTotalWorldTime() % 200 == 0) { // every 10 seconds
@@ -619,6 +605,24 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         randomIncomingState++;
                     } else if (randomIncomingState >= (waitOpen + wait) && randomIncomingEntities > 0 && (stargateState == EnumStargateState.ENGAGED || stargateState == EnumStargateState.INCOMING)) {
                         randomIncomingState++;
+
+                        // Load entities
+                        String[] entityListString = tauri.dev.jsg.config.JSGConfig.randomIncoming.entitiesToSpawn;
+                        List<Entity> entityList = new ArrayList<Entity>();
+                        for (String entityString : entityListString) {
+                            String[] entityTemporallyList = entityString.split(":");
+                            if (entityTemporallyList.length < 2) continue; // prevents from Ticking block entity null pointer
+                            String entityStringNew =
+                                    (
+                                            (entityTemporallyList[0].equals("minecraft"))
+                                                    ? entityTemporallyList[1]
+                                                    : entityTemporallyList[0] + ":" + entityTemporallyList[1]
+                                    );
+                            ResourceLocation rlString = new ResourceLocation(entityStringNew);
+                            entityList.add(EntityList.createEntityByIDFromName(rlString, world));
+                        }
+
+
                         int randomDelay = new Random().nextInt(16);
                         if (randomDelay <= 0) randomDelay = 1;
                         if (randomIncomingState % (5 * randomDelay) == 0) {

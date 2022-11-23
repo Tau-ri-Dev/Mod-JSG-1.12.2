@@ -194,7 +194,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     }
 
     @Override
-    public void lightUpChevronByIncoming(boolean disableAnimation){
+    protected void lightUpChevronByIncoming(boolean disableAnimation){
         super.lightUpChevronByIncoming(disableAnimation);
         if(incomingPeriod == -1) return;
 

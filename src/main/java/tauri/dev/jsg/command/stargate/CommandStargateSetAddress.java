@@ -1,4 +1,4 @@
-package tauri.dev.jsg.command;
+package tauri.dev.jsg.command.stargate;
 
 import tauri.dev.jsg.stargate.network.StargateAddressDynamic;
 import tauri.dev.jsg.stargate.network.StargateNetwork;

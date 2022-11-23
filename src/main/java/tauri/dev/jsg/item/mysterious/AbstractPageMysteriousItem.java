@@ -15,10 +15,10 @@ import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.advancements.JSGAdvancements;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 import tauri.dev.jsg.worldgen.structures.stargate.StargateGenerator;
 import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 
@@ -37,7 +37,7 @@ public abstract class AbstractPageMysteriousItem extends Item {
         setRegistryName(JSG.MOD_ID + ":" + BASE_NAME + "_" + typeName);
         setUnlocalizedName(JSG.MOD_ID + "." + BASE_NAME + "_" + typeName);
 
-        setCreativeTab(JSGCreativeTabsHandler.jsgItemsCreativeTab);
+        setCreativeTab(JSGCreativeTabsHandler.JSG_ITEMS_CREATIVE_TAB);
     }
 
     @Override

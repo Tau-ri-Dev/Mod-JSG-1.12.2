@@ -42,7 +42,7 @@ public enum SymbolTypeEnum implements EnumKeyInterface<Integer> {
         return SymbolMilkyWayEnum.BRB;
 
       case PEGASUS:
-        return SymbolPegasusEnum.BRB;
+        return SymbolPegasusEnum.BBB;
 
       case UNIVERSE:
         return SymbolUniverseEnum.getTopSymbol();

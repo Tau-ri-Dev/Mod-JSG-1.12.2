@@ -14,6 +14,7 @@ public class TRControllerGoauldRenderer extends TRControllerAbstractRenderer {
     public void renderController(TRControllerAbstractTile te, TRControllerAbstractRendererState rendererState) {
         TRControllerGoauldRendererState rs = ((TRControllerGoauldRendererState) rendererState);
         if(rs == null) return;
+        if(rs.pos == null) return;
 
         // render plate
         ElementEnum.RINGS_CONTROLLER_GOAULD.bindTextureAndRender(te.getBiomeOverlay());

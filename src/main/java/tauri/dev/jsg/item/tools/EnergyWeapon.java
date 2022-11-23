@@ -3,11 +3,11 @@ package tauri.dev.jsg.item.tools;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.capability.WeaponCapabilityProvider;
 import tauri.dev.jsg.capability.endpoint.ItemEndpointCapability;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.entity.JSGEnergyProjectile;
 import tauri.dev.jsg.item.renderer.CustomModel;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
 import tauri.dev.jsg.stargate.power.StargateItemEnergyStorage;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -41,7 +41,7 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
         setRegistryName(new ResourceLocation(JSG.MOD_ID, this.itemName));
         setUnlocalizedName(JSG.MOD_ID + "." + this.itemName);
         setMaxStackSize(1);
-        setCreativeTab(JSGCreativeTabsHandler.jsgWeaponsCreativeTab);
+        setCreativeTab(JSGCreativeTabsHandler.JSG_WEAPONS_CREATIVE_TAB);
     }
 
     private static void checkNBT(ItemStack stack) {

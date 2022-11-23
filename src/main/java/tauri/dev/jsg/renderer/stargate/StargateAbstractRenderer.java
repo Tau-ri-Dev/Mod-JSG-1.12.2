@@ -358,10 +358,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
                             if (getWorld().getTotalWorldTime() - stateChange - 9 > 7) {
                                 rendererState.doEventHorizonRender = false;
-                                //								clearChevrons(stateChange + 9 + 7);
                             }
-
-                            // return;
                         }
                     }
                 } // not closing if

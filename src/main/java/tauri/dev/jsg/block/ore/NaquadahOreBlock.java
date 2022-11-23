@@ -2,8 +2,8 @@ package tauri.dev.jsg.block.ore;
 
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -27,7 +27,7 @@ public class NaquadahOreBlock extends JSGBlock {
 		
 		setSoundType(SoundType.STONE);
 		if(isInTab)
-			setCreativeTab(JSGCreativeTabsHandler.jsgOresCreativeTab);
+			setCreativeTab(JSGCreativeTabsHandler.JSG_ORES_CREATIVE_TAB);
 		
 		setHardness(4.5f);
 		setHarvestLevel("pickaxe", 3);

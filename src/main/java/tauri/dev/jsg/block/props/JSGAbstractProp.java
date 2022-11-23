@@ -2,8 +2,8 @@ package tauri.dev.jsg.block.props;
 
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGAbstractCustomMetaItemBlock;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.util.main.JSGProps;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -23,7 +23,7 @@ import java.util.Map;
 public abstract class JSGAbstractProp extends JSGAbstractCustomMetaItemBlock {
     public JSGAbstractProp(Material materialIn) {
         super(materialIn);
-        setCreativeTab(JSGCreativeTabsHandler.jsgPropsCreativeTab);
+        setCreativeTab(JSGCreativeTabsHandler.JSG_PROPS_CREATIVE_TAB);
         setLightOpacity(0);
         setDefaultState(blockState.getBaseState().withProperty(JSGProps.PROP_VARIANT, 0));
     }

@@ -22,6 +22,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.beamer.BeamerLinkingHelper;
 import tauri.dev.jsg.block.JSGBlock;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.gui.GuiIdEnum;
 import tauri.dev.jsg.renderer.BeamerRenderer;
 import tauri.dev.jsg.sound.JSGSoundHelper;
@@ -29,7 +30,6 @@ import tauri.dev.jsg.sound.SoundPositionedEnum;
 import tauri.dev.jsg.tileentity.BeamerTile;
 import tauri.dev.jsg.util.ItemHandlerHelper;
 import tauri.dev.jsg.util.main.JSGProps;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 
 import javax.annotation.Nonnull;
 
@@ -44,7 +44,7 @@ public class BeamerBlock extends JSGBlock {
         setUnlocalizedName(JSG.MOD_ID + "." + BLOCK_NAME);
 
         setSoundType(SoundType.METAL);
-        setCreativeTab(JSGCreativeTabsHandler.jsgGatesCreativeTab);
+        setCreativeTab(JSGCreativeTabsHandler.JSG_GATES_CREATIVE_TAB);
 
         setDefaultState(blockState.getBaseState()
                 .withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.NORTH));

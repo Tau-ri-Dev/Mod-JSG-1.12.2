@@ -1,4 +1,4 @@
-package tauri.dev.jsg.command;
+package tauri.dev.jsg.command.stargate;
 
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import net.minecraft.command.CommandBase;

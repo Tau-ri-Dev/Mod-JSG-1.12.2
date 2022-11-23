@@ -110,14 +110,14 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         resetToDialSymbols();
 
         if (isLinkedAndDHDOperational()) {
-            getLinkedDHD(world).activateSymbol(SymbolPegasusEnum.BRB);
+            getLinkedDHD(world).activateSymbol(SymbolPegasusEnum.BBB);
         }
     }
 
     @Override
     public void activateDHDSymbolBRB() {
         if (isLinkedAndDHDOperational()) {
-            getLinkedDHD(world).activateSymbol(SymbolPegasusEnum.BRB);
+            getLinkedDHD(world).activateSymbol(SymbolPegasusEnum.BBB);
         }
     }
 
@@ -187,7 +187,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     }
 
     @Override
-    public void lightUpChevronByIncoming(boolean disableAnimation) {
+    protected void lightUpChevronByIncoming(boolean disableAnimation) {
         super.lightUpChevronByIncoming(disableAnimation);
         if (incomingPeriod == -1) return;
 
@@ -440,7 +440,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         if (!world.isRemote) {
 
             if ((toDialSymbols.size() > 0) && (world.getTotalWorldTime() % 2 == 0) && stargateState.idle()) {
-                if (canAddSymbolInternal(toDialSymbols.get(0)) || toDialSymbols.get(0) == SymbolPegasusEnum.BRB)
+                if (canAddSymbolInternal(toDialSymbols.get(0)) || toDialSymbols.get(0) == SymbolPegasusEnum.BBB)
                     addSymbolToAddressByList(toDialSymbols.get(0));
                 if (toDialSymbols.size() > 0)
                     toDialSymbols.remove(0);
@@ -640,10 +640,10 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     }
 
     public void addSymbolToAddressDHD(SymbolInterface targetSymbol) {
-        if(targetSymbol != SymbolPegasusEnum.BRB && !canAddSymbolToList(targetSymbol)) return;
+        if(targetSymbol != SymbolPegasusEnum.BBB && !canAddSymbolToList(targetSymbol)) return;
         if(!(targetSymbol instanceof SymbolPegasusEnum)) return;
         if(toDialSymbols.contains(targetSymbol)) return;
-        if (isLinkedAndDHDOperational() && (targetSymbol != SymbolPegasusEnum.BRB || toDialSymbols.size() > 0)) {
+        if (isLinkedAndDHDOperational() && (targetSymbol != SymbolPegasusEnum.BBB || toDialSymbols.size() > 0)) {
             DHDAbstractTile dhd = getLinkedDHD(world);
             if (dhd != null)
                 dhd.activateSymbol(targetSymbol);

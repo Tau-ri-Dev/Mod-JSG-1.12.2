@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -27,7 +27,7 @@ public class UpgradeIris extends Item {
         setRegistryName(JSG.MOD_ID + ":" + name);
         setUnlocalizedName(JSG.MOD_ID + "." + name);
 
-        setCreativeTab(JSGCreativeTabsHandler.jsgItemsCreativeTab);
+        setCreativeTab(JSGCreativeTabsHandler.JSG_ITEMS_CREATIVE_TAB);
     }
 
     @Override

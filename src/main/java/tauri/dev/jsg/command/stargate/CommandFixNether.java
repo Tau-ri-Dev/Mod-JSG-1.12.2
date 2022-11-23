@@ -1,5 +1,6 @@
-package tauri.dev.jsg.command;
+package tauri.dev.jsg.command.stargate;
 
+import net.minecraft.util.text.TextComponentString;
 import tauri.dev.jsg.stargate.network.StargateNetwork;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -28,6 +29,7 @@ public class CommandFixNether extends CommandBase {
   public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
     World world = sender.getEntityWorld();
     StargateNetwork.get(world).deleteNetherGate();
+    sender.sendMessage(new TextComponentString("Nether gate deleted!"));
   }
 
 }

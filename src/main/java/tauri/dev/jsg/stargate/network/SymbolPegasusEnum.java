@@ -53,7 +53,7 @@ public enum SymbolPegasusEnum implements SymbolInterface {
   ARAMI(1, "Arami", "1.obj", 27),
   DANAMI(0, "Danami", "0.obj", 18),
 
-  BRB(38, "Bright Red Button", "BRB.obj", -39);
+  BBB(38, "Bright Blue Button", "BRB.obj", -39);
 
   public final int id;
   public final int textureSlot;
@@ -78,7 +78,7 @@ public enum SymbolPegasusEnum implements SymbolInterface {
   }
 
   public boolean brb() {
-    return this == BRB;
+    return this == BBB;
   }
 
   @Override

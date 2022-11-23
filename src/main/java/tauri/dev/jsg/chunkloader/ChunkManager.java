@@ -19,11 +19,10 @@ import java.util.Map;
 @EventBusSubscriber
 public class ChunkManager {
 	
-	private static Map<World, Ticket> worldTicketMap = new HashMap<>();
+	private static final Map<World, Ticket> worldTicketMap = new HashMap<>();
 	
 	public static Ticket requestTicket(World world) {
 		if (!worldTicketMap.containsKey(world)) {
-//			JSG.info("Creating ticket for "+world.provider);
 			worldTicketMap.put(world, ForgeChunkManager.requestTicket(JSG.instance, world, Type.NORMAL));
 		}
 		

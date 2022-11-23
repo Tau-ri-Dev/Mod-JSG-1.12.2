@@ -17,16 +17,14 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGAbstractCustomItemBlock;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.item.energy.ZPMItemBlock;
 import tauri.dev.jsg.renderer.zpm.ZPMRenderer;
 import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.stargate.power.StargateItemEnergyStorage;
 import tauri.dev.jsg.tileentity.energy.ZPMTile;
-import tauri.dev.jsg.util.ItemHandlerHelper;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,7 +41,7 @@ public class ZPMBlock extends JSGAbstractCustomItemBlock {
         setUnlocalizedName(JSG.MOD_ID + "." + BLOCK_NAME);
 
         setSoundType(SoundType.GLASS);
-        setCreativeTab(JSGCreativeTabsHandler.jsgEnergyCreativeTab);
+        setCreativeTab(JSGCreativeTabsHandler.JSG_ENERGY_CREATIVE_TAB);
 
         setHardness(3.0f);
         setHarvestLevel("pickaxe", 3);

@@ -15,12 +15,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractMemberTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicMemberTile;
 import tauri.dev.jsg.util.main.JSGProps;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,7 +34,7 @@ public abstract class StargateAbstractMemberBlock extends JSGBlock {
         setUnlocalizedName(JSG.MOD_ID + "." + blockName);
 
         setSoundType(SoundType.METAL);
-        setCreativeTab(JSGCreativeTabsHandler.jsgGatesCreativeTab);
+        setCreativeTab(JSGCreativeTabsHandler.JSG_GATES_CREATIVE_TAB);
 
         setHardness(3.0f);
         setResistance(60.0f);

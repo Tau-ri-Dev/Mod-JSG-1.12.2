@@ -1,4 +1,4 @@
-package tauri.dev.jsg.command;
+package tauri.dev.jsg.command.stargate;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

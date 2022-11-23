@@ -145,6 +145,7 @@ public class EventHorizon {
         if (!new StargateTeleportEntityEvent(baseTile, packet.getTargetGatePos().getTileEntity(), packet.getEntity()).post()) {
             // Not cancelled
             StargatePos targetGatePos = packet.getTargetGatePos();
+            JSGSoundHelper.playSoundEvent(world, gateCenter, SoundEventEnum.WORMHOLE_GO);
             if (targetGatePos.getTileEntity() instanceof StargateClassicBaseTile
                     && ((StargateClassicBaseTile) targetGatePos.getTileEntity()).isIrisClosed()) {
 
@@ -211,7 +212,6 @@ public class EventHorizon {
                 classicTargetGate.sendSignal(null, "stargate_event_iris_hit", new Object[]{"Something just hit the IRIS!"});
 
             } else {
-                JSGSoundHelper.playSoundEvent(world, gateCenter, SoundEventEnum.WORMHOLE_GO);
                 if (baseTile != null && baseTile.isCurrentlyUnstable)
                     if (Math.random() < JSGConfig.horizonConfig.ehDeathChance)
                         unstableEhKill(packet.getEntity());

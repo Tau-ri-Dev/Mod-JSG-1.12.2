@@ -20,12 +20,11 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGAbstractCustomItemBlock;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.stargate.power.StargateItemEnergyStorage;
-import tauri.dev.jsg.tileentity.machine.AssemblerTile;
 import tauri.dev.jsg.util.ItemHandlerHelper;
 import tauri.dev.jsg.util.main.JSGProps;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,7 +39,7 @@ public abstract class JSGMachineBlock extends JSGAbstractCustomItemBlock {
         setUnlocalizedName(JSG.MOD_ID + "." + blockName);
 
         setSoundType(SoundType.METAL);
-        setCreativeTab(JSGCreativeTabsHandler.jsgMachinesCreativeTab);
+        setCreativeTab(JSGCreativeTabsHandler.JSG_MACHINES_CREATIVE_TAB);
 
         setDefaultState(blockState.getBaseState().withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.NORTH));
 

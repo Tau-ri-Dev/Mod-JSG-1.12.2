@@ -20,12 +20,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.gui.GuiIdEnum;
 import tauri.dev.jsg.renderer.zpm.ZPMHubRenderer;
 import tauri.dev.jsg.tileentity.energy.ZPMHubTile;
 import tauri.dev.jsg.util.ItemHandlerHelper;
 import tauri.dev.jsg.util.main.JSGProps;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,7 +42,7 @@ public class ZPMHubBlock extends JSGBlock {
         setUnlocalizedName(JSG.MOD_ID + "." + blockName);
 
         setSoundType(SoundType.METAL);
-        setCreativeTab(JSGCreativeTabsHandler.jsgEnergyCreativeTab);
+        setCreativeTab(JSGCreativeTabsHandler.JSG_ENERGY_CREATIVE_TAB);
 
         setDefaultState(blockState.getBaseState()
                 .withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.NORTH));

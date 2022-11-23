@@ -22,13 +22,13 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.gui.GuiIdEnum;
 import tauri.dev.jsg.tileentity.dialhomedevice.DHDAbstractTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.util.ItemHandlerHelper;
 import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.main.JSGProps;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 
 import javax.annotation.Nullable;
 
@@ -41,7 +41,7 @@ public abstract class DHDAbstractBlock extends JSGBlock {
         setUnlocalizedName(JSG.MOD_ID + "." + blockName);
 
         setSoundType(SoundType.METAL);
-        setCreativeTab(JSGCreativeTabsHandler.jsgGatesCreativeTab);
+        setCreativeTab(JSGCreativeTabsHandler.JSG_GATES_CREATIVE_TAB);
 
         setDefaultState(blockState.getBaseState().withProperty(JSGProps.ROTATION_HORIZONTAL, 0).withProperty(JSGProps.SNOWY, false));
 

@@ -4,8 +4,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -26,7 +26,7 @@ public class TriniumOreBlock extends JSGBlock {
 		setUnlocalizedName(JSG.MOD_ID + "." + blockName);
 		
 		setSoundType(SoundType.STONE); 
-		setCreativeTab(JSGCreativeTabsHandler.jsgOresCreativeTab);
+		setCreativeTab(JSGCreativeTabsHandler.JSG_ORES_CREATIVE_TAB);
 		
 		setHardness(4.5f);
 		setHarvestLevel("pickaxe", 3);

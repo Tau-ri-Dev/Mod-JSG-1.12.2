@@ -2,10 +2,10 @@ package tauri.dev.jsg.block.transportrings;
 
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.gui.GuiIdEnum;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import tauri.dev.jsg.util.ItemHandlerHelper;
-import tauri.dev.jsg.util.main.loader.JSGCreativeTabsHandler;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -29,7 +29,7 @@ public abstract class TransportRingsAbstractBlock extends JSGBlock {
         setUnlocalizedName(JSG.MOD_ID + "." + name);
 
         setSoundType(SoundType.STONE);
-        setCreativeTab(JSGCreativeTabsHandler.jsgRingsCreativeTab);
+        setCreativeTab(JSGCreativeTabsHandler.JSG_RINGS_CREATIVE_TAB);
 
         setLightOpacity(0);
 
