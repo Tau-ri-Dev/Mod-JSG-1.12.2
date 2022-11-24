@@ -36,6 +36,7 @@ import tauri.dev.jsg.block.machine.CrystalChamberBlock;
 import tauri.dev.jsg.block.ore.NaquadahOreBlock;
 import tauri.dev.jsg.block.ore.TitaniumOreBlock;
 import tauri.dev.jsg.block.ore.TriniumOreBlock;
+import tauri.dev.jsg.block.props.DestinyCountDownBlock;
 import tauri.dev.jsg.block.props.TRPlatformBlock;
 import tauri.dev.jsg.block.stargate.*;
 import tauri.dev.jsg.block.transportrings.TRControllerGoauldBlock;
@@ -137,6 +138,7 @@ public class JSGBlocks {
     // DECOR BLOCKS
 
     public static final JSGBlock DECOR_CRYSTAL_BLOCK = (JSGBlock) BlockHelpers.createSimpleBlock("tokra_crystal_block", Material.ROCK, CreativeTabs.BUILDING_BLOCKS, JSGItems.CRYSTAL_TOKRA, 2, 4, 3).setHardness(1.5f).setLightLevel(11f);
+    public static final DestinyCountDownBlock DESTINY_COUNTDOWN_BLOCK = new DestinyCountDownBlock();
 
     // -----------------------------------------------------------------------------
 
@@ -248,7 +250,8 @@ public class JSGBlocks {
             ZPM_HUB,
             ZPM_SLOT,
 
-            DECOR_CRYSTAL_BLOCK
+            DECOR_CRYSTAL_BLOCK,
+            DESTINY_COUNTDOWN_BLOCK
 
     };
 
