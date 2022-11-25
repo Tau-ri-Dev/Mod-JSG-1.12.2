@@ -1,5 +1,9 @@
 package tauri.dev.jsg.tileentity.stargate;
 
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.world.World;
+import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.packet.JSGPacketHandler;
@@ -18,22 +22,25 @@ import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.stargate.StargateRendererActionState;
 import tauri.dev.jsg.state.stargate.StargateSpinState;
 import tauri.dev.jsg.state.stargate.StargateUniverseSymbolState;
+import tauri.dev.jsg.tileentity.dialhomedevice.DHDMilkyWayTile;
+import tauri.dev.jsg.tileentity.props.DestinyCountDownTile;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
+import tauri.dev.jsg.util.ILinkable;
 import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import tauri.dev.jsg.util.LinkingHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 
 import static tauri.dev.jsg.stargate.EnumStargateState.DIALING;
 import static tauri.dev.jsg.stargate.EnumStargateState.FAILING;
 import static tauri.dev.jsg.stargate.network.SymbolUniverseEnum.G1;
 import static tauri.dev.jsg.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
-public class StargateUniverseBaseTile extends StargateClassicBaseTile {
+public class StargateUniverseBaseTile extends StargateClassicBaseTile implements ILinkable {
 
     // general
     private static final StargateSizeEnum defaultStargateSize = StargateSizeEnum.SMALL;
@@ -95,6 +102,11 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
                 markDirty();
             }
         }
+    }
+    @Override
+    protected void onGateMerged() {
+        super.onGateMerged();
+        this.updateLinkStatus();
     }
 
     // --------------------------------------------------------------------------------
@@ -651,6 +663,11 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
         compound.setBoolean("fastDialing", isFastDialing);
         compound.setBoolean("abortingDialing", abortingDialing);
 
+        if (isLinked()) {
+            compound.setLong("countDownPos", countDownPos.toLong());
+            compound.setInteger("linkId", linkId);
+        }
+
         return super.writeToNBT(compound);
     }
 
@@ -664,5 +681,103 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
         coolDown = compound.getInteger("coolDown");
         isFastDialing = compound.getBoolean("fastDialing");
         abortingDialing = compound.getBoolean("abortingDialing");
+
+        if (compound.hasKey("countDownPos")) this.countDownPos = BlockPos.fromLong(compound.getLong("countDownPos"));
+        if (compound.hasKey("linkId")) this.linkId = compound.getInteger("linkId");
+    }
+
+    // linking
+
+    @Override
+    public boolean canLinkTo() {
+        return isMerged() && !isLinked();
+    }
+
+    private BlockPos countDownPos;
+    private int linkId = -1;
+
+    @Nullable
+    public DestinyCountDownTile getLinkedCountdown(World world) {
+        if (countDownPos == null) return null;
+
+        return (DestinyCountDownTile) world.getTileEntity(countDownPos);
+    }
+
+    public boolean isLinked() {
+        return countDownPos != null && world.getTileEntity(countDownPos) instanceof DestinyCountDownTile;
+    }
+
+    public void setLinkedCountdown(BlockPos dhdPos, int linkId) {
+        this.countDownPos = dhdPos;
+        this.linkId = linkId;
+
+        markDirty();
+    }
+
+    public void updateLinkStatus() {
+        if(!isMerged()) return;
+        BlockPos closestUnlinked = LinkingHelper.findClosestUnlinked(world, pos, LinkingHelper.getDhdRange(), JSGBlocks.DESTINY_COUNTDOWN_BLOCK, this.getLinkId());
+        int linkId = LinkingHelper.getLinkId();
+
+        if (closestUnlinked != null) {
+            DestinyCountDownTile destinyCountDownTile = (DestinyCountDownTile) world.getTileEntity(closestUnlinked);
+            if(destinyCountDownTile != null) {
+                destinyCountDownTile.setLinkedGate(pos, linkId);
+                setLinkedCountdown(closestUnlinked, linkId);
+                markDirty();
+            }
+        }
+    }
+
+    public StargateAddressDynamic getRandomNearbyGate(){
+        int squaredGate = tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach * tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach;
+        ArrayList<StargateAddressDynamic> addresses = new ArrayList<>();
+
+        for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet()) {
+
+            StargatePos stargatePos = entry.getValue();
+
+            if (stargatePos.dimensionID != world.provider.getDimension())
+                continue;
+
+            if (stargatePos.gatePos.distanceSq(pos) > squaredGate)
+                continue;
+
+            if (stargatePos.gatePos.equals(pos))
+                continue;
+
+            StargateAbstractBaseTile targetGateTile = stargatePos.getTileEntity();
+
+            if (!(targetGateTile instanceof StargateUniverseBaseTile))
+                continue;
+
+            if (!targetGateTile.isMerged())
+                continue;
+
+            StargateAddressDynamic addr = new StargateAddressDynamic(Objects.requireNonNull(targetGateTile.getStargateAddress(SymbolTypeEnum.UNIVERSE)));
+            StargateAddressDynamic addr2 = new StargateAddressDynamic(SymbolTypeEnum.UNIVERSE);
+            addr2.addAll(addr.subList(0, 6));
+            addr2.addSymbol(targetGateTile.getSymbolType().getOrigin());
+
+            if(checkAddressAndEnergy(addr2).ok())
+                addresses.add(addr2);
+        }
+        if(addresses.size() == 0) return null;
+
+        int i = (int) Math.min(Math.round(Math.random() * addresses.size()), (addresses.size() - 1));
+        return addresses.get(i);
+    }
+
+    @Override
+    public boolean prepare(ICommandSender sender, ICommand command) {
+        setLinkedDHD(null, -1);
+        setLinkedCountdown(null, -1);
+
+        return super.prepare(sender, command);
+    }
+
+    @Override
+    public int getLinkId() {
+        return linkId;
     }
 }

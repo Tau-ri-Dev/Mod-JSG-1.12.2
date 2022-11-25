@@ -320,6 +320,7 @@ tile.jsg.titanium_block.name=Bloque de Titanio
 
 # decor blocks
 tile.jsg.tokra_crystal_block.name=Tokra's Crystal Block
+tile.jsg.destiny_countdown_block.name=Destiny Countdown Block
 
 # props
 prop.jsg.platform_ships_block.name=Rings platform (Ships)

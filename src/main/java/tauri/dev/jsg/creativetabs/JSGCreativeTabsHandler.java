@@ -39,7 +39,7 @@ public class JSGCreativeTabsHandler {
         @Nonnull
         @Override
         public ItemStack getTabIconItem() {
-            return new ItemStack(JSGBlocks.TR_PLATFORM_BLOCK);
+            return new ItemStack(JSGBlocks.DESTINY_COUNTDOWN_BLOCK);
         }
     };
     public static final JSGCreativeTabs JSG_MACHINES_CREATIVE_TAB = new JSGCreativeTabs("jsg_machines") {

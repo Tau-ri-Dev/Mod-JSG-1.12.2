@@ -89,6 +89,9 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     UNIVERSE_DIALER_CONNECTED(123, "universe_dialer_connect", 0.2f),
     UNIVERSE_DIALER_START_DIAL(124, "universe_dialer_start_dial", 0.1f),
 
+    DESTINY_COUNTDOWN_START(125, "destiny_countdown_start", 0.2f),
+    DESTINY_COUNTDOWN_STOP(126, "destiny_countdown_stop", 0.2f),
+
     // ----------------------------------------------------------
     // Entities
     ZAT_SHOOT(140, "item_zat_shoot", 0.1f),

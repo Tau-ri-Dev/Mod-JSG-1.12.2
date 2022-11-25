@@ -2,6 +2,7 @@ package tauri.dev.jsg.config;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.*;
@@ -14,6 +15,7 @@ import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.config.stargate.StargateTimeLimitModeEnum;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.util.ItemMetaPair;
+import tauri.dev.jsg.util.JSGAxisAlignedBB;
 
 import java.util.HashMap;
 import java.util.List;
@@ -837,19 +839,29 @@ public class JSGConfig {
         public float y = 0f;
         @Name("z")
         public float z = 0f;
+        @Name("x2")
+        public float x2 = 0f;
+        @Name("y2")
+        public float y2 = 0f;
+        @Name("z2")
+        public float z2 = 0f;
         @Name("s")
         public float s = 1f;
         @Name("sz")
-        public float sz = 0.4f;
+        public float sz = 0f;
         @Name("yz")
-        public float yz = 0.9f;
+        public float yz = 0f;
         @Name("tz")
-        public float tz = 1f;
+        public float tz = 0f;
     }
 
     public static void rescaleToConfig() {
         GlStateManager.translate(JSGConfig.devConfig.x, JSGConfig.devConfig.y, JSGConfig.devConfig.z);
         GlStateManager.scale(JSGConfig.devConfig.s, JSGConfig.devConfig.s, JSGConfig.devConfig.s);
+    }
+
+    public static JSGAxisAlignedBB createHitbox() {
+        return new JSGAxisAlignedBB(JSGConfig.devConfig.x, JSGConfig.devConfig.y, JSGConfig.devConfig.z, JSGConfig.devConfig.x2, JSGConfig.devConfig.y2, JSGConfig.devConfig.z2);
     }
 
     public static void resetCache() {

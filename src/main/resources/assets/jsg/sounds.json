@@ -417,6 +417,20 @@
     "sounds": [
       "jsg:transportrings/platform/platform_ships_close"
     ]
+  },
+  "destiny_countdown_start": {
+    "category": "ambient",
+    "subtitle": "jsg.subtitle.destiny_countdown_start",
+    "sounds": [
+      "jsg:misc/destiny/countdown_start"
+    ]
+  },
+  "destiny_countdown_stop": {
+    "category": "ambient",
+    "subtitle": "jsg.subtitle.destiny_countdown_stop",
+    "sounds": [
+      "jsg:misc/destiny/countdown_stop"
+    ]
   }
 }
 

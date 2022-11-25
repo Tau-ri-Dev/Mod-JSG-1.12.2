@@ -50,6 +50,7 @@ public class StateUpdatePacketToClient extends PositionedPacket {
 		@Override
 		public IMessage onMessage(StateUpdatePacketToClient message, MessageContext ctx) {			
 			EntityPlayer player = JSG.proxy.getPlayerClientSide();
+			if(player == null) return null;
 			World world = player.getEntityWorld();
 			
 			JSG.proxy.addScheduledTaskClientSide(() -> {

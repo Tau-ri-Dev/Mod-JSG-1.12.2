@@ -180,4 +180,8 @@ public abstract class TRControllerAbstractBlock extends JSGBlock {
                 return new AxisAlignedBB(0, 0, 0.15, 0.15, 1, 0.85);
         }
     }
+
+    public boolean renderHighlight(IBlockState blockState) {
+        return false;
+    }
 }

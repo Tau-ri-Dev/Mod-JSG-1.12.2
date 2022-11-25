@@ -296,7 +296,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                                     GlStateManager.rotate(180, 0, 1, 0);
 
                                     float factor = Math.abs(mul);
-                                    float xyFactor = 0.7f; //Math.max(factor, 0.5f);
+                                    float xyFactor = 0.7f * ((this instanceof StargateUniverseRenderer) ? 1.3f : 1);
 
                                     GlStateManager.scale(xyFactor, xyFactor, factor);
 

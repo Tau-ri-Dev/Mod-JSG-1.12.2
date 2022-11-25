@@ -1,0 +1,14 @@
+# Blender MTL File: 'None'
+# Material Count: 2
+
+newmtl zpm_slot
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+d 1.000000
+map_Kd jsg:tesr/zpm/slot
+
+newmtl zpm_slot_buttons
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+d 1.000000
+map_Kd jsg:tesr/zpm/slot

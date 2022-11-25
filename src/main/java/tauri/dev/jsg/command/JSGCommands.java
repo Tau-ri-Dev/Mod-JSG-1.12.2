@@ -25,7 +25,8 @@ public final class JSGCommands {
             new CommandFixNether(),
             new CommandGenerateIncoming(),
             new CommandAgs(),
-            new CommandActiveAll()
+            new CommandActiveAll(),
+            new CommandCountdownSet()
     );
 
     public static void registerCommands(FMLServerStartingEvent event) {
