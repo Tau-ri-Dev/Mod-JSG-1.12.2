@@ -764,7 +764,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         }
         if(addresses.size() == 0) return null;
 
-        int i = (int) Math.min(Math.round(Math.random() * addresses.size()), (addresses.size() - 1));
+        int i = (int) Math.min(Math.floor(Math.random() * addresses.size()), (addresses.size() - 1));
+        if(i < 0) i = 0;
         return addresses.get(i);
     }
 

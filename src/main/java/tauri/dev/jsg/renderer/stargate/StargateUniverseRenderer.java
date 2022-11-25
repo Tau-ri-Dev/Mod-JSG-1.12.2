@@ -22,20 +22,17 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
         GlStateManager.scale(scale, scale, scale);
 
         GlStateManager.translate(0.5, GATE_DIAMETER / 2 + 0.20, 0.55);
-        GlStateManager.rotate(90, 0, 0, 1);
     }
 
     @Override
     protected void renderGate(StargateUniverseRendererState rendererState, double partialTicks) {
         setGateHeatColor(rendererState);
-        GlStateManager.rotate(-rendererState.horizontalRotation, 0, 1, 0);
         float angularRotation = rendererState.spinHelper.getCurrentSymbol().getAngle();
 
         if (rendererState.spinHelper.getIsSpinning())
             angularRotation += rendererState.spinHelper.apply(getWorld().getTotalWorldTime() + partialTicks);
 
-        GlStateManager.rotate(rendererState.horizontalRotation - 90, 1, 0, 0);
-        GlStateManager.rotate((float) angularRotation + 0.6f, 0, 1, 0);
+        GlStateManager.rotate(-angularRotation, 0, 0, 1);
 
         // render
         applyLightMap(rendererState, partialTicks);
@@ -77,7 +74,6 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
     protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
 
         GlStateManager.translate(0, -0.05f, 0);
-        GlStateManager.rotate(90, 1, 0, 0);
         GlStateManager.scale(0.9, 0.9, 0.9);
 
         super.renderKawoosh(rendererState, partialTicks);
@@ -90,7 +86,6 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
     public void renderIris(double partialTicks, World world, StargateUniverseRendererState rendererState, boolean backOnly) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, -0.05f, 0);
-        GlStateManager.rotate(90, 1, 0, 0);
         GlStateManager.scale(0.887f, 0.887f, 0.887f);
         super.renderIris(partialTicks, world, rendererState, backOnly);
         GlStateManager.popMatrix();
@@ -102,7 +97,7 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
     @Override
     protected void renderChevron(StargateUniverseRendererState rendererState, double partialTicks, ChevronEnum chevron, boolean onlyLight) {
         GlStateManager.pushMatrix();
-        GlStateManager.rotate(-chevron.rotation, 0, 1, 0);
+        GlStateManager.rotate(chevron.rotation, 0, 0, 1);
 
         TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron, onlyLight)).bindTexture();
         ElementEnum.UNIVERSE_CHEVRON.render();
