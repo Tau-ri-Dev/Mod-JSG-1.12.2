@@ -104,7 +104,7 @@ public enum EnumStructures {
     END_UNI("sg_end_universe", 0, true, false, SymbolTypeEnum.UNIVERSE, 10, 10, 1, true, JSGConfig.stargateGeneratorConfig.stargateRandomGeneratorEnabled, JSGConfig.stargateGeneratorConfig.stargateRGChanceTheEnd, new OverworldProcessor(),
             new ArrayList<Block>() {{
                 add(Blocks.END_STONE);
-            }}, null, 15, Rotation.CLOCKWISE_90, 0.7, 0.8, EnumGenerationHeight.MIDDLE),
+            }}, null, 15, Rotation.CLOCKWISE_90, 0.7, 0.8, EnumGenerationHeight.LOW),
 
     // Nether
     NETHER_MW("sg_nether_milkyway", 9, true, false, SymbolTypeEnum.MILKYWAY, 16, 16, -1, true, false, 0, new NetherProcessor(),
@@ -121,7 +121,7 @@ public enum EnumStructures {
     NAQUADAH_MINE("naquadah_mine", 10, false, false, null, 15, 15, 0, false, JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled, 0.0005f, null,
             new ArrayList<Block>() {{
                 add(Blocks.GRASS);
-            }}, null, 35, Rotation.NONE, 0.5, 0.5, EnumGenerationHeight.HEIGHT),
+            }}, null, 35, Rotation.NONE, 0.5, 0.5, EnumGenerationHeight.LOW),
 
     TOKRA_TUNNEL("tr_tokra", 21, false, true, null, 7, 7, 0, false, JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled, 0.0005f, null,
             new ArrayList<Block>() {{

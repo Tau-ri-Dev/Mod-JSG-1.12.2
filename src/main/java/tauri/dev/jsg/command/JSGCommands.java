@@ -28,7 +28,9 @@ public final class JSGCommands {
             new CommandActiveAll(),
             new CommandCountdownSet(),
             new CommandReloadCraftingConfigs(),
-            new CommandTest()
+            new CommandTest(),
+            new CommandStargateSetFakePos(),
+            new CommandStargateGetFakePos()
     );
 
     public static void registerCommands(FMLServerStartingEvent event) {

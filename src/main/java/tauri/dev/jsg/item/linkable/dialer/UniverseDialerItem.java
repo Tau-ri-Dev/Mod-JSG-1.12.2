@@ -241,10 +241,12 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                             case NEARBY:
                                 StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(targetPos);
 
-                                if (gateTile == null || !gateTile.isMerged()) {
+                                if (gateTile == null || !gateTile.isMerged() || !(gateTile instanceof StargateUniverseBaseTile)) {
                                     blacklist.add(targetPos);
                                     continue;
                                 }
+
+                                StargateUniverseBaseTile uniTile = (StargateUniverseBaseTile) gateTile;
 
                                 NBTTagList nearbyList = new NBTTagList();
                                 int squaredGate = tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach * tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach;
@@ -258,16 +260,6 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                     for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet()) {
 
                                         StargatePos stargatePos = entry.getValue();
-
-                                        if (stargatePos.dimensionID != world.provider.getDimension())
-                                            continue;
-
-                                        if (stargatePos.gatePos.distanceSq(targetPos) > squaredGate)
-                                            continue;
-
-                                        if (stargatePos.gatePos.equals(targetPos))
-                                            continue;
-
                                         StargateAbstractBaseTile targetGateTile = stargatePos.getTileEntity();
 
                                         if (!(targetGateTile instanceof StargateClassicBaseTile))
@@ -278,6 +270,22 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                                         // get only universe gates in nearby
                                         if (!(targetGateTile instanceof StargateUniverseBaseTile) && mode.equals(UniverseDialerMode.NEARBY))
+                                            continue;
+
+                                        int targetDim = stargatePos.dimensionID;
+                                        BlockPos targetFoundPos = stargatePos.gatePos;
+                                        if(targetGateTile instanceof StargateUniverseBaseTile){
+                                            StargateUniverseBaseTile targetUniTile = (StargateUniverseBaseTile) targetGateTile;
+                                            targetDim = targetUniTile.getFakeWorld().provider.getDimension();
+                                            targetFoundPos = targetUniTile.getFakePos();
+                                        }
+                                        if (targetDim != uniTile.getFakeWorld().provider.getDimension())
+                                            continue;
+
+                                        if (targetFoundPos.distanceSq(uniTile.getFakePos()) > squaredGate)
+                                            continue;
+
+                                        if (stargatePos.gatePos.equals(targetPos))
                                             continue;
 
                                         NBTTagCompound entryCompound = entry.getKey().serializeNBT();

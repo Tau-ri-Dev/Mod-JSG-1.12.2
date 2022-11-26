@@ -4,6 +4,8 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
@@ -39,6 +41,26 @@ import static tauri.dev.jsg.stargate.network.SymbolUniverseEnum.G1;
 import static tauri.dev.jsg.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
 public class StargateUniverseBaseTile extends StargateClassicBaseTile implements ILinkable {
+
+    protected World fakeWorld;
+    protected BlockPos fakePos;
+
+    public World getFakeWorld() {
+        if(fakeWorld == null) return world;
+        return fakeWorld;
+    }
+    public void setFakeWorld(World world) {
+        fakeWorld = world;
+        markDirty();
+    }
+    public BlockPos getFakePos(){
+        if(fakePos == null) return pos;
+        return fakePos;
+    }
+    public void setFakePos(BlockPos pos) {
+        fakePos = pos;
+        markDirty();
+    }
 
     // general
     private static final StargateSizeEnum defaultStargateSize = StargateSizeEnum.SMALL;
@@ -664,6 +686,14 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
             compound.setInteger("linkId", linkId);
         }
 
+        if(fakePos != null){
+            compound.setInteger("fakeX", fakePos.getX());
+            compound.setInteger("fakeY", fakePos.getY());
+            compound.setInteger("fakeZ", fakePos.getY());
+        }
+        if(fakeWorld != null)
+            compound.setInteger("fakeWorld", fakeWorld.provider.getDimension());
+
         return super.writeToNBT(compound);
     }
 
@@ -680,6 +710,11 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
 
         if (compound.hasKey("countDownPos")) this.countDownPos = BlockPos.fromLong(compound.getLong("countDownPos"));
         if (compound.hasKey("linkId")) this.linkId = compound.getInteger("linkId");
+
+        if(compound.hasKey("fakeX"))
+            this.fakePos = new BlockPos(compound.getInteger("fakeX"), compound.getInteger("fakeY"), compound.getInteger("fakeZ"));
+        if(compound.hasKey("fakeWorld") && world.getMinecraftServer() != null)
+            this.fakeWorld = this.world.getMinecraftServer().getWorld(compound.getInteger("fakeWorld"));
     }
 
     // linking
@@ -722,25 +757,26 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         int squaredGate = tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach * tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach;
         ArrayList<StargateAddressDynamic> addresses = new ArrayList<>();
 
-        for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet()) {
+        for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(getFakeWorld()).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet()) {
 
             StargatePos stargatePos = entry.getValue();
-
-            if (stargatePos.dimensionID != world.provider.getDimension())
-                continue;
-
-            if (stargatePos.gatePos.distanceSq(pos) > squaredGate)
-                continue;
-
-            if (stargatePos.gatePos.equals(pos))
-                continue;
-
             StargateAbstractBaseTile targetGateTile = stargatePos.getTileEntity();
 
             if (!(targetGateTile instanceof StargateUniverseBaseTile))
                 continue;
 
             if (!targetGateTile.isMerged())
+                continue;
+
+            StargateUniverseBaseTile targetUniTile = (StargateUniverseBaseTile) targetGateTile;
+
+            if (targetUniTile.getFakeWorld().provider.getDimension() != getFakeWorld().provider.getDimension())
+                continue;
+
+            if (targetUniTile.getFakePos().distanceSq(getFakePos()) > squaredGate)
+                continue;
+
+            if (stargatePos.gatePos.equals(pos))
                 continue;
 
             StargateAddressDynamic addr = new StargateAddressDynamic(Objects.requireNonNull(targetGateTile.getStargateAddress(SymbolTypeEnum.UNIVERSE)));

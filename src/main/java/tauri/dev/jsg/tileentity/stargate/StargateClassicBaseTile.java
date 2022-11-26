@@ -684,7 +684,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         }
                     } else if ((randomIncomingEntities <= 0 && randomIncomingState >= (waitOpen + wait)) || stargateState != EnumStargateState.ENGAGED) {
                         resetRandomIncoming();
-                        closeGate(StargateClosedReasonEnum.AUTOCLOSE);
+                        attemptClose(StargateClosedReasonEnum.AUTOCLOSE);
                         JSG.debug(RIG_PREFIX + "Closed!!!");
 
                         if (this instanceof StargatePegasusBaseTile) ((StargatePegasusBaseTile) this).clearDHDSymbols();
