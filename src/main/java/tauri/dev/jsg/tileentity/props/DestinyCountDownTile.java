@@ -111,7 +111,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                         if (state.idle() && gate.isMerged()) {
                             StargateAddressDynamic foundAddress = gate.getRandomNearbyGate();
                             if (foundAddress != null) {
-                                gate.dialAddress(foundAddress.toImmutable(), (foundAddress.size() - 1));
+                                gate.dialAddress(foundAddress.toImmutable(), foundAddress.size());
                                 gateOpenedThisRound = true;
                                 markDirty();
                             }
@@ -177,6 +177,9 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                 break;
             case ZERO:
                 playSoundEvent(world, pos, SoundEventEnum.DESTINY_COUNTDOWN_STOP);
+                break;
+            case ONE_MINUTE:
+                playSoundEvent(world, pos, SoundEventEnum.DESTINY_COUNTDOWN_ONE_MINUTE);
                 break;
             default:
                 break;

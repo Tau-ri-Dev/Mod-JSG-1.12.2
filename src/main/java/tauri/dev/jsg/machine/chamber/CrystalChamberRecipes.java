@@ -1,14 +1,16 @@
 package tauri.dev.jsg.machine.chamber;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import tauri.dev.jsg.config.craftings.CraftingConfig;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.machine.pcbfabricator.PCBFabricatorRecipe;
+
+import static tauri.dev.jsg.Constants.ONE_INGOT_IN_FLUID_MB;
 
 public class CrystalChamberRecipes {
-
-    private static final int MB_PER_ONE_INGOT = 144;
-
     public static final CrystalChamberRecipe CRYSTAL_BLUE = new CrystalChamberRecipe() {
 
         @Override
@@ -18,7 +20,7 @@ public class CrystalChamberRecipes {
 
         @Override
         public FluidStack getSubFluidStack() {
-            return new FluidStack(JSGFluids.SILICON_MOLTEN_BLUE, MB_PER_ONE_INGOT);
+            return new FluidStack(JSGFluids.SILICON_MOLTEN_BLUE, ONE_INGOT_IN_FLUID_MB);
         }
 
         @Override
@@ -40,7 +42,7 @@ public class CrystalChamberRecipes {
 
         @Override
         public FluidStack getSubFluidStack() {
-            return new FluidStack(JSGFluids.SILICON_MOLTEN_RED, MB_PER_ONE_INGOT);
+            return new FluidStack(JSGFluids.SILICON_MOLTEN_RED, ONE_INGOT_IN_FLUID_MB);
         }
 
         @Override
@@ -62,7 +64,7 @@ public class CrystalChamberRecipes {
 
         @Override
         public FluidStack getSubFluidStack() {
-            return new FluidStack(JSGFluids.SILICON_MOLTEN_ENDER, MB_PER_ONE_INGOT);
+            return new FluidStack(JSGFluids.SILICON_MOLTEN_ENDER, ONE_INGOT_IN_FLUID_MB);
         }
 
         @Override
@@ -84,7 +86,7 @@ public class CrystalChamberRecipes {
 
         @Override
         public FluidStack getSubFluidStack() {
-            return new FluidStack(JSGFluids.SILICON_MOLTEN_YELLOW, MB_PER_ONE_INGOT);
+            return new FluidStack(JSGFluids.SILICON_MOLTEN_YELLOW, ONE_INGOT_IN_FLUID_MB);
         }
 
         @Override
@@ -106,7 +108,7 @@ public class CrystalChamberRecipes {
 
         @Override
         public FluidStack getSubFluidStack() {
-            return new FluidStack(JSGFluids.SILICON_MOLTEN_WHITE, MB_PER_ONE_INGOT);
+            return new FluidStack(JSGFluids.SILICON_MOLTEN_WHITE, ONE_INGOT_IN_FLUID_MB);
         }
 
         @Override
@@ -128,7 +130,7 @@ public class CrystalChamberRecipes {
 
         @Override
         public FluidStack getSubFluidStack() {
-            return new FluidStack(JSGFluids.SILICON_MOLTEN_PEGASUS, MB_PER_ONE_INGOT);
+            return new FluidStack(JSGFluids.SILICON_MOLTEN_PEGASUS, ONE_INGOT_IN_FLUID_MB);
         }
 
         @Override
@@ -150,4 +152,12 @@ public class CrystalChamberRecipes {
             CRYSTAL_WHITE,
             CRYSTAL_BLUE_PEGASUS
     };
+
+    public static void addToConfig(){
+        CraftingConfig config = new CraftingConfig(CrystalChamberRecipe.ID);
+        for(CrystalChamberRecipe recipe : RECIPES){
+            config.addKey(recipe.getResult().getItem().getRegistryName());
+        }
+        CraftingConfig.addConfig(config);
+    }
 }

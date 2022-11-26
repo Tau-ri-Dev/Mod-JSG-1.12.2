@@ -68,7 +68,7 @@ public class AssemblerTile extends TileEntity implements IUpgradable, StateProvi
         @Override
         protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
             if (slot == 0) return 1;
-            return 64;
+            return super.getStackLimit(slot, stack);
         }
 
         @Override

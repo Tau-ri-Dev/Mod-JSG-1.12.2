@@ -431,6 +431,13 @@
     "sounds": [
       "jsg:misc/destiny/countdown_stop"
     ]
+  },
+  "destiny_countdown_one_minute": {
+    "category": "ambient",
+    "subtitle": "jsg.subtitle.destiny_countdown_one_minute",
+    "sounds": [
+      "jsg:misc/destiny/countdown_one_minute"
+    ]
   }
 }
 

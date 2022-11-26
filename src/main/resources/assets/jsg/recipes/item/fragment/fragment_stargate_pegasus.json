@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "TTT",
+    "PPP"
+  ],
+  "key": {
+    "P": {
+      "type": "forge:ore_dict",
+      "ore": "plateNaquadahRefined"
+    },
+    "T": {
+      "type": "forge:ore_dict",
+      "ore": "plateTrinium"
+    }
+  },
+  "result": {
+    "item": "jsg:fragment_stargate_pegasus",
+    "count": 2
+  }
+}

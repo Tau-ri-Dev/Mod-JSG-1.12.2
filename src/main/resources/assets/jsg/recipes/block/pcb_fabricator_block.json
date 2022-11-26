@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GLG",
+    "RSR",
+    "TTT"
+  ],
+
+  "key": {
+    "G": {
+      "type": "forge:ore_dict",
+      "ore": "gearTrinium"
+    },
+    "R": {
+      "item": "jsg:crystal_red"
+    },
+    "L": {
+      "item": "jsg:crystal_yellow"
+    },
+    "T": {
+      "type": "forge:ore_dict",
+      "ore": "plateTitanium"
+    },
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlass"
+    }
+  },
+
+  "result": {
+    "item": "jsg:pcb_fabricator_block",
+    "data": 0,
+    "count": 1
+  }
+}

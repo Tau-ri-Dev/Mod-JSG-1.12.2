@@ -118,10 +118,10 @@ public enum EnumStructures {
     // ---------------------------------------------------------------------------
     // GENERAL STRUCTURES
 
-    NAQUADAH_MINE("naquadah_mine", 8, false, false, null, 15, 15, 0, false, JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled, 0.0005f, null,
+    NAQUADAH_MINE("naquadah_mine", 10, false, false, null, 15, 15, 0, false, JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled, 0.0005f, null,
             new ArrayList<Block>() {{
                 add(Blocks.GRASS);
-            }}, null, 35, Rotation.NONE, 0.8, 0.8, EnumGenerationHeight.LOW),
+            }}, null, 35, Rotation.NONE, 0.5, 0.5, EnumGenerationHeight.HEIGHT),
 
     TOKRA_TUNNEL("tr_tokra", 21, false, true, null, 7, 7, 0, false, JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled, 0.0005f, null,
             new ArrayList<Block>() {{

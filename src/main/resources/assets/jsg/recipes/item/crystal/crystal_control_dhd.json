@@ -1,0 +1,22 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" R ",
+		"RDR",
+		" R "
+	],
+	
+	"key": {
+		"D": {
+			"item": "jsg:circuit_control_naquadah"
+		},
+		"R": {
+			"item": "jsg:crystal_red"
+		}
+	},
+	
+	"result": {
+		"item": "jsg:crystal_control_dhd",
+		"count": 1
+	}
+}

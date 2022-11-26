@@ -11,19 +11,15 @@ import net.minecraft.util.EnumFacing;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.tileentity.props.DestinyCountDownTile;
+import tauri.dev.jsg.util.FacingToRotation;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
 
-import static tauri.dev.jsg.renderer.transportrings.TRControllerAbstractRenderer.getRotation;
+import static tauri.dev.jsg.Constants.*;
 
 public class DestinyCountDownRenderer extends TileEntitySpecialRenderer<DestinyCountDownTile> {
-
-    private static final int SECOND = 20;
-    private static final int MINUTE = SECOND * 60;
-    private static final int HOUR = MINUTE * 60;
-
 
     @Override
     public void render(@Nonnull DestinyCountDownTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -45,7 +41,7 @@ public class DestinyCountDownRenderer extends TileEntitySpecialRenderer<DestinyC
             IBlockState blockState = te.getWorld().getBlockState(te.getPos());
             EnumFacing facing = blockState.getValue(JSGProps.FACING_HORIZONTAL);
             GlStateManager.pushMatrix();
-            int rot = getRotation(facing);
+            int rot = FacingToRotation.getIntRotation(facing);
             GlStateManager.rotate(rot + 180, 0, 1, 0);
 
             GlStateManager.translate(0, 0, -0.5);
@@ -107,7 +103,7 @@ public class DestinyCountDownRenderer extends TileEntitySpecialRenderer<DestinyC
         GlStateManager.popMatrix();
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(SPACE_BETWEEN_X*2, 0, 0);
+        GlStateManager.translate(SPACE_BETWEEN_X * 2, 0, 0);
         renderNumber(-1);
         GlStateManager.popMatrix();
 
@@ -130,7 +126,7 @@ public class DestinyCountDownRenderer extends TileEntitySpecialRenderer<DestinyC
         GlStateManager.popMatrix();
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(SPACE_BETWEEN_X*2, 0, 0);
+        GlStateManager.translate(SPACE_BETWEEN_X * 2, 0, 0);
         renderNumber(-1);
         GlStateManager.popMatrix();
 
@@ -153,7 +149,7 @@ public class DestinyCountDownRenderer extends TileEntitySpecialRenderer<DestinyC
         GlStateManager.popMatrix();
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(SPACE_BETWEEN_X*2, 0, 0);
+        GlStateManager.translate(SPACE_BETWEEN_X * 2, 0, 0);
         renderNumber(-2);
         GlStateManager.popMatrix();
 

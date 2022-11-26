@@ -100,7 +100,7 @@ advancement.chamber.title=Grow, crystals, Grow!
 advancement.chamber.desc=Craft a Crystal Chamber
 
 advancement.pcb.title=Crystal based technology
-advancement.pcb.desc=Craft a PCB Factory
+advancement.pcb.desc=Craft a PCB Fabricator
 
 advancement.ore_washing.title=Purifying ores
 advancement.ore_washing.desc=Craft an Ore Washing Machine
@@ -375,6 +375,7 @@ tile.jsg.beamer_block.name=Transporter Block
 # machines
 tile.jsg.assembler_machine_block.name=Ancient Assembler
 tile.jsg.crystal_chamber_block.name=Crystal Chamber
+tile.jsg.pcb_fabricator_block.name=PCB Fabricator
 
 # -------------------
 
@@ -784,6 +785,10 @@ jsg.subtitle.universe_dialer_connect=Universe Dialer verbunden
 
 jsg.subtitle.item_zat_shoot=Zat'nik'tel Schuss
 jsg.subtitle.item_staff_shoot=Goa'uld Stabwaffe Schuss
+
+jsg.subtitle.destiny_countdown_start=Destiny's countdown started!
+jsg.subtitle.destiny_countdown_stop=Destiny's countdown reached zero
+jsg.subtitle.destiny_countdown_one_minute=One minute left on Destiny's countdown
 
 # -------------------
 

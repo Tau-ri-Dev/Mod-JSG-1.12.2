@@ -27,7 +27,7 @@ public class JEIAssemblerRecipeCategory implements IRecipeCategory<AbstractJEIRe
     public final IDrawable progressBar;
 
     public JEIAssemblerRecipeCategory(IGuiHelper helper) {
-        this.background = helper.createDrawable(BACK_TEXTURE, 0, 0, 175, 124);
+        this.background = helper.createDrawable(BACK_TEXTURE, 0, 0, 157, 53);
         this.icon = helper.createDrawableIngredient(new ItemStack(JSGBlocks.MACHINE_ASSEMBLER));
         this.progressBar = helper.createAnimatedDrawable(helper.createDrawable(BACK_TEXTURE, 176, 128, 216 - 176, 142 - 128), 40, IDrawableAnimated.StartDirection.LEFT, false);
     }
@@ -58,7 +58,7 @@ public class JEIAssemblerRecipeCategory implements IRecipeCategory<AbstractJEIRe
 
     @Override
     public void drawExtras(@Nonnull Minecraft minecraft){
-        progressBar.draw(minecraft, 95, 65);
+        progressBar.draw(minecraft, 86, 19);
     }
 
     @Override
@@ -69,18 +69,18 @@ public class JEIAssemblerRecipeCategory implements IRecipeCategory<AbstractJEIRe
     @Override
     public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull AbstractJEIRecipe assemblerRecipe, @Nonnull IIngredients ingredients) {
         // input slots
-        recipeLayout.getItemStacks().init(0, true, 9, 64);
+        recipeLayout.getItemStacks().init(0, true, 0, 18);
         int i = 0;
         for (int y1 = 0; y1 < 3; y1++) {
             for (int x1 = 0; x1 < 3; x1++) {
-                recipeLayout.getItemStacks().init(1 + i, true, 33 + (18 * x1), 46 + (18 * y1));
+                recipeLayout.getItemStacks().init(1 + i, true, 24 + (18 * x1), (18 * y1));
                 i++;
             }
         }
-        recipeLayout.getItemStacks().init(++i, true, 101, 64);
+        recipeLayout.getItemStacks().init(++i, true, 92, 18);
 
         // output slot
-        recipeLayout.getItemStacks().init(++i, false, 145, 64);
+        recipeLayout.getItemStacks().init(++i, false, 136, 18);
         recipeLayout.getItemStacks().set(ingredients);
     }
 }

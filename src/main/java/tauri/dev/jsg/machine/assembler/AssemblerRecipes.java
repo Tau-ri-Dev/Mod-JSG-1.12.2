@@ -1,11 +1,14 @@
 package tauri.dev.jsg.machine.assembler;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.config.craftings.CraftingConfig;
 import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.machine.chamber.CrystalChamberRecipe;
 
 import java.util.ArrayList;
 
@@ -663,6 +666,61 @@ public class AssemblerRecipes {
         }
     };
 
+    public static AssemblerRecipe DESTINY_COUNTDOWN = new AssemblerRecipe() {
+        @Override
+        public String getUnlocalizedName() {
+            return "tile.jsg.destiny_countdown_block.name";
+        }
+
+        @Override
+        public int getWorkingTime() {
+            return 100;
+        }
+
+        @Override
+        public boolean removeSubItem() {
+            return true;
+        }
+
+        @Override
+        public int getEnergyPerTick() {
+            return 2048;
+        }
+
+        @Override
+        public Item getSchematic() {
+            return JSGItems.SCHEMATIC_UNIVERSE;
+        }
+
+        @Override
+        public ArrayList<ItemStack> getPattern() {
+            ArrayList<ItemStack> array = new ArrayList<>();
+
+            array.add(new ItemStack(JSGItems.GEAR_NAQUADAH_RAW));
+            array.add(new ItemStack(JSGItems.CRYSTAL_WHITE));
+            array.add(new ItemStack(JSGItems.GEAR_NAQUADAH_RAW));
+
+            array.add(new ItemStack(JSGItems.FRAGMENT_UNIVERSE));
+            array.add(new ItemStack(Blocks.GLASS_PANE));
+            array.add(new ItemStack(JSGItems.FRAGMENT_UNIVERSE));
+
+            array.add(new ItemStack(JSGItems.GEAR_NAQUADAH_RAW));
+            array.add(new ItemStack(JSGItems.CRYSTAL_WHITE));
+            array.add(new ItemStack(JSGItems.GEAR_NAQUADAH_RAW));
+            return array;
+        }
+
+        @Override
+        public ItemStack getSubItemStack() {
+            return new ItemStack(JSGItems.CIRCUIT_CONTROL_CRYSTAL);
+        }
+
+        @Override
+        public ItemStack getResult() {
+            return new ItemStack(JSGBlocks.DESTINY_COUNTDOWN_BLOCK);
+        }
+    };
+
     public static AssemblerRecipe TR_GOAULD = new AssemblerRecipe() {
         @Override
         public String getUnlocalizedName() {
@@ -857,9 +915,19 @@ public class AssemblerRecipes {
             SG_UNI_CHEVRON_BLOCK,
             SG_UNI_RING_BLOCK,
 
+            DESTINY_COUNTDOWN,
+
             TR_GOAULD,
             TR_ORI,
             TR_GOAULD_CONTROLLER
     };
+
+    public static void addToConfig(){
+        CraftingConfig config = new CraftingConfig(AssemblerRecipe.ID);
+        for(AssemblerRecipe recipe : RECIPES){
+            config.addKey(recipe.getResult().getItem().getRegistryName());
+        }
+        CraftingConfig.addConfig(config);
+    }
 
 }

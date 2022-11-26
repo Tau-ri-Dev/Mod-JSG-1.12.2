@@ -3,6 +3,7 @@ package tauri.dev.jsg;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -11,12 +12,14 @@ import net.minecraftforge.fml.common.event.*;
 import org.apache.logging.log4j.Logger;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.command.JSGCommands;
+import tauri.dev.jsg.config.craftings.CraftingConfig;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.integration.OCWrapperInterface;
 import tauri.dev.jsg.proxy.IProxy;
 import tauri.dev.jsg.util.main.loader.JSGInit;
 import tauri.dev.jsg.util.main.loader.JSGPreInit;
 
+import java.io.File;
 import java.io.IOException;
 
 @Mod(modid = JSG.MOD_ID, name = JSG.MOD_NAME, version = JSG.MOD_VERSION, acceptedMinecraftVersions = JSG.MC_VERSION, dependencies = "after:cofhcore@[4.6.0,);after:opencomputers;after:thermalexpansion;after:tconstruct")
@@ -40,6 +43,7 @@ public class JSG {
     // VARIABLES
 
     public static Logger logger;
+    public static File modConfigDir;
     public static OCWrapperInterface ocWrapper;
     public static String clientModPath;
 
@@ -102,6 +106,11 @@ public class JSG {
 
     @EventHandler
     public void init(FMLInitializationEvent event) throws IOException {
+        if(Loader.isModLoaded("aunis")){
+            Loader.instance().runtimeDisableMod("aunis");
+            return;
+        }
+
         JSGInit.init(event);
         JSG.proxy.init(event);
     }

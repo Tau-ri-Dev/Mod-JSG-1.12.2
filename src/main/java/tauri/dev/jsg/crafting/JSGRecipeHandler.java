@@ -28,6 +28,17 @@ public class JSGRecipeHandler {
         FurnaceRecipes.instance().addSmelting(JSGItems.TRINIUM_ORE_PURIFIED, new ItemStack(JSGItems.TRINIUM_INGOT), 3f);
         FurnaceRecipes.instance().addSmelting(JSGItems.TRINIUM_ORE_RAW, new ItemStack(JSGItems.TRINIUM_INGOT, 2), 4f);
 
+        FurnaceRecipes.instance().addSmelting(JSGItems.NAQUADAH_DUST, new ItemStack(JSGItems.NAQUADAH_ALLOY), 2f);
+        FurnaceRecipes.instance().addSmelting(JSGItems.PLATE_NAQUADAH, new ItemStack(JSGItems.NAQUADAH_ALLOY), 2f);
+        FurnaceRecipes.instance().addSmelting(JSGItems.GEAR_NAQUADAH, new ItemStack(JSGItems.NAQUADAH_ALLOY, 4), 2f);
+
+        FurnaceRecipes.instance().addSmelting(JSGItems.NAQUADAH_RAW_DUST, new ItemStack(JSGItems.NAQUADAH_ALLOY_RAW), 2f);
+        FurnaceRecipes.instance().addSmelting(JSGItems.PLATE_NAQUADAH_RAW, new ItemStack(JSGItems.NAQUADAH_ALLOY_RAW), 2f);
+        FurnaceRecipes.instance().addSmelting(JSGItems.GEAR_NAQUADAH_RAW, new ItemStack(JSGItems.NAQUADAH_ALLOY_RAW, 4), 2f);
+        FurnaceRecipes.instance().addSmelting(JSGItems.NAQUADAH_ORE_IMPURE, new ItemStack(JSGItems.NAQUADAH_ALLOY_RAW, 4), 2f);
+        FurnaceRecipes.instance().addSmelting(JSGItems.NAQUADAH_ORE_PURIFIED, new ItemStack(JSGItems.NAQUADAH_ALLOY_RAW), 3f);
+        FurnaceRecipes.instance().addSmelting(JSGItems.NAQUADAH_ORE_RAW, new ItemStack(JSGItems.NAQUADAH_ALLOY_RAW, 2), 4f);
+
         // normal recipes
         event.getRegistry().register(new NotebookRecipe());
         event.getRegistry().register(new NotebookPageCloneRecipe());

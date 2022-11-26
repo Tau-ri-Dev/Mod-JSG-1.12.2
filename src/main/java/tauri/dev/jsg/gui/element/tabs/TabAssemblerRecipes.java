@@ -130,6 +130,7 @@ public class TabAssemblerRecipes extends Tab {
         private net.minecraft.inventory.Container container;
 
         public TabButtonsWithBlocksBuilder addButton(int id, int x, int y, ResourceLocation texture, int texU, int texV, AssemblerRecipe recipe) {
+            if(recipe.isDisabled()) return this;
             buttons.put(new BetterButton(id, x, y, 16, texture, 512, 512, texU, texV), recipe);
             return this;
         }

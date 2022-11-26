@@ -26,7 +26,9 @@ public final class JSGCommands {
             new CommandGenerateIncoming(),
             new CommandAgs(),
             new CommandActiveAll(),
-            new CommandCountdownSet()
+            new CommandCountdownSet(),
+            new CommandReloadCraftingConfigs(),
+            new CommandTest()
     );
 
     public static void registerCommands(FMLServerStartingEvent event) {

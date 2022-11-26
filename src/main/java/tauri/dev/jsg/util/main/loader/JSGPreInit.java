@@ -19,6 +19,7 @@ public class JSGPreInit {
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
         JSG.logger = event.getModLog();
+        JSG.modConfigDir = event.getModConfigurationDirectory();
 
         // mod file path - used in updater
         File source = event.getSourceFile();
@@ -39,7 +40,7 @@ public class JSGPreInit {
         // Tinkers Construct
         registerTIC();
 
-        StargateDimensionConfig.load(event.getModConfigurationDirectory());
+        StargateDimensionConfig.load(JSG.modConfigDir);
         JSG.info("Successfully registered Dimensions!");
 
         EntityRegister.registerEntities();

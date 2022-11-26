@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "   ",
+    "PPP"
+  ],
+  "key": {
+    "P": {
+      "type": "forge:ore_dict",
+      "ore": "plateNaquadahRaw"
+    }
+  },
+  "result": {
+    "item": "jsg:fragment_stargate_universe",
+    "count": 2
+  }
+}

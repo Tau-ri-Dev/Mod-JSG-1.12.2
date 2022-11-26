@@ -44,7 +44,7 @@ public class BeamerBeam {
     public double beamLength;
     public float beamRadius;
 
-    private BeamerBeam(float angleX, float angleY, double beamLength, float beamRadius) {
+    public BeamerBeam(float angleX, float angleY, double beamLength, float beamRadius) {
         this.angleX = angleX;
         this.angleY = angleY;
         this.beamLength = beamLength;
@@ -135,7 +135,6 @@ public class BeamerBeam {
 
     // -------------------------------------------
     // RENDERING
-
     public void render(float partialTicks, long tick, BeamerRoleEnum teRole, float[] colors, boolean transferringFluid, Fluid lastFluidTransferred, @Nonnull EnumFacing sourceTileFacing) {
         if (transferringFluid && tauri.dev.jsg.config.JSGConfig.beamerConfig.enableFluidBeamColorization) {
             if (lastFluidTransferred != null) {
@@ -149,9 +148,9 @@ public class BeamerBeam {
         GlStateManager.rotate(-90 + (this.angleX * -1), 1, 0, 0);
 
         GlStateManager.alphaFunc(516, 0.1F);
+        JSGTextureLightningHelper.lightUpTexture(1f);
         Minecraft.getMinecraft().getTextureManager().bindTexture(TileEntityBeaconRenderer.TEXTURE_BEACON_BEAM);
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 15 * 16, 15 * 16);
-        renderBeamSegment(-0.5, -0.3, -0.5, partialTicks, (teRole == BeamerRoleEnum.TRANSMIT ? 1 : -1), tick, 0, this.beamLength + 0.2D, colors, (this.beamRadius * 0.75), this.beamRadius + 0.05f);
+        renderBeamSegment(-0.5, -0.3, -0.5, partialTicks, (teRole == BeamerRoleEnum.TRANSMIT ? 1 : -1), tick, 0, this.beamLength + 0.2D, colors, this.beamRadius, this.beamRadius + 0.05f);
     }
 
     /**
@@ -159,7 +158,7 @@ public class BeamerBeam {
      * <p>
      * - edited some ints to doubles
      */
-    public static void renderBeamSegment(double x, double y, double z, double partialTicks, double textureScale, double totalWorldTime, double yOffset, double height, float[] colors, double beamRadius, double glowRadius) {
+    private static void renderBeamSegment(double x, double y, double z, double partialTicks, double textureScale, double totalWorldTime, double yOffset, double height, float[] colors, double beamRadius, double glowRadius) {
         GlStateManager.pushMatrix();
         JSGTextureLightningHelper.lightUpTexture(1f);
         double i = yOffset + height;

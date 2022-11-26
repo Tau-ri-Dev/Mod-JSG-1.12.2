@@ -15,6 +15,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.integration.jei.category.JEIAssemblerRecipeCategory;
 import tauri.dev.jsg.integration.jei.category.JEIChamberRecipeCategory;
+import tauri.dev.jsg.integration.jei.category.JEIPCBFabricatorRecipeCategory;
 import tauri.dev.jsg.integration.jei.recipe.JEINotebookCloneRecipe;
 import tauri.dev.jsg.integration.jei.recipe.JEINotebookRecipe;
 import tauri.dev.jsg.integration.jei.recipe.JEIUniverseDialerCloneRecipe;
@@ -25,10 +26,11 @@ import tauri.dev.jsg.machine.assembler.AssemblerRecipe;
 import tauri.dev.jsg.machine.assembler.AssemblerRecipes;
 import tauri.dev.jsg.machine.chamber.CrystalChamberRecipe;
 import tauri.dev.jsg.machine.chamber.CrystalChamberRecipes;
+import tauri.dev.jsg.machine.pcbfabricator.PCBFabricatorRecipe;
+import tauri.dev.jsg.machine.pcbfabricator.PCBFabricatorRecipes;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,8 +51,8 @@ public final class JEIIntegration implements IModPlugin {
         registry.addAdvancedGuiHandlers(new JEIAdvancedGuiHandler());
 
         // Hide icons in JEI
-        for(Item i : JSGItems.ITEMS){
-            if(i instanceof JSGIconItem)
+        for (Item i : JSGItems.ITEMS) {
+            if (i instanceof JSGIconItem)
                 registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(i, 1));
         }
 
@@ -65,8 +67,10 @@ public final class JEIIntegration implements IModPlugin {
 
         recipes.clear();
         // Assembler recipes
-        for(AssemblerRecipe recipe : AssemblerRecipes.RECIPES){
-            AbstractJEIRecipe newRecipe = new AbstractJEIRecipe(){
+        for (AssemblerRecipe recipe : AssemblerRecipes.RECIPES) {
+            if(recipe.isDisabled()) continue;
+
+            AbstractJEIRecipe newRecipe = new AbstractJEIRecipe() {
                 @Override
                 public void getIngredients(@Nonnull IIngredients iIngredients) {
                     List<List<ItemStack>> list = new ArrayList<>();
@@ -87,8 +91,10 @@ public final class JEIIntegration implements IModPlugin {
 
         recipes.clear();
         // Chamber recipes
-        for(CrystalChamberRecipe recipe : CrystalChamberRecipes.RECIPES){
-            AbstractJEIRecipe newRecipe = new AbstractJEIRecipe(){
+        for (CrystalChamberRecipe recipe : CrystalChamberRecipes.RECIPES) {
+            if(recipe.isDisabled()) continue;
+
+            AbstractJEIRecipe newRecipe = new AbstractJEIRecipe() {
                 @Override
                 public FluidStack getSubFluidStack() {
                     return recipe.getSubFluidStack();
@@ -103,11 +109,38 @@ public final class JEIIntegration implements IModPlugin {
             recipes.add(newRecipe);
         }
         registry.addRecipes(recipes, JEIChamberRecipeCategory.UID);
+
+        recipes.clear();
+        // Fabricator recipes
+        for (PCBFabricatorRecipe recipe : PCBFabricatorRecipes.RECIPES) {
+            if(recipe.isDisabled()) continue;
+
+            AbstractJEIRecipe newRecipe = new AbstractJEIRecipe() {
+                @Override
+                public FluidStack getSubFluidStack() {
+                    return recipe.getSubFluidStack();
+                }
+
+                @Override
+                public void getIngredients(@Nonnull IIngredients iIngredients) {
+                    List<List<ItemStack>> list = new ArrayList<>();
+
+                    for (ItemStack s : recipe.getPattern())
+                        list.add(Collections.singletonList(s));
+
+                    iIngredients.setInputLists(VanillaTypes.ITEM, list);
+                    iIngredients.setOutput(VanillaTypes.ITEM, recipe.getResult());
+                }
+            };
+            recipes.add(newRecipe);
+        }
+        registry.addRecipes(recipes, JEIPCBFabricatorRecipeCategory.UID);
     }
 
     @Override
     public void registerCategories(@Nonnull IRecipeCategoryRegistration registry) {
         registry.addRecipeCategories(new JEIAssemblerRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new JEIChamberRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
+        registry.addRecipeCategories(new JEIPCBFabricatorRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
     }
 }

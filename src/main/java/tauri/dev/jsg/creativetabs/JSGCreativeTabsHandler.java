@@ -46,7 +46,7 @@ public class JSGCreativeTabsHandler {
         @Nonnull
         @Override
         public ItemStack getTabIconItem() {
-            return new ItemStack(JSGBlocks.MACHINE_ASSEMBLER);
+            return new ItemStack(JSGBlocks.MACHINE_CHAMBER);
         }
     };
     public static final JSGCreativeTabs JSG_ITEMS_CREATIVE_TAB = (JSGCreativeTabs) new JSGCreativeTabs("jsg_items") {

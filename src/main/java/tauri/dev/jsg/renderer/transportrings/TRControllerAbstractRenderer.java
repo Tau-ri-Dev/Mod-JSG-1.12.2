@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import tauri.dev.jsg.block.transportrings.TRControllerAbstractBlock;
 import tauri.dev.jsg.tileentity.transportrings.TRControllerAbstractTile;
+import tauri.dev.jsg.util.FacingToRotation;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.vector.Vector3f;
 
@@ -34,22 +35,6 @@ public abstract class TRControllerAbstractRenderer extends TileEntitySpecialRend
         }
     }
 
-    public static int getRotation(EnumFacing facing) {
-        switch (facing) {
-            case EAST:
-                return 270;
-
-            case SOUTH:
-                return 180;
-
-            case WEST:
-                return 90;
-
-            default:
-                return 0;
-        }
-    }
-
     @Override
     public void render(TRControllerAbstractTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         TRControllerAbstractRendererState rendererState = te.getRendererState();
@@ -62,7 +47,7 @@ public abstract class TRControllerAbstractRenderer extends TileEntitySpecialRend
         GlStateManager.translate(x, y, z);
 
         Vector3f tr = getTranslation(facing);
-        int rot = getRotation(facing);
+        int rot = FacingToRotation.getIntRotation(facing);
 
         GlStateManager.translate(tr.x, tr.y, tr.z);
         GlStateManager.rotate(rot, 0, 1, 0);

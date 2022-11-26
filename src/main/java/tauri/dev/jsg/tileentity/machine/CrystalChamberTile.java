@@ -55,11 +55,6 @@ public class CrystalChamberTile extends TileEntity implements IUpgradable, State
         }
 
         @Override
-        protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
-            return 64;
-        }
-
-        @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));

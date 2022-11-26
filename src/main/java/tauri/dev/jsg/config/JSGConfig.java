@@ -261,7 +261,7 @@ public class JSGConfig {
         public double gateMaxHeat = 83400;
 
         @Name("Chance of lighting strike that charge a gate")
-        public float lightingBoldChance = 0.005f;
+        public float lightingBoldChance = 0.0005f;
 
     }
 

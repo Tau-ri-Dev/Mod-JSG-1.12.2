@@ -33,6 +33,7 @@ import tauri.dev.jsg.block.invisible.InvisibleBlock;
 import tauri.dev.jsg.block.invisible.IrisBlock;
 import tauri.dev.jsg.block.machine.AssemblerBlock;
 import tauri.dev.jsg.block.machine.CrystalChamberBlock;
+import tauri.dev.jsg.block.machine.PCBFabricatorBlock;
 import tauri.dev.jsg.block.ore.NaquadahOreBlock;
 import tauri.dev.jsg.block.ore.TitaniumOreBlock;
 import tauri.dev.jsg.block.ore.TriniumOreBlock;
@@ -126,6 +127,7 @@ public class JSGBlocks {
 
     public static final AssemblerBlock MACHINE_ASSEMBLER = new AssemblerBlock();
     public static final CrystalChamberBlock MACHINE_CHAMBER = new CrystalChamberBlock();
+    public static final PCBFabricatorBlock MACHINE_PCB_FABRICATOR = new PCBFabricatorBlock();
 
     // -----------------------------------------------------------------------------
     // ZPM stuff
@@ -245,6 +247,7 @@ public class JSGBlocks {
 
             MACHINE_ASSEMBLER,
             MACHINE_CHAMBER,
+            MACHINE_PCB_FABRICATOR,
 
             ZPM,
             ZPM_HUB,

@@ -129,6 +129,7 @@ public class CrystalChamberContainer extends Container implements OpenTabHolderI
                 }
             }
 
+            if(energyStorage == null) return;
             lastEnergyStored = energyStorage.getEnergyStored();
             energyTransferedLastTick = tile.getEnergyTransferedLastTick();
             machineStart = tile.getMachineStart();

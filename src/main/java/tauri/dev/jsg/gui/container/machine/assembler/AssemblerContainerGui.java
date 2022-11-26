@@ -96,6 +96,7 @@ public class AssemblerContainerGui extends GuiContainer implements TabbedContain
                 .addButton(100, 25, 25, BACKGROUND_TEXTURE, 176, 249, AssemblerRecipes.SG_UNI_BASE_BLOCK)
                 .addButton(101, 25 + 18, 25, BACKGROUND_TEXTURE, 176, 265, AssemblerRecipes.SG_UNI_CHEVRON_BLOCK)
                 .addButton(102, 25 + 18*2, 25, BACKGROUND_TEXTURE, 176, 281, AssemblerRecipes.SG_UNI_RING_BLOCK)
+                .addButton(103, 25 + 18*3, 25, BACKGROUND_TEXTURE, 211, 249, AssemblerRecipes.DESTINY_COUNTDOWN)
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)
                 .setTabPosition(-21, 2 + 22 * 2)

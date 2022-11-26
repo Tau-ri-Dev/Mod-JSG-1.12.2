@@ -2,10 +2,13 @@ package tauri.dev.jsg.machine.assembler;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import tauri.dev.jsg.config.craftings.CraftingConfig;
 
 import java.util.ArrayList;
 
 public abstract class AssemblerRecipe {
+    public static final String ID = "Ancient Assembler";
+
     public abstract int getWorkingTime(); // in ticks
 
     public abstract int getEnergyPerTick();
@@ -29,6 +32,8 @@ public abstract class AssemblerRecipe {
     }
 
     public boolean isOk(int energyStored, Item schematic, ArrayList<ItemStack> stacks, ItemStack subStack) {
+        if(isDisabled()) return false;
+
         if (energyStored < getEnergyPerTick()) return false;
         if (getSchematic() != schematic) return false;
         int i = 0;
@@ -44,5 +49,9 @@ public abstract class AssemblerRecipe {
         }
         if (subStack.isEmpty() || subStack.getItem() != getSubItemStack().getItem()) return false;
         return subStack.getCount() >= getSubItemStack().getCount();
+    }
+
+    public boolean isDisabled(){
+        return CraftingConfig.isDisabled(ID, getResult().getItem().getRegistryName());
     }
 }
