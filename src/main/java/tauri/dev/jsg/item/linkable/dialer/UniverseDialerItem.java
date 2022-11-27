@@ -21,6 +21,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,6 +31,7 @@ import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.capability.endpoint.ItemEndpointCapability;
 import tauri.dev.jsg.capability.endpoint.ItemEndpointInterface;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.linkable.LinkAbleCapabilityProvider;
@@ -55,6 +57,8 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Map;
+
+import static tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode.NEARBY;
 
 public class UniverseDialerItem extends Item implements CustomModelItemInterface {
 
@@ -104,7 +108,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
         NBTTagCompound compound = new NBTTagCompound();
         switch (UniverseDialerVariants.valueOf(stack.getItemDamage())) {
             case NORMAL:
-                compound.setByte("mode", UniverseDialerMode.NEARBY.id);
+                compound.setByte("mode", NEARBY.id);
                 compound.setByte("selected", (byte) 0);
                 compound.setTag("saved", new NBTTagList());
                 break;
@@ -249,7 +253,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                 StargateUniverseBaseTile uniTile = (StargateUniverseBaseTile) gateTile;
 
                                 NBTTagList nearbyList = new NBTTagList();
-                                int squaredGate = tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach * tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach;
+                                double squaredGate = (double) tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach * tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach;
                                 try {
 
                                     addrToBytes(gateTile.getDialedAddress(), compound, "dialedAddress");
@@ -269,12 +273,12 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                             continue;
 
                                         // get only universe gates in nearby
-                                        if (!(targetGateTile instanceof StargateUniverseBaseTile) && mode.equals(UniverseDialerMode.NEARBY))
+                                        if (!(targetGateTile instanceof StargateUniverseBaseTile) && mode.equals(NEARBY))
                                             continue;
 
                                         int targetDim = stargatePos.dimensionID;
                                         BlockPos targetFoundPos = stargatePos.gatePos;
-                                        if(targetGateTile instanceof StargateUniverseBaseTile){
+                                        if (targetGateTile instanceof StargateUniverseBaseTile) {
                                             StargateUniverseBaseTile targetUniTile = (StargateUniverseBaseTile) targetGateTile;
                                             targetDim = targetUniTile.getFakeWorld().provider.getDimension();
                                             targetFoundPos = targetUniTile.getFakePos();
@@ -285,15 +289,17 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                         if (targetFoundPos.distanceSq(uniTile.getFakePos()) > squaredGate)
                                             continue;
 
-                                        if (stargatePos.gatePos.equals(targetPos))
+                                        if (stargatePos.gatePos.equals(targetPos) && stargatePos.dimensionID == world.provider.getDimension())
                                             continue;
 
                                         NBTTagCompound entryCompound = entry.getKey().serializeNBT();
+                                        if(mode == NEARBY)
+                                            entryCompound.setBoolean("hasUpgrade", !StargateDimensionConfig.isGroupEqual(DimensionManager.getProviderType(stargatePos.dimensionID), world.provider.getDimensionType()));
 
                                         nearbyList.appendTag(entryCompound);
                                     }
 
-                                    compound.setTag(UniverseDialerMode.NEARBY.tagListName, nearbyList);
+                                    compound.setTag(NEARBY.tagListName, nearbyList);
                                     compound.setLong(mode.tagPosName, targetPos.toLong());
                                     found = true;
                                 } catch (ConcurrentModificationException e) {

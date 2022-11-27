@@ -91,6 +91,9 @@ public class JSGConfig {
     @Name("Advancements config")
     public static AdvancementsConfig advancementsConfig = new AdvancementsConfig();
 
+    @Name("Countdown config")
+    public static CountDownConfig countdownConfig = new CountDownConfig();
+
     @Name("Development config")
     public static DevConfig devConfig = new DevConfig();
 
@@ -828,6 +831,14 @@ public class JSGConfig {
                 "Players in this radius around triggered pos will get Advancement."
         })
         public int radius = 25;
+    }
+
+    public static class CountDownConfig {
+        @Name("Delay after zero-time (seconds)")
+        public int zeroDelay = 5;
+
+        @Name("Delay to start dialing after countdown start (seconds)")
+        public int dialStartDelay = 5;
     }
 
     public static class DevConfig {

@@ -204,7 +204,7 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 				return 9;
 				
 			case UNIVERSE:
-				return localDial ? 7 : 9;
+				return localDial ? 7 : 8;
 		}
 		
 		return 0;

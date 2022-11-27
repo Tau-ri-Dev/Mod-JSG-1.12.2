@@ -257,7 +257,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 BlockPos actualPos = new BlockPos(this.pos).add(o);
 
                 if(tryBuild){
-                    JSG.info("L: " + o);
                     if(isTherePlace(actualPos))
                         world.setBlockState(actualPos, removeBlocks ? Blocks.AIR.getDefaultState() : JSGBlocks.NAQUADAH_BLOCK_RAW.getDefaultState());
                     continue;
@@ -279,7 +278,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                     BlockPos actualPos = new BlockPos(this.pos).add(o);
 
                     if(tryBuild){
-                        JSG.info("K: " + o);
                         if(isTherePlace(actualPos))
                             world.setBlockState(actualPos, removeBlocks ? Blocks.AIR.getDefaultState() : JSGBlocks.NAQUADAH_BLOCK_RAW.getDefaultState());
                         continue;

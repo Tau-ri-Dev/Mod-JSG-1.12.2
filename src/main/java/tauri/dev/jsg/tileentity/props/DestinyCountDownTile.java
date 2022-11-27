@@ -13,18 +13,23 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
+import tauri.dev.jsg.packet.StateUpdateRequestToServer;
 import tauri.dev.jsg.renderer.props.DestinyCountDownRendererState;
 import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.stargate.EnumStargateState;
 import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
-import tauri.dev.jsg.stargate.network.StargateAddressDynamic;
+import tauri.dev.jsg.stargate.network.StargateAddress;
+import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateProviderInterface;
 import tauri.dev.jsg.state.StateTypeEnum;
@@ -43,7 +48,6 @@ import static tauri.dev.jsg.state.StateTypeEnum.RENDERER_UPDATE;
 public class DestinyCountDownTile extends TileEntity implements ICapabilityProvider, ITickable, Environment, StateProviderInterface, ILinkable, PreparableInterface {
 
     public long countdownTo = -1; // in ticks!
-    private long lastCountDown = 0;
 
     /**
      * @return countdown in TICKS!
@@ -65,6 +69,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
             playSound(EnumCountDownEventType.START);
             sendSignal(null, "countdown_start", new Object[]{getCountdownTicks()});
         }
+        sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
     }
 
 
@@ -76,17 +81,20 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
     public void onLoad() {
         if (!world.isRemote) {
             targetPoint = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
+            markDirty();
+            updateLinkStatus();
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
+        } else {
+            isClientUpdated = false;
+            markDirty();
         }
     }
 
-    private int ticksSinceLoad = 0; // max 120
+    private boolean isClientUpdated = false;
 
     @Override
     public void update() {
         if (!world.isRemote) {
-            if (ticksSinceLoad < 120)
-                ticksSinceLoad++;
             if (!addedToNetwork) {
                 addedToNetwork = true;
                 JSG.ocWrapper.joinOrCreateNetwork(this);
@@ -98,22 +106,32 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
 
             long i = getCountdownTicks();
 
-            if (i < -(20 * 10)) {
+            if (i < -(20L * JSGConfig.countdownConfig.zeroDelay)) {
                 countdownTo = -1;
                 markDirty();
+                sendSignal(null, "countdown_reset", new Object[]{i});
+                sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             }
 
-            if (!gateOpenedThisRound && getCountdownTicks() > 80 && (world.getTotalWorldTime() - countStart) > 100 && (world.getTotalWorldTime() % 40 == 0)) {
+            if (!gateOpenedThisRound && getCountdownTicks() > 1300 && (world.getTotalWorldTime() - countStart) > (20L * JSGConfig.countdownConfig.dialStartDelay) && (world.getTotalWorldTime() % 40 == 0)) {
                 if (isLinked()) {
                     StargateUniverseBaseTile gate = getLinkedGate(world);
                     if (gate != null) {
                         EnumStargateState state = gate.getStargateState();
                         if (state.idle() && gate.isMerged()) {
-                            StargateAddressDynamic foundAddress = gate.getRandomNearbyGate();
+                            StargateAddress foundAddress = gate.getRandomNearbyGate();
                             if (foundAddress != null) {
-                                gate.dialAddress(foundAddress.toImmutable(), foundAddress.size());
-                                gateOpenedThisRound = true;
-                                markDirty();
+
+                                int size = 6;
+                                StargatePos relPos = gate.getNetwork().getStargate(foundAddress);
+                                if (relPos != null) {
+                                    if (!StargateDimensionConfig.isGroupEqual(DimensionManager.getProviderType(relPos.dimensionID), gate.getWorld().provider.getDimensionType()))
+                                        size = 7;
+
+                                    gate.dialAddress(foundAddress, size);
+                                    gateOpenedThisRound = true;
+                                    markDirty();
+                                }
                             }
                         }
                     }
@@ -151,15 +169,14 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                 }
             }
 
-            if (ticksSinceLoad > 10) {
-                updateLinkStatus();
-            }
-
-            if (lastCountDown != countdownTo && ticksSinceLoad > 40) {
-                lastCountDown = countdownTo;
+            //if(world.getTotalWorldTime() % 40 == 0)
+            //    sendState(StateTypeEnum.RENDERER_UPDATE, new DestinyCountDownRendererState(countdownTo));
+        } else {
+            if (!isClientUpdated && getCountdownTicks() <= 0) {
+                // probably not loaded correctly
+                isClientUpdated = true;
                 markDirty();
-
-                sendState(StateTypeEnum.RENDERER_UPDATE, new DestinyCountDownRendererState(countdownTo));
+                JSGPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, RENDERER_UPDATE));
             }
         }
     }
@@ -256,7 +273,6 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
             compound.setInteger("linkId", linkId);
         }
 
-
         if (node != null) {
             NBTTagCompound nodeCompound = new NBTTagCompound();
             node.save(nodeCompound);
@@ -275,6 +291,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
         if (compound.hasKey("linkId")) this.linkId = compound.getInteger("linkId");
 
         if (node != null && compound.hasKey("node")) node.load(compound.getCompoundTag("node"));
+        markDirty();
         super.readFromNBT(compound);
     }
 

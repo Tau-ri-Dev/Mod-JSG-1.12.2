@@ -29,6 +29,8 @@ import tauri.dev.jsg.util.JSGTextureLightningHelper;
 
 import java.awt.*;
 
+import static tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode.NEARBY;
+
 
 public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 
@@ -280,6 +282,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
         // List rendering
 
         GlStateManager.enableBlend();
+        JSGTextureLightningHelper.lightUpTexture(1f);
 
         if (stack.hasTagCompound() && !isBroken) {
             NBTTagCompound compound = stack.getTagCompound();
@@ -350,7 +353,9 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 
                                     StargateAddress address = new StargateAddress(entryCompound);
 
-                                    int symbolCount = SymbolUniverseEnum.getMaxSymbolsDisplay(entryCompound.getBoolean("hasUpgrade"));
+                                    boolean hasUpgrade = entryCompound.getBoolean("hasUpgrade");
+
+                                    int symbolCount = SymbolUniverseEnum.getMaxSymbolsDisplay((hasUpgrade && mode != NEARBY));
 
                                     // gate status (might be used in future)
                                     EnumStargateState gateStatus = EnumStargateState.valueOf(compound.getInteger("gateStatus"));
@@ -375,7 +380,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
                                     boolean engage_poo;
 
                                     if (dialed == -1) engage_poo = false;
-                                    else if (symbolCount == 8)
+                                    else if (hasUpgrade)
                                         engage_poo = (dialed == 9);
                                     else
                                         engage_poo = (dialed == 7);
@@ -388,10 +393,10 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
                                     } else {
                                         for (int i = 0; i < symbolCount; i++) {
                                             boolean engage_s = (i < dialed);
-                                            renderSymbol(offset, i, address.get(i), isDialingThisAddr, active, symbolCount == 8, engage_s, gateStatus);
+                                            renderSymbol(offset, i, address.get(i), isDialingThisAddr, active, hasUpgrade, engage_s, gateStatus);
                                         }
 
-                                        renderSymbol(offset, symbolCount, SymbolUniverseEnum.getOrigin(), isDialingThisAddr, active, symbolCount == 8, engage_poo, gateStatus);
+                                        renderSymbol(offset, symbolCount, SymbolUniverseEnum.getOrigin(), isDialingThisAddr, active, hasUpgrade, engage_poo, gateStatus);
                                     }
 
                                     break;

@@ -4,10 +4,12 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
@@ -35,6 +37,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode.NEARBY;
 import static tauri.dev.jsg.stargate.EnumStargateState.DIALING;
 import static tauri.dev.jsg.stargate.EnumStargateState.FAILING;
 import static tauri.dev.jsg.stargate.network.SymbolUniverseEnum.G1;
@@ -46,17 +49,20 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     protected BlockPos fakePos;
 
     public World getFakeWorld() {
-        if(fakeWorld == null) return world;
+        if (fakeWorld == null) return world;
         return fakeWorld;
     }
+
     public void setFakeWorld(World world) {
         fakeWorld = world;
         markDirty();
     }
-    public BlockPos getFakePos(){
-        if(fakePos == null) return pos;
+
+    public BlockPos getFakePos() {
+        if (fakePos == null) return pos;
         return fakePos;
     }
+
     public void setFakePos(BlockPos pos) {
         fakePos = pos;
         markDirty();
@@ -299,7 +305,31 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
      */
     @Override
     protected StargateEnergyRequired getEnergyRequiredToDial(StargatePos targetGatePos) {
-        return super.getEnergyRequiredToDial(targetGatePos).mul(JSGConfig.powerConfig.stargateUniverseEnergyMul);
+        BlockPos sPos = getFakePos();
+        BlockPos tPos = targetGatePos.gatePos;
+        DimensionType sourceDim = getFakeWorld().provider.getDimensionType();
+        DimensionType targetDim = targetGatePos.getWorld().provider.getDimensionType();
+
+        StargateAbstractBaseTile targetTile = targetGatePos.getTileEntity();
+        if (targetTile instanceof StargateUniverseBaseTile) {
+            tPos = ((StargateUniverseBaseTile) targetTile).getFakePos();
+            targetDim = ((StargateUniverseBaseTile) targetTile).getFakeWorld().provider.getDimensionType();
+        }
+
+        if (sourceDim == DimensionType.OVERWORLD && targetDim == DimensionType.NETHER)
+            tPos = new BlockPos(tPos.getX() * 8, tPos.getY(), tPos.getZ() * 8);
+        else if (sourceDim == DimensionType.NETHER && targetDim == DimensionType.OVERWORLD)
+            sPos = new BlockPos(sPos.getX() * 8, sPos.getY(), sPos.getZ() * 8);
+
+        double distance = (int) sPos.getDistance(tPos.getX(), tPos.getY(), tPos.getZ());
+
+        if (distance < 5000) distance *= 0.8;
+        else distance = 5000 * Math.log10(distance) / Math.log10(5000);
+
+        StargateEnergyRequired energyRequired = new StargateEnergyRequired(JSGConfig.powerConfig.openingBlockToEnergyRatio, JSGConfig.powerConfig.keepAliveBlockToEnergyRatioPerTick);
+        energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(sourceDim, targetDim));
+
+        return energyRequired.mul(JSGConfig.powerConfig.stargateUniverseEnergyMul);
     }
 
     @Override
@@ -397,7 +427,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
                             if (!abortingDialing) stargateState = EnumStargateState.IDLE;
                         } else {
                             if (!stargateWillLock(targetRingSymbol)) {
-                                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 14));
+                                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 24));
                             } else
                                 attemptOpenAndFail();
                         }
@@ -686,12 +716,12 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
             compound.setInteger("linkId", linkId);
         }
 
-        if(fakePos != null){
+        if (fakePos != null) {
             compound.setInteger("fakeX", fakePos.getX());
             compound.setInteger("fakeY", fakePos.getY());
             compound.setInteger("fakeZ", fakePos.getY());
         }
-        if(fakeWorld != null)
+        if (fakeWorld != null)
             compound.setInteger("fakeWorld", fakeWorld.provider.getDimension());
 
         return super.writeToNBT(compound);
@@ -711,9 +741,9 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         if (compound.hasKey("countDownPos")) this.countDownPos = BlockPos.fromLong(compound.getLong("countDownPos"));
         if (compound.hasKey("linkId")) this.linkId = compound.getInteger("linkId");
 
-        if(compound.hasKey("fakeX"))
+        if (compound.hasKey("fakeX"))
             this.fakePos = new BlockPos(compound.getInteger("fakeX"), compound.getInteger("fakeY"), compound.getInteger("fakeZ"));
-        if(compound.hasKey("fakeWorld") && world.getMinecraftServer() != null)
+        if (compound.hasKey("fakeWorld") && world.getMinecraftServer() != null)
             this.fakeWorld = this.world.getMinecraftServer().getWorld(compound.getInteger("fakeWorld"));
     }
 
@@ -753,39 +783,46 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         }
     }
 
-    public StargateAddressDynamic getRandomNearbyGate() {
-        int squaredGate = tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach * tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach;
-        ArrayList<StargateAddressDynamic> addresses = new ArrayList<>();
+    public StargateAddress getRandomNearbyGate() {
+        double squaredGate = (double) JSGConfig.stargateConfig.universeGateNearbyReach * tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach;
+        ArrayList<StargateAddress> addresses = new ArrayList<>();
 
         for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(getFakeWorld()).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet()) {
 
             StargatePos stargatePos = entry.getValue();
             StargateAbstractBaseTile targetGateTile = stargatePos.getTileEntity();
 
-            if (!(targetGateTile instanceof StargateUniverseBaseTile))
+            if (!(targetGateTile instanceof StargateClassicBaseTile))
                 continue;
 
             if (!targetGateTile.isMerged())
                 continue;
 
+            // get only universe gates in nearby
+            if (!(targetGateTile instanceof StargateUniverseBaseTile))
+                continue;
+
             StargateUniverseBaseTile targetUniTile = (StargateUniverseBaseTile) targetGateTile;
 
-            if (targetUniTile.getFakeWorld().provider.getDimension() != getFakeWorld().provider.getDimension())
+            int targetDim = targetUniTile.getFakeWorld().provider.getDimension();
+            BlockPos targetFoundPos = targetUniTile.getFakePos();
+
+            if (targetDim != getFakeWorld().provider.getDimension())
                 continue;
 
-            if (targetUniTile.getFakePos().distanceSq(getFakePos()) > squaredGate)
+            if (targetFoundPos.distanceSq(getFakePos()) > squaredGate)
                 continue;
 
-            if (stargatePos.gatePos.equals(pos))
+            if (stargatePos.gatePos.equals(pos) && stargatePos.dimensionID == world.provider.getDimension())
                 continue;
 
-            StargateAddressDynamic addr = new StargateAddressDynamic(Objects.requireNonNull(targetGateTile.getStargateAddress(SymbolTypeEnum.UNIVERSE)));
-            StargateAddressDynamic addr2 = new StargateAddressDynamic(SymbolTypeEnum.UNIVERSE);
-            addr2.addAll(addr.subList(0, 6));
-            addr.addSymbol(targetGateTile.getSymbolType().getOrigin());
+            StargateAddressDynamic addr3 = new StargateAddressDynamic(SymbolTypeEnum.UNIVERSE);
+            int symbols = (StargateDimensionConfig.isGroupEqual(DimensionManager.getProviderType(stargatePos.dimensionID), world.provider.getDimensionType()) ? 6 : 7);
+            addr3.addAll(entry.getKey().subList(0, symbols));
+            addr3.addSymbol(targetGateTile.getSymbolType().getOrigin());
 
-            if (checkAddressAndEnergy(addr).ok())
-                addresses.add(addr2);
+            if (checkAddressAndEnergy(addr3).ok())
+                addresses.add(entry.getKey());
         }
         if (addresses.size() == 0) return null;
 
