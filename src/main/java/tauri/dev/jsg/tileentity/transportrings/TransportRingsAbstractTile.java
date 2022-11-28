@@ -529,7 +529,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                 for (Entity entity : teleportList) {
                     if (entity instanceof EntityPlayerMP) {
-                        JSGPacketHandler.INSTANCE.sendTo(new StartPlayerFadeOutToClient(), (EntityPlayerMP) entity);
+                        JSGPacketHandler.INSTANCE.sendTo(new StartPlayerFadeOutToClient(StartPlayerFadeOutToClient.EnumFadeOutEffectType.RINGS), (EntityPlayerMP) entity);
                     }
                 }
 
