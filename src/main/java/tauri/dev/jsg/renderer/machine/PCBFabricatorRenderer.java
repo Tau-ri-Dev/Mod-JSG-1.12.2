@@ -39,7 +39,7 @@ public class PCBFabricatorRenderer extends TileEntitySpecialRenderer<PCBFabricat
                             rendererState.colors.get(1),
                             rendererState.colors.get(2)
                     };
-                    beam.render(partialTicks, tick, BeamerRoleEnum.TRANSMIT, colors, false, null, EnumFacing.NORTH);
+                    beam.render(partialTicks, tick, BeamerRoleEnum.TRANSMIT, colors, false, null);
 
                     GlStateManager.popMatrix();
                 }

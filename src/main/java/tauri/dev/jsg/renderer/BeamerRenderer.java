@@ -26,8 +26,8 @@ public class BeamerRenderer extends TileEntitySpecialRenderer<BeamerTile> {
             GlStateManager.translate(x + 0.5, y + 0.5, z + 0.5);
             GlStateManager.rotate(180 - te.getFacing().getHorizontalAngle(), 0, 1, 0);
 
-            BeamerBeam beam = BeamerBeam.getBeam(te.beamOffsetFromTargetZ, te.beamOffsetFromGateTarget, te.beamOffsetFromTargetX, te.beamOffsetFromTargetY, te.beamRadiusClient);
-            beam.render(partialTicks, te.getWorld().getTotalWorldTime(), te.getRole(), te.getMode().colors, (te.getMode() == BeamerModeEnum.FLUID), te.lastFluidTransferred, te.getFacing());
+            BeamerBeam beam = BeamerBeam.getBeam(te.beamOffsetFromTargetZ, te.beamOffsetFromGateTarget, te.beamOffsetFromTargetX, te.beamOffsetFromTargetY, te.beamRadiusClient, te.getFacing());
+            beam.render(partialTicks, te.getWorld().getTotalWorldTime(), te.getRole(), te.getMode().colors, (te.getMode() == BeamerModeEnum.FLUID), te.lastFluidTransferred);
             GlStateManager.popMatrix();
             GlStateManager.enableCull();
         }

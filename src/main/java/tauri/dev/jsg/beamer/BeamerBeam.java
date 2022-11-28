@@ -5,16 +5,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityBeaconRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -52,7 +48,7 @@ public class BeamerBeam {
     }
 
     @Nonnull
-    public static BeamerBeam getBeam(int offsetZFromTarget, int offsetZTargetFromGate, int offsetXFromTarget, int offsetYFromTarget, float beamRadius) {
+    public static BeamerBeam getBeam(int offsetZFromTarget, int offsetZTargetFromGate, int offsetXFromTarget, int offsetYFromTarget, float beamRadius, @Nonnull EnumFacing facing) {
 
         double t1 = ((double) offsetXFromTarget) / ((double) offsetZFromTarget);
         double angY = Math.toDegrees(Math.atan(t1));
@@ -68,12 +64,15 @@ public class BeamerBeam {
 
         beamerLength += 0.2D;
 
-        return new BeamerBeam((float) angX, (float) angY, beamerLength, beamRadius);
+        return new BeamerBeam((float) angX * -1, (float) angY * ((facing == EnumFacing.SOUTH || facing == EnumFacing.WEST) ? -1 : 1), beamerLength, beamRadius);
     }
 
     public static boolean isSomethingInBeam(BeamerTile beamer, boolean destroyBlocks, boolean hitEntities) {
-        if(!JSGConfig.beamerConfig.damageEntities) hitEntities = false;
-        if(!JSGConfig.beamerConfig.destroyBlocks) destroyBlocks = false;
+        if (!JSGConfig.beamerConfig.damageEntities) hitEntities = false;
+        if (!JSGConfig.beamerConfig.destroyBlocks) destroyBlocks = false;
+
+        boolean debug = false;
+
         BlockPos pos = beamer.getPos();
         World world = beamer.getWorld();
         EnumFacing facing = beamer.getFacing();
@@ -87,23 +86,23 @@ public class BeamerBeam {
             currentOffsetFromGate *= -1;
 
         for (int off = 1; off < currentOffsetFromGate; off++) {
-            BeamerBeam beam = getBeam(beamZOffset, targetOffset, beamXOffset, beamYOffset, -1);
-            double lengthXZ = (off / Math.cos(Math.toRadians(beam.angleX)));
+            BeamerBeam beam = getBeam(beamZOffset, targetOffset, beamXOffset, beamYOffset, -1, beamer.getFacing());
+            double lengthXZ = (off / Math.cos(Math.toRadians(beam.angleY)));
 
-            final double offX = (Math.tan(Math.toRadians(beam.angleX)) * off);
-            final double offY = (Math.tan(Math.toRadians(beam.angleY)) * lengthXZ);
+            final double offX = (Math.tan(Math.toRadians(beam.angleY)) * off);
+            final double offY = (Math.tan(Math.toRadians(beam.angleX)) * lengthXZ);
 
-            for(int i = 0; i < 9; i++){
+            for (int i = 0; i < 9; i++) {
 
                 double x;
                 double y;
 
-                if(i < 3) y = Math.ceil(offY);
-                else if(i < 6) y = Math.round(offY);
+                if (i < 3) y = Math.ceil(offY);
+                else if (i < 6) y = Math.round(offY);
                 else y = Math.floor(offY);
 
-                if(i % 3 == 0) x = Math.floor(offX);
-                else if((i-1) % 3 == 0) x = Math.round(offX);
+                if (i % 3 == 0) x = Math.floor(offX);
+                else if ((i - 1) % 3 == 0) x = Math.round(offX);
                 else x = Math.ceil(offX);
 
                 BlockPos stepPos = new BlockPos(x, y, off).rotate(FacingToRotation.get(facing));
@@ -114,16 +113,19 @@ public class BeamerBeam {
 
                 Block targetBlock = world.getBlockState(stepPos).getBlock();
                 IBlockState targetBlockState = world.getBlockState(stepPos);
-                if(destroyBlocks && !JSGBlocks.isInBlocksArray(targetBlock, JSGBlocks.BEAMER_BREAK_BLACKLIST) && targetBlockState.getBlockHardness(world, stepPos) >= 0.0f)
-                    world.setBlockToAir(stepPos);
-                else if(!destroyBlocks) {
-                    if ((!targetBlock.isAir(targetBlockState, world, pos) && !targetBlock.isReplaceable(world, pos) && targetBlockState.isOpaqueCube()) || targetBlock == JSGBlocks.IRIS_BLOCK)
-                        return true;
+                if (!debug) {
+                    if (destroyBlocks && !JSGBlocks.isInBlocksArray(targetBlock, JSGBlocks.BEAMER_BREAK_BLACKLIST) && targetBlockState.getBlockHardness(world, stepPos) >= 0.0f)
+                        world.setBlockToAir(stepPos);
+                    else if (!destroyBlocks) {
+                        if ((!targetBlock.isAir(targetBlockState, world, pos) && !targetBlock.isReplaceable(world, pos) && targetBlockState.isOpaqueCube()) || targetBlock == JSGBlocks.IRIS_BLOCK)
+                            return true;
+                    }
+                } else {
+                    world.setBlockState(stepPos, Blocks.STONE.getDefaultState());
                 }
-
-                if(hitEntities && world.getTotalWorldTime() % 20 == 0){
+                if (hitEntities && world.getTotalWorldTime() % 20 == 0) {
                     List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new JSGAxisAlignedBB(stepPos.add(-1, -1, -1), stepPos.add(1, 1, 1)));
-                    for(Entity entity : entities)
+                    for (Entity entity : entities)
                         entity.attackEntityFrom(JSGDamageSources.DAMAGE_BEAMER, ((beamer.getMode() == BeamerModeEnum.LASER) ? 5 : 2));
                 }
             }
@@ -135,7 +137,7 @@ public class BeamerBeam {
 
     // -------------------------------------------
     // RENDERING
-    public void render(float partialTicks, long tick, BeamerRoleEnum teRole, float[] colors, boolean transferringFluid, Fluid lastFluidTransferred, @Nonnull EnumFacing sourceTileFacing) {
+    public void render(float partialTicks, long tick, BeamerRoleEnum teRole, float[] colors, boolean transferringFluid, Fluid lastFluidTransferred) {
         if (transferringFluid && tauri.dev.jsg.config.JSGConfig.beamerConfig.enableFluidBeamColorization) {
             if (lastFluidTransferred != null) {
                 FluidColors.FloatColors fluidColors = FluidColors.getAverageColor(lastFluidTransferred);
@@ -144,13 +146,13 @@ public class BeamerBeam {
                 }
             }
         }
-        GlStateManager.rotate(this.angleY * ((sourceTileFacing == EnumFacing.SOUTH || sourceTileFacing == EnumFacing.WEST) ? -1 : 1), 0, 1, 0);
-        GlStateManager.rotate(-90 + (this.angleX * -1), 1, 0, 0);
+        GlStateManager.rotate(this.angleY, 0, 1, 0);
+        GlStateManager.rotate(-90 + this.angleX, 1, 0, 0);
 
         GlStateManager.alphaFunc(516, 0.1F);
         JSGTextureLightningHelper.lightUpTexture(1f);
         Minecraft.getMinecraft().getTextureManager().bindTexture(TileEntityBeaconRenderer.TEXTURE_BEACON_BEAM);
-        renderBeamSegment(-0.5, -0.3, -0.5, partialTicks, (teRole == BeamerRoleEnum.TRANSMIT ? 1 : -1), tick, 0, this.beamLength + 0.2D, colors, this.beamRadius, this.beamRadius + 0.05f);
+        renderBeamSegment(partialTicks, (teRole == BeamerRoleEnum.TRANSMIT ? 1 : -1), tick, this.beamLength + 0.2D, colors, this.beamRadius, this.beamRadius + 0.05f);
     }
 
     /**
@@ -158,10 +160,10 @@ public class BeamerBeam {
      * <p>
      * - edited some ints to doubles
      */
-    private static void renderBeamSegment(double x, double y, double z, double partialTicks, double textureScale, double totalWorldTime, double yOffset, double height, float[] colors, double beamRadius, double glowRadius) {
+    private static void renderBeamSegment(double partialTicks, double textureScale, double totalWorldTime, double height, float[] colors, double beamRadius, double glowRadius) {
         GlStateManager.pushMatrix();
         JSGTextureLightningHelper.lightUpTexture(1f);
-        double i = yOffset + height;
+        double i = (double) 0 + height;
         GlStateManager.glTexParameteri(3553, 10242, 10497);
         GlStateManager.glTexParameteri(3553, 10243, 10497);
         GlStateManager.disableLighting();
@@ -190,22 +192,22 @@ public class BeamerBeam {
         double d14 = -1.0D + d2;
         double d15 = height * textureScale * (0.5D / beamRadius) + d14;
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        bufferbuilder.pos(x + d4, y + i, z + d5).tex(1.0D, d15).color(f, f1, f2, 1.0F).endVertex();
-        bufferbuilder.pos(x + d4, y + yOffset, z + d5).tex(1.0D, d14).color(f, f1, f2, 1.0F).endVertex();
-        bufferbuilder.pos(x + d6, y + yOffset, z + d7).tex(0.0D, d14).color(f, f1, f2, 1.0F).endVertex();
-        bufferbuilder.pos(x + d6, y + i, z + d7).tex(0.0D, d15).color(f, f1, f2, 1.0F).endVertex();
-        bufferbuilder.pos(x + d10, y + i, z + d11).tex(1.0D, d15).color(f, f1, f2, 1.0F).endVertex();
-        bufferbuilder.pos(x + d10, y + yOffset, z + d11).tex(1.0D, d14).color(f, f1, f2, 1.0F).endVertex();
-        bufferbuilder.pos(x + d8, y + yOffset, z + d9).tex(0.0D, d14).color(f, f1, f2, 1.0F).endVertex();
-        bufferbuilder.pos(x + d8, y + i, z + d9).tex(0.0D, d15).color(f, f1, f2, 1.0F).endVertex();
-        bufferbuilder.pos(x + d6, y + i, z + d7).tex(1.0D, d15).color(f, f1, f2, 1.0F).endVertex();
-        bufferbuilder.pos(x + d6, y + yOffset, z + d7).tex(1.0D, d14).color(f, f1, f2, 1.0F).endVertex();
-        bufferbuilder.pos(x + d10, y + yOffset, z + d11).tex(0.0D, d14).color(f, f1, f2, 1.0F).endVertex();
-        bufferbuilder.pos(x + d10, y + i, z + d11).tex(0.0D, d15).color(f, f1, f2, 1.0F).endVertex();
-        bufferbuilder.pos(x + d8, y + i, z + d9).tex(1.0D, d15).color(f, f1, f2, 1.0F).endVertex();
-        bufferbuilder.pos(x + d8, y + yOffset, z + d9).tex(1.0D, d14).color(f, f1, f2, 1.0F).endVertex();
-        bufferbuilder.pos(x + d4, y + yOffset, z + d5).tex(0.0D, d14).color(f, f1, f2, 1.0F).endVertex();
-        bufferbuilder.pos(x + d4, y + i, z + d5).tex(0.0D, d15).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d4, -0.3 + i, -0.5 + d5).tex(1.0D, d15).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d4, -0.3 + (double) 0, -0.5 + d5).tex(1.0D, d14).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d6, -0.3 + (double) 0, -0.5 + d7).tex(0.0D, d14).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d6, -0.3 + i, -0.5 + d7).tex(0.0D, d15).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d10, -0.3 + i, -0.5 + d11).tex(1.0D, d15).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d10, -0.3 + (double) 0, -0.5 + d11).tex(1.0D, d14).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d8, -0.3 + (double) 0, -0.5 + d9).tex(0.0D, d14).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d8, -0.3 + i, -0.5 + d9).tex(0.0D, d15).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d6, -0.3 + i, -0.5 + d7).tex(1.0D, d15).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d6, -0.3 + (double) 0, -0.5 + d7).tex(1.0D, d14).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d10, -0.3 + (double) 0, -0.5 + d11).tex(0.0D, d14).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d10, -0.3 + i, -0.5 + d11).tex(0.0D, d15).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d8, -0.3 + i, -0.5 + d9).tex(1.0D, d15).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d8, -0.3 + (double) 0, -0.5 + d9).tex(1.0D, d14).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d4, -0.3 + (double) 0, -0.5 + d5).tex(0.0D, d14).color(f, f1, f2, 1.0F).endVertex();
+        bufferbuilder.pos(-0.5 + d4, -0.3 + i, -0.5 + d5).tex(0.0D, d15).color(f, f1, f2, 1.0F).endVertex();
         tessellator.draw();
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
@@ -220,22 +222,22 @@ public class BeamerBeam {
         d10 = 0.5D + glowRadius;
         d14 = height * textureScale + d13;
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        bufferbuilder.pos(x + d3, y + i, z + d4).tex(1.0D, d14).color(f, f1, f2, 0.25F).endVertex();
-        bufferbuilder.pos(x + d3, y + yOffset, z + d4).tex(1.0D, d13).color(f, f1, f2, 0.25F).endVertex();
-        bufferbuilder.pos(x + d5, y + yOffset, z + d6).tex(0.0D, d13).color(f, f1, f2, 0.25F).endVertex();
-        bufferbuilder.pos(x + d5, y + i, z + d6).tex(0.0D, d14).color(f, f1, f2, 0.25F).endVertex();
-        bufferbuilder.pos(x + d9, y + i, z + d10).tex(1.0D, d14).color(f, f1, f2, 0.25F).endVertex();
-        bufferbuilder.pos(x + d9, y + yOffset, z + d10).tex(1.0D, d13).color(f, f1, f2, 0.25F).endVertex();
-        bufferbuilder.pos(x + d7, y + yOffset, z + d8).tex(0.0D, d13).color(f, f1, f2, 0.25F).endVertex();
-        bufferbuilder.pos(x + d7, y + i, z + d8).tex(0.0D, d14).color(f, f1, f2, 0.25F).endVertex();
-        bufferbuilder.pos(x + d5, y + i, z + d6).tex(1.0D, d14).color(f, f1, f2, 0.25F).endVertex();
-        bufferbuilder.pos(x + d5, y + yOffset, z + d6).tex(1.0D, d13).color(f, f1, f2, 0.25F).endVertex();
-        bufferbuilder.pos(x + d9, y + yOffset, z + d10).tex(0.0D, d13).color(f, f1, f2, 0.25F).endVertex();
-        bufferbuilder.pos(x + d9, y + i, z + d10).tex(0.0D, d14).color(f, f1, f2, 0.25F).endVertex();
-        bufferbuilder.pos(x + d7, y + i, z + d8).tex(1.0D, d14).color(f, f1, f2, 0.25F).endVertex();
-        bufferbuilder.pos(x + d7, y + yOffset, z + d8).tex(1.0D, d13).color(f, f1, f2, 0.25F).endVertex();
-        bufferbuilder.pos(x + d3, y + yOffset, z + d4).tex(0.0D, d13).color(f, f1, f2, 0.25F).endVertex();
-        bufferbuilder.pos(x + d3, y + i, z + d4).tex(0.0D, d14).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d3, -0.3 + i, -0.5 + d4).tex(1.0D, d14).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d3, -0.3 + (double) 0, -0.5 + d4).tex(1.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d5, -0.3 + (double) 0, -0.5 + d6).tex(0.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d5, -0.3 + i, -0.5 + d6).tex(0.0D, d14).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d9, -0.3 + i, -0.5 + d10).tex(1.0D, d14).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d9, -0.3 + (double) 0, -0.5 + d10).tex(1.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d7, -0.3 + (double) 0, -0.5 + d8).tex(0.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d7, -0.3 + i, -0.5 + d8).tex(0.0D, d14).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d5, -0.3 + i, -0.5 + d6).tex(1.0D, d14).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d5, -0.3 + (double) 0, -0.5 + d6).tex(1.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d9, -0.3 + (double) 0, -0.5 + d10).tex(0.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d9, -0.3 + i, -0.5 + d10).tex(0.0D, d14).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d7, -0.3 + i, -0.5 + d8).tex(1.0D, d14).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d7, -0.3 + (double) 0, -0.5 + d8).tex(1.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d3, -0.3 + (double) 0, -0.5 + d4).tex(0.0D, d13).color(f, f1, f2, 0.25F).endVertex();
+        bufferbuilder.pos(-0.5 + d3, -0.3 + i, -0.5 + d4).tex(0.0D, d14).color(f, f1, f2, 0.25F).endVertex();
         tessellator.draw();
         GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();
