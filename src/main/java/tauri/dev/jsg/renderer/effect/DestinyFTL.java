@@ -16,10 +16,11 @@ public class DestinyFTL {
     private static World world;
 
     private static long tickStart;
-    private static boolean jumpingIn;
+    public static boolean jumpingIn;
+    public static boolean jumpingOut;
     private static float defaultFov;
 
-    private static final int TOTAL_EFFECT_TIME = 20;
+    private static final double TOTAL_EFFECT_TIME = 20 * 1.5;
 
     public static double calcFog(World world, long tickStart, double partialTicks) {
         double effTick = world.getTotalWorldTime() - tickStart + partialTicks;
@@ -29,15 +30,16 @@ public class DestinyFTL {
 
     @SubscribeEvent
     public static void onRender(RenderGameOverlayEvent.Post event) {
-        if (jumpingIn) {
+        if (jumpingIn || jumpingOut) {
             float fog = (float) calcFog(world, tickStart, event.getPartialTicks());
 
             if (fog < 0) {
                 jumpingIn = false;
+                jumpingOut = false;
                 Minecraft.getMinecraft().gameSettings.setOptionFloatValue(GameSettings.Options.FOV, defaultFov);
             } else {
-                int alpha = (int) (fog * (255 / 3));
-                float scale = (fog * 2f);
+                int alpha = (int) (fog * (255 / 2));
+                float scale = (fog + 1f);
 
                 alpha /= 3;
                 alpha <<= 24;
@@ -45,17 +47,20 @@ public class DestinyFTL {
                 ScaledResolution res = event.getResolution();
                 Gui.drawRect(0, 0, res.getScaledWidth(), res.getScaledHeight(), 0xFFFFFF | alpha);
 
-                float newFov = defaultFov * scale;
+                float newFov = (jumpingIn ? (defaultFov * scale) : (defaultFov / scale));
                 Minecraft.getMinecraft().gameSettings.setOptionFloatValue(GameSettings.Options.FOV, newFov);
             }
         }
     }
 
-    public static void jumpIn() {
+    public static void jumpIn(boolean in) {
         defaultFov = Minecraft.getMinecraft().gameSettings.getOptionFloatValue(GameSettings.Options.FOV);
         world = Minecraft.getMinecraft().world;
         tickStart = world.getTotalWorldTime();
 
-        jumpingIn = true;
+        if(in)
+            jumpingIn = true;
+        else
+            jumpingOut = true;
     }
 }

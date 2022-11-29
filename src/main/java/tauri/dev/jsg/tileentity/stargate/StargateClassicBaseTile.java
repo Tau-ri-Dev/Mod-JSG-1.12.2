@@ -208,6 +208,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         for (BlockPos targetPos : Objects.requireNonNull(StargateSizeEnum.getIrisBLocksPatter(getStargateSize()))) {
             BlockPos newPos = pos.add(targetPos.rotate(FacingToRotation.get(facing)));
             IBlockState state = world.getBlockState(newPos);
+            if(isLiquidBlock(false, state) || isLiquidBlock(true, state))
+                return false;
             if (state.getMaterial() == Material.AIR || state.getBlock() == JSGBlocks.IRIS_BLOCK || state.getBlock() == JSGBlocks.INVISIBLE_BLOCK)
                 return false;
         }

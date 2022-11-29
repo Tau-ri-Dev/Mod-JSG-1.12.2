@@ -8,10 +8,6 @@ import net.minecraft.server.MinecraftServer;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.transportrings.StartPlayerFadeOutToClient;
-import tauri.dev.jsg.worldgen.structures.EnumStructures;
-import tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator;
-
-import java.util.Random;
 
 public class CommandTest extends CommandBase {
     @Override
@@ -33,7 +29,10 @@ public class CommandTest extends CommandBase {
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         if (sender instanceof EntityPlayerMP) {
-            JSGPacketHandler.INSTANCE.sendTo(new StartPlayerFadeOutToClient(StartPlayerFadeOutToClient.EnumFadeOutEffectType.FTL), (EntityPlayerMP) sender);
+            StartPlayerFadeOutToClient.EnumFadeOutEffectType type = StartPlayerFadeOutToClient.EnumFadeOutEffectType.FTL_IN;
+            if(args.length > 0) type = StartPlayerFadeOutToClient.EnumFadeOutEffectType.FTL_OUT;
+
+            JSGPacketHandler.INSTANCE.sendTo(new StartPlayerFadeOutToClient(type), (EntityPlayerMP) sender);
         }
         notifyCommandListener(sender, this, JSG.AGS_PATH);
     }

@@ -8,10 +8,13 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.renderer.effect.DestinyFTL;
 import tauri.dev.jsg.renderer.transportrings.PlayerFadeOutRenderEvent;
 
+import static tauri.dev.jsg.packet.transportrings.StartPlayerFadeOutToClient.EnumFadeOutEffectType.FTL_IN;
+
 public class StartPlayerFadeOutToClient implements IMessage {
     public enum EnumFadeOutEffectType {
         RINGS(0),
-        FTL(1);
+        FTL_IN(1),
+        FTL_OUT(2);
 
         public final int id;
 
@@ -57,8 +60,9 @@ public class StartPlayerFadeOutToClient implements IMessage {
                 case RINGS:
                     JSG.proxy.addScheduledTaskClientSide(PlayerFadeOutRenderEvent::startFadeOut);
                     break;
-                case FTL:
-                    JSG.proxy.addScheduledTaskClientSide(DestinyFTL::jumpIn);
+                case FTL_IN:
+                case FTL_OUT:
+                    JSG.proxy.addScheduledTaskClientSide(() -> DestinyFTL.jumpIn(t == FTL_IN));
                     break;
                 default:
                     break;
