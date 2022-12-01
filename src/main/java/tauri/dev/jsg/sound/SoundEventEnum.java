@@ -92,6 +92,8 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     DESTINY_COUNTDOWN_START(125, "destiny_countdown_start", 0.2f),
     DESTINY_COUNTDOWN_STOP(126, "destiny_countdown_stop", 0.2f),
     DESTINY_COUNTDOWN_ONE_MINUTE(127, "destiny_countdown_one_minute", 0.2f),
+    DESTINY_FTL_JUMP_IN(128, "destiny_ftl_in", 1f),
+    DESTINY_FTL_JUMP_OUT(129, "destiny_ftl_out", 1f),
 
     // ----------------------------------------------------------
     // Entities

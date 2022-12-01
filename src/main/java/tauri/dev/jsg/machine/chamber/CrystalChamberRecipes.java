@@ -1,12 +1,10 @@
 package tauri.dev.jsg.machine.chamber;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import tauri.dev.jsg.config.craftings.CraftingConfig;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.machine.pcbfabricator.PCBFabricatorRecipe;
 
 import static tauri.dev.jsg.Constants.ONE_INGOT_IN_FLUID_MB;
 

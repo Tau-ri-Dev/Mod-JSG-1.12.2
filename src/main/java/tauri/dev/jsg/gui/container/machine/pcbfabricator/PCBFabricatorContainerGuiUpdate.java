@@ -3,34 +3,25 @@ package tauri.dev.jsg.gui.container.machine.pcbfabricator;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import tauri.dev.jsg.state.State;
+import tauri.dev.jsg.gui.container.machine.AbstractMachineContainerGuiUpdate;
 
 import java.nio.charset.StandardCharsets;
 
-public class PCBFabricatorContainerGuiUpdate extends State {
-    public PCBFabricatorContainerGuiUpdate() {}
+public class PCBFabricatorContainerGuiUpdate extends AbstractMachineContainerGuiUpdate {
+    public PCBFabricatorContainerGuiUpdate() {
+        super();
+    }
 
-    public int energyStored;
-    public int energyTransferedLastTick;
-    public long machineStart;
-    public long machineEnd;
     public FluidStack fluidStack;
 
     public PCBFabricatorContainerGuiUpdate(int energyStored, FluidStack fluidStack, int energyTransferedLastTick, long machineStart, long machineEnd) {
-        this.energyStored = energyStored;
-        this.energyTransferedLastTick = energyTransferedLastTick;
-        this.machineStart = machineStart;
-        this.machineEnd = machineEnd;
+        super(energyStored, energyTransferedLastTick, machineStart, machineEnd);
         this.fluidStack = fluidStack;
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        buf.writeInt(energyStored);
-        buf.writeInt(energyTransferedLastTick);
-        buf.writeLong(machineStart);
-        buf.writeLong(machineEnd);
-
+        super.toBytes(buf);
         if (fluidStack != null && fluidStack.getFluid() != null) {
             buf.writeBoolean(true);
 
@@ -38,18 +29,13 @@ public class PCBFabricatorContainerGuiUpdate extends State {
             buf.writeInt(name.length());
             buf.writeCharSequence(name, StandardCharsets.UTF_8);
             buf.writeInt(fluidStack.amount);
-        }
-        else
+        } else
             buf.writeBoolean(false);
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        energyStored = buf.readInt();
-        energyTransferedLastTick = buf.readInt();
-        machineStart = buf.readLong();
-        machineEnd = buf.readLong();
-
+        super.fromBytes(buf);
         if (buf.readBoolean()) {
             int size = buf.readInt();
             fluidStack = FluidRegistry.getFluidStack(buf.readCharSequence(size, StandardCharsets.UTF_8).toString(), buf.readInt());

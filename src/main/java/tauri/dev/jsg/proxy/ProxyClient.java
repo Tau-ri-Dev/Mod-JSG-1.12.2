@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -34,6 +35,7 @@ import tauri.dev.jsg.item.color.PageMysteriousItemColor;
 import tauri.dev.jsg.item.color.PageNotebookItemColor;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
 import tauri.dev.jsg.loader.ReloadListener;
+import tauri.dev.jsg.renderer.effect.DestinyFTL;
 import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateOrlinRenderer;
 import tauri.dev.jsg.sound.JSGSoundHelperClient;
@@ -121,5 +123,12 @@ public class ProxyClient implements IProxy {
     @Override
     public void openGui(GuiScreen gui) {
         Minecraft.getMinecraft().displayGuiScreen(gui);
+    }
+
+    @Override
+    public void shutDown() {
+        DestinyFTL.jumpingOut = false;
+        DestinyFTL.jumpingIn = false;
+        Minecraft.getMinecraft().gameSettings.setOptionFloatValue(GameSettings.Options.FOV, DestinyFTL.defaultFov);
     }
 }

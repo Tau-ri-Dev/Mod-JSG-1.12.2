@@ -1,13 +1,14 @@
 package tauri.dev.jsg;
 
+import com.google.common.collect.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import org.apache.logging.log4j.Logger;
 import tauri.dev.jsg.block.JSGBlocks;
@@ -33,6 +34,7 @@ public class JSG {
     public static final String MOD_VERSION = "@VERSION@";
     public static final int DATA_VERSION = 21;
     public static final String CONFIG_VERSION = "2.1";
+    public static final String CRAFTINGS_CONFIG_VERSION = "1.0";
     public static final String MC_VERSION = "@MCVERSION@";
     public static final String CLIENT = "tauri.dev.jsg.proxy.ProxyClient";
     public static final String SERVER = "tauri.dev.jsg.proxy.ProxyServer";
@@ -108,7 +110,7 @@ public class JSG {
     public void init(FMLInitializationEvent event) throws IOException {
         if(Loader.isModLoaded("aunis")){
             Loader.instance().runtimeDisableMod("aunis");
-            return;
+            throw new LoaderException("Found two same mods! Just Stargate Mod and The Aunis mod are the SAME mods!");
         }
 
         JSGInit.init(event);
@@ -142,6 +144,7 @@ public class JSG {
     }
 
     public static void shutDown() {
+        JSG.proxy.shutDown();
         JSG.info("Good bye! Thank you for using Just Stargate Mod :)");
     }
 }

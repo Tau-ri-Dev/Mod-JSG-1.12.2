@@ -16,6 +16,8 @@ import tauri.dev.jsg.gui.container.machine.assembler.AssemblerContainer;
 import tauri.dev.jsg.gui.container.machine.assembler.AssemblerContainerGui;
 import tauri.dev.jsg.gui.container.machine.crystalchamber.CrystalChamberContainer;
 import tauri.dev.jsg.gui.container.machine.crystalchamber.CrystalChamberContainerGui;
+import tauri.dev.jsg.gui.container.machine.orewashing.OreWashingContainer;
+import tauri.dev.jsg.gui.container.machine.orewashing.OreWashingContainerGui;
 import tauri.dev.jsg.gui.container.machine.pcbfabricator.PCBFabricatorContainer;
 import tauri.dev.jsg.gui.container.machine.pcbfabricator.PCBFabricatorContainerGui;
 import tauri.dev.jsg.gui.container.stargate.StargateContainer;
@@ -60,6 +62,9 @@ public class JSGGuiHandler implements IGuiHandler {
             case GUI_PCB_FABRICATOR:
                 return new PCBFabricatorContainer(player.inventory, world, x, y, z);
 
+            case GUI_ORE_WASHING:
+                return new OreWashingContainer(player.inventory, world, x, y, z);
+
             case GUI_ZPM_HUB:
                 return new ZPMHubContainer(player.inventory, world, x, y, z);
 
@@ -100,6 +105,9 @@ public class JSGGuiHandler implements IGuiHandler {
 
             case GUI_PCB_FABRICATOR:
                 return new PCBFabricatorContainerGui(new PCBFabricatorContainer(player.inventory, world, x, y, z));
+
+            case GUI_ORE_WASHING:
+                return new OreWashingContainerGui(new OreWashingContainer(player.inventory, world, x, y, z));
 
             case GUI_ZPM_HUB:
                 return new ZPMHubContainerGui(new ZPMHubContainer(player.inventory, world, x, y, z));

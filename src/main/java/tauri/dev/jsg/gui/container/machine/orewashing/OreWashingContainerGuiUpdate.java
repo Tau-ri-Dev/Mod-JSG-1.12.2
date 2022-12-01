@@ -1,4 +1,4 @@
-package tauri.dev.jsg.gui.container.machine.crystalchamber;
+package tauri.dev.jsg.gui.container.machine.orewashing;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -7,14 +7,14 @@ import tauri.dev.jsg.gui.container.machine.AbstractMachineContainerGuiUpdate;
 
 import java.nio.charset.StandardCharsets;
 
-public class CrystalChamberContainerGuiUpdate extends AbstractMachineContainerGuiUpdate {
-    public CrystalChamberContainerGuiUpdate() {
+public class OreWashingContainerGuiUpdate extends AbstractMachineContainerGuiUpdate {
+    public OreWashingContainerGuiUpdate() {
         super();
     }
 
     public FluidStack fluidStack;
 
-    public CrystalChamberContainerGuiUpdate(int energyStored, FluidStack fluidStack, int energyTransferedLastTick, long machineStart, long machineEnd) {
+    public OreWashingContainerGuiUpdate(int energyStored, FluidStack fluidStack, int energyTransferedLastTick, long machineStart, long machineEnd) {
         super(energyStored, energyTransferedLastTick, machineStart, machineEnd);
         this.fluidStack = fluidStack;
     }

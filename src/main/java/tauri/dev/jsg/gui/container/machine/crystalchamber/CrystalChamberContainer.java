@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import static tauri.dev.jsg.tileentity.machine.CrystalChamberTile.CONTAINER_SIZE;
 
 
-public class CrystalChamberContainer extends Container implements OpenTabHolderInterface {
+public class CrystalChamberContainer extends Container {
 
     public CrystalChamberTile tile;
     public FluidTank tank;
@@ -40,7 +40,6 @@ public class CrystalChamberContainer extends Container implements OpenTabHolderI
     private int lastEnergyStored;
     private int lastFluidStored;
     private int energyTransferedLastTick;
-    private int openTabId = -1;
 
     private long machineStart = 0;
     private long machineEnd = 0;
@@ -66,16 +65,6 @@ public class CrystalChamberContainer extends Container implements OpenTabHolderI
             for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 94))
                 addSlotToContainer(slot);
         }
-    }
-
-    @Override
-    public int getOpenTabId() {
-        return openTabId;
-    }
-
-    @Override
-    public void setOpenTabId(int tabId) {
-        openTabId = tabId;
     }
 
     @Nonnull

@@ -3,6 +3,7 @@ package tauri.dev.jsg.config.craftings;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.util.ResourceLocation;
+import tauri.dev.jsg.JSG;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -23,9 +24,10 @@ public class CraftingConfig {
     }
 
     public void addKey(@Nullable ResourceLocation key) {
-        if(key == null) return;
+        if (key == null) return;
         addKey(key.getResourceDomain() + ":" + key.getResourcePath());
     }
+
     public void addKey(String key) {
         entries.put(key, true);
     }
@@ -56,16 +58,17 @@ public class CraftingConfig {
     }
 
     public static boolean isDisabled(String configKey, @Nullable ResourceLocation key) {
-        if(key == null) return false;
+        if (key == null) return false;
         return isDisabled(configKey, key.getResourceDomain() + ":" + key.getResourcePath());
     }
+
     public static boolean isDisabled(String configKey, String key) {
         return !CONFIG_MAP.get(configKey).get(key);
     }
 
     public static void load(File configDir) {
         CraftingConfig.configDir = configDir;
-        configFile = new File(configDir, "jsg/craftingConfig.json");
+        configFile = new File(configDir, "jsg/jsgDisabledCraftings_" + JSG.CRAFTINGS_CONFIG_VERSION + ".json");
 
         try {
             Type typeOfHashMap = new TypeToken<Map<String, Map<String, Boolean>>>() {

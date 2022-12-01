@@ -7,12 +7,12 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import tauri.dev.jsg.block.machine.CrystalChamberBlock;
-import tauri.dev.jsg.gui.container.machine.crystalchamber.CrystalChamberContainerGuiUpdate;
+import tauri.dev.jsg.block.machine.OreWashingBlock;
+import tauri.dev.jsg.gui.container.machine.orewashing.OreWashingContainerGuiUpdate;
 import tauri.dev.jsg.machine.AbstractMachineRecipe;
-import tauri.dev.jsg.machine.chamber.CrystalChamberRecipe;
-import tauri.dev.jsg.machine.chamber.CrystalChamberRecipes;
-import tauri.dev.jsg.renderer.machine.CrystalChamberRendererState;
+import tauri.dev.jsg.machine.orewashing.OreWashingRecipe;
+import tauri.dev.jsg.machine.orewashing.OreWashingRecipes;
+import tauri.dev.jsg.renderer.machine.OreWashingRendererState;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
@@ -23,21 +23,15 @@ import tauri.dev.jsg.util.JSGItemStackHandler;
 
 import javax.annotation.Nonnull;
 
-import static tauri.dev.jsg.item.JSGItems.CRYSTAL_SEED;
+public class OreWashingTile extends AbstractMachineTile {
 
-public class CrystalChamberTile extends AbstractMachineTile {
-
-    public CrystalChamberRendererState rendererState = new CrystalChamberRendererState();
+    public OreWashingRendererState rendererState = new OreWashingRendererState();
     public static final int CONTAINER_SIZE = 2;
     protected final JSGItemStackHandler itemStackHandler = new JSGItemStackHandler(CONTAINER_SIZE) {
 
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            if (slot == 1) return false; // output slot
-            if (slot == 0) {
-                return stack.getItem() == CRYSTAL_SEED;
-            }
-            return true;
+            return slot != 1; // output slot
         }
 
         @Override
@@ -47,13 +41,13 @@ public class CrystalChamberTile extends AbstractMachineTile {
             markDirty();
         }
     };
-    protected final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(CrystalChamberBlock.MAX_ENERGY, CrystalChamberBlock.MAX_ENERGY_TRANSFER) {
+    protected final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(OreWashingBlock.MAX_ENERGY, OreWashingBlock.MAX_ENERGY_TRANSFER) {
         @Override
         protected void onEnergyChanged() {
             markDirty();
         }
     };
-    protected final FluidTank fluidHandler = new FluidTank(CrystalChamberBlock.FLUID_CAPACITY) {
+    protected final FluidTank fluidHandler = new FluidTank(OreWashingBlock.FLUID_CAPACITY) {
         @Override
         public boolean canFillFluidType(FluidStack fluid) {
             return fluid != null;
@@ -90,7 +84,7 @@ public class CrystalChamberTile extends AbstractMachineTile {
 
     @Override
     public AbstractMachineRecipe getRecipeIfPossible() {
-        for (CrystalChamberRecipe recipe : CrystalChamberRecipes.RECIPES) {
+        for (OreWashingRecipe recipe : OreWashingRecipes.RECIPES) {
             if (itemStackHandler.insertItem(1, recipe.getResult(), true).equals(recipe.getResult())) continue;
             if (fluidHandler.getFluid() == null) continue;
             if (recipe.isOk(energyStorage.getEnergyStored(), new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()), itemStackHandler.getStackInSlot(0)))
@@ -102,9 +96,9 @@ public class CrystalChamberTile extends AbstractMachineTile {
     @Override
     protected void workIsDone() {
         if (!isWorking) return;
-        CrystalChamberRecipe recipe = (CrystalChamberRecipe) currentRecipe;
+        OreWashingRecipe recipe = (OreWashingRecipe) currentRecipe;
         itemStackHandler.insertItem(1, recipe.getResult(), false);
-        itemStackHandler.extractItem(0, recipe.getNeededSeeds(), false);
+        itemStackHandler.extractItem(0, recipe.getItemNeeded().getCount(), false);
         fluidHandler.drainInternal(recipe.getSubFluidStack().amount, true);
         super.workIsDone();
     }
@@ -113,10 +107,10 @@ public class CrystalChamberTile extends AbstractMachineTile {
     public State getState(StateTypeEnum stateType) {
         switch (stateType) {
             case GUI_UPDATE:
-                return new CrystalChamberContainerGuiUpdate(energyStorage.getEnergyStored(), (fluidHandler.getFluid() != null ? new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()) : null), energyTransferedLastTick, machineStart, machineEnd);
+                return new OreWashingContainerGuiUpdate(energyStorage.getEnergyStored(), (fluidHandler.getFluid() != null ? new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()) : null), energyTransferedLastTick, machineStart, machineEnd);
             case RENDERER_UPDATE:
-                ItemStack stack = currentRecipe != null ? ((CrystalChamberRecipe) currentRecipe).getResult() : itemStackHandler.getStackInSlot(1);
-                return new CrystalChamberRendererState(machineProgress, isWorking, stack);
+                ItemStack stack = currentRecipe != null ? ((OreWashingRecipe) currentRecipe).getResult() : itemStackHandler.getStackInSlot(1);
+                return new OreWashingRendererState(machineProgress, isWorking, stack);
         }
         return null;
     }
@@ -125,9 +119,9 @@ public class CrystalChamberTile extends AbstractMachineTile {
     public State createState(StateTypeEnum stateType) {
         switch (stateType) {
             case GUI_UPDATE:
-                return new CrystalChamberContainerGuiUpdate();
+                return new OreWashingContainerGuiUpdate();
             case RENDERER_UPDATE:
-                return new CrystalChamberRendererState();
+                return new OreWashingRendererState();
         }
         return null;
     }
@@ -136,7 +130,7 @@ public class CrystalChamberTile extends AbstractMachineTile {
     public void setState(StateTypeEnum stateType, State state) {
         switch (stateType) {
             case GUI_UPDATE:
-                CrystalChamberContainerGuiUpdate guiUpdate = (CrystalChamberContainerGuiUpdate) state;
+                OreWashingContainerGuiUpdate guiUpdate = (OreWashingContainerGuiUpdate) state;
                 energyStorage.setEnergyStored(guiUpdate.energyStored);
                 energyTransferedLastTick = guiUpdate.energyTransferedLastTick;
                 machineStart = guiUpdate.machineStart;
@@ -145,14 +139,14 @@ public class CrystalChamberTile extends AbstractMachineTile {
                 markDirty();
                 break;
             case RENDERER_UPDATE:
-                rendererState = (CrystalChamberRendererState) state;
+                rendererState = (OreWashingRendererState) state;
                 this.machineProgress = rendererState.machineProgress;
                 this.isWorking = rendererState.isWorking;
                 break;
         }
     }
 
-    public CrystalChamberRendererState getRendererState() {
+    public OreWashingRendererState getRendererState() {
         return rendererState;
     }
 

@@ -22,6 +22,7 @@ import tauri.dev.jsg.integration.OCWrapperInterface;
 import tauri.dev.jsg.integration.ThermalIntegration;
 import tauri.dev.jsg.machine.assembler.AssemblerRecipes;
 import tauri.dev.jsg.machine.chamber.CrystalChamberRecipes;
+import tauri.dev.jsg.machine.orewashing.OreWashingRecipes;
 import tauri.dev.jsg.machine.pcbfabricator.PCBFabricatorRecipes;
 import tauri.dev.jsg.worldgen.JSGOresGenerator;
 import tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator;
@@ -58,6 +59,7 @@ public class JSGInit {
         AssemblerRecipes.addToConfig();
         CrystalChamberRecipes.addToConfig();
         PCBFabricatorRecipes.addToConfig();
+        OreWashingRecipes.addToConfig();
 
         CraftingConfig.load(JSG.modConfigDir);
 

@@ -5,23 +5,24 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import tauri.dev.jsg.block.machine.AssemblerBlock;
 import tauri.dev.jsg.capability.ItemCapabilityProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AssemblerItemBlock extends ItemBlock {
+public class MachineItemBlock extends ItemBlock {
 
-    public AssemblerItemBlock(Block block) {
+    private final int maxEnergy;
+
+    public MachineItemBlock(Block block, String name, int maxEnergy) {
         super(block);
-
-        setRegistryName(AssemblerBlock.BLOCK_NAME);
+        this.maxEnergy = maxEnergy;
+        setRegistryName(name);
         setHasSubtypes(true);
     }
 
     @Override
     public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new ItemCapabilityProvider(stack, nbt, AssemblerBlock.MAX_ENERGY);
+        return new ItemCapabilityProvider(stack, nbt, maxEnergy);
     }
 }

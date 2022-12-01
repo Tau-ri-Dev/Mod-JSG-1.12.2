@@ -3,18 +3,15 @@ package tauri.dev.jsg.machine.pcbfabricator;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import tauri.dev.jsg.config.craftings.CraftingConfig;
+import tauri.dev.jsg.machine.AbstractMachineRecipe;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public abstract class PCBFabricatorRecipe {
+public abstract class PCBFabricatorRecipe extends AbstractMachineRecipe {
     public static final String ID = "PCB Fabricator";
 
     public abstract FluidStack getSubFluidStack();
-
-    public abstract int getWorkingTime(); // in ticks
-
-    public abstract int getEnergyPerTick();
 
     public abstract ArrayList<ItemStack> getPattern();
 

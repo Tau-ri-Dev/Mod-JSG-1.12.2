@@ -1,4 +1,4 @@
-package tauri.dev.jsg.gui.container.machine.crystalchamber;
+package tauri.dev.jsg.gui.container.machine.orewashing;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -13,14 +13,14 @@ import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
 import java.util.Arrays;
 import java.util.List;
 
-public class CrystalChamberContainerGui extends GuiContainer {
+public class OreWashingContainerGui extends GuiContainer {
 
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_chamber.png");
 
-    private final CrystalChamberContainer container;
+    private final OreWashingContainer container;
     private final FluidTankElement tank;
 
-    public CrystalChamberContainerGui(CrystalChamberContainer container) {
+    public OreWashingContainerGui(OreWashingContainer container) {
         super(container);
 
         this.container = container;
@@ -56,7 +56,7 @@ public class CrystalChamberContainerGui extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        fontRenderer.drawString(I18n.format("tile.jsg.crystal_chamber_block.name"), 7, 6, 4210752);
+        fontRenderer.drawString(I18n.format("tile.jsg.ore_washing_machine_block.name"), 7, 6, 4210752);
         fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 
         StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.tile.getCapability(CapabilityEnergy.ENERGY, null);

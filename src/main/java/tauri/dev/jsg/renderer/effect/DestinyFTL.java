@@ -18,20 +18,23 @@ public class DestinyFTL {
     private static long tickStart;
     public static boolean jumpingIn;
     public static boolean jumpingOut;
-    private static float defaultFov;
 
-    private static final double TOTAL_EFFECT_TIME = 20 * 1.5;
+    public static float defaultFov;
 
-    public static double calcFog(World world, long tickStart, double partialTicks) {
+    private static final double TOTAL_EFFECT_TIME_IN = 20 * 3;
+    private static final double TOTAL_EFFECT_TIME_OUT = 20 * 3;
+
+    public static double calcFog(World world, long tickStart, double partialTicks, boolean out) {
         double effTick = world.getTotalWorldTime() - tickStart + partialTicks;
-
-        return -(effTick * (effTick - TOTAL_EFFECT_TIME)) / (20 * 20);
+        double total = (out ? TOTAL_EFFECT_TIME_OUT : TOTAL_EFFECT_TIME_IN);
+        double tick = effTick / total;
+        return (tick < total) ? Math.min(1, (Math.sin(Math.toRadians(tick * 180)) * 1.4)) : -1;
     }
 
     @SubscribeEvent
     public static void onRender(RenderGameOverlayEvent.Post event) {
         if (jumpingIn || jumpingOut) {
-            float fog = (float) calcFog(world, tickStart, event.getPartialTicks());
+            float fog = (float) calcFog(world, tickStart, event.getPartialTicks(), jumpingOut);
 
             if (fog < 0) {
                 jumpingIn = false;
@@ -54,11 +57,13 @@ public class DestinyFTL {
     }
 
     public static void jumpIn(boolean in) {
+        if(jumpingIn || jumpingOut) return;
         defaultFov = Minecraft.getMinecraft().gameSettings.getOptionFloatValue(GameSettings.Options.FOV);
+
         world = Minecraft.getMinecraft().world;
         tickStart = world.getTotalWorldTime();
 
-        if(in)
+        if (in)
             jumpingIn = true;
         else
             jumpingOut = true;

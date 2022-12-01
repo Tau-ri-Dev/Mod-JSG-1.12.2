@@ -3,15 +3,12 @@ package tauri.dev.jsg.machine.assembler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import tauri.dev.jsg.config.craftings.CraftingConfig;
+import tauri.dev.jsg.machine.AbstractMachineRecipe;
 
 import java.util.ArrayList;
 
-public abstract class AssemblerRecipe {
+public abstract class AssemblerRecipe extends AbstractMachineRecipe {
     public static final String ID = "Ancient Assembler";
-
-    public abstract int getWorkingTime(); // in ticks
-
-    public abstract int getEnergyPerTick();
 
     public abstract Item getSchematic();
 

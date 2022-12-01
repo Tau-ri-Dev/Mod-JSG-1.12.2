@@ -61,4 +61,8 @@ public class ProxyServer implements IProxy {
     @Override
     public void openGui(GuiScreen gui) {
     }
+
+    @Override
+    public void shutDown() {
+    }
 }

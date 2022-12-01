@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.gui.GuiIdEnum;
-import tauri.dev.jsg.item.machine.CrystalChamberItemBlock;
+import tauri.dev.jsg.item.machine.MachineItemBlock;
 import tauri.dev.jsg.renderer.machine.CrystalChamberRenderer;
 import tauri.dev.jsg.tileentity.machine.CrystalChamberTile;
 
@@ -24,7 +24,7 @@ public class CrystalChamberBlock extends JSGMachineBlock {
     public static final String BLOCK_NAME = "crystal_chamber_block";
     public static final int MAX_ENERGY = 9_000_000;
     public static final int MAX_ENERGY_TRANSFER = 20_000;
-    public static final int FLUID_CAPACITY = 3000;
+    public static final int FLUID_CAPACITY = 7000;
 
     public CrystalChamberBlock() {
         super(BLOCK_NAME);
@@ -65,7 +65,7 @@ public class CrystalChamberBlock extends JSGMachineBlock {
 
     @Override
     public ItemBlock getItemBlock() {
-        return new CrystalChamberItemBlock(this);
+        return new MachineItemBlock(this, BLOCK_NAME, MAX_ENERGY);
     }
 
     @Nonnull

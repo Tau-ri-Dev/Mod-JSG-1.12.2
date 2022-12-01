@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import static tauri.dev.jsg.tileentity.machine.PCBFabricatorTile.CONTAINER_SIZE;
 
 
-public class PCBFabricatorContainer extends Container implements OpenTabHolderInterface {
+public class PCBFabricatorContainer extends Container {
 
     public PCBFabricatorTile tile;
     public FluidTank tank;
@@ -40,7 +40,6 @@ public class PCBFabricatorContainer extends Container implements OpenTabHolderIn
     private int lastEnergyStored;
     private int lastFluidStored;
     private int energyTransferedLastTick;
-    private int openTabId = -1;
 
     private long machineStart = 0;
     private long machineEnd = 0;
@@ -72,16 +71,6 @@ public class PCBFabricatorContainer extends Container implements OpenTabHolderIn
             for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 94))
                 addSlotToContainer(slot);
         }
-    }
-
-    @Override
-    public int getOpenTabId() {
-        return openTabId;
-    }
-
-    @Override
-    public void setOpenTabId(int tabId) {
-        openTabId = tabId;
     }
 
     @Nonnull
