@@ -15,6 +15,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.integration.jei.category.JEIAssemblerRecipeCategory;
 import tauri.dev.jsg.integration.jei.category.JEIChamberRecipeCategory;
+import tauri.dev.jsg.integration.jei.category.JEIOreWashingRecipeCategory;
 import tauri.dev.jsg.integration.jei.category.JEIPCBFabricatorRecipeCategory;
 import tauri.dev.jsg.integration.jei.recipe.JEINotebookCloneRecipe;
 import tauri.dev.jsg.integration.jei.recipe.JEINotebookRecipe;
@@ -26,6 +27,8 @@ import tauri.dev.jsg.machine.assembler.AssemblerRecipe;
 import tauri.dev.jsg.machine.assembler.AssemblerRecipes;
 import tauri.dev.jsg.machine.chamber.CrystalChamberRecipe;
 import tauri.dev.jsg.machine.chamber.CrystalChamberRecipes;
+import tauri.dev.jsg.machine.orewashing.OreWashingRecipe;
+import tauri.dev.jsg.machine.orewashing.OreWashingRecipes;
 import tauri.dev.jsg.machine.pcbfabricator.PCBFabricatorRecipe;
 import tauri.dev.jsg.machine.pcbfabricator.PCBFabricatorRecipes;
 
@@ -135,6 +138,27 @@ public final class JEIIntegration implements IModPlugin {
             recipes.add(newRecipe);
         }
         registry.addRecipes(recipes, JEIPCBFabricatorRecipeCategory.UID);
+
+        recipes.clear();
+        // Ore Washing recipes
+        for (OreWashingRecipe recipe : OreWashingRecipes.RECIPES) {
+            if(recipe.isDisabled()) continue;
+
+            AbstractJEIRecipe newRecipe = new AbstractJEIRecipe() {
+                @Override
+                public FluidStack getSubFluidStack() {
+                    return recipe.getSubFluidStack();
+                }
+
+                @Override
+                public void getIngredients(@Nonnull IIngredients iIngredients) {
+                    iIngredients.setInput(VanillaTypes.ITEM, recipe.getItemNeeded());
+                    iIngredients.setOutput(VanillaTypes.ITEM, recipe.getResult());
+                }
+            };
+            recipes.add(newRecipe);
+        }
+        registry.addRecipes(recipes, JEIOreWashingRecipeCategory.UID);
     }
 
     @Override
@@ -142,5 +166,6 @@ public final class JEIIntegration implements IModPlugin {
         registry.addRecipeCategories(new JEIAssemblerRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new JEIChamberRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new JEIPCBFabricatorRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
+        registry.addRecipeCategories(new JEIOreWashingRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
     }
 }

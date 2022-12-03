@@ -18,7 +18,7 @@ public class CrystalChamberRenderer extends TileEntitySpecialRenderer<CrystalCha
 
     @Override
     public void render(@Nonnull CrystalChamberTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        CrystalChamberRendererState rendererState = te.getRendererState();
+        CrystalChamberRendererState rendererState = (CrystalChamberRendererState) te.getRendererState();
         if (rendererState != null) {
             long tick = te.getWorld().getTotalWorldTime();
 

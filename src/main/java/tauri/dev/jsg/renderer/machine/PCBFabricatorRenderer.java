@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.beamer.BeamerBeam;
 import tauri.dev.jsg.beamer.BeamerRoleEnum;
 import tauri.dev.jsg.particle.ParticleBlenderSmoke;
@@ -20,7 +21,7 @@ public class PCBFabricatorRenderer extends TileEntitySpecialRenderer<PCBFabricat
 
     @Override
     public void render(@Nonnull PCBFabricatorTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        PCBFabricatorRendererState rendererState = te.getRendererState();
+        PCBFabricatorRendererState rendererState = (PCBFabricatorRendererState) te.getRendererState();
         if (rendererState != null) {
             long tick = te.getWorld().getTotalWorldTime();
 
@@ -33,13 +34,13 @@ public class PCBFabricatorRenderer extends TileEntitySpecialRenderer<PCBFabricat
                 if (rendererState.isWorking) {
                     GlStateManager.pushMatrix();
 
-                    BeamerBeam beam = new BeamerBeam(90f, 0, 0.8f, 0.02f);
+                    BeamerBeam beam = new BeamerBeam(90f, 0, 0.6f, 0.02f);
                     float[] colors = new float[]{
                             rendererState.colors.get(0),
                             rendererState.colors.get(1),
                             rendererState.colors.get(2)
                     };
-                    beam.render(partialTicks, tick, BeamerRoleEnum.TRANSMIT, colors, false, null);
+                    beam.render(partialTicks, tick, BeamerRoleEnum.RECEIVE, colors, false, null);
 
                     GlStateManager.popMatrix();
                 }

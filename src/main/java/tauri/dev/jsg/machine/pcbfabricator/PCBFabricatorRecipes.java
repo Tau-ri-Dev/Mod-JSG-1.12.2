@@ -22,12 +22,12 @@ public class PCBFabricatorRecipes {
 
         @Override
         public int getWorkingTime() {
-            return 200;
+            return 800;
         }
 
         @Override
         public int getEnergyPerTick() {
-            return 232;
+            return 512;
         }
 
         @Override
@@ -54,10 +54,6 @@ public class PCBFabricatorRecipes {
 
         @Override
         public float[] getBeamColors() {
-            FluidColors.FloatColors fluidColors = FluidColors.getAverageColor(JSGFluids.SILICON_MOLTEN_WHITE);
-            if (fluidColors != null) {
-                return fluidColors.colors;
-            }
             return new float[]{1f, 1f, 1f};
         }
     };
@@ -69,12 +65,12 @@ public class PCBFabricatorRecipes {
 
         @Override
         public int getWorkingTime() {
-            return 200;
+            return 800;
         }
 
         @Override
         public int getEnergyPerTick() {
-            return 232;
+            return 512;
         }
 
         @Override
@@ -101,11 +97,7 @@ public class PCBFabricatorRecipes {
 
         @Override
         public float[] getBeamColors() {
-            FluidColors.FloatColors fluidColors = FluidColors.getAverageColor(JSGFluids.MOLTEN_NAQUADAH_ALLOY);
-            if (fluidColors != null) {
-                return fluidColors.colors;
-            }
-            return new float[]{1f, 1f, 1f};
+            return new float[]{0.4f, 0.4f, 0.6f};
         }
     };
 
@@ -149,10 +141,6 @@ public class PCBFabricatorRecipes {
 
         @Override
         public float[] getBeamColors() {
-            FluidColors.FloatColors fluidColors = FluidColors.getAverageColor(JSGFluids.SILICON_MOLTEN_WHITE);
-            if (fluidColors != null) {
-                return fluidColors.colors;
-            }
             return new float[]{1f, 1f, 1f};
         }
     };
@@ -196,10 +184,6 @@ public class PCBFabricatorRecipes {
 
         @Override
         public float[] getBeamColors() {
-            FluidColors.FloatColors fluidColors = FluidColors.getAverageColor(JSGFluids.SILICON_MOLTEN_WHITE);
-            if (fluidColors != null) {
-                return fluidColors.colors;
-            }
             return new float[]{1f, 1f, 1f};
         }
     };
@@ -243,10 +227,6 @@ public class PCBFabricatorRecipes {
 
         @Override
         public float[] getBeamColors() {
-            FluidColors.FloatColors fluidColors = FluidColors.getAverageColor(JSGFluids.SILICON_MOLTEN_WHITE);
-            if (fluidColors != null) {
-                return fluidColors.colors;
-            }
             return new float[]{1f, 1f, 1f};
         }
     };
@@ -290,10 +270,6 @@ public class PCBFabricatorRecipes {
 
         @Override
         public float[] getBeamColors() {
-            FluidColors.FloatColors fluidColors = FluidColors.getAverageColor(JSGFluids.SILICON_MOLTEN_WHITE);
-            if (fluidColors != null) {
-                return fluidColors.colors;
-            }
             return new float[]{1f, 1f, 1f};
         }
     };
@@ -338,11 +314,7 @@ public class PCBFabricatorRecipes {
 
         @Override
         public float[] getBeamColors() {
-            FluidColors.FloatColors fluidColors = FluidColors.getAverageColor(JSGFluids.NAQUADAH_MOLTEN_RAW);
-            if (fluidColors != null) {
-                return fluidColors.colors;
-            }
-            return new float[]{1f, 1f, 1f};
+            return new float[]{0.22f, 0.31f, 0.26f};
         }
     };
     public static PCBFabricatorRecipe TR_CRYSTAL_ORI = new PCBFabricatorRecipe() {
@@ -385,10 +357,6 @@ public class PCBFabricatorRecipes {
 
         @Override
         public float[] getBeamColors() {
-            FluidColors.FloatColors fluidColors = FluidColors.getAverageColor(JSGFluids.SILICON_MOLTEN_WHITE);
-            if (fluidColors != null) {
-                return fluidColors.colors;
-            }
             return new float[]{1f, 1f, 1f};
         }
     };
@@ -432,10 +400,6 @@ public class PCBFabricatorRecipes {
 
         @Override
         public float[] getBeamColors() {
-            FluidColors.FloatColors fluidColors = FluidColors.getAverageColor(JSGFluids.SILICON_MOLTEN_WHITE);
-            if (fluidColors != null) {
-                return fluidColors.colors;
-            }
             return new float[]{1f, 1f, 1f};
         }
     };
@@ -480,10 +444,6 @@ public class PCBFabricatorRecipes {
 
         @Override
         public float[] getBeamColors() {
-            FluidColors.FloatColors fluidColors = FluidColors.getAverageColor(JSGFluids.SILICON_MOLTEN_WHITE);
-            if (fluidColors != null) {
-                return fluidColors.colors;
-            }
             return new float[]{1f, 1f, 1f};
         }
     };
@@ -495,12 +455,12 @@ public class PCBFabricatorRecipes {
 
         @Override
         public int getWorkingTime() {
-            return 200;
+            return 500;
         }
 
         @Override
         public int getEnergyPerTick() {
-            return 232;
+            return 250;
         }
 
         @Override
@@ -527,10 +487,6 @@ public class PCBFabricatorRecipes {
 
         @Override
         public float[] getBeamColors() {
-            FluidColors.FloatColors fluidColors = FluidColors.getAverageColor(JSGFluids.SILICON_MOLTEN_WHITE);
-            if (fluidColors != null) {
-                return fluidColors.colors;
-            }
             return new float[]{1f, 1f, 1f};
         }
     };

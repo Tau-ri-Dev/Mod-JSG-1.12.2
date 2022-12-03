@@ -12,6 +12,7 @@ import tauri.dev.jsg.gui.container.machine.orewashing.OreWashingContainerGuiUpda
 import tauri.dev.jsg.machine.AbstractMachineRecipe;
 import tauri.dev.jsg.machine.orewashing.OreWashingRecipe;
 import tauri.dev.jsg.machine.orewashing.OreWashingRecipes;
+import tauri.dev.jsg.renderer.machine.AbstractMachineRendererState;
 import tauri.dev.jsg.renderer.machine.OreWashingRendererState;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
@@ -37,7 +38,6 @@ public class OreWashingTile extends AbstractMachineTile {
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
-            sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             markDirty();
         }
     };
@@ -56,6 +56,7 @@ public class OreWashingTile extends AbstractMachineTile {
         @Override
         protected void onContentsChanged() {
             markDirty();
+            sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
 
@@ -146,7 +147,7 @@ public class OreWashingTile extends AbstractMachineTile {
         }
     }
 
-    public OreWashingRendererState getRendererState() {
+    public AbstractMachineRendererState getRendererState() {
         return rendererState;
     }
 

@@ -399,6 +399,7 @@ tile.jsg.beamer_block.name=Beamer Block
 tile.jsg.assembler_machine_block.name=Ancient Assembler
 tile.jsg.crystal_chamber_block.name=Crystal Chamber
 tile.jsg.pcb_fabricator_block.name=PCB Fabricator
+tile.jsg.ore_washing_machine_block.name=Ore Washing Machine
 
 # -------------------
 

@@ -15,7 +15,7 @@ public class OreWashingRenderer extends TileEntitySpecialRenderer<OreWashingTile
 
     @Override
     public void render(@Nonnull OreWashingTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        OreWashingRendererState rendererState = te.getRendererState();
+        OreWashingRendererState rendererState = (OreWashingRendererState) te.getRendererState();
         if (rendererState != null) {
             long tick = te.getWorld().getTotalWorldTime();
 
@@ -24,7 +24,7 @@ public class OreWashingRenderer extends TileEntitySpecialRenderer<OreWashingTile
             GlStateManager.color(1, 1, 1, 1f);
             if (rendererState.craftingStack != null) {
                 GlStateManager.pushMatrix();
-                GlStateManager.translate(0.5f, 0.4f, 0.5f);
+                GlStateManager.translate(0.5f, 0.7f, 0.5f);
                 GlStateManager.scale(0.8f, 0.8f, 0.8f);
                 GlStateManager.rotate((float) tick * 2, 0, 1f, 0);
                 GlStateManager.translate(0f, 0.05f * Math.sin((float) tick / 9), 0f);

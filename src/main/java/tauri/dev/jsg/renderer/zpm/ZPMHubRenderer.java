@@ -27,7 +27,7 @@ public class ZPMHubRenderer extends TileEntitySpecialRenderer<ZPMHubTile> {
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
         GlStateManager.translate(0.5, 0, 0.5);
-        GlStateManager.rotate(te.facingAngle, 0, 1, 0);
+        GlStateManager.rotate((te.facingAngle == 0 ? 180 : ((te.facingAngle == -180 || te.facingAngle == 180) ? 0 : te.facingAngle)), 0, 1, 0);
         renderMainObject(te);
 
         for (int i = 0; i < 3; i++) {

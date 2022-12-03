@@ -18,7 +18,7 @@ public class AssemblerRenderer extends TileEntitySpecialRenderer<AssemblerTile> 
 
     @Override
     public void render(@Nonnull AssemblerTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        AssemblerRendererState rendererState = te.getRendererState();
+        AssemblerRendererState rendererState = (AssemblerRendererState) te.getRendererState();
         if (rendererState != null) {
             long tick = te.getWorld().getTotalWorldTime();
 

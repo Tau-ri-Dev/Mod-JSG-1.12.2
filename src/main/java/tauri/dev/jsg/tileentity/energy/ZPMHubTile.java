@@ -13,7 +13,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.advancements.JSGAdvancements;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.gui.container.zpmhub.ZPMHubContainerGuiUpdate;
@@ -38,7 +37,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
 
     private static final int SLIDING_ANIMATION_LENGTH = 50;// int ticks
 
-    public int getAnimationLength(){
+    public int getAnimationLength() {
         return SLIDING_ANIMATION_LENGTH;
     }
 
@@ -46,17 +45,17 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         return 3;
     }
 
-    public void triggerAdvancement(){
-        if(itemStackHandler.getStackInSlot(0).isEmpty()) return;
-        if(itemStackHandler.getStackInSlot(1).isEmpty()) return;
-        if(itemStackHandler.getStackInSlot(2).isEmpty()) return;
+    public void triggerAdvancement() {
+        if (itemStackHandler.getStackInSlot(0).isEmpty()) return;
+        if (itemStackHandler.getStackInSlot(1).isEmpty()) return;
+        if (itemStackHandler.getStackInSlot(2).isEmpty()) return;
         tryTriggerRangedAdvancement(this, JSGAdvancementsUtil.EnumAdvancementType.ZPM_HUB);
     }
 
     protected final ItemStackHandler itemStackHandler = new JSGItemStackHandler(getContainerSize()) {
 
         @Override
-        public boolean isItemValid(int slot, ItemStack stack) {
+        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             if (!isSlidingUp || isAnimating) return false;
             if (stack.getItem() instanceof ItemBlock) {
                 ItemBlock itemBlock = (ItemBlock) stack.getItem();
@@ -162,7 +161,12 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                 }
             }
 
+            if(energyStoredLastTick != (energyStorage.getEnergyStored() - energyStoredLastTick)){
+                sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
+            }
+
             energyTransferedLastTick = energyStorage.getEnergyStored() - energyStoredLastTick;
+            if (energyTransferedLastTick > 0) energyTransferedLastTick = 0;
             energyStoredLastTick = energyStorage.getEnergyStored();
             markDirty();
 
@@ -276,7 +280,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                 int zpm2Level = stack2.isEmpty() ? -1 : getZPMPowerLevel(Objects.requireNonNull(stack2.getCapability(CapabilityEnergy.ENERGY, null)).getEnergyStored(), Objects.requireNonNull(stack2.getCapability(CapabilityEnergy.ENERGY, null)).getMaxEnergyStored());
                 int zpm3Level = stack3.isEmpty() ? -1 : getZPMPowerLevel(Objects.requireNonNull(stack3.getCapability(CapabilityEnergy.ENERGY, null)).getEnergyStored(), Objects.requireNonNull(stack3.getCapability(CapabilityEnergy.ENERGY, null)).getMaxEnergyStored());
 
-                return new ZPMHubRendererUpdate(animationStart, isAnimating, isSlidingUp, zpm1Level, zpm2Level, zpm3Level, facing.getHorizontalAngle());
+                return new ZPMHubRendererUpdate(animationStart, isAnimating, isSlidingUp, zpm1Level, zpm2Level, zpm3Level, (facing.getHorizontalIndex() - 2) * 90);
 
             case GUI_UPDATE:
                 return new ZPMHubContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick);

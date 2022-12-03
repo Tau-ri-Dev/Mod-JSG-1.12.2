@@ -1,6 +1,5 @@
 package tauri.dev.jsg.machine.assembler;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -8,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.craftings.CraftingConfig;
 import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.machine.chamber.CrystalChamberRecipe;
 
 import java.util.ArrayList;
 
@@ -22,7 +20,7 @@ public class AssemblerRecipes {
 
         @Override
         public int getWorkingTime() {
-            return 200;
+            return 800;
         }
 
         @Override
@@ -259,7 +257,7 @@ public class AssemblerRecipes {
 
         @Override
         public int getWorkingTime() {
-            return 200;
+            return 800;
         }
 
         @Override
@@ -496,7 +494,7 @@ public class AssemblerRecipes {
 
         @Override
         public int getWorkingTime() {
-            return 200;
+            return 600;
         }
 
         @Override
@@ -922,9 +920,9 @@ public class AssemblerRecipes {
             TR_GOAULD_CONTROLLER
     };
 
-    public static void addToConfig(){
+    public static void addToConfig() {
         CraftingConfig config = new CraftingConfig(AssemblerRecipe.ID);
-        for(AssemblerRecipe recipe : RECIPES){
+        for (AssemblerRecipe recipe : RECIPES) {
             config.addKey(recipe.getResult().getItem().getRegistryName());
         }
         CraftingConfig.addConfig(config);

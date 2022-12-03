@@ -12,6 +12,7 @@ import tauri.dev.jsg.gui.container.machine.crystalchamber.CrystalChamberContaine
 import tauri.dev.jsg.machine.AbstractMachineRecipe;
 import tauri.dev.jsg.machine.chamber.CrystalChamberRecipe;
 import tauri.dev.jsg.machine.chamber.CrystalChamberRecipes;
+import tauri.dev.jsg.renderer.machine.AbstractMachineRendererState;
 import tauri.dev.jsg.renderer.machine.CrystalChamberRendererState;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
@@ -43,8 +44,8 @@ public class CrystalChamberTile extends AbstractMachineTile {
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
-            sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             markDirty();
+            sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
     protected final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(CrystalChamberBlock.MAX_ENERGY, CrystalChamberBlock.MAX_ENERGY_TRANSFER) {
@@ -62,6 +63,7 @@ public class CrystalChamberTile extends AbstractMachineTile {
         @Override
         protected void onContentsChanged() {
             markDirty();
+            sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
 
@@ -152,7 +154,7 @@ public class CrystalChamberTile extends AbstractMachineTile {
         }
     }
 
-    public CrystalChamberRendererState getRendererState() {
+    public AbstractMachineRendererState getRendererState() {
         return rendererState;
     }
 

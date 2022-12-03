@@ -23,10 +23,10 @@ public class JEIChamberRecipeCategory implements IRecipeCategory<AbstractJEIReci
     public static final String UID = "jsg_chamber";
     public static final ResourceLocation BACK_TEXTURE = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_chamber_jei.png");
 
-    public final IDrawable background;
-    public final IDrawable icon;
-    public final IDrawable progressBar;
-    public final IDrawable fluidMeter;
+    public IDrawable background;
+    public IDrawable icon;
+    public IDrawable progressBar;
+    public IDrawable fluidMeter;
 
     public JEIChamberRecipeCategory(IGuiHelper helper) {
         this.background = helper.createDrawable(BACK_TEXTURE, 0, 0, 119, 55);

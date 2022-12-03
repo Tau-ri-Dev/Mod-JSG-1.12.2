@@ -30,7 +30,7 @@ public class JSGSoundHelper {
 	}
 	
 	public static void playSoundToPlayer(EntityPlayerMP player, SoundEventEnum soundEventEnum, BlockPos pos) {
-		player.connection.sendPacket(new SPacketSoundEffect(soundEventEnum.soundEvent, JSG.JSG_SOUNDS, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, soundEventEnum.volume * tauri.dev.jsg.config.JSGConfig.avConfig.volume, 1.0f));
+		player.connection.sendPacket(new SPacketSoundEffect(soundEventEnum.soundEvent, JSG.JSG_SOUNDS, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, soundEventEnum.volume * tauri.dev.jsg.config.JSGConfig.avConfig.volume * 5f, 1.0f));
 	}
 	
 	@SubscribeEvent

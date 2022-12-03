@@ -7,10 +7,13 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.machine.PCBFabricatorBlock;
 import tauri.dev.jsg.gui.container.machine.pcbfabricator.PCBFabricatorContainerGuiUpdate;
+import tauri.dev.jsg.machine.AbstractMachineRecipe;
 import tauri.dev.jsg.machine.pcbfabricator.PCBFabricatorRecipe;
 import tauri.dev.jsg.machine.pcbfabricator.PCBFabricatorRecipes;
+import tauri.dev.jsg.renderer.machine.AbstractMachineRendererState;
 import tauri.dev.jsg.renderer.machine.PCBFabricatorRendererState;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
@@ -37,8 +40,8 @@ public class PCBFabricatorTile extends AbstractMachineTile {
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
-            sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             markDirty();
+            sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
     protected final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(PCBFabricatorBlock.MAX_ENERGY, PCBFabricatorBlock.MAX_ENERGY_TRANSFER) {
@@ -55,11 +58,10 @@ public class PCBFabricatorTile extends AbstractMachineTile {
 
         @Override
         protected void onContentsChanged() {
-            sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             markDirty();
+            sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
-    protected PCBFabricatorRecipe currentRecipe = null;
 
     @Override
     public JSGItemStackHandler getJSGItemHandler() {
@@ -79,7 +81,8 @@ public class PCBFabricatorTile extends AbstractMachineTile {
             JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.BEAMER_START);
     }
 
-    public PCBFabricatorRecipe getRecipeIfPossible() {
+    @Override
+    public AbstractMachineRecipe getRecipeIfPossible() {
         ArrayList<ItemStack> stacks = new ArrayList<>();
         for (int i = 0; i < 9; i++)
             stacks.add(itemStackHandler.getStackInSlot(i));
@@ -94,7 +97,8 @@ public class PCBFabricatorTile extends AbstractMachineTile {
     }
 
     protected void workIsDone() {
-        if (!isWorking) return;
+        if (!isWorking || currentRecipe == null) return;
+        PCBFabricatorRecipe currentRecipe = (PCBFabricatorRecipe) this.currentRecipe;
         itemStackHandler.insertItem(9, currentRecipe.getResult(), false);
         fluidHandler.drainInternal(currentRecipe.getSubFluidStack().amount, true);
         for (int i = 0; i < 9; i++) {
@@ -130,8 +134,8 @@ public class PCBFabricatorTile extends AbstractMachineTile {
             case GUI_UPDATE:
                 return new PCBFabricatorContainerGuiUpdate(energyStorage.getEnergyStored(), (fluidHandler.getFluid() != null ? new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()) : null), energyTransferedLastTick, machineStart, machineEnd);
             case RENDERER_UPDATE:
-                ItemStack stack = currentRecipe != null ? currentRecipe.getResult() : itemStackHandler.getStackInSlot(9);
-                float[] colors = currentRecipe != null ? currentRecipe.getBeamColors() : new float[]{0.68f, 0.25f, 0.26f};
+                ItemStack stack = currentRecipe != null ? ((PCBFabricatorRecipe) currentRecipe).getResult() : itemStackHandler.getStackInSlot(9);
+                float[] colors = currentRecipe != null ? ((PCBFabricatorRecipe) currentRecipe).getBeamColors() : new float[]{1f, 1f, 1f};
                 return new PCBFabricatorRendererState(machineProgress, isWorking, stack, colors);
         }
         return null;
@@ -169,7 +173,7 @@ public class PCBFabricatorTile extends AbstractMachineTile {
         }
     }
 
-    public PCBFabricatorRendererState getRendererState() {
+    public AbstractMachineRendererState getRendererState() {
         return rendererState;
     }
 

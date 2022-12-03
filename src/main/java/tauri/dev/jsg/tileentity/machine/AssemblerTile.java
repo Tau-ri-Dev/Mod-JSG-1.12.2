@@ -7,8 +7,10 @@ import net.minecraftforge.items.ItemStackHandler;
 import tauri.dev.jsg.block.machine.AssemblerBlock;
 import tauri.dev.jsg.gui.container.machine.assembler.AssemblerContainerGuiUpdate;
 import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.machine.AbstractMachineRecipe;
 import tauri.dev.jsg.machine.assembler.AssemblerRecipe;
 import tauri.dev.jsg.machine.assembler.AssemblerRecipes;
+import tauri.dev.jsg.renderer.machine.AbstractMachineRendererState;
 import tauri.dev.jsg.renderer.machine.AssemblerRendererState;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
@@ -56,8 +58,8 @@ public class AssemblerTile extends AbstractMachineTile {
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
-            sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             markDirty();
+            sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
     protected final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(AssemblerBlock.MAX_ENERGY, AssemblerBlock.MAX_ENERGY_TRANSFER) {
@@ -88,7 +90,7 @@ public class AssemblerTile extends AbstractMachineTile {
             JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.BEAMER_START);
     }
 
-    public AssemblerRecipe getRecipeIfPossible() {
+    public AbstractMachineRecipe getRecipeIfPossible() {
         ArrayList<ItemStack> stacks = new ArrayList<>();
         for (int i = 1; i < 10; i++)
             stacks.add(itemStackHandler.getStackInSlot(i));
@@ -163,7 +165,7 @@ public class AssemblerTile extends AbstractMachineTile {
         }
     }
 
-    public AssemblerRendererState getRendererState() {
+    public AbstractMachineRendererState getRendererState() {
         return rendererState;
     }
 }

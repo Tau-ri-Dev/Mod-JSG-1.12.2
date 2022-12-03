@@ -27,13 +27,14 @@ public abstract class AbstractMachineTile extends TileEntity implements IUpgrada
     protected int energyStoredLastTick = 0;
     protected int energyTransferedLastTick = 0;
     protected int machineProgress = 0;
-    protected int machineProgressLast = 0;
+    protected int machineProgressLast = -1;
     protected long machineStart = -1;
     protected long machineEnd = -1;
     protected boolean isWorking = false;
     protected boolean isWorkingLast = false;
 
     protected AbstractMachineRecipe currentRecipe = null;
+    protected AbstractMachineRecipe currentRecipeLast = null;
 
     public int getEnergyTransferedLastTick() {
         return energyTransferedLastTick;
@@ -130,7 +131,7 @@ public abstract class AbstractMachineTile extends TileEntity implements IUpgrada
                 playSound(true);
             }
 
-            if (isWorking != isWorkingLast || machineProgress != machineProgressLast) {
+            if (isWorking != isWorkingLast || machineProgress != machineProgressLast || currentRecipe != currentRecipeLast) {
                 isWorkingLast = isWorking;
                 machineProgressLast = machineProgress;
                 playLoopSound(!isWorking);

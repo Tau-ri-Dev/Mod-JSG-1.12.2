@@ -580,7 +580,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                             randomIncomingState++;
                         } else resetRandomIncoming();
                     } else if (randomIncomingState == waitOpen) { // open gate
-                        if (!stargateState.engaged() && !stargateState.unstable()) {
+                        if (!stargateState.engaged() && !stargateState.unstable() && stargateState.incoming()) {
                             randomIncomingState++;
                             targetGatePos = null;
 
