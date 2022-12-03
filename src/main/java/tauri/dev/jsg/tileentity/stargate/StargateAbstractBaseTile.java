@@ -158,9 +158,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         world.setBlockToAir(getGateCenterPos());
         resetTargetIncomingAnimation();
 
-        if (stargateState.initiating()) {
+        if (stargateState.initiating() || (stargateState.engaged() && targetGatePos == null)) {
             attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
-        } else if (stargateState.engaged() && targetGatePos != null) {
+        } else if (stargateState.engaged()) {
             targetGatePos.getTileEntity().attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
         }
 
@@ -969,8 +969,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 // Max Open Time
                 if (targetGatePos.getTileEntity() != null) targetGatePos.getTileEntity().addTimeLimitSecond();
                 int morePower = doTimeLimitFunc();
-                if (dialedAddress.size() == 9)
-                    morePower += keepAliveEnergyPerTick * 0.75; // add energy draw when is 9 symbol address engaged
                 energySecondsToClose = energyStored / (float) (keepAliveEnergyPerTick + morePower + shieldKeepAlive) / 20f;
 
                 if (energySecondsToClose >= 1) {
@@ -1652,6 +1650,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         StargateEnergyRequired energyRequired = new StargateEnergyRequired(tauri.dev.jsg.config.JSGConfig.powerConfig.openingBlockToEnergyRatio, tauri.dev.jsg.config.JSGConfig.powerConfig.keepAliveBlockToEnergyRatioPerTick);
         energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(world.provider.getDimensionType(), targetDim));
+
+        if(dialedAddress.size() == 9)
+            energyRequired.mul(JSGConfig.powerConfig.nineSymbolAddressMul);
+        if(dialedAddress.size() == 8)
+            energyRequired.mul(JSGConfig.powerConfig.eightSymbolAddressMul);
 
         //JSG.logger.info(String.format("Energy required to dial [distance=%,d, from=%s, to=%s] = %,d / keepAlive: %,d/t, stored=%,d", Math.round(distance), sourceDim, targetDim, energyRequired.energyToOpen, energyRequired.keepAlive, getEnergyStorage().getEnergyStored()));
 

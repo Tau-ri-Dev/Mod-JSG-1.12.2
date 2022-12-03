@@ -54,7 +54,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
     private boolean keyTyped = false;
 
-    private BlockPos pos;
+    private final BlockPos pos;
 
     public TRGui(BlockPos pos, TRContainer container) {
         super(container);
@@ -357,7 +357,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
     @Override
     public List<Rectangle> getGuiExtraAreas() {
         return tabs.stream()
-                .map(tab -> tab.getArea())
+                .map(Tab::getArea)
                 .collect(Collectors.toList());
     }
 

@@ -2,7 +2,6 @@ package tauri.dev.jsg.config;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.*;
@@ -459,6 +458,22 @@ public class JSGConfig {
         @Name("ZPMHub's max power throughput")
         @RangeInt(min = 1)
         public int zpmHubMaxEnergyTransfer = 104360;
+
+        @Name("Stargate eight symbols address power mul")
+        @Comment({
+                "Specifies the multiplier of power needed to keep the gate alive",
+                "when 8-symbols address is dialed"
+        })
+        @RangeDouble(min = 0)
+        public float eightSymbolAddressMul = 1.3f;
+
+        @Name("Stargate nine symbols address power mul")
+        @Comment({
+                "Specifies the multiplier of power needed to keep the gate alive",
+                "when 9-symbols address is dialed"
+        })
+        @RangeDouble(min = 0)
+        public float nineSymbolAddressMul = 1.7f;
     }
 
     public static class RingsConfig {
@@ -866,11 +881,13 @@ public class JSGConfig {
         public float tz = 0f;
     }
 
+    @SuppressWarnings("unused")
     public static void rescaleToConfig() {
         GlStateManager.translate(JSGConfig.devConfig.x, JSGConfig.devConfig.y, JSGConfig.devConfig.z);
         GlStateManager.scale(JSGConfig.devConfig.s, JSGConfig.devConfig.s, JSGConfig.devConfig.s);
     }
 
+    @SuppressWarnings("unused")
     public static JSGAxisAlignedBB createHitbox() {
         return new JSGAxisAlignedBB(JSGConfig.devConfig.x, JSGConfig.devConfig.y, JSGConfig.devConfig.z, JSGConfig.devConfig.x2, JSGConfig.devConfig.y2, JSGConfig.devConfig.z2);
     }

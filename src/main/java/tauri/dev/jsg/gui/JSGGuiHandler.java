@@ -8,6 +8,8 @@ import tauri.dev.jsg.gui.container.beamer.BeamerContainer;
 import tauri.dev.jsg.gui.container.beamer.BeamerContainerGui;
 import tauri.dev.jsg.gui.container.capacitor.CapacitorContainer;
 import tauri.dev.jsg.gui.container.capacitor.CapacitorContainerGui;
+import tauri.dev.jsg.gui.container.countdown.CountDownContainer;
+import tauri.dev.jsg.gui.container.countdown.CountDownContainerGui;
 import tauri.dev.jsg.gui.container.dhd.DHDMilkyWayContainer;
 import tauri.dev.jsg.gui.container.dhd.DHDMilkyWayContainerGui;
 import tauri.dev.jsg.gui.container.dhd.DHDPegasusContainer;
@@ -70,6 +72,9 @@ public class JSGGuiHandler implements IGuiHandler {
 
             case GUI_ZPM_SLOT:
                 return new ZPMSlotContainer(player.inventory, world, x, y, z);
+
+            case GUI_COUNTDOWN:
+                return new CountDownContainer(player.inventory, world, x, y, z, isOp);
         }
 
         return null;
@@ -114,6 +119,9 @@ public class JSGGuiHandler implements IGuiHandler {
 
             case GUI_ZPM_SLOT:
                 return new ZPMSlotContainerGui(new ZPMSlotContainer(player.inventory, world, x, y, z));
+
+            case GUI_COUNTDOWN:
+                return new CountDownContainerGui(new BlockPos(x, y, z), new CountDownContainer(player.inventory, world, x, y, z, isOp));
 
         }
 

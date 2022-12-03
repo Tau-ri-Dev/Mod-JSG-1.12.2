@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -19,12 +20,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
+import tauri.dev.jsg.gui.GuiIdEnum;
 import tauri.dev.jsg.renderer.props.DestinyCountDownRenderer;
 import tauri.dev.jsg.tileentity.dialhomedevice.DHDAbstractTile;
 import tauri.dev.jsg.tileentity.props.DestinyCountDownTile;
@@ -54,6 +57,17 @@ public class DestinyCountDownBlock extends JSGBlock {
         setHardness(2.5f);
         setResistance(15.0f);
         setHarvestLevel("pickaxe", 2);
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!world.isRemote) {
+            if (!player.isSneaking()) {
+                player.openGui(JSG.instance, GuiIdEnum.GUI_COUNTDOWN.id, world, pos.getX(), pos.getY(), pos.getZ());
+            }
+        }
+
+        return !player.isSneaking();
     }
 
 

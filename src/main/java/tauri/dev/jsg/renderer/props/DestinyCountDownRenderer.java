@@ -17,6 +17,9 @@ import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
 
+import java.time.LocalTime;
+import java.time.temporal.ChronoField;
+
 import static tauri.dev.jsg.Constants.*;
 
 public class DestinyCountDownRenderer extends TileEntitySpecialRenderer<DestinyCountDownTile> {
@@ -25,7 +28,13 @@ public class DestinyCountDownRenderer extends TileEntitySpecialRenderer<DestinyC
     public void render(@Nonnull DestinyCountDownTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         DestinyCountDownRendererState rs = te.getRendererState();
         if (rs != null) {
+            boolean clock = (te.getConfig().getOption(DestinyCountDownTile.ConfigOptions.SWITCH_TO_CLOCK.id).getBooleanValue() && te.countdownTo == -1);
+
             long ticks = te.getCountdownTicks();
+
+            if(clock){
+                ticks = Math.round(((double) LocalTime.now().getLong(ChronoField.MILLI_OF_DAY)/1000L)*20);
+            }
 
             if (ticks < 0) ticks = 0;
 
@@ -60,7 +69,7 @@ public class DestinyCountDownRenderer extends TileEntitySpecialRenderer<DestinyC
 
             GlStateManager.color(1, 1, 1);
 
-            if (hours > 0) {
+            if (hours > 0 || clock) {
                 GlStateManager.translate(HOURS_START_X, 0, 0);
                 renderTime(hours, minutes, seconds, ticksDisplay);
             } else if (minutes > 0) {

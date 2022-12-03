@@ -107,8 +107,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     private int irisMaxDurability = 0;
     protected boolean isFinalActive;
 
-    protected StargateAddressDynamic lastDialedAddress = new StargateAddressDynamic(getSymbolType());
-
     protected double lastIrisHeat;
     protected double lastGateHeat;
     public double irisHeat;
@@ -143,14 +141,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             gateHeat -= (0.2 * coolDownCoefficient);
 
         ItemStack irisItem = getItemHandler().getStackInSlot(11);
-        boolean irisDeleted = false;
         double maxHeat = (getIrisType() == EnumIrisType.IRIS_TRINIUM ? IRIS_MAX_HEAT_TRINIUM : IRIS_MAX_HEAT_TITANIUM);
         if (isPhysicalIris() && irisHeat >= maxHeat) {
-            if (JSGConfig.irisConfig.enableIrisOverHeatCollapse && world.getTotalWorldTime() % (20 + ((int) (Math.random()*30))) == 0) {
-                irisItem.getItem().setDamage(irisItem, irisItem.getItem().getDamage(irisItem) + ((int) (Math.random()*10)));
-                if(irisItem.getCount() == 0)
+            if (JSGConfig.irisConfig.enableIrisOverHeatCollapse && world.getTotalWorldTime() % (20 + ((int) (Math.random() * 30))) == 0) {
+                irisItem.getItem().setDamage(irisItem, irisItem.getItem().getDamage(irisItem) + ((int) (Math.random() * 10)));
+                if (irisItem.getCount() == 0)
                     updateIrisType();
-                irisDeleted = true;
                 JSGSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.IRIS_HIT);
             }
             irisHeat = maxHeat;
@@ -205,10 +201,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     public boolean isGateBurried() {
         if (JSGConfig.stargateConfig.bypassBurriedState) return false;
-        for (BlockPos targetPos : Objects.requireNonNull(StargateSizeEnum.getIrisBLocksPatter(getStargateSize()))) {
+        for (BlockPos targetPos : Objects.requireNonNull(StargateSizeEnum.getIrisBlocksPattern(getStargateSize()))) {
             BlockPos newPos = pos.add(targetPos.rotate(FacingToRotation.get(facing)));
             IBlockState state = world.getBlockState(newPos);
-            if(isLiquidBlock(false, state) || isLiquidBlock(true, state))
+            if (isLiquidBlock(false, state) || isLiquidBlock(true, state))
                 return false;
             if (state.getMaterial() == Material.AIR || state.getBlock() == JSGBlocks.IRIS_BLOCK || state.getBlock() == JSGBlocks.INVISIBLE_BLOCK)
                 return false;
@@ -477,15 +473,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Override
     public void update() {
         // Charging gate with lighting bold
-        if(!world.isRemote && isMerged()){
+        if (!world.isRemote && isMerged()) {
             BlockPos topBlockPos = getMergeHelper().getTopBlock().add(pos);
-            if(world.getWorldInfo().isThundering() && BlockHelpers.isBlockDirectlyUnderSky(world, topBlockPos)){
+            if (world.getWorldInfo().isThundering() && BlockHelpers.isBlockDirectlyUnderSky(world, topBlockPos)) {
                 Random rand = new Random();
                 float chance = rand.nextFloat();
-                if(chance < JSGConfig.stargateConfig.lightingBoldChance){
-                    int max = JSGConfig.powerConfig.stargateEnergyStorage/17;
-                    int min = max/6;
-                    int energy = (int) ((rand.nextFloat() * (max-min)) + min);
+                if (chance < JSGConfig.stargateConfig.lightingBoldChance) {
+                    int max = JSGConfig.powerConfig.stargateEnergyStorage / 17;
+                    int min = max / 6;
+                    int energy = (int) ((rand.nextFloat() * (max - min)) + min);
                     getEnergyStorage().receiveEnergy(energy, false);
                     world.addWeatherEffect(new EntityLightningBolt(world, topBlockPos.getX(), topBlockPos.getY(), topBlockPos.getZ(), false));
                 }
@@ -613,7 +609,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         List<Entity> entityList = new ArrayList<Entity>();
                         for (String entityString : entityListString) {
                             String[] entityTemporallyList = entityString.split(":");
-                            if (entityTemporallyList.length < 2) continue; // prevents from Ticking block entity null pointer
+                            if (entityTemporallyList.length < 2)
+                                continue; // prevents from Ticking block entity null pointer
                             String entityStringNew =
                                     (
                                             (entityTemporallyList[0].equals("minecraft"))
@@ -1335,7 +1332,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     }
 
-    public void setOriginId(NBTTagCompound compound){}
+    public void setOriginId(NBTTagCompound compound) {
+    }
 
 
     // ------------------------------------------------------------------------
@@ -1624,7 +1622,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public boolean canInsertItemAsIris(Item item) {
-        if(JSGConfig.irisConfig.enableIrisOverHeatCollapse) {
+        if (JSGConfig.irisConfig.enableIrisOverHeatCollapse) {
             if (item == JSGItems.UPGRADE_IRIS && (irisHeat >= IRIS_MAX_HEAT_TITANIUM || gateHeat >= IRIS_MAX_HEAT_TITANIUM))
                 return false;
             if (item == JSGItems.UPGRADE_IRIS_TRINIUM && (irisHeat >= IRIS_MAX_HEAT_TRINIUM || gateHeat >= IRIS_MAX_HEAT_TRINIUM))
@@ -1842,7 +1840,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (set) invBlockState = JSGBlocks.IRIS_BLOCK.getStateFromMeta(getFacing().getHorizontalIndex());
         Rotation invBlocksRotation = FacingToRotation.get(facing);
         BlockPos startPos = this.pos;
-        for (BlockPos invPos : Objects.requireNonNull(StargateSizeEnum.getIrisBLocksPatter(getStargateSize()))) {
+        for (BlockPos invPos : Objects.requireNonNull(StargateSizeEnum.getIrisBlocksPattern(getStargateSize()))) {
             BlockPos newPos = startPos.add(invPos.rotate(invBlocksRotation));
 
             if (set) {

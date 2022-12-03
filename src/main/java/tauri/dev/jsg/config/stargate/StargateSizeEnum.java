@@ -66,8 +66,7 @@ public enum StargateSizeEnum {
     return StargateSizeEnum.values()[id];
   }
 
-  public static BlockPos[] getIrisBLocksPatter(StargateSizeEnum size) {
-    List<BlockPos> patter = new ArrayList<>();
+  public static BlockPos[] getIrisBlocksPattern(StargateSizeEnum size) {
     switch (size) {
       case SMALL:
       case MEDIUM:

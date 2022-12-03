@@ -25,6 +25,10 @@ public class StateUpdatePacketToClient extends PositionedPacket {
 		super(pos);
 		
 		this.stateType = stateType;
+		if(state == null){
+			throw new NullPointerException("State was null! (State type: " + stateType.toString() + "; Pos: " + pos.toString() + ")");
+		}
+
 		this.state = state;
 	}
 
@@ -65,10 +69,8 @@ public class StateUpdatePacketToClient extends PositionedPacket {
 					
 					if (state != null) {
 						state.fromBytes(message.stateBuf);
-						
-						if (te != null) {
-							te.setState(message.stateType, state);
-						}
+
+						te.setState(message.stateType, state);
 					}
 					
 					else {

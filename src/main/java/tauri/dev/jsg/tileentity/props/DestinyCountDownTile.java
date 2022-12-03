@@ -17,10 +17,17 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.ingame.ITileConfig;
+import tauri.dev.jsg.config.ingame.JSGConfigOption;
+import tauri.dev.jsg.config.ingame.JSGConfigOptionTypeEnum;
+import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
+import tauri.dev.jsg.gui.container.countdown.CountDownContainerGuiUpdate;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
@@ -43,9 +50,10 @@ import javax.annotation.Nullable;
 
 import static tauri.dev.jsg.sound.JSGSoundHelper.playSoundEvent;
 import static tauri.dev.jsg.state.StateTypeEnum.RENDERER_UPDATE;
+import static tauri.dev.jsg.tileentity.props.DestinyCountDownTile.ConfigOptions.*;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers")})
-public class DestinyCountDownTile extends TileEntity implements ICapabilityProvider, ITickable, Environment, StateProviderInterface, ILinkable, PreparableInterface {
+public class DestinyCountDownTile extends TileEntity implements ICapabilityProvider, ITickable, Environment, StateProviderInterface, ILinkable, PreparableInterface, ITileConfig {
 
     public long countdownTo = -1; // in ticks!
 
@@ -95,6 +103,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
     @Override
     public void update() {
         if (!world.isRemote) {
+            initConfig();
             if (!addedToNetwork) {
                 addedToNetwork = true;
                 JSG.ocWrapper.joinOrCreateNetwork(this);
@@ -113,7 +122,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                 sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             }
 
-            if (!gateOpenedThisRound && getCountdownTicks() > 1300 && (world.getTotalWorldTime() - countStart) > (20L * JSGConfig.countdownConfig.dialStartDelay) && (world.getTotalWorldTime() % 40 == 0)) {
+            if (getConfig().getOption(ENABLE_GATE_OPENING.id).getBooleanValue() && !gateOpenedThisRound && getCountdownTicks() > 1300 && (world.getTotalWorldTime() - countStart) > (20L * JSGConfig.countdownConfig.dialStartDelay) && (world.getTotalWorldTime() % 40 == 0)) {
                 if (isLinked()) {
                     StargateUniverseBaseTile gate = getLinkedGate(world);
                     if (gate != null) {
@@ -146,7 +155,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                     gateOpenedThisRound = false;
                     markDirty();
 
-                    if (isLinked()) {
+                    if (getConfig().getOption(ENABLE_GATE_CLOSING.id).getBooleanValue() && isLinked()) {
                         StargateUniverseBaseTile gate = getLinkedGate(world);
                         if (gate != null) {
                             EnumStargateState state = gate.getStargateState();
@@ -220,8 +229,14 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
      */
     @Override
     public State getState(StateTypeEnum stateType) {
-        if (stateType == RENDERER_UPDATE) {
-            return new DestinyCountDownRendererState(countdownTo);
+        switch (stateType) {
+            case RENDERER_UPDATE:
+                return new DestinyCountDownRendererState(countdownTo, getConfig());
+            case GUI_STATE:
+            case GUI_UPDATE:
+                return new CountDownContainerGuiUpdate(getConfig());
+            default:
+                break;
         }
         return null;
     }
@@ -235,8 +250,14 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
      */
     @Override
     public State createState(StateTypeEnum stateType) {
-        if (stateType == RENDERER_UPDATE) {
-            return new DestinyCountDownRendererState();
+        switch (stateType) {
+            case RENDERER_UPDATE:
+                return new DestinyCountDownRendererState();
+            case GUI_STATE:
+            case GUI_UPDATE:
+                return new CountDownContainerGuiUpdate();
+            default:
+                break;
         }
         return null;
     }
@@ -249,13 +270,24 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
      * @param state     {@link State} instance obtained from packet
      */
     @Override
+    @SideOnly(Side.CLIENT)
     public void setState(StateTypeEnum stateType, State state) {
-        if (stateType == RENDERER_UPDATE) {
-            rendererState = (DestinyCountDownRendererState) state;
-            this.countdownTo = rendererState.countdownTo;
-            //JSG.info("Client got new countdown: " + countdownTo);
-            markDirty();
+        switch (stateType) {
+            case RENDERER_UPDATE:
+                rendererState = (DestinyCountDownRendererState) state;
+                this.countdownTo = rendererState.countdownTo;
+                this.config = rendererState.config;
+                //JSG.info("Client got new countdown: " + countdownTo);
+                break;
+            case GUI_STATE:
+            case GUI_UPDATE:
+                CountDownContainerGuiUpdate guiState = (CountDownContainerGuiUpdate) state;
+                config = guiState.config;
+                break;
+            default:
+                break;
         }
+        markDirty();
     }
 
     public DestinyCountDownRendererState getRendererState() {
@@ -279,6 +311,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
 
             compound.setTag("node", nodeCompound);
         }
+        compound.setTag("config", config.serializeNBT());
         return super.writeToNBT(compound);
     }
 
@@ -291,6 +324,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
         if (compound.hasKey("linkId")) this.linkId = compound.getInteger("linkId");
 
         if (node != null && compound.hasKey("node")) node.load(compound.getCompoundTag("node"));
+        config.deserializeNBT(compound.getCompoundTag("config"));
         markDirty();
         super.readFromNBT(compound);
     }
@@ -299,7 +333,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
 
     @Override
     public boolean canLinkTo() {
-        return !isLinked();
+        return !isLinked() && getConfig().getOption(ENABLE_GATE_LINK.id).getBooleanValue();
     }
 
     private BlockPos gatePos;
@@ -313,10 +347,11 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
     }
 
     public boolean isLinked() {
-        return gatePos != null && world.getTileEntity(gatePos) instanceof StargateUniverseBaseTile;
+        return gatePos != null && getConfig().getOption(ENABLE_GATE_LINK.id).getBooleanValue() && world.getTileEntity(gatePos) instanceof StargateUniverseBaseTile;
     }
 
     public void setLinkedGate(BlockPos dhdPos, int linkId) {
+        if (dhdPos != null && !getConfig().getOption(ENABLE_GATE_LINK.id).getBooleanValue()) return;
         this.gatePos = dhdPos;
         this.linkId = linkId;
 
@@ -330,10 +365,18 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
         if (closestUnlinked != null) {
             StargateUniverseBaseTile stargateUniverseBaseTile = (StargateUniverseBaseTile) world.getTileEntity(closestUnlinked);
             if (stargateUniverseBaseTile != null) {
+                if(!getConfig().getOption(ENABLE_GATE_LINK.id).getBooleanValue()){
+                    setLinkedGate(null, -1);
+                    stargateUniverseBaseTile.setLinkedCountdown(null, -1);
+                    return;
+                }
                 stargateUniverseBaseTile.setLinkedCountdown(pos, linkId);
                 setLinkedGate(closestUnlinked, linkId);
                 markDirty();
             }
+        }
+        if(!getConfig().getOption(ENABLE_GATE_LINK.id).getBooleanValue()){
+            setLinkedGate(null, -1);
         }
     }
 
@@ -346,6 +389,89 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
     @Override
     public int getLinkId() {
         return linkId;
+    }
+
+
+    // -----------------------------------------------------------------
+    // Tile entity config
+
+    protected JSGTileEntityConfig config = new JSGTileEntityConfig();
+
+    public enum ConfigOptions {
+        ENABLE_GATE_LINK(
+                0, "enableGateLink", JSGConfigOptionTypeEnum.BOOLEAN, "true",
+                "Enable linking to a universe gate?"
+        ),
+        ENABLE_GATE_OPENING(
+                1, "enableGateOpening", JSGConfigOptionTypeEnum.BOOLEAN, "true",
+                "Enable opening linked gate after countdown set?",
+                "This option needs enabled \"enableGateLink\" option!"
+        ),
+        ENABLE_GATE_CLOSING(
+                2, "enableGateClosing", JSGConfigOptionTypeEnum.BOOLEAN, "true",
+                "Enable closing linked gate after countdown reach zero?",
+                "This option needs enabled \"enableGateLink\" option!"
+        ),
+        SWITCH_TO_CLOCK(
+                3, "switchToClock", JSGConfigOptionTypeEnum.BOOLEAN, "false",
+                "Switch countdown to clock when its turned off"
+        );
+
+        public final int id;
+        public final String label;
+        public final String[] comment;
+        public final JSGConfigOptionTypeEnum type;
+        public final String defaultValue;
+
+        public final int minInt;
+        public final int maxInt;
+
+        ConfigOptions(int optionId, String label, JSGConfigOptionTypeEnum type, String defaultValue, String... comment) {
+            this(optionId, label, type, defaultValue, -1, -1, comment);
+        }
+
+        ConfigOptions(int optionId, String label, JSGConfigOptionTypeEnum type, String defaultValue, int minInt, int maxInt, String... comment) {
+            this.id = optionId;
+            this.label = label;
+            this.type = type;
+            this.defaultValue = defaultValue;
+            this.minInt = minInt;
+            this.maxInt = maxInt;
+            this.comment = comment;
+        }
+    }
+
+    @Override
+    public JSGTileEntityConfig getConfig() {
+        return this.config;
+    }
+
+    @Override
+    public void setConfig(JSGTileEntityConfig config) {
+        for (JSGConfigOption o : config.getOptions()) {
+            this.config.getOption(o.id).setValue(o.getStringValue());
+        }
+        markDirty();
+        updateLinkStatus();
+    }
+
+    @Override
+    public void initConfig() {
+        if (getConfig().getOptions().size() != DestinyCountDownTile.ConfigOptions.values().length) {
+            getConfig().clearOptions();
+            for (DestinyCountDownTile.ConfigOptions option : DestinyCountDownTile.ConfigOptions.values()) {
+                getConfig().addOption(
+                        new JSGConfigOption(option.id)
+                                .setType(option.type)
+                                .setLabel(option.label)
+                                .setValue(option.defaultValue)
+                                .setDefaultValue(option.defaultValue)
+                                .setMinInt(option.minInt)
+                                .setMaxInt(option.maxInt)
+                                .setComment(option.comment)
+                );
+            }
+        }
     }
 
 
@@ -406,5 +532,11 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
         long time = args.checkInteger(0);
         setCountDown(this.world.getTotalWorldTime() + time);
         return new Object[]{true, "Countdown set to " + time + " ticks!"};
+    }
+
+    @Optional.Method(modid = "opencomputers")
+    @Callback(getter = true)
+    public Object[] remainingTicks(Context context, Arguments args) {
+        return new Object[]{getCountdownTicks()};
     }
 }

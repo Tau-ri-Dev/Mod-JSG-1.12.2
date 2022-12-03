@@ -1253,14 +1253,14 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 "Play press sound when dialing with OC"
         );
 
-        public int id;
-        public String label;
-        public String[] comment;
-        public JSGConfigOptionTypeEnum type;
-        public String defaultValue;
+        public final int id;
+        public final String label;
+        public final String[] comment;
+        public final JSGConfigOptionTypeEnum type;
+        public final String defaultValue;
 
-        public int minInt;
-        public int maxInt;
+        public final int minInt;
+        public final int maxInt;
 
         ConfigOptions(int optionId, String label, JSGConfigOptionTypeEnum type, String defaultValue, String... comment){
             this(optionId, label, type, defaultValue, -1, -1, comment);

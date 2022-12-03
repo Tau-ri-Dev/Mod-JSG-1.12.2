@@ -1,14 +1,17 @@
 package tauri.dev.jsg.renderer.props;
 
 import io.netty.buffer.ByteBuf;
+import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
 import tauri.dev.jsg.state.State;
 
 public class DestinyCountDownRendererState extends State {
     public long countdownTo = 0;
+    public JSGTileEntityConfig config = new JSGTileEntityConfig();
 
     public DestinyCountDownRendererState(){}
-    public DestinyCountDownRendererState(long countdownTo){
+    public DestinyCountDownRendererState(long countdownTo, JSGTileEntityConfig config){
         this.countdownTo = countdownTo;
+        this.config = config;
     }
 
     /**
@@ -22,6 +25,7 @@ public class DestinyCountDownRendererState extends State {
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeLong(countdownTo);
+        config.toBytes(buf);
     }
 
     /**
@@ -32,5 +36,6 @@ public class DestinyCountDownRendererState extends State {
     @Override
     public void fromBytes(ByteBuf buf) {
         countdownTo = buf.readLong();
+        config.fromBytes(buf);
     }
 }

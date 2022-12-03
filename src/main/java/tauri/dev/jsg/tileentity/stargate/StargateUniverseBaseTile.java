@@ -35,9 +35,11 @@ import tauri.dev.jsg.util.LinkingHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
 
-import static tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode.NEARBY;
 import static tauri.dev.jsg.stargate.EnumStargateState.DIALING;
 import static tauri.dev.jsg.stargate.EnumStargateState.FAILING;
 import static tauri.dev.jsg.stargate.network.SymbolUniverseEnum.G1;
@@ -328,6 +330,11 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
 
         StargateEnergyRequired energyRequired = new StargateEnergyRequired(JSGConfig.powerConfig.openingBlockToEnergyRatio, JSGConfig.powerConfig.keepAliveBlockToEnergyRatioPerTick);
         energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(sourceDim, targetDim));
+
+        if(dialedAddress.size() == 9)
+            energyRequired.mul(JSGConfig.powerConfig.nineSymbolAddressMul);
+        if(dialedAddress.size() == 8)
+            energyRequired.mul(JSGConfig.powerConfig.eightSymbolAddressMul);
 
         return energyRequired.mul(JSGConfig.powerConfig.stargateUniverseEnergyMul);
     }

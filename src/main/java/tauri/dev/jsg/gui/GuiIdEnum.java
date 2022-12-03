@@ -15,9 +15,10 @@ public enum GuiIdEnum {
 	GUI_PCB_FABRICATOR(8),
 	GUI_ORE_WASHING(9),
 	GUI_ZPM_HUB(10),
-	GUI_ZPM_SLOT(11)
+	GUI_ZPM_SLOT(11),
+	GUI_COUNTDOWN(12)
 	;
-    public int id;
+    public final int id;
 	
 	GuiIdEnum(int id) {
 		this.id = id;
