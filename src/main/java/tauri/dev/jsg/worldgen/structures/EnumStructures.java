@@ -14,6 +14,7 @@ import tauri.dev.jsg.worldgen.util.EnumGenerationHeight;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public enum EnumStructures {
@@ -130,17 +131,18 @@ public enum EnumStructures {
             }}, null, 35, Rotation.NONE, 0.88, 0.8, EnumGenerationHeight.LOW),
     ;
 
-    public final JSGStructure structure;
+    public final String name;
+    private final JSGStructure structure;
+    private final JSGNetherStructure netherStructure;
     public final boolean randomGenEnable;
     public final float chance;
     public final List<String> allowedInBiomes;
     public final List<Block> allowedOnBlocks;
 
     EnumStructures(String structureName, int yNegativeOffset, boolean isStargateStructure, boolean isRingsStructure, SymbolTypeEnum symbolType, int structureSizeX, int structureSizeZ, int dimensionToSpawn, boolean findOptimalRotation, boolean randomGenEnable, float chanceToGenerateRandom, ITemplateProcessor templateProcessor, @Nullable List<Block> allowedOnBlocks, @Nullable List<String> allowedInBiomes, int airCountUp, Rotation rotationToNorth, double terrainFlatPercents, double topBlockMatchPercent, @Nonnull EnumGenerationHeight genHeight) {
-        if (dimensionToSpawn == -1)
-            this.structure = new JSGNetherStructure(structureName, yNegativeOffset, isStargateStructure, isRingsStructure, symbolType, structureSizeX, structureSizeZ, airCountUp, dimensionToSpawn, findOptimalRotation, templateProcessor, rotationToNorth, terrainFlatPercents, topBlockMatchPercent, genHeight);
-        else
-            this.structure = new JSGStructure(structureName, yNegativeOffset, isStargateStructure, isRingsStructure, symbolType, structureSizeX, structureSizeZ, airCountUp, dimensionToSpawn, findOptimalRotation, templateProcessor, rotationToNorth, terrainFlatPercents, topBlockMatchPercent, genHeight);
+        this.name = structureName;
+        this.netherStructure = new JSGNetherStructure(structureName, yNegativeOffset, isStargateStructure, isRingsStructure, symbolType, structureSizeX, structureSizeZ, airCountUp, dimensionToSpawn, findOptimalRotation, templateProcessor, rotationToNorth, terrainFlatPercents, topBlockMatchPercent, genHeight);
+        this.structure = new JSGStructure(structureName, yNegativeOffset, isStargateStructure, isRingsStructure, symbolType, structureSizeX, structureSizeZ, airCountUp, dimensionToSpawn, findOptimalRotation, templateProcessor, rotationToNorth, terrainFlatPercents, topBlockMatchPercent, genHeight);
 
         this.randomGenEnable = randomGenEnable;
         this.chance = chanceToGenerateRandom;
@@ -149,13 +151,18 @@ public enum EnumStructures {
         this.allowedOnBlocks = allowedOnBlocks;
     }
 
+    public JSGStructure getActualStructure(int dimId){
+        if(dimId == -1) return netherStructure;
+        return structure;
+    }
+
     @Nullable
     public static EnumStructures getStargateStructureByBiome(String biomeName, SymbolTypeEnum symbolType, int dimensionToSpawn) {
         ArrayList<EnumStructures> biomeNull = new ArrayList<>();
         for (EnumStructures structure : EnumStructures.values()) {
-            if (!structure.structure.isStargateStructure) continue;
-            if (structure.structure.symbolType != symbolType) continue;
-            if (structure.structure.dimensionToSpawn != dimensionToSpawn) continue;
+            if (!structure.getActualStructure(dimensionToSpawn).isStargateStructure) continue;
+            if (structure.getActualStructure(dimensionToSpawn).symbolType != symbolType) continue;
+            if (structure.getActualStructure(dimensionToSpawn).dimensionToSpawn != dimensionToSpawn) continue;
             if (structure.allowedInBiomes != null) {
                 for (String s : structure.allowedInBiomes) {
                     if (biomeName.toLowerCase().contains(s.toLowerCase())) return structure;
@@ -164,5 +171,20 @@ public enum EnumStructures {
         }
         if (biomeNull.size() > 0) return biomeNull.get(0);
         return null;
+    }
+
+    @Nullable
+    public static EnumStructures getStructureByName(String name){
+        for(EnumStructures s : EnumStructures.values()){
+            if(s.name.equalsIgnoreCase(name)) return s;
+        }
+        return null;
+    }
+
+    public static Collection<String> getAllStructureNames(){
+        Collection<String> col = new ArrayList<>();
+        for(EnumStructures s : EnumStructures.values())
+            col.add(s.name);
+        return col;
     }
 }

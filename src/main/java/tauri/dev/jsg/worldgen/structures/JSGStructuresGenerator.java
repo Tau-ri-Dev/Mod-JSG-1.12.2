@@ -29,7 +29,7 @@ public class JSGStructuresGenerator implements IWorldGenerator {
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         for (EnumStructures structure : EnumStructures.values()) {
-            if (structure.structure.dimensionToSpawn == world.provider.getDimension()) {
+            if (structure.getActualStructure(world.provider.getDimension()).dimensionToSpawn == world.provider.getDimension()) {
                 if (structure.randomGenEnable) {
                     if (structure.chance > 0 && (random.nextFloat() < structure.chance)) {
                         JSGStructuresGenerator.generateStructure(structure, world, random, chunkX, chunkZ, false);
@@ -41,16 +41,19 @@ public class JSGStructuresGenerator implements IWorldGenerator {
     }
 
     public static GeneratedStargate generateStructure(EnumStructures structure, World world, Random random, int chunkX, int chunkZ, boolean notRandomGen) {
-        WorldServer worldToSpawn = Objects.requireNonNull(world.getMinecraftServer()).getWorld(structure.structure.dimensionToSpawn);
+        return generateStructure(structure, world, random, chunkX, chunkZ, notRandomGen, true, structure.getActualStructure(0).dimensionToSpawn);
+    }
+    public static GeneratedStargate generateStructure(EnumStructures structure, World world, Random random, int chunkX, int chunkZ, boolean notRandomGen, boolean notCommandGen, int dimId) {
+        WorldServer worldToSpawn = Objects.requireNonNull(world.getMinecraftServer()).getWorld(dimId);
 
-        int x = (chunkX * 16) + random.nextInt(15);
-        int z = (chunkZ * 16) + random.nextInt(15);
+        int x = (chunkX * 16) + (notCommandGen ? random.nextInt(15) : 0);
+        int z = (chunkZ * 16) + (notCommandGen ? random.nextInt(15) : 0);
 
-        if(structure.structure instanceof JSGNetherStructure){
-            return structure.structure.generateStructure(world, new BlockPos(x, 15, z), random, worldToSpawn);
+        if(structure.getActualStructure(dimId) instanceof JSGNetherStructure){
+            return structure.getActualStructure(dimId).generateStructure(world, new BlockPos(x, 15, z), random, worldToSpawn);
         }
-        JSGStructurePos structurePos = checkForPlace(worldToSpawn, chunkX, chunkZ, structure, structure.structure.dimensionToSpawn);
-        if (notRandomGen) {
+        JSGStructurePos structurePos = checkForPlace(worldToSpawn, chunkX, chunkZ, structure, dimId);
+        if (notRandomGen && notCommandGen) {
             int tries = 0;
             while ((structurePos == null || structurePos.foundPos == null) && tries < 50) {
                 if (structurePos != null && structurePos.bestAttemptPos != null) {
@@ -75,14 +78,14 @@ public class JSGStructuresGenerator implements IWorldGenerator {
                 chunkX = x / 16;
                 chunkZ = z / 16;
 
-                structurePos = JSGStructuresGenerator.checkForPlace(worldToSpawn, chunkX, chunkZ, structure, structure.structure.dimensionToSpawn);
+                structurePos = JSGStructuresGenerator.checkForPlace(worldToSpawn, chunkX, chunkZ, structure, dimId);
                 tries++;
             }
         }
 
         if (structurePos != null && structurePos.foundPos != null && structurePos.foundPos.getY() > 0) {
             String biome = Objects.requireNonNull(worldToSpawn.getBiome(structurePos.foundPos).getRegistryName()).getResourcePath();
-            if (worldToSpawn.getWorldType() != WorldType.FLAT) {
+            if (worldToSpawn.getWorldType() != WorldType.FLAT || !notRandomGen) {
                 boolean contains = (structure.allowedInBiomes == null);
                 if (!contains) {
                     for (String s : structure.allowedInBiomes) {
@@ -93,14 +96,14 @@ public class JSGStructuresGenerator implements IWorldGenerator {
                     }
                 }
                 if (contains) {
-                    if (notRandomGen || (structure.structure.isStargateStructure && JSGConfig.stargateGeneratorConfig.stargateRandomGeneratorEnabled) ||
-                            (!structure.structure.isStargateStructure && JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled)) {
-                        return structure.structure.generateStructure(world, structurePos.foundPos, random, worldToSpawn);
+                    if (notRandomGen || (structure.getActualStructure(dimId).isStargateStructure && JSGConfig.stargateGeneratorConfig.stargateRandomGeneratorEnabled) ||
+                            (!structure.getActualStructure(dimId).isStargateStructure && JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled)) {
+                        return structure.getActualStructure(dimId).generateStructure(world, structurePos.foundPos, random, worldToSpawn);
                     }
                 }
             }
         } else if(notRandomGen){
-            JSG.error("Can not generate structure " + structure.structure.structureName + "; StPos: " + structurePos);
+            JSG.error("Can not generate structure " + structure.getActualStructure(dimId).structureName + "; StPos: " + structurePos);
         }
         return null;
     }
@@ -112,8 +115,8 @@ public class JSGStructuresGenerator implements IWorldGenerator {
         int x = chunkX * 16;
         int z = chunkZ * 16;
 
-        int structureSizeX = structure.structure.structureSizeX;
-        int structureSizeZ = structure.structure.structureSizeZ;
+        int structureSizeX = structure.getActualStructure(dimensionId).structureSizeX;
+        int structureSizeZ = structure.getActualStructure(dimensionId).structureSizeZ;
 
 
         int lowestY = 100;
@@ -127,7 +130,7 @@ public class JSGStructuresGenerator implements IWorldGenerator {
             for (int zz = -1; zz <= (structureSizeZ + 1); zz++) {
                 BlockPos newPos = pos.add((new BlockPos(xx, 0, zz).rotate(rotation)));
                 if (world.getChunkProvider().isChunkGeneratedAt(newPos.getX() / 16, newPos.getZ() / 16)) {
-                    JSGWorldTopBlock topBlock = getTopBlock(world, newPos.getX(), newPos.getZ(), structure.structure.airUp, dimensionId);
+                    JSGWorldTopBlock topBlock = getTopBlock(world, newPos.getX(), newPos.getZ(), structure.getActualStructure(dimensionId).airUp, dimensionId);
                     if (topBlock != null) {
                         if (topBlock.y < lowestY) lowestY = topBlock.y;
                         if (topBlock.y > highestY) highestY = topBlock.y;
@@ -164,10 +167,10 @@ public class JSGStructuresGenerator implements IWorldGenerator {
 
         double successPercent = (bestPositions.size() / ((double) (structureSizeX * structureSizeZ)));
 
-        if (bestAttemptPos != null && (successPercent < structure.structure.terrainFlatPercents))
+        if (bestAttemptPos != null && (successPercent < structure.getActualStructure(dimensionId).terrainFlatPercents))
             return new JSGStructurePos(null, bestAttemptPos);
-        if (successPercent >= structure.structure.terrainFlatPercents && ((topBlocksOk / (double) (structureSizeX * structureSizeZ)) >= structure.structure.topBlockMatchPercent))
-            return new JSGStructurePos(new BlockPos(x, structure.structure.genHeight.getHeight(lowestY, highestY), z), null);
+        if (successPercent >= structure.getActualStructure(dimensionId).terrainFlatPercents && ((topBlocksOk / (double) (structureSizeX * structureSizeZ)) >= structure.getActualStructure(dimensionId).topBlockMatchPercent))
+            return new JSGStructurePos(new BlockPos(x, structure.getActualStructure(dimensionId).genHeight.getHeight(lowestY, highestY), z), null);
         return null;
     }
 

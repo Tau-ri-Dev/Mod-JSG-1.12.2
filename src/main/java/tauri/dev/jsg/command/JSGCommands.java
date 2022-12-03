@@ -30,7 +30,8 @@ public final class JSGCommands {
             new CommandReloadCraftingConfigs(),
             new CommandDestinyFTL(),
             new CommandStargateSetFakePos(),
-            new CommandStargateGetFakePos()
+            new CommandStargateGetFakePos(),
+            new CommandStructureSpawn()
     );
 
     public static void registerCommands(FMLServerStartingEvent event) {

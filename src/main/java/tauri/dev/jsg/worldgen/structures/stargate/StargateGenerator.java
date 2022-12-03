@@ -91,6 +91,6 @@ public class StargateGenerator {
             return null;
         }
 
-        return structure.structure.generateStructure(pWorld, structurePos.foundPos, rand, worldToSpawn);
+        return structure.getActualStructure(dimensionToSpawn).generateStructure(pWorld, structurePos.foundPos, rand, worldToSpawn);
     }
 }
