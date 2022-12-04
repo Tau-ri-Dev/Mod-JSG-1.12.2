@@ -2,6 +2,8 @@ package tauri.dev.jsg.item.linkable.dialer;
 
 import io.netty.buffer.ByteBuf;
 import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.sound.JSGSoundHelper;
+import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.stargate.EnumStargateState;
 import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -53,7 +55,10 @@ public class UniverseDialerActionPacketToServer implements IMessage {
 
 			world.addScheduledTask(() -> {
 				ItemStack stack = player.getHeldItem(message.hand);
-				
+
+				boolean playModeChangeSound = false;
+				boolean playDialFailSound = false;
+
 				if (stack.getItem() == JSGItems.UNIVERSE_DIALER && stack.hasTagCompound()) {
 					NBTTagCompound compound = stack.getTagCompound();
 					UniverseDialerMode mode = UniverseDialerMode.valueOf(compound.getByte("mode"));
@@ -76,11 +81,15 @@ public class UniverseDialerActionPacketToServer implements IMessage {
 						case ADDRESS_CHANGE:
 							int addressCount = compound.getTagList(mode.tagListName, NBT.TAG_COMPOUND).tagCount();
 							
-							if (message.next && selected < addressCount-1) // message.offset < 0
-								compound.setByte("selected", (byte) (selected+1));
+							if (message.next && selected < addressCount-1) { // message.offset < 0
+								compound.setByte("selected", (byte) (selected + 1));
+								playModeChangeSound = true;
+							}
 							
-							if (!message.next && selected > 0)
-								compound.setByte("selected", (byte) (selected-1));
+							if (!message.next && selected > 0) {
+								compound.setByte("selected", (byte) (selected - 1));
+								playModeChangeSound = true;
+							}
 							
 							break;
 							
@@ -91,8 +100,10 @@ public class UniverseDialerActionPacketToServer implements IMessage {
 								StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(pos);
 								if(gateTile == null) break;
 								if (gateTile.getStargateState() == EnumStargateState.DIALING) {
-									if(gateTile.abortDialingSequence())
+									if(gateTile.abortDialingSequence()) {
 										player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.aborting"), true);
+										playDialFailSound = true;
+									}
 								}
 								
 								else {
@@ -113,6 +124,7 @@ public class UniverseDialerActionPacketToServer implements IMessage {
 								if(gateTile == null) break;
 								if (gateTile.getStargateState().idle()) {
 									gateTile.setFastDial(!gateTile.getFastDialState());
+									playModeChangeSound = true;
 									if(gateTile.getFastDialState())
 										player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.fast_dail_true"), true);
 									else
@@ -131,6 +143,11 @@ public class UniverseDialerActionPacketToServer implements IMessage {
 							break;
 					}
 				}
+
+				if(playDialFailSound)
+					JSGSoundHelper.playSoundToPlayer(player, SoundEventEnum.UNIVERSE_DIALER_START_DIAL, player.getPosition());
+				if(playModeChangeSound)
+					JSGSoundHelper.playSoundToPlayer(player, SoundEventEnum.UNIVERSE_DIALER_MODE_CHANGE, player.getPosition());
 			});
 			
 			return null;

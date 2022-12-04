@@ -8,10 +8,12 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
@@ -41,6 +43,7 @@ import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.stargate.EnumStargateState;
+import tauri.dev.jsg.stargate.NearbyGate;
 import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
 import tauri.dev.jsg.stargate.network.*;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
@@ -199,16 +202,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                 return;
             }
             NBTTagCompound compound = stack.getTagCompound();
-
-            boolean switchState = false;
-            if (world.getTotalWorldTime() % 40 == 0 && isSelected && compound != null) {
-                if (compound.hasKey("switchState"))
-                    switchState = compound.getBoolean("switchState");
-
-                switchState = !switchState;
-                compound.setBoolean("switchState", switchState);
-            }
-
+            boolean wasLinked = false;
             if (world.getTotalWorldTime() % 20 == 0 && isSelected && compound != null) {
                 BlockPos pos = entity.getPosition();
 
@@ -218,6 +212,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                 if (mode.linkable) {
                     if (compound.hasKey(mode.tagPosName)) {
+                        wasLinked = true;
                         BlockPos tilePos = BlockPos.fromLong(compound.getLong(mode.tagPosName));
 
                         if (!JSGBlocks.isInBlocksArray(world.getBlockState(tilePos).getBlock(), mode.matchBlocks) || tilePos.distanceSq(pos) > reachSquared) {
@@ -226,11 +221,6 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                     }
 
                     boolean found = false;
-
-                    long targetPosOld = 0;
-                    if (compound.hasKey(mode.tagPosName)) {
-                        targetPosOld = compound.getLong(mode.tagPosName);
-                    }
 
                     BlockPos targetPos;
                     ArrayList<BlockPos> blacklist = new ArrayList<>();
@@ -251,9 +241,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                 }
 
                                 StargateUniverseBaseTile uniTile = (StargateUniverseBaseTile) gateTile;
-
                                 NBTTagList nearbyList = new NBTTagList();
-                                double squaredGate = (double) tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach * tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach;
                                 try {
 
                                     addrToBytes(gateTile.getDialedAddress(), compound, "dialedAddress");
@@ -261,49 +249,22 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                     compound.setInteger("gateStatus", gateTile.getStargateState().id);
                                     compound.setBoolean("serverSideEnabledFastDial", ((StargateClassicBaseTile) gateTile).getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ALLOW_FAST_DIAL.id).getBooleanValue());
 
-                                    for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(world).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet()) {
+                                    ArrayList<NearbyGate> foundList = uniTile.getNearbyGates(SymbolTypeEnum.UNIVERSE, false, false);
 
-                                        StargatePos stargatePos = entry.getValue();
-                                        StargateAbstractBaseTile targetGateTile = stargatePos.getTileEntity();
+                                    if(foundList != null) {
+                                        for (NearbyGate gate : foundList) {
+                                            NBTTagCompound entryCompound = gate.address.serializeNBT();
+                                            entryCompound.setBoolean("hasUpgrade", gate.symbolsNeeded > 7);
 
-                                        if (!(targetGateTile instanceof StargateClassicBaseTile))
-                                            continue;
+                                            nearbyList.appendTag(entryCompound);
 
-                                        if (!targetGateTile.isMerged())
-                                            continue;
-
-                                        // get only universe gates in nearby
-                                        if (!(targetGateTile instanceof StargateUniverseBaseTile) && mode.equals(NEARBY))
-                                            continue;
-
-                                        int targetDim = stargatePos.dimensionID;
-                                        BlockPos targetFoundPos = stargatePos.gatePos;
-                                        if (targetGateTile instanceof StargateUniverseBaseTile) {
-                                            StargateUniverseBaseTile targetUniTile = (StargateUniverseBaseTile) targetGateTile;
-                                            targetDim = targetUniTile.getFakeWorld().provider.getDimension();
-                                            targetFoundPos = targetUniTile.getFakePos();
                                         }
-                                        if (targetDim != uniTile.getFakeWorld().provider.getDimension())
-                                            continue;
-
-                                        if (targetFoundPos.distanceSq(uniTile.getFakePos()) > squaredGate)
-                                            continue;
-
-                                        if (stargatePos.gatePos.equals(targetPos) && stargatePos.dimensionID == world.provider.getDimension())
-                                            continue;
-
-                                        NBTTagCompound entryCompound = entry.getKey().serializeNBT();
-                                        if(mode == NEARBY)
-                                            entryCompound.setBoolean("hasUpgrade", !StargateDimensionConfig.isGroupEqual(DimensionManager.getProviderType(stargatePos.dimensionID), world.provider.getDimensionType()));
-
-                                        nearbyList.appendTag(entryCompound);
                                     }
-
                                     compound.setTag(NEARBY.tagListName, nearbyList);
                                     compound.setLong(mode.tagPosName, targetPos.toLong());
                                     found = true;
                                 } catch (ConcurrentModificationException e) {
-                                    JSG.logger.error("Error while iterating nearby stargates occurred", e);
+                                    JSG.error("Error while iterating nearby stargates occurred", e);
 
                                     if (entity instanceof EntityPlayer) {
                                         ((EntityPlayer) entity).sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.dialer_broke"), true);
@@ -331,23 +292,21 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                 break;
 
                             case GATE_INFO:
-                                StargateAbstractBaseTile tile = (StargateAbstractBaseTile) world.getTileEntity(targetPos);
-                                if (tile != null) {
-                                    if (tile instanceof StargateClassicBaseTile) {
-                                        StargateClassicBaseTile t = (StargateClassicBaseTile) tile;
+                                TileEntity tile = world.getTileEntity(targetPos);
+                                if (tile instanceof StargateClassicBaseTile) {
+                                    StargateClassicBaseTile t = (StargateClassicBaseTile) tile;
 
-                                        compound.setBoolean("serverSideEnabledFastDial", t.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ALLOW_FAST_DIAL.id).getBooleanValue());
-                                        compound.setInteger("gateStatus", t.getStargateState().id);
-                                        compound.setString("gateOpenTime", t.getOpenedSecondsToDisplay() > 0 ? t.getOpenedSecondsToDisplayAsMinutes() : "CLOSED");
-                                        compound.setString("gateIrisState", t.hasIris() ? t.getIrisState().toString() : "MISSING");
-                                        compound.setString("gateLastSymbol", (t.getDialedAddress().size() > 0) ? t.getDialedAddress().get(t.getDialedAddress().size() - 1).toString() + " (" + t.getDialedAddress().size() + ")" : "-- (0)");
+                                    compound.setBoolean("serverSideEnabledFastDial", t.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ALLOW_FAST_DIAL.id).getBooleanValue());
+                                    compound.setInteger("gateStatus", t.getStargateState().id);
+                                    compound.setString("gateOpenTime", t.getOpenedSecondsToDisplay() > 0 ? t.getOpenedSecondsToDisplayAsMinutes() : "CLOSED");
+                                    compound.setString("gateIrisState", t.hasIris() ? t.getIrisState().toString() : "MISSING");
+                                    compound.setString("gateLastSymbol", (t.getDialedAddress().size() > 0) ? t.getDialedAddress().get(t.getDialedAddress().size() - 1).toString() + " (" + t.getDialedAddress().size() + ")" : "-- (0)");
 
-                                        if (t.getStargateState().notInitiating())
-                                            compound.setString("gateLastSymbol", "INCOMING");
+                                    if (t.getStargateState().notInitiating())
+                                        compound.setString("gateLastSymbol", "INCOMING");
 
-                                        compound.setLong(mode.tagPosName, targetPos.toLong());
-                                        found = true;
-                                    }
+                                    compound.setLong(mode.tagPosName, targetPos.toLong());
+                                    found = true;
                                 }
                                 break;
 
@@ -355,9 +314,8 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                 break;
                         }
 
-                        if (found) {
-                            if (targetPosOld != 0 && !(BlockPos.fromLong(targetPosOld).equals(targetPos)))
-                                JSGSoundHelper.playSoundEventClientSide(entity.getEntityWorld(), entity.getPosition(), SoundEventEnum.UNIVERSE_DIALER_CONNECTED);
+                        if (found && !wasLinked && entity instanceof EntityPlayerMP) {
+                            JSGSoundHelper.playSoundToPlayer(((EntityPlayerMP) entity), SoundEventEnum.UNIVERSE_DIALER_CONNECTED, entity.getPosition());
                         }
                         loop++;
                     } while (!found && loop < 100);
@@ -417,24 +375,36 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                             int maxSymbols = SymbolUniverseEnum.getMaxSymbolsDisplay(selectedCompound.getBoolean("hasUpgrade"));
                             gateTile.dialAddress(new StargateAddress(selectedCompound), maxSymbols);
                             player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.dial_start"), true);
+                            if(player instanceof EntityPlayerMP)
+                                JSGSoundHelper.playSoundToPlayer(((EntityPlayerMP) player), SoundEventEnum.UNIVERSE_DIALER_START_DIAL, player.getPosition());
                             break;
 
                         case ENGAGED_INITIATING:
                             gateTile.attemptClose(StargateClosedReasonEnum.REQUESTED);
+                            if(player instanceof EntityPlayerMP)
+                                JSGSoundHelper.playSoundToPlayer(((EntityPlayerMP) player), SoundEventEnum.UNIVERSE_DIALER_START_DIAL, player.getPosition());
                             break;
 
                         case ENGAGED:
                             player.sendStatusMessage(new TextComponentTranslation("tile.jsg.dhd_block.incoming_wormhole_warn"), true);
+                            //TODO(Mine): add error sound
+                            //if(player instanceof EntityPlayerMP)
+                            //    JSGSoundHelper.playSoundToPlayer(((EntityPlayerMP) player), SoundEventEnum.UNIVERSE_DIALER_START_DIAL, player.getPosition());
                             break;
 
                         default:
                             if (gateTile.getStargateState() == EnumStargateState.DIALING) {
                                 if (gateTile.abortDialingSequence()) {
                                     player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.aborting"), true);
+                                    if(player instanceof EntityPlayerMP)
+                                        JSGSoundHelper.playSoundToPlayer(((EntityPlayerMP) player), SoundEventEnum.UNIVERSE_DIALER_START_DIAL, player.getPosition());
                                     break;
                                 }
                             }
                             player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.gate_busy"), true);
+                            //TODO(Mine): add error sound
+                            //if(player instanceof EntityPlayerMP)
+                            //    JSGSoundHelper.playSoundToPlayer(((EntityPlayerMP) player), SoundEventEnum.UNIVERSE_DIALER_START_DIAL, player.getPosition());
                             break;
                     }
 

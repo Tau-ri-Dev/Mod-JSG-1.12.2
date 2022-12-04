@@ -390,6 +390,13 @@
       "jsg:misc/dialer/button_connect_universe"
     ]
   },
+  "universe_dialer_error": {
+    "category": "ambient",
+    "subtitle": "jsg.subtitle.universe_dialer_error",
+    "sounds": [
+      "jsg:misc/dialer/button_error_universe"
+    ]
+  },
   "item_zat_shoot": {
     "category": "ambient",
     "subtitle": "jsg.subtitle.item_zat_shoot",

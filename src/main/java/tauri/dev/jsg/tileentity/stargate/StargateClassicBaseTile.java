@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
@@ -25,6 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -40,6 +42,7 @@ import tauri.dev.jsg.config.ingame.ITileConfig;
 import tauri.dev.jsg.config.ingame.JSGConfigOption;
 import tauri.dev.jsg.config.ingame.JSGConfigOptionTypeEnum;
 import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
+import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.gui.container.stargate.StargateContainerGuiState;
 import tauri.dev.jsg.gui.container.stargate.StargateContainerGuiUpdate;
@@ -1948,7 +1951,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     public void addLinkedBeamer(BlockPos pos) {
         if (stargateState.engaged()) {
-            ((BeamerTile) world.getTileEntity(pos)).gateEngaged(targetGatePos);
+            ((BeamerTile) Objects.requireNonNull(world.getTileEntity(pos))).gateEngaged(targetGatePos);
         }
 
         linkedBeamers.add(pos.toImmutable());
@@ -1967,7 +1970,85 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     ((BeamerTile) Objects.requireNonNull(world.getTileEntity(beamerPos))).gateEngaged(targetGatePos);
             }
         }
+    }
 
+    public World getFakeWorld() {
+        return world;
+    }
+
+    public void setFakeWorld(World world) {}
+
+    public BlockPos getFakePos() {
+        return pos;
+    }
+
+    public void setFakePos(BlockPos pos) {}
+
+    public ArrayList<NearbyGate> getNearbyGates() {
+        return getNearbyGates(null, false, true);
+    }
+    public ArrayList<NearbyGate> getNearbyGates(@Nullable SymbolTypeEnum gateType, boolean ignoreIfInstance, boolean checkAddressAndEnergy) {
+        if(gateType == null) gateType = getSymbolType();
+        double squaredGate = (double) JSGConfig.stargateConfig.universeGateNearbyReach * tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach;
+
+        ArrayList<NearbyGate> addresses = new ArrayList<>();
+
+        Class<? extends TileEntity> tileClass;
+        switch (gateType) {
+            case MILKYWAY:
+                tileClass = StargateMilkyWayBaseTile.class;
+                break;
+            case UNIVERSE:
+                tileClass = StargateUniverseBaseTile.class;
+                break;
+            case PEGASUS:
+                tileClass = StargatePegasusBaseTile.class;
+                break;
+            default:
+                return addresses;
+        }
+
+        for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(getFakeWorld()).getMap().get(gateType).entrySet()) {
+
+            StargatePos stargatePos = entry.getValue();
+            StargateAbstractBaseTile targetGateTile = stargatePos.getTileEntity();
+
+            if (!(targetGateTile instanceof StargateClassicBaseTile))
+                continue;
+
+            StargateClassicBaseTile classicTile = (StargateClassicBaseTile) targetGateTile;
+
+            if (!classicTile.isMerged())
+                continue;
+
+            if (!ignoreIfInstance && !tileClass.isInstance(classicTile))
+                continue;
+
+            int targetDim = classicTile.getFakeWorld().provider.getDimension();
+            BlockPos targetFoundPos = classicTile.getFakePos();
+
+            if (targetDim != getFakeWorld().provider.getDimension())
+                continue;
+
+            if (targetFoundPos.distanceSq(getFakePos()) > squaredGate)
+                continue;
+
+            if (stargatePos.gatePos.equals(pos) && stargatePos.dimensionID == world.provider.getDimension())
+                continue;
+
+            int symbolsNeeded = getSymbolType().getMinimalSymbolCountTo(gateType, StargateDimensionConfig.isGroupEqual(DimensionManager.getProviderType(stargatePos.dimensionID), world.provider.getDimensionType()));
+
+            if(checkAddressAndEnergy) {
+                StargateAddressDynamic addr3 = new StargateAddressDynamic(gateType);
+                addr3.addAll(entry.getKey().subList(0, symbolsNeeded));
+                addr3.addSymbol(targetGateTile.getSymbolType().getOrigin());
+                if (checkAddressAndEnergy(addr3).ok())
+                    addresses.add(new NearbyGate(entry.getKey(), symbolsNeeded, targetGateTile.getSymbolType()));
+            }
+            else
+                addresses.add(new NearbyGate(entry.getKey(), symbolsNeeded, targetGateTile.getSymbolType()));
+        }
+        return addresses;
     }
 
 
@@ -1975,6 +2056,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // OpenComputers methods
 
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getOpenedTime(Context context, Arguments args) {
@@ -1989,6 +2071,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return new Object[]{false, "stargate_not_connected"};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function() -- close/open the iris/shield")
     public Object[] toggleIris(Context context, Arguments args) {
@@ -2002,24 +2085,25 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             return new Object[]{false, "stargate_iris_not_power", "Not enough power to close shield"};
         else if (!result)
             return new Object[]{false, "stargate_iris_busy", "Iris is busy"};
-        else if (result)
-            return new Object[]{true};
         else
-            return new Object[]{false, "stargate_iris_error_unknown", "Unknow error while toggling iris!"};
+            return new Object[]{true};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function() -- get info about iris")
     public Object[] getIrisState(Context context, Arguments args) {
         return new Object[]{irisState.toString()};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function() -- get info about iris")
     public Object[] getIrisType(Context context, Arguments args) {
         return new Object[]{irisType.toString()};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function() -- get info about iris")
     public Object[] getIrisDurability(Context context, Arguments args) {
@@ -2027,6 +2111,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return new Object[]{irisDurability + "/" + irisMaxDurability, irisDurability, irisMaxDurability};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(message:string) -- Sends message to last person, who sent code for iris")
     public Object[] sendMessageToIncoming(Context context, Arguments args) {
@@ -2043,6 +2128,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return new Object[]{false, "no_listener_available"};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(code:integer) -- send code like GDO")
     public Object[] sendIrisCode(Context context, Arguments args) {
@@ -2066,13 +2152,14 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return new Object[]{true, "success"};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(symbolName:string) -- Spins the ring to the given symbol and engages/locks it")
     public Object[] engageSymbol(Context context, Arguments args) {
         if (!isMerged()) return new Object[]{null, "stargate_failure_not_merged", "Stargate is not merged"};
 
         if (!stargateState.idle()) {
-            return new Object[]{null, "stargate_failure_busy", "Stargate is busy, state: " + stargateState.toString()};
+            return new Object[]{null, "stargate_failure_busy", "Stargate is busy, state: " + stargateState};
         }
 
         if (dialedAddress.size() == 9) {
@@ -2090,6 +2177,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return new Object[]{"stargate_spin"};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function() - aborts dialing")
     public Object[] abortDialing(Context context, Arguments args) {
@@ -2103,6 +2191,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return new Object[]{null, "stargate_aborting_failed", "Aborting dialing failed"};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function() -- Tries to open the gate")
     public Object[] engageGate(Context context, Arguments args) {
@@ -2114,7 +2203,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             if (gateState.ok()) {
                 return new Object[]{"stargate_engage"};
             } else {
-                sendSignal(null, "stargate_failed", new Object[]{});
+                sendSignal(null, "stargate_failed", "");
                 return new Object[]{null, "stargate_failure_opening", "Stargate failed to open", gateState.toString()};
             }
         } else {
@@ -2122,6 +2211,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function() -- Tries to close the gate")
     public Object[] disengageGate(Context context, Arguments args) {
@@ -2137,6 +2227,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function() -- Tries to spin mw gate")
     public Object[] spinGate(Context context, Arguments args) {
@@ -2146,7 +2237,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             return new Object[]{null, "stargate_not_supported", "Stargate type is not supported"};
 
         if (stargateState.idle()) {
-            int time = 0;
+            int time;
             if (args.isInteger(0)) {
                 time = args.checkInteger(0);
                 int rounds = 1;
@@ -2164,20 +2255,23 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
-    @Callback
+    @Callback(doc = "function() -- Returns capacitors count")
     public Object[] getCapacitorsInstalled(Context context, Arguments args) {
         return new Object[]{isMerged() ? currentPowerTier - 1 : null};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
-    @Callback
+    @Callback(doc = "function() -- Returns gate type")
     public Object[] getGateType(Context context, Arguments args) {
         return new Object[]{isMerged() ? getSymbolType() : null};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
-    @Callback
+    @Callback(doc = "function() -- Returns gate status")
     public Object[] getGateStatus(Context context, Arguments args) {
         if (!isMerged()) return new Object[]{"not_merged"};
 
@@ -2186,23 +2280,23 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return new Object[]{stargateState.toString().toLowerCase()};
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unused", "unchecked"})
     @Optional.Method(modid = "opencomputers")
-    @Callback
+    @Callback(doc = "function(address:table|address:string...) -- Returns energy needed to dial an address")
     public Object[] getEnergyRequiredToDial(Context context, Arguments args) {
         if (!isMerged()) return new Object[]{"not_merged"};
 
         StargateAddressDynamic stargateAddress = new StargateAddressDynamic(getSymbolType());
-        Iterator<Object> iter = null;
+        Iterator<Object> iterator;
 
         if (args.isTable(0)) {
-            iter = args.checkTable(0).values().iterator();
+            iterator = args.checkTable(0).values().iterator();
         } else {
-            iter = args.iterator();
+            iterator = args.iterator();
         }
 
-        while (iter.hasNext()) {
-            Object symbolObj = iter.next();
+        while (iterator.hasNext()) {
+            Object symbolObj = iterator.next();
 
             if (stargateAddress.size() == 9) {
                 throw new IllegalArgumentException("Too much glyphs");
@@ -2222,7 +2316,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         if (!canDialAddress(stargateAddress)) return new Object[]{"address_malformed"};
 
-        StargateEnergyRequired energyRequired = getEnergyRequiredToDial(network.getStargate(stargateAddress));
+        StargateEnergyRequired energyRequired = getEnergyRequiredToDial(Objects.requireNonNull(network.getStargate(stargateAddress)));
         Map<String, Object> energyMap = new HashMap<>(2);
 
         energyMap.put("open", energyRequired.energyToOpen);
@@ -2230,6 +2324,26 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         energyMap.put("canOpen", getEnergyStorage().getEnergyStored() >= energyRequired.energyToOpen);
 
         return new Object[]{energyMap};
+    }
+
+    @SuppressWarnings("unused")
+    @Optional.Method(modid = "opencomputers")
+    @Callback(doc = "function(gateType:string|gateType:int, checkGateType:boolean, checkAddressAndEnergy:boolean) -- Returns nearby gates")
+    public Object[] getNearbyGates(Context context, Arguments args) {
+        if(!isMerged()) return new Object[]{null, false, "gate_not_merged", new HashMap<String, Object>()};
+        Map<String, Map<List<String>, Integer>> map = new HashMap<>(); // (SymbolType, (address, symbolsNeeded))
+
+        SymbolTypeEnum symbolType = (args.isInteger(0) ? SymbolTypeEnum.valueOf(args.checkInteger(0)) : (args.isString(0) ? SymbolTypeEnum.valueOf(args.checkString(0)) : getSymbolType()));
+        boolean checkType = (args.isBoolean(1) && args.checkBoolean(1));
+        boolean checkAddEne = (args.isBoolean(2) && args.checkBoolean(2));
+
+        for(NearbyGate g : getNearbyGates(symbolType, checkType, checkAddEne)){
+            Map<List<String>, Integer> map2 = map.computeIfAbsent(g.address.getSymbolType().toString(), k -> new HashMap<>());
+            map2.put(g.address.getNameList(), g.symbolsNeeded);
+            map.put(g.gateType.toString(), map2);
+        }
+
+        return new Object[]{null, true, "success", map};
     }
 
 }

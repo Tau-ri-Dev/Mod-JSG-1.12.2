@@ -67,7 +67,7 @@ public class StargatePegasusSpinHelper implements ISpinHelper {
 
   private float calculate(float tick) {
     if (tick < 0) {
-      JSG.logger.warn("Negative argument");
+      //JSG.logger.warn("Negative argument");
       return 0;
     }
 
@@ -76,7 +76,7 @@ public class StargatePegasusSpinHelper implements ISpinHelper {
 
   public float apply(double tick) {
     float slot = calculate((float) tick - spinStartTime);
-    return ((direction.mul == -1 ? 36 - slot : slot) + startOffset) % 36;
+    return (float) ((direction.mul == -1 ? Math.ceil(36 - slot) : Math.floor(slot)) + startOffset) % 36;
   }
 
   public void toBytes(ByteBuf buf) {

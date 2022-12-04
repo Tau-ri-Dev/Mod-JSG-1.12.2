@@ -34,6 +34,7 @@ import tauri.dev.jsg.packet.StateUpdateRequestToServer;
 import tauri.dev.jsg.renderer.props.DestinyCountDownRendererState;
 import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.stargate.EnumStargateState;
+import tauri.dev.jsg.stargate.NearbyGate;
 import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
 import tauri.dev.jsg.stargate.network.StargateAddress;
 import tauri.dev.jsg.stargate.network.StargatePos;
@@ -128,19 +129,13 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                     if (gate != null) {
                         EnumStargateState state = gate.getStargateState();
                         if (state.idle() && gate.isMerged()) {
-                            StargateAddress foundAddress = gate.getRandomNearbyGate();
+                            NearbyGate found = gate.getRandomNearbyGate();
+                            StargateAddress foundAddress = found.address;
+                            int symbols = found.symbolsNeeded;
                             if (foundAddress != null) {
-
-                                int size = 6;
-                                StargatePos relPos = gate.getNetwork().getStargate(foundAddress);
-                                if (relPos != null) {
-                                    if (!StargateDimensionConfig.isGroupEqual(DimensionManager.getProviderType(relPos.dimensionID), gate.getWorld().provider.getDimensionType()))
-                                        size = 7;
-
-                                    gate.dialAddress(foundAddress, size);
-                                    gateOpenedThisRound = true;
-                                    markDirty();
-                                }
+                                gate.dialAddress(foundAddress, symbols);
+                                gateOpenedThisRound = true;
+                                markDirty();
                             }
                         }
                     }

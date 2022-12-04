@@ -1,16 +1,5 @@
 package tauri.dev.jsg.item.linkable.dialer;
 
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.item.oc.ItemOCMessage;
-import tauri.dev.jsg.item.renderer.JSGFontRenderer;
-import tauri.dev.jsg.item.renderer.ItemRenderHelper;
-import tauri.dev.jsg.loader.ElementEnum;
-import tauri.dev.jsg.loader.texture.TextureLoader;
-import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
-import tauri.dev.jsg.stargate.EnumStargateState;
-import tauri.dev.jsg.stargate.network.*;
-import tauri.dev.jsg.transportrings.TransportRings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -25,9 +14,23 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.item.oc.ItemOCMessage;
+import tauri.dev.jsg.item.renderer.ItemRenderHelper;
+import tauri.dev.jsg.item.renderer.JSGFontRenderer;
+import tauri.dev.jsg.loader.ElementEnum;
+import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
+import tauri.dev.jsg.stargate.EnumStargateState;
+import tauri.dev.jsg.stargate.network.*;
+import tauri.dev.jsg.transportrings.TransportRings;
+import tauri.dev.jsg.util.JSGMinecraftHelper;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
 
 import java.awt.*;
+import java.time.LocalTime;
+import java.time.temporal.ChronoField;
+import java.util.ArrayList;
 
 import static tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode.NEARBY;
 
@@ -40,7 +43,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
         StargateAddressDynamic newAddress = new StargateAddressDynamic(symbolType);
         int addressLength = compound.getByte(baseName + "_addressLength");
         for (int i = 0; i < addressLength; i++) {
-            int symbolId = (int) compound.getByte(baseName + "_" + i);
+            int symbolId = compound.getByte(baseName + "_" + i);
             switch (symbolType) {
                 case MILKYWAY:
                     newAddress.addSymbol(SymbolMilkyWayEnum.valueOf(symbolId));
@@ -216,6 +219,8 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
         GlStateManager.popMatrix();
     }
 
+    private final ArrayList<Integer> switchStates = new ArrayList<>();
+
     @SideOnly(Side.CLIENT)
     @Override
     public void renderByItem(ItemStack stack) {
@@ -225,8 +230,6 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
         boolean isBroken = stack.getItemDamage() == UniverseDialerItem.UniverseDialerVariants.BROKEN.meta;
 
         GlStateManager.pushMatrix();
-
-        long actualTicks = 1;
 
         // Item frame
         if (transformType == TransformType.FIXED) {
@@ -240,7 +243,6 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
             EnumHandSide handSide = mainhand ? EnumHandSide.RIGHT : EnumHandSide.LEFT;
 
             EntityPlayer player = Minecraft.getMinecraft().player;
-            actualTicks = player.world != null ? player.world.getTotalWorldTime() : 1;
             float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * partialTicks;
             float angle = ItemRenderHelper.getMapAngleFromPitch(pitch);
 
@@ -304,15 +306,13 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 
             if (!notLinked || mode == UniverseDialerMode.MEMORY) {
                 if (mode == UniverseDialerMode.GATE_INFO) {
-					EnumStargateState gateStatus = EnumStargateState.valueOf(compound.getInteger("gateStatus"));
-					String opened = compound.getString("gateOpenTime");
-					String iris = compound.getString("gateIrisState");
-					String lastSymbol = compound.getString("gateLastSymbol");
+                    EnumStargateState gateStatus = EnumStargateState.valueOf(compound.getInteger("gateStatus"));
+                    String[] opened = compound.getString("gateOpenTime").split(" ");
+                    String[] iris = compound.getString("gateIrisState").split(" ");
+                    String[] lastSymbol = compound.getString("gateLastSymbol").replaceAll("Glyph ", "G").split(" ");
 
-					boolean switchState = compound.getBoolean("switchState");
-
-					float top = 0.32f*2;
-					float row = 0.20f;
+                    float top = 0.32f * 2;
+                    float row = 0.20f;
                     float x = -0.42f;
                     float second = 0.90f;
 
@@ -321,30 +321,59 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
                     drawStringWithShadow(x, top - (row * 2), "Iris:", false, false);
                     drawStringWithShadow(x, top - (row * 3), "Last glyph:", false, false);
 
-                    String state = gateStatus.toString()
+                    String[] state = gateStatus.toString()
                             .replaceAll("ENGAGED", "ENGAGED INCOMING")
                             .replaceAll("ENGAGED INCOMING_INITIATING", "ENGAGED OUTGOING")
-                            .replaceAll("_", " ");
+                            .replaceAll("_", " ").split(" ");
 
-                    String[] s = state.split(" ");
+                    if(switchStates.size() < 4){
+                        switchStates.clear();
+                        for(int i = 0; i < 4; i++)
+                            switchStates.add(0);
+                    }
 
-                    state = s.length > 1 ? s[switchState ? 1 : 0] : s.length > 0 ? s[0] : "";
+                    for (int u = 0; u < 4; u++) {
+                        int max = 0;
+                        switch (u) {
+                            default:
+                                break;
+                            case 0:
+                                max = state.length;
+                                break;
+                            case 1:
+                                max = opened.length;
+                                break;
+                            case 2:
+                                max = iris.length;
+                                break;
+                            case 3:
+                                max = lastSymbol.length;
+                                break;
+                        }
+                        int current = (int) Math.floor(JSGMinecraftHelper.getClientTick() % (40*max)/40D);
 
-                    drawStringWithShadow(x + second, top - (row * 0), state, true, false);
-                    drawStringWithShadow(x + second, top - (row * 1), opened, true, false);
-                    drawStringWithShadow(x + second, top - (row * 2), iris, true, false);
-                    drawStringWithShadow(x + second, top - (row * 3), lastSymbol.replaceAll("Glyph ", "G"), true, false);
+                        switchStates.set(u, (current));
+                    }
+
+                    if (state.length > switchStates.get(0))
+                        drawStringWithShadow(x + second, top - (row * 0), state[switchStates.get(0)].replaceAll("_", " "), true, false);
+                    if (opened.length > switchStates.get(1))
+                        drawStringWithShadow(x + second, top - (row * 1), opened[switchStates.get(1)].replaceAll("_", " "), true, false);
+                    if (iris.length > switchStates.get(2))
+                        drawStringWithShadow(x + second, top - (row * 2), iris[switchStates.get(2)].replaceAll("_", " "), true, false);
+                    if (lastSymbol.length > switchStates.get(3))
+                        drawStringWithShadow(x + second, top - (row * 3), lastSymbol[switchStates.get(3)].replaceAll("_", " "), true, false);
 
                 } else {
-					int selected = compound.getByte("selected");
-					NBTTagList tagList = compound.getTagList(mode.tagListName, NBT.TAG_COMPOUND);
+                    int selected = compound.getByte("selected");
+                    NBTTagList tagList = compound.getTagList(mode.tagListName, NBT.TAG_COMPOUND);
 
                     for (int offset = -1; offset <= 1; offset++) {
                         int index = selected + offset;
                         if (index >= 0 && index < tagList.tagCount()) {
 
                             boolean active = offset == 0;
-                            NBTTagCompound entryCompound = (NBTTagCompound) tagList.getCompoundTagAt(index);
+                            NBTTagCompound entryCompound = tagList.getCompoundTagAt(index);
 
                             switch (mode) {
                                 case MEMORY:

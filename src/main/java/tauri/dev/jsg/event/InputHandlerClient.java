@@ -129,39 +129,7 @@ public class InputHandlerClient {
 						Minecraft.getMinecraft().displayGuiScreen(new GuiSendCode(getHand(JSGItems.GDO)));
 					}
 				}
-
 			}
-			if (checkForItem(JSGItems.UNIVERSE_DIALER)) {
-				EnumHand hand = getHand(JSGItems.UNIVERSE_DIALER);
-				if (Minecraft.getMinecraft().player.getHeldItem(hand).getItemDamage() != UniverseDialerItem.UniverseDialerVariants.BROKEN.meta) {
-					// universe dial start sound
-					if (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()) {
-						ItemStack itemStack = getItemStack(Minecraft.getMinecraft().player, JSGItems.UNIVERSE_DIALER);
-						if(itemStack == null) return;
-						NBTTagCompound compound = itemStack.getTagCompound();
-						if(compound == null) return;
-						UniverseDialerMode mode = UniverseDialerMode.valueOf(compound.getByte("mode"));
-						int selected = compound.getByte("selected");
-						NBTTagList tagList = compound.getTagList(mode.tagListName, Constants.NBT.TAG_COMPOUND);
-						if (selected >= tagList.tagCount()) return;
-						switch (mode) {
-							case MEMORY:
-							case NEARBY:
-								JSGSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_START_DIAL);
-								break;
-
-							/*case RINGS:
-								break;
-
-							case OC:
-								break;
-							 */
-						}
-					}
-				}
-
-			}
-
 			return;
 		}
 
@@ -186,7 +154,6 @@ public class InputHandlerClient {
 
 				// ---------------------------------------------
 				if (action != null) {
-					JSGSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_MODE_CHANGE);
 					event.setCanceled(true);
 					JSGPacketHandler.INSTANCE.sendToServer(new UniverseDialerActionPacketToServer(action, hand, next));
 				}
@@ -261,7 +228,6 @@ public class InputHandlerClient {
 			
 			// ---------------------------------------------
 			if (action != null) {
-				JSGSoundHelper.playSoundEventClientSide(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getPosition(), SoundEventEnum.UNIVERSE_DIALER_MODE_CHANGE);
 				JSGPacketHandler.INSTANCE.sendToServer(new UniverseDialerActionPacketToServer(action, hand, next));
 			}
 		}

@@ -95,6 +95,8 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     DESTINY_FTL_JUMP_IN(128, "destiny_ftl_in", 1f),
     DESTINY_FTL_JUMP_OUT(129, "destiny_ftl_out", 1f),
 
+    //UNIVERSE_DIALER_ERROR(130, "universe_dialer_error", 0.1f),
+
     // ----------------------------------------------------------
     // Entities
     ZAT_SHOOT(140, "item_zat_shoot", 0.1f),

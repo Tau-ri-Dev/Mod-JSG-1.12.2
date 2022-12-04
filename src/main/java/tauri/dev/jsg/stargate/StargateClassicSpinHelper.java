@@ -167,7 +167,7 @@ public class StargateClassicSpinHelper implements ISpinHelper {
 
   private float calculate(float tick) {
     if (tick < 0) {
-      JSG.logger.warn("Negative argument");
+      //JSG.logger.warn("Negative argument");
       return 0;
     }
 
@@ -184,7 +184,6 @@ public class StargateClassicSpinHelper implements ISpinHelper {
   }
 
   public float apply(double tick) {
-    //		JSG.info("("+tick+", "+calculate((float) tick) * direction.mul+")");
     return calculate((float) (tick - spinStartTime)) * direction.mul;
   }
 

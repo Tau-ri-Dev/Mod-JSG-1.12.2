@@ -790,49 +790,9 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         }
     }
 
-    public StargateAddress getRandomNearbyGate() {
-        double squaredGate = (double) JSGConfig.stargateConfig.universeGateNearbyReach * tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach;
-        ArrayList<StargateAddress> addresses = new ArrayList<>();
-
-        for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(getFakeWorld()).getMap().get(SymbolTypeEnum.UNIVERSE).entrySet()) {
-
-            StargatePos stargatePos = entry.getValue();
-            StargateAbstractBaseTile targetGateTile = stargatePos.getTileEntity();
-
-            if (!(targetGateTile instanceof StargateClassicBaseTile))
-                continue;
-
-            if (!targetGateTile.isMerged())
-                continue;
-
-            // get only universe gates in nearby
-            if (!(targetGateTile instanceof StargateUniverseBaseTile))
-                continue;
-
-            StargateUniverseBaseTile targetUniTile = (StargateUniverseBaseTile) targetGateTile;
-
-            int targetDim = targetUniTile.getFakeWorld().provider.getDimension();
-            BlockPos targetFoundPos = targetUniTile.getFakePos();
-
-            if (targetDim != getFakeWorld().provider.getDimension())
-                continue;
-
-            if (targetFoundPos.distanceSq(getFakePos()) > squaredGate)
-                continue;
-
-            if (stargatePos.gatePos.equals(pos) && stargatePos.dimensionID == world.provider.getDimension())
-                continue;
-
-            StargateAddressDynamic addr3 = new StargateAddressDynamic(SymbolTypeEnum.UNIVERSE);
-            int symbols = (StargateDimensionConfig.isGroupEqual(DimensionManager.getProviderType(stargatePos.dimensionID), world.provider.getDimensionType()) ? 6 : 7);
-            addr3.addAll(entry.getKey().subList(0, symbols));
-            addr3.addSymbol(targetGateTile.getSymbolType().getOrigin());
-
-            if (checkAddressAndEnergy(addr3).ok())
-                addresses.add(entry.getKey());
-        }
+    public NearbyGate getRandomNearbyGate() {
+        ArrayList<NearbyGate> addresses = getNearbyGates();
         if (addresses.size() == 0) return null;
-
         int i = (int) Math.min(Math.floor(Math.random() * addresses.size()), (addresses.size() - 1));
         if (i < 0) i = 0;
         return addresses.get(i);

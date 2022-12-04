@@ -14,7 +14,7 @@ public enum UniverseDialerMode implements EnumKeyInterface<Byte> {
 	MEMORY(1, "item.jsg.universe_dialer.mode_saved", true, "linkedGate", "saved", new Block[]{JSGBlocks.STARGATE_UNIVERSE_BASE_BLOCK}),
 	RINGS(2, "item.jsg.universe_dialer.mode_rings", true, "linkedRings", "rings", JSGBlocks.RINGS_BLOCKS),
 	OC(3, "item.jsg.universe_dialer.mode_oc", false, null, "ocmess", null),
-	GATE_INFO(4, "item.jsg.universe_dialer.mode_info", true, "linkedGate", "info", new Block[]{JSGBlocks.STARGATE_UNIVERSE_BASE_BLOCK});
+	GATE_INFO(4, "item.jsg.universe_dialer.mode_info", true, "linkedGate", "info", JSGBlocks.STARGATE_CLASSIC_BASE_BLOCKS);
 
 	
 	public final byte id;

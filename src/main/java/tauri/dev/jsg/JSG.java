@@ -74,17 +74,29 @@ public class JSG {
     public static void info(String string) {
         logger.info(string);
     }
+    public static void info(String string, Exception e) {
+        logger.info(string, e);
+    }
 
     public static void warn(String string) {
         logger.warn(string);
+    }
+    public static void warn(String string, Exception e) {
+        logger.warn(string, e);
     }
 
     public static void error(String string) {
         logger.error(string);
     }
+    public static void error(String string, Exception e) {
+        logger.error(string, e);
+    }
 
     public static void debug(String string) {
         logger.debug(string);
+    }
+    public static void debug(String string, Exception e) {
+        logger.debug(string, e);
     }
 
     // --------------------------------------------
