@@ -86,7 +86,7 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     PAGE_FLIP(120, "page_flip", 0.2f),
     GUI_SEND_CODE_BUTTON_PRESS(121, "gui_send_code_button_press", 0.1f),
     UNIVERSE_DIALER_MODE_CHANGE(122, "universe_dialer_mode_change", 0.1f),
-    UNIVERSE_DIALER_CONNECTED(123, "universe_dialer_connect", 0.2f),
+    UNIVERSE_DIALER_CONNECTED(123, "universe_dialer_connect", 0.4f),
     UNIVERSE_DIALER_START_DIAL(124, "universe_dialer_start_dial", 0.1f),
 
     DESTINY_COUNTDOWN_START(125, "destiny_countdown_start", 0.2f),

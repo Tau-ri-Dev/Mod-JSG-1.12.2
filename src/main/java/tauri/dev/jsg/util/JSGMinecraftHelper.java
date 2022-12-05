@@ -1,6 +1,7 @@
 package tauri.dev.jsg.util;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class JSGMinecraftHelper {
     /**
@@ -11,5 +12,11 @@ public class JSGMinecraftHelper {
      */
     public static long getClientTick() {
         return (long) Math.floor((Minecraft.getSystemTime() / (double) 1000) * 20);
+    }
+
+    public static long getPlayerTickClientSide() {
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        if(player == null) return 0;
+        return player.getEntityWorld().getTotalWorldTime();
     }
 }

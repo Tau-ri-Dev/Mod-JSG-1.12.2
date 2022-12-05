@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Config(modid = JSG.MOD_ID, name = "jsg/jsgConfig_" + JSG.CONFIG_VERSION)
+@Config(modid = JSG.MOD_ID, name = "jsg/jsgConfig_" + JSG.CONFIG_GENERAL_VERSION)
 public class JSGConfig {
 
     @Name("Stargate size")
@@ -214,6 +214,7 @@ public class JSGConfig {
                 put(BiomeOverlayEnum.MOSSY.toString(), new String[]{"minecraft:vine"});
                 put(BiomeOverlayEnum.AGED.toString(), new String[]{"minecraft:cobblestone"});
                 put(BiomeOverlayEnum.SOOTY.toString(), new String[]{"minecraft:coal_block"});
+                put(BiomeOverlayEnum.SANDY.toString(), new String[]{"minecraft:sand"});
             }
         };
 
@@ -677,6 +678,9 @@ public class JSGConfig {
                 "Disable this if it causes lags."
         })
         public boolean renderEmissive = true;
+
+        @Name("Enable different Point Of Origins for MW gate")
+        public boolean enableDiffOrigins = true;
     }
 
     public static class WorldOreGenerator {
@@ -885,6 +889,13 @@ public class JSGConfig {
     public static void rescaleToConfig() {
         GlStateManager.translate(JSGConfig.devConfig.x, JSGConfig.devConfig.y, JSGConfig.devConfig.z);
         GlStateManager.scale(JSGConfig.devConfig.s, JSGConfig.devConfig.s, JSGConfig.devConfig.s);
+    }
+
+    @SuppressWarnings("unused")
+    public static void rotateToConfig() {
+        GlStateManager.rotate(JSGConfig.devConfig.x2, 1, 0, 0);
+        GlStateManager.rotate(JSGConfig.devConfig.y2, 0, 1, 0);
+        GlStateManager.rotate(JSGConfig.devConfig.z2, 0, 0, 1);
     }
 
     @SuppressWarnings("unused")

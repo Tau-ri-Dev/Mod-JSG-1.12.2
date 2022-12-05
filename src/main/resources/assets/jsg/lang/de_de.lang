@@ -233,6 +233,9 @@ item.jsg.universe_dialer.mode_saved=Speicher
 item.jsg.universe_dialer.mode_rings=Ringe
 item.jsg.universe_dialer.mode_oc=OpnCom
 item.jsg.universe_dialer.mode_info=Status
+item.jsg.universe_dialer.mode_countdown=Timer
+item.jsg.universe_dialer.countdown_not_sync=Not synchronized!
+item.jsg.universe_dialer.countdown_not_active=Countdown not active!
 item.jsg.universe_dialer.aborting=Anwahl abbrechen
 item.jsg.universe_dialer.abort=Abbruch
 item.jsg.universe_dialer.dial_start=Wähle das Gate...
@@ -639,6 +642,7 @@ gui.stargate.biome_overlay.frost=Frostig
 gui.stargate.biome_overlay.mossy=Moosig
 gui.stargate.biome_overlay.aged=Gealtert
 gui.stargate.biome_overlay.sooty=Verrußt
+gui.stargate.biome_overlay.sandy=Sandy
 gui.stargate.capacitors=Kondensatoren
 gui.stargate.energyBuffer=Energiespeicher
 

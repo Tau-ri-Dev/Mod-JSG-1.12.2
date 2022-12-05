@@ -18,11 +18,11 @@ import java.util.List;
 
 public class TabBiomeOverlay extends Tab {
 	
-	private EnumSet<BiomeOverlayEnum> supportedOverlays;
+	private final EnumSet<BiomeOverlayEnum> supportedOverlays;
 	private SlotTab slot;
 	
-	private int slotTexX;
-	private int slotTexY;
+	private final int slotTexX;
+	private final int slotTexY;
 	
 	protected TabBiomeOverlay(TabBiomeOverlayBuilder builder) {		
 		super(builder);
@@ -55,13 +55,13 @@ public class TabBiomeOverlay extends Tab {
 					if (!supportedOverlays.contains(biomeOverlay))
 						continue;
 					
-					String line = biomeOverlay.getLocalizedColorizedName() + ": ";
+					StringBuilder line = new StringBuilder(biomeOverlay.getLocalizedColorizedName() + ": ");
 					
 					for (ItemMetaPair itemMeta : JSGConfig.stargateConfig.getBiomeOverrideBlocks().get(biomeOverlay)) {
-						line += itemMeta.getDisplayName() + ", ";
+						line.append(itemMeta.getDisplayName()).append(", ");
 					}
 					
-					text.add(line);
+					text.add(line.toString());
 				}
 				
 				screen.drawHoveringText(text, mouseX-guiLeft, mouseY-guiTop);

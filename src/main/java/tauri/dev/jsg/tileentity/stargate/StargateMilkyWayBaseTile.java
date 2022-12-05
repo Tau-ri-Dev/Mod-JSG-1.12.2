@@ -421,7 +421,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         }
     }
 
-    public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.AGED, BiomeOverlayEnum.SOOTY);
+    public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.AGED, BiomeOverlayEnum.SOOTY, BiomeOverlayEnum.SANDY);
 
     @Override
     public EnumSet<BiomeOverlayEnum> getSupportedOverlays() {
@@ -522,7 +522,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
     @Override
     public void setOriginId(NBTTagCompound compound){
-        compound.setInteger("originId", SymbolMilkyWayEnum.getOriginId(BiomeOverlayEnum.updateBiomeOverlay(world, pos, getSupportedOverlays()), world.provider.getDimension()));
+        compound.setInteger("originId", SymbolMilkyWayEnum.getOriginId(getBiomeOverlayWithOverride(), world.provider.getDimension()));
     }
 
 

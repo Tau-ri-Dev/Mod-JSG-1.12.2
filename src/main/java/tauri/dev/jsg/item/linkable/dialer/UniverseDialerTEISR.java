@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,11 +16,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.oc.ItemOCMessage;
 import tauri.dev.jsg.item.renderer.ItemRenderHelper;
 import tauri.dev.jsg.item.renderer.JSGFontRenderer;
 import tauri.dev.jsg.loader.ElementEnum;
+import tauri.dev.jsg.renderer.AncientTimeRenderer;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.stargate.EnumStargateState;
 import tauri.dev.jsg.stargate.network.*;
@@ -28,8 +31,6 @@ import tauri.dev.jsg.util.JSGMinecraftHelper;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
 
 import java.awt.*;
-import java.time.LocalTime;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 
 import static tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode.NEARBY;
@@ -294,17 +295,25 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
             drawStringWithShadow(0.22f, 0.916f, mode.next().localize(), false, false);
 
             boolean notLinked = mode.linkable && !compound.hasKey(mode.tagPosName);
+            boolean clocksDisabled = false;
+            if (mode == UniverseDialerMode.COUNTDOWN) {
+                long time = compound.getLong("timerCountTo");
+                if (time == -1) clocksDisabled = true;
+            }
 
-            if (notLinked) {
+            if (notLinked || clocksDisabled) {
                 Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(JSG.MOD_ID, "textures/gui/universe_warning.png"));
                 GlStateManager.enableTexture2D();
                 GlStateManager.enableBlend();
-                GlStateManager.color(0.91f, 1, 1, 1);
+                if (notLinked && mode == UniverseDialerMode.COUNTDOWN)
+                    GlStateManager.color(0.7f, 1, 0.3f, 1f);
+                else
+                    GlStateManager.color(1f, 1, 1f, 1f);
                 drawTexturedRect(0.72f, 0.26f, 0, 0.24f, 0.24f);
-
             }
 
-            if (!notLinked || mode == UniverseDialerMode.MEMORY) {
+            if (!notLinked || mode == UniverseDialerMode.MEMORY || mode == UniverseDialerMode.COUNTDOWN) {
+                // static displays
                 if (mode == UniverseDialerMode.GATE_INFO) {
                     EnumStargateState gateStatus = EnumStargateState.valueOf(compound.getInteger("gateStatus"));
                     String[] opened = compound.getString("gateOpenTime").split(" ");
@@ -326,9 +335,9 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
                             .replaceAll("ENGAGED INCOMING_INITIATING", "ENGAGED OUTGOING")
                             .replaceAll("_", " ").split(" ");
 
-                    if(switchStates.size() < 4){
+                    if (switchStates.size() < 4) {
                         switchStates.clear();
-                        for(int i = 0; i < 4; i++)
+                        for (int i = 0; i < 4; i++)
                             switchStates.add(0);
                     }
 
@@ -350,7 +359,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
                                 max = lastSymbol.length;
                                 break;
                         }
-                        int current = (int) Math.floor(JSGMinecraftHelper.getClientTick() % (40*max)/40D);
+                        int current = (int) Math.floor(JSGMinecraftHelper.getClientTick() % (40 * max) / 40D);
 
                         switchStates.set(u, (current));
                     }
@@ -364,7 +373,40 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
                     if (lastSymbol.length > switchStates.get(3))
                         drawStringWithShadow(x + second, top - (row * 3), lastSymbol[switchStates.get(3)].replaceAll("_", " "), true, false);
 
-                } else {
+                } else if (mode == UniverseDialerMode.COUNTDOWN) {
+                    if(notLinked) {
+                        drawStringWithShadow(-0.46f, (0.32f * 2) - (0.2f * 3), I18n.format("item.jsg.universe_dialer.countdown_not_sync"), false, false);
+                    }
+                    if (!clocksDisabled) {
+                        long time = compound.getLong("timerCountTo");
+                        long countdown = (time - JSGMinecraftHelper.getPlayerTickClientSide());
+                        long ticks = countdown;
+
+                        if (countdown < 0) ticks = 0;
+
+                        // must be there because client doesn't get message when timerCountTo reaches -1
+                        if (countdown < -(20L * JSGConfig.countdownConfig.zeroDelay)) time = -1;
+
+                        float y = (0.32f * 2) + (0.20f * 2) - 0.8f;
+                        float x = -0.52f + 0.90f;
+
+                        GlStateManager.pushMatrix();
+                        GlStateManager.translate(x, y, 0);
+                        GlStateManager.scale(0.03, 0.03, 0.03);
+                        GlStateManager.rotate(180, 0, 1, 0);
+                        GlStateManager.rotate(180, 0, 0, 1);
+                        GlStateManager.pushMatrix();
+                        GlStateManager.color(1, 1, 1);
+                        AncientTimeRenderer.renderClock(ticks, false, time, true);
+                        GlStateManager.popMatrix();
+                        GlStateManager.popMatrix();
+                    }
+                    else {
+                        drawStringWithShadow(-0.42f, (0.32f * 2) - (0.2f * 1.5f), I18n.format("item.jsg.universe_dialer.countdown_not_active"), false, false);
+                    }
+                }
+                // Lists of each tag list
+                else {
                     int selected = compound.getByte("selected");
                     NBTTagList tagList = compound.getTagList(mode.tagListName, NBT.TAG_COMPOUND);
 
@@ -435,7 +477,6 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
                                     String name = rings.getName();
                                     if (name.equals("") || name.equals("[empty]")) name = index + "";
                                     drawStringWithShadow(-0.10f, 0.32f - 0.32f * offset, name, active, false);
-                                    //drawStringWithShadow(-0.32f, 0.32f - 0.32f*offset, rings.getAddress().toShortString(), active, false);
                                     break;
 
                                 case OC:

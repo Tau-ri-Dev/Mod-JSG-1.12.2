@@ -52,7 +52,7 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
         GlStateManager.translate(-RING_LOC.x, -RING_LOC.z, -RING_LOC.y);
 
         ElementEnum.MILKYWAY_RING.bindTextureAndRender(rendererState.getBiomeOverlay());
-        ModelLoader.getModel(((SymbolMilkyWayEnum) SymbolMilkyWayEnum.getOrigin()).getModelResource(rendererState.biomeOverride, getWorld().provider.getDimension(), false)).render();
+        ModelLoader.getModel(((SymbolMilkyWayEnum) SymbolMilkyWayEnum.getOrigin()).getModelResource(rendererState.getBiomeOverlay(), getWorld().provider.getDimension(), false)).render();
 
         GlStateManager.popMatrix();
     }

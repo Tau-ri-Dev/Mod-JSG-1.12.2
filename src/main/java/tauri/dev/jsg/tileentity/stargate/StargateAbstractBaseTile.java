@@ -1067,6 +1067,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     public abstract EnumSet<BiomeOverlayEnum> getSupportedOverlays();
 
+    public BiomeOverlayEnum getBiomeOverlayWithOverride(){
+        return BiomeOverlayEnum.updateBiomeOverlay(world, pos, getSupportedOverlays());
+    }
+
     /**
      * Method for closing the gate using Autoclose mechanism.
      *

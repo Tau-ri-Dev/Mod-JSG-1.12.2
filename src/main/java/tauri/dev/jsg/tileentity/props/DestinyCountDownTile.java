@@ -130,12 +130,14 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                         EnumStargateState state = gate.getStargateState();
                         if (state.idle() && gate.isMerged()) {
                             NearbyGate found = gate.getRandomNearbyGate();
-                            StargateAddress foundAddress = found.address;
-                            int symbols = found.symbolsNeeded;
-                            if (foundAddress != null) {
-                                gate.dialAddress(foundAddress, symbols);
-                                gateOpenedThisRound = true;
-                                markDirty();
+                            if(found != null) {
+                                StargateAddress foundAddress = found.address;
+                                int symbols = found.symbolsNeeded;
+                                if (foundAddress != null) {
+                                    gate.dialAddress(foundAddress, symbols);
+                                    gateOpenedThisRound = true;
+                                    markDirty();
+                                }
                             }
                         }
                     }

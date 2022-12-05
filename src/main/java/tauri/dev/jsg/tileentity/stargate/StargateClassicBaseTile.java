@@ -837,6 +837,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return null;
     }
 
+    public BiomeOverlayEnum getBiomeOverlayWithOverride(){
+        BiomeOverlayEnum overlay = determineBiomeOverride();
+        if(overlay == null) return super.getBiomeOverlayWithOverride();
+        return overlay;
+    }
+
     @Override
     protected boolean shouldAutoclose() {
         boolean beamerActive = false;
@@ -1317,6 +1323,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     JSG.logger.debug("Giving Notebook page of address " + symbolType);
 
                     NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(gateAddressMap.get(symbolType), hasUpgrade(StargateUpgradeEnum.CHEVRON_UPGRADE), PageNotebookItem.getRegistryPathFromWorld(world, pos));
+
+                    setOriginId(compound);
 
                     stack = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 1, 1);
                     stack.setTagCompound(compound);

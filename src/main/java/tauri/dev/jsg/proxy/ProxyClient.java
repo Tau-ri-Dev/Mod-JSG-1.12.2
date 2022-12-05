@@ -25,7 +25,9 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.stargate.StargateClassicMemberBlockColor;
+import tauri.dev.jsg.entity.EntityKino;
 import tauri.dev.jsg.entity.friendly.TokraEntity;
+import tauri.dev.jsg.entity.renderer.KinoRenderer;
 import tauri.dev.jsg.entity.renderer.TokraRenderer;
 import tauri.dev.jsg.event.InputHandlerClient;
 import tauri.dev.jsg.fluid.JSGBlockFluid;
@@ -81,6 +83,7 @@ public class ProxyClient implements IProxy {
 
     private void registerEntityRenderers() {
         RenderingRegistry.registerEntityRenderingHandler(TokraEntity.class, TokraRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityKino.class, KinoRenderer::new);
     }
 
 

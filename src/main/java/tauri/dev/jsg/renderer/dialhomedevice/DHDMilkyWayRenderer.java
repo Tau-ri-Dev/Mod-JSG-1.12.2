@@ -23,7 +23,7 @@ public class DHDMilkyWayRenderer extends DHDAbstractRenderer {
             JSGTextureLightningHelper.lightUpTexture((rendererState.isButtonActive(symbol) ? 0.9f : 0));
             setColorByAddress(te, rendererState, compound, SymbolTypeEnum.MILKYWAY, symbol);
             rendererDispatcher.renderEngine.bindTexture(((DHDMilkyWayRendererState) rendererState).getButtonTexture(symbol, rendererState.getBiomeOverlay()));
-            ModelLoader.getModel(symbol.getModelResource(rendererState.biomeOverlay, te.getWorld().provider.getDimension(), true)).render();
+            ModelLoader.getModel(symbol.getModelResource(rendererState.getBiomeOverlay(), te.getWorld().provider.getDimension(), true, true)).render();
             JSGTextureLightningHelper.resetLight(getWorld(), rendererState.pos);
             GlStateManager.popMatrix();
         }
@@ -32,7 +32,7 @@ public class DHDMilkyWayRenderer extends DHDAbstractRenderer {
     @Override
     public void renderDHD(DHDAbstractRendererState rendererState, DHDAbstractTile te) {
         ElementEnum.MILKYWAY_DHD.bindTextureAndRender(rendererState.getBiomeOverlay());
-        ModelLoader.getModel(((SymbolMilkyWayEnum) SymbolMilkyWayEnum.getOrigin()).getModelResource(rendererState.biomeOverlay, te.getWorld().provider.getDimension(), true)).render();
+        ModelLoader.getModel(((SymbolMilkyWayEnum) SymbolMilkyWayEnum.getOrigin()).getModelResource(rendererState.getBiomeOverlay(), te.getWorld().provider.getDimension(), true)).render();
     }
 
     @Override

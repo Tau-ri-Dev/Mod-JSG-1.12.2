@@ -1,9 +1,12 @@
 package tauri.dev.jsg.stargate.network;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.DimensionManager;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.loader.model.ModelLoader;
+import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 
 import java.util.HashMap;
@@ -113,52 +116,79 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
     public static int getOriginId(BiomeOverlayEnum overlay, int dimId) {
 		/*
 		IDS:
-		0- normal - overworld
-		0- mossy
-		0- aged
-		1- end
+		5/0- normal - overworld
+		0- mossy - unknown
+		0- aged - unknown
+		1- end - tornado
 		2- sooty - nether
-		3- frosty
-		4- sandy
+		3- frosty - beta
+		4- sandy - Abydos
 		 */
-        if (dimId == -1)
-            return 2; // nether
-        if (dimId == 1)
-            return 1; // end
-        if (dimId == 0 && overlay != null) {
-            switch (overlay) {
-                case SOOTY:
-                    return 1;
-                case FROST:
-                    return 3;
-                case SANDY:
-                    return 4;
-                default:
-                    break;
-            }
+        if(overlay == null) overlay = BiomeOverlayEnum.NORMAL;
+
+        int override = StargateDimensionConfig.getOrigin(DimensionManager.getProviderType(dimId), overlay);
+        if (override >= 0)
+            return override;
+
+        switch (overlay) {
+            case FROST:
+                return 3;
+            case SANDY:
+                return 4;
+            case SOOTY:
+                return 2;
+            case NORMAL:
+                if (dimId == 0) return 5;
+                return 0;
+            default:
+                break;
         }
         return 0;
     }
 
     @Override
     public ResourceLocation getIconResource(int originId) {
-        if (this == ORIGIN)
-            return new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/milkyway/origin_" + originId + ".png");
+        if (this == ORIGIN) {
+            if (JSGConfig.avConfig.enableDiffOrigins)
+                return new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/milkyway/origin_" + originId + ".png");
+            return new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/milkyway/origin_5.png");
+        }
         return getIconResource(BiomeOverlayEnum.NORMAL, 0);
     }
 
     @Override
     public ResourceLocation getIconResource(BiomeOverlayEnum overlay, int dimensionId) {
         if (this == ORIGIN)
-            return new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/milkyway/origin_" + getOriginId(overlay, dimensionId) + ".png");
+            return getIconResource(getOriginId(overlay, dimensionId));
         return iconResource;
     }
 
     public ResourceLocation getModelResource(BiomeOverlayEnum overlay, int dimensionId, boolean forDHD) {
-        if (this == ORIGIN)
-            return ModelLoader.getModelResource("milkyway/" + (!forDHD ? "ring/" : "") + "origin_" + getOriginId(overlay, dimensionId) + ".obj");
+        return getModelResource(overlay, dimensionId, forDHD, false);
+    }
 
-        return modelResource;
+    public ResourceLocation getModelResource(BiomeOverlayEnum overlay, int dimensionId, boolean forDHD, boolean lightModel) {
+        return getModelResource(overlay, dimensionId, forDHD, lightModel, false);
+    }
+
+    private ResourceLocation getModelResource(BiomeOverlayEnum overlay, int dimensionId, boolean forDHD, boolean lightModel, boolean notFound) {
+        ResourceLocation modelResource;
+        if (this == ORIGIN) {
+            if (!notFound && JSGConfig.avConfig.enableDiffOrigins)
+                modelResource = ModelLoader.getModelResource("milkyway/" + (!forDHD ? "ring/" : "") + "origin_" + getOriginId(overlay, dimensionId) + (lightModel ? "_light" : "") + ".obj");
+            else
+                modelResource = ModelLoader.getModelResource("milkyway/" + (!forDHD ? "ring/" : "") + "origin_5" + (lightModel ? "_light" : "") + ".obj");
+
+            if (ModelLoader.getModel(modelResource) == null && !notFound) {
+                JSG.error("Origin model not loaded!");
+                JSG.error(modelResource.getResourceDomain() + ":" + modelResource.getResourcePath());
+                return getModelResource(overlay, dimensionId, forDHD, lightModel, true);
+            }
+
+            return modelResource;
+        }
+
+        return this.modelResource;
     }
 
     @Override

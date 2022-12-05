@@ -46,6 +46,7 @@ import tauri.dev.jsg.stargate.EnumStargateState;
 import tauri.dev.jsg.stargate.NearbyGate;
 import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
 import tauri.dev.jsg.stargate.network.*;
+import tauri.dev.jsg.tileentity.props.DestinyCountDownTile;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
@@ -56,6 +57,7 @@ import tauri.dev.jsg.util.EnumKeyInterface;
 import tauri.dev.jsg.util.EnumKeyMap;
 import tauri.dev.jsg.util.LinkingHelper;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
@@ -195,13 +197,24 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+    public void onUpdate(@Nonnull ItemStack stack, World world, @Nonnull Entity entity, int itemSlot, boolean isSelected) {
         if (!world.isRemote) {
             checkNBT(stack);
             if (stack.getItemDamage() == UniverseDialerVariants.BROKEN.meta) {
                 return;
             }
             NBTTagCompound compound = stack.getTagCompound();
+            if(compound != null && compound.hasKey("timerCountTo")){
+                long time = compound.getLong("timerCountTo");
+                long actualTicks = (time - entity.getEntityWorld().getTotalWorldTime());
+                if(entity instanceof EntityPlayerMP) {
+                    EntityPlayerMP p = (EntityPlayerMP) entity;
+                    if (actualTicks == 0)
+                        JSGSoundHelper.playSoundToPlayer(p, SoundEventEnum.DESTINY_COUNTDOWN_STOP, p.getPosition());
+                    if (actualTicks == (20*60))
+                        JSGSoundHelper.playSoundToPlayer(p, SoundEventEnum.DESTINY_COUNTDOWN_ONE_MINUTE, p.getPosition());
+                }
+            }
             boolean wasLinked = false;
             if (world.getTotalWorldTime() % 20 == 0 && isSelected && compound != null) {
                 BlockPos pos = entity.getPosition();
@@ -305,6 +318,16 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                     if (t.getStargateState().notInitiating())
                                         compound.setString("gateLastSymbol", "INCOMING");
 
+                                    compound.setLong(mode.tagPosName, targetPos.toLong());
+                                    found = true;
+                                }
+                                break;
+
+                            case COUNTDOWN:
+                                TileEntity timerTile = world.getTileEntity(targetPos);
+                                if (timerTile instanceof DestinyCountDownTile) {
+                                    DestinyCountDownTile timerTileCasted = (DestinyCountDownTile) timerTile;
+                                    compound.setLong("timerCountTo", timerTileCasted.countdownTo);
                                     compound.setLong(mode.tagPosName, targetPos.toLong());
                                     found = true;
                                 }

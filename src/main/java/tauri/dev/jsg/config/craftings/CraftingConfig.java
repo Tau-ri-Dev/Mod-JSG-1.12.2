@@ -68,7 +68,7 @@ public class CraftingConfig {
 
     public static void load(File configDir) {
         CraftingConfig.configDir = configDir;
-        configFile = new File(configDir, "jsg/jsgDisabledCraftings_" + JSG.CRAFTINGS_CONFIG_VERSION + ".json");
+        configFile = new File(configDir, "jsg/jsgDisabledCraftings_" + JSG.CONFIG_CRAFTINGS_VERSION + ".json");
 
         try {
             Type typeOfHashMap = new TypeToken<Map<String, Map<String, Boolean>>>() {

@@ -1,8 +1,5 @@
 package tauri.dev.jsg;
 
-import com.google.common.collect.*;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -13,7 +10,6 @@ import net.minecraftforge.fml.common.event.*;
 import org.apache.logging.log4j.Logger;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.command.JSGCommands;
-import tauri.dev.jsg.config.craftings.CraftingConfig;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.integration.OCWrapperInterface;
 import tauri.dev.jsg.proxy.IProxy;
@@ -33,8 +29,9 @@ public class JSG {
     public static final String MOD_NAME = "Just Stargate Mod";
     public static final String MOD_VERSION = "@VERSION@";
     public static final int DATA_VERSION = 21;
-    public static final String CONFIG_VERSION = "2.1";
-    public static final String CRAFTINGS_CONFIG_VERSION = "1.0";
+    public static final String CONFIG_GENERAL_VERSION = "2.1";
+    public static final String CONFIG_CRAFTINGS_VERSION = "1.0";
+    public static final String CONFIG_DIMENSIONS_VERSION = "1.0";
     public static final String MC_VERSION = "@MCVERSION@";
     public static final String CLIENT = "tauri.dev.jsg.proxy.ProxyClient";
     public static final String SERVER = "tauri.dev.jsg.proxy.ProxyServer";
