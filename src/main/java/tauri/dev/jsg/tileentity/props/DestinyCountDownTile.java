@@ -123,7 +123,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                 sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             }
 
-            if (getConfig().getOption(ENABLE_GATE_OPENING.id).getBooleanValue() && !gateOpenedThisRound && getCountdownTicks() > 1300 && (world.getTotalWorldTime() - countStart) > (20L * JSGConfig.countdownConfig.dialStartDelay) && (world.getTotalWorldTime() % 40 == 0)) {
+            if (getConfig().getOption(ENABLE_GATE_OPENING.id).getBooleanValue() && !gateOpenedThisRound && i > 1300 && (world.getTotalWorldTime() - countStart) > (20L * JSGConfig.countdownConfig.dialStartDelay) && (world.getTotalWorldTime() % 40 == 0)) {
                 if (isLinked()) {
                     StargateUniverseBaseTile gate = getLinkedGate(world);
                     if (gate != null) {
@@ -132,7 +132,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                             NearbyGate found = gate.getRandomNearbyGate();
                             if(found != null) {
                                 StargateAddress foundAddress = found.address;
-                                int symbols = found.symbolsNeeded;
+                                int symbols = (found.symbolsNeeded - 1);
                                 if (foundAddress != null) {
                                     gate.dialAddress(foundAddress, symbols);
                                     gateOpenedThisRound = true;

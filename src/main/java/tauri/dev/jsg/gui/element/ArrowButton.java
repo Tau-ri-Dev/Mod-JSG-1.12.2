@@ -27,7 +27,10 @@ public class ArrowButton extends JSGButton {
 
     public final ArrowType type;
     public ArrowButton(int buttonId, int x, int y, ArrowType type) {
-        super(buttonId, x, y, 20, 20, "");
+        this(buttonId, x, y, 20, 20, type);
+    }
+    public ArrowButton(int buttonId, int x, int y, int sizeX, int sizeY, ArrowType type) {
+        super(buttonId, x, y, sizeX, sizeY, "");
         this.type = type;
     }
 

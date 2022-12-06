@@ -67,12 +67,6 @@ public class TabAddress extends Tab {
                 SymbolCoords symbolCoords = getSymbolCoords(i);
                 GuiHelper.drawTexturedRectWithShadow(symbolCoords.x, symbolCoords.y, shadow, shadow, symbolType.iconWidht, symbolType.iconHeight, color);
             }
-
-            int i = maxSymbols;
-            Minecraft.getMinecraft().getTextureManager().bindTexture(Objects.requireNonNull(symbolType.getOrigin()).getIconResource(SymbolMilkyWayEnum.getOriginId(gateTile.getBiomeOverlayWithOverride(), gateTile.getWorld().provider.getDimension())));
-            SymbolCoords symbolCoords = getSymbolCoords(i);
-            GuiHelper.drawTexturedRectWithShadow(symbolCoords.x, symbolCoords.y, shadow, shadow, symbolType.iconWidht, symbolType.iconHeight, color);
-
             GlStateManager.enableBlend();
 
             Minecraft.getMinecraft().getTextureManager().bindTexture(bgTexLocation);

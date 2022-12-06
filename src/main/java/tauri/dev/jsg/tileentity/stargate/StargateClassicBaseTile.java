@@ -2049,7 +2049,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
             if(checkAddressAndEnergy) {
                 StargateAddressDynamic addr3 = new StargateAddressDynamic(gateType);
-                addr3.addAll(entry.getKey().subList(0, symbolsNeeded));
+                addr3.addAll(entry.getKey().subList(0, (symbolsNeeded-1)));
                 addr3.addSymbol(targetGateTile.getSymbolType().getOrigin());
                 if (checkAddressAndEnergy(addr3).ok())
                     addresses.add(new NearbyGate(entry.getKey(), symbolsNeeded, targetGateTile.getSymbolType()));

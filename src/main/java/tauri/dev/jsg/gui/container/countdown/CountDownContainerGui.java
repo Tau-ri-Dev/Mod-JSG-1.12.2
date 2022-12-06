@@ -5,8 +5,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.input.Mouse;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.gui.element.ArrowButton;
 import tauri.dev.jsg.gui.element.tabs.*;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.SetOpenTabToServer;
@@ -24,6 +26,7 @@ public class CountDownContainerGui extends GuiContainer implements TabbedContain
 
     private TabConfig configTab;
     private List<Tab> tabs;
+    private List<ArrowButton> buttons;
 
     private final BlockPos pos;
     private final CountDownContainer container;
@@ -33,7 +36,7 @@ public class CountDownContainerGui extends GuiContainer implements TabbedContain
         this.container = container;
 
         this.xSize = 176;
-        this.ySize = 168;
+        this.ySize = 175;
 
         this.pos = pos;
     }
@@ -43,6 +46,7 @@ public class CountDownContainerGui extends GuiContainer implements TabbedContain
         super.initGui();
 
         tabs = new ArrayList<>();
+        buttons = new ArrayList<>();
 
         configTab = (TabConfig) TabConfig.builder()
                 .setConfig(container.tile.getConfig())
@@ -63,8 +67,31 @@ public class CountDownContainerGui extends GuiContainer implements TabbedContain
         tabs.add(configTab);
 
         configTab.setOnTabClose(this::saveConfig);
-
         configTab.setVisible(container.isOperator);
+
+        int id = 0;
+        for (int y = 0; y < 2; y++) {
+            for (int x = 0; x < 3; x++) {
+                for (int x2 = 0; x2 < 2; x2++) {
+                    buttons.add((ArrowButton) new ArrowButton(id, guiLeft + (6 + 14 * x2 + 45 * x), guiTop + 7 + (58 * y), (y == 0 ? ArrowButton.ArrowType.UP : ArrowButton.ArrowType.DOWN)).setFgColor(GuiUtils.getColorCode('f', true)));
+                    id++;
+                }
+            }
+        }
+        for (int y = 0; y < 3; y++) {
+            ArrowButton.ArrowType type = ArrowButton.ArrowType.CROSS;
+            int color = GuiUtils.getColorCode('f', true);
+            if(y == 1){
+                type = ArrowButton.ArrowType.PLUS;
+                color = GuiUtils.getColorCode('a', true);
+            }
+            if(y == 2){
+                type = ArrowButton.ArrowType.RIGHT;
+                color = GuiUtils.getColorCode('3', true);
+            }
+            buttons.add((ArrowButton) new ArrowButton(id, guiLeft + 152, guiTop + 20 + (23 * y), type).setFgColor(color));
+            id++;
+        }
     }
 
     @Override
@@ -72,6 +99,12 @@ public class CountDownContainerGui extends GuiContainer implements TabbedContain
         drawDefaultBackground();
         Tab.updatePositions(tabs);
         super.drawScreen(mouseX, mouseY, partialTicks);
+        for (ArrowButton b : buttons) {
+            GlStateManager.pushMatrix();
+            GlStateManager.color(1, 1, 1, 1);
+            b.drawButton(mc, mouseX, mouseY, partialTicks);
+            GlStateManager.popMatrix();
+        }
         renderHoveredToolTip(mouseX, mouseY);
     }
 
@@ -86,7 +119,7 @@ public class CountDownContainerGui extends GuiContainer implements TabbedContain
 
         mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
         GlStateManager.color(1, 1, 1, 1);
-        drawModalRectWithCustomSizedTexture(guiLeft, guiTop, 0, 0, xSize, ySize, 512, 512);
+        drawModalRectWithCustomSizedTexture(guiLeft, guiTop, 0, 0, xSize, ySize, 256, 256);
     }
 
     @Override
@@ -109,6 +142,15 @@ public class CountDownContainerGui extends GuiContainer implements TabbedContain
         for (Tab tab : tabs) {
             if (tab.isOpen() && tab.isVisible()) {
                 tab.mouseClicked(mouseX, mouseY, mouseButton);
+            }
+        }
+        for (ArrowButton b : buttons) {
+            if (b.isMouseOver()) {
+                JSG.info("Id: " + b.id);
+                switch (b.id) {
+                    default:
+                        break;
+                }
             }
         }
     }
