@@ -19,7 +19,7 @@ public class EntityRegister {
         registerEntity("tokra", TokraEntity.class, TOKRA_ID, 50, 11583869, 0);
 
 
-        registerEntity("kino", EntityKino.class, KINO_ID, 512, 7105386, 12895428);
+        //registerEntity("kino", EntityKino.class, KINO_ID, 512, 7105386, 12895428);
     }
 
     private static void registerEntity(String entityName, Class<? extends Entity> entityClass, int id, int trackingRange, int spawnEggColor1, int spawnEggColor2) {

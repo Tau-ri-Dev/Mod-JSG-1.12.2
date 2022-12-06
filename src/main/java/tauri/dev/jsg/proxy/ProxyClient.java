@@ -83,7 +83,7 @@ public class ProxyClient implements IProxy {
 
     private void registerEntityRenderers() {
         RenderingRegistry.registerEntityRenderingHandler(TokraEntity.class, TokraRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityKino.class, KinoRenderer::new);
+        //RenderingRegistry.registerEntityRenderingHandler(EntityKino.class, KinoRenderer::new);
     }
 
 

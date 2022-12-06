@@ -520,11 +520,6 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         super.setState(stateType, state);
     }
 
-    @Override
-    public void setOriginId(NBTTagCompound compound){
-        compound.setInteger("originId", SymbolMilkyWayEnum.getOriginId(getBiomeOverlayWithOverride(), world.provider.getDimension()));
-    }
-
 
     // -----------------------------------------------------------------
     // Scheduled tasks

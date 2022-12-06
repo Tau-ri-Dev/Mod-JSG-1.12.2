@@ -85,8 +85,12 @@ public class StargateDimensionConfig {
 
     public static int getOrigin(DimensionType dimIn, @Nullable BiomeOverlayEnum overlay) {
         if(overlay == null) overlay = BiomeOverlayEnum.NORMAL;
-        if(!dimensionMap.get(fixDimType(dimIn)).milkyWayOrigins.containsKey(overlay)) return -1;
-        return dimensionMap.get(fixDimType(dimIn)).milkyWayOrigins.get(overlay);
+        DimensionType dim = fixDimType(dimIn);
+        if(dim == null) return -1;
+        StargateDimensionConfigEntry entry = dimensionMap.get(dim);
+        if(entry == null) return -1;
+        if(!entry.milkyWayOrigins.containsKey(overlay)) return -1;
+        return entry.milkyWayOrigins.get(overlay);
     }
 
     private static DimensionType fixDimType(DimensionType type) {

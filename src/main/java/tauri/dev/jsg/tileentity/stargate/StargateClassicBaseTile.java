@@ -1343,7 +1343,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     }
 
-    public void setOriginId(NBTTagCompound compound) {
+    public void setOriginId(NBTTagCompound compound){
+        compound.setInteger("originId", SymbolMilkyWayEnum.getOriginId(getBiomeOverlayWithOverride(), world.provider.getDimension()));
     }
 
 

@@ -62,11 +62,16 @@ public class TabAddress extends Tab {
                     break;
             }
             for (int i = 0; i < maxSymbols; i++) {
-                Minecraft.getMinecraft().getTextureManager().bindTexture(Objects.requireNonNull(gateTile.getStargateAddress(symbolType)).get(i).getIconResource(SymbolMilkyWayEnum.getOriginId(BiomeOverlayEnum.updateBiomeOverlay(gateTile.getWorld(), gateTile.getPos(), gateTile.getSupportedOverlays()), gateTile.getWorld().provider.getDimension())));
+                Minecraft.getMinecraft().getTextureManager().bindTexture(Objects.requireNonNull(gateTile.getStargateAddress(symbolType)).get(i).getIconResource(SymbolMilkyWayEnum.getOriginId(gateTile.getBiomeOverlayWithOverride(), gateTile.getWorld().provider.getDimension())));
 
                 SymbolCoords symbolCoords = getSymbolCoords(i);
                 GuiHelper.drawTexturedRectWithShadow(symbolCoords.x, symbolCoords.y, shadow, shadow, symbolType.iconWidht, symbolType.iconHeight, color);
             }
+
+            int i = maxSymbols;
+            Minecraft.getMinecraft().getTextureManager().bindTexture(Objects.requireNonNull(symbolType.getOrigin()).getIconResource(SymbolMilkyWayEnum.getOriginId(gateTile.getBiomeOverlayWithOverride(), gateTile.getWorld().provider.getDimension())));
+            SymbolCoords symbolCoords = getSymbolCoords(i);
+            GuiHelper.drawTexturedRectWithShadow(symbolCoords.x, symbolCoords.y, shadow, shadow, symbolType.iconWidht, symbolType.iconHeight, color);
 
             GlStateManager.enableBlend();
 
