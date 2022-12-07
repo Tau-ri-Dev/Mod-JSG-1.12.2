@@ -112,7 +112,7 @@ public class TextureLoader {
             if (JSGConfig.debugConfig.logTexturesLoading)
                 JSG.info("Loading texture: " + texturePath);
             BufferedImage bufferedImage = TextureUtil.readBufferedImage(resource.getInputStream());
-            LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage, false));
+            LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage));
         } catch (IOException e) {
             JSG.error("Failed to load texture " + texturePath);
             e.printStackTrace();
@@ -132,7 +132,7 @@ public class TextureLoader {
 
             BufferedImage bufferedImage = TextureUtil.readBufferedImage(resource.getInputStream());
 
-            LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage, false));
+            LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage));
 
             ProgressBar subProgressBar = ProgressManager.push("JSG - Event Horizon Sub-Textures", EH_ANIMATED_TEXTURE_SUB_TEXTURES);
 
@@ -149,7 +149,7 @@ public class TextureLoader {
                     JSG.info("Loading sub-texture: " + subPath);
 
                 BufferedImage texturePart = bufferedImage.getSubimage(x * onePiece, y * onePiece, onePiece, onePiece);
-                LOADED_TEXTURES.put(new ResourceLocation(JSG.MOD_ID, subPath), new Texture(texturePart, false));
+                LOADED_TEXTURES.put(new ResourceLocation(JSG.MOD_ID, subPath), new Texture(texturePart));
             }
 
             ProgressManager.pop(subProgressBar);

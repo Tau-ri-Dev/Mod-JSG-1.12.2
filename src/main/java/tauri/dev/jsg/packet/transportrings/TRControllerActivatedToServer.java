@@ -31,8 +31,6 @@ public class TRControllerActivatedToServer extends PositionedPacket {
 
 		this.symbolType = symbolType.id;
 		this.symbol = Objects.requireNonNull(SymbolTypeTransportRingsEnum.valueOf(this.symbolType).getSymbolByAngleIndex(i)).getId();
-		JSG.info("Pressed: " + (i));
-		JSG.info("Added: " + this.symbol);
 	}
 	
 	@Override
@@ -67,9 +65,6 @@ public class TRControllerActivatedToServer extends PositionedPacket {
 
 					if (ringsTile != null) {
 						TransportResult result = ringsTile.addSymbolToAddressInternal(SymbolTypeTransportRingsEnum.valueOf(message.symbolType).getSymbol(message.symbol), false);
-						// moved to tile entity
-						//if(result != TransportResult.ALREADY_ACTIVATED && result != TransportResult.BUSY)
-						//	JSGSoundHelper.playSoundEvent(world, message.pos, SoundEventEnum.RINGS_CONTROLLER_BUTTON);
 						result.sendMessageIfFailed(player);
 					} else
 						player.sendStatusMessage(new TextComponentTranslation("tile.jsg.transportrings_controller_block.not_linked"), true);
