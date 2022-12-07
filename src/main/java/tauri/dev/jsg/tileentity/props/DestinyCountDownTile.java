@@ -174,9 +174,6 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                     sendSignal(null, "countdown_minute_pass", new Object[]{getCountdownTicks()});
                 }
             }
-
-            //if(world.getTotalWorldTime() % 40 == 0)
-            //    sendState(StateTypeEnum.RENDERER_UPDATE, new DestinyCountDownRendererState(countdownTo));
         } else {
             if (!isClientUpdated && getCountdownTicks() <= 0) {
                 // probably not loaded correctly
@@ -274,7 +271,6 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                 rendererState = (DestinyCountDownRendererState) state;
                 this.countdownTo = rendererState.countdownTo;
                 this.config = rendererState.config;
-                //JSG.info("Client got new countdown: " + countdownTo);
                 break;
             case GUI_STATE:
             case GUI_UPDATE:

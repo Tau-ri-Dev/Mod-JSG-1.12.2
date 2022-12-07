@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "jsg:gui/symbol/milkyway/origin_10"
+    "layer0": "jsg:gui/symbol/milkyway/origin_5"
   }
 }

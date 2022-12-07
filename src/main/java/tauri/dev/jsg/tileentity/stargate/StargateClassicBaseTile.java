@@ -157,7 +157,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         if (gateHeat >= GATE_MAX_HEAT) {
             if (JSGConfig.stargateConfig.enableGateOverHeatExplosion)
-                world.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 60, false, false).doExplosionA();
+                world.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 60, false, true);
             gateHeat = GATE_MAX_HEAT;
         }
 
@@ -497,7 +497,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
          * HEATING UP IRIS System
          */
         if (!world.isRemote && isMerged()) {
-            tryHeatUp(false, (getAroundGateLiquid(true) > 0), ((getAroundGateLiquid(true) * 2) + 1), 1, ((getAroundGateLiquid(false) * 2) + 1), 1700);
+            tryHeatUp(false, (getAroundGateLiquid(true) > 0), ((getAroundGateLiquid(true) * 2) + 1), 1, ((getAroundGateLiquid(false) * 4) + 1), 1700);
             if (!hasIris()) {
                 irisHeat = -1;
                 markDirty();

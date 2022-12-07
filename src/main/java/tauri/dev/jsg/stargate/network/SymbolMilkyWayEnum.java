@@ -146,12 +146,14 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
         return 0;
     }
 
+    private static final int DEFAULT_ORIGIN_ID = 0;
+
     @Override
     public ResourceLocation getIconResource(int originId) {
         if (this == ORIGIN) {
             if (JSGConfig.avConfig.enableDiffOrigins)
                 return new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/milkyway/origin_" + originId + ".png");
-            return new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/milkyway/origin_5.png");
+            return new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/milkyway/origin_" + DEFAULT_ORIGIN_ID + ".png");
         }
         return getIconResource(BiomeOverlayEnum.NORMAL, 0);
     }
@@ -177,7 +179,7 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
             if (!notFound && JSGConfig.avConfig.enableDiffOrigins)
                 modelResource = ModelLoader.getModelResource("milkyway/" + (!forDHD ? "ring/" : "") + "origin_" + getOriginId(overlay, dimensionId) + (lightModel ? "_light" : "") + ".obj");
             else
-                modelResource = ModelLoader.getModelResource("milkyway/" + (!forDHD ? "ring/" : "") + "origin_5" + (lightModel ? "_light" : "") + ".obj");
+                modelResource = ModelLoader.getModelResource("milkyway/" + (!forDHD ? "ring/" : "") + "origin_" + DEFAULT_ORIGIN_ID + (lightModel ? "_light" : "") + ".obj");
 
             if (ModelLoader.getModel(modelResource) == null && !notFound) {
                 JSG.error("Origin model not loaded!");

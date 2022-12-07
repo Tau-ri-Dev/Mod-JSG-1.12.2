@@ -87,7 +87,7 @@ public class StargateGenerator {
         } while ((structurePos == null || structurePos.foundPos == null) && tries < 50);
         if (structure == null || structurePos == null || structurePos.foundPos == null) {
             JSG.error("(" + playerIn.getDisplayNameString() + ") StargateGenerator: Failed to find place - myst page: Tries:" + tries + "; Structure:" + (structure != null));
-            JSG.info("Best places count: " + bestCount);
+            JSG.error("Best places count: " + bestCount);
             return null;
         }
 

@@ -29,7 +29,7 @@ public class ZPMRenderer extends TileEntitySpecialRenderer<ZPMTile> {
     }
     public static void renderZPM(World world, BlockPos pos, int powerLevel, float size, boolean on) {
         if (powerLevel < 0) return;
-        JSGTextureLightningHelper.lightUpTexture(world, pos, (powerLevel/5f));
+        JSGTextureLightningHelper.lightUpTexture(1f);
         GlStateManager.scale(size, size, size);
         TextureLoader.getTexture(TextureLoader.getTextureResource("zpm/zpm" + powerLevel + (on ? "" : "_off") + ".png")).bindTexture();
         ElementEnum.ZPM.render();

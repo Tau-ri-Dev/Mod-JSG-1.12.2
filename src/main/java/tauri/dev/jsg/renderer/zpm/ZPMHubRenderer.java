@@ -37,15 +37,20 @@ public class ZPMHubRenderer extends TileEntitySpecialRenderer<ZPMHubTile> {
     }
 
     protected void renderMainObject(ZPMHubTile tile) {
+        boolean zpmsDown = false;
+        if (!tile.isAnimating)
+            zpmsDown = !tile.isSlidingUp;
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0.6, 0);
         GlStateManager.scale(0.025, 0.025, 0.025);
         ElementEnum.ZPM_HUB.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
-        int zpmHubLights = (int) Math.round(Math.abs(Math.sin(JSGMinecraftHelper.getClientTick()/8f)) * 5);
+        int zpmHubLights = (int) Math.round(Math.abs(Math.sin(JSGMinecraftHelper.getClientTick()/8f)) * 5) + 1;
         if ((tile.zpm1Level == -1) && (tile.zpm2Level == -1) && (tile.zpm3Level == -1)) zpmHubLights = 0;
         if (zpmHubLights > 5) zpmHubLights = 5;
         if (zpmHubLights < 0) zpmHubLights = 0;
-        JSGTextureLightningHelper.lightUpTexture(tile.getWorld(), tile.getPos(), zpmHubLights/5f);
+        if(!zpmsDown) zpmHubLights = 0;
+        if(zpmHubLights > 0)
+            JSGTextureLightningHelper.lightUpTexture(1f);
         TextureLoader.getTexture(TextureLoader.getTextureResource("zpm/hub/pg_lights" + zpmHubLights + ".jpg")).bindTexture();
         ElementEnum.ZPM_HUB_LIGHTS.render();
         JSGTextureLightningHelper.resetLight(tile.getWorld(), tile.getPos());

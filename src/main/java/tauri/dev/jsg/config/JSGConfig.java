@@ -255,9 +255,10 @@ public class JSGConfig {
 
         @Name("Enable gate overheat with explosion")
         @Comment({
-                "Should gate explode when its overheated?"
+                "Should gate explode when its overheated?",
+                "This method is not implemented yet!"
         })
-        public boolean enableGateOverHeatExplosion = true;
+        public boolean enableGateOverHeatExplosion = false;
 
         @RequiresMcRestart
         @Name("Max stargate heat")
@@ -681,6 +682,13 @@ public class JSGConfig {
 
         @Name("Enable different Point Of Origins for MW gate")
         public boolean enableDiffOrigins = true;
+
+        @Name("Origins added by resource pack count")
+        @Comment({
+                "Specifies, how many Point Of Origins were added by any resource pack.",
+                "This options is required to load all models of added origins!"
+        })
+        public int addedPoOs = 0;
     }
 
     public static class WorldOreGenerator {
