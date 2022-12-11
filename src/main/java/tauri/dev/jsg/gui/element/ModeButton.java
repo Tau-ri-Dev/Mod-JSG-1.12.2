@@ -7,9 +7,9 @@ import net.minecraft.util.ResourceLocation;
 public class ModeButton extends GuiButton {
     public final int textureWidth;
     public final int textureHeight;
-    public final int states;
-    private final ResourceLocation texture;
-    private int currentState = 0;
+    public int states;
+    protected final ResourceLocation texture;
+    protected int currentState = 0;
 
     public ModeButton(int buttonId, int x, int y, int size, ResourceLocation texture, int textureWidth, int textureHeight, int states) {
         super(buttonId, x, y, size, size, "");
@@ -17,6 +17,10 @@ public class ModeButton extends GuiButton {
         this.textureWidth = textureWidth;
         this.states = states;
         this.texture = texture;
+    }
+
+    public void setStates(int i){
+        this.states = i;
     }
 
 

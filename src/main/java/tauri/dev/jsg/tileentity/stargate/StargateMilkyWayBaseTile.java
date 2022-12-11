@@ -421,7 +421,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         }
     }
 
-    public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.AGED, BiomeOverlayEnum.SOOTY, BiomeOverlayEnum.SANDY);
+    public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.AGED, BiomeOverlayEnum.SOOTY);
 
     @Override
     public EnumSet<BiomeOverlayEnum> getSupportedOverlays() {

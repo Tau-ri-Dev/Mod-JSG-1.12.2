@@ -19,7 +19,6 @@ public enum BiomeOverlayEnum {
 	MOSSY(2, "_mossy", TextFormatting.DARK_GREEN),
 	AGED(3, "_aged", TextFormatting.GRAY),
 	SOOTY(4, "_sooty", TextFormatting.DARK_GRAY),
-	SANDY(5, "_sandy", TextFormatting.YELLOW),
 
 	// for transport rings
 	TR_NORMAL(10, "", TextFormatting.GOLD)

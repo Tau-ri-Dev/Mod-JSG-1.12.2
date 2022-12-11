@@ -122,7 +122,7 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
 		1- end - tornado
 		2- sooty - nether
 		3- frosty - beta
-		4- sandy - Abydos
+		4- aged - Abydos
 		 */
         if(overlay == null) overlay = BiomeOverlayEnum.NORMAL;
 
@@ -133,7 +133,7 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
         switch (overlay) {
             case FROST:
                 return 3;
-            case SANDY:
+            case AGED:
                 return 4;
             case SOOTY:
                 return 2;

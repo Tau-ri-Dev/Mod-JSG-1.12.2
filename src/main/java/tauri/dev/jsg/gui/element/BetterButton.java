@@ -29,7 +29,6 @@ public class BetterButton extends GuiButton {
     public void drawButton(int mouseX, int mouseY, boolean toggled) {
         if (this.visible) {
             this.hovered = toggled || GuiHelper.isPointInRegion(x, y, width, height, mouseX, mouseY);
-            //this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
             this.mouseDragged(Minecraft.getMinecraft(), mouseX, mouseY);
 

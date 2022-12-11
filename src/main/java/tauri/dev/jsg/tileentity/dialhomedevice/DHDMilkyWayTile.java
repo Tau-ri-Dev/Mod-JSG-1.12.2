@@ -34,7 +34,7 @@ import java.util.EnumSet;
 
 public class DHDMilkyWayTile extends DHDAbstractTile {
 
-    public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.SOOTY, BiomeOverlayEnum.AGED, BiomeOverlayEnum.SANDY);
+    public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.SOOTY, BiomeOverlayEnum.AGED);
 
     @Override
     public EnumSet<BiomeOverlayEnum> getSupportedOverlays() {

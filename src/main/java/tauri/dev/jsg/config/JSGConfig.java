@@ -174,7 +174,6 @@ public class JSGConfig {
                 put(BiomeOverlayEnum.MOSSY.toString(), new String[]{"minecraft:jungle", "minecraft:jungle_hills", "minecraft:jungle_edge", "minecraft:mutated_jungle", "minecraft:mutated_jungle_edge"});
                 put(BiomeOverlayEnum.AGED.toString(), new String[]{});
                 put(BiomeOverlayEnum.SOOTY.toString(), new String[]{"minecraft:hell"});
-                put(BiomeOverlayEnum.SANDY.toString(), new String[]{"minecraft:desert"});
             }
         };
 
@@ -214,7 +213,6 @@ public class JSGConfig {
                 put(BiomeOverlayEnum.MOSSY.toString(), new String[]{"minecraft:vine"});
                 put(BiomeOverlayEnum.AGED.toString(), new String[]{"minecraft:cobblestone"});
                 put(BiomeOverlayEnum.SOOTY.toString(), new String[]{"minecraft:coal_block"});
-                put(BiomeOverlayEnum.SANDY.toString(), new String[]{"minecraft:sand"});
             }
         };
 
@@ -821,7 +819,7 @@ public class JSGConfig {
         @Comment({
                 "WARNING! - Requires reloading!"
         })
-        public boolean tExpansionIntegration = false;
+        public boolean tExpansionIntegration = true;
     }
 
     public static class RandomIncomingConfig {

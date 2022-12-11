@@ -228,7 +228,7 @@ public abstract class DHDAbstractBlock extends JSGBlock {
         int rotation = (int) (state.getValue(JSGProps.ROTATION_HORIZONTAL) * 22.5f);
 
         if (rotation % 90 == 0)
-            return new JSGAxisAlignedBB(-0.5, 0, -0.25, 0.5, 1, 0.25).rotate(rotation).offset(0.5, 0, 0.5);
-        else return new JSGAxisAlignedBB(0.25, 0, 0.25, 0.75, 1, 0.75);
+            return new JSGAxisAlignedBB(-0.5, 0, -0.25, 0.5, 1.3, 0.25).rotate(rotation).offset(0.5, 0, 0.5);
+        else return new JSGAxisAlignedBB(0.25, 0, 0.25, 0.75, 1.3, 0.75);
     }
 }

@@ -1,16 +1,18 @@
 package tauri.dev.jsg.config.ingame;
 
 import io.netty.buffer.ByteBuf;
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.gui.element.ModeButton;
-import tauri.dev.jsg.gui.element.NumberOnlyTextField;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.gui.element.EnumButton;
+import tauri.dev.jsg.gui.element.ModeButton;
+import tauri.dev.jsg.gui.element.NumberOnlyTextField;
 
+import javax.annotation.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +21,7 @@ import java.util.List;
 public class JSGConfigOption {
     public int id;
     public List<String> comment = new ArrayList<>();
+    public List<JSGConfigEnumEntry> possibleValues = new ArrayList<>();
     public JSGConfigOptionTypeEnum type = JSGConfigOptionTypeEnum.TEXT;
     public String value = "";
     public String defaultValue = "";
@@ -39,13 +42,13 @@ public class JSGConfigOption {
         this.fromBytes(buf);
     }
 
-    private static final int X = -25;
+    protected static final int X = -25;
 
 
     @SideOnly(Side.CLIENT)
     public GuiTextField createField(int y) {
         int componentId = id + 100;
-        GuiTextField field = null;
+        GuiTextField field;
         if (this.type == JSGConfigOptionTypeEnum.NUMBER)
             field = new NumberOnlyTextField(componentId, Minecraft.getMinecraft().fontRenderer, X, y, 90, 15);
         else
@@ -64,8 +67,10 @@ public class JSGConfigOption {
                     componentId, X, y, 16, new ResourceLocation(JSG.MOD_ID, textureBase + "boolean_modes.png"),
                     32, 32, 2
             );
+        if (this.type == JSGConfigOptionTypeEnum.SWITCH)
+            button = new EnumButton(componentId, X, y, possibleValues);
 
-        if(button != null)
+        if (button != null)
             button.setCurrentState(this.getIntValue());
         return button;
     }
@@ -81,11 +86,11 @@ public class JSGConfigOption {
 
     public List<String> getCommentToRender() {
         List<String> c = new ArrayList<>(getComment());
-        if(maxInt != -1 || minInt != -1){
+        if (maxInt != -1 || minInt != -1) {
             c.add("---------------------------------");
-            if(minInt != -1)
+            if (minInt != -1)
                 c.add("Min: " + minInt);
-            if(maxInt != -1)
+            if (maxInt != -1)
                 c.add("Max: " + maxInt);
             c.add("---------------------------------");
         }
@@ -107,11 +112,20 @@ public class JSGConfigOption {
     }
 
     public JSGConfigOption setValue(String value) {
-        if (this.type == JSGConfigOptionTypeEnum.NUMBER)
+        if (this.type == JSGConfigOptionTypeEnum.NUMBER || this.type == JSGConfigOptionTypeEnum.SWITCH)
             return this.setIntValue(value);
         else if (this.type == JSGConfigOptionTypeEnum.BOOLEAN)
             return this.setBooleanValue(value);
         return this.setStringValue(value);
+    }
+
+    public JSGConfigOption setPossibleValues(List<JSGConfigEnumEntry> values) {
+        if(this.type != JSGConfigOptionTypeEnum.SWITCH){
+            JSG.error("Can not set values of config option!");
+            JSG.error("Option is not SWITCH type!");
+            return this;
+        }
+        return this.setEnumValues(values);
     }
 
     public JSGConfigOption setDefaultValue(String value) {
@@ -119,12 +133,12 @@ public class JSGConfigOption {
         return this;
     }
 
-    public JSGConfigOption setMinInt(int value){
+    public JSGConfigOption setMinInt(int value) {
         this.minInt = value;
         return this;
     }
 
-    public JSGConfigOption setMaxInt(int value){
+    public JSGConfigOption setMaxInt(int value) {
         this.maxInt = value;
         return this;
     }
@@ -145,18 +159,19 @@ public class JSGConfigOption {
     public int getIntValue() {
         return getIntValue(false);
     }
+
     public int getIntValue(boolean getDefault) {
         String v = value;
-        if(getDefault)
+        if (getDefault)
             v = defaultValue;
 
         if (v == null) return -1;
         try {
             return Integer.parseInt(v);
         } catch (Exception e) {
-            if(v.equals("true"))
+            if (v.equals("true"))
                 return 1;
-            if(v.equals("false"))
+            if (v.equals("false"))
                 return 0;
             return -1;
         }
@@ -165,7 +180,7 @@ public class JSGConfigOption {
     private JSGConfigOption setIntValue(String value) {
         try {
             int i = Integer.parseInt(value);
-            if((maxInt == -1 || i <= maxInt) && (minInt == -1 || i >= minInt))
+            if ((maxInt == -1 || i <= maxInt) && (minInt == -1 || i >= minInt))
                 this.value = i + "";
         } catch (Exception ignored) {
         }
@@ -178,6 +193,17 @@ public class JSGConfigOption {
 
     private JSGConfigOption setStringValue(String value) {
         this.value = value;
+        return this;
+    }
+
+    @Nullable
+    public JSGConfigEnumEntry getEnumValue(){
+        if(possibleValues.size() >= getIntValue()) return null;
+        return possibleValues.get(getIntValue());
+    }
+
+    private JSGConfigOption setEnumValues(List<JSGConfigEnumEntry> entries){
+        this.possibleValues = entries;
         return this;
     }
 
@@ -194,6 +220,12 @@ public class JSGConfigOption {
         compound.setInteger("minInt", minInt);
         compound.setInteger("maxInt", maxInt);
         compound.setString("defaultValue", defaultValue);
+        compound.setInteger("possibleValuesLength", possibleValues.size());
+        int i = 0;
+        for(JSGConfigEnumEntry e : possibleValues){
+            compound.setString("possibleValue" + i, e.value);
+            compound.setString("possibleValueName" + i++, e.name);
+        }
 
         return compound;
     }
@@ -211,6 +243,11 @@ public class JSGConfigOption {
         this.minInt = compound.getInteger("minInt");
         this.maxInt = compound.getInteger("maxInt");
         this.defaultValue = compound.getString("defaultValue");
+        this.possibleValues = new ArrayList<>();
+        int s = compound.getInteger("possibleValuesLength");
+        for(int i = 0; i < s; i++){
+            possibleValues.add(new JSGConfigEnumEntry(compound.getString("possibleValueName" + i), compound.getString("possibleValue" + i)));
+        }
     }
 
     public void toBytes(ByteBuf buf) {
@@ -229,6 +266,14 @@ public class JSGConfigOption {
         buf.writeInt(maxInt);
         buf.writeInt(defaultValue.length());
         buf.writeCharSequence(defaultValue, StandardCharsets.UTF_8);
+
+        buf.writeInt(possibleValues.size());
+        for(JSGConfigEnumEntry e : possibleValues){
+            buf.writeInt(e.value.length());
+            buf.writeCharSequence(e.value, StandardCharsets.UTF_8);
+            buf.writeInt(e.name.length());
+            buf.writeCharSequence(e.name, StandardCharsets.UTF_8);
+        }
     }
 
     public void fromBytes(ByteBuf buf) {
@@ -248,5 +293,14 @@ public class JSGConfigOption {
         this.maxInt = buf.readInt();
         int defaultValueSize = buf.readInt();
         this.defaultValue = buf.readCharSequence(defaultValueSize, StandardCharsets.UTF_8).toString();
+
+        int s = buf.readInt();
+        for(int i = 0; i < s; i++){
+            int valueSize2 = buf.readInt();
+            String value = buf.readCharSequence(valueSize2, StandardCharsets.UTF_8).toString();
+            int nameSize = buf.readInt();
+            String name = buf.readCharSequence(nameSize, StandardCharsets.UTF_8).toString();
+            possibleValues.add(new JSGConfigEnumEntry(name, value));
+        }
     }
 }
