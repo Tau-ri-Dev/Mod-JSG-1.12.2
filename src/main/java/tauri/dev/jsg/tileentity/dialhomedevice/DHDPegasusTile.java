@@ -1,6 +1,7 @@
 package tauri.dev.jsg.tileentity.dialhomedevice;
 
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.stargate.network.StargateAddressDynamic;
 import tauri.dev.jsg.stargate.network.SymbolInterface;
@@ -97,6 +98,7 @@ public class DHDPegasusTile extends DHDAbstractTile {
     public State getState(StateTypeEnum stateType) {
         if (stateType == StateTypeEnum.RENDERER_STATE) {
             StargateAddressDynamic address = new StargateAddressDynamic(SymbolTypeEnum.PEGASUS);
+            JSGTileEntityConfig config = new JSGTileEntityConfig();
 
             if (isLinked()) {
                 StargateAbstractBaseTile gateTile = getLinkedGate(world);
@@ -118,10 +120,13 @@ public class DHDPegasusTile extends DHDAbstractTile {
                         break;
                 }
 
-                return new DHDPegasusRendererState(address, brbActive, determineBiomeOverride(), gateTile.connectedToGate);
+                if(gateTile instanceof StargateClassicBaseTile)
+                    config = ((StargateClassicBaseTile) gateTile).getConfig();
+
+                return new DHDPegasusRendererState(address, brbActive, determineBiomeOverride(), gateTile.connectedToGate, config);
             }
 
-            return new DHDPegasusRendererState(address, false, determineBiomeOverride(), false);
+            return new DHDPegasusRendererState(address, false, determineBiomeOverride(), false, config);
         }
         throw new UnsupportedOperationException("EnumStateType." + stateType.name() + " not implemented on " + this.getClass().getName());
     }

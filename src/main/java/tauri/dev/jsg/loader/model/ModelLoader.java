@@ -8,6 +8,7 @@ import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.FolderLoader;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,8 @@ public class ModelLoader {
 
         List<String> modelPaths = FolderLoader.getAllFiles(MODELS_PATH, ".obj");
 
-        for (int i = 5; i < (5 + JSGConfig.avConfig.addedPoOs); i++) {
+        for (String poo : JSGConfig.originsConfig.additionalOrigins) {
+            int i = Integer.parseInt(poo.split(":")[0]);
             String s = "assets/jsg/models/tesr/milkyway/origin_" + i + ".obj";
             if (!modelPaths.contains(s)) {
                 modelPaths.add(s);
@@ -47,11 +49,13 @@ public class ModelLoader {
 
         JSG.logger.info("Started loading models...");
         for (String modelPath : modelPaths) {
-            if (JSGConfig.debugConfig.logTexturesLoading)
-                JSG.logger.info("Loading model: " + modelPath);
             String modelResourcePath = modelPath.replaceFirst("assets/jsg/", "");
+            if (JSGConfig.debugConfig.logTexturesLoading)
+                JSG.logger.info("Loading model: " + modelResourcePath);
             progressBar.step(modelResourcePath.replaceFirst("models/", ""));
-            OBJModel model = OBJLoader.loadModel(modelPath);
+
+            InputStream stream = JSG.class.getClassLoader().getResourceAsStream(modelPath);
+            OBJModel model = OBJLoader.loadModel(stream);
             if (model == null) continue;
             LOADED_MODELS.put(new ResourceLocation(JSG.MOD_ID, modelResourcePath), model);
         }

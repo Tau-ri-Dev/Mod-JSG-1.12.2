@@ -38,10 +38,7 @@ import tauri.dev.jsg.beamer.BeamerLinkingHelper;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.chunkloader.ChunkManager;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.config.ingame.ITileConfig;
-import tauri.dev.jsg.config.ingame.JSGConfigOption;
-import tauri.dev.jsg.config.ingame.JSGConfigOptionTypeEnum;
-import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
+import tauri.dev.jsg.config.ingame.*;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.gui.container.stargate.StargateContainerGuiState;
@@ -53,6 +50,7 @@ import tauri.dev.jsg.item.stargate.UpgradeIris;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
+import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRenderer;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRendererState.StargateClassicRendererStateBuilder;
@@ -77,16 +75,17 @@ import tauri.dev.jsg.tileentity.BeamerTile;
 import tauri.dev.jsg.tileentity.util.IUpgradable;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
 import tauri.dev.jsg.util.*;
+import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static tauri.dev.jsg.item.linkable.gdo.GDOItem.isLinked;
 import static tauri.dev.jsg.stargate.EnumIrisType.IRIS_TITANIUM;
 import static tauri.dev.jsg.stargate.EnumSpinDirection.CLOCKWISE;
 import static tauri.dev.jsg.stargate.EnumSpinDirection.COUNTER_CLOCKWISE;
-import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_INCOMING;
-import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_RIG;
+import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.*;
 import static tauri.dev.jsg.util.JSGAdvancementsUtil.tryTriggerRangedAdvancement;
 
 /**
@@ -1019,16 +1018,41 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 "Enable ring spin",
                 "animation while incoming animation",
                 "occurs"
+        ),
+        ORIGIN_MODEL(
+                8, "originModel", "0", // default value here is index of value in array below
+                new ArrayList<JSGConfigEnumEntry>(){{
+                    add(new JSGConfigEnumEntry("[by overlay]", "-1"));
+                    add(new JSGConfigEnumEntry("Default", "0"));
+                    add(new JSGConfigEnumEntry("P7J-989", "1"));
+                    add(new JSGConfigEnumEntry("Nether", "2"));
+                    add(new JSGConfigEnumEntry("Antarctica", "3"));
+                    add(new JSGConfigEnumEntry("Abydos", "4"));
+                    add(new JSGConfigEnumEntry("Tauri", "5"));
+                    for(String poo : JSGConfig.originsConfig.additionalOrigins){
+                        String name = poo.split(":")[1];
+                        String value = poo.split(":")[0];
+                        add(new JSGConfigEnumEntry(name, value));
+                    }
+                }},
+                "Override point of origin model",
+                " - ONLY FOR MW GATES NOW - "
         );
 
-        public int id;
-        public String label;
-        public String[] comment;
-        public JSGConfigOptionTypeEnum type;
-        public String defaultValue;
+        public final int id;
+        public final String label;
+        public final String[] comment;
+        public final JSGConfigOptionTypeEnum type;
+        public final String defaultValue;
+        public List<JSGConfigEnumEntry> possibleValues;
 
-        public int minInt;
-        public int maxInt;
+        public final int minInt;
+        public final int maxInt;
+
+        ConfigOptions(int optionId, String label, String defaultValue, List<JSGConfigEnumEntry> possibleValues, String... comment) {
+            this(optionId, label, JSGConfigOptionTypeEnum.SWITCH, defaultValue, comment);
+            this.possibleValues = possibleValues;
+        }
 
         ConfigOptions(int optionId, String label, JSGConfigOptionTypeEnum type, String defaultValue, String... comment) {
             this(optionId, label, type, defaultValue, -1, -1, comment);
@@ -1063,16 +1087,19 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (getConfig().getOptions().size() != ConfigOptions.values().length) {
             getConfig().clearOptions();
             for (ConfigOptions option : ConfigOptions.values()) {
-                getConfig().addOption(
-                        new JSGConfigOption(option.id)
-                                .setType(option.type)
-                                .setLabel(option.label)
-                                .setValue(option.defaultValue)
-                                .setDefaultValue(option.defaultValue)
-                                .setMinInt(option.minInt)
-                                .setMaxInt(option.maxInt)
-                                .setComment(option.comment)
-                );
+                JSGConfigOption optionNew = new JSGConfigOption(option.id).setType(option.type);
+
+                if(option.type == JSGConfigOptionTypeEnum.SWITCH)
+                    optionNew.setPossibleValues(option.possibleValues);
+
+                optionNew.setLabel(option.label)
+                        .setValue(option.defaultValue)
+                        .setDefaultValue(option.defaultValue)
+                        .setMinInt(option.minInt)
+                        .setMaxInt(option.maxInt)
+                        .setComment(option.comment);
+
+                getConfig().addOption(optionNew);
             }
         }
     }
@@ -1089,7 +1116,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
             if (getMergeHelper().matchMember(world.getBlockState(chevPos))) {
                 StargateClassicMemberTile memberTile = (StargateClassicMemberTile) world.getTileEntity(chevPos);
-                memberTile.setLitUp(i == 8 ? isFinalActive : lightUp > i);
+                if (memberTile != null) {
+                    memberTile.setLitUp(i == 8 ? isFinalActive : lightUp > i);
+                }
             }
         }
     }
@@ -1225,6 +1254,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 StargateContainerGuiState guiState = (StargateContainerGuiState) state;
                 gateAddressMap = guiState.gateAdddressMap;
                 config = guiState.config;
+                getRendererStateClient().config = guiState.config;
+                markDirty();
                 break;
 
             case GUI_UPDATE:
@@ -1344,7 +1375,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public void setOriginId(NBTTagCompound compound){
-        compound.setInteger("originId", SymbolMilkyWayEnum.getOriginId(getBiomeOverlayWithOverride(), world.provider.getDimension()));
+        compound.setInteger("originId", SymbolMilkyWayEnum.getOriginId(getBiomeOverlayWithOverride(), world.provider.getDimension(), getConfig().getOption(ORIGIN_MODEL.id).getEnumValue().getIntValue()));
     }
 
 
@@ -1670,16 +1701,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     }
 
-    public int getIrisDurability() {
-        updateIrisDurability();
-        return irisDurability;
-    }
-
-    public int getIrisMaxDurability() {
-        updateIrisDurability();
-        return irisDurability;
-    }
-
     public EnumIrisType getIrisType() {
         return irisType;
     }
@@ -1727,7 +1748,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             openSound = SoundEventEnum.SHIELD_OPENING;
             closeSound = SoundEventEnum.SHIELD_CLOSING;
         }
-        //StargateAbstractBaseTile targetGate = targetGatePos.getTileEntity();
         switch (irisState) {
             case OPENED:
                 if (isShieldIris() && getEnergyStorage().getEnergyStored() < shieldKeepAlive * 3)

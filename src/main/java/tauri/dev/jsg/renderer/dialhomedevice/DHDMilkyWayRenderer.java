@@ -11,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
 
 public class DHDMilkyWayRenderer extends DHDAbstractRenderer {
@@ -23,7 +24,7 @@ public class DHDMilkyWayRenderer extends DHDAbstractRenderer {
             JSGTextureLightningHelper.lightUpTexture((rendererState.isButtonActive(symbol) ? 0.9f : 0));
             setColorByAddress(te, rendererState, compound, SymbolTypeEnum.MILKYWAY, symbol);
             rendererDispatcher.renderEngine.bindTexture(((DHDMilkyWayRendererState) rendererState).getButtonTexture(symbol, rendererState.getBiomeOverlay()));
-            ModelLoader.getModel(symbol.getModelResource(rendererState.getBiomeOverlay(), te.getWorld().provider.getDimension(), true, true)).render();
+            ModelLoader.getModel(symbol.getModelResource(rendererState.getBiomeOverlay(), te.getWorld().provider.getDimension(), true, true, rendererState.gateConfig.getOption(StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL.id).getEnumValue().getIntValue())).render();
             JSGTextureLightningHelper.resetLight(getWorld(), rendererState.pos);
             GlStateManager.popMatrix();
         }
@@ -32,7 +33,7 @@ public class DHDMilkyWayRenderer extends DHDAbstractRenderer {
     @Override
     public void renderDHD(DHDAbstractRendererState rendererState, DHDAbstractTile te) {
         ElementEnum.MILKYWAY_DHD.bindTextureAndRender(rendererState.getBiomeOverlay());
-        ModelLoader.getModel(((SymbolMilkyWayEnum) SymbolMilkyWayEnum.getOrigin()).getModelResource(rendererState.getBiomeOverlay(), te.getWorld().provider.getDimension(), true)).render();
+        ModelLoader.getModel(((SymbolMilkyWayEnum) SymbolMilkyWayEnum.getOrigin()).getModelResource(rendererState.getBiomeOverlay(), te.getWorld().provider.getDimension(), true, false, rendererState.gateConfig.getOption(StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL.id).getEnumValue().getIntValue())).render();
     }
 
     @Override

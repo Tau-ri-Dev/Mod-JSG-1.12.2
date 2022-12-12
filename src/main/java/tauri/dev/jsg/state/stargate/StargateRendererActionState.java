@@ -12,7 +12,7 @@ public class StargateRendererActionState extends State {
     public static final StargateRendererActionState STARGATE_HORIZON_WIDEN_ACTION = new StargateRendererActionState(EnumGateAction.STARGATE_HORIZON_WIDEN);
     public static final StargateRendererActionState STARGATE_HORIZON_SHRINK_ACTION = new StargateRendererActionState(EnumGateAction.STARGATE_HORIZON_SHRINK);
 
-    public static enum EnumGateAction {
+    public enum EnumGateAction {
         CHEVRON_ACTIVATE(1),
         OPEN_GATE(3),
         CLOSE_GATE(4),
@@ -30,9 +30,9 @@ public class StargateRendererActionState extends State {
         HEAT_UPDATE(15);
 
         public final int actionID;
-        private static final Map<Integer, EnumGateAction> map = new HashMap<Integer, EnumGateAction>();
+        private static final Map<Integer, EnumGateAction> map = new HashMap<>();
 
-        private EnumGateAction(int actionID) {
+        EnumGateAction(int actionID) {
             this.actionID = actionID;
         }
 

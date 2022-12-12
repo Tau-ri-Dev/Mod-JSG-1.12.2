@@ -45,7 +45,7 @@ public class TriniumOreBlock extends JSGBlock {
 
 		int quantity = 1 + random.nextInt(2) + (fortune * random.nextInt(3));
 
-		drops.add(new ItemStack(JSGItems.TITANIUM_ORE_IMPURE, quantity));
+		drops.add(new ItemStack(JSGItems.TRINIUM_ORE_IMPURE, quantity));
 	}
 	
 	@Override

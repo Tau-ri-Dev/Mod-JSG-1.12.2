@@ -2,6 +2,7 @@ package tauri.dev.jsg.renderer.dialhomedevice;
 
 import io.netty.buffer.ByteBuf;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
 import tauri.dev.jsg.renderer.activation.Activation;
 import tauri.dev.jsg.renderer.activation.DHDActivation;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
@@ -47,8 +48,8 @@ public class DHDPegasusRendererState extends DHDAbstractRendererState {
 		}
 	}
 
-	public DHDPegasusRendererState(StargateAddressDynamic addressDialed, boolean brbActive, BiomeOverlayEnum biomeOverride, boolean stargateIsConnected) {
-		super(addressDialed, brbActive, biomeOverride, stargateIsConnected);
+	public DHDPegasusRendererState(StargateAddressDynamic addressDialed, boolean brbActive, BiomeOverlayEnum biomeOverride, boolean stargateIsConnected, JSGTileEntityConfig gateConfig) {
+		super(addressDialed, brbActive, biomeOverride, stargateIsConnected, gateConfig);
 	}
 
 	public DHDPegasusRendererState initClient(BlockPos pos, float horizontalRotation, BiomeOverlayEnum biomeOverlay, boolean stargateIsConnected) {

@@ -14,6 +14,7 @@ import tauri.dev.jsg.block.JSGBlock;
 import tauri.dev.jsg.block.props.TRPlatformBlock;
 import tauri.dev.jsg.block.transportrings.TRControllerAbstractBlock;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.ingame.*;
 import tauri.dev.jsg.entity.friendly.TokraEntity;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.sound.JSGSoundHelper;
@@ -21,10 +22,6 @@ import tauri.dev.jsg.tileentity.util.PreparableInterface;
 import tauri.dev.jsg.transportrings.*;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.block.JSGBlocks;
-import tauri.dev.jsg.config.ingame.JSGConfigOption;
-import tauri.dev.jsg.config.ingame.JSGConfigOptionTypeEnum;
-import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
-import tauri.dev.jsg.config.ingame.ITileConfig;
 import tauri.dev.jsg.gui.container.transportrings.TRGuiState;
 import tauri.dev.jsg.gui.container.transportrings.TRGuiUpdate;
 import tauri.dev.jsg.item.JSGItems;
@@ -1258,9 +1255,15 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         public final String[] comment;
         public final JSGConfigOptionTypeEnum type;
         public final String defaultValue;
+        public List<JSGConfigEnumEntry> possibleValues;
 
         public final int minInt;
         public final int maxInt;
+
+        ConfigOptions(int optionId, String label, String defaultValue, List<JSGConfigEnumEntry> possibleValues, String... comment) {
+            this(optionId, label, JSGConfigOptionTypeEnum.SWITCH, defaultValue, -1, -1, comment);
+            this.possibleValues = possibleValues;
+        }
 
         ConfigOptions(int optionId, String label, JSGConfigOptionTypeEnum type, String defaultValue, String... comment){
             this(optionId, label, type, defaultValue, -1, -1, comment);
@@ -1295,16 +1298,19 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         if(getConfig().getOptions().size() != TransportRingsAbstractTile.ConfigOptions.values().length) {
             getConfig().clearOptions();
             for (TransportRingsAbstractTile.ConfigOptions option : TransportRingsAbstractTile.ConfigOptions.values()) {
-                getConfig().addOption(
-                        new JSGConfigOption(option.id)
-                                .setType(option.type)
-                                .setLabel(option.label)
-                                .setValue(option.defaultValue)
-                                .setDefaultValue(option.defaultValue)
-                                .setMinInt(option.minInt)
-                                .setMaxInt(option.maxInt)
-                                .setComment(option.comment)
-                );
+                JSGConfigOption optionNew = new JSGConfigOption(option.id).setType(option.type);
+
+                if(option.type == JSGConfigOptionTypeEnum.SWITCH)
+                    optionNew.setPossibleValues(option.possibleValues);
+
+                optionNew.setLabel(option.label)
+                        .setValue(option.defaultValue)
+                        .setDefaultValue(option.defaultValue)
+                        .setMinInt(option.minInt)
+                        .setMaxInt(option.maxInt)
+                        .setComment(option.comment);
+
+                getConfig().addOption(optionNew);
             }
         }
     }

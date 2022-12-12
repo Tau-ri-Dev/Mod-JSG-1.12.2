@@ -1,16 +1,15 @@
 package tauri.dev.jsg.gui.element.tabs;
 
-import tauri.dev.jsg.gui.element.GuiHelper;
-import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
-import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
-import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.gui.element.GuiHelper;
+import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
+import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 
 import java.awt.*;
 import java.util.Objects;
@@ -62,7 +61,7 @@ public class TabAddress extends Tab {
                     break;
             }
             for (int i = 0; i < maxSymbols; i++) {
-                Minecraft.getMinecraft().getTextureManager().bindTexture(Objects.requireNonNull(gateTile.getStargateAddress(symbolType)).get(i).getIconResource(SymbolMilkyWayEnum.getOriginId(gateTile.getBiomeOverlayWithOverride(), gateTile.getWorld().provider.getDimension())));
+                Minecraft.getMinecraft().getTextureManager().bindTexture(Objects.requireNonNull(gateTile.getStargateAddress(symbolType)).get(i).getIconResource(SymbolMilkyWayEnum.getOriginId(gateTile.getBiomeOverlayWithOverride(), gateTile.getWorld().provider.getDimension(), gateTile.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL.id).getEnumValue().getIntValue())));
 
                 SymbolCoords symbolCoords = getSymbolCoords(i);
                 GuiHelper.drawTexturedRectWithShadow(symbolCoords.x, symbolCoords.y, shadow, shadow, symbolType.iconWidht, symbolType.iconHeight, color);

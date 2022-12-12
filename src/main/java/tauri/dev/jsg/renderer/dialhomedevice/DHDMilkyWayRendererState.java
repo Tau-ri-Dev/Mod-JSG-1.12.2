@@ -2,6 +2,7 @@ package tauri.dev.jsg.renderer.dialhomedevice;
 
 import io.netty.buffer.ByteBuf;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
 import tauri.dev.jsg.renderer.activation.Activation;
 import tauri.dev.jsg.renderer.activation.DHDActivation;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
@@ -46,8 +47,8 @@ public class DHDMilkyWayRendererState extends DHDAbstractRendererState {
     public DHDMilkyWayRendererState() {
     }
 
-    public DHDMilkyWayRendererState(StargateAddressDynamic addressDialed, boolean brbActive, BiomeOverlayEnum biomeOverride, boolean stargateIsConnected) {
-        super(addressDialed, brbActive, biomeOverride, stargateIsConnected);
+    public DHDMilkyWayRendererState(StargateAddressDynamic addressDialed, boolean brbActive, BiomeOverlayEnum biomeOverride, boolean stargateIsConnected, JSGTileEntityConfig gateConfig) {
+        super(addressDialed, brbActive, biomeOverride, stargateIsConnected, gateConfig);
     }
 
     public DHDMilkyWayRendererState initClient(BlockPos pos, float horizontalRotation, BiomeOverlayEnum biomeOverlay, boolean stargateIsConnected) {
@@ -97,7 +98,7 @@ public class DHDMilkyWayRendererState extends DHDAbstractRendererState {
 
     @Override
     public boolean isButtonActive(SymbolInterface symbol) {
-        return BUTTON_STATE_MAP.get((SymbolMilkyWayEnum) symbol) == 5;
+        return BUTTON_STATE_MAP.get(symbol) == 5;
     }
 
     @Override
@@ -107,10 +108,11 @@ public class DHDMilkyWayRendererState extends DHDAbstractRendererState {
         for (int state : BUTTON_STATE_MAP.values()) {
             if (state > 0) count++;
         }
-        if (BUTTON_STATE_MAP.get((SymbolMilkyWayEnum) origin) > 0) count--;
+        if (BUTTON_STATE_MAP.get(origin) > 0) count--;
         return count;
     }
 
+    @Override
     public void fromBytes(ByteBuf buf) {
         addressDialed = new StargateAddressDynamic(SymbolTypeEnum.MILKYWAY);
         super.fromBytes(buf);

@@ -357,7 +357,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
         sendState(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
     }
 
-    protected void sendState(StateTypeEnum type, State state) {
+    public void sendState(StateTypeEnum type, State state) {
         if (world.isRemote) return;
 
         if (targetPoint != null) {

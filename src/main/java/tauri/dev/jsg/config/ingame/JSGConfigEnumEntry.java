@@ -8,4 +8,12 @@ public class JSGConfigEnumEntry {
         this.name= name;
         this.value= value;
     }
+
+    public int getIntValue(){
+        try{
+            return Integer.parseInt(this.value);
+        }
+        catch(Exception ignored){}
+        return -1;
+    }
 }

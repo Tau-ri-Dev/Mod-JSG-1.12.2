@@ -113,7 +113,7 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
         return getEnglishName();
     }
 
-    public static int getOriginId(BiomeOverlayEnum overlay, int dimId) {
+    public static int getOriginId(BiomeOverlayEnum overlay, int dimId, int configOrigin) {
 		/*
 		IDS:
 		5/0- normal - overworld
@@ -124,6 +124,8 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
 		3- frosty - beta
 		4- aged - Abydos
 		 */
+        if(configOrigin >= 0) return configOrigin;
+
         if(overlay == null) overlay = BiomeOverlayEnum.NORMAL;
 
         int override = StargateDimensionConfig.getOrigin(DimensionManager.getProviderType(dimId), overlay);
@@ -146,45 +148,45 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
         return 0;
     }
 
-    private static final int DEFAULT_ORIGIN_ID = 0;
+    private static final int DEFAULT_ORIGIN_ID = 5;
 
     @Override
     public ResourceLocation getIconResource(int originId) {
         if (this == ORIGIN) {
-            if (JSGConfig.avConfig.enableDiffOrigins)
+            if (JSGConfig.originsConfig.enableDiffOrigins)
                 return new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/milkyway/origin_" + originId + ".png");
             return new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/milkyway/origin_" + DEFAULT_ORIGIN_ID + ".png");
         }
-        return getIconResource(BiomeOverlayEnum.NORMAL, 0);
+        return getIconResource(BiomeOverlayEnum.NORMAL, 0, originId);
     }
 
     @Override
-    public ResourceLocation getIconResource(BiomeOverlayEnum overlay, int dimensionId) {
+    public ResourceLocation getIconResource(BiomeOverlayEnum overlay, int dimensionId, int configOrigin) {
         if (this == ORIGIN)
-            return getIconResource(getOriginId(overlay, dimensionId));
+            return getIconResource(getOriginId(overlay, dimensionId, configOrigin));
         return iconResource;
     }
 
     public ResourceLocation getModelResource(BiomeOverlayEnum overlay, int dimensionId, boolean forDHD) {
-        return getModelResource(overlay, dimensionId, forDHD, false);
+        return getModelResource(overlay, dimensionId, forDHD, false, -1);
     }
 
-    public ResourceLocation getModelResource(BiomeOverlayEnum overlay, int dimensionId, boolean forDHD, boolean lightModel) {
-        return getModelResource(overlay, dimensionId, forDHD, lightModel, false);
+    public ResourceLocation getModelResource(BiomeOverlayEnum overlay, int dimensionId, boolean forDHD, boolean lightModel, int configOrigin) {
+        return getModelResource(overlay, dimensionId, forDHD, lightModel, false, configOrigin);
     }
 
-    private ResourceLocation getModelResource(BiomeOverlayEnum overlay, int dimensionId, boolean forDHD, boolean lightModel, boolean notFound) {
+    private ResourceLocation getModelResource(BiomeOverlayEnum overlay, int dimensionId, boolean forDHD, boolean lightModel, boolean notFound, int configOrigin) {
         ResourceLocation modelResource;
         if (this == ORIGIN) {
-            if (!notFound && JSGConfig.avConfig.enableDiffOrigins)
-                modelResource = ModelLoader.getModelResource("milkyway/" + (!forDHD ? "ring/" : "") + "origin_" + getOriginId(overlay, dimensionId) + (lightModel ? "_light" : "") + ".obj");
+            if (!notFound && JSGConfig.originsConfig.enableDiffOrigins)
+                modelResource = ModelLoader.getModelResource("milkyway/" + (!forDHD ? "ring/" : "") + "origin_" + getOriginId(overlay, dimensionId, configOrigin) + (lightModel ? "_light" : "") + ".obj");
             else
                 modelResource = ModelLoader.getModelResource("milkyway/" + (!forDHD ? "ring/" : "") + "origin_" + DEFAULT_ORIGIN_ID + (lightModel ? "_light" : "") + ".obj");
 
             if (ModelLoader.getModel(modelResource) == null && !notFound) {
                 JSG.error("Origin model not loaded!");
                 JSG.error(modelResource.getResourceDomain() + ":" + modelResource.getResourcePath());
-                return getModelResource(overlay, dimensionId, forDHD, lightModel, true);
+                return getModelResource(overlay, dimensionId, forDHD, lightModel, true, configOrigin);
             }
 
             return modelResource;

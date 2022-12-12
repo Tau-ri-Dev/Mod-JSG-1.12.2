@@ -106,7 +106,7 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 	}
 	
 	@Override
-	public ResourceLocation getIconResource(BiomeOverlayEnum overlay, int dimensionId) {
+	public ResourceLocation getIconResource(BiomeOverlayEnum overlay, int dimensionId, int configOrigin) {
 		return iconResource;
 	}
 

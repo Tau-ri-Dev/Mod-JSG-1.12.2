@@ -12,7 +12,7 @@
     },
     "P": {
       "type": "forge:ore_dict",
-      "ore": "placeTitanium"
+      "ore": "plateTitanium"
     },
     "L": {
       "type": "forge:ore_dict",

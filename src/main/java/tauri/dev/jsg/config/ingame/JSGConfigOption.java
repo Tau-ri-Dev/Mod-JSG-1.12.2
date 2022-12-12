@@ -12,11 +12,13 @@ import tauri.dev.jsg.gui.element.EnumButton;
 import tauri.dev.jsg.gui.element.ModeButton;
 import tauri.dev.jsg.gui.element.NumberOnlyTextField;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class JSGConfigOption {
     public int id;
@@ -165,15 +167,13 @@ public class JSGConfigOption {
         if (getDefault)
             v = defaultValue;
 
-        if (v == null) return -1;
+        if (v == null) return 0;
         try {
             return Integer.parseInt(v);
         } catch (Exception e) {
             if (v.equals("true"))
                 return 1;
-            if (v.equals("false"))
-                return 0;
-            return -1;
+            return 0;
         }
     }
 
@@ -196,10 +196,12 @@ public class JSGConfigOption {
         return this;
     }
 
-    @Nullable
+    @Nonnull
     public JSGConfigEnumEntry getEnumValue(){
-        if(possibleValues.size() >= getIntValue()) return null;
-        return possibleValues.get(getIntValue());
+        if(possibleValues.size() <= getIntValue()) return new JSGConfigEnumEntry("null", "-1");
+        JSGConfigEnumEntry t = possibleValues.get(getIntValue());
+        if(t != null) return t;
+        return new JSGConfigEnumEntry("null", "-1");
     }
 
     private JSGConfigOption setEnumValues(List<JSGConfigEnumEntry> entries){
@@ -293,7 +295,7 @@ public class JSGConfigOption {
         this.maxInt = buf.readInt();
         int defaultValueSize = buf.readInt();
         this.defaultValue = buf.readCharSequence(defaultValueSize, StandardCharsets.UTF_8).toString();
-
+        possibleValues = new ArrayList<>();
         int s = buf.readInt();
         for(int i = 0; i < s; i++){
             int valueSize2 = buf.readInt();

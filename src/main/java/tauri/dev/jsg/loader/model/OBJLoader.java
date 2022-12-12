@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class OBJLoader {
 
-    public static OBJModel loadModel(String modelPath) {
+    public static OBJModel loadModel(InputStream stream) {
         BufferedReader reader;
 
         List<Vector3f> vertices = new ArrayList<>();
@@ -26,9 +26,9 @@ public class OBJLoader {
         int current = 0;
 
         try {
-            InputStream stream = JSG.class.getClassLoader().getResourceAsStream(modelPath);
-			if(stream == null)
-				return null;
+            //stream = JSG.class.getClassLoader().getResourceAsStream(modelPath);
+            if (stream == null)
+                return null;
             reader = new BufferedReader(new InputStreamReader(stream));
             String line;
 

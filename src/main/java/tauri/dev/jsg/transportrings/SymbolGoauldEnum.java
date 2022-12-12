@@ -74,7 +74,7 @@ public enum SymbolGoauldEnum implements SymbolInterface {
     }
 
     @Override
-    public ResourceLocation getIconResource(BiomeOverlayEnum overlay, int dimId) {
+    public ResourceLocation getIconResource(BiomeOverlayEnum overlay, int dimId, int configOrigin) {
         return iconResource;
     }
 

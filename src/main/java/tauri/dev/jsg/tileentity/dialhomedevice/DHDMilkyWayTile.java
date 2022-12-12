@@ -2,6 +2,7 @@ package tauri.dev.jsg.tileentity.dialhomedevice;
 
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
@@ -98,6 +99,7 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
     public State getState(StateTypeEnum stateType) {
         if (stateType == StateTypeEnum.RENDERER_STATE) {
             StargateAddressDynamic address = new StargateAddressDynamic(SymbolTypeEnum.MILKYWAY);
+            JSGTileEntityConfig config = new JSGTileEntityConfig();
 
             if (isLinked()) {
                 StargateAbstractBaseTile gateTile = getLinkedGate(world);
@@ -119,10 +121,13 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
                         break;
                 }
 
-                return new DHDMilkyWayRendererState(address, brbActive, determineBiomeOverride(), gateTile.connectedToGate);
+                if(gateTile instanceof StargateClassicBaseTile)
+                    config = ((StargateClassicBaseTile) gateTile).getConfig();
+
+                return new DHDMilkyWayRendererState(address, brbActive, determineBiomeOverride(), gateTile.connectedToGate, config);
             }
 
-            return new DHDMilkyWayRendererState(address, false, determineBiomeOverride(), false);
+            return new DHDMilkyWayRendererState(address, false, determineBiomeOverride(), false, config);
         }
         throw new UnsupportedOperationException("EnumStateType." + stateType.name() + " not implemented on " + this.getClass().getName());
     }
@@ -156,7 +161,7 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
                 if (state == null) break;
                 DHDActivateButtonState activateState = (DHDActivateButtonState) state;
 
-                ((DHDAbstractRendererState) getRendererStateClient()).setIsConnected(connected);
+                getRendererStateClient().setIsConnected(connected);
 
                 if (activateState.clearAll)
                     ((DHDMilkyWayRendererState) getRendererStateClient()).clearSymbols(world.getTotalWorldTime());

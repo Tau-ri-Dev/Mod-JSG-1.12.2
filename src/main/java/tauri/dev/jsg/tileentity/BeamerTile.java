@@ -91,7 +91,6 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
     }
 
     public JSGAxisAlignedBB getRenderBoxForDisplay() {
-//		return new JSGAxisAlignedBB(-0.5, 0, -0.5, 0.5, 1, JSGConfig.beamerConfig.reach).rotate(facing).offset(0.5, 0, 0.5);
         return renderBox;
     }
 
@@ -101,10 +100,6 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 
         if (!world.isRemote) {
             targetPoint = new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
-
-//			if (loopSoundPlaying) {
-//				JSGSoundHelper.playPositionedSound(world, pos, SoundPositionedEnum.BEAMER_LOOP, true);
-//			}
         } else {
             JSGPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
             JSGPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_UPDATE));

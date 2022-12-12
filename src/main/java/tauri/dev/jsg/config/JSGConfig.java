@@ -72,6 +72,9 @@ public class JSGConfig {
     @Name("Audio/Video")
     public static AudioVideoConfig avConfig = new AudioVideoConfig();
 
+    @Name("Point Of Origin options")
+    public static PointOfOriginConfig originsConfig = new PointOfOriginConfig();
+
     @Name("Ore Generator config")
     public static WorldOreGenerator oreGeneratorConfig = new WorldOreGenerator();
 
@@ -677,16 +680,22 @@ public class JSGConfig {
                 "Disable this if it causes lags."
         })
         public boolean renderEmissive = true;
+    }
 
+    public static class PointOfOriginConfig {
         @Name("Enable different Point Of Origins for MW gate")
         public boolean enableDiffOrigins = true;
 
-        @Name("Origins added by resource pack count")
+        @RequiresMcRestart
+        @Name("Custom added points of origin")
         @Comment({
-                "Specifies, how many Point Of Origins were added by any resource pack.",
-                "This options is required to load all models of added origins!"
+                "Specifies Point Of Origins that were added by any resource pack.",
+                "This options is required to load all models of added origins!",
+                "Format: \"id:name\", for example: ",
+                "\"6:Tollan\"",
+                "\"7:P4X-256\""
         })
-        public int addedPoOs = 0;
+        public String[] additionalOrigins = {};
     }
 
     public static class WorldOreGenerator {

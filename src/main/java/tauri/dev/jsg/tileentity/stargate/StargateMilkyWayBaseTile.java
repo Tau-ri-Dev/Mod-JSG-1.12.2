@@ -2,8 +2,10 @@ package tauri.dev.jsg.tileentity.stargate;
 
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
+import tauri.dev.jsg.renderer.dialhomedevice.DHDAbstractRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateMilkyWayRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateMilkyWayRendererState.StargateMilkyWayRendererStateBuilder;
@@ -97,6 +99,19 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
     public void clearDHDSymbols(){
         if (isLinkedAndDHDOperational()) Objects.requireNonNull(getLinkedDHD(world)).clearSymbols();
+    }
+
+    @Override
+    public void setConfig(JSGTileEntityConfig config) {
+        super.setConfig(config);
+        if(isLinked()){
+            DHDAbstractTile dhd = getLinkedDHD(world);
+            if(dhd != null) {
+                DHDAbstractRendererState state = ((DHDAbstractRendererState) dhd.getState(StateTypeEnum.RENDERER_STATE));
+                state.gateConfig = getConfig();
+                dhd.sendState(StateTypeEnum.RENDERER_STATE, state);
+            }
+        }
     }
 
     // ------------------------------------------------------------------------
@@ -493,27 +508,21 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     @SideOnly(Side.CLIENT)
     public void setState(StateTypeEnum stateType, State state) {
         if(getRendererStateClient() != null) {
-            switch (stateType) {
-                case RENDERER_UPDATE:
-                    StargateRendererActionState gateActionState = (StargateRendererActionState) state;
+            if (stateType == StateTypeEnum.RENDERER_UPDATE) {
+                StargateRendererActionState gateActionState = (StargateRendererActionState) state;
 
-                    switch (gateActionState.action) {
-                        case CHEVRON_OPEN:
-                            getRendererStateClient().openChevron(world.getTotalWorldTime());
-                            break;
+                switch (gateActionState.action) {
+                    case CHEVRON_OPEN:
+                        getRendererStateClient().openChevron(world.getTotalWorldTime());
+                        break;
 
-                        case CHEVRON_CLOSE:
-                            getRendererStateClient().closeChevron(world.getTotalWorldTime());
-                            break;
-                        case OPEN_GATE:
-                        default:
-                            break;
-                    }
-
-                    break;
-
-                default:
-                    break;
+                    case CHEVRON_CLOSE:
+                        getRendererStateClient().closeChevron(world.getTotalWorldTime());
+                        break;
+                    case OPEN_GATE:
+                    default:
+                        break;
+                }
             }
         }
 

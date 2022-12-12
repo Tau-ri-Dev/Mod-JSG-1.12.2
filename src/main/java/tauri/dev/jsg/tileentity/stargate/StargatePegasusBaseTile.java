@@ -3,11 +3,14 @@ package tauri.dev.jsg.tileentity.stargate;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.ingame.JSGConfigOption;
+import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.gui.container.stargate.StargateContainerGuiUpdate;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
+import tauri.dev.jsg.renderer.dialhomedevice.DHDAbstractRendererState;
 import tauri.dev.jsg.renderer.stargate.ChevronEnum;
 import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
 import tauri.dev.jsg.renderer.stargate.StargatePegasusRendererState;
@@ -123,6 +126,19 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
     public void clearDHDSymbols() {
         if (isLinkedAndDHDOperational()) getLinkedDHD(world).clearSymbols();
+    }
+
+    @Override
+    public void setConfig(JSGTileEntityConfig config) {
+        super.setConfig(config);
+        if(isLinked()){
+            DHDAbstractTile dhd = getLinkedDHD(world);
+            if(dhd != null) {
+                DHDAbstractRendererState state = ((DHDAbstractRendererState) dhd.getState(StateTypeEnum.RENDERER_STATE));
+                state.gateConfig = getConfig();
+                dhd.sendState(StateTypeEnum.RENDERER_STATE, state);
+            }
+        }
     }
 
     // ------------------------------------------------------------------------

@@ -22,10 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.config.ingame.ITileConfig;
-import tauri.dev.jsg.config.ingame.JSGConfigOption;
-import tauri.dev.jsg.config.ingame.JSGConfigOptionTypeEnum;
-import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
+import tauri.dev.jsg.config.ingame.*;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.gui.container.countdown.CountDownContainerGuiUpdate;
 import tauri.dev.jsg.packet.JSGPacketHandler;
@@ -48,6 +45,8 @@ import tauri.dev.jsg.util.LinkingHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import java.util.List;
 
 import static tauri.dev.jsg.sound.JSGSoundHelper.playSoundEvent;
 import static tauri.dev.jsg.state.StateTypeEnum.RENDERER_UPDATE;
@@ -415,9 +414,16 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
         public final String[] comment;
         public final JSGConfigOptionTypeEnum type;
         public final String defaultValue;
+        public List<JSGConfigEnumEntry> possibleValues;
 
         public final int minInt;
         public final int maxInt;
+
+
+        ConfigOptions(int optionId, String label, String defaultValue, List<JSGConfigEnumEntry> possibleValues, String... comment) {
+            this(optionId, label, JSGConfigOptionTypeEnum.SWITCH, defaultValue, -1, -1, comment);
+            this.possibleValues = possibleValues;
+        }
 
         ConfigOptions(int optionId, String label, JSGConfigOptionTypeEnum type, String defaultValue, String... comment) {
             this(optionId, label, type, defaultValue, -1, -1, comment);
@@ -453,16 +459,19 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
         if (getConfig().getOptions().size() != DestinyCountDownTile.ConfigOptions.values().length) {
             getConfig().clearOptions();
             for (DestinyCountDownTile.ConfigOptions option : DestinyCountDownTile.ConfigOptions.values()) {
-                getConfig().addOption(
-                        new JSGConfigOption(option.id)
-                                .setType(option.type)
-                                .setLabel(option.label)
-                                .setValue(option.defaultValue)
-                                .setDefaultValue(option.defaultValue)
-                                .setMinInt(option.minInt)
-                                .setMaxInt(option.maxInt)
-                                .setComment(option.comment)
-                );
+                JSGConfigOption optionNew = new JSGConfigOption(option.id).setType(option.type);
+
+                if(option.type == JSGConfigOptionTypeEnum.SWITCH)
+                    optionNew.setPossibleValues(option.possibleValues);
+
+                optionNew.setLabel(option.label)
+                        .setValue(option.defaultValue)
+                        .setDefaultValue(option.defaultValue)
+                        .setMinInt(option.minInt)
+                        .setMaxInt(option.maxInt)
+                        .setComment(option.comment);
+
+                getConfig().addOption(optionNew);
             }
         }
     }

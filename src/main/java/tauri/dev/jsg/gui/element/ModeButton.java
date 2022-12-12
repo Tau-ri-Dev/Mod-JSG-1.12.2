@@ -12,14 +12,17 @@ public class ModeButton extends GuiButton {
     protected int currentState = 0;
 
     public ModeButton(int buttonId, int x, int y, int size, ResourceLocation texture, int textureWidth, int textureHeight, int states) {
-        super(buttonId, x, y, size, size, "");
+        this(buttonId, x, y, size, size, texture, textureWidth, textureHeight, states);
+    }
+    public ModeButton(int buttonId, int x, int y, int width, int height, ResourceLocation texture, int textureWidth, int textureHeight, int states) {
+        super(buttonId, x, y, width, height, "");
         this.textureHeight = textureHeight;
         this.textureWidth = textureWidth;
         this.states = states;
         this.texture = texture;
     }
 
-    public void setStates(int i){
+    public void setStates(int i) {
         this.states = i;
     }
 
@@ -81,6 +84,8 @@ public class ModeButton extends GuiButton {
     }
 
     public void setCurrentState(int currentState) {
+        if (currentState < 0) currentState = 0;
+        if (currentState > (states - 1)) currentState = (states - 1);
         this.currentState = currentState;
     }
 }
