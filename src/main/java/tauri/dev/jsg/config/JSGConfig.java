@@ -693,7 +693,8 @@ public class JSGConfig {
                 "This options is required to load all models of added origins!",
                 "Format: \"id:name\", for example: ",
                 "\"6:Tollan\"",
-                "\"7:P4X-256\""
+                "\"7:P4X-256\"",
+                "!DO NOT CHANGE ANYTHING IF YOU DON'T KNOW WHAT ARE YOU DOING!"
         })
         public String[] additionalOrigins = {};
     }

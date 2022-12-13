@@ -29,6 +29,7 @@ public class JSGStructuresGenerator implements IWorldGenerator {
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         for (EnumStructures structure : EnumStructures.values()) {
+            if(world.getWorldType() == WorldType.FLAT) return;
             if (structure.getActualStructure(world.provider.getDimension()).dimensionToSpawn == world.provider.getDimension()) {
                 if (structure.randomGenEnable) {
                     if (structure.chance > 0 && (random.nextFloat() < structure.chance)) {

@@ -7,112 +7,112 @@ itemGroup.jsg_energy=JSG: Energie
 itemGroup.jsg_tools=JSG: Werkzeuge
 itemGroup.jsg_props=JSG: Props
 itemGroup.jsg_machines=JSG: Maschinen
-itemGroup.jsg_weapons=JSG: Weapons
+itemGroup.jsg_weapons=JSG: Waffen
 
 # -------------------
 # ADVANCEMENTS
 
-advancement.machines.title=Some gears and screws
-advancement.machines.desc=Category full of machinery stuff
+advancement.machines.title=Einige Zahnräder und Schrauben
+advancement.machines.desc=Kategorie voller Maschinenkram
 
-advancement.wormhole_go.title=What wormhole? And why worm?
-advancement.wormhole_go.desc=Enter event Horizon of a Stargate
+advancement.wormhole_go.title=Welches Wurmloch? Und warum Wurm?
+advancement.wormhole_go.desc=Gehe durch den Ereignishorizont eines Sternentores
 
-advancement.merged_orlin.title=You're going to need a new toaster
-advancement.merged_orlin.desc=Build a Orlin´s stargate
+advancement.merged_orlin.title=Du brauchst einen neuen Toaster
+advancement.merged_orlin.desc=Baue ein Orlin-Gate
 
-advancement.merged_milkyway.title=Pyramid with the sun directly above it
-advancement.merged_milkyway.desc=Build a Milky Way stargate
+advancement.merged_milkyway.title=Pyramide mit der Sonne direkt darüber
+advancement.merged_milkyway.desc=Baue ein Sternentor der Milchstraße
 
-advancement.merged_pegasus.title=Jumper is not included
-advancement.merged_pegasus.desc=Build a Pegasus stargate
+advancement.merged_pegasus.title=Jumper ist nicht enthalten
+advancement.merged_pegasus.desc=Baue ein Pegasus-Sternentor
 
-advancement.merged_universe.title=Ancient, in both meanings
-advancement.merged_universe.desc=Build Universe stargate
+advancement.merged_universe.title=Antik, in beiden Bedeutungen
+advancement.merged_universe.desc=Baue das älteste Sternentor des Universums
 
-advancement.chevron_seven_locked.title=Chevron 7 locked!
-advancement.chevron_seven_locked.desc=Dial existing 7-symbols address
+advancement.chevron_seven_locked.title=Chevron 7 fixiert!
+advancement.chevron_seven_locked.desc=Vorhandene 7-Zeichen-Adresse anwählen
 
 advancement.chevron_eight_locked.title=Address is not incorrect, but incomplete.
-advancement.chevron_eight_locked.desc=Dial existing 8-symbols address
+advancement.chevron_eight_locked.desc=Vorhandene 8-Zeichen-Adresse anwählen
 
 advancement.chevron_nine_locked.title=Several billion light years from home
-advancement.chevron_nine_locked.desc=Dial existing 9-symbols address
+advancement.chevron_nine_locked.desc=Vorhandene 9-Zeichen-Adresse anwählen
 
-advancement.iris_impact.title=Knock, knock... Who's there?
-advancement.iris_impact.desc=Witness an object hit the iris
+advancement.iris_impact.title=Klopf, klopf... Wer ist da?
+advancement.iris_impact.desc=Sehen Sie, wie ein Gegenstand die Iris getroffen hat
 
-advancement.gdo_used.title=Code accepted - Opening Iris
-advancement.gdo_used.desc=Use GDO to send code
+advancement.gdo_used.title=Code akzeptiert - Öffnende Iris
+advancement.gdo_used.desc=Verwende ein GDO um den Code zu senden
 
-advancement.kawoosh_cremation.title=Escaping Hadante
-advancement.kawoosh_cremation.desc=Experience Kawoosh cremation on yourself
+advancement.kawoosh_cremation.title=Flucht aus Hadante
+advancement.kawoosh_cremation.desc=Erleben Sie die Kawoosh-Einäscherung an sich selbst
 
-advancement.first_zpm.title=What? ZPM, he is Canadian
-advancement.first_zpm.desc=Obtain a Zero Point Module
+advancement.first_zpm.title=Was? ZPM, er ist kanadier.
+advancement.first_zpm.desc=Erhalte ein ZPM
 
-advancement.three_zpms.title=I can't believe my eyes: Three ZPMs
-advancement.three_zpms.desc=Use ZPM hub with three ZPMs in
+advancement.three_zpms.title=Ich traue meinen Augen nicht: Drei ZPMs
+advancement.three_zpms.desc=Verwenden Sie den ZPM-Hub mit drei ZPMs
 
 advancement.zpm_slot.title=Oh yeah
-advancement.zpm_slot.desc=Use ZPM slot
+advancement.zpm_slot.desc=Verwenden Sie den ZPM-Steckplatz
 
-advancement.upgrade_shield.title=Using power, using power...
-advancement.upgrade_shield.desc=Obtain stargate shield
+advancement.upgrade_shield.title=Energieverschwendung, Energieverschwendung...
+advancement.upgrade_shield.desc=Erhalte den Stargate-Schild
 
-advancement.beamer.title=Beamers gonna beam
-advancement.beamer.desc=Obtain a beamer
+advancement.beamer.title=Transporter wird strahlen
+advancement.beamer.desc=Holen Sie sich einen Transporter
 
 advancement.titanium.title=Getting harder and tougher
 advancement.titanium.desc=Obtain a titanium ingot
 
-advancement.naquadah_raw.title=Naqua... What?
-advancement.naquadah_raw.desc=Craft a raw naquadah alloy
+advancement.naquadah_raw.title=Naqua... was?
+advancement.naquadah_raw.desc=Stelle eine rohe Naquadah-Legierung her
 
-advancement.naquadah_alloy.title=The best Super Conductor
-advancement.naquadah_alloy.desc=Craft a naquadah alloy
+advancement.naquadah_alloy.title=Der beste Supraleiter
+advancement.naquadah_alloy.desc=Stelle eine Naquadah-Legierung her
 
-advancement.trinium.title=Did you ask Xe´ls and T´akaya?!
-advancement.trinium.desc=Obtain a trinium ingot
+advancement.trinium.title=Hast du Xe´ls und T´akaya gefragt?!
+advancement.trinium.desc=Erhalte einen Triniumbarren
 
-advancement.unstable_eh_survive.title=For a moment there I thought we were in trouble
-advancement.unstable_eh_survive.desc=Enter an unstable wormhole and survive
+advancement.unstable_eh_survive.title=Einen Moment lang dachte ich, wir wären in Schwierigkeiten
+advancement.unstable_eh_survive.desc=Betrete ein instabiles Wurmloch und überlebe
 
-advancement.tokra_crystal.title=They live underground
-advancement.tokra_crystal.desc=Obtain tokra crystals
+advancement.tokra_crystal.title=Sie leben unter der Erde
+advancement.tokra_crystal.desc=Erhalte Tokra-Kristalle
 
-advancement.beamer_crystal_laser.title=A particle accelerator firing through a Stargate?
-advancement.beamer_crystal_laser.desc=Obtain a beamer laser crystal
+advancement.beamer_crystal_laser.title=Ein Teilchenbeschleuniger, der durch ein Stargate schießt?
+advancement.beamer_crystal_laser.desc=Besorge einen Transporter Laserkristall
 
-advancement.transportrings_goauld.title=Elevators are such a pain in a**
-advancement.transportrings_goauld.desc=Use goauld transport rings
+advancement.transportrings_goauld.title=Aufzüge sind langweilig
+advancement.transportrings_goauld.desc=Benutzt Goa'uld-Transportringe
 
-advancement.transportrings_ori.title=Plains of Celestis
-advancement.transportrings_ori.desc=Use ori transport rings
+advancement.transportrings_ori.title=Ebenen von Celestis
+advancement.transportrings_ori.desc=Verwenden Sie Ori-Transportringe
 
-advancement.transportrings_ancient.title=The original you might say
-advancement.transportrings_ancient.desc=Use ancient transport rings
+advancement.transportrings_ancient.title=Das Original könnte man sagen
+advancement.transportrings_ancient.desc=Verwenden Sie Antiker-Transportringe
 
-advancement.assembler.title=Ancient factory
-advancement.assembler.desc=Craft an Ancient Assembler
+advancement.assembler.title=Antike Fabrik
+advancement.assembler.desc=Erstelle einen Antiken Monteur
 
-advancement.chamber.title=Grow, crystals, Grow!
-advancement.chamber.desc=Craft a Crystal Chamber
+advancement.chamber.title=Wachse, Kristalle, wachse!
+advancement.chamber.desc=Stelle eine Kristallkammer her
 
-advancement.pcb.title=Crystal based technology
-advancement.pcb.desc=Craft a PCB Fabricator
+advancement.pcb.title=Technologie auf Kristallbasis
+advancement.pcb.desc=Stelle einen Leiterplattenhersteller her
 
-advancement.ore_washing.title=Purifying ores
-advancement.ore_washing.desc=Craft an Ore Washing Machine
+advancement.ore_washing.title=Erze reinigen
+advancement.ore_washing.desc=Stelle eine Erzwaschmaschine her
 
-advancement.chemicals.title=Is it Janus secret lab?
-advancement.chemicals.desc=Craft an Ancient Chemical Lab
+advancement.chemicals.title=Ist es Janus Geheimlabor?
+advancement.chemicals.desc=Baue ein antikes Chemielabor
 
-advancement.refined_naquadah.title=Now that's a HOT stuff
-advancement.refined_naquadah.desc=Obtain a Refined Liquid Naquadah
+advancement.refined_naquadah.title=Nun, das ist ein HEIßES Zeug
+advancement.refined_naquadah.desc=Erhalte ein raffiniertes flüssiges Naquadah
 
-advancement.myst_page.title=Abydos Cartouche
-advancement.myst_page.desc=Use Mysterious Page
+advancement.myst_page.title=Abydos-Kartusche
+advancement.myst_page.desc=Verwenden Sie die mysteriöse Seite
 
 # -------------------
 
@@ -203,24 +203,24 @@ item.jsg.holder_crystal.name=Kristallhalter
 item.jsg.holder_crystal_pegasus.name=Pegasus Kristallhalter
 
 # notebook
-item.jsg.page_notebook.name=Notebook Page
-item.jsg.page_notebook.empty=Empty
+item.jsg.page_notebook.name=Notizbuchseite
+item.jsg.page_notebook.empty=Leer
 
 # mysterious page
-item.jsg.page_mysterious_milkyway.name=Mysterious Page (Milky Way)
-item.jsg.page_mysterious_pegasus.name=Mysterious Page (Pegasus)
-item.jsg.page_mysterious_universe.name=Mysterious Page (Universe)
-item.jsg.page_mysterious.tooltip=Who knows where it leads
+item.jsg.page_mysterious_milkyway.name=Mysteriöse Seite (Milchstraße)
+item.jsg.page_mysterious_pegasus.name=Mysteriöse Seite (Pegasus)
+item.jsg.page_mysterious_universe.name=Mysteriöse Seite (Universe)
+item.jsg.page_mysterious.tooltip=Wer weiß wohin es führt?
 
-item.jsg.page_mysterious.generation.start=Starting new stargate generation...
-item.jsg.page_mysterious.generation.success=Stargate generated successfully!
-item.jsg.page_mysterious.generation.failed=Stargate generation FAILED!
+item.jsg.page_mysterious.generation.start=Neues Sternentor wird generiert...
+item.jsg.page_mysterious.generation.success=Sternentor erfolgreich erstellt!
+item.jsg.page_mysterious.generation.failed=Sternentor generierung FEHLGESCHLAGEN!
 
 # beamer
 item.jsg.beamer_crystal_power.name=Transporter Energiekristall
 item.jsg.beamer_crystal_fluid.name=Transporter Flüssigkeitskristall
 item.jsg.beamer_crystal_items.name=Transporter Item-Kristall
-item.jsg.beamer_crystal_laser.name=Beamer Laser Crystal
+item.jsg.beamer_crystal_laser.name=Transporter Laser-Kristall
 
 # universe dialer
 item.jsg.universe_dialer.name=Universe Dialer
@@ -307,7 +307,7 @@ tile.jsg.trinium_block.name=Trinium Block
 tile.jsg.titanium_block.name=Titanium Block
 
 # decor blocks
-tile.jsg.tokra_crystal_block.name=Tokra's Crystal Block
+tile.jsg.tokra_crystal_block.name=Tokra Kristall Block
 tile.jsg.destiny_countdown_block.name=Destiny Countdown Block
 
 # props
@@ -376,10 +376,10 @@ tile.jsg.transportrings_block.rings_distance=Entfernung
 tile.jsg.beamer_block.name=Transporter Block
 
 # machines
-tile.jsg.assembler_machine_block.name=Ancient Assembler
-tile.jsg.crystal_chamber_block.name=Crystal Chamber
-tile.jsg.pcb_fabricator_block.name=PCB Fabricator
-tile.jsg.ore_washing_machine_block.name=Ore Washing Machine
+tile.jsg.assembler_machine_block.name=Antiker Monteur
+tile.jsg.crystal_chamber_block.name=Kristallkammer
+tile.jsg.pcb_fabricator_block.name=Leiterplattenhersteller
+tile.jsg.ore_washing_machine_block.name=Erz Waschmaschine
 
 # -------------------
 
@@ -401,7 +401,7 @@ fluid.silicon_molten_red=Energiemischung
 fluid.silicon_molten_blue=Teleportierende Mischung
 fluid.silicon_molten_ender=Endermischung
 fluid.silicon_molten_yellow=Leuchtende Mischung
-fluid.silicon_molten_pegasus=Pegasus Blend
+fluid.silicon_molten_pegasus=Pegasus Mischung
 
 # naquadah
 fluid.naquadah_molten_raw=Flüssiges Naquadah
@@ -646,21 +646,21 @@ gui.stargate.biome_overlay.sandy=Sandy
 gui.stargate.capacitors=Kondensatoren
 gui.stargate.energyBuffer=Energiespeicher
 
-gui.stargate.state.closed=Stargate closed!
-gui.stargate.state.opened=Open time:
+gui.stargate.state.closed=Stargate geschlossen!
+gui.stargate.state.opened=Offene Zeit:
 
 # zpmhub
-gui.zpmhub.inProgress=ZPMs are not locked!
-gui.zpmhub.slideDown=Engage ZPMs
-gui.zpmhub.slideUp=Disengage ZPMs
+gui.zpmhub.inProgress=ZPMs sind nicht gesperrt!
+gui.zpmhub.slideDown=Aktiviere ZPMs
+gui.zpmhub.slideUp=Deaktiviere ZPMs
 
 # capacitor
 gui.capacitor.name=Kondensatorbatterie
 
 # rings
-gui.transportrings.energyBuffer=Energy buffer
-gui.transportrings.ori_address=Ori address
-gui.transportrings.goauld_address=Goa'uld address
+gui.transportrings.energyBuffer=Energiespeicher
+gui.transportrings.ori_address=Ori-Adresse
+gui.transportrings.goauld_address=Goa'uld-Adresse
 
 # beamer
 gui.beamer.name=Stargate Transporter
@@ -704,15 +704,15 @@ gui.gdo.send_code=Code Eingabe:
 gui.gdo.send_button=Code senden
 
 # assembler
-gui.assembler.name=Ancient Assembler
+gui.assembler.name=Antiker Monteur
 
-gui.assembler.milkyway=Milky Way Items
+gui.assembler.milkyway=Milchstraßen Items
 gui.assembler.pegasus=Pegasus Items
 gui.assembler.universe=Universe Items
 
 gui.assembler.goauld=Goa'uld Items
 gui.assembler.ori=Ori Items
-gui.assembler.ancient=Ancient Items
+gui.assembler.ancient=Antiker Items
 
 # -------------------
 
@@ -751,7 +751,7 @@ jsg.subtitle.gate_pegasus_open=Stargate Wurmloch öffnet
 jsg.subtitle.gate_pegasus_close=Stargate Wurmloch schließt
 jsg.subtitle.gate_pegasus_ring_roll=Stargate Ring bewegt sich
 jsg.subtitle.gate_pegasus_dial_fail=Stargate Anwahl schlägt fehl
-jsg.subtitle.gate_pegasus_dial_fail_computer=Stargate computer Anwahl schlägt fehl
+jsg.subtitle.gate_pegasus_dial_fail_computer=Stargate Computeranwahl schlägt fehl
 jsg.subtitle.gate_pegasus_incoming=Stargate Chevron sichern
 jsg.subtitle.gate_pegasus_chevron_shut=Stargate Chevron schließt
 jsg.subtitle.gate_pegasus_chevron_open=Stargate Chevron öffnet
@@ -791,9 +791,9 @@ jsg.subtitle.universe_dialer_connect=Universe Dialer verbunden
 jsg.subtitle.item_zat_shoot=Zat'nik'tel Schuss
 jsg.subtitle.item_staff_shoot=Goa'uld Stabwaffe Schuss
 
-jsg.subtitle.destiny_countdown_start=Destiny's countdown started!
-jsg.subtitle.destiny_countdown_stop=Destiny's countdown reached zero
-jsg.subtitle.destiny_countdown_one_minute=One minute left on Destiny's countdown
+jsg.subtitle.destiny_countdown_start=Destiny's countdown gestartet!
+jsg.subtitle.destiny_countdown_stop=Destiny's countdown hat null erreicht
+jsg.subtitle.destiny_countdown_one_minute=Eine Minute verbleibend auf Destiny's countdown
 
 # -------------------
 

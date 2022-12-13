@@ -265,7 +265,7 @@ public class JSGStructure extends WorldGenerator {
                 gateTile.getNetwork().addStargate(address, new StargatePos(worldToSpawn.provider.getDimensionType().getId(), gatePos, address));
 
             ResourceLocation biomePath = biome.getRegistryName();
-            return new GeneratedStargate(address, (biomePath == null ? null : biomePath.getResourcePath()), hasUpgrade);
+            return new GeneratedStargate(address, (biomePath == null ? null : biomePath.getResourcePath()), hasUpgrade, gateTile.getOriginId());
         }
         if (isRingsStructure && ringsTiles.size() > 0) {
             for (TransportRingsAbstractTile ringsTile : ringsTiles) {

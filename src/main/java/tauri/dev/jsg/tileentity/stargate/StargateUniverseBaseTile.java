@@ -6,7 +6,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
@@ -38,7 +37,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Map;
 
 import static tauri.dev.jsg.stargate.EnumStargateState.DIALING;
 import static tauri.dev.jsg.stargate.EnumStargateState.FAILING;
@@ -93,7 +91,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
 
     // cooldown
     private int coolDown = 0;
-    private static final int coolDownDelay = 60; // in ticks (3 seconds)
+    private static final int COOL_DOWN_DELAY = 60; // in ticks (3 seconds)
 
     // --------------------------------------------------------------------------------
     // CoolDown system - prevent from spamming uni dialer functions
@@ -111,7 +109,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     }
 
     public void setCoolDown() {
-        coolDown = coolDownDelay;
+        coolDown = COOL_DOWN_DELAY;
         markDirty();
     }
 
@@ -214,10 +212,10 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
             abortingDialing = true;
             currentRingSymbol = targetRingSymbol;
             markDirty();
-            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_RESET, 5, null));
-            spinStartTime = world.getTotalWorldTime() + 3000;
+            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_RESET, 60, null));
+            spinStartTime = -1;
             isSpinning = false;
-            JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, true, 0)), targetPoint);
+            sendState(StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, true, 0));
             addFailedTaskAndPlaySound();
             playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
             // remove last spinning finished task

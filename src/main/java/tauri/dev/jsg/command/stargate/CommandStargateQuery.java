@@ -17,6 +17,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 
 import java.util.Map;
 
@@ -163,7 +165,7 @@ public class CommandStargateQuery extends CommandBase {
 		}
 		
 		if (givePage) {			
-			if (idCheck == -1 || selectedAddress == null) {
+			if (idCheck == -1 || selectedAddress == null || selectedStargatePos == null) {
 				throw new WrongUsageException("commands.sgquery.wrong_id");
 			}
 			
@@ -176,7 +178,11 @@ public class CommandStargateQuery extends CommandBase {
 			}
 			
 			ItemStack stack = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, givePageCount, 1);
-			stack.setTagCompound(PageNotebookItem.getCompoundFromAddress(selectedAddress, true, PageNotebookItem.getRegistryPathFromWorld(selectedStargatePos.getWorld(), selectedStargatePos.gatePos)));
+			int originId = -1;
+			StargateAbstractBaseTile tile = selectedStargatePos.getTileEntity();
+			if(tile instanceof StargateClassicBaseTile)
+				originId = ((StargateClassicBaseTile) tile).getOriginId();
+			stack.setTagCompound(PageNotebookItem.getCompoundFromAddress(selectedAddress, true, PageNotebookItem.getRegistryPathFromWorld(selectedStargatePos.getWorld(), selectedStargatePos.gatePos), originId));
 			((EntityPlayer) sender).addItemStackToInventory(stack);
 			
 			notifyCommandListener(sender, this, "commands.sgquery.giving_page", sender.getName());

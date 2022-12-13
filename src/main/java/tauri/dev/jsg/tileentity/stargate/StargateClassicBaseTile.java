@@ -47,10 +47,7 @@ import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.linkable.gdo.GDOMessages;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.item.stargate.UpgradeIris;
-import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
-import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRenderer;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRendererState.StargateClassicRendererStateBuilder;
@@ -75,17 +72,16 @@ import tauri.dev.jsg.tileentity.BeamerTile;
 import tauri.dev.jsg.tileentity.util.IUpgradable;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
 import tauri.dev.jsg.util.*;
-import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static tauri.dev.jsg.item.linkable.gdo.GDOItem.isLinked;
 import static tauri.dev.jsg.stargate.EnumIrisType.IRIS_TITANIUM;
 import static tauri.dev.jsg.stargate.EnumSpinDirection.CLOCKWISE;
 import static tauri.dev.jsg.stargate.EnumSpinDirection.COUNTER_CLOCKWISE;
-import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.*;
+import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_INCOMING;
+import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_RIG;
 import static tauri.dev.jsg.util.JSGAdvancementsUtil.tryTriggerRangedAdvancement;
 
 /**
@@ -256,7 +252,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (stargateState.dialingComputer() || stargateState.idle() || stargateState.dialing()) {
             spinStartTime = world.getTotalWorldTime() + 3000;
             isSpinning = false;
-            JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, true, 0)), targetPoint);
+            sendState(StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, true, 0));
             addFailedTaskAndPlaySound();
             playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
             // remove last spinning finished task
@@ -304,7 +300,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         irisState = EnumIrisState.OPENED;
         irisType = EnumIrisType.NULL;
         currentRingSymbol = getSymbolType().getTopSymbol();
-        JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(currentRingSymbol, spinDirection, true, 0)), targetPoint);
+        sendState(StateTypeEnum.SPIN_STATE, new StargateSpinState(currentRingSymbol, spinDirection, true, 0));
 
         playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
         ItemHandlerHelper.dropInventoryItems(world, pos, itemStackHandler);
@@ -836,9 +832,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return null;
     }
 
-    public BiomeOverlayEnum getBiomeOverlayWithOverride(){
+    public BiomeOverlayEnum getBiomeOverlayWithOverride() {
         BiomeOverlayEnum overlay = determineBiomeOverride();
-        if(overlay == null) return super.getBiomeOverlayWithOverride();
+        if (overlay == null) return super.getBiomeOverlayWithOverride();
         return overlay;
     }
 
@@ -1021,7 +1017,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         ),
         ORIGIN_MODEL(
                 8, "originModel", "0", // default value here is index of value in array below
-                new ArrayList<JSGConfigEnumEntry>(){{
+                new ArrayList<JSGConfigEnumEntry>() {{
                     add(new JSGConfigEnumEntry("[by overlay]", "-1"));
                     add(new JSGConfigEnumEntry("Default", "0"));
                     add(new JSGConfigEnumEntry("P7J-989", "1"));
@@ -1029,7 +1025,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     add(new JSGConfigEnumEntry("Antarctica", "3"));
                     add(new JSGConfigEnumEntry("Abydos", "4"));
                     add(new JSGConfigEnumEntry("Tauri", "5"));
-                    for(String poo : JSGConfig.originsConfig.additionalOrigins){
+                    for (String poo : JSGConfig.originsConfig.additionalOrigins) {
                         String name = poo.split(":")[1];
                         String value = poo.split(":")[0];
                         add(new JSGConfigEnumEntry(name, value));
@@ -1089,7 +1085,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             for (ConfigOptions option : ConfigOptions.values()) {
                 JSGConfigOption optionNew = new JSGConfigOption(option.id).setType(option.type);
 
-                if(option.type == JSGConfigOptionTypeEnum.SWITCH)
+                if (option.type == JSGConfigOptionTypeEnum.SWITCH)
                     optionNew.setPossibleValues(option.possibleValues);
 
                 optionNew.setLabel(option.label)
@@ -1101,6 +1097,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
                 getConfig().addOption(optionNew);
             }
+        }
+        // reset config option when array change (by config for example)
+        for (ConfigOptions option : ConfigOptions.values()) {
+            if (option.type != JSGConfigOptionTypeEnum.SWITCH) continue;
+            if (option.possibleValues.equals(getConfig().getOption(option.id).possibleValues)) continue;
+            getConfig().getOption(option.id).setPossibleValues(option.possibleValues).setDefaultValue(option.defaultValue).setValue(option.defaultValue);
         }
     }
 
@@ -1353,9 +1355,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 } else {
                     JSG.logger.debug("Giving Notebook page of address " + symbolType);
 
-                    NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(gateAddressMap.get(symbolType), hasUpgrade(StargateUpgradeEnum.CHEVRON_UPGRADE), PageNotebookItem.getRegistryPathFromWorld(world, pos));
-
-                    setOriginId(compound);
+                    NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(gateAddressMap.get(symbolType), hasUpgrade(StargateUpgradeEnum.CHEVRON_UPGRADE), PageNotebookItem.getRegistryPathFromWorld(world, pos), getOriginId());
 
                     stack = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 1, 1);
                     stack.setTagCompound(compound);
@@ -1374,8 +1374,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     }
 
-    public void setOriginId(NBTTagCompound compound){
-        compound.setInteger("originId", SymbolMilkyWayEnum.getOriginId(getBiomeOverlayWithOverride(), world.provider.getDimension(), getConfig().getOption(ORIGIN_MODEL.id).getEnumValue().getIntValue()));
+    public int getOriginId() {
+        return -1;
+    }
+
+    public void setOriginId(NBTTagCompound compound) {
+        compound.setInteger("originId", getOriginId());
     }
 
 
@@ -1425,7 +1429,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
         doIncomingAnimation(duration, true, targetRingSymbol);
 
-        JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, plusRounds)), targetPoint);
+        sendState(StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, plusRounds));
         lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 5);
         addTask(lastSpinFinished);
         addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, soundSpinWait));
@@ -1489,7 +1493,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
 
         if (targetPoint != null)
-            JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, rounds)), targetPoint);
+            sendState(StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, rounds));
         if (stargateState.incoming()) {
             stargateState = EnumStargateState.INCOMING;
             markDirty();
@@ -2005,19 +2009,22 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return world;
     }
 
-    public void setFakeWorld(World world) {}
+    public void setFakeWorld(World world) {
+    }
 
     public BlockPos getFakePos() {
         return pos;
     }
 
-    public void setFakePos(BlockPos pos) {}
+    public void setFakePos(BlockPos pos) {
+    }
 
     public ArrayList<NearbyGate> getNearbyGates() {
         return getNearbyGates(null, false, true);
     }
+
     public ArrayList<NearbyGate> getNearbyGates(@Nullable SymbolTypeEnum gateType, boolean ignoreIfInstance, boolean checkAddressAndEnergy) {
-        if(gateType == null) gateType = getSymbolType();
+        if (gateType == null) gateType = getSymbolType();
         double squaredGate = (double) JSGConfig.stargateConfig.universeGateNearbyReach * tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach;
 
         ArrayList<NearbyGate> addresses = new ArrayList<>();
@@ -2067,14 +2074,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
             int symbolsNeeded = getSymbolType().getMinimalSymbolCountTo(gateType, StargateDimensionConfig.isGroupEqual(DimensionManager.getProviderType(stargatePos.dimensionID), world.provider.getDimensionType()));
 
-            if(checkAddressAndEnergy) {
+            if (checkAddressAndEnergy) {
                 StargateAddressDynamic addr3 = new StargateAddressDynamic(gateType);
-                addr3.addAll(entry.getKey().subList(0, (symbolsNeeded-1)));
+                addr3.addAll(entry.getKey().subList(0, (symbolsNeeded - 1)));
                 addr3.addSymbol(targetGateTile.getSymbolType().getOrigin());
                 if (checkAddressAndEnergy(addr3).ok())
                     addresses.add(new NearbyGate(entry.getKey(), symbolsNeeded, targetGateTile.getSymbolType()));
-            }
-            else
+            } else
                 addresses.add(new NearbyGate(entry.getKey(), symbolsNeeded, targetGateTile.getSymbolType()));
         }
         return addresses;
@@ -2359,14 +2365,14 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(gateType:string|gateType:int, checkGateType:boolean, checkAddressAndEnergy:boolean) -- Returns nearby gates")
     public Object[] getNearbyGates(Context context, Arguments args) {
-        if(!isMerged()) return new Object[]{null, false, "gate_not_merged", new HashMap<String, Object>()};
+        if (!isMerged()) return new Object[]{null, false, "gate_not_merged", new HashMap<String, Object>()};
         Map<String, Map<List<String>, Integer>> map = new HashMap<>(); // (SymbolType, (address, symbolsNeeded))
 
         SymbolTypeEnum symbolType = (args.isInteger(0) ? SymbolTypeEnum.valueOf(args.checkInteger(0)) : (args.isString(0) ? SymbolTypeEnum.valueOf(args.checkString(0)) : getSymbolType()));
         boolean checkType = (args.isBoolean(1) && args.checkBoolean(1));
         boolean checkAddEne = (args.isBoolean(2) && args.checkBoolean(2));
 
-        for(NearbyGate g : getNearbyGates(symbolType, checkType, checkAddEne)){
+        for (NearbyGate g : getNearbyGates(symbolType, checkType, checkAddEne)) {
             Map<List<String>, Integer> map2 = map.computeIfAbsent(g.address.getSymbolType().toString(), k -> new HashMap<>());
             map2.put(g.address.getNameList(), g.symbolsNeeded);
             map.put(g.gateType.toString(), map2);

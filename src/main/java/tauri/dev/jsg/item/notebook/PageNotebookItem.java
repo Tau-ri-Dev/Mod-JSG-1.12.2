@@ -5,6 +5,7 @@ import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.item.renderer.CustomModel;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
 import tauri.dev.jsg.stargate.network.StargateAddress;
+import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
 import tauri.dev.jsg.transportrings.TransportRingsAddress;
@@ -25,6 +26,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+
+import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL;
 
 public class PageNotebookItem extends Item implements CustomModelItemInterface {
 
@@ -134,8 +137,8 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 	public static String getRegistryPathFromWorld(World world, BlockPos pos) {
 		return world.getBiome(pos).getRegistryName().getResourcePath();
 	}
-	
-	public static NBTTagCompound getCompoundFromAddress(StargateAddress address, boolean hasUpgrade, String registryPath) {
+
+	public static NBTTagCompound getCompoundFromAddress(StargateAddress address, boolean hasUpgrade, String registryPath, int originId) {
 		NBTTagCompound compound = new NBTTagCompound();
 		if(address != null) {
 			if (address.getSymbolType() != null) compound.setInteger("symbolType", address.getSymbolType().id);
@@ -143,6 +146,7 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 		}
 		compound.setBoolean("hasUpgrade", hasUpgrade);
 		compound.setInteger("color", PageNotebookItem.getColorForBiome(registryPath));
+		compound.setInteger("originId", originId);
 		
 		return compound;
 	}
