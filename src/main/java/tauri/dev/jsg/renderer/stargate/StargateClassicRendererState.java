@@ -3,7 +3,9 @@ package tauri.dev.jsg.renderer.stargate;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
+import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.stargate.*;
 import tauri.dev.jsg.stargate.network.SymbolInterface;
@@ -23,6 +25,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
         this.irisState = builder.irisState;
         this.irisType = builder.irisType;
         this.irisAnimation = builder.irisAnimation;
+        this.stargateSize = builder.stargateSize;
     }
 
     @Override
@@ -33,6 +36,10 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     }
 
     protected abstract String getChevronTextureBase();
+
+    // Gate
+    // Saved
+    public StargateSizeEnum stargateSize = JSGConfig.stargateSize;
 
     // Chevrons
     // Saved
@@ -75,6 +82,8 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
 
     @Override
     public void toBytes(ByteBuf buf) {
+        if(stargateSize == null) stargateSize = JSGConfig.stargateSize;
+        buf.writeInt(stargateSize.id);
         chevronTextureList.toBytes(buf);
         spinHelper.toBytes(buf);
 
@@ -95,6 +104,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
 
     @Override
     public void fromBytes(ByteBuf buf) {
+        stargateSize = StargateSizeEnum.fromId(buf.readInt());
         fromBytes(buf, StargateClassicSpinHelper.class);
     }
 
@@ -135,6 +145,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
         }
 
         protected SymbolTypeEnum symbolType;
+        private StargateSizeEnum stargateSize;
 
         // Chevrons
         protected int activeChevrons;
@@ -160,6 +171,11 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
 
         public StargateClassicRendererStateBuilder(StargateAbstractRendererStateBuilder superBuilder) {
             setStargateState(superBuilder.stargateState);
+        }
+
+        public StargateClassicRendererStateBuilder setStargateSize(StargateSizeEnum stargateSize) {
+            this.stargateSize = stargateSize;
+            return this;
         }
 
         public StargateClassicRendererStateBuilder setSymbolType(SymbolTypeEnum symbolType) {

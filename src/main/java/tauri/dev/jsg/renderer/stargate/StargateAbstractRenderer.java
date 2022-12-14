@@ -71,6 +71,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         if (rendererState != null) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(x, y, z);
+            GlStateManager.disableLighting();
 
 
             if (shouldRender(rendererState)) {
@@ -129,6 +130,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
             }
 
             GlStateManager.popMatrix();
+            GlStateManager.enableLighting();
         }
     }
 

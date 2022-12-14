@@ -1,16 +1,18 @@
 package tauri.dev.jsg.renderer.stargate;
 
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.texture.Texture;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.stargate.network.SymbolPegasusEnum;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
 import tauri.dev.jsg.util.math.NumberUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.Vec3d;
-import org.lwjgl.opengl.GL11;
 
 public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePegasusRendererState> {
 
@@ -20,9 +22,13 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
     private static final int GLYPHS_COUNT = 36;
 
     @Override
-    protected void applyTransformations(StargatePegasusRendererState rendererState) {
-        GlStateManager.translate(0.50, GATE_DIAMETER / 2 + rendererState.stargateSize.renderTranslationY, 0.50);
-        GlStateManager.scale(rendererState.stargateSize.renderScale, rendererState.stargateSize.renderScale, rendererState.stargateSize.renderScale);
+    public float getGateDiameter() {
+        return GATE_DIAMETER;
+    }
+
+    @Override
+    public double getScaleMultiplier() {
+        return 1;
     }
 
     @Override
@@ -37,29 +43,28 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         GlStateManager.popMatrix();
 
         GlStateManager.pushMatrix();
-            JSGTextureLightningHelper.lightUpTexture(1f);
+        JSGTextureLightningHelper.lightUpTexture(1f);
 
-            if (rendererState.spinHelper.getIsSpinning()) {
-                int index = Math.round(rendererState.spinHelper.apply(getWorld().getTotalWorldTime() + partialTicks));
-                if (!rendererState.slotToGlyphMap.containsKey(index)) {
-                    renderGlyph(rendererState.spinHelper.getTargetSymbol().getId(), index, false);
-                }
+        if (rendererState.spinHelper.getIsSpinning()) {
+            int index = Math.round(rendererState.spinHelper.apply(getWorld().getTotalWorldTime() + partialTicks));
+            if (!rendererState.slotToGlyphMap.containsKey(index)) {
+                renderGlyph(rendererState.spinHelper.getTargetSymbol().getId(), index, false);
             }
+        }
 
 
-            for (int i = 0; i < GLYPHS_COUNT + 2; i++) { // +2 for incoming bug
-                if (!rendererState.slotToGlyphMap.containsKey(i) && i < GLYPHS_COUNT) { // here is fixed
-                    // Don't show the faded out glyphs when the gate is dialing.
-                    if (!rendererState.spinHelper.getIsSpinning() && rendererState.slotToGlyphMap.size() == 0) {
-                        renderGlyph(i, i, true);
-                    }
-                    continue;
+        for (int i = 0; i < GLYPHS_COUNT + 2; i++) { // +2 for incoming bug
+            if (!rendererState.slotToGlyphMap.containsKey(i) && i < GLYPHS_COUNT) { // here is fixed
+                // Don't show the faded out glyphs when the gate is dialing.
+                if (!rendererState.spinHelper.getIsSpinning() && rendererState.slotToGlyphMap.size() == 0) {
+                    renderGlyph(i, i, true);
                 }
-                else if (!rendererState.slotToGlyphMap.containsKey(i) && i >= GLYPHS_COUNT)
-                    continue;
+                continue;
+            } else if (!rendererState.slotToGlyphMap.containsKey(i) && i >= GLYPHS_COUNT)
+                continue;
 
-                renderGlyph(rendererState.slotToGlyphMap.get(i), i, false); // for incoming and locked chevrons
-            }
+            renderGlyph(rendererState.slotToGlyphMap.get(i), i, false); // for incoming and locked chevrons
+        }
         applyLightMap(rendererState, partialTicks);
         GlStateManager.popMatrix();
 
@@ -83,7 +88,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
         // GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
 
-        if(ElementEnum.PEGASUS_RING.modelResource != null && ElementEnum.PEGASUS_RING.biomeTextureResourceMap != null && ElementEnum.PEGASUS_RING.biomeTextureResourceMap.get(rendererState.getBiomeOverlay()) != null)
+        if (ElementEnum.PEGASUS_RING.modelResource != null && ElementEnum.PEGASUS_RING.biomeTextureResourceMap != null && ElementEnum.PEGASUS_RING.biomeTextureResourceMap.get(rendererState.getBiomeOverlay()) != null)
             ElementEnum.PEGASUS_RING.bindTextureAndRender(rendererState.getBiomeOverlay());
 
         GlStateManager.popMatrix();
@@ -100,7 +105,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         GlStateManager.rotate(chevron.rotation, 0, 0, 1);
 
         Texture chevronTexture = TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron, onlyLight));
-        if(chevronTexture != null) {
+        if (chevronTexture != null) {
             chevronTexture.bindTexture();
 
             if (chevron.isFinal()) {
@@ -120,7 +125,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
                 ElementEnum.PEGASUS_CHEVRON_LIGHT.render();
             }
 
-            if(!onlyLight) {
+            if (!onlyLight) {
                 ElementEnum.PEGASUS_CHEVRON_FRAME.bindTextureAndRender(rendererState.getBiomeOverlay());
                 ElementEnum.PEGASUS_CHEVRON_BACK.render();
             }
@@ -138,10 +143,11 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
     protected void renderGlyph(int glyphId, int slot, boolean deactivated) {
         renderGlyph(glyphId, slot, deactivated, false);
-        if(deactivated){
+        if (deactivated) {
             renderGlyph(glyphId, slot, false, true);
         }
     }
+
     protected void renderGlyph(int glyphId, int slot, boolean deactivated, boolean translatePos) {
         GlStateManager.pushMatrix();
         GlStateManager.disableBlend();
@@ -170,7 +176,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         double radius = 0.94;
         // double[] uv = getPositionInRingAtIndex(radius, -glyphId);
         int textureSlot = SymbolPegasusEnum.valueOf(glyphId).textureSlot;
-        double[] uv = getPositionInRingAtIndex(radius, - (textureSlot));
+        double[] uv = getPositionInRingAtIndex(radius, -(textureSlot));
         double x = (uv[0] + radius) / 2;
         double y = (uv[1] + radius) / 2;
 

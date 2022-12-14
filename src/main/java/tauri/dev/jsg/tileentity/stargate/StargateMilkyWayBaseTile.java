@@ -1,9 +1,15 @@
 package tauri.dev.jsg.tileentity.stargate;
 
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
-import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.renderer.dialhomedevice.DHDAbstractRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
@@ -21,37 +27,31 @@ import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.stargate.network.SymbolInterface;
 import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
-import tauri.dev.jsg.state.stargate.StargateRendererActionState;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
+import tauri.dev.jsg.state.stargate.StargateRendererActionState;
 import tauri.dev.jsg.tileentity.dialhomedevice.DHDAbstractTile;
-import tauri.dev.jsg.tileentity.dialhomedevice.DHDMilkyWayTile;
 import tauri.dev.jsg.tileentity.dialhomedevice.DHDAbstractTile.DHDUpgradeEnum;
+import tauri.dev.jsg.tileentity.dialhomedevice.DHDMilkyWayTile;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
-import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.ILinkable;
+import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.LinkingHelper;
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.*;
 
 
 public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements ILinkable {
-    @Nonnull
+
     @Override
-    public StargateSizeEnum getStargateSize() {
-        return stargateSize;
+    public int getOriginId() {
+        return SymbolMilkyWayEnum.getOriginId(getBiomeOverlayWithOverride(), getFakeWorld().provider.getDimension(), getConfig().getOption(ORIGIN_MODEL.id).getEnumValue().getIntValue());
     }
 
     // ------------------------------------------------------------------------
@@ -91,22 +91,22 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     }
 
     @Override
-    public void activateDHDSymbolBRB(){
+    public void activateDHDSymbolBRB() {
         if (isLinkedAndDHDOperational()) {
             Objects.requireNonNull(getLinkedDHD(world)).activateSymbol(SymbolMilkyWayEnum.BRB);
         }
     }
 
-    public void clearDHDSymbols(){
+    public void clearDHDSymbols() {
         if (isLinkedAndDHDOperational()) Objects.requireNonNull(getLinkedDHD(world)).clearSymbols();
     }
 
     @Override
     public void setConfig(JSGTileEntityConfig config) {
         super.setConfig(config);
-        if(isLinked()){
+        if (isLinked()) {
             DHDAbstractTile dhd = getLinkedDHD(world);
-            if(dhd != null) {
+            if (dhd != null) {
                 DHDAbstractRendererState state = ((DHDAbstractRendererState) dhd.getState(StateTypeEnum.RENDERER_STATE));
                 state.gateConfig = getConfig();
                 dhd.sendState(StateTypeEnum.RENDERER_STATE, state);
@@ -122,11 +122,6 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         return SymbolTypeEnum.MILKYWAY;
     }
 
-    @Override
-    protected JSGAxisAlignedBB getHorizonTeleportBox(boolean server) {
-        return getStargateSizeConfig(server).teleportBox;
-    }
-
     public void addSymbolToAddressDHD(SymbolInterface symbol) {
         stargateState = EnumStargateState.DIALING;
         markDirty();
@@ -136,12 +131,11 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
         if (stargateWillLock(symbol)) {
             isFinalActive = true;
-            if(config.getOption(DHD_TOP_LOCK.id).getBooleanValue())
+            if (config.getOption(DHD_TOP_LOCK.id).getBooleanValue())
                 addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 5 + plusTime));
             else
                 addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10 + plusTime));
-        }
-        else
+        } else
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10 + plusTime));
 
         sendSignal(null, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), isFinalActive, symbol.getEnglishName()});
@@ -196,24 +190,24 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     }
 
     @Override
-    public void startIncomingAnimation(int addressSize, int period){
+    public void startIncomingAnimation(int addressSize, int period) {
         super.startIncomingAnimation(addressSize, period);
-        incomingPeriod -= (int) Math.round((double) 20/addressSize);
+        incomingPeriod -= (int) Math.round((double) 20 / addressSize);
 
         // spin ring
-        if(config.getOption(SPIN_GATE_INCOMING.id).getBooleanValue() && incomingPeriod > 9)
+        if (config.getOption(SPIN_GATE_INCOMING.id).getBooleanValue() && incomingPeriod > 9)
             // disable ringsSpin when dialing with DHD or dialing (somehow) fast
-            spinRing(1, false, true, incomingPeriod*addressSize);
+            spinRing(1, false, true, incomingPeriod * addressSize);
 
         markDirty();
     }
 
     @Override
-    protected void lightUpChevronByIncoming(boolean disableAnimation){
+    protected void lightUpChevronByIncoming(boolean disableAnimation) {
         super.lightUpChevronByIncoming(disableAnimation);
-        if(incomingPeriod == -1) return;
+        if (incomingPeriod == -1) return;
 
-        if(!disableAnimation) {
+        if (!disableAnimation) {
             if (!stargateState.idle()) {
                 if (incomingLastChevronLightUp < incomingAddressSize) {
                     playSoundEvent(StargateSoundEventEnum.INCOMING);
@@ -232,8 +226,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 markDirty();
                 return;
             }
-        }
-        else{
+        } else {
             sendRenderingUpdate(StargateRendererActionState.EnumGateAction.LIGHT_UP_CHEVRONS, incomingAddressSize, false);
             playSoundEvent(StargateSoundEventEnum.INCOMING);
             isIncoming = false;
@@ -305,7 +298,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     }
 
     public void updateLinkStatus() {
-        if(!isMerged()) return;
+        if (!isMerged()) return;
         BlockPos closestDhd = LinkingHelper.findClosestUnlinked(world, pos, LinkingHelper.getDhdRange(), JSGBlocks.DHD_BLOCK, this.getLinkId());
         int linkId = LinkingHelper.getLinkId();
 
@@ -338,8 +331,6 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
             compound.setInteger("linkId", linkId);
         }
 
-        compound.setInteger("stargateSize", stargateSize.id);
-
         return super.writeToNBT(compound);
     }
 
@@ -347,13 +338,6 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     public void readFromNBT(NBTTagCompound compound) {
         if (compound.hasKey("linkedDHD")) this.linkedDHD = BlockPos.fromLong(compound.getLong("linkedDHD"));
         if (compound.hasKey("linkId")) this.linkId = compound.getInteger("linkId");
-
-        if (compound.hasKey("patternVersion")) stargateSize = StargateSizeEnum.SMALL;
-        else {
-            if (compound.hasKey("stargateSize"))
-                stargateSize = StargateSizeEnum.fromId(compound.getInteger("stargateSize"));
-            else stargateSize = StargateSizeEnum.LARGE;
-        }
 
         super.readFromNBT(compound);
     }
@@ -405,11 +389,6 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     // ------------------------------------------------------------------------
     // Ticking and loading
 
-    @Override
-    public BlockPos getGateCenterPos() {
-        return pos.offset(EnumFacing.UP, 4);
-    }
-
     private BlockPos lastPos = BlockPos.ORIGIN;
 
     @Override
@@ -443,44 +422,13 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         return SUPPORTED_OVERLAYS;
     }
 
-    // ------------------------------------------------------------------------
-    // Killing and block vaporizing
-
-    @Override
-    protected JSGAxisAlignedBB getHorizonKillingBox(boolean server) {
-        return getStargateSizeConfig(server).killingBox;
-    }
-
-    @Override
-    protected int getHorizonSegmentCount(boolean server) {
-        return getStargateSizeConfig(server).horizonSegmentCount;
-    }
-
-    @Override
-    protected List<JSGAxisAlignedBB> getGateVaporizingBoxes(boolean server) {
-        return getStargateSizeConfig(server).gateVaporizingBoxes;
-    }
-
 
     // ------------------------------------------------------------------------
     // Rendering
 
-    private StargateSizeEnum stargateSize = tauri.dev.jsg.config.JSGConfig.stargateSize;
-
-    /**
-     * Returns stargate state either from config or from client's state.
-     * THIS IS NOT A GETTER OF stargateSize.
-     *
-     * @param server Is the code running on server
-     * @return Stargate's size
-     */
-    private StargateSizeEnum getStargateSizeConfig(boolean server) {
-        return server ? tauri.dev.jsg.config.JSGConfig.stargateSize : getRendererStateClient().stargateSize;
-    }
-
     @Override
     protected StargateMilkyWayRendererStateBuilder getRendererStateServer() {
-        return new StargateMilkyWayRendererStateBuilder(super.getRendererStateServer()).setStargateSize(stargateSize);
+        return (StargateMilkyWayRendererStateBuilder) new StargateMilkyWayRendererStateBuilder(super.getRendererStateServer()).setStargateSize(stargateSize);
     }
 
     @Override
@@ -507,7 +455,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     @Override
     @SideOnly(Side.CLIENT)
     public void setState(StateTypeEnum stateType, State state) {
-        if(getRendererStateClient() != null) {
+        if (getRendererStateClient() != null) {
             if (stateType == StateTypeEnum.RENDERER_UPDATE) {
                 StargateRendererActionState gateActionState = (StargateRendererActionState) state;
 
@@ -536,7 +484,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     @Override
     public void executeTask(EnumScheduledTask scheduledTask, NBTTagCompound customData) {
         boolean onlySpin = false;
-        if(customData != null && customData.hasKey("onlySpin"))
+        if (customData != null && customData.hasKey("onlySpin"))
             onlySpin = customData.getBoolean("onlySpin");
         switch (scheduledTask) {
             case STARGATE_ACTIVATE_CHEVRON:
@@ -550,9 +498,9 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 break;
 
             case STARGATE_SPIN_FINISHED:
-                if(!onlySpin)
+                if (!onlySpin)
                     addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 7));
-                else if(stargateState.dialingComputer())
+                else if (stargateState.dialingComputer())
                     stargateState = EnumStargateState.IDLE;
 
                 markDirty();
@@ -563,7 +511,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
                 sendRenderingUpdate(StargateRendererActionState.EnumGateAction.CHEVRON_OPEN, 0, false);
 
-                if(stargateState.incoming() || stargateState.unstable() || stargateState.dialingDHD() || isIncoming){
+                if (stargateState.incoming() || stargateState.unstable() || stargateState.dialingDHD() || isIncoming) {
                     addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN_SECOND, 7));
                     return;
                 }
@@ -587,14 +535,15 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 break;
 
             case STARGATE_CHEVRON_LIGHT_UP:
-                if(stargateState.incoming() || stargateState.unstable() || stargateState.dialingDHD() || isIncoming) {
+                if (stargateState.incoming() || stargateState.unstable() || stargateState.dialingDHD() || isIncoming) {
                     sendRenderingUpdate(StargateRendererActionState.EnumGateAction.CHEVRON_ACTIVATE, 0, true);
                     addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_CLOSE, 10));
                     return;
                 }
 
 
-                if (stargateWillLock(targetRingSymbol)) sendRenderingUpdate(StargateRendererActionState.EnumGateAction.CHEVRON_ACTIVATE, 0, true);
+                if (stargateWillLock(targetRingSymbol))
+                    sendRenderingUpdate(StargateRendererActionState.EnumGateAction.CHEVRON_ACTIVATE, 0, true);
                 else sendRenderingUpdate(StargateRendererActionState.EnumGateAction.CHEVRON_ACTIVATE_BOTH, 0, false);
 
                 updateChevronLight(dialedAddress.size(), isFinalActive);
@@ -604,10 +553,10 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 break;
 
             case STARGATE_CHEVRON_CLOSE:
-                if(stargateState.incoming() || stargateState.dialingDHD() || isIncoming) {
+                if (stargateState.incoming() || stargateState.dialingDHD() || isIncoming) {
                     playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
                     sendRenderingUpdate(StargateRendererActionState.EnumGateAction.CHEVRON_CLOSE, 0, false);
-                    if(stargateState.dialingDHD())
+                    if (stargateState.dialingDHD())
                         stargateState = EnumStargateState.IDLE;
                     markDirty();
                     return;

@@ -60,6 +60,7 @@ public class JSGConfigOption {
         return field;
     }
 
+    @SideOnly(Side.CLIENT)
     public ModeButton createButton(int y) {
         int componentId = id + 100;
         String textureBase = "textures/gui/config/";

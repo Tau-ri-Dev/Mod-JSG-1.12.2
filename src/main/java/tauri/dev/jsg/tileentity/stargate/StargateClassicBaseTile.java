@@ -168,6 +168,56 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         markDirty();
     }
 
+
+    protected StargateSizeEnum stargateSize = JSGConfig.stargateSize;
+
+    /**
+     * Returns stargate state either from config or from client's state.
+     * THIS IS NOT A GETTER OF stargateSize.
+     *
+     * @param server Is the code running on server
+     * @return Stargate's size
+     */
+    protected StargateSizeEnum getStargateSizeConfig(boolean server) {
+        return server ? tauri.dev.jsg.config.JSGConfig.stargateSize : getRendererStateClient().stargateSize;
+    }
+
+    @Override
+    public BlockPos getGateCenterPos() {
+        if (stargateSize == StargateSizeEnum.EXTRA_LARGE)
+            return pos.offset(EnumFacing.UP, 5);
+        return pos.offset(EnumFacing.UP, 4);
+    }
+
+    @Nonnull
+    protected StargateSizeEnum getStargateSize() {
+        return stargateSize;
+    }
+
+
+    // ------------------------------------------------------------------------
+    // Killing and block vaporizing
+
+    @Override
+    protected JSGAxisAlignedBB getHorizonKillingBox(boolean server) {
+        return getStargateSizeConfig(server).killingBox;
+    }
+
+    @Override
+    protected int getHorizonSegmentCount(boolean server) {
+        return getStargateSizeConfig(server).horizonSegmentCount;
+    }
+
+    @Override
+    protected List<JSGAxisAlignedBB> getGateVaporizingBoxes(boolean server) {
+        return getStargateSizeConfig(server).gateVaporizingBoxes;
+    }
+
+    @Override
+    protected JSGAxisAlignedBB getHorizonTeleportBox(boolean server) {
+        return getStargateSizeConfig(server).teleportBox;
+    }
+
     @Override
     protected void engageGate() {
         super.engageGate();
@@ -870,6 +920,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        compound.setInteger("stargateSize", stargateSize.id);
         compound.setTag("itemHandler", itemStackHandler.serializeNBT());
         compound.setBoolean("isFinalActive", isFinalActive);
 
@@ -913,6 +964,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
+        if (compound.hasKey("patternVersion")) stargateSize = StargateSizeEnum.SMALL;
+        else {
+            if (compound.hasKey("stargateSize"))
+                stargateSize = StargateSizeEnum.fromId(compound.getInteger("stargateSize"));
+            else stargateSize = JSGConfig.stargateSize;
+        }
+
         itemStackHandler.deserializeNBT(compound.getCompoundTag("itemHandler"));
 
         isFinalActive = compound.getBoolean("isFinalActive");
@@ -1150,9 +1208,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public static final JSGAxisAlignedBB RENDER_BOX = new JSGAxisAlignedBB(-5.5, 0, -0.5, 5.5, 10.5, 0.5);
+    public static final JSGAxisAlignedBB RENDER_BOX_LARGE = new JSGAxisAlignedBB(-7.5, 0, -0.5, 7.5, 12.5, 0.5);
 
     @Override
     protected JSGAxisAlignedBB getRenderBoundingBoxRaw() {
+        if (getStargateSize() == StargateSizeEnum.EXTRA_LARGE)
+            return RENDER_BOX_LARGE;
         return RENDER_BOX;
     }
 
@@ -1897,9 +1958,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             }
         }
     }
-
-    @Nonnull
-    protected abstract StargateSizeEnum getStargateSize();
 
     // -----------------------------------------------------------
 

@@ -2,11 +2,9 @@ package tauri.dev.jsg.renderer.stargate;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.loader.ElementEnum;
@@ -27,6 +25,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class StargateClassicRenderer<S extends StargateClassicRendererState> extends StargateAbstractRenderer<S> {
+
+    public abstract float getGateDiameter();
+
+    public abstract double getScaleMultiplier();
+
+    @Override
+    protected void applyTransformations(StargateClassicRendererState rendererState) {
+        double scale = rendererState.stargateSize.renderScale * getScaleMultiplier();
+        GlStateManager.translate(0.50, ((getGateDiameter() * scale) / 2) + 0.2, 0.50);
+        GlStateManager.scale(scale, scale, scale);
+    }
 
 
     @Override
@@ -66,7 +75,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             renderChevron(rendererState, partialTicks, chevron, false);
 
             // emissive layer
-            JSGTextureLightningHelper.lightUpTexture(rendererState.chevronTextureList.CHEVRON_STATE_MAP.get(chevron)/10f);
+            JSGTextureLightningHelper.lightUpTexture(rendererState.chevronTextureList.CHEVRON_STATE_MAP.get(chevron) / 10f);
             renderChevron(rendererState, partialTicks, chevron, true);
             applyLightMap(rendererState, partialTicks);
             GlStateManager.popMatrix();
@@ -160,8 +169,9 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     public void setIrisHeatColor(StargateClassicRendererState rendererState, float red) {
         GlStateManager.color(1 + (red * 3F), 1, 1);
     }
+
     public void setIrisHeatColor(StargateClassicRendererState rendererState) {
-        if (rendererState.irisHeat == -1){
+        if (rendererState.irisHeat == -1) {
             setIrisHeatColor(rendererState, 0); // for universe gate
             return;
         }

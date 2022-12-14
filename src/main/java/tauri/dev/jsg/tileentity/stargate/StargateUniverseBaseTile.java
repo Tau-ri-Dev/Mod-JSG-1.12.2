@@ -9,7 +9,6 @@ import net.minecraft.world.World;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
-import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
@@ -29,14 +28,11 @@ import tauri.dev.jsg.state.stargate.StargateUniverseSymbolState;
 import tauri.dev.jsg.tileentity.props.DestinyCountDownTile;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
 import tauri.dev.jsg.util.ILinkable;
-import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.LinkingHelper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 
 import static tauri.dev.jsg.stargate.EnumStargateState.DIALING;
 import static tauri.dev.jsg.stargate.EnumStargateState.FAILING;
@@ -69,7 +65,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     }
 
     // general
-    private static final StargateSizeEnum defaultStargateSize = StargateSizeEnum.SMALL;
     private static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(
             BiomeOverlayEnum.NORMAL,
             BiomeOverlayEnum.FROST,
@@ -329,9 +324,9 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         StargateEnergyRequired energyRequired = new StargateEnergyRequired(JSGConfig.powerConfig.openingBlockToEnergyRatio, JSGConfig.powerConfig.keepAliveBlockToEnergyRatioPerTick);
         energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(sourceDim, targetDim));
 
-        if(dialedAddress.size() == 9)
+        if (dialedAddress.size() == 9)
             energyRequired.mul(JSGConfig.powerConfig.nineSymbolAddressMul);
-        if(dialedAddress.size() == 8)
+        if (dialedAddress.size() == 8)
             energyRequired.mul(JSGConfig.powerConfig.eightSymbolAddressMul);
 
         return energyRequired.mul(JSGConfig.powerConfig.stargateUniverseEnergyMul);
@@ -627,34 +622,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     }
 
     // --------------------------------------------------------------------------------
-    // Teleportation
-
-    @Override
-    protected JSGAxisAlignedBB getHorizonTeleportBox(boolean server) {
-        return defaultStargateSize.teleportBox;
-    }
-
-    @Override
-    public BlockPos getGateCenterPos() {
-        return pos.up(4);
-    }
-
-    @Override
-    protected JSGAxisAlignedBB getHorizonKillingBox(boolean server) {
-        return defaultStargateSize.killingBox;
-    }
-
-    @Override
-    protected int getHorizonSegmentCount(boolean server) {
-        return defaultStargateSize.horizonSegmentCount;
-    }
-
-    @Override
-    protected List<JSGAxisAlignedBB> getGateVaporizingBoxes(boolean server) {
-        return defaultStargateSize.gateVaporizingBoxes;
-    }
-
-    // --------------------------------------------------------------------------------
     // Merging
 
     @Override
@@ -664,17 +631,16 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
 
     @Override
     protected boolean onGateMergeRequested() {
+        if (stargateSize != JSGConfig.stargateSize) {
+            StargateUniverseMergeHelper.INSTANCE.convertToPattern(world, pos, facing, stargateSize, tauri.dev.jsg.config.JSGConfig.stargateSize);
+            stargateSize = tauri.dev.jsg.config.JSGConfig.stargateSize;
+        }
+
         return StargateUniverseMergeHelper.INSTANCE.checkBlocks(world, pos, facing);
     }
 
     @Override
     public void setLinkedDHD(BlockPos dhdPos, int linkId) {
-    }
-
-    @Nonnull
-    @Override
-    protected StargateSizeEnum getStargateSize() {
-        return defaultStargateSize;
     }
 
 
@@ -685,7 +651,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     protected StargateClassicRendererState.StargateClassicRendererStateBuilder getRendererStateServer() {
         return new StargateUniverseRendererState.StargateUniverseRendererStateBuilder(super.getRendererStateServer())
                 .setDialedAddress((stargateState.initiating() || stargateState.dialing()) ? dialedAddress : new StargateAddressDynamic(getSymbolType()))
-                .setActiveChevrons(stargateState.idle() ? 0 : 9);
+                .setActiveChevrons(stargateState.idle() ? 0 : 9).setStargateSize(stargateSize);
     }
 
     @Override

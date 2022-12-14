@@ -1,6 +1,7 @@
 package tauri.dev.jsg.beamer;
 
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.stargate.StargateClassicBaseBlock;
@@ -16,8 +17,8 @@ import net.minecraft.world.World;
 
 public class BeamerLinkingHelper {
 	
-	private static final int SIDE = 2;
-	private static final int DOWN = 6;
+	private static final int SIDE = (JSGConfig.stargateSize != StargateSizeEnum.EXTRA_LARGE ? 2 : 4);
+	private static final int DOWN = (JSGConfig.stargateSize != StargateSizeEnum.EXTRA_LARGE ? 6 : 9);
 	
 	public static void findGateInFrontAndLink(World world, BlockPos pos, EnumFacing blockFacing) {
 		EnumFacing left = blockFacing.rotateYCCW();

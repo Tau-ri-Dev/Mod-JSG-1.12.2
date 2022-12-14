@@ -17,11 +17,13 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
     private static final float GATE_DIAMETER = 8.67415f;
 
     @Override
-    protected void applyTransformations(StargateUniverseRendererState rendererState) {
-        float scale = 0.90f;
-        GlStateManager.scale(scale, scale, scale);
+    public float getGateDiameter(){
+        return GATE_DIAMETER;
+    }
 
-        GlStateManager.translate(0.5, GATE_DIAMETER / 2 + 0.20, 0.55);
+    @Override
+    public double getScaleMultiplier(){
+        return 1.14;
     }
 
     @Override

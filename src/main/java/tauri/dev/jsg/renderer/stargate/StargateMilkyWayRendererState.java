@@ -1,98 +1,69 @@
 package tauri.dev.jsg.renderer.stargate;
 
-import io.netty.buffer.ByteBuf;
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.config.stargate.StargateSizeEnum;
-
 public class StargateMilkyWayRendererState extends StargateClassicRendererState {
-	public StargateMilkyWayRendererState() {}
-	
-	private StargateMilkyWayRendererState(StargateMilkyWayRendererStateBuilder builder) {
-		super(builder);
-		
-		this.stargateSize = builder.stargateSize;
-	}
-		
-	// Gate
-	// Saved
-	public StargateSizeEnum stargateSize = JSGConfig.stargateSize;
-	
-	// Chevrons
-	// Not saved
-	public boolean chevronOpen;
-	public long chevronActionStart;
-	public boolean chevronOpening;
-	public boolean chevronClosing;
-	
-	public void openChevron(long totalWorldTime) {
-		chevronActionStart = totalWorldTime;
-		chevronOpening = true;
-	}
-	
-	public void closeChevron(long totalWorldTime) {
-		chevronActionStart = totalWorldTime;
-		chevronClosing = true;
-	}
-	
-	@Override
-	protected String getChevronTextureBase() {
-		return "milkyway/chevron";
-	}
-		
-	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(stargateSize.id);
-		
-		super.toBytes(buf);
-	}
-	
-	@Override
-	public void fromBytes(ByteBuf buf) {	
-		stargateSize = StargateSizeEnum.fromId(buf.readInt());
-				
-		super.fromBytes(buf);
-	}
-	
-	
-	// ------------------------------------------------------------------------
-	// Builder
-	
-	public static StargateMilkyWayRendererStateBuilder builder() {
-		return new StargateMilkyWayRendererStateBuilder();
-	}
-	
-	public static class StargateMilkyWayRendererStateBuilder extends StargateClassicRendererStateBuilder {
-		public StargateMilkyWayRendererStateBuilder() {}
-		
-		private StargateSizeEnum stargateSize;
-		
-		public StargateMilkyWayRendererStateBuilder(StargateClassicRendererStateBuilder superBuilder) {
-			super(superBuilder);
-			setSymbolType(superBuilder.symbolType);
-			setActiveChevrons(superBuilder.activeChevrons);
-			setFinalActive(superBuilder.isFinalActive);
-			setCurrentRingSymbol(superBuilder.currentRingSymbol);
-			setSpinDirection(superBuilder.spinDirection);
-			setSpinning(superBuilder.isSpinning);
-			setTargetRingSymbol(superBuilder.targetRingSymbol);
-			setSpinStartTime(superBuilder.spinStartTime);
-			setBiomeOverride(superBuilder.biomeOverride);
-			setIrisState(superBuilder.irisState);
-			setIrisType(superBuilder.irisType);
-			setIrisCode(superBuilder.irisCode);
-			setIrisMode(superBuilder.irisMode);
-			setIrisAnimation(superBuilder.irisAnimation);
-			setPlusRounds(superBuilder.plusRounds);
-		}
-		
-		public StargateMilkyWayRendererStateBuilder setStargateSize(StargateSizeEnum stargateSize) {
-			this.stargateSize = stargateSize;
-			return this;
-		}
+    public StargateMilkyWayRendererState() {
+    }
 
-		@Override
-		public StargateMilkyWayRendererState build() {
-			return new StargateMilkyWayRendererState(this);
-		}
-	}
+    private StargateMilkyWayRendererState(StargateMilkyWayRendererStateBuilder builder) {
+        super(builder);
+    }
+
+    // Chevrons
+    // Not saved
+    public boolean chevronOpen;
+    public long chevronActionStart;
+    public boolean chevronOpening;
+    public boolean chevronClosing;
+
+    public void openChevron(long totalWorldTime) {
+        chevronActionStart = totalWorldTime;
+        chevronOpening = true;
+    }
+
+    public void closeChevron(long totalWorldTime) {
+        chevronActionStart = totalWorldTime;
+        chevronClosing = true;
+    }
+
+    @Override
+    protected String getChevronTextureBase() {
+        return "milkyway/chevron";
+    }
+
+
+    // ------------------------------------------------------------------------
+    // Builder
+
+    public static StargateMilkyWayRendererStateBuilder builder() {
+        return new StargateMilkyWayRendererStateBuilder();
+    }
+
+    public static class StargateMilkyWayRendererStateBuilder extends StargateClassicRendererStateBuilder {
+        public StargateMilkyWayRendererStateBuilder() {
+        }
+
+        public StargateMilkyWayRendererStateBuilder(StargateClassicRendererStateBuilder superBuilder) {
+            super(superBuilder);
+            setSymbolType(superBuilder.symbolType);
+            setActiveChevrons(superBuilder.activeChevrons);
+            setFinalActive(superBuilder.isFinalActive);
+            setCurrentRingSymbol(superBuilder.currentRingSymbol);
+            setSpinDirection(superBuilder.spinDirection);
+            setSpinning(superBuilder.isSpinning);
+            setTargetRingSymbol(superBuilder.targetRingSymbol);
+            setSpinStartTime(superBuilder.spinStartTime);
+            setBiomeOverride(superBuilder.biomeOverride);
+            setIrisState(superBuilder.irisState);
+            setIrisType(superBuilder.irisType);
+            setIrisCode(superBuilder.irisCode);
+            setIrisMode(superBuilder.irisMode);
+            setIrisAnimation(superBuilder.irisAnimation);
+            setPlusRounds(superBuilder.plusRounds);
+        }
+
+        @Override
+        public StargateMilkyWayRendererState build() {
+            return new StargateMilkyWayRendererState(this);
+        }
+    }
 }

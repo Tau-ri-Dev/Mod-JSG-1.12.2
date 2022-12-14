@@ -1,11 +1,18 @@
 package tauri.dev.jsg.tileentity.stargate;
 
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.config.ingame.JSGConfigOption;
 import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
-import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.gui.container.stargate.StargateContainerGuiUpdate;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
@@ -37,21 +44,9 @@ import tauri.dev.jsg.state.stargate.StargateSpinState;
 import tauri.dev.jsg.tileentity.dialhomedevice.DHDAbstractTile;
 import tauri.dev.jsg.tileentity.dialhomedevice.DHDPegasusTile;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
-import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.ILinkable;
 import tauri.dev.jsg.util.LinkingHelper;
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -61,11 +56,6 @@ import java.util.Objects;
 import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.SPIN_GATE_INCOMING;
 
 public class StargatePegasusBaseTile extends StargateClassicBaseTile implements ILinkable {
-    @Nonnull
-    @Override
-    public StargateSizeEnum getStargateSize() {
-        return stargateSize;
-    }
 
     // ------------------------------------------------------------------------
     // Stargate state
@@ -131,9 +121,9 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     @Override
     public void setConfig(JSGTileEntityConfig config) {
         super.setConfig(config);
-        if(isLinked()){
+        if (isLinked()) {
             DHDAbstractTile dhd = getLinkedDHD(world);
-            if(dhd != null) {
+            if (dhd != null) {
                 DHDAbstractRendererState state = ((DHDAbstractRendererState) dhd.getState(StateTypeEnum.RENDERER_STATE));
                 state.gateConfig = getConfig();
                 dhd.sendState(StateTypeEnum.RENDERER_STATE, state);
@@ -147,11 +137,6 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     @Override
     public SymbolTypeEnum getSymbolType() {
         return SymbolTypeEnum.PEGASUS;
-    }
-
-    @Override
-    protected JSGAxisAlignedBB getHorizonTeleportBox(boolean server) {
-        return getStargateSizeConfig(server).teleportBox;
     }
 
     @Override
@@ -350,7 +335,10 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound.setInteger("stargateSize", stargateSize.id);
+        if (isLinked()) {
+            compound.setLong("linkedDHD", linkedDHD.toLong());
+            compound.setInteger("linkId", linkId);
+        }
 
         return super.writeToNBT(compound);
     }
@@ -359,13 +347,6 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     public void readFromNBT(NBTTagCompound compound) {
         if (compound.hasKey("linkedDHD")) this.linkedDHD = BlockPos.fromLong(compound.getLong("linkedDHD"));
         if (compound.hasKey("linkId")) this.linkId = compound.getInteger("linkId");
-
-        if (compound.hasKey("patternVersion")) stargateSize = StargateSizeEnum.SMALL;
-        else {
-            if (compound.hasKey("stargateSize"))
-                stargateSize = StargateSizeEnum.fromId(compound.getInteger("stargateSize"));
-            else stargateSize = StargateSizeEnum.LARGE;
-        }
 
         super.readFromNBT(compound);
         if (stargateState.engaged() || stargateState.incoming() || stargateState.unstable()) {
@@ -422,12 +403,12 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     // Ticking and loading
 
     @Override
-    public BlockPos getGateCenterPos() {
-        return pos.offset(EnumFacing.UP, 4);
-    }
-
-    @Override
     protected boolean onGateMergeRequested() {
+        if (stargateSize != JSGConfig.stargateSize) {
+            StargatePegasusMergeHelper.INSTANCE.convertToPattern(world, pos, facing, stargateSize, tauri.dev.jsg.config.JSGConfig.stargateSize);
+            stargateSize = tauri.dev.jsg.config.JSGConfig.stargateSize;
+        }
+
         return StargatePegasusMergeHelper.INSTANCE.checkBlocks(world, pos, facing);
     }
 
@@ -479,44 +460,13 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         return SUPPORTED_OVERLAYS;
     }
 
-    // ------------------------------------------------------------------------
-    // Killing and block vaporizing
-
-    @Override
-    protected JSGAxisAlignedBB getHorizonKillingBox(boolean server) {
-        return getStargateSizeConfig(server).killingBox;
-    }
-
-    @Override
-    protected int getHorizonSegmentCount(boolean server) {
-        return getStargateSizeConfig(server).horizonSegmentCount;
-    }
-
-    @Override
-    protected List<JSGAxisAlignedBB> getGateVaporizingBoxes(boolean server) {
-        return getStargateSizeConfig(server).gateVaporizingBoxes;
-    }
-
 
     // ------------------------------------------------------------------------
     // Rendering
 
-    private StargateSizeEnum stargateSize = JSGConfig.stargateSize;
-
-    /**
-     * Returns stargate state either from config or from client's state.
-     * THIS IS NOT A GETTER OF stargateSize.
-     *
-     * @param server Is the code running on server
-     * @return Stargate's size
-     */
-    private StargateSizeEnum getStargateSizeConfig(boolean server) {
-        return server ? tauri.dev.jsg.config.JSGConfig.stargateSize : getRendererStateClient().stargateSize;
-    }
-
     @Override
     protected StargatePegasusRendererState.StargatePegasusRendererStateBuilder getRendererStateServer() {
-        return new StargatePegasusRendererState.StargatePegasusRendererStateBuilder(super.getRendererStateServer()).setStargateSize(stargateSize);
+        return (StargatePegasusRendererState.StargatePegasusRendererStateBuilder) new StargatePegasusRendererState.StargatePegasusRendererStateBuilder(super.getRendererStateServer()).setStargateSize(stargateSize);
     }
 
     @Override
@@ -633,18 +583,18 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
     @Override
     public boolean canAddSymbol(SymbolInterface symbol) {
-        if(dialedAddress.size() >= getMaxChevrons()) return false;
+        if (dialedAddress.size() >= getMaxChevrons()) return false;
 
         return super.canAddSymbol(symbol);
     }
 
-    public boolean canAddSymbolToList(SymbolInterface symbol){
+    public boolean canAddSymbolToList(SymbolInterface symbol) {
         int size = toDialSymbols.size();
-        for(SymbolPegasusEnum s : toDialSymbols) {
+        for (SymbolPegasusEnum s : toDialSymbols) {
             if (s.brb()) size--;
         }
-        if(dialedAddress.size() + size + (this.stargateState.dialing() ? 1 : 0) >= getMaxChevrons()) return false;
-        if(toDialSymbols.contains((SymbolPegasusEnum) symbol)) return false;
+        if (dialedAddress.size() + size + (this.stargateState.dialing() ? 1 : 0) >= getMaxChevrons()) return false;
+        if (toDialSymbols.contains((SymbolPegasusEnum) symbol)) return false;
 
         return super.canAddSymbol(symbol);
     }
@@ -656,9 +606,9 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     }
 
     public void addSymbolToAddressDHD(SymbolInterface targetSymbol) {
-        if(targetSymbol != SymbolPegasusEnum.BBB && !canAddSymbolToList(targetSymbol)) return;
-        if(!(targetSymbol instanceof SymbolPegasusEnum)) return;
-        if(toDialSymbols.contains(targetSymbol)) return;
+        if (targetSymbol != SymbolPegasusEnum.BBB && !canAddSymbolToList(targetSymbol)) return;
+        if (!(targetSymbol instanceof SymbolPegasusEnum)) return;
+        if (toDialSymbols.contains(targetSymbol)) return;
         if (isLinkedAndDHDOperational() && (targetSymbol != SymbolPegasusEnum.BBB || toDialSymbols.size() > 0)) {
             DHDAbstractTile dhd = getLinkedDHD(world);
             if (dhd != null)

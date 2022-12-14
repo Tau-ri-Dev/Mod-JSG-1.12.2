@@ -1265,7 +1265,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         double width = kBox.maxZ - kBox.minZ;
         width /= getHorizonSegmentCount(server);
 
-        localKillingBoxes = new ArrayList<JSGAxisAlignedBB>(getHorizonSegmentCount(server));
+        localKillingBoxes = new ArrayList<>(getHorizonSegmentCount(server));
         for (int i = 0; i < getHorizonSegmentCount(server); i++) {
             JSGAxisAlignedBB box = new JSGAxisAlignedBB(kBox.minX, kBox.minY, kBox.minZ + width * i, kBox.maxX, kBox.maxY, kBox.minZ + width * (i + 1));
             box = box.rotate(facing).offset(0.5, 0, 0.5);
@@ -1273,8 +1273,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             localKillingBoxes.add(box);
         }
 
-        localInnerBlockBoxes = new ArrayList<JSGAxisAlignedBB>(3);
-        localInnerEntityBoxes = new ArrayList<JSGAxisAlignedBB>(3);
+        localInnerBlockBoxes = new ArrayList<>();
+        localInnerEntityBoxes = new ArrayList<>();
         for (JSGAxisAlignedBB lBox : getGateVaporizingBoxes(server)) {
             localInnerBlockBoxes.add(lBox.rotate(facing).offset(0.5, 0, 0.5));
             localInnerEntityBoxes.add(lBox.grow(0, 0, -0.25).rotate(facing).offset(0.5, 0, 0.5));
