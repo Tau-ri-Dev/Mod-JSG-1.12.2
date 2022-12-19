@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CountDownContainerGui extends GuiContainer implements TabbedContainerInterface {
-    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_countdown.png");
+    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_only_inv.png");
     private static final ResourceLocation BACKGROUND_TEXTURE_SG = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_stargate.png");
 
     private TabConfig configTab;

@@ -4,10 +4,33 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.*;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.gui.container.dhd.DHDContainerGuiUpdate;
 import tauri.dev.jsg.item.JSGItems;
@@ -28,34 +51,14 @@ import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.util.IUpgradable;
 import tauri.dev.jsg.tileentity.util.ReactorStateEnum;
-import tauri.dev.jsg.util.JSGItemStackHandler;
 import tauri.dev.jsg.util.EnumKeyInterface;
 import tauri.dev.jsg.util.ILinkable;
 import tauri.dev.jsg.util.ItemMetaPair;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
+import tauri.dev.jsg.util.JSGItemStackHandler;
+import tauri.dev.jsg.util.main.JSGProps;
 
-import java.util.Arrays;
+import javax.annotation.Nonnull;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -66,7 +69,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     // Gate linking
 
     public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.SOOTY, BiomeOverlayEnum.AGED);
-    public static final List<Item> SUPPORTED_UPGRADES = Arrays.asList(JSGItems.CRYSTAL_GLYPH_DHD);
+    public static final List<Item> SUPPORTED_UPGRADES = Collections.singletonList(JSGItems.CRYSTAL_GLYPH_DHD);
     public static final int BIOME_OVERRIDE_SLOT = 5;
     protected final FluidTank fluidHandler = new FluidTank(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, 0), tauri.dev.jsg.config.JSGConfig.dhdConfig.fluidCapacity) {
 
@@ -94,10 +97,9 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
 
     // ---------------------------------------------------------------------------------------------------
     // Loading and ticking
-    private boolean firstTick = true;
     private boolean addedToNetwork;
     private boolean hadControlCrystal;
-    private DHDAbstractTile instance = this;
+    private final DHDAbstractTile instance = this;
     protected final ItemStackHandler itemStackHandler = new JSGItemStackHandler(6) {
 
         @Override
@@ -114,8 +116,14 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
                 case 1:
                 case 2:
                 case 3:
-                case 4:
                     return SUPPORTED_UPGRADES.contains(item) && !hasUpgrade(item);
+
+                case 4:
+                    if (stack.getItem() instanceof UniversalBucket) {
+                        FluidStack fluid = ((UniversalBucket) stack.getItem()).getFluid(stack);
+                        return (fluid != null && fluid.getFluid() == JSGFluids.NAQUADAH_MOLTEN_REFINED);
+                    }
+                    return false;
 
                 case BIOME_OVERRIDE_SLOT:
                     BiomeOverlayEnum override = tauri.dev.jsg.config.JSGConfig.stargateConfig.getBiomeOverrideItemMetaPairs().get(new ItemMetaPair(stack));
@@ -129,12 +137,12 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
         }
 
         @Override
-        protected int getStackLimit(int slot, ItemStack stack) {
+        protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
             return 1;
         }
 
         @Override
-        public void setStackInSlot(int slot, ItemStack stack) {
+        public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
             super.setStackInSlot(slot, stack);
 
             if (!world.isRemote && slot == 0) {
@@ -143,8 +151,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
             }
         }
 
-        ;
-
+        @Nonnull
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
             ItemStack out = super.extractItem(slot, amount, simulate);
@@ -164,6 +171,22 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
                     sendState(StateTypeEnum.BIOME_OVERRIDE_STATE, new StargateBiomeOverrideState(determineBiomeOverride()));
                     break;
 
+                case 4:
+                    ItemStack stack = getStackInSlot(slot);
+                    if (stack.getItem() instanceof UniversalBucket) {
+                        FluidStack fluid = ((UniversalBucket) stack.getItem()).getFluid(stack);
+                        if (fluid != null && fluid.getFluid() == JSGFluids.NAQUADAH_MOLTEN_REFINED) {
+                            int amount = fluid.amount;
+                            int filled = fluidHandler.fill(fluid, false);
+                            if (filled == amount) {
+                                setStackInSlot(slot, new ItemStack(Items.BUCKET));
+                                fluidHandler.fill(fluid, true);
+                            }
+                        }
+                    }
+                    break;
+
+
                 default:
                     break;
             }
@@ -174,7 +197,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     };
     // ------------------------------------------------------------
     // Node-related work
-    private Node node = JSG.ocWrapper.createNode(this, "dhd");
+    private final Node node = JSG.ocWrapper.createNode(this, "dhd");
 
     public DHDAbstractRendererState getRendererStateClient() {
         return rendererStateClient;
@@ -281,7 +304,8 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
                         float percent = energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored();
                         //						JSG.info("state: " + reactorState + ", percent: " + percent);
 
-                        if (percent < tauri.dev.jsg.config.JSGConfig.dhdConfig.activationLevel) reactorState = ReactorStateEnum.ONLINE;
+                        if (percent < tauri.dev.jsg.config.JSGConfig.dhdConfig.activationLevel)
+                            reactorState = ReactorStateEnum.ONLINE;
 
                         else if (percent >= JSGConfig.dhdConfig.deactivationLevel)
                             reactorState = ReactorStateEnum.STANDBY;
@@ -546,9 +570,9 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(symbolName:string) -- Activates DHD symbol")
     public Object[] pressButton(Context context, Arguments args) {
-        if(!isLinked())
+        if (!isLinked())
             return new Object[]{null, "dhd_failure_not_linked", "DHD is not linked to a gate"};
-        if(!hasControlCrystal())
+        if (!hasControlCrystal())
             return new Object[]{null, "dhd_failure_no_crystal", "DHD has no control crystal"};
         StargateClassicBaseTile gateTile = (StargateClassicBaseTile) this.getLinkedGate(world);
         if (gateTile == null)
