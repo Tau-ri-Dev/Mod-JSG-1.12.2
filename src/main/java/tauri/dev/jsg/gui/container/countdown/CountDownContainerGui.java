@@ -53,7 +53,7 @@ public class CountDownContainerGui extends GuiContainer implements TabbedContain
                 .setTabPosition(-21, 2)
                 .setOpenX(-128)
                 .setHiddenX(-6)
-                .setTabSize(128, 94)
+                .setTabSize(128, 95)
                 .setTabTitle(I18n.format("gui.configuration"))
                 .setTabSide(TabSideEnum.LEFT)
                 .setTexture(BACKGROUND_TEXTURE_SG, 512)

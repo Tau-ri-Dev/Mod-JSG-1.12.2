@@ -47,19 +47,14 @@ public class TabAddress extends Tab {
         if (isVisible() && gateTile.getStargateAddress(symbolType) != null) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(bgTexLocation);
             GlStateManager.color(1, 1, 1, 1);
-            Gui.drawModalRectWithCustomSizedTexture(guiLeft + currentOffsetX + 105, guiTop + defaultY + 86, 6, 174, 18, 18, textureSize, textureSize);
+            Gui.drawModalRectWithCustomSizedTexture(guiLeft + currentOffsetX + 105, guiTop + defaultY + 86, 6, 179, 18, 18, textureSize, textureSize);
 
             int shadow = 2;
             float color = 1.0f;
 
-            switch (symbolType) {
-                case UNIVERSE:
-                    color = 0.0f;
-                    break;
+            if (symbolType == SymbolTypeEnum.UNIVERSE)
+                color = 0.0f;
 
-                default:
-                    break;
-            }
             for (int i = 0; i < maxSymbols; i++) {
                 Minecraft.getMinecraft().getTextureManager().bindTexture(Objects.requireNonNull(gateTile.getStargateAddress(symbolType)).get(i).getIconResource(SymbolMilkyWayEnum.getOriginId(gateTile.getBiomeOverlayWithOverride(), gateTile.getWorld().provider.getDimension(), gateTile.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL.id).getEnumValue().getIntValue())));
 
@@ -75,7 +70,8 @@ public class TabAddress extends Tab {
             float green = c.getGreen();
             float blue = c.getBlue();
             GlStateManager.color(red, green, blue);
-            Gui.drawModalRectWithCustomSizedTexture(guiLeft + currentOffsetX + 97, guiTop + defaultY + 86 + (18 - progress), 0, 174 + (18 - progress), 6, progress, textureSize, textureSize);
+
+            Gui.drawModalRectWithCustomSizedTexture(guiLeft + currentOffsetX + 97, guiTop + defaultY + 86 + (18 - progress), 0, 179 + (18 - progress), 6, progress, textureSize, textureSize);
 
             GlStateManager.disableBlend();
         }
@@ -90,7 +86,7 @@ public class TabAddress extends Tab {
                 SymbolCoords symbolCoords = getSymbolCoords(i);
 
                 if (GuiHelper.isPointInRegion(symbolCoords.x, symbolCoords.y, symbolType.iconWidht, symbolType.iconHeight, mouseX, mouseY)) {
-                    screen.drawHoveringText(gateTile.getStargateAddress(symbolType).get(i).localize(), mouseX - guiLeft, mouseY - guiTop);
+                    screen.drawHoveringText(Objects.requireNonNull(gateTile.getStargateAddress(symbolType)).get(i).localize(), mouseX - guiLeft, mouseY - guiTop);
                 }
             }
         }

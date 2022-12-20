@@ -46,18 +46,16 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
         gateTile = (StargateClassicBaseTile) world.getTileEntity(pos);
         IItemHandler itemHandler = gateTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
-        // Upgrades 2x2 (index 0-3)
-        for (int row = 0; row < 2; row++) {
-            for (int col = 0; col < 2; col++) {
-                addSlotToContainer(new SlotItemHandler(itemHandler, row * 2 + col, 9 + 18 * col, 18 + 18 * row));
-            }
+        // Upgrades 4x (index 0-3)
+        for (int col = 0; col < 4; col++) {
+            addSlotToContainer(new SlotItemHandler(itemHandler, col, 9 + 18 * col, 27));
         }
 
         // Capacitors 1x3 (index 4-6)
         for (int col = 0; col < 3; col++) {
             final int capacitorIndex = col;
 
-            addSlotToContainer(new SlotItemHandler(itemHandler, col + 4, 115 + 18 * col, 40) {
+            addSlotToContainer(new SlotItemHandler(itemHandler, col + 4, 115 + 18 * col, 27) {
                 @Override
                 public boolean isEnabled() {
                     // getHasStack() is a compatibility thing for when players already had their capacitors in the gate.
@@ -75,9 +73,9 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
         addSlotToContainer(new SlotItemHandler(itemHandler, 10, 0, 0));
 
         // Shield/Iris Upgrade (index 11)
-        addSlotToContainer(new SlotItemHandler(itemHandler, 11, 17 + 18 * 3, 27));
+        addSlotToContainer(new SlotItemHandler(itemHandler, 11, 81, 27));
 
-        for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 86))
+        for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 91))
             addSlotToContainer(slot);
     }
 

@@ -1670,15 +1670,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public abstract int getSupportedCapacitors();
 
 
-    public static enum StargateUpgradeEnum implements EnumKeyInterface<Item> {
+    public enum StargateUpgradeEnum implements EnumKeyInterface<Item> {
         MILKYWAY_GLYPHS(JSGItems.CRYSTAL_GLYPH_MILKYWAY),
         PEGASUS_GLYPHS(JSGItems.CRYSTAL_GLYPH_PEGASUS),
         UNIVERSE_GLYPHS(JSGItems.CRYSTAL_GLYPH_UNIVERSE),
         CHEVRON_UPGRADE(JSGItems.CRYSTAL_GLYPH_STARGATE);
 
-        public Item item;
+        public final Item item;
 
-        private StargateUpgradeEnum(Item item) {
+        StargateUpgradeEnum(Item item) {
             this.item = item;
         }
 

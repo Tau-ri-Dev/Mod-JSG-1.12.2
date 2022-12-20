@@ -5,6 +5,7 @@ import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.gui.element.tabs.*;
 import tauri.dev.jsg.gui.element.TextFieldLabel;
 import tauri.dev.jsg.gui.element.tabs.Tab.SlotTab;
+import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.SetOpenTabToServer;
 import tauri.dev.jsg.packet.stargate.SaveConfigToServer;
@@ -78,7 +79,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setProgressColor(0xE9A93A)
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(-21, 2)
+                .setTabPosition(-21, 11)
                 .setOpenX(-128)
                 .setHiddenX(-6)
                 .setTabSize(128, 113)
@@ -96,7 +97,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setProgressColor(0x90E0F9)
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(-21, 2+22)
+                .setTabPosition(-21, 11+22)
                 .setOpenX(-128)
                 .setHiddenX(-6)
                 .setTabSize(128, 113)
@@ -114,7 +115,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setProgressColor(0x90E0F9)
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(-21, 2+(22*2))
+                .setTabPosition(-21, 11+(22*2))
                 .setOpenX(-128)
                 .setHiddenX(-6)
                 .setTabSize(128, 113)
@@ -130,10 +131,10 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setConfig(container.trTile.getConfig())
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(-21, 2+22*2)
+                .setTabPosition(-21, 11+22*3)
                 .setOpenX(-128)
                 .setHiddenX(-6)
-                .setTabSize(128, 94)
+                .setTabSize(128, 95)
                 .setTabTitle(I18n.format("gui.configuration"))
                 .setTabSide(TabSideEnum.LEFT)
                 .setTexture(BACKGROUND_TEXTURE_SG, 512)
@@ -262,24 +263,86 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
         // Draw cross on inactive capacitors
         for (int i = 0; i < 3 - container.trTile.getSupportedCapacitors(); i++) {
-            drawModalRectWithCustomSizedTexture(guiLeft + 151 - 18 * i, guiTop + 40, 24, 175, 16, 16, 512, 512);
+            drawModalRectWithCustomSizedTexture(guiLeft + 151 - 18 * i, guiTop + 45, 24, 180, 16, 16, 512, 512);
         }
 
         for (int i = container.trTile.getPowerTier(); i < 4; i++)
-            drawModalRectWithCustomSizedTexture(guiLeft + 10 + 39 * i, guiTop + 61, 0, 168, 39, 6, 512, 512);
+            drawModalRectWithCustomSizedTexture(guiLeft + 10 + 39 * i, guiTop + 66, 0, 173, 39, 6, 512, 512);
 
         int width = Math.round((energyStored / (float) JSGConfig.powerConfig.stargateEnergyStorage * 156));
-        drawGradientRect(guiLeft + 10, guiTop + 61, guiLeft + 10 + width, guiTop + 61 + 6, 0xffcc2828, 0xff731616);
+        drawGradientRect(guiLeft + 10, guiTop + 66, guiLeft + 10 + width, guiTop + 66 + 6, 0xffcc2828, 0xff731616);
+
+        // Draw ancient title
+        switch (container.trTile.getSymbolType()) {
+            case GOAULD:
+                drawModalRectWithCustomSizedTexture(guiLeft + 137, guiTop + 4, 330, 0, 34, 7, 512, 512);
+                break;
+            case ORI:
+                drawModalRectWithCustomSizedTexture(guiLeft + 137, guiTop + 4, 330, 18, 34, 7, 512, 512);
+                break;
+            case ANCIENT:
+                drawModalRectWithCustomSizedTexture(guiLeft + 137, guiTop + 4, 330, 36, 34, 7, 512, 512);
+                break;
+            default:
+                break;
+        }
+
+        boolean drawICFirstCable = false;
+        boolean drawICSecondCable = false;
+
+        // Draw cables
+        for (int i = 0; i < 7; i++) {
+            if (container.getSlot(i).getHasStack()) {
+                if (i < 4) drawICFirstCable = true;
+                // render activated wires/cables
+                switch (i) {
+                    // upgrades
+                    case 0:
+                        drawModalRectWithCustomSizedTexture(guiLeft + 16, guiTop + 44, 18, 239, 48 - 17, 253 - 238, 512, 512);
+                        break;
+                    case 1:
+                        drawModalRectWithCustomSizedTexture(guiLeft + 34, guiTop + 44, 3, 239, 15 - 2, 249 - 238, 512, 512);
+                        break;
+                    case 2:
+                        drawModalRectWithCustomSizedTexture(guiLeft + 52, guiTop + 44, 0, 239, 2, 6, 512, 512);
+                        break;
+                    case 3:
+                        drawICSecondCable = true;
+                        drawModalRectWithCustomSizedTexture(guiLeft + 59, guiTop + 44, 33, 254, 45 - 32, 264 - 253, 512, 512);
+                        break;
+
+                    // capacitors
+                    case 4:
+                        drawModalRectWithCustomSizedTexture(guiLeft + 121, guiTop + 44, 0, 225, 14, 236 - 224, 512, 512);
+                        break;
+                    case 5:
+                        drawModalRectWithCustomSizedTexture(guiLeft + 139, guiTop + 44, 14, 225, 4, 230 - 224, 512, 512);
+                        break;
+                    case 6:
+                        drawModalRectWithCustomSizedTexture(guiLeft + 147, guiTop + 44, 18, 225, 31 - 17, 238 - 224, 512, 512);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        // render cables from 1. IC to power line
+        if (drawICFirstCable)
+            drawModalRectWithCustomSizedTexture(guiLeft + 50, guiTop + 62, 0, 239, 2, 6, 512, 512);
+        if (drawICSecondCable)
+            drawModalRectWithCustomSizedTexture(guiLeft + 54, guiTop + 62, 0, 239, 2, 6, 512, 512);
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        fontRenderer.drawString(I18n.format("gui.stargate.capacitors"), 112, 29, 4210752);
+        String caps = I18n.format("gui.stargate.capacitors");
+        fontRenderer.drawString(caps, this.xSize - 8 - fontRenderer.getStringWidth(caps), 34, 4210752);
 
         String energyPercent = String.format("%.2f", energyStored / (float) maxEnergyStored * 100) + " %";
-        fontRenderer.drawString(energyPercent, 168 - fontRenderer.getStringWidth(energyPercent) + 2, 71, 4210752);
+        fontRenderer.drawString(energyPercent, this.xSize - 8 - fontRenderer.getStringWidth(energyPercent), 76, 4210752);
 
-        fontRenderer.drawString(I18n.format("gui.upgrades"), 7, 6, 4210752);
+        fontRenderer.drawString(I18n.format("gui.upgrades"), 8, 34, 4210752);
         fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 
         for (TextFieldLabel label : labels)
@@ -303,7 +366,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
             transferredFormatting = TextFormatting.RED;
         }
 
-        if (isPointInRegion(10, 61, 156, 6, mouseX, mouseY)) {
+        if (isPointInRegion(10, 66, 156, 6, mouseX, mouseY)) {
             List<String> power = Arrays.asList(
                     I18n.format("gui.transportrings.energyBuffer"),
                     TextFormatting.GRAY + String.format("%,d / %,d RF", energyStored, maxEnergyStored),

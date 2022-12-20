@@ -36,12 +36,12 @@ public class AssemblerContainerGui extends GuiContainer {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
-        drawModalRectWithCustomSizedTexture(guiLeft, guiTop, 0, 0, xSize, ySize, 512, 512);
+        drawModalRectWithCustomSizedTexture(guiLeft, guiTop, 0, 0, xSize, ySize, 256, 256);
 
         long start = container.tile.getMachineStart();
         long end = container.tile.getMachineEnd();
         double progress = (start == -1 || end == -1 || start == end) ? 0 : ((double) (container.tile.getWorld().getTotalWorldTime() - start)) / ((double) (end - start));
-        drawModalRectWithCustomSizedTexture(guiLeft + 95, guiTop + 65, 176, 128, ((int) ((216 - 176) * progress)), 143 - 128, 512, 512);
+        drawModalRectWithCustomSizedTexture(guiLeft + 95, guiTop + 65, 176, 128, ((int) ((216 - 176) * progress)), 143 - 128, 256, 256);
 
         StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.tile.getCapability(CapabilityEnergy.ENERGY, null);
 

@@ -173,21 +173,19 @@ public abstract class DHDAbstractContainerGui extends GuiContainer implements Ta
 
             // Bottom duct Naquadah
             for (int i = 0; i < 5; i++)
-                GuiHelper.drawTexturedRectScaled(guiLeft + 87 + 16 * i, guiTop + 86, sprite, 16, 16, 10.0f / 16);
+                GuiHelper.drawTexturedRectScaled(guiLeft + 87 + 16 * i, guiTop + 87, sprite, 16, 16, 10.0f / 16);
         }
 
         // Naquadah ducts
         GlStateManager.enableBlend();
         mc.getTextureManager().bindTexture(getBackgroundTexture());
         drawTexturedModalRect(guiLeft + 103, guiTop + 60, 0, 173, 48, 16);
-        drawTexturedModalRect(guiLeft + 84, guiTop + 77, 0, 188, 84, 10);
+        drawTexturedModalRect(guiLeft + 84, guiTop + 77, 0, 189, 84, 10);
         GlStateManager.disableBlend();
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        //String fusion = I18n.format("gui.dhd.fusion");
-        //fontRenderer.drawString(fusion, 168 - fontRenderer.getStringWidth(fusion) + 2, 6, 4210752);
         fontRenderer.drawString(I18n.format("gui.upgrades"), 8, 29, 4210752);
         fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 

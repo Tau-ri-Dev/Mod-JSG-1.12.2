@@ -41,7 +41,7 @@ public class TabTRAddress extends Tab {
             // Draw page slot
             Minecraft.getMinecraft().getTextureManager().bindTexture(bgTexLocation);
             GlStateManager.color(1, 1, 1, 1);
-            Gui.drawModalRectWithCustomSizedTexture(guiLeft + currentOffsetX + 105, guiTop + defaultY + 86, 6, 174, 18, 18, textureSize, textureSize);
+            Gui.drawModalRectWithCustomSizedTexture(guiLeft + currentOffsetX + 105, guiTop + defaultY + 86, 6, 179, 18, 18, textureSize, textureSize);
 
             int shadow = 2;
             float color = 1.0f;
@@ -61,7 +61,7 @@ public class TabTRAddress extends Tab {
             float green = c.getGreen();
             float blue = c.getBlue();
             GlStateManager.color(red, green, blue);
-            Gui.drawModalRectWithCustomSizedTexture(guiLeft + currentOffsetX + 97, guiTop + defaultY + 86 + (18 - progress), 0, 174 + (18 - progress), 6, progress, textureSize, textureSize);
+            Gui.drawModalRectWithCustomSizedTexture(guiLeft + currentOffsetX + 97, guiTop + defaultY + 86 + (18 - progress), 0, 179 + (18 - progress), 6, progress, textureSize, textureSize);
 
             GlStateManager.disableBlend();
         }

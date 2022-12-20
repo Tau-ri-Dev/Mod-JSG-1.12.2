@@ -256,7 +256,7 @@ public abstract class Tab {
 	 * Sorts tabs so only visible (enabled by some upgrade) occupy space.
 	 */
 	public static void updatePositions(List<Tab> tabs) {
-		int yPosLeft = 2;
+		int yPosLeft = 11;
 		int yPosRight = 2;
 		
 		for (Tab tab : tabs) {

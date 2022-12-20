@@ -91,7 +91,7 @@ public class TabConfig extends TabScrollAble {
     @Override
     public boolean canContinueScrolling(int k) {
         int top = guiTop + defaultY + 30;
-        int bottom = guiTop + defaultY + height - 34;
+        int bottom = guiTop + defaultY + height - 38;
         if (FIELDS.size() < 1 && BUTTONS.size() < 1) return false;
 
         boolean isTop = ((FIELDS.size() > 0 && FIELDS.get(0).getId() < BUTTONS.get(0).id) ? FIELDS.get(0).y > top : BUTTONS.get(0).y > top);

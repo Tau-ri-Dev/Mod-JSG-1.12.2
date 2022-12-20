@@ -144,7 +144,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 case 1:
                 case 2:
                 case 3:
-                    return TransportRingsAbstractTile.TransportRingsUpgradeEnum.contains(item) && !hasUpgrade(item);
+                    return TransportRingsAbstractTile.TransportRingsUpgradeEnum.contains(item) && !hasUpgrade(item) && TransportRingsUpgradeEnum.valueOf(item).slotId == slot;
 
                 case 4:
                     return isItemCapacitor && getSupportedCapacitors() >= 1;
@@ -1542,16 +1542,18 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return true;
     }
 
-    public static enum TransportRingsUpgradeEnum implements EnumKeyInterface<Item> {
-        GOAULD_UPGRADE(JSGItems.CRYSTAL_GLYPH_GOAULD),
-        ORI_UPGRADE(JSGItems.CRYSTAL_GLYPH_ORI),
-        ANCIENT_UPGRADE(JSGItems.CRYSTAL_GLYPH_ANCIENT);
+    public enum TransportRingsUpgradeEnum implements EnumKeyInterface<Item> {
+        GOAULD_UPGRADE(JSGItems.CRYSTAL_GLYPH_GOAULD, 0),
+        ORI_UPGRADE(JSGItems.CRYSTAL_GLYPH_ORI, 1),
+        ANCIENT_UPGRADE(JSGItems.CRYSTAL_GLYPH_ANCIENT, 2);
 
         private static final EnumKeyMap<Item, TransportRingsAbstractTile.TransportRingsUpgradeEnum> idMap = new EnumKeyMap<>(values());
         public final Item item;
+        public final int slotId;
 
-        private TransportRingsUpgradeEnum(Item item) {
+        TransportRingsUpgradeEnum(Item item, int slotId) {
             this.item = item;
+            this.slotId = slotId;
         }
 
         public static TransportRingsAbstractTile.TransportRingsUpgradeEnum valueOf(Item item) {
