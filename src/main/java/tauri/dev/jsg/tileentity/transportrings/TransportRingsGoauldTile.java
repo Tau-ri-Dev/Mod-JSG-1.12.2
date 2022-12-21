@@ -8,7 +8,7 @@ import static tauri.dev.jsg.block.JSGBlocks.TR_CONTROLLER_GOAULD_BLOCK;
 
 public class TransportRingsGoauldTile extends TransportRingsAbstractTile {
     @Override
-    public int getSupportedCapacitors() {
+    public int getDefaultCapacitors() {
         return 2;
     }
 

@@ -39,7 +39,7 @@ public class TabConfig extends TabScrollAble {
         updateConfig(null, false); // update pos of fields
         for (GuiTextField field : FIELDS) {
             int id = field.getId() - 100;
-            int y = field.y - 10;
+            int y = field.y - 9;
             int x = field.x;
             if (canRenderEntry(x, y)) {
                 if (id < 0) continue;
@@ -49,7 +49,7 @@ public class TabConfig extends TabScrollAble {
         }
         for (ModeButton button : BUTTONS) {
             int id = button.id - 100;
-            int y = button.y - 10;
+            int y = button.y - 9;
             int x = button.x;
             if (canRenderEntry(x, y)) {
                 if (id < 0) continue;
@@ -68,20 +68,20 @@ public class TabConfig extends TabScrollAble {
         super.renderFg(screen, fontRenderer, mouseX, mouseY);
         if (isVisible() && isOpen()) {
             for (GuiTextField field : FIELDS) {
-                int y = field.y - 10;
+                int y = field.y - 9;
                 int x = field.x;
                 int id = field.getId() - 100;
 
-                if (GuiHelper.isPointInRegion(x, y, field.width, 10 + field.height, mouseX, mouseY)) {
+                if (canRenderEntry(x, y) && GuiHelper.isPointInRegion(x, y, field.width, 10 + field.height, mouseX, mouseY)) {
                     screen.drawHoveringText(config.getOption(id).getCommentToRender(), mouseX - guiLeft, mouseY - guiTop);
                 }
             }
             for (ModeButton button : BUTTONS) {
-                int y = button.y - 10;
+                int y = button.y - 9;
                 int x = button.x;
                 int id = button.id - 100;
 
-                if (GuiHelper.isPointInRegion(x, y, 75, 10 + button.height, mouseX, mouseY)) {
+                if (canRenderEntry(x, y) && GuiHelper.isPointInRegion(x, y, 75, 10 + button.height, mouseX, mouseY)) {
                     screen.drawHoveringText(config.getOption(id).getCommentToRender(), mouseX - guiLeft, mouseY - guiTop);
                 }
             }
@@ -135,11 +135,14 @@ public class TabConfig extends TabScrollAble {
     }
 
     @Override
-    public void keyTyped(char typedChar, int keyCode) {
+    public boolean keyTyped(char typedChar, int keyCode) {
+        boolean typed = false;
         for (GuiTextField field : FIELDS) {
-            field.textboxKeyTyped(typedChar, keyCode);
+            if(field.textboxKeyTyped(typedChar, keyCode))
+                typed = true;
         }
         getConfig(true);
+        return typed;
     }
 
     public void setOnTabClose(Runnable onTabClose) {
@@ -172,30 +175,28 @@ public class TabConfig extends TabScrollAble {
             BUTTONS.clear();
             for (int i = 0; i < this.config.getOptions().size(); i++) {
                 JSGConfigOption option = this.config.getOption(i);
-                if (option != null) {
-                    if (option.type == JSGConfigOptionTypeEnum.SWITCH || option.type == JSGConfigOptionTypeEnum.BOOLEAN) {
-                        ModeButton btn = option.createButton(k);
-                        if (btn != null) {
-                            BUTTONS.add(btn);
-                        }
-                    } else {
-                        GuiTextField field = option.createField(k);
-                        if (field != null) {
-                            FIELDS.add(field);
-                        }
+                if (option.type == JSGConfigOptionTypeEnum.SWITCH || option.type == JSGConfigOptionTypeEnum.BOOLEAN) {
+                    ModeButton btn = option.createButton(k);
+                    if (btn != null) {
+                        BUTTONS.add(btn);
+                    }
+                } else {
+                    GuiTextField field = option.createField(k);
+                    if (field != null) {
+                        FIELDS.add(field);
                     }
                 }
             }
         } else {
             for (ModeButton btn : BUTTONS) {
                 if (btn != null) {
-                    btn.y = 27 * (btn.id - 100) + k + scrolled;
+                    btn.y = 29 * (btn.id - 100) + k + scrolled;
                     btn.x = guiLeft + 6 + currentOffsetX + 25;
                 }
             }
             for (GuiTextField field : FIELDS) {
                 if (field != null) {
-                    field.y = 27 * (field.getId() - 100) + k + scrolled;
+                    field.y = 29 * (field.getId() - 100) + k + scrolled;
                     field.x = guiLeft + 6 + currentOffsetX + 25;
                 }
             }

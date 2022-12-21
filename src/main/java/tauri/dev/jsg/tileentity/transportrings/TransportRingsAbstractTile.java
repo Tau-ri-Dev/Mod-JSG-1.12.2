@@ -6,47 +6,11 @@ import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.Environment;
 import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.block.JSGBlock;
-import tauri.dev.jsg.block.props.TRPlatformBlock;
-import tauri.dev.jsg.block.transportrings.TRControllerAbstractBlock;
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.config.ingame.*;
-import tauri.dev.jsg.entity.friendly.TokraEntity;
-import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.sound.JSGSoundHelper;
-import tauri.dev.jsg.tileentity.util.PreparableInterface;
-import tauri.dev.jsg.transportrings.*;
-import tauri.dev.jsg.util.main.JSGProps;
-import tauri.dev.jsg.block.JSGBlocks;
-import tauri.dev.jsg.gui.container.transportrings.TRGuiState;
-import tauri.dev.jsg.gui.container.transportrings.TRGuiUpdate;
-import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.item.notebook.PageNotebookItem;
-import tauri.dev.jsg.packet.StateUpdatePacketToClient;
-import tauri.dev.jsg.packet.StateUpdateRequestToServer;
-import tauri.dev.jsg.packet.transportrings.StartPlayerFadeOutToClient;
-import tauri.dev.jsg.renderer.transportrings.TransportRingsAbstractRenderer;
-import tauri.dev.jsg.sound.SoundEventEnum;
-import tauri.dev.jsg.stargate.EnumScheduledTask;
-import tauri.dev.jsg.stargate.network.SymbolInterface;
-import tauri.dev.jsg.stargate.power.StargateClassicEnergyStorage;
-import tauri.dev.jsg.stargate.power.StargateEnergyRequired;
-import tauri.dev.jsg.state.State;
-import tauri.dev.jsg.state.StateProviderInterface;
-import tauri.dev.jsg.state.StateTypeEnum;
-import tauri.dev.jsg.state.dialhomedevice.DHDActivateButtonState;
-import tauri.dev.jsg.state.transportrings.TransportRingsRendererState;
-import tauri.dev.jsg.state.transportrings.TransportRingsStartAnimationRequest;
-import tauri.dev.jsg.tileentity.util.IUpgradable;
-import tauri.dev.jsg.tileentity.util.ScheduledTask;
-import tauri.dev.jsg.tileentity.util.ScheduledTaskExecutorInterface;
-import tauri.dev.jsg.util.*;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -68,6 +32,42 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.block.JSGBlock;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.block.props.TRPlatformBlock;
+import tauri.dev.jsg.block.transportrings.TRControllerAbstractBlock;
+import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.ingame.*;
+import tauri.dev.jsg.entity.friendly.TokraEntity;
+import tauri.dev.jsg.gui.container.transportrings.TRGuiState;
+import tauri.dev.jsg.gui.container.transportrings.TRGuiUpdate;
+import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.item.notebook.PageNotebookItem;
+import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.packet.StateUpdatePacketToClient;
+import tauri.dev.jsg.packet.StateUpdateRequestToServer;
+import tauri.dev.jsg.packet.transportrings.StartPlayerFadeOutToClient;
+import tauri.dev.jsg.renderer.transportrings.TransportRingsAbstractRenderer;
+import tauri.dev.jsg.sound.JSGSoundHelper;
+import tauri.dev.jsg.sound.SoundEventEnum;
+import tauri.dev.jsg.stargate.EnumScheduledTask;
+import tauri.dev.jsg.stargate.network.SymbolInterface;
+import tauri.dev.jsg.stargate.power.StargateClassicEnergyStorage;
+import tauri.dev.jsg.stargate.power.StargateEnergyRequired;
+import tauri.dev.jsg.state.State;
+import tauri.dev.jsg.state.StateProviderInterface;
+import tauri.dev.jsg.state.StateTypeEnum;
+import tauri.dev.jsg.state.dialhomedevice.DHDActivateButtonState;
+import tauri.dev.jsg.state.transportrings.TransportRingsRendererState;
+import tauri.dev.jsg.state.transportrings.TransportRingsStartAnimationRequest;
+import tauri.dev.jsg.tileentity.util.IUpgradable;
+import tauri.dev.jsg.tileentity.util.PreparableInterface;
+import tauri.dev.jsg.tileentity.util.ScheduledTask;
+import tauri.dev.jsg.tileentity.util.ScheduledTaskExecutorInterface;
+import tauri.dev.jsg.transportrings.*;
+import tauri.dev.jsg.util.*;
+import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -211,40 +211,44 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     public boolean isPlatformBuild = false;
     public IBlockState platformOverlayBlockState = Blocks.CONCRETE.getStateFromMeta(10);
 
-    public IBlockState getPlatformOverlayBlockState(){
+    public IBlockState getPlatformOverlayBlockState() {
         return platformOverlayBlockState;
     }
 
-    public boolean isTherePlatform(){
+    public boolean isTherePlatform() {
         return getPlatform() != null;
     }
-    public void updatePlatformStatus(){
+
+    public void updatePlatformStatus() {
         updatePlatformStatus(false);
     }
-    public void updatePlatformStatus(boolean forceDeletion){
-        if(world.getTileEntity(pos) == null || !(world.getTileEntity(pos) instanceof TransportRingsAbstractTile)) forceDeletion = true;
+
+    public void updatePlatformStatus(boolean forceDeletion) {
+        if (world.getTileEntity(pos) == null || !(world.getTileEntity(pos) instanceof TransportRingsAbstractTile))
+            forceDeletion = true;
         boolean tempState = isTherePlatform() && (isPlatformBuild || hasPlatformSpace());
-        if(isPlatformBuild != tempState || forceDeletion){
+        if (isPlatformBuild != tempState || forceDeletion) {
             tryBuildPlatformPattern(!tempState || forceDeletion);
         }
         isPlatformBuild = tempState;
     }
 
-    public boolean isTherePlace(BlockPos pos){
+    public boolean isTherePlace(BlockPos pos) {
         IBlockState newState = world.getBlockState(pos);
         Block newBlock = newState.getBlock();
         return (newBlock.isAir(newState, world, pos) || newBlock.isReplaceable(world, pos) || !(newBlock instanceof JSGBlock));
     }
 
-    public boolean hasPlatformSpace(){
+    public boolean hasPlatformSpace() {
         return hasPlatformSpace(false, false);
     }
-    public boolean hasPlatformSpace(boolean tryBuild, boolean removeBlocks){
-        if(getPlatform() == null) return false;
+
+    public boolean hasPlatformSpace(boolean tryBuild, boolean removeBlocks) {
+        if (getPlatform() == null) return false;
         BlockPos[] pattern = getPlatform().platformBlock.getPattern();
         boolean fromToPattern = getPlatform().platformBlock.getPlatform().fromToPattern;
 
-        if(!fromToPattern) {
+        if (!fromToPattern) {
             for (BlockPos offset : pattern) {
                 BlockPos o = new BlockPos(offset);
 
@@ -253,8 +257,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                 BlockPos actualPos = new BlockPos(this.pos).add(o);
 
-                if(tryBuild){
-                    if(isTherePlace(actualPos))
+                if (tryBuild) {
+                    if (isTherePlace(actualPos))
                         world.setBlockState(actualPos, removeBlocks ? Blocks.AIR.getDefaultState() : JSGBlocks.NAQUADAH_BLOCK_RAW.getDefaultState());
                     continue;
                 }
@@ -263,10 +267,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 }
             }
             return true;
-        }
-        else{
-            for(int x = pattern[0].getX(); x <= pattern[1].getX(); x++){
-                for(int z = pattern[0].getZ(); z <= pattern[1].getZ(); z++){
+        } else {
+            for (int x = pattern[0].getX(); x <= pattern[1].getX(); x++) {
+                for (int z = pattern[0].getZ(); z <= pattern[1].getZ(); z++) {
                     BlockPos o = new BlockPos(x, 0, z);
 
                     if (ringsDistance > 0) o.up(ringsDistance);
@@ -274,8 +277,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                     BlockPos actualPos = new BlockPos(this.pos).add(o);
 
-                    if(tryBuild){
-                        if(isTherePlace(actualPos))
+                    if (tryBuild) {
+                        if (isTherePlace(actualPos))
                             world.setBlockState(actualPos, removeBlocks ? Blocks.AIR.getDefaultState() : JSGBlocks.NAQUADAH_BLOCK_RAW.getDefaultState());
                         continue;
                     }
@@ -288,23 +291,24 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return true;
     }
 
-    public void tryBuildPlatformPattern(boolean removeBlocks){
+    public void tryBuildPlatformPattern(boolean removeBlocks) {
         hasPlatformSpace(true, removeBlocks);
     }
 
-    public RingsPlatform getPlatform(){
-        for(EnumFacing facing : EnumFacing.values()){
+    public RingsPlatform getPlatform() {
+        for (EnumFacing facing : EnumFacing.values()) {
             BlockPos pos = this.pos.offset(facing, 1);
             Block block = world.getBlockState(pos).getBlock();
-            if(block instanceof TRPlatformBlock){
+            if (block instanceof TRPlatformBlock) {
                 return new RingsPlatform(pos, (TRPlatformBlock) block);
             }
         }
         return null;
     }
 
-    public void playPlatformSound(boolean closing){
-        if(ringsDistance < 0 || !isTherePlatform() || !getConfig().getOption(RENDER_PLATFORM_MOVING.id).getBooleanValue()) return; // platform is not rendering!
+    public void playPlatformSound(boolean closing) {
+        if (ringsDistance < 0 || !isTherePlatform() || !getConfig().getOption(RENDER_PLATFORM_MOVING.id).getBooleanValue())
+            return; // platform is not rendering!
         JSGSoundHelper.playSoundEvent(world, getPosWithDistance(ringsDistance), getPlatform().platformBlock.getPlatformSound(closing));
     }
 
@@ -328,7 +332,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                     || getRings().getAddress(SymbolTypeTransportRingsEnum.valueOf(0)).get(0).equals(SymbolGoauldEnum.getOrigin()) // if first symbol is origin
                     || getRings().getAddress(SymbolTypeTransportRingsEnum.valueOf(0)).get(0).equals(getRings().getAddress(SymbolTypeTransportRingsEnum.valueOf(0)).get(1)) // if there are two same symbols
             ) {
-                if(getRings().getAddresses() != null)
+                if (getRings().getAddresses() != null)
                     JSG.logger.debug("TransportRings at " + pos.toString() + " are generating new addresses!");
                 generateAddress(true);
             }
@@ -346,7 +350,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
             updatePlatformStatus();
 
-            if(world.getTotalWorldTime() % 80 == 0) // every 4 seconds, update boxed (render and teleport)
+            if (world.getTotalWorldTime() % 80 == 0) // every 4 seconds, update boxed (render and teleport)
                 updateRingsDistance();
 
             /*
@@ -416,7 +420,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         }
     }
 
-    public int getSlotsCount(){
+    public int getSlotsCount() {
         return itemStackHandlerSlotsCount;
     }
 
@@ -540,11 +544,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 if (targetTile == null) break;
                 int targetRingsHeight = targetTile.getRings().getRingsDistance();
 
-                for(Entity entity : teleportList){
+                for (Entity entity : teleportList) {
                     int extracted = getEnergyStorage().extractEnergy(tauri.dev.jsg.config.JSGConfig.powerConfig.ringsTeleportPowerDraw, true);
-                    if(!initiating || extracted >= tauri.dev.jsg.config.JSGConfig.powerConfig.ringsTeleportPowerDraw || !(entity instanceof EntityLivingBase)) {
+                    if (!initiating || extracted >= tauri.dev.jsg.config.JSGConfig.powerConfig.ringsTeleportPowerDraw || !(entity instanceof EntityLivingBase)) {
 
-                        if(entity instanceof EntityLivingBase && initiating)
+                        if (entity instanceof EntityLivingBase && initiating)
                             getEnergyStorage().extractEnergy(extracted, false);
 
                         if (!excludedEntities.contains(entity)) {
@@ -552,10 +556,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                             double y = targetRingsPos.getY() + targetRingsHeight;
                             entity.setPositionAndUpdate(ePos.getX(), y, ePos.getZ());
 
-                            if(entity instanceof TokraEntity) // move tokra away from the rings platform
+                            if (entity instanceof TokraEntity) // move tokra away from the rings platform
                                 ((TokraEntity) entity).moveFromRingsPlatform();
 
-                            if(entity instanceof EntityPlayerMP)
+                            if (entity instanceof EntityPlayerMP)
                                 triggerTeleportAdvancement((EntityPlayerMP) entity);
                         }
                     }
@@ -602,11 +606,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 break;
 
             case RINGS_SYMBOL_DEACTIVATE:
-                if(customData != null && customData.hasKey("symbol")) {
+                if (customData != null && customData.hasKey("symbol")) {
                     int symbolId = customData.getInteger("symbol");
                     sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbolId, true));
-                }
-                else{
+                } else {
                     sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
                 }
                 break;
@@ -626,11 +629,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         this.busy = busy;
     }
 
-    public int getRingsDistance(){
+    public int getRingsDistance() {
         return ringsDistance;
     }
 
-    public String getRingsName(){
+    public String getRingsName() {
         return ringsName;
     }
 
@@ -658,7 +661,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.START_ANIMATION, new TransportRingsStartAnimationRequest(rendererState.animationStart, rendererState.ringsDistance, rendererState.ringsConfig)), point);
     }
 
-    public TransportRingsRendererState getRendererState(){
+    public TransportRingsRendererState getRendererState() {
         return rendererState;
     }
 
@@ -666,7 +669,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     // -------------------------------
     // Engaging symbols
 
-    public TransportResult dialNearestRings(boolean dial){
+    public TransportResult dialNearestRings(boolean dial) {
         for (TransportRings rings : ringsMap.values()) {
             if (!rings.isInGrid()) return TransportResult.NO_SUCH_ADDRESS;
 
@@ -683,11 +686,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
             // power
             StargateEnergyRequired energyRequired = getEnergyRequiredToDial(rings);
-            int extracted = getEnergyStorage().extractEnergy((energyRequired.keepAlive*20), true);
-            if(extracted < (energyRequired.keepAlive*20)) // *20 because rings should be active more than 1 second
+            int extracted = getEnergyStorage().extractEnergy((energyRequired.keepAlive * 20), true);
+            if (extracted < (energyRequired.keepAlive * 20)) // *20 because rings should be active more than 1 second
                 return TransportResult.NOT_ENOUGH_POWER;
 
-            if(dial) {
+            if (dial) {
                 keepAliveEnergyPerTick = energyRequired.keepAlive;
                 // ------
 
@@ -704,7 +707,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     public TransportResult addSymbolToAddressInternal(SymbolInterface symbol, boolean computer) {
-        if(isBusy()) return TransportResult.BUSY;
+        if (isBusy()) return TransportResult.BUSY;
         if (canAddSymbol(symbol)) {
             dialedAddress.setSymbolType(getSymbolType());
             dialedAddress.add(symbol);
@@ -723,7 +726,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             sendSignal(ocContext, "transportrings_symbol_engage", TransportResult.OK.toString());
             return TransportResult.ACTIVATED;
         }
-        if(symbol.origin()) {
+        if (symbol.origin()) {
             activateSymbolController(symbol);
             clearButtonsController(7);
             playPressSoundController(computer, true);
@@ -733,23 +736,25 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return TransportResult.ALREADY_ACTIVATED;
     }
 
-    public void playPressSoundController(boolean computer, boolean isFinal){
+    public void playPressSoundController(boolean computer, boolean isFinal) {
         TRControllerAbstractTile controller = getLinkedControllerTile(world);
-        if((!computer || config.getOption(ENABLE_OC_PRESS_SOUND.id).getBooleanValue()) && isLinked() && controller != null)
+        if ((!computer || config.getOption(ENABLE_OC_PRESS_SOUND.id).getBooleanValue()) && isLinked() && controller != null)
             controller.playPressSound(isFinal);
     }
 
-    public void activateSymbolController(SymbolInterface symbol){
+    public void activateSymbolController(SymbolInterface symbol) {
         NBTTagCompound compound = new NBTTagCompound();
         compound.setInteger("symbol", symbol.getId());
         sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(symbol));
         addTask(new ScheduledTask(EnumScheduledTask.RINGS_SYMBOL_DEACTIVATE, compound));
     }
 
-    public void clearButtonsController(){
-        clearButtonsController(-1);}
-    public void clearButtonsController(int waitTicks){
-        if(waitTicks > -1)
+    public void clearButtonsController() {
+        clearButtonsController(-1);
+    }
+
+    public void clearButtonsController(int waitTicks) {
+        if (waitTicks > -1)
             addTask(new ScheduledTask(EnumScheduledTask.RINGS_SYMBOL_DEACTIVATE, waitTicks));
         else
             sendStateToController(StateTypeEnum.DHD_ACTIVATE_BUTTON, new DHDActivateButtonState(true));
@@ -766,8 +771,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return !isBusy();
     }
 
-    public void sendStateToController(StateTypeEnum stateType, State state){
-        if(getLinkedControllerTile(world) != null)
+    public void sendStateToController(StateTypeEnum stateType, State state) {
+        if (getLinkedControllerTile(world) != null)
             getLinkedControllerTile(world).sendState(stateType, state);
     }
 
@@ -794,7 +799,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         TransportRingsAddress strippedAddress = (address.getLast().origin()) ? address.stripOrigin() : address;
 
-        if(address.size() < MAX_SYMBOLS){
+        if (address.size() < MAX_SYMBOLS) {
             return TransportResult.NO_SUCH_ADDRESS;
         }
 
@@ -817,8 +822,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
                 // power
                 StargateEnergyRequired energyRequired = getEnergyRequiredToDial(rings);
-                int extracted = getEnergyStorage().extractEnergy((energyRequired.keepAlive*20), true);
-                if(extracted < (energyRequired.keepAlive*20)) // *20 because rings should be active more than 1 second
+                int extracted = getEnergyStorage().extractEnergy((energyRequired.keepAlive * 20), true);
+                if (extracted < (energyRequired.keepAlive * 20)) // *20 because rings should be active more than 1 second
                     return TransportResult.NOT_ENOUGH_POWER;
 
                 keepAliveEnergyPerTick = energyRequired.keepAlive;
@@ -837,8 +842,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         }
         if (!found) {
             return TransportResult.NO_SUCH_ADDRESS;
-        }
-        else
+        } else
             return TransportResult.OK;
     }
 
@@ -866,6 +870,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     public void setBarrierBlocks(boolean set, boolean passable) {
         setBarrierBlocks(set, passable, false);
     }
+
     public void setBarrierBlocks(boolean set, boolean passable, boolean force) {
         IBlockState invBlockState = JSGBlocks.INVISIBLE_BLOCK.getDefaultState();
 
@@ -1022,7 +1027,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return ParamsSetResult.OK;
     }
 
-    public void setRingsName(String name){
+    public void setRingsName(String name) {
         getRings().setName(name);
         ringsName = name;
         markDirty();
@@ -1132,7 +1137,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
             config.deserializeNBT(compound.getCompoundTag("config"));
 
-        }catch (NullPointerException | IndexOutOfBoundsException | ClassCastException e) {
+        } catch (NullPointerException | IndexOutOfBoundsException | ClassCastException e) {
             JSG.logger.warn("Exception at reading NBT");
             JSG.logger.warn("If loading world used with previous version and nothing game-breaking doesn't happen, please ignore it");
 
@@ -1181,7 +1186,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         }
     }
 
-    public BlockPos getPosWithDistance(int distance){
+    public BlockPos getPosWithDistance(int distance) {
         return (distance > 0 ? pos.up(distance + 2) : pos.down((distance * -1) - (distance < -2 ? 2 : 0)));
     }
 
@@ -1221,7 +1226,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 TRGuiUpdate guiUpdate = (TRGuiUpdate) state;
                 energyStorage.setEnergyStoredInternally(guiUpdate.energyStored);
                 energyTransferedLastTick = guiUpdate.transferedLastTick;
-                if(!getRings().getName().equals(guiUpdate.ringsName) || getRings().getRingsDistance() != guiUpdate.distance)
+                if (!getRings().getName().equals(guiUpdate.ringsName) || getRings().getRingsDistance() != guiUpdate.distance)
                     setRingsParams(guiUpdate.ringsName, guiUpdate.distance);
                 break;
             default:
@@ -1230,13 +1235,12 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
 
-
     // -----------------------------------------------------------------
     // Tile entity config
 
     protected JSGTileEntityConfig config = new JSGTileEntityConfig();
 
-    public enum ConfigOptions{
+    public enum ConfigOptions implements ITileConfigEntry {
         RENDER_PLATFORM_MOVING(
                 0, "platformMoving", JSGConfigOptionTypeEnum.BOOLEAN, "true",
                 "Render platform moving part"
@@ -1248,7 +1252,14 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         ENABLE_OC_PRESS_SOUND(
                 2, "ocPressSound", JSGConfigOptionTypeEnum.BOOLEAN, "false",
                 "Play press sound when dialing with OC"
-        );
+        ),
+        CAPACITORS_COUNT(
+                3, "maxCapacitors", JSGConfigOptionTypeEnum.NUMBER, "3", 0, 3,
+                "Specifies how many",
+                "capacitors can be installed",
+                "into rings"
+        ),
+        ;
 
         public final int id;
         public final String label;
@@ -1260,16 +1271,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         public final int minInt;
         public final int maxInt;
 
-        ConfigOptions(int optionId, String label, String defaultValue, List<JSGConfigEnumEntry> possibleValues, String... comment) {
-            this(optionId, label, JSGConfigOptionTypeEnum.SWITCH, defaultValue, -1, -1, comment);
-            this.possibleValues = possibleValues;
-        }
-
-        ConfigOptions(int optionId, String label, JSGConfigOptionTypeEnum type, String defaultValue, String... comment){
+        ConfigOptions(int optionId, String label, JSGConfigOptionTypeEnum type, String defaultValue, String... comment) {
             this(optionId, label, type, defaultValue, -1, -1, comment);
         }
 
-        ConfigOptions(int optionId, String label, JSGConfigOptionTypeEnum type, String defaultValue, int minInt, int maxInt, String... comment){
+        ConfigOptions(int optionId, String label, JSGConfigOptionTypeEnum type, String defaultValue, int minInt, int maxInt, String... comment) {
             this.id = optionId;
             this.label = label;
             this.type = type;
@@ -1277,6 +1283,46 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             this.minInt = minInt;
             this.maxInt = maxInt;
             this.comment = comment;
+        }
+
+        @Override
+        public int getId() {
+            return id;
+        }
+
+        @Override
+        public String getLabel() {
+            return label;
+        }
+
+        @Override
+        public String[] getComment() {
+            return comment;
+        }
+
+        @Override
+        public JSGConfigOptionTypeEnum getType() {
+            return type;
+        }
+
+        @Override
+        public String getDefaultValue() {
+            return defaultValue;
+        }
+
+        @Override
+        public List<JSGConfigEnumEntry> getPossibleValues() {
+            return possibleValues;
+        }
+
+        @Override
+        public int getMin() {
+            return minInt;
+        }
+
+        @Override
+        public int getMax() {
+            return maxInt;
         }
     }
 
@@ -1287,32 +1333,20 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
     @Override
     public void setConfig(JSGTileEntityConfig config) {
-        for(JSGConfigOption o : config.getOptions()){
+        for (JSGConfigOption o : config.getOptions()) {
             this.config.getOption(o.id).setValue(o.getStringValue());
         }
         markDirty();
     }
 
     @Override
-    public void initConfig(){
-        if(getConfig().getOptions().size() != TransportRingsAbstractTile.ConfigOptions.values().length) {
-            getConfig().clearOptions();
-            for (TransportRingsAbstractTile.ConfigOptions option : TransportRingsAbstractTile.ConfigOptions.values()) {
-                JSGConfigOption optionNew = new JSGConfigOption(option.id).setType(option.type);
-
-                if(option.type == JSGConfigOptionTypeEnum.SWITCH)
-                    optionNew.setPossibleValues(option.possibleValues);
-
-                optionNew.setLabel(option.label)
-                        .setValue(option.defaultValue)
-                        .setDefaultValue(option.defaultValue)
-                        .setMinInt(option.minInt)
-                        .setMaxInt(option.maxInt)
-                        .setComment(option.comment);
-
-                getConfig().addOption(optionNew);
-            }
-        }
+    public void initConfig() {
+        JSGConfigOption o = getConfig().getOption(ConfigOptions.CAPACITORS_COUNT.id, true);
+        int caps = ((o == null) ? getDefaultCapacitors() : o.getIntValue());
+        JSGTileEntityConfig.initConfig(getConfig(), ConfigOptions.values());
+        getConfig().getOption(ConfigOptions.CAPACITORS_COUNT.id).setDefaultValue(getDefaultCapacitors() + "").setValue(caps + "");
+        markDirty();
+        JSGTileEntityConfig.initConfig(getConfig(), ConfigOptions.values());
     }
 
     public abstract TRControllerAbstractBlock getControllerBlock();
@@ -1447,7 +1481,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     public Object[] addSymbolToAddress(Context context, Arguments args) {
         String symbolName = "";
         int symbolId = -1;
-        if(!args.isInteger(1))
+        if (!args.isInteger(1))
             symbolName = args.checkString(1);
         else
             symbolId = args.checkInteger(1);
@@ -1463,7 +1497,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             throw new IllegalArgumentException("bad argument #2 (address out of range, must be higher than -1 and lower than " + maxSymbols + ")");
 
         ocContext = context;
-        if(symbolName.equals(""))
+        if (symbolName.equals(""))
             return new Object[]{addSymbolToAddressInternal(symbolTypeConverted.getSymbol(symbolId), true)};
         else
             return new Object[]{addSymbolToAddressInternal(symbolTypeConverted.fromEnglishName(symbolName), true)};
@@ -1491,7 +1525,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return energyTransferedLastTick;
     }
 
-    public abstract int getSupportedCapacitors();
+    public int getSupportedCapacitors() {
+        return getConfig().getOption(ConfigOptions.CAPACITORS_COUNT.id).getIntValue();
+    }
+
+    public abstract int getDefaultCapacitors();
 
     protected StargateClassicEnergyStorage getEnergyStorage() {
         return energyStorage;

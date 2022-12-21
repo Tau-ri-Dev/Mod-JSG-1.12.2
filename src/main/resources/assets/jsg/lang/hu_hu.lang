@@ -663,6 +663,10 @@ gui.stargate.energyBuffer=Energiapuffer
 
 gui.stargate.state.closed=Csillagkapu zárva!
 gui.stargate.state.opened=Nyitva ennyi ideje:
+gui.stargate.state.gate_temp=Gate temp:
+gui.stargate.state.iris_temp=Iris temp:
+
+gui.stargate.info=Kapu információk
 
 # zpmhub
 gui.zpmhub.inProgress=ZPMs are not locked!
@@ -676,6 +680,8 @@ gui.capacitor.name=Kondenzátor
 gui.transportrings.energyBuffer=Energiapuffer
 gui.transportrings.ori_address=Ori cím
 gui.transportrings.goauld_address=Goa'uld cím
+gui.transportrings.ancient_address=Ancient cím
+gui.transportrings.parameters=Paraméterek
 
 # beamer
 gui.beamer.name=Vetítő

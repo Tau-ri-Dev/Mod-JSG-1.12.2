@@ -619,7 +619,7 @@ glyph.jsg.universe.g36=Glyph 36
 # GUI
 
 gui.upgrades=Улучшения
-gui.configuration=Configuration
+gui.configuration=Конфигурация
 
 # dhd
 gui.dhd.fusion=Холодный Синтез
@@ -657,25 +657,31 @@ gui.stargate.biome_overlay.frost=Замороженные
 gui.stargate.biome_overlay.mossy=Замшелые
 gui.stargate.biome_overlay.aged=Старые
 gui.stargate.biome_overlay.sooty=Пепельные
-gui.stargate.biome_overlay.sandy=Sandy
+gui.stargate.biome_overlay.sandy=Сэнди
 gui.stargate.capacitors=Конденсаторы
 gui.stargate.energyBuffer=Буфер Энергии
 
-gui.stargate.state.closed=Stargate closed!
-gui.stargate.state.opened=Open time:
+gui.stargate.state.closed=Звездные врата закрыты!
+gui.stargate.state.opened=Время открытия:
+gui.stargate.state.gate_temp=Gate temp:
+gui.stargate.state.iris_temp=Iris temp:
+
+gui.stargate.info=Информация о воротах
 
 # zpmhub
-gui.zpmhub.inProgress=ZPMs are not locked!
-gui.zpmhub.slideDown=Engage ZPMs
-gui.zpmhub.slideUp=Disengage ZPMs
+gui.zpmhub.inProgress=ZPM не заблокированы!
+gui.zpmhub.slideDown=Привлекайте ZPM
+gui.zpmhub.slideUp=Отключить ZPM
 
 # capacitor
 gui.capacitor.name=Конденсатор
 
 # rings
-gui.transportrings.energyBuffer=Energy buffer
-gui.transportrings.ori_address=Ori address
-gui.transportrings.goauld_address=Goa'uld address
+gui.transportrings.energyBuffer=Буфер энергии
+gui.transportrings.ori_address=Ори адрес
+gui.transportrings.goauld_address=Гоаулд адрес
+gui.transportrings.ancient_address=Древний адрес
+gui.transportrings.parameters=Параметры
 
 # beamer
 gui.beamer.name=Лучевой Передатчик Врат

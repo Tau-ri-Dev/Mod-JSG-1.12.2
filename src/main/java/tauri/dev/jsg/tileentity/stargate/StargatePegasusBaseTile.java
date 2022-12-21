@@ -833,7 +833,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     }
 
     @Override
-    public int getSupportedCapacitors() {
+    public int getDefaultCapacitors() {
         return 3;
     }
 }

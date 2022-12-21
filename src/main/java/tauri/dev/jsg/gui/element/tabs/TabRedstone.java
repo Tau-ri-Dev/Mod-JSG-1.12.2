@@ -176,9 +176,13 @@ public class TabRedstone extends Tab {
 		}
 	}
 	
-	public void keyTyped(char typedChar, int keyCode) {
-		for (LabeledTextBox tf : getTextBoxes(beamerModeGetter.get()))
-			tf.textField.textboxKeyTyped(typedChar, keyCode);
+	public boolean keyTyped(char typedChar, int keyCode) {
+		boolean typed = false;
+		for (LabeledTextBox tf : getTextBoxes(beamerModeGetter.get())) {
+			if (tf.textField.textboxKeyTyped(typedChar, keyCode))
+				typed = true;
+		}
+		return typed;
 	}
 	
 	public void updateScreen() {		

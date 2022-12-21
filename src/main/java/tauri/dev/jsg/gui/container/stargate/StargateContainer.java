@@ -25,11 +25,14 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 public class StargateContainer extends Container implements OpenTabHolderInterface {
 
     public StargateClassicBaseTile gateTile;
     public boolean isOperator;
-    private BlockPos pos;
+    private final BlockPos pos;
     private int lastEnergyStored;
     private int energyTransferedLastTick;
     private float lastEnergySecondsToClose;
@@ -38,13 +41,15 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
     private EnumIrisMode irisMode;
     private int irisCode;
     private float openedSeconds;
+    private double gateTemp;
+    private double irisTemp;
 
     public StargateContainer(IInventory playerInventory, World world, int x, int y, int z, boolean isOperator) {
         this.isOperator = isOperator;
 
         pos = new BlockPos(x, y, z);
         gateTile = (StargateClassicBaseTile) world.getTileEntity(pos);
-        IItemHandler itemHandler = gateTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+        IItemHandler itemHandler = Objects.requireNonNull(gateTile).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
         // Upgrades 4x (index 0-3)
         for (int col = 0; col < 4; col++) {
@@ -90,7 +95,7 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer playerIn) {
+    public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
         return true;
     }
 
@@ -99,8 +104,9 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
         gateTile.setPageProgress(data);
     }
 
+    @Nonnull
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int index) {
+    public ItemStack transferStackInSlot(@Nonnull EntityPlayer player, int index) {
         ItemStack stack = getSlot(index).getStack();
 
         // Transfering from Stargate to player's inventory
@@ -188,12 +194,14 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
 
         StargateClassicEnergyStorage energyStorage = (StargateClassicEnergyStorage) gateTile.getCapability(CapabilityEnergy.ENERGY, null);
 
-        if (lastEnergyStored != energyStorage.getEnergyStoredInternally()
+        if (lastEnergyStored != Objects.requireNonNull(energyStorage).getEnergyStoredInternally()
                 || lastEnergySecondsToClose != gateTile.getEnergySecondsToClose()
                 || energyTransferedLastTick != gateTile.getEnergyTransferedLastTick()
                 || irisMode != gateTile.getIrisMode()
                 || irisCode != gateTile.getIrisCode()
                 || openedSeconds != gateTile.getOpenedSecondsToDisplay()
+                || (Math.abs(gateTemp - gateTile.gateHeat) > 25) || (gateTemp == -1 && gateTile.gateHeat != -1)
+                || (Math.abs(irisTemp - gateTile.irisHeat) > 25) || (irisTemp == -1 && gateTile.irisHeat != -1)
 
         ) {
             for (IContainerListener listener : listeners) {
@@ -208,6 +216,8 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
             openedSeconds = gateTile.getOpenedSecondsToDisplay();
             irisMode = gateTile.getIrisMode();
             irisCode = gateTile.getIrisCode();
+            gateTemp = gateTile.gateHeat;
+            irisTemp = gateTile.irisHeat;
         }
 
         if (lastProgress != gateTile.getPageProgress()) {
@@ -220,7 +230,7 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
     }
 
     @Override
-    public void addListener(IContainerListener listener) {
+    public void addListener(@Nonnull IContainerListener listener) {
         super.addListener(listener);
 
         if (listener instanceof EntityPlayerMP)

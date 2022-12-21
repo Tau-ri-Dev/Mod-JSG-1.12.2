@@ -1,11 +1,12 @@
 package tauri.dev.jsg.config.ingame;
 
+import com.google.common.collect.Lists;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class JSGTileEntityConfig {
 
@@ -27,9 +28,16 @@ public class JSGTileEntityConfig {
         return options;
     }
 
+    @Nonnull
     public JSGConfigOption getOption(int id) {
+        return Objects.requireNonNull(getOption(id, false));
+    }
+
+    @Nullable
+    public JSGConfigOption getOption(int id, boolean canBeNull) {
         if (id < options.size())
             return options.get(id);
+        if(canBeNull) return null;
         return new JSGConfigOption(id).setLabel("error while getting option! (" + id + ")").setComment("").setType(JSGConfigOptionTypeEnum.TEXT).setValue("");
     }
 
@@ -66,6 +74,48 @@ public class JSGTileEntityConfig {
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
             options.add(new JSGConfigOption(buf));
+        }
+    }
+
+    // Static
+    public static void initConfig(JSGTileEntityConfig config, ITileConfigEntry[] entries) {
+        initConfig(config, Arrays.asList(entries));
+    }
+    public static void initConfig(JSGTileEntityConfig config, List<ITileConfigEntry> entries) {
+        if (config.getOptions().size() != entries.size()) {
+            config.clearOptions();
+            for (ITileConfigEntry option : entries) {
+                JSGConfigOption optionNew = new JSGConfigOption(option.getId()).setType(option.getType());
+
+                if (option.getType() == JSGConfigOptionTypeEnum.SWITCH)
+                    optionNew.setPossibleValues(option.getPossibleValues());
+
+                optionNew.setLabel(option.getLabel())
+                        .setValue(option.getDefaultValue())
+                        .setDefaultValue(option.getDefaultValue())
+                        .setMinInt(option.getMin())
+                        .setMaxInt(option.getMax())
+                        .setComment(option.getComment());
+
+                config.addOption(optionNew);
+            }
+        }
+        // setup config option when there is a change (by config for example)
+        for (ITileConfigEntry option : entries) {
+            JSGConfigOption o = config.getOption(option.getId(), true);
+            if(o == null) continue;
+
+            if(o.type != option.getType()) o.setType(option.getType());
+            if(!Objects.equals(o.defaultValue, option.getDefaultValue())) o.setDefaultValue(option.getDefaultValue());
+            if(!Objects.equals(o.getLabel(), option.getLabel())) o.setLabel(option.getLabel());
+            if(!o.getComment().equals(Arrays.asList(option.getComment()))) o.setComment(option.getComment());
+
+            o.setMaxInt(option.getMax());
+            o.setMinInt(option.getMin());
+
+            if (option.getType() != JSGConfigOptionTypeEnum.SWITCH) continue;
+            if (option.getPossibleValues().equals(o.possibleValues)) continue;
+            o.setPossibleValues(option.getPossibleValues()).setDefaultValue(option.getDefaultValue()).setValue(option.getDefaultValue());
         }
     }
 }

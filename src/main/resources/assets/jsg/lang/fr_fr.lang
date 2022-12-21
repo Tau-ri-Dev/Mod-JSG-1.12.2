@@ -670,7 +670,11 @@ gui.stargate.capacitors=Capaciteurs
 gui.stargate.energyBuffer=Tampon d'énergie
 
 gui.stargate.state.closed=Porte des étoiles fermée !
-gui.stargate.state.opened=Temps d'ouverture :
+gui.stargate.state.opened=Temps d'ouverture:
+gui.stargate.state.gate_temp=Gate temp:
+gui.stargate.state.iris_temp=Iris temp:
+
+gui.stargate.info=Informations sur la porte
 
 # zpmhub
 gui.zpmhub.inProgress=Les ZPMs ne sont pas verrouillés !
@@ -684,6 +688,8 @@ gui.capacitor.name=Banque de condensateurs
 gui.transportrings.energyBuffer=Tampon d'énergie
 gui.transportrings.ori_address=Adresse Ori
 gui.transportrings.goauld_address=Adresse de Goa'uld
+gui.transportrings.ancient_address=Ancienne adresse
+gui.transportrings.parameters=Paramètres
 
 # beamer
 gui.beamer.name=Beamer de la Porte

@@ -13,6 +13,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import org.lwjgl.input.Mouse;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
 import tauri.dev.jsg.gui.element.tabs.*;
 import tauri.dev.jsg.gui.element.tabs.Tab.SlotTab;
 import tauri.dev.jsg.item.JSGItems;
@@ -20,6 +21,7 @@ import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.SetOpenTabToServer;
 import tauri.dev.jsg.packet.stargate.SaveConfigToServer;
 import tauri.dev.jsg.packet.stargate.SaveIrisCodeToServer;
+import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
 import tauri.dev.jsg.stargate.network.SymbolPegasusEnum;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
@@ -31,12 +33,50 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class StargateContainerGui extends GuiContainer implements TabbedContainerInterface {
 
-    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_stargate.png");
+    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_stargate.png");
+
+    public static TabConfig createConfigTab(JSGTileEntityConfig config, int guiXSize, int guiYSize, int guiLeft, int guiTop) {
+        return (TabConfig) TabConfig.builder()
+                .setConfig(config)
+                .setGuiSize(guiXSize, guiYSize)
+                .setGuiPosition(guiLeft, guiTop)
+                .setTabPosition(-21, 11 + 22 * 3)
+                .setOpenX(-128)
+                .setHiddenX(-6)
+                .setTabSize(128, 96)
+                .setTabTitle(I18n.format("gui.configuration"))
+                .setTabSide(TabSideEnum.LEFT)
+                .setTexture(BACKGROUND_TEXTURE, 512)
+                .setBackgroundTextureLocation(176, 165)
+                .setIconRenderPos(0, 6)
+                .setIconSize(22, 22)
+                .setIconTextureLocation(326, 66).build();
+    }
+
+    public static TabBiomeOverlay createOverlayTab(EnumSet<BiomeOverlayEnum> supportedOverlay, int guiXSize, int guiYSize, int guiLeft, int guiTop) {
+        return (TabBiomeOverlay) TabBiomeOverlay.builder()
+                .setSupportedOverlays(supportedOverlay)
+                .setSlotTexture(6, 179)
+                .setGuiSize(guiXSize, guiYSize)
+                .setGuiPosition(guiLeft, guiTop)
+                .setTabPosition(176 - 107, 2)
+                .setOpenX(176)
+                .setHiddenX(54)
+                .setTabSize(128, 51)
+                .setTabTitle(I18n.format("gui.stargate.biome_overlay"))
+                .setTabSide(TabSideEnum.RIGHT)
+                .setTexture(BACKGROUND_TEXTURE, 512)
+                .setBackgroundTextureLocation(176+24, 113)
+                .setIconRenderPos(107, 6)
+                .setIconSize(22, 22)
+                .setIconTextureLocation(304, 22 * 3).build();
+    }
 
     private final StargateContainer container;
     private final List<Tab> tabs = new ArrayList<>();
@@ -103,7 +143,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
                 .setBackgroundTextureLocation(176, 0)
                 .setIconRenderPos(0, 6)
                 .setIconSize(22, 22)
-                .setIconTextureLocation(304, 18).build();
+                .setIconTextureLocation(304, 22).build();
 
         universeAddressTab = (TabAddress) TabAddress.builder()
                 .setGateTile(container.gateTile)
@@ -121,40 +161,11 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
                 .setBackgroundTextureLocation(176, 0)
                 .setIconRenderPos(0, 6)
                 .setIconSize(22, 22)
-                .setIconTextureLocation(304, 18 * 2).build();
+                .setIconTextureLocation(304, 22 * 2).build();
 
-        configTab = (TabConfig) TabConfig.builder()
-                .setConfig(container.gateTile.getConfig())
-                .setGuiSize(xSize, ySize)
-                .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(-21, 11 + 22 * 3)
-                .setOpenX(-128)
-                .setHiddenX(-6)
-                .setTabSize(128, 95)
-                .setTabTitle(I18n.format("gui.configuration"))
-                .setTabSide(TabSideEnum.LEFT)
-                .setTexture(BACKGROUND_TEXTURE, 512)
-                .setBackgroundTextureLocation(176, 165)
-                .setIconRenderPos(0, 6)
-                .setIconSize(22, 22)
-                .setIconTextureLocation(304, 91).build();
+        configTab = createConfigTab(container.gateTile.getConfig(), xSize, ySize, guiLeft, guiTop);
 
-        TabBiomeOverlay overlayTab = (TabBiomeOverlay) TabBiomeOverlay.builder()
-                .setSupportedOverlays(container.gateTile.getSupportedOverlays())
-                .setSlotTexture(6, 179)
-                .setGuiSize(xSize, ySize)
-                .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(176 - 107, 2)
-                .setOpenX(176)
-                .setHiddenX(54)
-                .setTabSize(128, 51)
-                .setTabTitle(I18n.format("gui.stargate.biome_overlay"))
-                .setTabSide(TabSideEnum.RIGHT)
-                .setTexture(BACKGROUND_TEXTURE, 512)
-                .setBackgroundTextureLocation(176, 113)
-                .setIconRenderPos(108, 6)
-                .setIconSize(22, 22)
-                .setIconTextureLocation(304, 54).build();
+        TabBiomeOverlay overlayTab = createOverlayTab(container.gateTile.getSupportedOverlays(), xSize, ySize, guiLeft, guiTop);
 
         irisTab = (TabIris) TabIris.builder()
                 .setCode(container.gateTile.getIrisCode())
@@ -168,25 +179,25 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
                 .setTabTitle(I18n.format("gui.stargate.iris_code"))
                 .setTabSide(TabSideEnum.RIGHT)
                 .setTexture(BACKGROUND_TEXTURE, 512)
-                .setBackgroundTextureLocation(176, 113)
-                .setIconRenderPos(108, 6)
+                .setBackgroundTextureLocation(176+24, 113)
+                .setIconRenderPos(107, 6)
                 .setIconSize(22, 22)
-                .setIconTextureLocation(304, 72).build();
+                .setIconTextureLocation(304, 22 * 4).build();
 
         infoTab = (TabInfo) TabInfo.builder()
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(176 - 107, 2 + 22 * 2)
+                .setTabPosition(176 - 131, 2 + 22 * 2)
                 .setOpenX(176)
-                .setHiddenX(54)
-                .setTabSize(128, 51)
+                .setHiddenX(30)
+                .setTabSize(152, 51)
                 .setTabTitle(I18n.format("gui.stargate.info"))
                 .setTabSide(TabSideEnum.RIGHT)
                 .setTexture(BACKGROUND_TEXTURE, 512)
                 .setBackgroundTextureLocation(176, 113)
-                .setIconRenderPos(108, 6)
+                .setIconRenderPos(131, 6)
                 .setIconSize(22, 22)
-                .setIconTextureLocation(304, 109).build();
+                .setIconTextureLocation(326, 88).build();
 
         irisTab.setOnTabClose(this::saveIrisCode);
         configTab.setOnTabClose(this::saveConfig);
@@ -216,8 +227,17 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
             String openedTime = I18n.format("gui.stargate.state.closed");
             if (openedSeconds > 0)
                 openedTime = I18n.format("gui.stargate.state.opened") + " " + container.gateTile.getOpenedSecondsToDisplayAsMinutes();
+            // gate temp
+            int gateTemperature = (int) Math.round(container.gateTile.gateHeat);
+            // iris temp
+            int irisTemperature = (int) Math.round(container.gateTile.irisHeat);
 
-            infoTab.clearStrings().addString(new TabInfo.InfoString(openedTime, 4, 24));
+
+            infoTab.clearStrings()
+                    .addString(new TabInfo.InfoString(openedTime, 4, 20))
+                    .addString(new TabInfo.InfoString(I18n.format("gui.stargate.state.gate_temp") + " " + gateTemperature + "\u00B0C", 4, 30));
+            if(irisTemperature != -1)
+                infoTab.addString(new TabInfo.InfoString(I18n.format("gui.stargate.state.iris_temp") + " " + irisTemperature + "\u00B0C", 4, 40));
         }
 
         drawDefaultBackground();
@@ -267,8 +287,10 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
         Tab.updatePositions(tabs);
 
         StargateClassicEnergyStorage energyStorageInternal = (StargateClassicEnergyStorage) container.gateTile.getCapability(CapabilityEnergy.ENERGY, null);
-        energyStored = energyStorageInternal.getEnergyStoredInternally();
-        maxEnergyStored = energyStorageInternal.getMaxEnergyStoredInternally();
+        if (energyStorageInternal != null) {
+            energyStored = energyStorageInternal.getEnergyStoredInternally();
+            maxEnergyStored = energyStorageInternal.getMaxEnergyStoredInternally();
+        }
 
         for (int i = 4; i < 7; i++) {
             IEnergyStorage energyStorage = container.getSlot(i).getStack().getCapability(CapabilityEnergy.ENERGY, null);
@@ -321,13 +343,13 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
         // Draw ancient title
         switch (container.gateTile.getSymbolType()) {
             case MILKYWAY:
-                drawModalRectWithCustomSizedTexture(guiLeft + 137, guiTop + 4, 330, 0, 34, 7, 512, 512);
+                drawModalRectWithCustomSizedTexture(guiLeft + 137, guiTop + 4, 330, 0, 35, 8, 512, 512);
                 break;
             case PEGASUS:
-                drawModalRectWithCustomSizedTexture(guiLeft + 137, guiTop + 4, 330, 18, 34, 7, 512, 512);
+                drawModalRectWithCustomSizedTexture(guiLeft + 137, guiTop + 4, 330, 18, 35, 8, 512, 512);
                 break;
             case UNIVERSE:
-                drawModalRectWithCustomSizedTexture(guiLeft + 137, guiTop + 4, 330, 36, 34, 7, 512, 512);
+                drawModalRectWithCustomSizedTexture(guiLeft + 137, guiTop + 4, 330, 36, 35, 8, 512, 512);
                 break;
             default:
                 break;

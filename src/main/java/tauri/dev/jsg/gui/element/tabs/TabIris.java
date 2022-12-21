@@ -157,8 +157,8 @@ public class TabIris extends Tab {
         return inputField.getText().length() > 0 ? Integer.parseInt(inputField.getText()) : -1;
     }
 
-    public void keyTyped(char typedChar, int keyCode) {
-        inputField.textboxKeyTyped(typedChar, keyCode);
+    public boolean keyTyped(char typedChar, int keyCode) {
+        return inputField.textboxKeyTyped(typedChar, keyCode);
     }
 
     private Runnable onTabClose = null;

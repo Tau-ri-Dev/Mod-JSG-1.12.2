@@ -671,6 +671,10 @@ gui.stargate.energyBuffer=Energy buffer
 
 gui.stargate.state.closed=Stargate closed!
 gui.stargate.state.opened=Open time:
+gui.stargate.state.gate_temp=Gate temp:
+gui.stargate.state.iris_temp=Iris temp:
+
+gui.stargate.info=Gate information
 
 # zpmhub
 gui.zpmhub.inProgress=ZPMs are not locked!
@@ -684,6 +688,8 @@ gui.capacitor.name=Capacitor Bank
 gui.transportrings.energyBuffer=Energy buffer
 gui.transportrings.ori_address=Ori address
 gui.transportrings.goauld_address=Goa'uld address
+gui.transportrings.ancient_address=Ancient address
+gui.transportrings.parameters=Parameters
 
 # beamer
 gui.beamer.name=Gate Beamer

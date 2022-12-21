@@ -41,6 +41,7 @@ import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.ingame.*;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
+import tauri.dev.jsg.config.stargate.StargateTimeLimitModeEnum;
 import tauri.dev.jsg.gui.container.stargate.StargateContainerGuiState;
 import tauri.dev.jsg.gui.container.stargate.StargateContainerGuiUpdate;
 import tauri.dev.jsg.item.JSGItems;
@@ -247,7 +248,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public boolean isGateBurried() {
-        if (JSGConfig.stargateConfig.bypassBurriedState) return false;
+        if (!getConfig().getOption(ENABLE_BURY_STATE.id).getBooleanValue()) return false;
         for (BlockPos targetPos : Objects.requireNonNull(StargateSizeEnum.getIrisBlocksPattern(getStargateSize()))) {
             BlockPos newPos = pos.add(targetPos.rotate(FacingToRotation.get(facing)));
             IBlockState state = world.getBlockState(newPos);
@@ -1026,7 +1027,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     protected JSGTileEntityConfig config = new JSGTileEntityConfig();
 
-    public enum ConfigOptions {
+    public enum ConfigOptions implements ITileConfigEntry {
         ALLOW_INCOMING(
                 0, "allowIncomingAnim", JSGConfigOptionTypeEnum.BOOLEAN, tauri.dev.jsg.config.JSGConfig.dialingConfig.allowIncomingAnimations + "",
                 "Enable incoming animation",
@@ -1055,11 +1056,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 "when dialing with OC"
         ),
         CAPACITORS_COUNT(
-                5, "maxCapacitors", JSGConfigOptionTypeEnum.NUMBER, tauri.dev.jsg.config.JSGConfig.powerConfig.universeCapacitors + "", 0, 3,
+                5, "maxCapacitors", JSGConfigOptionTypeEnum.NUMBER, "3", 0, 3,
                 "Specifies how many",
                 "capacitors can be installed",
-                "into this gate",
-                " - ONLY FOR UNI GATES NOW - "
+                "into this gate"
         ),
         PEG_DIAL_ANIMATION(
                 6, "pegDialAnim", JSGConfigOptionTypeEnum.BOOLEAN, tauri.dev.jsg.config.JSGConfig.dhdConfig.animatePegDHDDial + "",
@@ -1089,8 +1089,34 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     }
                 }},
                 "Override point of origin model",
-                " - ONLY FOR MW GATES NOW - "
-        );
+                " - ONLY FOR MW ADDRESS/GATE - "
+        ),
+        ENABLE_BURY_STATE(
+                9, "enableBuryState", JSGConfigOptionTypeEnum.BOOLEAN, JSGConfig.stargateConfig.enableBurriedState + "",
+                "Enable bury state for the gate?"
+        ),
+        TIME_LIMIT_MODE(
+                10, "timeLimitMode", JSGConfig.openLimitConfig.maxOpenedWhat.id + "",
+                new ArrayList<JSGConfigEnumEntry>() {{
+                    add(new JSGConfigEnumEntry(StargateTimeLimitModeEnum.DISABLED.name, StargateTimeLimitModeEnum.DISABLED.id + ""));
+                    add(new JSGConfigEnumEntry(StargateTimeLimitModeEnum.CLOSE_GATE.name, StargateTimeLimitModeEnum.CLOSE_GATE.id + ""));
+                    add(new JSGConfigEnumEntry(StargateTimeLimitModeEnum.DRAW_MORE_POWER.name, StargateTimeLimitModeEnum.DRAW_MORE_POWER.id + ""));
+                }},
+                "Gate open time limit mode"
+        ),
+        TIME_LIMIT_TIME(
+                11, "timeLimitTime", JSGConfigOptionTypeEnum.NUMBER, JSGConfig.openLimitConfig.maxOpenedSeconds + "",
+                0, -1,
+                "Seconds of gate's open time limit."
+        ),
+        TIME_LIMIT_POWER(
+                12, "timeLimitPower", JSGConfigOptionTypeEnum.NUMBER, JSGConfig.openLimitConfig.maxOpenedPowerDrawAfterLimit + "",
+                0, -1,
+                "Power draw when gate runs",
+                "out of open time limit.",
+                " - TIME LIMIT MODE MUST BE SET TO \"DRAW_POWER\" - "
+        )
+        ;
 
         public final int id;
         public final String label;
@@ -1120,6 +1146,46 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             this.maxInt = maxInt;
             this.comment = comment;
         }
+
+        @Override
+        public int getId() {
+            return id;
+        }
+
+        @Override
+        public String getLabel() {
+            return label;
+        }
+
+        @Override
+        public String[] getComment() {
+            return comment;
+        }
+
+        @Override
+        public JSGConfigOptionTypeEnum getType() {
+            return type;
+        }
+
+        @Override
+        public String getDefaultValue() {
+            return defaultValue;
+        }
+
+        @Override
+        public List<JSGConfigEnumEntry> getPossibleValues() {
+            return possibleValues;
+        }
+
+        @Override
+        public int getMin() {
+            return minInt;
+        }
+
+        @Override
+        public int getMax() {
+            return maxInt;
+        }
     }
 
     @Override
@@ -1137,30 +1203,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public void initConfig() {
-        if (getConfig().getOptions().size() != ConfigOptions.values().length) {
-            getConfig().clearOptions();
-            for (ConfigOptions option : ConfigOptions.values()) {
-                JSGConfigOption optionNew = new JSGConfigOption(option.id).setType(option.type);
-
-                if (option.type == JSGConfigOptionTypeEnum.SWITCH)
-                    optionNew.setPossibleValues(option.possibleValues);
-
-                optionNew.setLabel(option.label)
-                        .setValue(option.defaultValue)
-                        .setDefaultValue(option.defaultValue)
-                        .setMinInt(option.minInt)
-                        .setMaxInt(option.maxInt)
-                        .setComment(option.comment);
-
-                getConfig().addOption(optionNew);
-            }
-        }
-        // reset config option when array change (by config for example)
-        for (ConfigOptions option : ConfigOptions.values()) {
-            if (option.type != JSGConfigOptionTypeEnum.SWITCH) continue;
-            if (option.possibleValues.equals(getConfig().getOption(option.id).possibleValues)) continue;
-            getConfig().getOption(option.id).setPossibleValues(option.possibleValues).setDefaultValue(option.defaultValue).setValue(option.defaultValue);
-        }
+        JSGConfigOption o = getConfig().getOption(CAPACITORS_COUNT.id, true);
+        int caps = ((o == null || o.defaultValue.equals(o.getStringValue()) ? getDefaultCapacitors() : o.getIntValue()));
+        JSGTileEntityConfig.initConfig(getConfig(), ConfigOptions.values());
+        getConfig().getOption(CAPACITORS_COUNT.id).setDefaultValue(getDefaultCapacitors() + "").setValue(caps + "");
+        markDirty();
     }
 
 
@@ -1230,7 +1277,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 return new StargateContainerGuiState(gateAddressMap, getConfig());
 
             case GUI_UPDATE:
-                return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose, this.irisMode, this.irisCode, getOpenedSecondsToDisplay());
+                return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose, this.irisMode, this.irisCode, getOpenedSecondsToDisplay(), this.gateHeat, this.irisHeat);
 
             default:
                 return super.getState(stateType);
@@ -1328,6 +1375,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 irisMode = guiUpdate.irisMode;
                 irisCode = guiUpdate.irisCode;
                 secondsOpened = guiUpdate.openedSeconds;
+                gateHeat = guiUpdate.gateTemp;
+                irisHeat = guiUpdate.irisTemp;
                 break;
 
             case SPIN_STATE:
@@ -1445,9 +1494,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 		3- frosty - beta
 		4- aged - Abydos
 		 */
-        if(configOrigin >= 0) return configOrigin;
+        if (configOrigin >= 0) return configOrigin;
 
-        if(overlay == null) overlay = BiomeOverlayEnum.NORMAL;
+        if (overlay == null) overlay = BiomeOverlayEnum.NORMAL;
 
         int override = StargateDimensionConfig.getOrigin(DimensionManager.getProviderType(dimId), overlay);
         if (override >= 0)
@@ -1701,7 +1750,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     };
 
-    public abstract int getSupportedCapacitors();
+    public int getSupportedCapacitors(){
+        return getConfig().getOption(ConfigOptions.CAPACITORS_COUNT.id).getIntValue();
+    }
+
+    public abstract int getDefaultCapacitors();
 
 
     public enum StargateUpgradeEnum implements EnumKeyInterface<Item> {
@@ -1740,7 +1793,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         IRIS_UPGRADE_TRINIUM(JSGItems.UPGRADE_IRIS_TRINIUM),
         IRIS_UPGRADE_SHIELD(JSGItems.UPGRADE_SHIELD);
 
-        public Item item;
+        public final Item item;
 
         private StargateIrisUpgradeEnum(Item item) {
             this.item = item;

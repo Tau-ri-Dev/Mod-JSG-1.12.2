@@ -1,20 +1,6 @@
 package tauri.dev.jsg.gui.container.transportrings;
 
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.gui.element.tabs.*;
-import tauri.dev.jsg.gui.element.TextFieldLabel;
-import tauri.dev.jsg.gui.element.tabs.Tab.SlotTab;
-import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.packet.SetOpenTabToServer;
-import tauri.dev.jsg.packet.stargate.SaveConfigToServer;
-import tauri.dev.jsg.packet.transportrings.SaveRingsParametersToServer;
-import tauri.dev.jsg.stargate.power.StargateClassicEnergyStorage;
-import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
-import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -28,32 +14,40 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.SlotItemHandler;
 import org.lwjgl.input.Mouse;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.gui.element.tabs.*;
+import tauri.dev.jsg.gui.element.tabs.Tab.SlotTab;
+import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.packet.SetOpenTabToServer;
+import tauri.dev.jsg.packet.stargate.SaveConfigToServer;
+import tauri.dev.jsg.packet.transportrings.SaveRingsParametersToServer;
+import tauri.dev.jsg.stargate.power.StargateClassicEnergyStorage;
+import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
+import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static tauri.dev.jsg.gui.container.stargate.StargateContainerGui.createConfigTab;
 
 public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_transportrings.png");
-    private static final ResourceLocation BACKGROUND_TEXTURE_SG = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_stargate.png");
-    private final List<GuiTextField> textFields = new ArrayList<>();
-    private final List<TextFieldLabel> labels = new ArrayList<>();
     private final TRContainer container;
     private List<Tab> tabs;
     private TabTRAddress goauldAddressTab;
     private TabTRAddress oriAddressTab;
     private TabTRAddress ancientAddressTab;
     private TabConfig configTab;
+    private TabTRSettings settingsTab;
     private int energyStored;
     private int maxEnergyStored;
-    private GuiTextField nameTextField;
-    private GuiTextField distanceTextField;
-
-    private boolean keyTyped = false;
 
     private final BlockPos pos;
 
@@ -62,7 +56,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
         this.container = container;
 
         this.xSize = 176;
-        this.ySize = 168;
+        this.ySize = 173;
 
         this.pos = pos;
     }
@@ -71,7 +65,23 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
     public void initGui() {
         super.initGui();
 
-        tabs = new ArrayList<Tab>();
+        tabs = new ArrayList<>();
+
+        settingsTab = (TabTRSettings) TabTRSettings.builder()
+                .setParams(container.trTile.getRingsName(), container.trTile.getRingsDistance())
+                .setGuiSize(xSize, ySize)
+                .setGuiPosition(guiLeft, guiTop)
+                .setTabPosition(176 - 107, 2)
+                .setOpenX(176)
+                .setHiddenX(54)
+                .setTabSize(128, 68)
+                .setTabTitle(I18n.format("gui.transportrings.parameters"))
+                .setTabSide(TabSideEnum.RIGHT)
+                .setTexture(BACKGROUND_TEXTURE, 512)
+                .setBackgroundTextureLocation(176, 113)
+                .setIconRenderPos(107, 5)
+                .setIconSize(22, 22)
+                .setIconTextureLocation(304, 0).build();
 
         goauldAddressTab = (TabTRAddress) TabTRAddress.builder()
                 .setTile(container.trTile)
@@ -79,7 +89,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setProgressColor(0xE9A93A)
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(-21, 11)
+                .setTabPosition(-21, 11 + 22)
                 .setOpenX(-128)
                 .setHiddenX(-6)
                 .setTabSize(128, 113)
@@ -87,9 +97,9 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setTabSide(TabSideEnum.LEFT)
                 .setTexture(BACKGROUND_TEXTURE, 512)
                 .setBackgroundTextureLocation(176, 0)
-                .setIconRenderPos(1, 7)
-                .setIconSize(20, 18)
-                .setIconTextureLocation(304, 0).build();
+                .setIconRenderPos(0, 6)
+                .setIconSize(22, 22)
+                .setIconTextureLocation(304, 22).build();
 
         oriAddressTab = (TabTRAddress) TabTRAddress.builder()
                 .setTile(container.trTile)
@@ -97,7 +107,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setProgressColor(0x90E0F9)
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(-21, 11+22)
+                .setTabPosition(-21, 11 + 22 * 2)
                 .setOpenX(-128)
                 .setHiddenX(-6)
                 .setTabSize(128, 113)
@@ -105,9 +115,9 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setTabSide(TabSideEnum.LEFT)
                 .setTexture(BACKGROUND_TEXTURE, 512)
                 .setBackgroundTextureLocation(176, 0)
-                .setIconRenderPos(1, 7)
-                .setIconSize(20, 18)
-                .setIconTextureLocation(304, 18).build();
+                .setIconRenderPos(0, 6)
+                .setIconSize(22, 22)
+                .setIconTextureLocation(304, 22 * 2).build();
 
         ancientAddressTab = (TabTRAddress) TabTRAddress.builder()
                 .setTile(container.trTile)
@@ -115,7 +125,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setProgressColor(0x90E0F9)
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(-21, 11+(22*2))
+                .setTabPosition(-21, 11 + 22 * 3)
                 .setOpenX(-128)
                 .setHiddenX(-6)
                 .setTabSize(128, 113)
@@ -123,26 +133,13 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setTabSide(TabSideEnum.LEFT)
                 .setTexture(BACKGROUND_TEXTURE, 512)
                 .setBackgroundTextureLocation(176, 0)
-                .setIconRenderPos(1, 7)
-                .setIconSize(20, 18)
-                .setIconTextureLocation(304, 36).build();
+                .setIconRenderPos(0, 6)
+                .setIconSize(22, 22)
+                .setIconTextureLocation(304, 22 * 3).build();
 
-        configTab = (TabConfig) TabConfig.builder()
-                .setConfig(container.trTile.getConfig())
-                .setGuiSize(xSize, ySize)
-                .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(-21, 11+22*3)
-                .setOpenX(-128)
-                .setHiddenX(-6)
-                .setTabSize(128, 95)
-                .setTabTitle(I18n.format("gui.configuration"))
-                .setTabSide(TabSideEnum.LEFT)
-                .setTexture(BACKGROUND_TEXTURE_SG, 512)
-                .setBackgroundTextureLocation(176, 165)
-                .setIconRenderPos(1, 7)
-                .setIconSize(20, 18)
-                .setIconTextureLocation(304, 91).build();
+        configTab = createConfigTab(container.trTile.getConfig(), xSize, ySize, guiLeft, guiTop);
 
+        tabs.add(settingsTab);
         tabs.add(goauldAddressTab);
         tabs.add(oriAddressTab);
         tabs.add(ancientAddressTab);
@@ -155,45 +152,12 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
         container.inventorySlots.set(7, goauldAddressTab.createSlot((SlotItemHandler) container.getSlot(7)));
         container.inventorySlots.set(8, oriAddressTab.createSlot((SlotItemHandler) container.getSlot(8)));
         container.inventorySlots.set(9, ancientAddressTab.createSlot((SlotItemHandler) container.getSlot(9)));
-
-        textFields.clear();
-        int y = 14;
-        int id = 0;
-        nameTextField = new GuiTextField(++id,
-                Minecraft.getMinecraft().fontRenderer, 50, y + 10,
-                50, 10);
-        nameTextField.setText(container.trTile.getRingsName());
-        textFields.add(nameTextField);
-        labels.add(new TextFieldLabel(50, y + 2, "tile.jsg.transportrings_block.rings_name"));
-
-        y += 20;
-        distanceTextField = new GuiTextField(++id,
-                Minecraft.getMinecraft().fontRenderer, 50, y + 10,
-                50, 10);
-        distanceTextField.setText(container.trTile.getRingsDistance() + "");
-        textFields.add(distanceTextField);
-        labels.add(new TextFieldLabel(50, y + 2, "tile.jsg.transportrings_block.rings_distance"));
-    }
-
-    // todo(Mine): temporarily solution
-    public void tryToUpdateInputs(){
-        if(!keyTyped){
-            try {
-                String name = container.trTile.getRingsName();
-                int distance = container.trTile.getRingsDistance();
-                if (!(nameTextField.getText().equals(name)))
-                    nameTextField.setText(name);
-                if (Integer.parseInt(distanceTextField.getText()) != distance)
-                    distanceTextField.setText(distance + "");
-            }
-            catch (Exception ignored){}
-        }
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        settingsTab.setParams(container.trTile.getRingsName(), container.trTile.getRingsDistance());
         drawDefaultBackground();
-        tryToUpdateInputs();
 
         boolean hasGoauldUpgrade = false;
         boolean hasOriUpgrade = false;
@@ -226,7 +190,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
         Tab.updatePositions(tabs);
 
         StargateClassicEnergyStorage energyStorageInternal = (StargateClassicEnergyStorage) container.trTile.getCapability(CapabilityEnergy.ENERGY, null);
-        energyStored = energyStorageInternal.getEnergyStoredInternally();
+        energyStored = Objects.requireNonNull(energyStorageInternal).getEnergyStoredInternally();
         maxEnergyStored = energyStorageInternal.getMaxEnergyStoredInternally();
 
         for (int i = 4; i < 7; i++) {
@@ -250,7 +214,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        if(container.trTile.getConfig().getOptions().size() != configTab.getConfig(false).getOptions().size())
+        if (container.trTile.getConfig().getOptions().size() != configTab.getConfig(false).getOptions().size())
             configTab.updateConfig(container.trTile.getConfig(), true);
 
         for (Tab tab : tabs) {
@@ -263,14 +227,14 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
         // Draw cross on inactive capacitors
         for (int i = 0; i < 3 - container.trTile.getSupportedCapacitors(); i++) {
-            drawModalRectWithCustomSizedTexture(guiLeft + 151 - 18 * i, guiTop + 45, 24, 180, 16, 16, 512, 512);
+            drawModalRectWithCustomSizedTexture(guiLeft + 151 - 18 * i, guiTop + 27, 24, 180, 16, 16, 512, 512);
         }
 
         for (int i = container.trTile.getPowerTier(); i < 4; i++)
-            drawModalRectWithCustomSizedTexture(guiLeft + 10 + 39 * i, guiTop + 66, 0, 173, 39, 6, 512, 512);
+            drawModalRectWithCustomSizedTexture(guiLeft + 10 + 39 * i, guiTop + 69, 0, 173, 39, 6, 512, 512);
 
         int width = Math.round((energyStored / (float) JSGConfig.powerConfig.stargateEnergyStorage * 156));
-        drawGradientRect(guiLeft + 10, guiTop + 66, guiLeft + 10 + width, guiTop + 66 + 6, 0xffcc2828, 0xff731616);
+        drawGradientRect(guiLeft + 10, guiTop + 69, guiLeft + 10 + width, guiTop + 69 + 6, 0xffcc2828, 0xff731616);
 
         // Draw ancient title
         switch (container.trTile.getSymbolType()) {
@@ -298,17 +262,17 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 switch (i) {
                     // upgrades
                     case 0:
-                        drawModalRectWithCustomSizedTexture(guiLeft + 16, guiTop + 44, 18, 239, 48 - 17, 253 - 238, 512, 512);
+                        drawModalRectWithCustomSizedTexture(guiLeft + 16, guiTop + 44, 11, 239, 32 - 10, 254 - 238, 512, 512);
                         break;
                     case 1:
-                        drawModalRectWithCustomSizedTexture(guiLeft + 34, guiTop + 44, 3, 239, 15 - 2, 249 - 238, 512, 512);
+                        drawModalRectWithCustomSizedTexture(guiLeft + 34, guiTop + 44, 7, 237, 10 - 6, 246 - 236, 512, 512);
                         break;
                     case 2:
-                        drawModalRectWithCustomSizedTexture(guiLeft + 52, guiTop + 44, 0, 239, 2, 6, 512, 512);
+                        drawModalRectWithCustomSizedTexture(guiLeft + 50, guiTop + 44, 2, 237, 5 - 1, 246 - 236, 512, 512);
                         break;
                     case 3:
                         drawICSecondCable = true;
-                        drawModalRectWithCustomSizedTexture(guiLeft + 59, guiTop + 44, 33, 254, 45 - 32, 264 - 253, 512, 512);
+                        drawModalRectWithCustomSizedTexture(guiLeft + 50, guiTop + 44, 0, 255, 22, 270 - 254, 512, 512);
                         break;
 
                     // capacitors
@@ -327,29 +291,23 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
             }
         }
 
-        // render cables from 1. IC to power line
+        // render cable from 1. IC to power line
         if (drawICFirstCable)
-            drawModalRectWithCustomSizedTexture(guiLeft + 50, guiTop + 62, 0, 239, 2, 6, 512, 512);
+            drawModalRectWithCustomSizedTexture(guiLeft + 41, guiTop + 62, 0, 239, 2, 6, 512, 512);
         if (drawICSecondCable)
-            drawModalRectWithCustomSizedTexture(guiLeft + 54, guiTop + 62, 0, 239, 2, 6, 512, 512);
+            drawModalRectWithCustomSizedTexture(guiLeft + 45, guiTop + 62, 0, 239, 2, 6, 512, 512);
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         String caps = I18n.format("gui.stargate.capacitors");
-        fontRenderer.drawString(caps, this.xSize - 8 - fontRenderer.getStringWidth(caps), 34, 4210752);
+        fontRenderer.drawString(caps, this.xSize - 8 - fontRenderer.getStringWidth(caps), 16, 4210752);
 
         String energyPercent = String.format("%.2f", energyStored / (float) maxEnergyStored * 100) + " %";
-        fontRenderer.drawString(energyPercent, this.xSize - 8 - fontRenderer.getStringWidth(energyPercent), 76, 4210752);
+        fontRenderer.drawString(energyPercent, this.xSize - 8 - fontRenderer.getStringWidth(energyPercent), 79, 4210752);
 
-        fontRenderer.drawString(I18n.format("gui.upgrades"), 8, 34, 4210752);
+        fontRenderer.drawString(I18n.format("gui.upgrades"), 8, 16, 4210752);
         fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
-
-        for (TextFieldLabel label : labels)
-            fontRenderer.drawString(I18n.format(label.localized), label.x, label.y, 4210752);
-
-        for (GuiTextField tf : textFields)
-            tf.drawTextBox();
 
         for (Tab tab : tabs) {
             tab.renderFg(this, fontRenderer, mouseX, mouseY);
@@ -366,7 +324,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
             transferredFormatting = TextFormatting.RED;
         }
 
-        if (isPointInRegion(10, 66, 156, 6, mouseX, mouseY)) {
+        if (isPointInRegion(10, 69, 156, 6, mouseX, mouseY)) {
             List<String> power = Arrays.asList(
                     I18n.format("gui.transportrings.energyBuffer"),
                     TextFormatting.GRAY + String.format("%,d / %,d RF", energyStored, maxEnergyStored),
@@ -378,9 +336,6 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
-
-        for (GuiTextField tf : textFields)
-            tf.mouseClicked(mouseX - guiLeft, mouseY - guiTop, mouseButton);
 
         for (int i = 0; i < tabs.size(); i++) {
             Tab tab = tabs.get(i);
@@ -396,8 +351,8 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 break;
             }
         }
-        for(Tab tab : tabs){
-            if(tab.isOpen() && tab.isVisible()){
+        for (Tab tab : tabs) {
+            if (tab.isOpen() && tab.isVisible()) {
                 tab.mouseClicked(mouseX, mouseY, mouseButton);
             }
         }
@@ -409,8 +364,8 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
         int wheel = Mouse.getEventDWheel();
 
         if (wheel != 0) {
-            for(Tab tab : tabs){
-                if(tab instanceof TabScrollAble && tab.isVisible() && tab.isOpen()){
+            for (Tab tab : tabs) {
+                if (tab instanceof TabScrollAble && tab.isVisible() && tab.isOpen()) {
                     ((TabScrollAble) tab).scroll(wheel);
                 }
             }
@@ -426,25 +381,22 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if(keyCode == 1 || mc.gameSettings.keyBindInventory.isActiveAndMatches(keyCode))
-            super.keyTyped(typedChar, keyCode);
-        for (GuiTextField tf : textFields) {
-            if(tf.textboxKeyTyped(typedChar, keyCode))
-                keyTyped = true;
-        }
-        for(Tab tab : tabs){
-            if(tab.isOpen() && tab.isVisible()){
-                tab.keyTyped(typedChar, keyCode);
+        boolean typed = false;
+        for (Tab tab : tabs) {
+            if (tab.isOpen() && tab.isVisible()) {
+                if(tab.keyTyped(typedChar, keyCode))
+                    typed = true;
             }
         }
+        if (!typed || keyCode == 1)
+            super.keyTyped(typedChar, keyCode);
     }
 
     @Override
     public void updateScreen() {
         super.updateScreen();
-
-        for (GuiTextField tf : textFields)
-            tf.updateCursorCounter();
+        for (Tab t : tabs)
+            t.updateScreen();
     }
 
     @Override
@@ -454,7 +406,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
         super.onGuiClosed();
     }
 
-    private void saveConfig(){
+    private void saveConfig() {
         JSGPacketHandler.INSTANCE.sendToServer(new SaveConfigToServer(pos, configTab.config));
         container.trTile.setConfig(configTab.getConfig(true));
     }
@@ -462,9 +414,9 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
     public void saveData() {
         EntityPlayer player = Minecraft.getMinecraft().player;
         try {
-            String name = nameTextField.getText();
+            String name = settingsTab.nameTextField.getText();
             try {
-                int distance = Integer.parseInt(distanceTextField.getText());
+                int distance = Integer.parseInt(settingsTab.distanceTextField.getText());
 
                 if (distance >= -40 && distance <= 40) {
                     JSGPacketHandler.INSTANCE.sendToServer(new SaveRingsParametersToServer(pos, name, distance));

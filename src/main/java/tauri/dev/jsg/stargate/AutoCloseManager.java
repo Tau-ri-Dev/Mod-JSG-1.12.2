@@ -73,10 +73,6 @@ public class AutoCloseManager implements INBTSerializable<NBTTagCompound> {
 		return false;
 	}
 
-	public boolean afterLimitSeconds(){
-		return secondsOpened >= JSGConfig.openLimitConfig.maxOpenedSeconds;
-	}
-
 	public void addLimitSecond(){
 		if (gateTile.getWorld().getTotalWorldTime() % 20 == 0)
 			secondsOpened++;

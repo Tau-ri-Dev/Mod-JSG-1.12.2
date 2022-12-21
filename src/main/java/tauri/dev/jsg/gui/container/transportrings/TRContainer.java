@@ -23,12 +23,15 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 public class TRContainer extends Container implements OpenTabHolderInterface {
 
     public TransportRingsAbstractTile trTile;
     public boolean isOperator;
 
-    private BlockPos pos;
+    private final BlockPos pos;
     private int lastEnergyStored;
     private int energyTransferedLastTick;
     private int ringsDistance;
@@ -50,20 +53,18 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
         this.isOperator = isOperator;
         pos = new BlockPos(x, y, z);
         trTile = (TransportRingsAbstractTile) world.getTileEntity(pos);
-        IItemHandler itemHandler = trTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+        IItemHandler itemHandler = Objects.requireNonNull(trTile).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
         // Upgrades 2x2 (index 0-3)
-        for (int row = 0; row < 2; row++) {
-            for (int col = 0; col < 2; col++) {
-                addSlotToContainer(new SlotItemHandler(itemHandler, row * 2 + col, 9 + 18 * col, 18 + 18 * row));
-            }
+        for (int col = 0; col < 4; col++) {
+            addSlotToContainer(new SlotItemHandler(itemHandler, col, 9 + 18 * col, 27));
         }
 
         // Capacitors 1x3 (index 4-6)
         for (int col = 0; col < 3; col++) {
             final int capacitorIndex = col;
 
-            addSlotToContainer(new SlotItemHandler(itemHandler, col + 4, 115 + 18 * col, 40) {
+            addSlotToContainer(new SlotItemHandler(itemHandler, col + 4, 115 + 18 * col, 27) {
                 @Override
                 public boolean isEnabled() {
                     // getHasStack() is a compatibility thing for when players already had their capacitors in the gate.
@@ -76,12 +77,12 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
         for (int i = 0; i < 3; i++) {
             addSlotToContainer(new SlotItemHandler(itemHandler, i + 7, -22, 89 + 22 * i));
         }
-        for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 86))
+        for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 91))
             addSlotToContainer(slot);
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer playerIn) {
+    public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
         return true;
     }
 
@@ -90,11 +91,12 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
         trTile.setPageProgress(data);
     }
 
+    @Nonnull
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int index) {
+    public ItemStack transferStackInSlot(@Nonnull EntityPlayer player, int index) {
         ItemStack stack = getSlot(index).getStack();
 
-        // Transfering from Stargate to player's inventory
+        // Transferring from Stargate to player's inventory
         if (index < trTile.getSlotsCount()) {
             if (!mergeItemStack(stack, trTile.getSlotsCount(), inventorySlots.size(), false)) {
                 return ItemStack.EMPTY;
@@ -103,7 +105,7 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
             putStackInSlot(index, ItemStack.EMPTY);
         }
 
-        // Transfering from player's inventory to Stargate
+        // Transferring from player's inventory to Stargate
         else {
             // Capacitors
             if (stack.getItem() == Item.getItemFromBlock(JSGBlocks.CAPACITOR_BLOCK)) {
@@ -154,7 +156,7 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
 
         StargateClassicEnergyStorage energyStorage = (StargateClassicEnergyStorage) trTile.getCapability(CapabilityEnergy.ENERGY, null);
 
-        if (lastEnergyStored != energyStorage.getEnergyStoredInternally()
+        if (lastEnergyStored != Objects.requireNonNull(energyStorage).getEnergyStoredInternally()
                 || energyTransferedLastTick != trTile.getEnergyTransferedLastTick()
                 || ringsName == null
                 || !(ringsName.equals(trTile.getRings().getName()))
@@ -182,7 +184,7 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
     }
 
     @Override
-    public void addListener(IContainerListener listener) {
+    public void addListener(@Nonnull IContainerListener listener) {
         super.addListener(listener);
 
         if (listener instanceof EntityPlayerMP){

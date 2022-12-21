@@ -209,10 +209,15 @@ public abstract class Tab {
 		return new Rectangle(guiLeft+xSize, guiTop+defaultY, width+currentOffsetX-xSize, tabHeight);
 	}
 
-	public void keyTyped(char typedChar, int keyCode) {
+	public boolean keyTyped(char typedChar, int keyCode) {
+		return false;
 	}
 
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+	}
+
+	public void updateScreen() {
+
 	}
 		
 	// ------------------------------------------------------------------------------------------------

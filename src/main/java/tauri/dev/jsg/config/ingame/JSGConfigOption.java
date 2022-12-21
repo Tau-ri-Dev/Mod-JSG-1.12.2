@@ -85,6 +85,16 @@ public class JSGConfigOption {
         return this;
     }
 
+    protected String getDefaultValueToDisplay(){
+        if(this.type == JSGConfigOptionTypeEnum.SWITCH) {
+            try {
+                return possibleValues.get(Integer.parseInt(defaultValue)).name;
+            }
+            catch (Exception ignored){}
+        }
+        return defaultValue;
+    }
+
     public List<String> getCommentToRender() {
         List<String> c = new ArrayList<>(getComment());
         c.add("---------------------------------");
@@ -92,7 +102,7 @@ public class JSGConfigOption {
             c.add("Min: " + minInt);
         if (maxInt != -1)
             c.add("Max: " + maxInt);
-        c.add("Default: " + defaultValue);
+        c.add("Default: " + getDefaultValueToDisplay());
         c.add("---------------------------------");
         return c;
     }

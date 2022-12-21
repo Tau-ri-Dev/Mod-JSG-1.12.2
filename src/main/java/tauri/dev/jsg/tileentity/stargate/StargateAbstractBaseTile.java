@@ -1090,16 +1090,28 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         getAutoCloseManager().resetLimitSeconds();
     }
 
+    public void clearDHDSymbols(){}
+
     protected int doTimeLimitFunc() {
         int morePower = 0;
         getOpenedSeconds();
         addTimeLimitSecond();
-        int configPower = tauri.dev.jsg.config.JSGConfig.openLimitConfig.maxOpenedPowerDrawAfterLimit;
-        if (tauri.dev.jsg.config.JSGConfig.openLimitConfig.maxOpenedEnabled && getAutoCloseManager().afterLimitSeconds()) {
-            if (tauri.dev.jsg.config.JSGConfig.openLimitConfig.maxOpenedWhat == StargateTimeLimitModeEnum.CLOSE_GATE) {
+        int configPower = JSGConfig.openLimitConfig.maxOpenedPowerDrawAfterLimit;
+        int maxSeconds = JSGConfig.openLimitConfig.maxOpenedSeconds;
+        StargateTimeLimitModeEnum limitMode = JSGConfig.openLimitConfig.maxOpenedWhat;
+
+        if(this instanceof StargateClassicBaseTile){
+            StargateClassicBaseTile casted = ((StargateClassicBaseTile) this);
+            limitMode = StargateTimeLimitModeEnum.byId(casted.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.TIME_LIMIT_MODE.id).getEnumValue().getIntValue());
+            configPower = casted.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.TIME_LIMIT_POWER.id).getIntValue();
+            maxSeconds = casted.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.TIME_LIMIT_TIME.id).getIntValue();
+        }
+        boolean enabled = (limitMode != StargateTimeLimitModeEnum.DISABLED);
+
+        if (enabled && (getAutoCloseManager().getOpenedSeconds() >= maxSeconds)) {
+            if (limitMode == StargateTimeLimitModeEnum.CLOSE_GATE) {
                 attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
-                if (this instanceof StargatePegasusBaseTile) ((StargatePegasusBaseTile) this).clearDHDSymbols();
-                if (this instanceof StargateMilkyWayBaseTile) ((StargateMilkyWayBaseTile) this).clearDHDSymbols();
+                clearDHDSymbols();
                 resetLimitSeconds();
             } else
                 morePower = (configPower + (getOpenedSeconds() * (configPower / 100)));

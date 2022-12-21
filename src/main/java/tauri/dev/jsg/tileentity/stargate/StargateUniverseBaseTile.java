@@ -665,8 +665,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     }
 
     @Override
-    public int getSupportedCapacitors() {
-        return getConfig().getOption(ConfigOptions.CAPACITORS_COUNT.id).getIntValue();
+    public int getDefaultCapacitors() {
+        return JSGConfig.powerConfig.universeCapacitors;
     }
 
 

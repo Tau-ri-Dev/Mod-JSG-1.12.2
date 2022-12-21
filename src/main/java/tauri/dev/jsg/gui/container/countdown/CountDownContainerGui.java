@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.input.Mouse;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.gui.container.stargate.StargateContainerGui;
 import tauri.dev.jsg.gui.element.ArrowButton;
 import tauri.dev.jsg.gui.element.tabs.*;
 import tauri.dev.jsg.packet.JSGPacketHandler;
@@ -20,9 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static tauri.dev.jsg.gui.container.stargate.StargateContainerGui.createConfigTab;
+
 public class CountDownContainerGui extends GuiContainer implements TabbedContainerInterface {
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_only_inv.png");
-    private static final ResourceLocation BACKGROUND_TEXTURE_SG = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_stargate.png");
 
     private TabConfig configTab;
     private List<Tab> tabs;
@@ -46,21 +48,7 @@ public class CountDownContainerGui extends GuiContainer implements TabbedContain
 
         tabs = new ArrayList<>();
 
-        configTab = (TabConfig) TabConfig.builder()
-                .setConfig(container.tile.getConfig())
-                .setGuiSize(xSize, ySize)
-                .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(-21, 2)
-                .setOpenX(-128)
-                .setHiddenX(-6)
-                .setTabSize(128, 95)
-                .setTabTitle(I18n.format("gui.configuration"))
-                .setTabSide(TabSideEnum.LEFT)
-                .setTexture(BACKGROUND_TEXTURE_SG, 512)
-                .setBackgroundTextureLocation(176, 165)
-                .setIconRenderPos(1, 7)
-                .setIconSize(20, 18)
-                .setIconTextureLocation(304, 91).build();
+        configTab = createConfigTab(container.tile.getConfig(), xSize, ySize, guiLeft, guiTop);
 
         tabs.add(configTab);
 

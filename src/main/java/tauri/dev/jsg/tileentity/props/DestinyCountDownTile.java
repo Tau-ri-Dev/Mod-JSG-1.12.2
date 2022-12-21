@@ -13,7 +13,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -23,7 +22,6 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.ingame.*;
-import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.gui.container.countdown.CountDownContainerGuiUpdate;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
@@ -34,7 +32,6 @@ import tauri.dev.jsg.stargate.EnumStargateState;
 import tauri.dev.jsg.stargate.NearbyGate;
 import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
 import tauri.dev.jsg.stargate.network.StargateAddress;
-import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateProviderInterface;
 import tauri.dev.jsg.state.StateTypeEnum;
@@ -45,7 +42,6 @@ import tauri.dev.jsg.util.LinkingHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.List;
 
 import static tauri.dev.jsg.sound.JSGSoundHelper.playSoundEvent;
@@ -129,7 +125,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                         EnumStargateState state = gate.getStargateState();
                         if (state.idle() && gate.isMerged()) {
                             NearbyGate found = gate.getRandomNearbyGate();
-                            if(found != null) {
+                            if (found != null) {
                                 StargateAddress foundAddress = found.address;
                                 int symbols = (found.symbolsNeeded - 1);
                                 if (foundAddress != null) {
@@ -357,7 +353,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
         if (closestUnlinked != null) {
             StargateUniverseBaseTile stargateUniverseBaseTile = (StargateUniverseBaseTile) world.getTileEntity(closestUnlinked);
             if (stargateUniverseBaseTile != null) {
-                if(!getConfig().getOption(ENABLE_GATE_LINK.id).getBooleanValue()){
+                if (!getConfig().getOption(ENABLE_GATE_LINK.id).getBooleanValue()) {
                     setLinkedGate(null, -1);
                     stargateUniverseBaseTile.setLinkedCountdown(null, -1);
                     return;
@@ -367,7 +363,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                 markDirty();
             }
         }
-        if(!getConfig().getOption(ENABLE_GATE_LINK.id).getBooleanValue()){
+        if (!getConfig().getOption(ENABLE_GATE_LINK.id).getBooleanValue()) {
             setLinkedGate(null, -1);
         }
     }
@@ -389,7 +385,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
 
     protected JSGTileEntityConfig config = new JSGTileEntityConfig();
 
-    public enum ConfigOptions {
+    public enum ConfigOptions implements ITileConfigEntry {
         ENABLE_GATE_LINK(
                 0, "enableGateLink", JSGConfigOptionTypeEnum.BOOLEAN, "true",
                 "Enable linking to a universe gate?"
@@ -419,12 +415,6 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
         public final int minInt;
         public final int maxInt;
 
-
-        ConfigOptions(int optionId, String label, String defaultValue, List<JSGConfigEnumEntry> possibleValues, String... comment) {
-            this(optionId, label, JSGConfigOptionTypeEnum.SWITCH, defaultValue, -1, -1, comment);
-            this.possibleValues = possibleValues;
-        }
-
         ConfigOptions(int optionId, String label, JSGConfigOptionTypeEnum type, String defaultValue, String... comment) {
             this(optionId, label, type, defaultValue, -1, -1, comment);
         }
@@ -437,6 +427,46 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
             this.minInt = minInt;
             this.maxInt = maxInt;
             this.comment = comment;
+        }
+
+        @Override
+        public int getId() {
+            return id;
+        }
+
+        @Override
+        public String getLabel() {
+            return label;
+        }
+
+        @Override
+        public String[] getComment() {
+            return comment;
+        }
+
+        @Override
+        public JSGConfigOptionTypeEnum getType() {
+            return type;
+        }
+
+        @Override
+        public String getDefaultValue() {
+            return defaultValue;
+        }
+
+        @Override
+        public List<JSGConfigEnumEntry> getPossibleValues() {
+            return possibleValues;
+        }
+
+        @Override
+        public int getMin() {
+            return minInt;
+        }
+
+        @Override
+        public int getMax() {
+            return maxInt;
         }
     }
 
@@ -456,24 +486,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
 
     @Override
     public void initConfig() {
-        if (getConfig().getOptions().size() != DestinyCountDownTile.ConfigOptions.values().length) {
-            getConfig().clearOptions();
-            for (DestinyCountDownTile.ConfigOptions option : DestinyCountDownTile.ConfigOptions.values()) {
-                JSGConfigOption optionNew = new JSGConfigOption(option.id).setType(option.type);
-
-                if(option.type == JSGConfigOptionTypeEnum.SWITCH)
-                    optionNew.setPossibleValues(option.possibleValues);
-
-                optionNew.setLabel(option.label)
-                        .setValue(option.defaultValue)
-                        .setDefaultValue(option.defaultValue)
-                        .setMinInt(option.minInt)
-                        .setMaxInt(option.maxInt)
-                        .setComment(option.comment);
-
-                getConfig().addOption(optionNew);
-            }
-        }
+        JSGTileEntityConfig.initConfig(getConfig(), ConfigOptions.values());
     }
 
 

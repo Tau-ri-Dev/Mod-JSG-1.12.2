@@ -30,6 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static tauri.dev.jsg.gui.container.stargate.StargateContainerGui.BACKGROUND_TEXTURE;
+import static tauri.dev.jsg.gui.container.stargate.StargateContainerGui.createOverlayTab;
+
 public abstract class DHDAbstractContainerGui extends GuiContainer implements TabbedContainerInterface {
     private final DHDAbstractContainer container;
     private final FluidTankElement tank;
@@ -92,22 +95,7 @@ public abstract class DHDAbstractContainerGui extends GuiContainer implements Ta
 
         tabs.clear();
 
-        TabBiomeOverlay overlayTab = (TabBiomeOverlay) TabBiomeOverlay.builder()
-                .setSupportedOverlays(container.dhdTile.getSupportedOverlays())
-                .setSlotTexture(176, 86)
-                .setGuiSize(xSize, ySize)
-                .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(176 - 107, 2)
-                .setOpenX(176)
-                .setHiddenX(54)
-                .setTabSize(128, 51)
-                .setTabTitle(I18n.format("gui.stargate.biome_overlay"))
-                .setTabSide(TabSideEnum.RIGHT)
-                .setTexture(getBackgroundTexture(), 256)
-                .setBackgroundTextureLocation(0, 200)
-                .setIconRenderPos(107, 7)
-                .setIconSize(20, 18)
-                .setIconTextureLocation(176, 104).build();
+        TabBiomeOverlay overlayTab = createOverlayTab(container.dhdTile.getSupportedOverlays(), xSize, ySize, guiLeft, guiTop);
 
         tabs.add(overlayTab);
 

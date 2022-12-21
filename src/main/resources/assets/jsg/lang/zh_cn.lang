@@ -663,6 +663,10 @@ gui.stargate.energyBuffer=能量缓冲计术
 
 gui.stargate.state.closed=Stargate closed!
 gui.stargate.state.opened=Open time:
+gui.stargate.state.gate_temp=Gate temp:
+gui.stargate.state.iris_temp=Iris temp:
+
+gui.stargate.info=Gate information
 
 # zpmhub
 gui.zpmhub.inProgress=ZPMs are not locked!
@@ -670,12 +674,14 @@ gui.zpmhub.slideDown=Engage ZPMs
 gui.zpmhub.slideUp=Disengage ZPMs
 
 # capacitor
-gui.capacitor.name=Capacitor Bank
+gui.capacitor.name=電容器組
 
 # rings
-gui.transportrings.energyBuffer=Energy buffer
-gui.transportrings.ori_address=Ori address
-gui.transportrings.goauld_address=Goa'uld address
+gui.transportrings.energyBuffer=能量緩衝器
+gui.transportrings.ori_address=原地址
+gui.transportrings.goauld_address=目標地址
+gui.transportrings.ancient_address=古地址
+gui.transportrings.parameters=參數
 
 # beamer
 gui.beamer.name=Gate Beamer

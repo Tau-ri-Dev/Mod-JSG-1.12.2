@@ -100,8 +100,11 @@ public class JSGConfig {
     public static DevConfig devConfig = new DevConfig();
 
     public static class StargateConfig {
-        @Name("Disable burried state for gates")
-        public boolean bypassBurriedState = false;
+        @Name("Enable burried state for gates")
+        @Comment({
+                "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
+        })
+        public boolean enableBurriedState = true;
 
         @Name("Orlin's gate max open count")
         @RangeInt(min = 0)
@@ -609,11 +612,11 @@ public class JSGConfig {
         @RangeInt(min = 5, max = 3000)
         public int maxOpenedSeconds = 240;
 
-        @Name("What happens after the open time reach this time")
+        @Name("Gate open time limit mode")
+        @Comment({
+                "What happens after gate's open time reaches limit?"
+        })
         public StargateTimeLimitModeEnum maxOpenedWhat = StargateTimeLimitModeEnum.DRAW_MORE_POWER;
-
-        @Name("Enable max open time?")
-        public boolean maxOpenedEnabled = true;
 
         @Name("Power draw after opened time limit")
         @RangeInt(min = 0, max = 50000)
