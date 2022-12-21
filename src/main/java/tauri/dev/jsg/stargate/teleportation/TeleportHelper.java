@@ -20,6 +20,7 @@ import net.minecraftforge.common.util.ITeleporter;
 
 import javax.vecmath.Vector2f;
 import java.util.List;
+import java.util.Objects;
 
 public class TeleportHelper {
 	
@@ -106,7 +107,7 @@ public class TeleportHelper {
 		else
 			flipAxis |= EnumFlipAxis.Z.mask;
 		
-		Vec3d pos = null;
+		Vec3d pos;
 		BlockPos tPos = targetGatePos.gatePos;
 		
 		if (sourceTile instanceof StargateOrlinBaseTile)
@@ -116,9 +117,9 @@ public class TeleportHelper {
 		else
 			pos = getPosition(entity, sourceTile.getGateCenterPos(), targetTile.getGateCenterPos(), rotation, targetTile.getFacing().getAxis()==Axis.Z ? ~flipAxis : flipAxis);
 
-		pos = plusOneBlock(targetTile.getFacing() ,pos);
+		//pos = plusOneBlock(targetTile.getFacing() ,pos);
 		
-		final float yawRotated = getRotation(entity.isBeingRidden() ? entity.getControllingPassenger() : entity, rotation, flipAxis);
+		final float yawRotated = getRotation(entity.isBeingRidden() ? Objects.requireNonNull(entity.getControllingPassenger()) : entity, rotation, flipAxis);
 		boolean isPlayer = entity instanceof EntityPlayerMP;
 				
 		if (sourceDim == targetGatePos.dimensionID) {
@@ -130,17 +131,11 @@ public class TeleportHelper {
 			
 			final Vec3d posFinal = pos;
 			
-			ITeleporter teleporter = new ITeleporter() {
-				
-				@Override
-				public void placeEntity(World world, Entity entity, float yaw) {
-					setRotationAndPosition(entity, yawRotated, posFinal);
-				}
-			};
+			ITeleporter teleporter = (world1, entity1, yaw) -> setRotationAndPosition(entity1, yawRotated, posFinal);
 			
 			if (isPlayer) {
 				EntityPlayerMP player = (EntityPlayerMP) entity;
-				player.getServer().getPlayerList().transferPlayerToDimension(player, targetGatePos.dimensionID, teleporter);
+				Objects.requireNonNull(player.getServer()).getPlayerList().transferPlayerToDimension(player, targetGatePos.dimensionID, teleporter);
 			}
 			
 			else {			
@@ -167,6 +162,7 @@ public class TeleportHelper {
 	 * @param pos position of teleported player -> after teleport
 	 * @return Vec3d
 	 */
+	@Deprecated
 	public static Vec3d plusOneBlock(EnumFacing gateRotation, Vec3d pos){
 		float k = 1.5f;
 

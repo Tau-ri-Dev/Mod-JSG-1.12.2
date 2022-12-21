@@ -8,6 +8,7 @@ import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.loader.model.ModelLoader;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -113,41 +114,6 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
         return getEnglishName();
     }
 
-    public static int getOriginId(BiomeOverlayEnum overlay, int dimId, int configOrigin) {
-		/*
-		IDS:
-		5/0- normal - overworld
-		0- mossy - unknown
-		0- aged - unknown
-		1- end - tornado
-		2- sooty - nether
-		3- frosty - beta
-		4- aged - Abydos
-		 */
-        if(configOrigin >= 0) return configOrigin;
-
-        if(overlay == null) overlay = BiomeOverlayEnum.NORMAL;
-
-        int override = StargateDimensionConfig.getOrigin(DimensionManager.getProviderType(dimId), overlay);
-        if (override >= 0)
-            return override;
-
-        switch (overlay) {
-            case FROST:
-                return 3;
-            case AGED:
-                return 4;
-            case SOOTY:
-                return 2;
-            case NORMAL:
-                if (dimId == 0) return 5;
-                return 0;
-            default:
-                break;
-        }
-        return 0;
-    }
-
     private static final int DEFAULT_ORIGIN_ID = 5;
 
     @Override
@@ -163,7 +129,7 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
     @Override
     public ResourceLocation getIconResource(BiomeOverlayEnum overlay, int dimensionId, int configOrigin) {
         if (this == ORIGIN)
-            return getIconResource(getOriginId(overlay, dimensionId, configOrigin));
+            return getIconResource(StargateClassicBaseTile.getOriginId(overlay, dimensionId, configOrigin));
         return iconResource;
     }
 
@@ -179,7 +145,7 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
         ResourceLocation modelResource;
         if (this == ORIGIN) {
             if (!notFound && JSGConfig.originsConfig.enableDiffOrigins)
-                modelResource = ModelLoader.getModelResource("milkyway/" + (!forDHD ? "ring/" : "") + "origin_" + getOriginId(overlay, dimensionId, configOrigin) + (lightModel ? "_light" : "") + ".obj");
+                modelResource = ModelLoader.getModelResource("milkyway/" + (!forDHD ? "ring/" : "") + "origin_" + StargateClassicBaseTile.getOriginId(overlay, dimensionId, configOrigin) + (lightModel ? "_light" : "") + ".obj");
             else
                 modelResource = ModelLoader.getModelResource("milkyway/" + (!forDHD ? "ring/" : "") + "origin_" + DEFAULT_ORIGIN_ID + (lightModel ? "_light" : "") + ".obj");
 

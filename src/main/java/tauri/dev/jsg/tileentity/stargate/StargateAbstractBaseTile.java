@@ -5,6 +5,7 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.*;
+import net.minecraft.util.math.Vec3i;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.api.event.*;
 import tauri.dev.jsg.block.JSGBlocks;
@@ -920,6 +921,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
             }
 
+            updatePassedEntities();
+
             // Event horizon teleportation
             if (stargateState.initiating()) {
                 eventHorizon.scheduleTeleportation(targetGatePos, true);
@@ -1352,13 +1355,43 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     // ------------------------------------------------------------------------
     // AutoClose
 
+    // Last entities that were going through the gate
+    // This prevents to kill entity on destination by "Wrong Side Kill" method
+    public final HashMap<Integer, Entity> entitiesPassedLast = new HashMap<>();
+
+    public void updatePassedEntities(){
+        if(!stargateState.engaged()){
+            if(entitiesPassedLast.size() > 0)
+                entitiesPassedLast.clear();
+            markDirty();
+            return;
+        }
+
+        AxisAlignedBB scanBox = new AxisAlignedBB(getGateCenterPos().add(new Vec3i(-5, -5, -5)), getGateCenterPos().add(new Vec3i(5, 5, 5)));
+        List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, scanBox);
+        List<Integer> ids = new ArrayList<Integer>(){{
+            for(Entity e : entities)
+                add(e.getEntityId());
+        }};
+        HashMap<Integer, Entity> clonedEntitiesLast = new HashMap<Integer, Entity>(){{
+            putAll(entitiesPassedLast);
+        }};
+        for(int i : clonedEntitiesLast.keySet()){
+            if(!ids.contains(i))
+                entitiesPassedLast.remove(i);
+        }
+        markDirty();
+    }
+
     public final void entityPassing(Entity entity, boolean inbound) {
+        if(inbound)
+            entitiesPassedLast.put(entity.getEntityId(), entity);
+
         boolean isPlayer = entity instanceof EntityPlayerMP;
 
-        if (isPlayer) {
+        if (isPlayer)
             getAutoCloseManager().playerPassing();
-            markDirty();
-        }
+        markDirty();
 
         sendSignal(null, "stargate_traveler", new Object[]{inbound, isPlayer, entity.getClass().getSimpleName()});
     }

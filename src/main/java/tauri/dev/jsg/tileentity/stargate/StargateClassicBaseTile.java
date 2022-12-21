@@ -80,8 +80,7 @@ import java.util.*;
 import static tauri.dev.jsg.stargate.EnumIrisType.IRIS_TITANIUM;
 import static tauri.dev.jsg.stargate.EnumSpinDirection.CLOCKWISE;
 import static tauri.dev.jsg.stargate.EnumSpinDirection.COUNTER_CLOCKWISE;
-import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_INCOMING;
-import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ALLOW_RIG;
+import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.*;
 import static tauri.dev.jsg.util.JSGAdvancementsUtil.tryTriggerRangedAdvancement;
 
 /**
@@ -1435,8 +1434,43 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     }
 
+    public static int getOriginId(BiomeOverlayEnum overlay, int dimId, int configOrigin) {
+		/*
+		IDS:
+		5/0- normal - overworld
+		0- mossy - unknown
+		0- aged - unknown
+		1- end - tornado
+		2- sooty - nether
+		3- frosty - beta
+		4- aged - Abydos
+		 */
+        if(configOrigin >= 0) return configOrigin;
+
+        if(overlay == null) overlay = BiomeOverlayEnum.NORMAL;
+
+        int override = StargateDimensionConfig.getOrigin(DimensionManager.getProviderType(dimId), overlay);
+        if (override >= 0)
+            return override;
+
+        switch (overlay) {
+            case FROST:
+                return 3;
+            case AGED:
+                return 4;
+            case SOOTY:
+                return 2;
+            case NORMAL:
+                if (dimId == 0) return 5;
+                return 0;
+            default:
+                break;
+        }
+        return 0;
+    }
+
     public int getOriginId() {
-        return -1;
+        return getOriginId(getBiomeOverlayWithOverride(), getFakeWorld().provider.getDimension(), getConfig().getOption(ORIGIN_MODEL.id).getEnumValue().getIntValue());
     }
 
     public void setOriginId(NBTTagCompound compound) {

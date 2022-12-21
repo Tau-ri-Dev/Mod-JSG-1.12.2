@@ -49,11 +49,6 @@ import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOp
 
 public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements ILinkable {
 
-    @Override
-    public int getOriginId() {
-        return SymbolMilkyWayEnum.getOriginId(getBiomeOverlayWithOverride(), getFakeWorld().provider.getDimension(), getConfig().getOption(ORIGIN_MODEL.id).getEnumValue().getIntValue());
-    }
-
     // ------------------------------------------------------------------------
     // Stargate state
 

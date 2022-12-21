@@ -13,12 +13,10 @@ import tauri.dev.jsg.gui.element.ModeButton;
 import tauri.dev.jsg.gui.element.NumberOnlyTextField;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class JSGConfigOption {
     public int id;
@@ -89,14 +87,13 @@ public class JSGConfigOption {
 
     public List<String> getCommentToRender() {
         List<String> c = new ArrayList<>(getComment());
-        if (maxInt != -1 || minInt != -1) {
-            c.add("---------------------------------");
-            if (minInt != -1)
-                c.add("Min: " + minInt);
-            if (maxInt != -1)
-                c.add("Max: " + maxInt);
-            c.add("---------------------------------");
-        }
+        c.add("---------------------------------");
+        if (minInt != -1)
+            c.add("Min: " + minInt);
+        if (maxInt != -1)
+            c.add("Max: " + maxInt);
+        c.add("Default: " + defaultValue);
+        c.add("---------------------------------");
         return c;
     }
 
@@ -123,7 +120,7 @@ public class JSGConfigOption {
     }
 
     public JSGConfigOption setPossibleValues(List<JSGConfigEnumEntry> values) {
-        if(this.type != JSGConfigOptionTypeEnum.SWITCH){
+        if (this.type != JSGConfigOptionTypeEnum.SWITCH) {
             JSG.error("Can not set values of config option!");
             JSG.error("Option is not SWITCH type!");
             return this;
@@ -198,14 +195,14 @@ public class JSGConfigOption {
     }
 
     @Nonnull
-    public JSGConfigEnumEntry getEnumValue(){
-        if(possibleValues.size() <= getIntValue()) return new JSGConfigEnumEntry("null", "-1");
+    public JSGConfigEnumEntry getEnumValue() {
+        if (possibleValues.size() <= getIntValue()) return new JSGConfigEnumEntry("null", "-1");
         JSGConfigEnumEntry t = possibleValues.get(getIntValue());
-        if(t != null) return t;
+        if (t != null) return t;
         return new JSGConfigEnumEntry("null", "-1");
     }
 
-    private JSGConfigOption setEnumValues(List<JSGConfigEnumEntry> entries){
+    private JSGConfigOption setEnumValues(List<JSGConfigEnumEntry> entries) {
         this.possibleValues = entries;
         return this;
     }
@@ -225,7 +222,7 @@ public class JSGConfigOption {
         compound.setString("defaultValue", defaultValue);
         compound.setInteger("possibleValuesLength", possibleValues.size());
         int i = 0;
-        for(JSGConfigEnumEntry e : possibleValues){
+        for (JSGConfigEnumEntry e : possibleValues) {
             compound.setString("possibleValue" + i, e.value);
             compound.setString("possibleValueName" + i++, e.name);
         }
@@ -248,7 +245,7 @@ public class JSGConfigOption {
         this.defaultValue = compound.getString("defaultValue");
         this.possibleValues = new ArrayList<>();
         int s = compound.getInteger("possibleValuesLength");
-        for(int i = 0; i < s; i++){
+        for (int i = 0; i < s; i++) {
             possibleValues.add(new JSGConfigEnumEntry(compound.getString("possibleValueName" + i), compound.getString("possibleValue" + i)));
         }
     }
@@ -271,7 +268,7 @@ public class JSGConfigOption {
         buf.writeCharSequence(defaultValue, StandardCharsets.UTF_8);
 
         buf.writeInt(possibleValues.size());
-        for(JSGConfigEnumEntry e : possibleValues){
+        for (JSGConfigEnumEntry e : possibleValues) {
             buf.writeInt(e.value.length());
             buf.writeCharSequence(e.value, StandardCharsets.UTF_8);
             buf.writeInt(e.name.length());
@@ -298,7 +295,7 @@ public class JSGConfigOption {
         this.defaultValue = buf.readCharSequence(defaultValueSize, StandardCharsets.UTF_8).toString();
         possibleValues = new ArrayList<>();
         int s = buf.readInt();
-        for(int i = 0; i < s; i++){
+        for (int i = 0; i < s; i++) {
             int valueSize2 = buf.readInt();
             String value = buf.readCharSequence(valueSize2, StandardCharsets.UTF_8).toString();
             int nameSize = buf.readInt();

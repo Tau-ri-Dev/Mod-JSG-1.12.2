@@ -29,10 +29,7 @@ import tauri.dev.jsg.util.main.JSGDamageSources;
 import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.vecmath.Vector2f;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static tauri.dev.jsg.util.JSGAdvancementsUtil.tryTriggerRangedAdvancement;
 
@@ -65,28 +62,29 @@ public class EventHorizon {
     // ------------------------------------------------------------------------
     // Teleporting
 
-    private Map<Integer, TeleportPacket> scheduledTeleportMap = new HashMap<>();
+    private final Map<Integer, TeleportPacket> scheduledTeleportMap = new HashMap<>();
 
     /**
      * This map is used not to double the teleport packet on Entity's
      * passengers.
      */
-    private Map<Integer, Integer> timeoutMap = new HashMap<>();
+    private final Map<Integer, Integer> timeoutMap = new HashMap<>();
 
     public void scheduleTeleportation(StargatePos targetGate, boolean teleport) {
         if (targetGate == null) return;
         boolean closedIris = false;
-        if (world.getTileEntity(pos) instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) world.getTileEntity(pos)).isIrisClosed()) {
+        if (world.getTileEntity(pos) instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) Objects.requireNonNull(world.getTileEntity(pos))).isIrisClosed()) {
             teleport = false;
             closedIris = true;
         }
         List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, globalBox);
 
         if (teleport) {
-            for (int entityId : timeoutMap.keySet())
-                timeoutMap.put(entityId, timeoutMap.get(entityId) - 1);
+            timeoutMap.replaceAll((i, v) -> timeoutMap.get(i) - 1);
             timeoutMap.entrySet().removeIf(entry -> entry.getValue() < 0);
         }
+
+        StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(pos);
 
         for (Entity entity : entities) {
             int entityId = entity.getEntityId();
@@ -112,10 +110,8 @@ public class EventHorizon {
 
                         scheduledTeleportMap.put(entityId, packet.setMotion(motion));
                         teleportEntity(entityId);
-                    } else if (!closedIris && !teleport && front && tauri.dev.jsg.config.JSGConfig.horizonConfig.wrongSideKilling)
+                    } else if ((gateTile == null || !gateTile.entitiesPassedLast.containsKey(entityId)) && !closedIris && !teleport && front && tauri.dev.jsg.config.JSGConfig.horizonConfig.wrongSideKilling)
                         wrongSideKill(entity);
-                    //if(!front && JSGConfig.horizonConfig.backSideKilling)
-                    //    wrongSideKill(entity);
                 }
             }
         }

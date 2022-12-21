@@ -5,7 +5,6 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class JSGTileEntityConfig {
@@ -20,25 +19,21 @@ public class JSGTileEntityConfig {
         this.fromBytes(buf);
     }
 
-    public void addOptions(@Nonnull JSGConfigOption... options){
-        this.options.addAll(Arrays.asList(options));
-    }
-
-    public void addOption(@Nonnull JSGConfigOption options){
-        this.options.add(options);
+    public void addOption(@Nonnull JSGConfigOption option) {
+        this.options.add(option);
     }
 
     public List<JSGConfigOption> getOptions() {
         return options;
     }
 
-    public JSGConfigOption getOption(int id){
-        if(id < options.size())
+    public JSGConfigOption getOption(int id) {
+        if (id < options.size())
             return options.get(id);
         return new JSGConfigOption(id).setLabel("error while getting option! (" + id + ")").setComment("").setType(JSGConfigOptionTypeEnum.TEXT).setValue("");
     }
 
-    public void clearOptions(){
+    public void clearOptions() {
         options.clear();
     }
 
@@ -59,7 +54,7 @@ public class JSGTileEntityConfig {
         }
     }
 
-    public void toBytes(ByteBuf buf){
+    public void toBytes(ByteBuf buf) {
         buf.writeInt(options.size());
         for (JSGConfigOption option : options) {
             option.toBytes(buf);
@@ -69,7 +64,7 @@ public class JSGTileEntityConfig {
     public void fromBytes(ByteBuf buf) {
         this.options = new ArrayList<>();
         int size = buf.readInt();
-        for(int i = 0; i < size; i++){
+        for (int i = 0; i < size; i++) {
             options.add(new JSGConfigOption(buf));
         }
     }
