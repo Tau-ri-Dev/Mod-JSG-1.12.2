@@ -27,6 +27,7 @@ import tauri.dev.jsg.stargate.network.SymbolPegasusEnum;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.stargate.network.SymbolUniverseEnum;
 import tauri.dev.jsg.stargate.power.StargateClassicEnergyStorage;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.StargateUpgradeEnum;
 
 import java.awt.*;
@@ -72,7 +73,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
                 .setTabTitle(I18n.format("gui.stargate.biome_overlay"))
                 .setTabSide(TabSideEnum.RIGHT)
                 .setTexture(BACKGROUND_TEXTURE, 512)
-                .setBackgroundTextureLocation(176+24, 113)
+                .setBackgroundTextureLocation(176 + 24, 113)
                 .setIconRenderPos(107, 6)
                 .setIconSize(22, 22)
                 .setIconTextureLocation(304, 22 * 3).build();
@@ -179,7 +180,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
                 .setTabTitle(I18n.format("gui.stargate.iris_code"))
                 .setTabSide(TabSideEnum.RIGHT)
                 .setTexture(BACKGROUND_TEXTURE, 512)
-                .setBackgroundTextureLocation(176+24, 113)
+                .setBackgroundTextureLocation(176 + 24, 113)
                 .setIconRenderPos(107, 6)
                 .setIconSize(22, 22)
                 .setIconTextureLocation(304, 22 * 4).build();
@@ -222,22 +223,49 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
         if (infoTab != null) {
+            infoTab.clearStrings();
+            int y = 22;
+
             // opened time
-            float openedSeconds = container.gateTile.getOpenedSecondsToDisplay();
-            String openedTime = I18n.format("gui.stargate.state.closed");
-            if (openedSeconds > 0)
-                openedTime = I18n.format("gui.stargate.state.opened") + " " + container.gateTile.getOpenedSecondsToDisplayAsMinutes();
+            long openedSince = container.gateTile.openedSince;
+            if (openedSince > 0) {
+                long openedSeconds = container.gateTile.getOpenedSeconds();
+                String format = TextFormatting.DARK_GREEN.toString();
+                int maxTime = container.gateTile.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.TIME_LIMIT_TIME.id).getIntValue();
+                if (openedSeconds >= (maxTime * 0.75))
+                    format = TextFormatting.YELLOW.toString();
+                if (openedSeconds >= maxTime)
+                    format = TextFormatting.RED.toString();
+                String openedTime = I18n.format("gui.stargate.state.opened") + " " + format + container.gateTile.getOpenedSecondsToDisplayAsMinutes();
+                infoTab.addString(new TabInfo.InfoString(openedTime, 4, y));
+                y += 9;
+            }
             // gate temp
             int gateTemperature = (int) Math.round(container.gateTile.gateHeat);
             // iris temp
             int irisTemperature = (int) Math.round(container.gateTile.irisHeat);
 
+            String format = TextFormatting.DARK_GREEN.toString();
+            if (gateTemperature >= (StargateClassicBaseTile.GATE_MAX_HEAT * 0.5))
+                format = TextFormatting.YELLOW.toString();
+            if (gateTemperature >= (StargateClassicBaseTile.GATE_MAX_HEAT * 0.75))
+                format = TextFormatting.RED.toString();
 
-            infoTab.clearStrings()
-                    .addString(new TabInfo.InfoString(openedTime, 4, 20))
-                    .addString(new TabInfo.InfoString(I18n.format("gui.stargate.state.gate_temp") + " " + gateTemperature + "\u00B0C", 4, 30));
-            if(irisTemperature != -1)
-                infoTab.addString(new TabInfo.InfoString(I18n.format("gui.stargate.state.iris_temp") + " " + irisTemperature + "\u00B0C", 4, 40));
+            infoTab.addString(new TabInfo.InfoString(I18n.format("gui.stargate.state.gate_temp") + " " + format + gateTemperature + "\u00B0C", 4, y));
+            y += 9;
+            if (container.gateTile.isPhysicalIris()) {
+                //irisTemperature = gateTemperature;
+
+                double maxHeat = container.gateTile.getMaxIrisHeat();
+
+                format = TextFormatting.DARK_GREEN.toString();
+                if (irisTemperature > (maxHeat * 0.5))
+                    format = TextFormatting.YELLOW.toString();
+                if (irisTemperature > (maxHeat * 0.75))
+                    format = TextFormatting.RED.toString();
+
+                infoTab.addString(new TabInfo.InfoString(I18n.format("gui.stargate.state.iris_temp") + " " + format + irisTemperature + "\u00B0C", 4, y));
+            }
         }
 
         drawDefaultBackground();

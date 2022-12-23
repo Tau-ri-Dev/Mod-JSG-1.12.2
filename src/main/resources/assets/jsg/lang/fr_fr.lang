@@ -712,6 +712,8 @@ gui.beamer.disabled_by_logic=Désactivé par la logique
 gui.beamer.disabled_by_logic_target=Désactivé par la logique (Cible)
 gui.beamer.running=Running
 gui.beamer.no_crystal=Non cristal
+gui.beamer.no_power=Not enough power
+gui.beamer.can_not_receive=Can not receive
 
 gui.beamer.transmit=Transmission
 gui.beamer.receive=Recevoir

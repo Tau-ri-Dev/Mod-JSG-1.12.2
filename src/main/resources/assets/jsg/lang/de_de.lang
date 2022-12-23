@@ -689,6 +689,8 @@ gui.beamer.disabled_by_logic=Transporter durch Logik deaktiviert
 gui.beamer.disabled_by_logic_target=Zieltransporter durch Logik deaktiviert
 gui.beamer.running=aktiv
 gui.beamer.no_crystal=Kein Kristall
+gui.beamer.no_power=Not enough power
+gui.beamer.can_not_receive=Can not receive
 
 gui.beamer.transmit=Senden
 gui.beamer.receive=Empfangen

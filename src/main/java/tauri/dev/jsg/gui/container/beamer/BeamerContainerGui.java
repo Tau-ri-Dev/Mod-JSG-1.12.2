@@ -145,6 +145,7 @@ public class BeamerContainerGui extends GuiContainer implements TabbedContainerI
 						case BEAMER_DISABLED_BY_LOGIC:
 						case BEAMER_DISABLED_BY_LOGIC_TARGET:
 						case NO_POWER:
+						case BEAMER_CANNOT_RECEIVE:
 							return DiodeStatus.WARN;
 							
 						case OK:
@@ -171,12 +172,13 @@ public class BeamerContainerGui extends GuiContainer implements TabbedContainerI
 						case BEAMER_DISABLED_BY_LOGIC: return I18n.format("gui.beamer.disabled_by_logic");
 						case BEAMER_DISABLED_BY_LOGIC_TARGET: return I18n.format("gui.beamer.disabled_by_logic_target");
 						case NO_POWER: return I18n.format("gui.beamer.no_power");
+						case BEAMER_CANNOT_RECEIVE: return I18n.format("gui.beamer.can_not_receive");
 
 						case OK: return I18n.format("gui.beamer.running");
 					}
 					
 					return null;
-				})); x += 9;
+				}));
 	}
 	
 	@Override

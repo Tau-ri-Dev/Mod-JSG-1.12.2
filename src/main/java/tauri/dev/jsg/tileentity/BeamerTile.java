@@ -80,6 +80,8 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
     // -----------------------------------------------------------------------------
     // Ticking & loading
 
+    public static final float BEAMER_BEAM_MAX_RADIUS = 0.1375f;
+
     private EnumFacing facing;
     private TargetPoint targetPoint;
     private JSGAxisAlignedBB renderBox = new JSGAxisAlignedBB(0, 0, 0, 1, 1, 1); // To be replaced in updateFacing()
@@ -124,54 +126,59 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
         StargateClassicBaseTile gateTile = getLinkedGateTile();
 
         if (!gateTile.getStargateState().engaged()) {
-            if(targetGatePos != null){
+            if (targetGatePos != null) {
                 targetGatePos = null;
                 markDirty();
             }
             return BeamerStatusEnum.CLOSED;
         }
 
-        if (isObstructed)
-            return BeamerStatusEnum.OBSTRUCTED;
-
         updateTargetBeamerData(targetGatePos);
 
         boolean isLaser = (this.getMode() == BeamerModeEnum.LASER);
 
-        if (targetBeamerWorld == null || targetBeamerPos == null || !BEAMER_MATCHER.apply(targetBeamerWorld.getBlockState(targetBeamerPos)))
-            return BeamerStatusEnum.NO_BEAMER;
-
-        BeamerTile targetBeamerTile = (BeamerTile) targetBeamerWorld.getTileEntity(targetBeamerPos);
-
-        if(targetBeamerTile == null)
-            return BeamerStatusEnum.NO_BEAMER;
-
-        if (targetBeamerTile.isObstructed)
-            return BeamerStatusEnum.OBSTRUCTED_TARGET;
-
         if (beamerRole == BeamerRoleEnum.DISABLED)
             return BeamerStatusEnum.BEAMER_DISABLED;
 
-        if (targetBeamerTile.getRole() == BeamerRoleEnum.DISABLED)
-            return BeamerStatusEnum.BEAMER_DISABLED_TARGET;
+        if(isLaser && beamerRole == BeamerRoleEnum.RECEIVE)
+            return BeamerStatusEnum.BEAMER_CANNOT_RECEIVE;
 
-        if (targetBeamerTile.getStatus() == BeamerStatusEnum.BEAMER_DISABLED_BY_LOGIC)
-            return BeamerStatusEnum.BEAMER_DISABLED_BY_LOGIC_TARGET;
+        if(!isLaser) {
+            if (targetBeamerWorld == null || targetBeamerPos == null || !BEAMER_MATCHER.apply(targetBeamerWorld.getBlockState(targetBeamerPos)))
+                return BeamerStatusEnum.NO_BEAMER;
 
-        if (!isLaser && beamerRole == targetBeamerTile.getRole()) {
-            if (beamerRole == BeamerRoleEnum.TRANSMIT)
-                return BeamerStatusEnum.TWO_TRANSMITTERS;
-            else
-                return BeamerStatusEnum.TWO_RECEIVERS;
+            BeamerTile targetBeamerTile = (BeamerTile) targetBeamerWorld.getTileEntity(targetBeamerPos);
+
+            if (targetBeamerTile == null)
+                return BeamerStatusEnum.NO_BEAMER;
+
+            if (targetBeamerTile.isObstructed)
+                return BeamerStatusEnum.OBSTRUCTED_TARGET;
+
+            if (targetBeamerTile.getRole() == BeamerRoleEnum.DISABLED)
+                return BeamerStatusEnum.BEAMER_DISABLED_TARGET;
+
+            if (targetBeamerTile.getStatus() == BeamerStatusEnum.BEAMER_DISABLED_BY_LOGIC)
+                return BeamerStatusEnum.BEAMER_DISABLED_BY_LOGIC_TARGET;
+
+            if (beamerRole == targetBeamerTile.getRole()) {
+                if (beamerRole == BeamerRoleEnum.TRANSMIT)
+                    return BeamerStatusEnum.TWO_TRANSMITTERS;
+                else
+                    return BeamerStatusEnum.TWO_RECEIVERS;
+            }
+
+            if (beamerMode.id != targetBeamerTile.getMode().id)
+                return BeamerStatusEnum.MODE_MISMATCH;
         }
 
-        if (!isLaser && beamerMode.id != targetBeamerTile.getMode().id)
-            return BeamerStatusEnum.MODE_MISMATCH;
+        if (isObstructed)
+            return BeamerStatusEnum.OBSTRUCTED;
 
-        if (beamerMode != BeamerModeEnum.POWER && ((gateTile.getStargateState().initiating() && beamerRole != BeamerRoleEnum.TRANSMIT) || (gateTile.getStargateState() == EnumStargateState.ENGAGED && beamerRole != BeamerRoleEnum.RECEIVE)))
+        if ((isLaser && !gateTile.getStargateState().initiating()) || (!isLaser && beamerMode != BeamerModeEnum.POWER && ((gateTile.getStargateState().initiating() && beamerRole != BeamerRoleEnum.TRANSMIT) || (gateTile.getStargateState() == EnumStargateState.ENGAGED && beamerRole != BeamerRoleEnum.RECEIVE))))
             return BeamerStatusEnum.INCOMING;
 
-        if(isLaser && this.energyStorage.getEnergyStored() < JSGConfig.beamerConfig.laserEnergy)
+        if (isLaser && this.energyStorage.getEnergyStored() < JSGConfig.beamerConfig.laserEnergy)
             return BeamerStatusEnum.NO_POWER;
 
         switch (redstoneMode) {
@@ -210,8 +217,9 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
                     }
 
                     if (beamerStatus == BeamerStatusEnum.BEAMER_DISABLED_BY_LOGIC) {
+                        BeamerTile targetBeamerTile = (BeamerTile) targetBeamerWorld.getTileEntity(targetBeamerPos);
                         for (int i = 1; i < 5; i++) {
-                            if ((beamerRole == BeamerRoleEnum.RECEIVE && !targetBeamerTile.itemStackHandler.getStackInSlot(i).isEmpty()) || (beamerRole == BeamerRoleEnum.TRANSMIT && !itemStackHandler.getStackInSlot(i).isEmpty())) {
+                            if ((beamerRole == BeamerRoleEnum.RECEIVE && !Objects.requireNonNull(targetBeamerTile).itemStackHandler.getStackInSlot(i).isEmpty()) || (beamerRole == BeamerRoleEnum.TRANSMIT && !itemStackHandler.getStackInSlot(i).isEmpty())) {
                                 return BeamerStatusEnum.OK;
                             }
                         }
@@ -282,7 +290,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 
             beamerStatus = updateBeamerStatus();
 
-            if((beamerStatus == BeamerStatusEnum.OK || beamerStatus == BeamerStatusEnum.OBSTRUCTED) && beamerMode != BeamerModeEnum.NONE && beamerRole != BeamerRoleEnum.DISABLED){
+            if ((beamerStatus == BeamerStatusEnum.OK || beamerStatus == BeamerStatusEnum.OBSTRUCTED) && beamerMode != BeamerModeEnum.NONE && beamerRole != BeamerRoleEnum.DISABLED) {
                 BeamerBeam.isSomethingInBeam(this, true, true);
             }
 
@@ -377,7 +385,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
                         case LASER:
                             int lx = energyStorage.extractEnergy(tauri.dev.jsg.config.JSGConfig.beamerConfig.laserEnergy, false);
                             StargateClassicBaseTile gate = ((StargateClassicBaseTile) this.targetGatePos.getTileEntity());
-                            gate.tryHeatUp(false, true, 3, 0, 0, -1);
+                            gate.tryHeatUp(true, true, 0.3, 0.6, 0, -1, -1);
                             powerTransferredSinceLastSignal += lx;
                             break;
 
@@ -537,11 +545,11 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
                     beamRadiusClient = 0;
                 }
             } else if (beamRadiusWiden) {
-                if (beamRadiusClient < 0.1375f)
+                if (beamRadiusClient < BEAMER_BEAM_MAX_RADIUS)
                     beamRadiusClient += speed;
                 else {
                     beamRadiusWiden = false;
-                    beamRadiusClient = 0.1375f;
+                    beamRadiusClient = BEAMER_BEAM_MAX_RADIUS;
                 }
             }
         }
@@ -557,7 +565,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 
     public void updateTargetBeamerData(@Nullable StargatePos targetGatePos) {
         boolean isLaser = (this.getMode() == BeamerModeEnum.LASER);
-        if(isLaser){
+        if (isLaser) {
             targetBeamerWorld = this.world;
             targetBeamerPos = this.pos;
             markDirty();
@@ -1006,21 +1014,11 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 
     @Override
     public void executeTask(EnumScheduledTask scheduledTask, NBTTagCompound customData) {
-        switch (scheduledTask) {
-            case BEAMER_TOGGLE_SOUND:
-                if (loopSoundPlaying)
-                    JSGSoundHelper.playPositionedSound(world, pos, SoundPositionedEnum.BEAMER_LOOP, false);
-                else
-                    JSGSoundHelper.playPositionedSound(world, pos, SoundPositionedEnum.BEAMER_LOOP, true);
+        if (scheduledTask == EnumScheduledTask.BEAMER_TOGGLE_SOUND) {
+            JSGSoundHelper.playPositionedSound(world, pos, SoundPositionedEnum.BEAMER_LOOP, isActive());
 
-                loopSoundPlaying ^= true;
-//				syncToClient();
-                markDirty();
-
-                break;
-
-            default:
-                break;
+            loopSoundPlaying ^= true;
+            markDirty();
         }
     }
 
@@ -1084,6 +1082,21 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
                             //JSG.info("Y: " + beamOffsetFromTargetYClient);
                             markDirty();
                         }
+                    }
+
+                    if (beamerMode == BeamerModeEnum.LASER) {
+                        d1 += 0.5;
+
+                        EnumFacing.Axis ax2 = world.getBlockState(basePos).getValue(JSGProps.FACING_HORIZONTAL).getAxis();
+
+                        int x1 = 0;
+                        int x2 = (ax2 == EnumFacing.Axis.Z ? (basePos.getX() - getPos().getX()) : (basePos.getZ() - getPos().getZ()));
+                        beamOffsetFromTargetX = x1 - x2;
+
+                        int y1 = (basePos.getY() - getLinkedGateTile().getGateCenterPos().getY());
+                        int y2 = (basePos.getY() - getPos().getY());
+                        beamOffsetFromTargetY = y1 - y2;
+                        markDirty();
                     }
 
                     distance = d1 + d2;
@@ -1151,7 +1164,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
             case RENDERER_UPDATE:
                 BeamerRendererUpdate update = (BeamerRendererUpdate) state;
 
-                beamRadiusClient = update.beamerStatus == BeamerStatusEnum.OK ? 0.1375f : 0;
+                beamRadiusClient = update.beamerStatus == BeamerStatusEnum.OK ? BEAMER_BEAM_MAX_RADIUS : 0;
                 JSGSoundHelperClient.playPositionedSoundClientSide(pos, SoundPositionedEnum.BEAMER_LOOP, update.beamerStatus == BeamerStatusEnum.OK);
 
                 break;
@@ -1167,7 +1180,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
                         break;
 
                     case BEAM_OFF:
-                        beamRadiusClient = 0.1375f;
+                        beamRadiusClient = BEAMER_BEAM_MAX_RADIUS;
                         beamRadiusWiden = false;
                         beamRadiusShrink = true;
                         break;
@@ -1247,7 +1260,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
         compound.setTag("fluidsTransferredSinceLastSignal", NBTHelper.serializeFluidStackList(fluidsTransferredSinceLastSignal));
         compound.setTag("itemsTransferredSinceLastSignal", NBTHelper.serializeItemStackList(itemsTransferredSinceLastSignal));
 
-        if(targetGatePos != null){
+        if (targetGatePos != null) {
             compound.setInteger("targetGatePosSymbolType", targetGatePos.symbolType.id);
             compound.setTag("targetGatePos", targetGatePos.serializeNBT());
         }
@@ -1288,7 +1301,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 
         ScheduledTask.deserializeList(compound.getCompoundTag("scheduledTasks"), scheduledTasks, this);
 
-        if(compound.hasKey("targetGatePos")){
+        if (compound.hasKey("targetGatePos")) {
             SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf(compound.getInteger("targetGatePosSymbolType"));
             targetGatePos = new StargatePos(symbolType, compound.getCompoundTag("targetGatePos"));
         }

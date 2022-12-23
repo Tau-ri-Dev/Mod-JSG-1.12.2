@@ -311,7 +311,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                                     compound.setBoolean("serverSideEnabledFastDial", t.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ALLOW_FAST_DIAL.id).getBooleanValue());
                                     compound.setInteger("gateStatus", t.getStargateState().id);
-                                    compound.setString("gateOpenTime", t.getOpenedSecondsToDisplay() > 0 ? t.getOpenedSecondsToDisplayAsMinutes() : "CLOSED");
+                                    compound.setString("gateOpenTime", t.getOpenedSeconds() > 0 ? t.getOpenedSecondsToDisplayAsMinutes() : "CLOSED");
                                     compound.setString("gateIrisState", t.hasIris() ? t.getIrisState().toString() : "MISSING");
                                     compound.setString("gateLastSymbol", (t.getDialedAddress().size() > 0) ? t.getDialedAddress().get(t.getDialedAddress().size() - 1).toString() + " (" + t.getDialedAddress().size() + ")" : "-- (0)");
 

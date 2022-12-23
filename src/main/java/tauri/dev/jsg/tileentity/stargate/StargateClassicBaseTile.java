@@ -3,6 +3,8 @@ package tauri.dev.jsg.tileentity.stargate;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -31,6 +33,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
@@ -73,6 +76,7 @@ import tauri.dev.jsg.tileentity.BeamerTile;
 import tauri.dev.jsg.tileentity.util.IUpgradable;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
 import tauri.dev.jsg.util.*;
+import tauri.dev.jsg.util.math.TemperatureHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -113,49 +117,61 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public static final double IRIS_MAX_HEAT_TRINIUM = JSGConfig.irisConfig.irisTriniumMaxHeat;
     public static final double GATE_MAX_HEAT = JSGConfig.stargateConfig.gateMaxHeat;
 
-    public void tryHeatUp(boolean byIrisHit, boolean heatUpGate, double irisHeatUpCoefficient) {
-        tryHeatUp(byIrisHit, heatUpGate, 1, irisHeatUpCoefficient, 1, -1);
+    public void tryHeatUp(boolean byIrisHit, double irisHeatUpCoefficient) {
+        tryHeatUp(byIrisHit, false, 1, irisHeatUpCoefficient, 1, -1, -1);
     }
 
     public void tryHeatUp(double gateHeatUpCoefficient) {
-        tryHeatUp(false, true, gateHeatUpCoefficient, 1, 1, -1);
+        tryHeatUp(false, true, gateHeatUpCoefficient, 1, 1, -1, -1);
+    }
+
+    public double getMaxIrisHeat() {
+        if (isShieldIris()) return Double.MAX_VALUE;
+        return (getIrisType() == EnumIrisType.IRIS_TRINIUM ? IRIS_MAX_HEAT_TRINIUM : IRIS_MAX_HEAT_TITANIUM);
     }
 
 
-    public void tryHeatUp(boolean heatUpIris, boolean heatUpGate, double gateHeatUpCoefficient, double irisHeatUpCoefficient, double coolDownCoefficient, double maxHeatByAround) {
-        double blockTemperature = (world.getBiome(pos).getTemperature(pos) * 30);
-        if (gateHeat < blockTemperature) gateHeat = blockTemperature;
-        double irisHeatMin = Math.max(blockTemperature, gateHeat);
-        if (irisHeat < irisHeatMin && hasIris()) irisHeat = irisHeatMin;
+    public void tryHeatUp(boolean heatUpIris, boolean heatUpGate, double gateHeatUpCoefficient, double irisHeatUpCoefficient, double coolDownCoefficient, double maxHeatByAround, double minHeatByAround) {
 
-        if (heatUpIris && (maxHeatByAround == -1 || (irisHeat + (1.5 * irisHeatUpCoefficient)) <= maxHeatByAround)) {
-            irisHeat += (1.5 * irisHeatUpCoefficient);
-        }
-        irisHeat -= (0.2 * coolDownCoefficient);
+        final double heatUpCoefficientConst = 0.7;
+        final double coolDownCoefficientConst = 0.3;
 
-        if (heatUpGate && (maxHeatByAround == -1 || (gateHeat + (1.5 * gateHeatUpCoefficient)) <= maxHeatByAround))
-            gateHeat += (1.5 * gateHeatUpCoefficient);
-        else
-            gateHeat -= (0.2 * coolDownCoefficient);
+        if ((heatUpGate || Math.abs(gateHeat - irisHeat) >= 50) && (maxHeatByAround == -1 || (gateHeat + (heatUpCoefficientConst * gateHeatUpCoefficient)) <= maxHeatByAround))
+            gateHeat += (heatUpCoefficientConst * gateHeatUpCoefficient);
+        if ((minHeatByAround == -1 || (gateHeat - (coolDownCoefficientConst * coolDownCoefficient)) > minHeatByAround))
+            gateHeat -= (coolDownCoefficientConst * coolDownCoefficient);
 
+        if ((heatUpIris || Math.abs(gateHeat - irisHeat) >= 25) && (maxHeatByAround == -1 || (irisHeat + (heatUpCoefficientConst * irisHeatUpCoefficient)) <= maxHeatByAround))
+            irisHeat += (heatUpCoefficientConst * irisHeatUpCoefficient);
+
+        if ((minHeatByAround == -1 || (irisHeat - (coolDownCoefficientConst * coolDownCoefficient)) > minHeatByAround))
+            irisHeat -= (coolDownCoefficientConst * coolDownCoefficient);
+
+        // iris breaking
         ItemStack irisItem = getItemHandler().getStackInSlot(11);
-        double maxHeat = (getIrisType() == EnumIrisType.IRIS_TRINIUM ? IRIS_MAX_HEAT_TRINIUM : IRIS_MAX_HEAT_TITANIUM);
-        if (isPhysicalIris() && irisHeat >= maxHeat) {
-            if (JSGConfig.irisConfig.enableIrisOverHeatCollapse && world.getTotalWorldTime() % (20 + ((int) (Math.random() * 30))) == 0) {
-                irisItem.getItem().setDamage(irisItem, irisItem.getItem().getDamage(irisItem) + ((int) (Math.random() * 10)));
-                if (irisItem.getCount() == 0)
-                    updateIrisType();
-                JSGSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.IRIS_HIT);
+        double maxHeat = getMaxIrisHeat();
+        if (irisHeat >= maxHeat) {
+            int heatCoefficient = (int) Math.round(Math.abs(irisHeat - maxHeat));
+            if (JSGConfig.irisConfig.enableIrisOverHeatCollapse) {
+                if (world.getTotalWorldTime() % (((int) (Math.random() * 70)) + 1) == 0) {
+                    if (isPhysicalIris()) {
+                        irisItem.getItem().setDamage(irisItem, irisItem.getItem().getDamage(irisItem) + (new Random().nextInt(heatCoefficient) + 1));
+                        if (irisItem.getCount() == 0)
+                            updateIrisType();
+                        JSGSoundHelper.playSoundEvent(world, getGateCenterPos(), SoundEventEnum.IRIS_HIT);
+                    }
+                }
             }
-            irisHeat = maxHeat;
         }
 
+        // gate explosion
         if (gateHeat >= GATE_MAX_HEAT) {
             if (JSGConfig.stargateConfig.enableGateOverHeatExplosion)
                 world.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 60, false, true);
-            gateHeat = GATE_MAX_HEAT;
+            //gateHeat = GATE_MAX_HEAT;
         }
 
+        // send render update about temperature -> to color the gate red
         if (world.getTotalWorldTime() % 20 == 0) {// every second send a render_update packet to client if heat changed
             if (lastIrisHeat != irisHeat || lastGateHeat != gateHeat) {
                 lastIrisHeat = irisHeat;
@@ -358,7 +374,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         for (BlockPos beamerPos : linkedBeamers) {
             if (world.getTileEntity(beamerPos) != null) {
                 BeamerTile beamerTile = (BeamerTile) world.getTileEntity(beamerPos);
-                beamerTile.setLinkedGate(null, null);
+                Objects.requireNonNull(beamerTile).setLinkedGate(null, null);
             }
         }
 
@@ -474,45 +490,124 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             lightUpChevronByIncoming(!getConfig().getOption(ALLOW_INCOMING.id).getBooleanValue());
     }
 
-    private String RIG_PREFIX = "";
-
-    private boolean isLiquidBlock(boolean lava, IBlockState state) {
-        if (lava)
-            return (state.getBlock().getUnlocalizedName().equals("lava")
-                    || state.getBlock().getUnlocalizedName().equals("minecraft:lava")
-                    || state.getBlock() == Blocks.LAVA
-                    || state.getBlock() == Blocks.FLOWING_LAVA);
-        return (state.getBlock().getUnlocalizedName().equals("water")
-                || state.getBlock().getUnlocalizedName().equals("minecraft:water")
-                || state.getBlock() == Blocks.WATER
-                || state.getBlock() == Blocks.FLOWING_WATER);
+    private static boolean isLiquidBlock(boolean lava, IBlockState state) {
+        return getLiquidBlockTemp(lava, state) > -1;
     }
 
-    public int getAroundGateLiquid(boolean lava) {
-        int suma = 0;
+    /**
+     * @param lava  - searching for hot block?
+     * @param state - state of target block
+     * @return temperature in Kelvins
+     */
+    private static double getLiquidBlockTemp(boolean lava, IBlockState state) {
+        Block block = state.getBlock();
+        if (block instanceof BlockLiquid) {
+            if (lava && block.getUnlocalizedName().equalsIgnoreCase("tile.lava"))
+                return TemperatureHelper.asCelsius(1200).toKelvins();
+            if (!lava && block.getUnlocalizedName().equalsIgnoreCase("tile.water"))
+                return TemperatureHelper.asCelsius(3).toKelvins();
+        }
+
+        if (block instanceof BlockFluidBase) {
+            BlockFluidBase liquid = (BlockFluidBase) block;
+            boolean isHot = (liquid.getFluid().getTemperature() >= TemperatureHelper.asCelsius(1200).toKelvins());
+            if ((isHot && lava) || (!isHot && !lava)) {
+                return liquid.getFluid().getTemperature();
+            }
+        }
+        return -1;
+    }
+
+    public double getAroundGateLiquid(boolean lava, boolean getTemperature) {
+        return getTemperatureAroundGate((lava ? 1 : -1), getTemperature);
+    }
+
+    /**
+     * @param type           - specifies type of search -> 1: hot; 0: air; -1: cold
+     * @param getTemperature - return sum of temperatures of all blocks?
+     */
+    public double getTemperatureAroundGate(int type, boolean getTemperature) {
+        boolean lava = (type == 1);
+        boolean air = (type == 0);
+        double suma = 0;
+        // check chevron blocks
         for (BlockPos chevron : getMergeHelper().getChevronBlocks()) {
+            chevron = chevron.rotate(FacingToRotation.get(this.facing)).add(pos);
             for (EnumFacing facing : EnumFacing.values()) {
                 BlockPos newPos = chevron.add(facing.getDirectionVec());
                 IBlockState state = world.getBlockState(newPos);
-                if (isLiquidBlock(lava, state)) {
-                    suma++;
+                Block block = state.getBlock();
+                if (air) {
+                    if (world.isAirBlock(newPos)) {
+                        if (getTemperature)
+                            suma += TemperatureHelper.asCelsius(world.getBiome(pos).getTemperature(pos) * 30).toKelvins();
+                        else
+                            suma++;
+                    }
+                } else if (isLiquidBlock(lava, state)) {
+                    if (getTemperature)
+                        suma += getLiquidBlockTemp(lava, state);
+                    else
+                        suma++;
+                } else if (!lava && (block == Blocks.ICE || block == Blocks.SNOW || block == Blocks.PACKED_ICE)) {
+                    if (getTemperature)
+                        suma += (block == Blocks.SNOW ? TemperatureHelper.asCelsius(3).toKelvins() : TemperatureHelper.asCelsius(-3).toKelvins());
+                    else
+                        suma++;
                 }
             }
         }
+
+        // check ring blocks
         for (BlockPos ring : getMergeHelper().getRingBlocks()) {
+            ring = ring.rotate(FacingToRotation.get(this.facing)).add(pos);
             for (EnumFacing facing : EnumFacing.values()) {
                 BlockPos newPos = ring.add(facing.getDirectionVec());
                 IBlockState state = world.getBlockState(newPos);
-                if (isLiquidBlock(lava, state)) {
-                    suma++;
+                Block block = state.getBlock();
+                if (air) {
+                    if (world.isAirBlock(newPos)) {
+                        if (getTemperature)
+                            suma += TemperatureHelper.asCelsius(world.getBiome(pos).getTemperature(pos) * 30).toKelvins();
+                        else
+                            suma++;
+                    }
+                } else if (isLiquidBlock(lava, state)) {
+                    if (getTemperature)
+                        suma += getLiquidBlockTemp(lava, state);
+                    else
+                        suma++;
+                } else if (!lava && (block == Blocks.ICE || block == Blocks.SNOW || block == Blocks.PACKED_ICE)) {
+                    if (getTemperature)
+                        suma += (block == Blocks.SNOW ? TemperatureHelper.asCelsius(3).toKelvins() : TemperatureHelper.asCelsius(-3).toKelvins());
+                    else
+                        suma++;
                 }
             }
         }
+
+        // check base block
         for (EnumFacing facing : EnumFacing.values()) {
             BlockPos newPos = pos.add(facing.getDirectionVec());
             IBlockState state = world.getBlockState(newPos);
-            if (isLiquidBlock(lava, state)) {
-                suma++;
+            Block block = state.getBlock();
+            if (air) {
+                if (world.isAirBlock(newPos)) {
+                    if (getTemperature)
+                        suma += TemperatureHelper.asCelsius(world.getBiome(pos).getTemperature(pos) * 30).toKelvins();
+                    else
+                        suma++;
+                }
+            } else if (isLiquidBlock(lava, state)) {
+                if (getTemperature)
+                    suma += getLiquidBlockTemp(lava, state);
+                else
+                    suma++;
+            } else if (!lava && (block == Blocks.ICE || block == Blocks.SNOW || block == Blocks.PACKED_ICE)) {
+                if (getTemperature)
+                    suma += (block == Blocks.SNOW ? TemperatureHelper.asCelsius(3).toKelvins() : TemperatureHelper.asCelsius(-3).toKelvins());
+                else
+                    suma++;
             }
         }
         return suma;
@@ -539,10 +634,29 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         /*
          * =========================================================================
-         * HEATING UP IRIS System
+         * HEATING UP System
          */
         if (!world.isRemote && isMerged()) {
-            tryHeatUp(false, (getAroundGateLiquid(true) > 0), ((getAroundGateLiquid(true) * 2) + 1), 1, ((getAroundGateLiquid(false) * 4) + 1), 1700);
+
+            double lavaCount = getAroundGateLiquid(true, false);
+            double waterCount = getAroundGateLiquid(false, false);
+            double airCount = getTemperatureAroundGate(0, false);
+
+            double total = lavaCount + waterCount + airCount;
+
+            double maxTemperature = getAroundGateLiquid(true, true);
+            double minTemperature = getAroundGateLiquid(false, true);
+            double airTemp = getTemperatureAroundGate(0, true);
+
+            double totalTemp = maxTemperature + minTemperature + airTemp;
+
+            double middleTemperature = ((total > 0) ? TemperatureHelper.asKelvins((totalTemp / total)).toCelsius() : 25);
+
+            double cc = Math.min(Math.abs(gateHeat/(middleTemperature*2)), 0.5);
+
+            double c = Math.sin(cc)*0.7 + 0.05;
+
+            tryHeatUp(false, true, c, c, c, middleTemperature, middleTemperature);
             if (!hasIris()) {
                 irisHeat = -1;
                 markDirty();
@@ -550,7 +664,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
 
 
-        RIG_PREFIX = "[RIG] at " + pos.toString() + ":: ";
+        String RIG_PREFIX = "[RIG] at " + pos.toString() + ":: ";
 
         // Stargate Incoming Animations Timer
         if (!world.isRemote)
@@ -627,6 +741,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         if (!stargateState.engaged() && !stargateState.unstable() && stargateState.incoming()) {
                             randomIncomingState++;
                             targetGatePos = null;
+                            setOpenedSince();
 
                             ChunkManager.forceChunk(world, new ChunkPos(pos));
 
@@ -752,10 +867,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         /*
          * Draw power (shield)
          */
-        super.extractEnergyByShield(0);
+        extractEnergyByShield(0);
         if (!world.isRemote && isShieldIris()) {
             shieldKeepAlive = tauri.dev.jsg.config.JSGConfig.irisConfig.shieldPowerDraw;
-            if (isIrisClosed()) super.extractEnergyByShield(shieldKeepAlive);
+            shieldKeepAlive += irisHeat * (irisHeat / IRIS_MAX_HEAT_TRINIUM);
+            if (isIrisClosed()) extractEnergyByShield(shieldKeepAlive);
             if (getEnergyStorage().getEnergyStored() < shieldKeepAlive) {
                 toggleIris();
                 sendSignal(null, "stargate_iris_out_of_power", new Object[]{"Shield runs out of power! Opening shield..."});
@@ -851,7 +967,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             // Each 2s check for the biome overlay
             if (world.getTotalWorldTime() % 40 == 0 && rendererStateClient != null) {
                 if (getRendererStateClient().biomeOverride == null)
-                    rendererStateClient.setBiomeOverlay(BiomeOverlayEnum.updateBiomeOverlay(world, getMergeHelper().getTopBlock().add(pos), getSupportedOverlays()));
+                    rendererStateClient.setBiomeOverlay(getBiomeOverlayWithOverride(false));
 //               if (getRendererStateClient().irisType != EnumIrisType.NULL
 //                       && (getRendererStateClient().irisType != irisType || getRendererStateClient().irisState != irisState)) {
 //                   sendRenderingUpdate(EnumGateAction.IRIS_UPDATE, 0, false, irisType, irisState, irisAnimation);
@@ -882,9 +998,18 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return null;
     }
 
-    public BiomeOverlayEnum getBiomeOverlayWithOverride() {
-        BiomeOverlayEnum overlay = determineBiomeOverride();
-        if (overlay == null) return super.getBiomeOverlayWithOverride();
+    @Override
+    public BiomeOverlayEnum getBiomeOverlayWithOverride(boolean override) {
+        BiomeOverlayEnum overlay = null;
+
+        if (gateHeat < (JSGConfig.stargateConfig.frostyTemperatureThreshold * 30))
+            overlay = BiomeOverlayEnum.FROST;
+        if (!getSupportedOverlays().contains(overlay))
+            overlay = null;
+
+        if (override) overlay = determineBiomeOverride();
+
+        if (overlay == null) return super.getBiomeOverlayWithOverride(override);
         return overlay;
     }
 
@@ -1115,8 +1240,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 "Power draw when gate runs",
                 "out of open time limit.",
                 " - TIME LIMIT MODE MUST BE SET TO \"DRAW_POWER\" - "
-        )
-        ;
+        );
 
         public final int id;
         public final String label;
@@ -1277,7 +1401,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 return new StargateContainerGuiState(gateAddressMap, getConfig());
 
             case GUI_UPDATE:
-                return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose, this.irisMode, this.irisCode, getOpenedSecondsToDisplay(), this.gateHeat, this.irisHeat);
+                return new StargateContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick, energySecondsToClose, this.irisMode, this.irisCode, this.openedSince, this.gateHeat, this.irisHeat);
 
             default:
                 return super.getState(stateType);
@@ -1374,9 +1498,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 energySecondsToClose = guiUpdate.secondsToClose;
                 irisMode = guiUpdate.irisMode;
                 irisCode = guiUpdate.irisCode;
-                secondsOpened = guiUpdate.openedSeconds;
+                openedSince = guiUpdate.openedSince;
                 gateHeat = guiUpdate.gateTemp;
                 irisHeat = guiUpdate.irisTemp;
+                markDirty();
                 break;
 
             case SPIN_STATE:
@@ -1519,7 +1644,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public int getOriginId() {
-        return getOriginId(getBiomeOverlayWithOverride(), getFakeWorld().provider.getDimension(), getConfig().getOption(ORIGIN_MODEL.id).getEnumValue().getIntValue());
+        return getOriginId(getBiomeOverlayWithOverride(true), getFakeWorld().provider.getDimension(), getConfig().getOption(ORIGIN_MODEL.id).getEnumValue().getIntValue());
     }
 
     public void setOriginId(NBTTagCompound compound) {
@@ -1750,7 +1875,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
     };
 
-    public int getSupportedCapacitors(){
+    public int getSupportedCapacitors() {
         return getConfig().getOption(ConfigOptions.CAPACITORS_COUNT.id).getIntValue();
     }
 
@@ -2241,7 +2366,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Callback
     public Object[] getOpenedTime(Context context, Arguments args) {
         if (stargateState.engaged()) {
-            float openedSeconds = getOpenedSecondsToDisplay();
+            float openedSeconds = getOpenedSeconds();
             int minutes = ((int) Math.floor(openedSeconds / 60));
             int seconds = ((int) (openedSeconds - (60 * minutes)));
             String secondsString = ((seconds < 10) ? "0" + seconds : "" + seconds);

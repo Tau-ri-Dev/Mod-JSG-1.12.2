@@ -657,6 +657,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * @param isInitiating  True if gate is initializing the connection, false otherwise.
      */
     protected void openGate(StargatePos targetGatePos, boolean isInitiating) {
+        setOpenedSince();
 
         this.isInitiating = isInitiating;
         this.targetGatePos = targetGatePos;
@@ -689,6 +690,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected void closeGate(StargateClosedReasonEnum reason) {
         stargateState = EnumStargateState.UNSTABLE;
         energySecondsToClose = 0;
+        resetOpenedSince();
 
         addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CLOSE, 62));
 
@@ -970,7 +972,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 int energyStored = getEnergyStorage().getEnergyStored();
 
                 // Max Open Time
-                if (targetGatePos.getTileEntity() != null) targetGatePos.getTileEntity().addTimeLimitSecond();
                 int morePower = doTimeLimitFunc();
                 energySecondsToClose = energyStored / (float) (keepAliveEnergyPerTick + morePower + shieldKeepAlive) / 20f;
 
@@ -1006,7 +1007,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                     attemptClose(StargateClosedReasonEnum.OUT_OF_POWER);
             } else {
                 if (shieldKeepAlive > 0) getEnergyStorage().extractEnergy(shieldKeepAlive, false);
-                if (getOpenedSeconds() > 0 && stargateState != EnumStargateState.ENGAGED) resetLimitSeconds();
             }
 
             energyTransferedLastTick = getEnergyStorage().getEnergyStored() - energyStoredLastTick;
@@ -1017,8 +1017,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected void kawooshDestruction() {
         // Event horizon killing
         if (horizonKilling) {
-            List<Entity> entities = new ArrayList<Entity>();
-            List<BlockPos> blocks = new ArrayList<BlockPos>();
+            List<Entity> entities = new ArrayList<>();
+            List<BlockPos> blocks = new ArrayList<>();
 
             // Get all blocks and entities inside the kawoosh
             for (int i = 0; i < horizonSegments; i++) {
@@ -1070,8 +1070,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     public abstract EnumSet<BiomeOverlayEnum> getSupportedOverlays();
 
-    public BiomeOverlayEnum getBiomeOverlayWithOverride(){
-        return BiomeOverlayEnum.updateBiomeOverlay(world, pos, getSupportedOverlays());
+    public BiomeOverlayEnum getBiomeOverlayWithOverride(boolean override){
+        return BiomeOverlayEnum.updateBiomeOverlay(world, getMergeHelper().getTopBlock().add(pos), getSupportedOverlays());
     }
 
     /**
@@ -1081,13 +1081,17 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      */
     protected boolean shouldAutoclose() {
         if (!randomIncomingIsActive && targetGatePos != null) return getAutoCloseManager().shouldClose(targetGatePos);
-        else if (!randomIncomingIsActive) return true;
-        return false;
+        else return !randomIncomingIsActive;
     }
 
-    protected void resetLimitSeconds() {
-        secondsOpened = 0;
-        getAutoCloseManager().resetLimitSeconds();
+    protected void resetOpenedSince() {
+        openedSince = -1;
+        markDirty();
+    }
+
+    protected void setOpenedSince() {
+        openedSince = world.getTotalWorldTime();
+        markDirty();
     }
 
     public void clearDHDSymbols(){}
@@ -1095,7 +1099,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected int doTimeLimitFunc() {
         int morePower = 0;
         getOpenedSeconds();
-        addTimeLimitSecond();
         int configPower = JSGConfig.openLimitConfig.maxOpenedPowerDrawAfterLimit;
         int maxSeconds = JSGConfig.openLimitConfig.maxOpenedSeconds;
         StargateTimeLimitModeEnum limitMode = JSGConfig.openLimitConfig.maxOpenedWhat;
@@ -1108,33 +1111,24 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         }
         boolean enabled = (limitMode != StargateTimeLimitModeEnum.DISABLED);
 
-        if (enabled && (getAutoCloseManager().getOpenedSeconds() >= maxSeconds)) {
+        if (enabled && (getOpenedSeconds() >= maxSeconds)) {
             if (limitMode == StargateTimeLimitModeEnum.CLOSE_GATE) {
                 attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
                 clearDHDSymbols();
-                resetLimitSeconds();
             } else
-                morePower = (configPower + (getOpenedSeconds() * (configPower / 100)));
+                morePower = (int) (((double) getOpenedSeconds()/maxSeconds) * configPower);
         }
         return morePower;
     }
 
-    protected void addTimeLimitSecond() {
-        getAutoCloseManager().addLimitSecond();
-    }
-
-    public int getOpenedSeconds() {
-        secondsOpened = getAutoCloseManager().getOpenedSeconds();
-        return (int) secondsOpened;
-    }
-
-    public float getOpenedSecondsToDisplay() {
-        return secondsOpened;
+    public long getOpenedSeconds() {
+        if(openedSince < 0) return -1;
+        return (world.getTotalWorldTime() - openedSince)/20;
     }
 
     public String getOpenedSecondsToDisplayAsMinutes() {
-        float openedSeconds = getOpenedSecondsToDisplay();
-        int minutes = ((int) Math.floor(openedSeconds / 60));
+        long openedSeconds = getOpenedSeconds();
+        int minutes = ((int) Math.floor((double) openedSeconds / 60));
         int seconds = ((int) (openedSeconds - (60 * minutes)));
         String secondsString = ((seconds < 10) ? "0" + seconds : "" + seconds);
         return minutes + ":" + secondsString + "min";
@@ -1483,7 +1477,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             case RENDERER_STATE:
                 EnumFacing facing = world.getBlockState(pos).getValue(JSGProps.FACING_HORIZONTAL);
 
-                setRendererStateClient(((StargateAbstractRendererState) state).initClient(pos, facing, BiomeOverlayEnum.updateBiomeOverlay(world, pos, getSupportedOverlays())));
+                setRendererStateClient(((StargateAbstractRendererState) state).initClient(pos, facing, getBiomeOverlayWithOverride(false)));
 
                 updateFacing(facing, false);
 
@@ -1668,7 +1662,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     private int energyStoredLastTick = 0;
     protected int energyTransferedLastTick = 0;
     protected float energySecondsToClose = 0;
-    protected float secondsOpened = 0;
+    public long openedSince;
 
     public int getEnergyTransferedLastTick() {
         return energyTransferedLastTick;
@@ -1775,6 +1769,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         compound.setBoolean("horizonKilling", horizonKilling);
         compound.setInteger("horizonSegments", horizonSegments);
+        compound.setLong("openedSince", openedSince);
 
         return super.writeToNBT(compound);
     }
@@ -1817,6 +1812,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         horizonKilling = compound.getBoolean("horizonKilling");
         horizonSegments = compound.getInteger("horizonSegments");
+        openedSince = compound.getLong("openedSince");
 
         super.readFromNBT(compound);
     }

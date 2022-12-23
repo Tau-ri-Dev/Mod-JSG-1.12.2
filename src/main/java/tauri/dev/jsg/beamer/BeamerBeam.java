@@ -39,16 +39,21 @@ public class BeamerBeam {
 
     public double beamLength;
     public float beamRadius;
+    public float beamMaxRadius;
 
     public BeamerBeam(float angleX, float angleY, double beamLength, float beamRadius) {
+        this(angleX, angleY, beamLength, beamRadius, beamRadius);
+    }
+    public BeamerBeam(float angleX, float angleY, double beamLength, float beamRadius, float beamMaxRadius) {
         this.angleX = angleX;
         this.angleY = angleY;
         this.beamLength = beamLength;
         this.beamRadius = beamRadius;
+        this.beamMaxRadius = beamMaxRadius;
     }
 
     @Nonnull
-    public static BeamerBeam getBeam(int offsetZFromTarget, int offsetZTargetFromGate, int offsetXFromTarget, int offsetYFromTarget, float beamRadius, @Nonnull EnumFacing facing) {
+    public static BeamerBeam getBeam(int offsetZFromTarget, int offsetZTargetFromGate, int offsetXFromTarget, int offsetYFromTarget, float beamRadius, float beamMaxRadius, @Nonnull EnumFacing facing) {
 
         double t1 = ((double) offsetXFromTarget) / ((double) offsetZFromTarget);
         double angY = Math.toDegrees(Math.atan(t1));
@@ -64,7 +69,7 @@ public class BeamerBeam {
 
         beamerLength += 0.2D;
 
-        return new BeamerBeam((float) angX * -1, (float) angY * ((facing == EnumFacing.SOUTH || facing == EnumFacing.WEST) ? -1 : 1), beamerLength, beamRadius);
+        return new BeamerBeam((float) angX * -1, (float) angY * ((facing == EnumFacing.SOUTH || facing == EnumFacing.WEST) ? -1 : 1), beamerLength, beamRadius, beamMaxRadius);
     }
 
     public static boolean isSomethingInBeam(BeamerTile beamer, boolean destroyBlocks, boolean hitEntities) {
@@ -86,7 +91,7 @@ public class BeamerBeam {
             currentOffsetFromGate *= -1;
 
         for (int off = 1; off < currentOffsetFromGate; off++) {
-            BeamerBeam beam = getBeam(beamZOffset, targetOffset, beamXOffset, beamYOffset, -1, beamer.getFacing());
+            BeamerBeam beam = getBeam(beamZOffset, targetOffset, beamXOffset, beamYOffset, -1, -1, beamer.getFacing());
             double lengthXZ = (off / Math.cos(Math.toRadians(beam.angleY)));
 
             final double offX = (Math.tan(Math.toRadians(beam.angleY)) * off);
@@ -152,7 +157,8 @@ public class BeamerBeam {
         GlStateManager.alphaFunc(516, 0.1F);
         JSGTextureLightningHelper.lightUpTexture(1f);
         Minecraft.getMinecraft().getTextureManager().bindTexture(TileEntityBeaconRenderer.TEXTURE_BEACON_BEAM);
-        renderBeamSegment(partialTicks, (teRole == BeamerRoleEnum.TRANSMIT ? 1 : -1), tick, this.beamLength + 0.2D, colors, this.beamRadius, this.beamRadius + 0.05f);
+        float lengthAnimCoefficient = (this.beamRadius/this.beamMaxRadius);
+        renderBeamSegment(partialTicks, (teRole == BeamerRoleEnum.TRANSMIT ? 1 : -1), tick, ((this.beamLength - 0.2D) * lengthAnimCoefficient), colors, this.beamRadius, this.beamRadius + 0.05f);
     }
 
     /**

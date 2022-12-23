@@ -704,6 +704,8 @@ gui.beamer.disabled_by_logic=Vetítő logika által kikapcsolva
 gui.beamer.disabled_by_logic_target=Cél vetítő logika által kikapcsolva
 gui.beamer.running=Fut
 gui.beamer.no_crystal=Hiányzó kristály
+gui.beamer.no_power=Not enough power
+gui.beamer.can_not_receive=Can not receive
 
 gui.beamer.transmit=Küld
 gui.beamer.receive=Vesz

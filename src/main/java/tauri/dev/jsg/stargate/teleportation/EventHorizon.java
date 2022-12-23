@@ -198,7 +198,7 @@ public class EventHorizon {
                     if (irisItem.getCount() == 0) {
                         classicTargetGate.updateIrisType();
                     }
-                    classicTargetGate.tryHeatUp(true, false, 2);
+                    classicTargetGate.tryHeatUp(true, 2);
                 } else {
                     IEnergyStorage energyStorage = classicTargetGate.getCapability(CapabilityEnergy.ENERGY, null);
                     if (energyStorage != null) {

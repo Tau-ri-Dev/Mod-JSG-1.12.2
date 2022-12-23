@@ -40,7 +40,7 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
     private int openTabId = -1;
     private EnumIrisMode irisMode;
     private int irisCode;
-    private float openedSeconds;
+    public long openedSince;
     private double gateTemp;
     private double irisTemp;
 
@@ -199,9 +199,9 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
                 || energyTransferedLastTick != gateTile.getEnergyTransferedLastTick()
                 || irisMode != gateTile.getIrisMode()
                 || irisCode != gateTile.getIrisCode()
-                || openedSeconds != gateTile.getOpenedSecondsToDisplay()
-                || (Math.abs(gateTemp - gateTile.gateHeat) > 25) || (gateTemp == -1 && gateTile.gateHeat != -1)
-                || (Math.abs(irisTemp - gateTile.irisHeat) > 25) || (irisTemp == -1 && gateTile.irisHeat != -1)
+                || openedSince != gateTile.openedSince
+                || (Math.abs(gateTemp - gateTile.gateHeat) > 5) || (gateTemp == -1 && gateTile.gateHeat != -1)
+                || (Math.abs(irisTemp - gateTile.irisHeat) > 5) || (irisTemp == -1 && gateTile.irisHeat != -1)
 
         ) {
             for (IContainerListener listener : listeners) {
@@ -213,7 +213,7 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
             lastEnergyStored = energyStorage.getEnergyStoredInternally();
             energyTransferedLastTick = gateTile.getEnergyTransferedLastTick();
             lastEnergySecondsToClose = gateTile.getEnergySecondsToClose();
-            openedSeconds = gateTile.getOpenedSecondsToDisplay();
+            openedSince = gateTile.openedSince;
             irisMode = gateTile.getIrisMode();
             irisCode = gateTile.getIrisCode();
             gateTemp = gateTile.gateHeat;

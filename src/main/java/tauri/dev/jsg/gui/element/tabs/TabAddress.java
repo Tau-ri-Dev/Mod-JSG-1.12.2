@@ -56,7 +56,7 @@ public class TabAddress extends Tab {
                 color = 0.0f;
 
             for (int i = 0; i < maxSymbols; i++) {
-                Minecraft.getMinecraft().getTextureManager().bindTexture(Objects.requireNonNull(gateTile.getStargateAddress(symbolType)).get(i).getIconResource(StargateClassicBaseTile.getOriginId(gateTile.getBiomeOverlayWithOverride(), gateTile.getWorld().provider.getDimension(), gateTile.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL.id).getEnumValue().getIntValue())));
+                Minecraft.getMinecraft().getTextureManager().bindTexture(Objects.requireNonNull(gateTile.getStargateAddress(symbolType)).get(i).getIconResource(StargateClassicBaseTile.getOriginId(gateTile.getBiomeOverlayWithOverride(true), gateTile.getWorld().provider.getDimension(), gateTile.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL.id).getEnumValue().getIntValue())));
 
                 SymbolCoords symbolCoords = getSymbolCoords(i);
                 GuiHelper.drawTexturedRectWithShadow(symbolCoords.x, symbolCoords.y, shadow, shadow, symbolType.iconWidht, symbolType.iconHeight, color);

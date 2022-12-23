@@ -11,6 +11,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class CapacitorContainerGui extends GuiContainer {
 
@@ -23,7 +24,7 @@ public class CapacitorContainerGui extends GuiContainer {
 		
 		this.container = container;
 		this.xSize = 176;
-		this.ySize = 168;
+		this.ySize = 163;
 	}
 	
 	@Override
@@ -41,22 +42,22 @@ public class CapacitorContainerGui extends GuiContainer {
 		
 		StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.capTile.getCapability(CapabilityEnergy.ENERGY, null);
 
-		int width = Math.round((energyStorage.getEnergyStored()/((float) JSGConfig.powerConfig.stargateEnergyStorage/4) * 156));
-		drawGradientRect(guiLeft+10, guiTop+61, guiLeft+10+width, guiTop+61+6, 0xffcc2828, 0xff731616);
+		int width = Math.round((Objects.requireNonNull(energyStorage).getEnergyStored()/((float) JSGConfig.powerConfig.stargateEnergyStorage/4) * 156));
+		drawGradientRect(guiLeft+10, guiTop+59, guiLeft+10+width, guiTop+59+6, 0xffcc2828, 0xff731616);
 	}
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		fontRenderer.drawString(I18n.format("gui.capacitor.name"), 7, 6, 4210752);
+		fontRenderer.drawString(I18n.format("gui.capacitor.name"), 8, 16, 4210752);
         fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
         
 		StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.capTile.getCapability(CapabilityEnergy.ENERGY, null);
         
-		int energyStored = energyStorage.getEnergyStored();
+		int energyStored = Objects.requireNonNull(energyStorage).getEnergyStored();
 		int maxEnergyStored = energyStorage.getMaxEnergyStored();
 		
 		String energyPercent = String.format("%.2f", energyStored/(float)maxEnergyStored * 100) + " %";
-		fontRenderer.drawString(energyPercent, 170-fontRenderer.getStringWidth(energyPercent), 71, 4210752);
+		fontRenderer.drawString(energyPercent, this.xSize - 8 - fontRenderer.getStringWidth(energyPercent), 69, 4210752);
 		
 		int transferred = container.capTile.getEnergyTransferedLastTick();
 		TextFormatting transferredFormatting = TextFormatting.GRAY;
@@ -69,10 +70,7 @@ public class CapacitorContainerGui extends GuiContainer {
 			transferredFormatting = TextFormatting.RED;
 		}
 		
-//		String energyString = String.format("%,d / %,d RF", energyStorage.getEnergyStored(), energyStorage.getMaxEnergyStored());
-//		fontRenderer.drawString(energyString, 169-fontRenderer.getStringWidth(energyString), 49, 4210752);
-		
-        if (isPointInRegion(10, 61, 156, 6, mouseX, mouseY)) {
+        if (isPointInRegion(10, 59, 156, 6, mouseX, mouseY)) {
 			List<String> power = Arrays.asList(
 					I18n.format("gui.stargate.energyBuffer"),
 					TextFormatting.GRAY + String.format("%,d / %,d RF", energyStorage.getEnergyStored(), energyStorage.getMaxEnergyStored()),

@@ -23,19 +23,12 @@ public class TabInfo extends Tab {
         }
     }
 
-    public TabInfo addString(InfoString string) {
+    public void addString(InfoString string) {
         strings.add(string);
-        return this;
     }
 
-    public TabInfo addStrings(InfoString... strings) {
-        this.strings.addAll(Arrays.asList(strings));
-        return this;
-    }
-
-    public TabInfo clearStrings() {
+    public void clearStrings() {
         strings.clear();
-        return this;
     }
 
     public static class InfoString {

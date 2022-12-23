@@ -657,7 +657,7 @@ public class JSGConfig {
 
         @Name("Energy/tick needed to keep laser alive")
         @RangeInt(min = 1)
-        public int laserEnergy = 7050;
+        public int laserEnergy = 16384;
 
         @Name("Damage entities in a beam")
         public boolean damageEntities = true;

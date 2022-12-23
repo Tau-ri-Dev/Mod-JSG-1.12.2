@@ -704,6 +704,8 @@ gui.beamer.disabled_by_logic=Отключен логикой
 gui.beamer.disabled_by_logic_target=Отключён логикой (Целевой передатчик)
 gui.beamer.running=Активен
 gui.beamer.no_crystal=Нет кристалла
+gui.beamer.no_power=Not enough power
+gui.beamer.can_not_receive=Can not receive
 
 gui.beamer.transmit=Отправлять
 gui.beamer.receive=Получать

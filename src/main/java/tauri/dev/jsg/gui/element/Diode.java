@@ -17,13 +17,13 @@ public class Diode {
 	
 	public static final ResourceLocation DIODE_TEXTURE = new ResourceLocation(JSG.MOD_ID, "textures/gui/diodes.png");
 	
-	private GuiScreen screen;
+	private final GuiScreen screen;
 
-	private int x;
-	private int y;
+	private final int x;
+	private final int y;
 	
-	private String description;
-	private Map<DiodeStatus, String> statusStringMap;
+	private final String description;
+	private final Map<DiodeStatus, String> statusStringMap;
 	private DiodeStatus status;
 	private StatusMapperInterface statusMapper;
 	private StatusStringMapperInterface statusStringMapper;
@@ -33,7 +33,7 @@ public class Diode {
 		this.x = x;
 		this.y = y;
 		this.description = description;
-		this.statusStringMap = new HashMap<DiodeStatus, String>(3);
+		this.statusStringMap = new HashMap<>(3);
 	}
 	
 	public Diode putStatus(DiodeStatus status, String statusString) {
@@ -85,32 +85,32 @@ public class Diode {
 				textComponent.getFormattedText()), mouseX, mouseY);
 	}
 	
-	public static enum DiodeStatus {
+	public enum DiodeStatus {
 		OFF(0, 0, TextFormatting.DARK_RED),
 		WARN(8, 0, TextFormatting.YELLOW),
 		ON(0, 7, TextFormatting.GREEN);
 		
-		public int xTex;
-		public int yTex;
-		public TextFormatting color;
+		public final int xTex;
+		public final int yTex;
+		public final TextFormatting color;
 
-		private DiodeStatus(int xTex, int yTex, TextFormatting color) {
+		DiodeStatus(int xTex, int yTex, TextFormatting color) {
 			this.xTex = xTex;
 			this.yTex = yTex;
 			this.color = color;
 		}
 	}
 	
-	public static interface StatusMapperInterface {
-		public DiodeStatus get();
+	public interface StatusMapperInterface {
+		DiodeStatus get();
 	}
 	
-	public static interface StatusStringMapperInterface {
+	public interface StatusStringMapperInterface {
 		
 		/**
 		 * @return Custom status string or {@code null} to use {@link Map} one.
 		 */
 		@Nullable
-		public String get();
+		String get();
 	}
 }

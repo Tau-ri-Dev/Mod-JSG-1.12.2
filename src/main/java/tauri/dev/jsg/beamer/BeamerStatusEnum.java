@@ -20,13 +20,14 @@ public enum BeamerStatusEnum implements EnumKeyInterface<Integer> {
 	TWO_RECEIVERS(13),
 	BEAMER_DISABLED_BY_LOGIC(14),
 	BEAMER_DISABLED_BY_LOGIC_TARGET(15),
-	NO_POWER(16);
+	NO_POWER(16),
+	BEAMER_CANNOT_RECEIVE(17);
 	
 	
-	public int id;
-	public float[] colors;
+	public final int id;
+	public final float[] colors;
 	
-	private BeamerStatusEnum(int id, float... colors) {
+	BeamerStatusEnum(int id, float... colors) {
 		this.id = id;
 		this.colors = colors;
 	}

@@ -20,33 +20,37 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 public class CapacitorContainer extends Container {
 
     public CapacitorTile capTile;
     public Slot slot;
-    private BlockPos pos;
+    private final BlockPos pos;
     private int lastEnergyStored;
     private int energyTransferedLastTick;
 
     public CapacitorContainer(IInventory playerInventory, World world, int x, int y, int z) {
         pos = new BlockPos(x, y, z);
         capTile = (CapacitorTile) world.getTileEntity(pos);
-        IItemHandler itemHandler = capTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-
-        for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 86))
-            addSlotToContainer(slot);
+        IItemHandler itemHandler = Objects.requireNonNull(capTile).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
         slot = new SlotItemHandler(itemHandler, 0, 80, 35);
         addSlotToContainer(slot);
+
+        for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 81))
+            addSlotToContainer(slot);
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(@Nonnull EntityPlayer player) {
         return true;
     }
 
+    @Nonnull
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+    public ItemStack transferStackInSlot(@Nonnull EntityPlayer playerIn, int index) {
         ItemStack stack = getSlot(index).getStack();
 
         // Transferring from Capacitor to player's inventory
@@ -84,7 +88,7 @@ public class CapacitorContainer extends Container {
 
         StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) capTile.getCapability(CapabilityEnergy.ENERGY, null);
 
-        if (lastEnergyStored != energyStorage.getEnergyStored() || energyTransferedLastTick != capTile.getEnergyTransferedLastTick()) {
+        if (lastEnergyStored != Objects.requireNonNull(energyStorage).getEnergyStored() || energyTransferedLastTick != capTile.getEnergyTransferedLastTick()) {
             for (IContainerListener listener : listeners) {
                 if (listener instanceof EntityPlayerMP) {
                     JSGPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(pos, StateTypeEnum.GUI_UPDATE, capTile.getState(StateTypeEnum.GUI_UPDATE)), (EntityPlayerMP) listener);
