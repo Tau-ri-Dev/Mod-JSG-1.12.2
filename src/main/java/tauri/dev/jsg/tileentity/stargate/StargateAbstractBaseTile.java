@@ -218,7 +218,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         if (targetPoint != null) {
             JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, type, state), targetPoint);
         } else {
-            JSG.logger.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
+            JSG.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
         }
     }
 
@@ -919,7 +919,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             }
 
             if (stargateState.engaged() && targetGatePos == null && !randomIncomingIsActive) {
-                JSG.logger.error("A stargateState indicates the Gate should be open, but targetGatePos is null. This is a bug. Closing gate...");
+                JSG.error("A stargateState indicates the Gate should be open, but targetGatePos is null. This is a bug. Closing gate...");
                 attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
             }
 
@@ -1797,8 +1797,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         try {
             ScheduledTask.deserializeList(compound.getCompoundTag("scheduledTasks"), scheduledTasks, this);
         } catch (NullPointerException | IndexOutOfBoundsException | ClassCastException e) {
-            JSG.logger.warn("Exception at reading NBT");
-            JSG.logger.warn("If loading world used with previous version and nothing game-breaking doesn't happen, please ignore it");
+            JSG.warn("Exception at reading NBT");
+            JSG.warn("If loading world used with previous version and nothing game-breaking doesn't happen, please ignore it");
 
             e.printStackTrace();
         }

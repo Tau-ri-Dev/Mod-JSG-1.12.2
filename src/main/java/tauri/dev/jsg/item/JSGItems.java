@@ -64,7 +64,13 @@ public class JSGItems {
     public static final Item CRYSTAL_GLYPH_ANCIENT = ItemHelper.createGenericItem("crystal_glyph_ancient", JSG_ITEMS_CREATIVE_TAB);
 
     /**
-     * Diffrent Naquadah(main Stargate building material) stages of purity
+     * Upgrades
+     */
+    public static final Item CRYSTAL_UPGRADE_CAPACITY = ItemHelper.createGenericItem("crystal_upgrade_capacity", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item CRYSTAL_UPGRADE_EFFICIENCY = ItemHelper.createGenericItem("crystal_upgrade_efficiency", JSG_ITEMS_CREATIVE_TAB);
+
+    /**
+     * Different Naquadah(main Stargate building material) stages of purity
      */
     public static final Item NAQUADAH_ORE_IMPURE = ItemHelper.createGenericItem("naquadah_impure", JSG_ITEMS_CREATIVE_TAB);
     public static final Item NAQUADAH_ORE_PURIFIED = ItemHelper.createGenericItem("naquadah_purified", JSG_ITEMS_CREATIVE_TAB);
@@ -243,6 +249,9 @@ public class JSGItems {
             CRYSTAL_WHITE,
             CRYSTAL_BLUE_PEGASUS,
             CRYSTAL_TOKRA,
+
+            CRYSTAL_UPGRADE_CAPACITY,
+            CRYSTAL_UPGRADE_EFFICIENCY,
 
             BEAMER_CRYSTAL_POWER,
             BEAMER_CRYSTAL_FLUID,

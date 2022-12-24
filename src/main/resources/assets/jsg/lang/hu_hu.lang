@@ -185,6 +185,9 @@ item.jsg.crystal_glyph_goauld.name=Goa'uld Gyűrű Szimbólumkristály
 item.jsg.crystal_glyph_ori.name=Ori Gyűrű Szimbólumkristály
 item.jsg.crystal_glyph_ancient.name=Ős Gyűrű Szimbólumkristály
 
+item.jsg.crystal_upgrade_capacity.name=Capacity Upgrade Crystal
+item.jsg.crystal_upgrade_efficiency.name=Efficiency Upgrade Crystal
+
 # dhd
 item.jsg.dhd_brb.name=Világos Piros Gomb
 item.jsg.dhd_bbb.name=Világos Kék Gomb

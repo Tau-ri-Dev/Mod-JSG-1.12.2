@@ -32,7 +32,7 @@ public class StargateAddressDynamic extends StargateAddress {
 		
 	public void addSymbol(SymbolInterface symbol) {		
 		if (address.size() == 9) {
-			JSG.logger.error("Tried to add symbol to already full address");
+			JSG.error("Tried to add symbol to already full address");
 			return;
 		}
 		
@@ -42,7 +42,7 @@ public class StargateAddressDynamic extends StargateAddress {
 	
 	public void addAll(StargateAddress stargateAddress) {
 		if (address.size()+stargateAddress.address.size() > 9) {
-			JSG.logger.error("Tried to add symbols to already populated address");
+			JSG.error("Tried to add symbols to already populated address");
 			return;
 		}
 		
@@ -52,7 +52,7 @@ public class StargateAddressDynamic extends StargateAddress {
 	
 	public void addAll(List<SymbolInterface> stargateAddress) {
 		if (address.size()+stargateAddress.size() > 9) {
-			JSG.logger.error("Tried to add symbols to already populated address");
+			JSG.error("Tried to add symbols to already populated address");
 			return;
 		}
 		

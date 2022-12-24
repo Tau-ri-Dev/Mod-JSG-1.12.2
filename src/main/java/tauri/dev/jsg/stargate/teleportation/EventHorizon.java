@@ -187,7 +187,7 @@ public class EventHorizon {
                 }
                 tryTriggerRangedAdvancement(classicTargetGate, JSGAdvancementsUtil.EnumAdvancementType.IRIS_IMPACT);
                 ItemStack irisItem = classicTargetGate.getItemHandler().getStackInSlot(11);
-                if (irisItem.getItem() instanceof UpgradeIris) {
+                if (irisItem.getItem() instanceof UpgradeIris && irisItem.isItemStackDamageable()) {
                     // different damages per source
                     int chance = EnchantmentHelper.getEnchantments(irisItem).containsKey(Enchantments.UNBREAKING) ? (tauri.dev.jsg.config.JSGConfig.irisConfig.unbreakingChance * EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, irisItem)) : 0;
                     int random = randomGenerator.nextInt(100);

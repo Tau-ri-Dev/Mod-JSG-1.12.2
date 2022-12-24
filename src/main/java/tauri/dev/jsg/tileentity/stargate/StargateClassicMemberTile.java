@@ -97,7 +97,7 @@ public abstract class StargateClassicMemberTile extends StargateAbstractMemberTi
 		}
 		
 		else {
-			JSG.logger.warn("Tried to set camoBlockState from client. This won't work!");
+			JSG.warn("Tried to set camoBlockState from client. This won't work!");
 		}
 	}
 	
@@ -185,7 +185,7 @@ public abstract class StargateClassicMemberTile extends StargateAbstractMemberTi
 		}
 		
 		else {
-			JSG.logger.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
+			JSG.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
 		}
 	}
 	

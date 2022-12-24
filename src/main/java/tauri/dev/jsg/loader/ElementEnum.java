@@ -144,7 +144,7 @@ public enum ElementEnum {
             // Probably doesn't exist
 
             if (!nonExistingReported.contains(biomeOverlay)) {
-                JSG.logger.error(this + " tried to use BiomeOverlay " + biomeOverlay + " but it doesn't exist. (" + resourceLocation + ")");
+                JSG.error(this + " tried to use BiomeOverlay " + biomeOverlay + " but it doesn't exist. (" + resourceLocation + ")");
                 nonExistingReported.add(biomeOverlay);
             }
 

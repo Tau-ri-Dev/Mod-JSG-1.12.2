@@ -40,7 +40,7 @@ public class StargateAddress implements INBTSerializable<NBTTagCompound> {
 	 */
 	public StargateAddress generate(Random random) {
 		if (!address.isEmpty()) {
-			JSG.logger.error("Tried to regenerate address already containing symbols");
+			JSG.error("Tried to regenerate address already containing symbols");
 			return this;
 		}
 		
@@ -119,7 +119,7 @@ public class StargateAddress implements INBTSerializable<NBTTagCompound> {
 	@Override
 	public void deserializeNBT(NBTTagCompound compound) {
 		if (!address.isEmpty()) {
-			JSG.logger.error("Tried to deserialize address already containing symbols");
+			JSG.error("Tried to deserialize address already containing symbols");
 			return;
 		}
 		
@@ -138,7 +138,7 @@ public class StargateAddress implements INBTSerializable<NBTTagCompound> {
 	
 	public void fromBytes(ByteBuf buf) {
 		if (!address.isEmpty()) {
-			JSG.logger.error("Tried to deserialize address already containing symbols");
+			JSG.error("Tried to deserialize address already containing symbols");
 			return;
 		}
 		

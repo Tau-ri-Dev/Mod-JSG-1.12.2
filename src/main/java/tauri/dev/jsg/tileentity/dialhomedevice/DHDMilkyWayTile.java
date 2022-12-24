@@ -184,7 +184,7 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
         }
     }
 
-    @Override
+    /*--@Override
     public void readFromNBT(NBTTagCompound compound) {
 
         if (compound.hasKey("inventory")) {
@@ -201,6 +201,6 @@ public class DHDMilkyWayTile extends DHDAbstractTile {
         }
 
         super.readFromNBT(compound);
-    }
+    }*/
 
 }

@@ -61,13 +61,13 @@ public class FluidColors {
 				colorsOut[i] /= 256.0f;
 			}
 			
-			JSG.logger.debug("Loaded fluid color for " + fluid);
+			JSG.debug("Loaded fluid color for " + fluid);
 			
 			fluidColorMap.put(fluid, new FloatColors(colorsOut));
 		}
 		
 		catch (IOException e) {
-			JSG.logger.error("Failed to get average fluid color for " + fluid);
+			JSG.error("Failed to get average fluid color for " + fluid);
 			e.printStackTrace();
 			
 			failedSet.add(fluid);

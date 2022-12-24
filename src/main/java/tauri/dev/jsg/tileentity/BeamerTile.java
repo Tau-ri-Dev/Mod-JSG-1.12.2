@@ -1043,7 +1043,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
         if (targetPoint != null) {
             JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, type, state), targetPoint);
         } else {
-            JSG.logger.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
+            JSG.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
         }
     }
 
@@ -1210,7 +1210,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
                 BeamerFluidUpdate fluidUpdate = (BeamerFluidUpdate) state;
 
                 lastFluidTransferred = fluidUpdate.fluidContained;
-                JSG.logger.debug("Received beamer fluid update: " + lastFluidTransferred);
+                JSG.debug("Received beamer fluid update: " + lastFluidTransferred);
 
                 break;
 

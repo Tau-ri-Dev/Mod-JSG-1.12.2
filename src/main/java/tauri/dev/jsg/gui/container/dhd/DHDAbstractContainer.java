@@ -26,6 +26,8 @@ import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.tileentity.dialhomedevice.DHDAbstractTile;
 import tauri.dev.jsg.tileentity.util.ReactorStateEnum;
 
+import javax.annotation.Nonnull;
+
 public abstract class DHDAbstractContainer extends Container implements OpenTabHolderInterface {
 
     public Slot slotCrystal;
@@ -79,6 +81,7 @@ public abstract class DHDAbstractContainer extends Container implements OpenTabH
         return true;
     }
 
+    @Nonnull
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int index) {
         ItemStack stack = getSlot(index).getStack();

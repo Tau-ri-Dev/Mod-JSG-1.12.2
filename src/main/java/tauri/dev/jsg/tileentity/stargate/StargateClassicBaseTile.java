@@ -109,8 +109,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     private int irisMaxDurability = 0;
     protected boolean isFinalActive;
 
-    protected double lastIrisHeat;
-    protected double lastGateHeat;
+    protected double lastIrisHeat = -2;
+    protected double lastGateHeat = -2;
     public double irisHeat;
     public double gateHeat;
     public static final double IRIS_MAX_HEAT_TITANIUM = JSGConfig.irisConfig.irisTitaniumMaxHeat;
@@ -154,7 +154,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             int heatCoefficient = (int) Math.round(Math.abs(irisHeat - maxHeat));
             if (JSGConfig.irisConfig.enableIrisOverHeatCollapse) {
                 if (world.getTotalWorldTime() % (((int) (Math.random() * 70)) + 1) == 0) {
-                    if (isPhysicalIris()) {
+                    if (isPhysicalIris() && irisItem.isItemStackDamageable()) {
                         irisItem.getItem().setDamage(irisItem, irisItem.getItem().getDamage(irisItem) + (new Random().nextInt(heatCoefficient) + 1));
                         if (irisItem.getCount() == 0)
                             updateIrisType();
@@ -389,6 +389,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         BeamerLinkingHelper.findBeamersInFront(world, pos, facing);
         updateBeamers();
         updateIrisType();
+        double heat = TemperatureHelper.asKelvins(getTemperatureAroundGate()).toCelsius();
+        gateHeat = heat;
+        irisHeat = heat;
+        markDirty();
     }
 
 
@@ -613,6 +617,26 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return suma;
     }
 
+    /**
+     *
+     * @return temperature of air/blocks/liquids around the gate
+     */
+    public double getTemperatureAroundGate(){
+        double lavaCount = getAroundGateLiquid(true, false);
+        double waterCount = getAroundGateLiquid(false, false);
+        double airCount = getTemperatureAroundGate(0, false);
+
+        double total = lavaCount + waterCount + airCount;
+
+        double maxTemperature = getAroundGateLiquid(true, true);
+        double minTemperature = getAroundGateLiquid(false, true);
+        double airTemp = getTemperatureAroundGate(0, true);
+
+        double totalTemp = maxTemperature + minTemperature + airTemp;
+
+        return TemperatureHelper.asCelsius(((total > 0) ? TemperatureHelper.asKelvins((totalTemp / total)).toCelsius() : 25)).toKelvins();
+    }
+
     @Override
     public void update() {
         // Charging gate with lighting bold
@@ -638,19 +662,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
          */
         if (!world.isRemote && isMerged()) {
 
-            double lavaCount = getAroundGateLiquid(true, false);
-            double waterCount = getAroundGateLiquid(false, false);
-            double airCount = getTemperatureAroundGate(0, false);
-
-            double total = lavaCount + waterCount + airCount;
-
-            double maxTemperature = getAroundGateLiquid(true, true);
-            double minTemperature = getAroundGateLiquid(false, true);
-            double airTemp = getTemperatureAroundGate(0, true);
-
-            double totalTemp = maxTemperature + minTemperature + airTemp;
-
-            double middleTemperature = ((total > 0) ? TemperatureHelper.asKelvins((totalTemp / total)).toCelsius() : 25);
+            double middleTemperature = TemperatureHelper.asKelvins(getTemperatureAroundGate()).toCelsius();
 
             double cc = Math.min(Math.abs(gateHeat/(middleTemperature*2)), 0.5);
 
@@ -849,9 +861,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         attemptClose(StargateClosedReasonEnum.AUTOCLOSE);
                         JSG.debug(RIG_PREFIX + "Closed!!!");
 
-                        if (this instanceof StargatePegasusBaseTile) ((StargatePegasusBaseTile) this).clearDHDSymbols();
-                        if (this instanceof StargateMilkyWayBaseTile)
-                            ((StargateMilkyWayBaseTile) this).clearDHDSymbols();
+                        clearDHDSymbols();
                     }
 
                     markDirty();
@@ -1473,6 +1483,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     case HEAT_UPDATE:
                         getRendererStateClient().irisHeat = gateActionState.irisHeat;
                         getRendererStateClient().gateHeat = gateActionState.gateHeat;
+                        this.irisHeat = gateActionState.irisHeat;
+                        this.gateHeat = gateActionState.gateHeat;
                         markDirty();
                         break;
 
@@ -1587,7 +1599,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     setOriginId(compound);
                     saved.appendTag(compound);
                 } else {
-                    JSG.logger.debug("Giving Notebook page of address " + symbolType);
+                    JSG.debug("Giving Notebook page of address " + symbolType);
 
                     NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(gateAddressMap.get(symbolType), hasUpgrade(StargateUpgradeEnum.CHEVRON_UPGRADE), PageNotebookItem.getRegistryPathFromWorld(world, pos), getOriginId());
 
@@ -1942,12 +1954,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public boolean canInsertItemAsIris(Item item) {
-        if (JSGConfig.irisConfig.enableIrisOverHeatCollapse) {
-            if (item == JSGItems.UPGRADE_IRIS && (irisHeat >= IRIS_MAX_HEAT_TITANIUM || gateHeat >= IRIS_MAX_HEAT_TITANIUM))
-                return false;
-            if (item == JSGItems.UPGRADE_IRIS_TRINIUM && (irisHeat >= IRIS_MAX_HEAT_TRINIUM || gateHeat >= IRIS_MAX_HEAT_TRINIUM))
-                return false;
-        }
         return StargateIrisUpgradeEnum.contains(item);
     }
 
@@ -2225,7 +2231,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 }
             }
 
-            JSG.logger.debug("Updated to power tier: " + powerTier);
+            JSG.debug("Updated to power tier: " + powerTier);
         }
     }
 

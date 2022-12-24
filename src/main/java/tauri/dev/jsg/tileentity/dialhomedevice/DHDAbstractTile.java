@@ -58,9 +58,7 @@ import tauri.dev.jsg.util.JSGItemStackHandler;
 import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
 public abstract class DHDAbstractTile extends TileEntity implements ILinkable, IUpgradable, StateProviderInterface, ITickable, Environment, WirelessEndpoint {
@@ -69,7 +67,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     // Gate linking
 
     public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.SOOTY, BiomeOverlayEnum.AGED);
-    public static final List<Item> SUPPORTED_UPGRADES = Collections.singletonList(JSGItems.CRYSTAL_GLYPH_DHD);
+    public static final List<Item> SUPPORTED_UPGRADES = Arrays.asList(JSGItems.CRYSTAL_GLYPH_DHD, JSGItems.CRYSTAL_UPGRADE_CAPACITY, JSGItems.CRYSTAL_UPGRADE_EFFICIENCY);
     public static final int BIOME_OVERRIDE_SLOT = 5;
     protected final FluidTank fluidHandler = new FluidTank(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, 0), tauri.dev.jsg.config.JSGConfig.dhdConfig.fluidCapacity) {
 
@@ -277,6 +275,17 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
                 this.updateLinkStatus(world, pos);
             }
 
+            // Fluid upgrades
+            int newFluidCapacity = JSGConfig.dhdConfig.fluidCapacity;
+            if(hasUpgrade(DHDUpgradeEnum.CAPACITY_UPGRADE))
+                newFluidCapacity *= JSGConfig.dhdConfig.capacityUpgradeMultiplier;
+
+            if(fluidHandler.getCapacity() != newFluidCapacity){
+                fluidHandler.setCapacity(newFluidCapacity);
+                markDirty();
+                JSG.debug("DHD at " + pos.toString() + " set itself new capacity! (" + newFluidCapacity + "mb)");
+            }
+
             // Has crystal
             if (hasControlCrystal()) {
                 if (isLinked()) {
@@ -284,7 +293,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
                     if (gateTile == null) {
                         setLinkedGate(null, -1);
 
-                        JSG.logger.error("Gate didn't unlink properly, forcing...");
+                        JSG.error("Gate didn't unlink properly, forcing...");
                         return;
                     }
 
@@ -301,8 +310,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
                     }
 
                     if (reactorState == ReactorStateEnum.ONLINE || reactorState == ReactorStateEnum.STANDBY) {
-                        float percent = energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored();
-                        //						JSG.info("state: " + reactorState + ", percent: " + percent);
+                        float percent = Objects.requireNonNull(energyStorage).getEnergyStored() / (float) energyStorage.getMaxEnergyStored();
 
                         if (percent < tauri.dev.jsg.config.JSGConfig.dhdConfig.activationLevel)
                             reactorState = ReactorStateEnum.ONLINE;
@@ -313,7 +321,10 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
 
                     if (reactorState == ReactorStateEnum.ONLINE) {
                         fluidHandler.drainInternal(amount, true);
-                        energyStorage.receiveEnergy(tauri.dev.jsg.config.JSGConfig.dhdConfig.energyPerNaquadah * tauri.dev.jsg.config.JSGConfig.dhdConfig.powerGenerationMultiplier, false);
+                        int energyPerOne = JSGConfig.dhdConfig.energyPerNaquadah;
+                        if(hasUpgrade(DHDUpgradeEnum.EFFICIENCY_UPGRADE))
+                            energyPerOne *= JSGConfig.dhdConfig.efficiencyUpgradeMultiplier;
+                        energyStorage.receiveEnergy(energyPerOne * tauri.dev.jsg.config.JSGConfig.dhdConfig.powerGenerationMultiplier, false);
                     }
                 }
 
@@ -387,7 +398,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
         if (targetPoint != null) {
             JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, type, state), targetPoint);
         } else {
-            JSG.logger.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
+            JSG.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
         }
     }
 
@@ -450,8 +461,9 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     // ---------------------------------------------------------------------------------------------------
     // NBT
 
+    @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         if (linkedGate != null) {
             compound.setLong("linkedGate", linkedGate.toLong());
             compound.setInteger("linkId", linkId);
@@ -474,7 +486,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         super.readFromNBT(compound);
 
         if (compound.hasKey("linkedGate")) {
@@ -638,6 +650,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
         return new Object[]{null, "dhd_engage_failed_unknown", "Unknown error! This is a bug!"};
     }
 
+    @Nonnull
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         return new AxisAlignedBB(getPos().add(-1, 0, -1), getPos().add(1, 2, 1));
@@ -652,13 +665,14 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
         return 65536;
     }
 
-    // TODO Get rid of EnumKeyInterface
-    public static enum DHDUpgradeEnum implements EnumKeyInterface<Item> {
-        CHEVRON_UPGRADE(JSGItems.CRYSTAL_GLYPH_DHD);
+    public enum DHDUpgradeEnum implements EnumKeyInterface<Item> {
+        CHEVRON_UPGRADE(JSGItems.CRYSTAL_GLYPH_DHD),
+        CAPACITY_UPGRADE(JSGItems.CRYSTAL_UPGRADE_CAPACITY),
+        EFFICIENCY_UPGRADE(JSGItems.CRYSTAL_UPGRADE_EFFICIENCY);
 
-        public Item item;
+        public final Item item;
 
-        private DHDUpgradeEnum(Item item) {
+        DHDUpgradeEnum(Item item) {
             this.item = item;
         }
 

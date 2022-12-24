@@ -9,6 +9,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.gui.element.Diode;
 import tauri.dev.jsg.gui.element.Diode.DiodeStatus;
@@ -102,8 +103,17 @@ public abstract class DHDAbstractContainerGui extends GuiContainer implements Ta
         container.inventorySlots.set(DHDAbstractTile.BIOME_OVERRIDE_SLOT, overlayTab.createAndSaveSlot((SlotItemHandler) container.getSlot(DHDAbstractTile.BIOME_OVERRIDE_SLOT)));
     }
 
+    public void updateTank(){
+        int capacity = JSGConfig.dhdConfig.fluidCapacity;
+        if(container.dhdTile.hasUpgrade(DHDAbstractTile.DHDUpgradeEnum.CAPACITY_UPGRADE))
+            capacity *= JSGConfig.dhdConfig.capacityUpgradeMultiplier;
+        if(capacity != container.tankNaquadah.getCapacity())
+            container.tankNaquadah.setCapacity(capacity);
+    }
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        updateTank();
         drawDefaultBackground();
 
         Tab.updatePositions(tabs);

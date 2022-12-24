@@ -519,7 +519,15 @@ public class JSGConfig {
 
         @Name("DHD's max fluid capacity")
         @RangeInt(min = 1)
-        public int fluidCapacity = 60000;
+        public int fluidCapacity = 16000;
+
+        @Name("Capacity upgrade multiplier")
+        @RangeDouble(min = 1.0, max = 5.0)
+        @Comment({
+                "When capacity upgrade is placed in the DHD,",
+                "then multiply internal capacity by this number"
+        })
+        public float capacityUpgradeMultiplier = 2f;
 
         @Name("Energy per 1mB Naquadah")
         @RangeInt(min = 1)
@@ -532,6 +540,14 @@ public class JSGConfig {
                 "Consumed mB/t is equal to this"
         })
         public int powerGenerationMultiplier = 1;
+
+        @Name("Efficiency upgrade multiplier")
+        @RangeDouble(min = 1.0, max = 5.0)
+        @Comment({
+                "Energy per 1mB is multiplied by this",
+                "when efficiency upgrade is placed in the DHD"
+        })
+        public float efficiencyUpgradeMultiplier = 1.4f;
 
         @Name("Cold fusion reactor activation energy level")
         @RangeDouble(min = 0, max = 1)

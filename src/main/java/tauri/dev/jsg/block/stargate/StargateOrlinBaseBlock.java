@@ -132,7 +132,7 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 				
 				gateTile.updateNetherAddress();
 				
-				JSG.logger.debug("nether address: " + network.getNetherGate());
+				JSG.debug("nether address: " + network.getNetherGate());
 			}
 		}
 	}

@@ -333,7 +333,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                     || getRings().getAddress(SymbolTypeTransportRingsEnum.valueOf(0)).get(0).equals(getRings().getAddress(SymbolTypeTransportRingsEnum.valueOf(0)).get(1)) // if there are two same symbols
             ) {
                 if (getRings().getAddresses() != null)
-                    JSG.logger.debug("TransportRings at " + pos.toString() + " are generating new addresses!");
+                    JSG.debug("TransportRings at " + pos.toString() + " are generating new addresses!");
                 generateAddress(true);
             }
 
@@ -595,7 +595,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 SymbolTypeTransportRingsEnum symbolType = SymbolTypeTransportRingsEnum.valueOf(pageSlotId - 7);
                 ItemStack stack = itemStackHandler.getStackInSlot(pageSlotId);
                 if (stack.isEmpty()) break;
-                JSG.logger.debug("Giving Notebook page of address " + symbolType);
+                JSG.debug("Giving Notebook page of address " + symbolType);
 
                 NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(getRings().getAddresses().get(symbolType), PageNotebookItem.getRegistryPathFromWorld(world, pos));
 
@@ -1138,8 +1138,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             config.deserializeNBT(compound.getCompoundTag("config"));
 
         } catch (NullPointerException | IndexOutOfBoundsException | ClassCastException e) {
-            JSG.logger.warn("Exception at reading NBT");
-            JSG.logger.warn("If loading world used with previous version and nothing game-breaking doesn't happen, please ignore it");
+            JSG.warn("Exception at reading NBT");
+            JSG.warn("If loading world used with previous version and nothing game-breaking doesn't happen, please ignore it");
 
             e.printStackTrace();
         }
@@ -1561,7 +1561,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 }
             }
 
-            JSG.logger.debug("Updated to power tier: " + powerTier);
+            JSG.debug("Updated to power tier: " + powerTier);
         }
     }
 

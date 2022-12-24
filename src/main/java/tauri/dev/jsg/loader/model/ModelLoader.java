@@ -47,11 +47,11 @@ public class ModelLoader {
 
         long start = System.currentTimeMillis();
 
-        JSG.logger.info("Started loading models...");
+        JSG.info("Started loading models...");
         for (String modelPath : modelPaths) {
             String modelResourcePath = modelPath.replaceFirst("assets/jsg/", "");
             if (JSGConfig.debugConfig.logTexturesLoading)
-                JSG.logger.info("Loading model: " + modelResourcePath);
+                JSG.info("Loading model: " + modelResourcePath);
             progressBar.step(modelResourcePath.replaceFirst("models/", ""));
 
             InputStream stream = JSG.class.getClassLoader().getResourceAsStream(modelPath);
@@ -60,7 +60,7 @@ public class ModelLoader {
             LOADED_MODELS.put(new ResourceLocation(JSG.MOD_ID, modelResourcePath), model);
         }
 
-        JSG.logger.info("Loaded " + modelPaths.size() + " models in " + (System.currentTimeMillis() - start) + " ms");
+        JSG.info("Loaded " + modelPaths.size() + " models in " + (System.currentTimeMillis() - start) + " ms");
 
         ProgressManager.pop(progressBar);
     }

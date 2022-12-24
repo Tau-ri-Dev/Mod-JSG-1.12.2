@@ -3,9 +3,12 @@ package tauri.dev.jsg;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.*;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.LoaderException;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import org.apache.logging.log4j.Logger;
 import tauri.dev.jsg.block.JSGBlocks;
@@ -71,6 +74,11 @@ public class JSG {
     public static void info(String string) {
         logger.info(string);
     }
+
+    public static void info(Object... o) {
+        logger.info(o);
+    }
+
     public static void info(String string, Exception e) {
         logger.info(string, e);
     }
@@ -78,6 +86,11 @@ public class JSG {
     public static void warn(String string) {
         logger.warn(string);
     }
+
+    public static void warn(Object... p) {
+        logger.warn(p);
+    }
+
     public static void warn(String string, Exception e) {
         logger.warn(string, e);
     }
@@ -85,6 +98,11 @@ public class JSG {
     public static void error(String string) {
         logger.error(string);
     }
+
+    public static void error(Object... o) {
+        logger.error(o);
+    }
+
     public static void error(String string, Exception e) {
         logger.error(string, e);
     }
@@ -92,6 +110,11 @@ public class JSG {
     public static void debug(String string) {
         logger.debug(string);
     }
+
+    public static void debug(Object... o) {
+        logger.debug(o);
+    }
+
     public static void debug(String string, Exception e) {
         logger.debug(string, e);
     }
@@ -117,7 +140,7 @@ public class JSG {
 
     @EventHandler
     public void init(FMLInitializationEvent event) throws IOException {
-        if(Loader.isModLoaded("aunis")){
+        if (Loader.isModLoaded("aunis")) {
             Loader.instance().runtimeDisableMod("aunis");
             throw new LoaderException("Found two same mods! Just Stargate Mod and The Aunis mod are the SAME mods!");
         }

@@ -41,7 +41,7 @@ public class StargateClassicMemberBlockBakedModel implements IBakedModel {
                     try {
                         return camoBlockModel.getQuads(state, side, rand);
                     } catch (IllegalArgumentException e) {
-                        JSG.logger.error("IllegalArgumentException in StargateClassicMemberBlockBakedModel: Unsupported block as camo");
+                        JSG.error("IllegalArgumentException in StargateClassicMemberBlockBakedModel: Unsupported block as camo");
                     }
                 }
             }
