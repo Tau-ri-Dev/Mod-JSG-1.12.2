@@ -20,7 +20,7 @@ public class ReloadListener implements ISelectiveResourceReloadListener {
             try {
                 ModelLoader.reloadModels();
             } catch (IOException e) {
-                JSG.logger.error("Failed reloading models");
+                JSG.error("Failed reloading models");
                 e.printStackTrace();
             }
         }
@@ -29,7 +29,7 @@ public class ReloadListener implements ISelectiveResourceReloadListener {
             try {
                 TextureLoader.reloadTextures(resourceManager);
             } catch (IOException e) {
-                JSG.logger.error("Failed reloading textures");
+                JSG.error("Failed reloading textures");
                 e.printStackTrace();
             }
         }

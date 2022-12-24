@@ -146,7 +146,7 @@ public abstract class AbstractMachineTile extends TileEntity implements IUpgrada
         if (targetPoint != null) {
             JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, type, state), targetPoint);
         } else {
-            JSG.logger.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
+            JSG.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
         }
     }
 

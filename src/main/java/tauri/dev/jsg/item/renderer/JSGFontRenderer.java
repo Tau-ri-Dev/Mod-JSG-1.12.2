@@ -25,7 +25,7 @@ public class JSGFontRenderer extends FontRenderer {
 			fontRenderer = new JSGFontRenderer(mc.gameSettings, new ResourceLocation("textures/font/ascii.png"), mc.renderEngine, false);
 			((IReloadableResourceManager) mc.getResourceManager()).registerReloadListener(fontRenderer);
 			
-			JSG.logger.debug("Created custom FontRenderer");
+			JSG.debug("Created custom FontRenderer");
 		}
 		
 		return fontRenderer;

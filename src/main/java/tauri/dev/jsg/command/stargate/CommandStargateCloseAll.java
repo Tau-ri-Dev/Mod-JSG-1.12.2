@@ -126,7 +126,7 @@ public class CommandStargateCloseAll extends CommandBase {
 		
 		for (StargateAddress address : toBeRemoved) {
 			network.removeStargate(address);
-			JSG.logger.warn("Removing address " + address);
+			JSG.warn("Removing address " + address);
 		}
 		
 		notifyCommandListener(sender, this, "commands.sgcloseall.closed", closed);

@@ -20,17 +20,17 @@ import java.util.stream.IntStream;
 public interface IUpgradable {
 
     // Already TileEntity method, we're just calling it from the interface
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing);
+    <T> T getCapability(Capability<T> capability, EnumFacing facing);
 
-    public default IItemHandler getItemHandler() {
+    default IItemHandler getItemHandler() {
         return getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
     }
 
-    public default boolean hasUpgrade(EnumKeyInterface<Item> upgrade) {
+    default boolean hasUpgrade(EnumKeyInterface<Item> upgrade) {
         return hasUpgrade(upgrade.getKey());
     }
 
-    public default boolean hasUpgrade(Item item) {
+    default boolean hasUpgrade(Item item) {
         final IItemHandler itemHandler = getItemHandler();
         final Iterator<Integer> iter = getUpgradeSlotsIterator();
 
@@ -47,7 +47,7 @@ public interface IUpgradable {
      * Get upgrade slot iterator. Used in interface. You can use `IntStream.range(min, max).iterator()`
      * @return upgrade slot iterator
      */
-    public default Iterator<Integer> getUpgradeSlotsIterator(){
+    default Iterator<Integer> getUpgradeSlotsIterator(){
         return IntStream.range(0, getItemHandler().getSlots()).iterator();
     }
 
@@ -57,7 +57,7 @@ public interface IUpgradable {
      * @param hand used hand
      * @return true if inserted successfully, false if not
      */
-    public default boolean tryInsertUpgrade(EntityPlayer player, EnumHand hand){
+    default boolean tryInsertUpgrade(EntityPlayer player, EnumHand hand){
         ItemStack stack = player.getHeldItem(hand);
 
         if(stack.isEmpty())

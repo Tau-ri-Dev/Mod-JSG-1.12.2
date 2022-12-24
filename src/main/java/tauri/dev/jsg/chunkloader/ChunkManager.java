@@ -30,7 +30,7 @@ public class ChunkManager {
 	}
 	
 	public static void forceChunk(World world, ChunkPos chunk) {
-		JSG.logger.debug("Forcing chunk " + chunk + ", in world: " + world.provider);
+		JSG.debug("Forcing chunk " + chunk + ", in world: " + world.provider);
 		
 		Ticket ticket = requestTicket(world);
 		ForgeChunkManager.forceChunk(ticket, chunk);

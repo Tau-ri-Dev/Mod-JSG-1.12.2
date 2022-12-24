@@ -469,7 +469,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
                 case OC:
                     ItemOCMessage message = new ItemOCMessage(selectedCompound);
-                    JSG.logger.debug("Sending OC message: " + message.toString());
+                    JSG.debug("Sending OC message: " + message.toString());
                     JSG.ocWrapper.sendWirelessPacketPlayer(player, player.getHeldItem(hand), message.address, message.port, message.getData());
                     break;
             }

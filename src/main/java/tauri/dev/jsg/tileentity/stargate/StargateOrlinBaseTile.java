@@ -152,7 +152,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 		}
 		markDirty();
 
-		JSG.logger.debug("Orlin's dialed address: " + dialedAddress);
+		JSG.debug("Orlin's dialed address: " + dialedAddress);
 	}
 
 	public StargateEnergyRequired getEnergyRequiredToDial() {

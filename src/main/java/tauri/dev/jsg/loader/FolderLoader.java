@@ -19,11 +19,11 @@ public class FolderLoader {
     List<String> out = new ArrayList<>();
 
     String classPath = JSG.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-    JSG.logger.debug(String.format("classPath was '%s'.", classPath));
+    JSG.debug(String.format("classPath was '%s'.", classPath));
 
     classPath = classPath.replaceAll("%20", " ");
 
-    JSG.logger.debug(String.format("classPath is  '%s'.", classPath));
+    JSG.debug(String.format("classPath is  '%s'.", classPath));
 
     int separatorIndex = classPath.indexOf("!");
 

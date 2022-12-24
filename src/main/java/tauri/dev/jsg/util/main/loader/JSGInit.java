@@ -93,7 +93,7 @@ public class JSGInit {
             } else
                 JSG.ocWrapper = (OCWrapperInterface) Class.forName(OC_WRAPPER_NOT_LOADED).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            JSG.logger.error("Exception loading OpenComputers wrapper");
+            JSG.error("Exception loading OpenComputers wrapper");
             e.printStackTrace();
         }
     }

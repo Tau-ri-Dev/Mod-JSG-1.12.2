@@ -273,7 +273,7 @@ public class JSGMainMenu extends GuiMainMenu {
                         this.mc.shutdown();
                         break;
                     default:
-                        JSG.logger.error("Wrong button clicked!!! This is a bug! (" + clickedButton + ")");
+                        JSG.error("Wrong button clicked!!! This is a bug! (" + clickedButton + ")");
                         break;
                 }
 
@@ -748,7 +748,7 @@ public class JSGMainMenu extends GuiMainMenu {
                     Object object = oclass.getMethod("getDesktop").invoke((Object) null);
                     oclass.getMethod("browse", URI.class).invoke(object, new URI(WIKI_URL));
                 } catch (Exception e) {
-                    JSG.logger.debug("Couldn't open link", e);
+                    JSG.debug("Couldn't open link", e);
                 }
                 break;
             // close alert
@@ -768,7 +768,7 @@ public class JSGMainMenu extends GuiMainMenu {
                     Object object = oclass.getMethod("getDesktop").invoke((Object) null);
                     oclass.getMethod("browse", URI.class).invoke(object, new URI(getSiteContent(GET_DOWNLOAD_URL)));
                 } catch (Exception e) {
-                    JSG.logger.debug("Couldn't open link", e);
+                    JSG.debug("Couldn't open link", e);
                 }
                 break;
             case 23:

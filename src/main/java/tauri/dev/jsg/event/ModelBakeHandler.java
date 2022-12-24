@@ -26,7 +26,7 @@ public class ModelBakeHandler {
 
     for (Item item : JSGItems.getItems()) {
       if (item instanceof CustomModelItemInterface) {
-        JSG.logger.debug("Registering custom model for: " + item);
+        JSG.debug("Registering custom model for: " + item);
 
         ((CustomModelItemInterface) item).registerCustomModel(registry);
       }

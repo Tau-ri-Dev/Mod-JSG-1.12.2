@@ -51,9 +51,9 @@ public class StargateDimensionConfig {
         StargateDimensionConfigEntry reqTo = dimensionMap.get(fixDimType(to));
 
         if (reqFrom == null || reqTo == null) {
-            JSG.logger.error("Tried to get a cost of a non-existing dimension. This is a bug.");
-            JSG.logger.error("FromId: {}, FromName: {}, ToId: {}, ToName: {}, FromEntryNull: {}, ToEntryNull: {}", from.getId(), from.getName(), to.getId(), to.getName(), reqFrom == null, reqTo == null);
-            JSG.logger.error("JSG dimension entries:{}{}", System.lineSeparator(), dimensionMap.entrySet().stream()
+            JSG.error("Tried to get a cost of a non-existing dimension. This is a bug.");
+            JSG.error("FromId: {}, FromName: {}, ToId: {}, ToName: {}, FromEntryNull: {}, ToEntryNull: {}", from.getId(), from.getName(), to.getId(), to.getName(), reqFrom == null, reqTo == null);
+            JSG.error("JSG dimension entries:{}{}", System.lineSeparator(), dimensionMap.entrySet().stream()
                     .map(en -> en.getKey().getName() + " | " + en.getValue().toString())
                     .collect(Collectors.joining(System.lineSeparator()))
             );
@@ -71,9 +71,9 @@ public class StargateDimensionConfig {
         StargateDimensionConfigEntry reqTo = dimensionMap.get(fixDimType(to));
 
         if (reqFrom == null || reqTo == null) {
-            JSG.logger.error("Tried to perform a group check for a non-existing dimension. This is a bug.");
-            JSG.logger.error("FromId: {}, FromName: {}, ToId: {}, ToName: {}, FromEntryNull: {}, ToEntryNull: {}", from.getId(), from.getName(), to.getId(), to.getName(), reqFrom == null, reqTo == null);
-            JSG.logger.error("JSG dimension entries:{}{}", System.lineSeparator(), dimensionMap.entrySet().stream()
+            JSG.error("Tried to perform a group check for a non-existing dimension. This is a bug.");
+            JSG.error("FromId: {}, FromName: {}, ToId: {}, ToName: {}, FromEntryNull: {}, ToEntryNull: {}", from.getId(), from.getName(), to.getId(), to.getName(), reqFrom == null, reqTo == null);
+            JSG.error("JSG dimension entries:{}{}", System.lineSeparator(), dimensionMap.entrySet().stream()
                     .map(en -> en.getKey().getName() + " | " + en.getValue().toString())
                     .collect(Collectors.joining(System.lineSeparator()))
             );
@@ -123,7 +123,7 @@ public class StargateDimensionConfig {
                     dimensionMap.put(DimensionType.byName(dimName), dimensionStringMap.get(dimName));
                 } catch (IllegalArgumentException ex) {
                     // Probably removed a mod
-                    JSG.logger.debug("DimensionType not found: " + dimName);
+                    JSG.debug("DimensionType not found: " + dimName);
                 }
             }
         }

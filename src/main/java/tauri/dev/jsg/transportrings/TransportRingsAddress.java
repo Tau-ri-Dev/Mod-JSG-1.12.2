@@ -31,7 +31,7 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
 
     public TransportRingsAddress generate(Random random) {
         if (!address.isEmpty()) {
-            JSG.logger.error("Tried to regenerate address already containing symbols");
+            JSG.error("Tried to regenerate address already containing symbols");
             return this;
         }
 
@@ -63,7 +63,7 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
 
     public void addAll(TransportRingsAddress ringsAddress) {
         if (address.size() + ringsAddress.address.size() > MAX_SYMBOLS) {
-            JSG.logger.error("Tried to add symbols to already populated address");
+            JSG.error("Tried to add symbols to already populated address");
             return;
         }
 
@@ -121,7 +121,7 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
     @Override
     public void deserializeNBT(NBTTagCompound compound) {
         if (!address.isEmpty()) {
-            JSG.logger.error("Tried to deserialize address already containing symbols");
+            JSG.error("Tried to deserialize address already containing symbols");
             return;
         }
         symbolType = SymbolTypeTransportRingsEnum.valueOf(compound.getInteger("symbolType"));
@@ -144,7 +144,7 @@ public class TransportRingsAddress implements INBTSerializable<NBTTagCompound> {
         symbolType = SymbolTypeTransportRingsEnum.valueOf(buf.readInt());
         try {
             if (!address.isEmpty()) {
-                JSG.logger.error("Tried to deserialize address already containing symbols");
+                JSG.error("Tried to deserialize address already containing symbols");
                 return;
             }
             int length = buf.readInt();

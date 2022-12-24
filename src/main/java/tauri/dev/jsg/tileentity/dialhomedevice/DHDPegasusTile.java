@@ -181,7 +181,7 @@ public class DHDPegasusTile extends DHDAbstractTile {
         }
     }
 
-    @Override
+    /*--@Override
     public void readFromNBT(NBTTagCompound compound) {
 
         if (compound.hasKey("inventory")) {
@@ -198,6 +198,6 @@ public class DHDPegasusTile extends DHDAbstractTile {
         }
 
         super.readFromNBT(compound);
-    }
+    }*/
 
 }

@@ -88,7 +88,7 @@ public class GDOActionPacketToServer implements IMessage {
 									}
 								}
 								catch (NullPointerException e) {
-									JSG.logger.error("Exception in GDO Action packet", e);
+									JSG.error("Exception in GDO Action packet", e);
 								}
 							}
 							break;
