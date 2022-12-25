@@ -16,11 +16,16 @@ public class ZPMSlotContainer extends ZPMHubContainer {
     @Nonnull
     public ArrayList<Slot> getSlots(IItemHandler itemHandler) {
         ArrayList<Slot> slots = new ArrayList<>();
-        slots.add(new SlotItemHandler(itemHandler, 0, 80, 25));
+        slots.add(new SlotItemHandler(itemHandler, 0, 80, 35));
         return slots;
     }
 
     public ZPMSlotContainer(IInventory playerInventory, World world, int x, int y, int z) {
         super(playerInventory, world, x, y, z);
+    }
+
+    @Override
+    public int getInventoryY() {
+        return 81;
     }
 }

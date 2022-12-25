@@ -16,9 +16,20 @@ public enum SymbolOriEnum implements SymbolInterface {
     BETA(1, 1, "Beta"),
     GAMMA(2, 2, "Gamma"),
     DELTA(3, 3, "Delta"),
-    OMEGA(4, 4, "Omega"),
-    ORIGIN(5, 5, "Origin"),
-    LIGHT(6, 6, "Light");
+    EPSILON(4, 4, "Epsilon"),
+    ZETA(5, 5, "Zeta"),
+    ETA(6, 6, "Eta"),
+    THETA(7, 7, "Theta"),
+    IOTA(8, 8, "Iota"),
+    KAPPA(9, 9, "Kappa"),
+    LAMBDA(10, 10, "Lambda"),
+    MU(11, 11, "Mu"),
+    NU(12, 12, "Nu"),
+    XI(13, 13, "Xi"),
+    OMICRON(14, 14, "Omicron"),
+    PI(14, 14, "Pi"),
+    RHO(15, 15, "Rho"),
+    LIGHT(16, 16, "Light");
 
     public final int id;
     public final int angleIndex;
@@ -41,7 +52,7 @@ public enum SymbolOriEnum implements SymbolInterface {
 
     @Override
     public boolean origin() {
-        return this == ORIGIN;
+        return this == getOrigin();
     }
 
     @Override
@@ -88,7 +99,7 @@ public enum SymbolOriEnum implements SymbolInterface {
         int id;
         do {
             id = random.nextInt(5);
-        } while (id == ORIGIN.id || id == LIGHT.id);
+        } while (id == getOrigin().id || id == LIGHT.id);
 
         return valueOf(id);
     }
@@ -105,7 +116,7 @@ public enum SymbolOriEnum implements SymbolInterface {
     }
 
     public static SymbolOriEnum getOrigin() {
-        return ORIGIN;
+        return ALPHA;
     }
 
     private static final Map<Integer, SymbolOriEnum> ID_MAP = new HashMap<>();

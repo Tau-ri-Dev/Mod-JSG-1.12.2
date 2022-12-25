@@ -1,15 +1,15 @@
 package tauri.dev.jsg.gui.element.tabs;
 
-import tauri.dev.jsg.gui.element.GuiHelper;
-import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
-import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
-import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.gui.element.GuiHelper;
+import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
+import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
+import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
 
 import java.awt.*;
 
@@ -90,6 +90,8 @@ public class TabTRAddress extends Tab {
     }
 
     public SymbolCoords getSymbolCoords(int symbol) {
+        if (symbolType == SymbolTypeTransportRingsEnum.ANCIENT)
+            return new SymbolCoords(guiLeft + currentOffsetX + 24 + 16 * (symbol % 6), guiTop + defaultY + 20 + 45 * (symbol / 6));
         return new SymbolCoords(guiLeft + currentOffsetX + 29 + 31 * (symbol % 3), guiTop + defaultY + 20 + 28 * (symbol / 3));
     }
 

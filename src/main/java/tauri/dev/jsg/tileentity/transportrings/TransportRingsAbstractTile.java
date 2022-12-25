@@ -132,7 +132,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     // Node-related work
     private final Node node = JSG.ocWrapper.createNode(this, "transportrings");
     private int currentPowerTier = 1;
-    public int itemStackHandlerSlotsCount = 9;
+    public int itemStackHandlerSlotsCount = 10;
     private final JSGItemStackHandler itemStackHandler = new JSGItemStackHandler(10) {
 
         @Override

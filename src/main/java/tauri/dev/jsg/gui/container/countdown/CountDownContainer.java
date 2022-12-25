@@ -29,7 +29,7 @@ public class CountDownContainer extends Container implements OpenTabHolderInterf
         this.isOperator = isOperator;
         pos = new BlockPos(x, y, z);
         tile = (DestinyCountDownTile) world.getTileEntity(pos);
-        for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 18))
+        for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 46))
             addSlotToContainer(slot);
     }
 

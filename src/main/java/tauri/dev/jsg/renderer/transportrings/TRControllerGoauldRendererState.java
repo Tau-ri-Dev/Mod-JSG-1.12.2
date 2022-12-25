@@ -41,7 +41,7 @@ public class TRControllerGoauldRendererState extends TRControllerAbstractRendere
 
     // Symbols
     // Not saved
-    public final Map<Integer, Integer> BUTTON_STATE_MAP = new HashMap<>(7);
+    public final Map<Integer, Integer> BUTTON_STATE_MAP = new HashMap<>(SymbolGoauldEnum.values().length);
     public List<Activation<SymbolInterface>> activationList = new ArrayList<>();
 
     public TRControllerGoauldRendererState(TransportRingsAddress addressDialed, BiomeOverlayEnum biomeOverride, boolean ringsAreConnected) {
@@ -91,14 +91,14 @@ public class TRControllerGoauldRendererState extends TRControllerAbstractRendere
 
     public ResourceLocation getButtonTexture(int symbolId, BiomeOverlayEnum biomeOverlay) {
         TextureContainer container = BIOME_TEXTURE_MAP.get(biomeOverlay);
-        if(symbolId == 6) // 6 are the lights
+        if(symbolId == SymbolGoauldEnum.LIGHT.id)
             return container.LIGHT_RESOURCE_MAP.get(BUTTON_STATE_MAP.get(symbolId));
         return container.SYMBOL_RESOURCE_MAP.get(BUTTON_STATE_MAP.get(symbolId));
     }
 
     @Override
     public boolean isButtonActive(SymbolInterface symbol) {
-        return BUTTON_STATE_MAP.get(((SymbolGoauldEnum) symbol).getId()) == 5;
+        return BUTTON_STATE_MAP.get((symbol).getId()) == 5;
     }
 
     @Override

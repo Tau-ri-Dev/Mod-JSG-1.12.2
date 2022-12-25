@@ -1,16 +1,18 @@
 package tauri.dev.jsg.gui.container.dhd;
 
-import tauri.dev.jsg.JSG;
-import net.minecraft.util.ResourceLocation;
-
 public class DHDPegasusContainerGui extends DHDAbstractContainerGui {
 
-	public DHDPegasusContainerGui(DHDAbstractContainer container) {
-		super(container);
-	}
+    public DHDPegasusContainerGui(DHDAbstractContainer container) {
+        super(container);
+    }
 
-	@Override
-	public ResourceLocation getBackgroundTexture(){
-		return new ResourceLocation(JSG.MOD_ID, "textures/gui/container_dhd_pegasus.png");
-	}
+    @Override
+    public void drawCrystal() {
+        drawTexturedModalRect(guiLeft + 77, guiTop + 21, 201, 0, 24, 32);
+    }
+
+    @Override
+    public void drawAncientTitle() {
+        drawTexturedModalRect(guiLeft + 136, guiTop + 4, 177, 96, 211 - 176, 103 - 95);
+    }
 }

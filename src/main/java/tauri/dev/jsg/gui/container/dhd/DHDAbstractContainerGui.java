@@ -9,6 +9,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.gui.element.Diode;
@@ -18,7 +19,6 @@ import tauri.dev.jsg.gui.element.GuiHelper;
 import tauri.dev.jsg.gui.element.tabs.Tab;
 import tauri.dev.jsg.gui.element.tabs.Tab.SlotTab;
 import tauri.dev.jsg.gui.element.tabs.TabBiomeOverlay;
-import tauri.dev.jsg.gui.element.tabs.TabSideEnum;
 import tauri.dev.jsg.gui.element.tabs.TabbedContainerInterface;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.SetOpenTabToServer;
@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static tauri.dev.jsg.gui.container.stargate.StargateContainerGui.BACKGROUND_TEXTURE;
 import static tauri.dev.jsg.gui.container.stargate.StargateContainerGui.createOverlayTab;
 
 public abstract class DHDAbstractContainerGui extends GuiContainer implements TabbedContainerInterface {
@@ -41,6 +40,8 @@ public abstract class DHDAbstractContainerGui extends GuiContainer implements Ta
     private final List<Diode> diodes = new ArrayList<>(3);
 
     private final List<Tab> tabs = new ArrayList<>();
+
+    public static final ResourceLocation BACKGROUND = new ResourceLocation(JSG.MOD_ID, "textures/gui/container_dhd.png");
 
     public DHDAbstractContainerGui(DHDAbstractContainer container) {
         super(container);
@@ -103,11 +104,11 @@ public abstract class DHDAbstractContainerGui extends GuiContainer implements Ta
         container.inventorySlots.set(DHDAbstractTile.BIOME_OVERRIDE_SLOT, overlayTab.createAndSaveSlot((SlotItemHandler) container.getSlot(DHDAbstractTile.BIOME_OVERRIDE_SLOT)));
     }
 
-    public void updateTank(){
+    public void updateTank() {
         int capacity = JSGConfig.dhdConfig.fluidCapacity;
-        if(container.dhdTile.hasUpgrade(DHDAbstractTile.DHDUpgradeEnum.CAPACITY_UPGRADE))
+        if (container.dhdTile.hasUpgrade(DHDAbstractTile.DHDUpgradeEnum.CAPACITY_UPGRADE))
             capacity *= JSGConfig.dhdConfig.capacityUpgradeMultiplier;
-        if(capacity != container.tankNaquadah.getCapacity())
+        if (capacity != container.tankNaquadah.getCapacity())
             container.tankNaquadah.setCapacity(capacity);
     }
 
@@ -130,13 +131,13 @@ public abstract class DHDAbstractContainerGui extends GuiContainer implements Ta
             tab.render(fontRenderer, mouseX, mouseY);
         }
 
-        mc.getTextureManager().bindTexture(getBackgroundTexture());
+        mc.getTextureManager().bindTexture(BACKGROUND);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
         // Crystal background
         if (container.slotCrystal.getHasStack()) {
             GlStateManager.enableBlend();
-            drawTexturedModalRect(guiLeft + 77, guiTop + 21, 176, 0, 24, 32);
+            drawCrystal();
             GlStateManager.disableBlend();
         }
 
@@ -145,13 +146,13 @@ public abstract class DHDAbstractContainerGui extends GuiContainer implements Ta
             if (container.getSlot(i).getHasStack()) {
                 switch (i) {
                     case 1:
-                        drawTexturedModalRect(guiLeft + 16, guiTop + 57, 121, 173, 178 - 121, 184 - 173);
+                        drawTexturedModalRect(guiLeft + 16, guiTop + 57, 121, 173, 178 - 121, 184 - 172);
                         break;
                     case 2:
-                        drawTexturedModalRect(guiLeft + 34, guiTop + 57, 121, 185, 160 - 121, 193 - 185);
+                        drawTexturedModalRect(guiLeft + 34, guiTop + 57, 121, 185, 160 - 121, 193 - 184);
                         break;
                     case 3:
-                        drawTexturedModalRect(guiLeft + 52, guiTop + 57, 121, 194, 142 - 121, 199 - 194);
+                        drawTexturedModalRect(guiLeft + 52, guiTop + 57, 121, 194, 142 - 121, 199 - 193);
                         break;
                     default:
                         break;
@@ -176,10 +177,13 @@ public abstract class DHDAbstractContainerGui extends GuiContainer implements Ta
 
         // Naquadah ducts
         GlStateManager.enableBlend();
-        mc.getTextureManager().bindTexture(getBackgroundTexture());
+        mc.getTextureManager().bindTexture(BACKGROUND);
         drawTexturedModalRect(guiLeft + 103, guiTop + 60, 0, 173, 48, 16);
         drawTexturedModalRect(guiLeft + 84, guiTop + 77, 0, 189, 84, 10);
         GlStateManager.disableBlend();
+
+        // Titles
+        drawAncientTitle();
     }
 
     @Override
@@ -191,7 +195,7 @@ public abstract class DHDAbstractContainerGui extends GuiContainer implements Ta
 
         // Tank's gauge
         GlStateManager.enableBlend();
-        mc.getTextureManager().bindTexture(getBackgroundTexture());
+        mc.getTextureManager().bindTexture(BACKGROUND);
         drawTexturedModalRect(152, 23, 176, 32, 16, 54);
         GlStateManager.disableBlend();
 
@@ -240,5 +244,7 @@ public abstract class DHDAbstractContainerGui extends GuiContainer implements Ta
                 .collect(Collectors.toList());
     }
 
-    public abstract ResourceLocation getBackgroundTexture();
+    public abstract void drawCrystal();
+
+    public abstract void drawAncientTitle();
 }

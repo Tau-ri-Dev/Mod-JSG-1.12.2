@@ -83,6 +83,9 @@ public class CountDownContainerGui extends GuiContainer implements TabbedContain
         mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
         GlStateManager.color(1, 1, 1, 1);
         drawModalRectWithCustomSizedTexture(guiLeft, guiTop, 0, 0, xSize, ySize, 256, 256);
+
+        // title
+        drawTexturedModalRect(guiLeft + 119 - 247 + 208, guiTop + 12 - 7, 209, 0, 247 - 208, 7);
     }
 
     @Override

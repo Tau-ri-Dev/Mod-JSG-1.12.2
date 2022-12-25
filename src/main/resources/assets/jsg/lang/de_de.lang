@@ -657,9 +657,10 @@ gui.stargate.state.iris_temp=Iris temp:
 gui.stargate.info=Gate-Informationen
 
 # zpmhub
-gui.zpmhub.inProgress=ZPMs sind nicht gesperrt!
+gui.zpmhub.inProgress=ZPMs are moving!
 gui.zpmhub.slideDown=Aktiviere ZPMs
 gui.zpmhub.slideUp=Deaktiviere ZPMs
+gui.zpmhub.alert=Slots for ZPMs are locked!
 
 # capacitor
 gui.capacitor.name=Kondensatorbatterie

@@ -34,9 +34,9 @@ public class ZPMHubContainer extends Container {
     @Nonnull
     public ArrayList<Slot> getSlots(IItemHandler itemHandler){
         ArrayList<Slot> slots = new ArrayList<>();
-        slots.add(new SlotItemHandler(itemHandler, 0, 80, 17));
-        slots.add(new SlotItemHandler(itemHandler, 1, 62, 38));
-        slots.add(new SlotItemHandler(itemHandler, 2, 98, 38));
+        slots.add(new SlotItemHandler(itemHandler, 0, 80, 27));
+        slots.add(new SlotItemHandler(itemHandler, 1, 56, 51));
+        slots.add(new SlotItemHandler(itemHandler, 2, 104, 51));
         return slots;
     }
 
@@ -53,8 +53,12 @@ public class ZPMHubContainer extends Container {
         for (Slot slot : slots)
             addSlotToContainer(slot);
 
-        for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 86))
+        for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, getInventoryY()))
             addSlotToContainer(slot);
+    }
+
+    public int getInventoryY() {
+        return 97;
     }
 
     @Override

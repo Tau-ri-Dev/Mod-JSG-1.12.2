@@ -1012,10 +1012,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public BiomeOverlayEnum getBiomeOverlayWithOverride(boolean override) {
         BiomeOverlayEnum overlay = null;
 
-        if (gateHeat < (JSGConfig.stargateConfig.frostyTemperatureThreshold * 30))
+        // TODO(Mine): Fix this shit
+        /*if (gateHeat < (JSGConfig.stargateConfig.frostyTemperatureThreshold * 30))
             overlay = BiomeOverlayEnum.FROST;
         if (!getSupportedOverlays().contains(overlay))
-            overlay = null;
+            overlay = null;*/
 
         if (override) overlay = determineBiomeOverride();
 

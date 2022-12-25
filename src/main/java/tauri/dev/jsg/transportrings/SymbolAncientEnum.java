@@ -12,13 +12,16 @@ import java.util.Map;
 import java.util.Random;
 
 public enum SymbolAncientEnum implements SymbolInterface {
-    ALPHA(0, 0, "Alpha"),
-    BETA(1, 1, "Beta"),
-    GAMMA(2, 2, "Gamma"),
-    DELTA(3, 3, "Delta"),
-    OMEGA(4, 4, "Omega"),
-    ORIGIN(5, 5, "Origin"),
-    LIGHT(6, 6, "Light");
+    UNUS(0, 0, "Unus"),
+    DUO(1, 1, "Duo"),
+    TRIBUS(2, 2, "Tribus"),
+    QUATTUOR(3, 3, "Quattuor"),
+    QUINQUE(4, 4, "Quinque"),
+    SEX(5, 5, "Sex"),
+    SEPTEM(6, 6, "Septem"),
+    OCTINGENTI(7, 7, "Octingenti"),
+    NOVEM(8, 8, "Novem"),
+    LIGHT(9, 9, "Light");
 
     public final int id;
     public final int angleIndex;
@@ -36,12 +39,12 @@ public enum SymbolAncientEnum implements SymbolInterface {
         this.englishName = englishName;
         this.translationKey = "glyph.jsg.transportrings.ancient." + englishName.toLowerCase().replace(" ", "_");
         this.iconResource = new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/transportrings/ancient/" + englishName.toLowerCase() + ".png");
-        this.modelResource = new ResourceLocation(JSG.MOD_ID, "models/tesr/transportrings/controller/ancient/ancient_button_" + (id+1) + ".obj");
+        this.modelResource = new ResourceLocation(JSG.MOD_ID, "models/tesr/transportrings/controller/ancient/ancient_button_" + (id + 1) + ".obj");
     }
 
     @Override
     public boolean origin() {
-        return this == ORIGIN;
+        return this == UNUS;
     }
 
     @Override
@@ -87,8 +90,8 @@ public enum SymbolAncientEnum implements SymbolInterface {
     public static SymbolAncientEnum getRandomSymbol(Random random) {
         int id;
         do {
-            id = random.nextInt(5);
-        } while (id == ORIGIN.id || id == LIGHT.id);
+            id = random.nextInt(9);
+        } while (id == UNUS.id || id == LIGHT.id);
 
         return valueOf(id);
     }
@@ -101,11 +104,11 @@ public enum SymbolAncientEnum implements SymbolInterface {
     }
 
     public static List<SymbolInterface> stripOrigin(List<SymbolInterface> dialedAddress) {
-        return dialedAddress.subList(0, dialedAddress.size()-1);
+        return dialedAddress.subList(0, dialedAddress.size() - 1);
     }
 
     public static SymbolAncientEnum getOrigin() {
-        return ORIGIN;
+        return UNUS;
     }
 
     private static final Map<Integer, SymbolAncientEnum> ID_MAP = new HashMap<>();
@@ -128,7 +131,7 @@ public enum SymbolAncientEnum implements SymbolInterface {
         return ENGLISH_NAME_MAP.get(englishName.toLowerCase().replace("ö", "o"));
     }
 
-    public static SymbolAncientEnum getSymbolByAngleIndex(int index){
+    public static SymbolAncientEnum getSymbolByAngleIndex(int index) {
         return ANGLE_INDEX_MAP.get(index);
     }
 }

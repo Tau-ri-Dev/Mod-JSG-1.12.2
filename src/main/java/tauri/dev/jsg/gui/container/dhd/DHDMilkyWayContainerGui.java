@@ -1,16 +1,18 @@
 package tauri.dev.jsg.gui.container.dhd;
 
-import tauri.dev.jsg.JSG;
-import net.minecraft.util.ResourceLocation;
-
 public class DHDMilkyWayContainerGui extends DHDAbstractContainerGui {
 
-	public DHDMilkyWayContainerGui(DHDAbstractContainer container) {
-		super(container);
-	}
+    public DHDMilkyWayContainerGui(DHDAbstractContainer container) {
+        super(container);
+    }
 
-	@Override
-	public ResourceLocation getBackgroundTexture(){
-		return new ResourceLocation(JSG.MOD_ID, "textures/gui/container_dhd.png");
-	}
+    @Override
+    public void drawCrystal() {
+        drawTexturedModalRect(guiLeft + 77, guiTop + 21, 176, 0, 24, 32);
+    }
+
+    @Override
+    public void drawAncientTitle() {
+        drawTexturedModalRect(guiLeft + 136, guiTop + 4, 177, 87, 211 - 176, 94 - 86);
+    }
 }

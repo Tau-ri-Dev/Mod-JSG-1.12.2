@@ -67,29 +67,13 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
         tabs = new ArrayList<>();
 
-        settingsTab = (TabTRSettings) TabTRSettings.builder()
-                .setParams(container.trTile.getRingsName(), container.trTile.getRingsDistance())
-                .setGuiSize(xSize, ySize)
-                .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(176 - 107, 2)
-                .setOpenX(176)
-                .setHiddenX(54)
-                .setTabSize(128, 68)
-                .setTabTitle(I18n.format("gui.transportrings.parameters"))
-                .setTabSide(TabSideEnum.RIGHT)
-                .setTexture(BACKGROUND_TEXTURE, 512)
-                .setBackgroundTextureLocation(176, 113)
-                .setIconRenderPos(107, 5)
-                .setIconSize(22, 22)
-                .setIconTextureLocation(304, 0).build();
-
         goauldAddressTab = (TabTRAddress) TabTRAddress.builder()
                 .setTile(container.trTile)
                 .setSymbolType(SymbolTypeTransportRingsEnum.GOAULD)
                 .setProgressColor(0xE9A93A)
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(-21, 11 + 22)
+                .setTabPosition(-21, 11)
                 .setOpenX(-128)
                 .setHiddenX(-6)
                 .setTabSize(128, 113)
@@ -107,7 +91,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setProgressColor(0x90E0F9)
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(-21, 11 + 22 * 2)
+                .setTabPosition(-21, 11 + 22)
                 .setOpenX(-128)
                 .setHiddenX(-6)
                 .setTabSize(128, 113)
@@ -125,7 +109,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setProgressColor(0x90E0F9)
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)
-                .setTabPosition(-21, 11 + 22 * 3)
+                .setTabPosition(-21, 11 + 22 * 2)
                 .setOpenX(-128)
                 .setHiddenX(-6)
                 .setTabSize(128, 113)
@@ -136,6 +120,22 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
                 .setIconRenderPos(0, 6)
                 .setIconSize(22, 22)
                 .setIconTextureLocation(304, 22 * 3).build();
+
+        settingsTab = (TabTRSettings) TabTRSettings.builder()
+                .setParams(container.trTile.getRingsName(), container.trTile.getRingsDistance())
+                .setGuiSize(xSize, ySize)
+                .setGuiPosition(guiLeft, guiTop)
+                .setTabPosition(176 - 107, 2)
+                .setOpenX(176)
+                .setHiddenX(54)
+                .setTabSize(128, 68)
+                .setTabTitle(I18n.format("gui.transportrings.parameters"))
+                .setTabSide(TabSideEnum.RIGHT)
+                .setTexture(BACKGROUND_TEXTURE, 512)
+                .setBackgroundTextureLocation(176, 113)
+                .setIconRenderPos(107, 5)
+                .setIconSize(22, 22)
+                .setIconTextureLocation(304, 0).build();
 
         configTab = createConfigTab(container.trTile.getConfig(), xSize, ySize, guiLeft, guiTop);
 
@@ -239,13 +239,13 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
         // Draw ancient title
         switch (container.trTile.getSymbolType()) {
             case GOAULD:
-                drawModalRectWithCustomSizedTexture(guiLeft + 137, guiTop + 4, 330, 0, 34, 7, 512, 512);
+                drawModalRectWithCustomSizedTexture(guiLeft + 136, guiTop + 4, 330, 0, 35, 8, 512, 512);
                 break;
             case ORI:
-                drawModalRectWithCustomSizedTexture(guiLeft + 137, guiTop + 4, 330, 18, 34, 7, 512, 512);
+                drawModalRectWithCustomSizedTexture(guiLeft + 136, guiTop + 4, 330, 18, 35, 8, 512, 512);
                 break;
             case ANCIENT:
-                drawModalRectWithCustomSizedTexture(guiLeft + 137, guiTop + 4, 330, 36, 34, 7, 512, 512);
+                drawModalRectWithCustomSizedTexture(guiLeft + 136, guiTop + 4, 330, 36, 35, 8, 512, 512);
                 break;
             default:
                 break;

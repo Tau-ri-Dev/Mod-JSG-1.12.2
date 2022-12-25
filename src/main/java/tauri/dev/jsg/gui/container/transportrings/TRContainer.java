@@ -7,6 +7,7 @@ import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.stargate.power.StargateClassicEnergyStorage;
 import tauri.dev.jsg.state.StateTypeEnum;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -96,16 +97,16 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
     public ItemStack transferStackInSlot(@Nonnull EntityPlayer player, int index) {
         ItemStack stack = getSlot(index).getStack();
 
-        // Transferring from Stargate to player's inventory
-        if (index < trTile.getSlotsCount()) {
-            if (!mergeItemStack(stack, trTile.getSlotsCount(), inventorySlots.size(), false)) {
+        // Transferring from tile to player's inventory
+        if (index < 10) {
+            if (!mergeItemStack(stack, 10, inventorySlots.size(), false)) {
                 return ItemStack.EMPTY;
             }
 
             putStackInSlot(index, ItemStack.EMPTY);
         }
 
-        // Transferring from player's inventory to Stargate
+        // Transferring from player's inventory to tile
         else {
             // Capacitors
             if (stack.getItem() == Item.getItemFromBlock(JSGBlocks.CAPACITOR_BLOCK)) {
@@ -143,7 +144,6 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
                     return ItemStack.EMPTY;
                 }
             }
-
             return ItemStack.EMPTY;
         }
 

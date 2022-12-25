@@ -680,9 +680,10 @@ gui.stargate.state.iris_temp=Iris temp:
 gui.stargate.info=Informations sur la porte
 
 # zpmhub
-gui.zpmhub.inProgress=Les ZPMs ne sont pas verrouillés !
+gui.zpmhub.inProgress=ZPMs are moving!
 gui.zpmhub.slideDown=Engager les ZPMs
 gui.zpmhub.slideUp=Désengager les ZPMs
+gui.zpmhub.alert=Slots for ZPMs are locked!
 
 # Condensateur
 gui.capacitor.name=Banque de condensateurs

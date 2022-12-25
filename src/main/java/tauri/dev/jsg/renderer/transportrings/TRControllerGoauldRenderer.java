@@ -21,8 +21,8 @@ public class TRControllerGoauldRenderer extends TRControllerAbstractRenderer {
 
         // render light
         GlStateManager.pushMatrix();
-        JSGTextureLightningHelper.lightUpTexture(getWorld(), rs.pos, rs.BUTTON_STATE_MAP.get(6)/5f);
-        ResourceLocation lightTexture = rs.getButtonTexture(6, rendererState.getBiomeOverlay());
+        JSGTextureLightningHelper.lightUpTexture(getWorld(), rs.pos, rs.BUTTON_STATE_MAP.get(SymbolGoauldEnum.LIGHT.id)/5f);
+        ResourceLocation lightTexture = rs.getButtonTexture(SymbolGoauldEnum.LIGHT.id, rendererState.getBiomeOverlay());
         if (rendererDispatcher != null && rendererDispatcher.renderEngine != null && lightTexture!= null) {
             rendererDispatcher.renderEngine.bindTexture(lightTexture);
             ModelLoader.getModel(ElementEnum.RINGS_CONTROLLER_GOAULD_LIGHT.modelResource).render();

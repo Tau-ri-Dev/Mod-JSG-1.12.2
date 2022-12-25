@@ -672,9 +672,10 @@ gui.stargate.state.iris_temp=Iris temp:
 gui.stargate.info=Информация о воротах
 
 # zpmhub
-gui.zpmhub.inProgress=ZPM не заблокированы!
+gui.zpmhub.inProgress=ZPMs are moving!
 gui.zpmhub.slideDown=Привлекайте ZPM
 gui.zpmhub.slideUp=Отключить ZPM
+gui.zpmhub.alert=Slots for ZPMs are locked!
 
 # capacitor
 gui.capacitor.name=Конденсатор

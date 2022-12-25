@@ -10,7 +10,7 @@ import java.util.Random;
 public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
     GOAULD(0, 32, 32),
     ORI(1, 32, 32),
-    ANCIENT(2, 32, 32);
+    ANCIENT(2, 20, 42);
 
     public final int id;
     public final int iconWidth;

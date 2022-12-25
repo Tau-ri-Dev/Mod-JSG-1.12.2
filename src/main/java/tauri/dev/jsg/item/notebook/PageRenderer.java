@@ -115,12 +115,24 @@ public class PageRenderer {
 			for (int i=0; i<address.size(); i++) {
 				float x = 0.21f*(i%3);
 				float y = 0.20f*((int) Math.floor((float) i/3)) + 0.14f;
-				renderSymbol(x, y, 0.2f, 0.2f, address.get(i), 0);
+
+				if (symbolType == SymbolTypeTransportRingsEnum.ANCIENT) {
+					y = 0.20f*(i/3) + 0.18f;
+					x += 0.04f;
+					renderSymbol(x, y, 0.095f, 0.2f, address.get(i), 0);
+				}
+				else {
+					renderSymbol(x, y, 0.2f, 0.2f, address.get(i), 0);
+				}
 			}
 
 			float x = 0.10f * 2;
 			float y = 0.20f*(3) + 0.14f;
 			float w = 0.2f;
+			if (symbolType == SymbolTypeTransportRingsEnum.ANCIENT) {
+				w = 0.095f;
+				x = 0.10f * 2.5f;
+			}
 			renderSymbol(x, y, w, 0.2f, Objects.requireNonNull(symbolType.getOrigin()), 0);
 		}
 		

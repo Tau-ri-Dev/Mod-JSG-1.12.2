@@ -672,9 +672,10 @@ gui.stargate.state.iris_temp=Iris temp:
 gui.stargate.info=Kapu információk
 
 # zpmhub
-gui.zpmhub.inProgress=ZPMs are not locked!
+gui.zpmhub.inProgress=ZPMs are moving!
 gui.zpmhub.slideDown=Engage ZPMs
 gui.zpmhub.slideUp=Disengage ZPMs
+gui.zpmhub.alert=Slots for ZPMs are locked!
 
 # capacitor
 gui.capacitor.name=Kondenzátor
