@@ -387,6 +387,7 @@ tile.jsg.transportrings_controller_block.not_linked=Contrôleur non lié
 # Anneaux
 tile.jsg.transportrings_goauld_block.name=Transport Anneaux (Goa'uld)
 tile.jsg.transportrings_ori_block.name=Anneaux de transport (Ori)
+tile.jsg.transportrings_ancient_block.name=Anneaux de transport (Ancient)
 
 tile.jsg.transportrings_block.non_existing_address=Incapable d'atteindre cette adresse
 tile.jsg.transportrings_block.wrong_distance=Mauvaise distance, devrait être de -40 à 40

@@ -11,7 +11,7 @@
       "translate": "advancement.transportrings_ancient.desc"
     },
     "icon": {
-      "item": "jsg:transportrings_goauld_block"
+      "item": "jsg:transportrings_ancient_block"
     },
     "frame": "challenge",
     "show_toast": true,

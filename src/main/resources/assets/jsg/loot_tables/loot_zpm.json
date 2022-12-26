@@ -1,0 +1,25 @@
+{
+  "pools": [
+    {
+      "name": "main",
+      "rolls": 3,
+      "entries": [
+        {
+          "type": "item",
+          "name": "jsg:zpm",
+          "weight": 2
+        },
+        {
+          "type": "item",
+          "name": "minecraft:web",
+          "weight": 35
+        },
+        {
+          "type": "item",
+          "name": "minecraft:cobblestone",
+          "weight": 15
+        }
+      ]
+    }
+  ]
+}

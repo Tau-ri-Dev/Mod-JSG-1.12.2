@@ -6,8 +6,7 @@ import tauri.dev.jsg.block.transportrings.TRControllerAbstractBlock;
 
 import static tauri.dev.jsg.block.JSGBlocks.TR_CONTROLLER_GOAULD_BLOCK;
 
-public class TransportRingsOriTile extends TransportRingsAbstractTile {
-
+public class TransportRingsAncientTile extends TransportRingsAbstractTile {
     @Override
     public int getDefaultCapacitors() {
         return 2;
@@ -15,13 +14,12 @@ public class TransportRingsOriTile extends TransportRingsAbstractTile {
 
     @Override
     public void triggerTeleportAdvancement(EntityPlayerMP playerIn) {
-        JSGAdvancements.TR_ORI.trigger(playerIn);
-
+        JSGAdvancements.TR_ANCIENT.trigger(playerIn);
     }
 
     @Override
-    public TRControllerAbstractBlock getControllerBlock() {
-        //todo(Mine): When ori controller finished, switch this to it
+    public TRControllerAbstractBlock getControllerBlock(){
+        //todo(Mine): When ancient controller finished, switch this to it
         return TR_CONTROLLER_GOAULD_BLOCK;
     }
 }

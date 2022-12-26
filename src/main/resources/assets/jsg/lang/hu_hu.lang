@@ -377,8 +377,9 @@ tile.jsg.transportrings_controller_goauld_block.name=Transzportgyűrű Irányít
 tile.jsg.transportrings_controller_block.not_linked=Irányító nincs csatlakoztatva
 
 # rings
-tile.jsg.transportrings_goauld_block.name=Transzportgyűrű
+tile.jsg.transportrings_goauld_block.name=Transzportgyűrű (Goa'uld)
 tile.jsg.transportrings_ori_block.name=Transzportgyűrű (Ori)
+tile.jsg.transportrings_ancient_block.name=Transzportgyűrű (Ancient)
 
 tile.jsg.transportrings_block.non_existing_address=Cím nem elérhető
 tile.jsg.transportrings_block.wrong_distance=Helytelen távolság, -40 és 40 között kell lennie

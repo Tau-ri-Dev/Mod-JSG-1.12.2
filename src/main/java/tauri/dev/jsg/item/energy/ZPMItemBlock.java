@@ -13,6 +13,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import tauri.dev.jsg.block.energy.ZPMBlock;
 import tauri.dev.jsg.capability.ItemCapabilityProvider;
+import tauri.dev.jsg.capability.ItemEnergyCapabilityWithoutReceiving;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.stargate.power.StargateItemEnergyStorage;
 
@@ -57,7 +58,7 @@ public class ZPMItemBlock extends ItemBlock {
 
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new ItemCapabilityProvider(stack, nbt, JSGConfig.powerConfig.zpmCapacity);
+        return new ItemEnergyCapabilityWithoutReceiving(stack, nbt, JSGConfig.powerConfig.zpmCapacity);
     }
 
     @Override

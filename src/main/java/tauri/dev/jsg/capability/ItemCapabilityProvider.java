@@ -9,11 +9,12 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.energy.CapabilityEnergy;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ItemCapabilityProvider implements ICapabilityProvider {
 
-	private final StargateItemEnergyStorage energyStorage;
+	protected StargateItemEnergyStorage energyStorage;
 	
 	public ItemCapabilityProvider(final ItemStack stack, @Nullable NBTTagCompound nbt, int maxEnergy) {
 		energyStorage = new StargateItemEnergyStorage(stack, maxEnergy);
@@ -21,18 +22,18 @@ public class ItemCapabilityProvider implements ICapabilityProvider {
 			backwardsCompat(nbt.getCompoundTag("Parent"));
 	}
 
-	private final void backwardsCompat(NBTTagCompound nbt){
+	private void backwardsCompat(NBTTagCompound nbt){
 		if(nbt.hasKey("energy", Constants.NBT.TAG_INT))
 			energyStorage.setEnergyStored(nbt.getInteger("energy"));
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
 		return capability == CapabilityEnergy.ENERGY;
 	}
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
 		return (capability == CapabilityEnergy.ENERGY ? CapabilityEnergy.ENERGY.cast(energyStorage) : null);
 	}
 

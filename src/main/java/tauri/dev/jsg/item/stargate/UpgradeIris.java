@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -31,17 +32,18 @@ public class UpgradeIris extends Item {
     }
 
     @Override
-    public void setDamage(ItemStack stack, int damage) {
+    public void setDamage(@Nonnull ItemStack stack, int damage) {
         if (damage >= MAX_DAMAGE) {
             stack.setCount(0);
             return;
         }
-        NBTTagCompound nbt;
-        if (stack.hasTagCompound()) {
+        NBTTagCompound nbt = null;
+        if (stack.hasTagCompound())
             nbt = stack.getTagCompound();
-        } else {
+
+        if(nbt == null)
             nbt = new NBTTagCompound();
-        }
+
         nbt.setInteger("damage", damage);
         stack.setTagCompound(nbt);
     }
@@ -52,7 +54,7 @@ public class UpgradeIris extends Item {
     }
 
     @Override
-    public int getMaxDamage(ItemStack stack) {
+    public int getMaxDamage(@Nonnull ItemStack stack) {
         return MAX_DAMAGE;
     }
 
@@ -60,12 +62,13 @@ public class UpgradeIris extends Item {
     public int getDamage(ItemStack stack) {
         if (stack.hasTagCompound()) {
             NBTTagCompound nbt = stack.getTagCompound();
-            if (nbt.hasKey("damage")) {
-                return nbt.getInteger("damage");
-            }
-            else {
-                nbt.setInteger("damage", 0);
-                stack.setTagCompound(nbt);
+            if(nbt != null) {
+                if (nbt.hasKey("damage")) {
+                    return nbt.getInteger("damage");
+                } else {
+                    nbt.setInteger("damage", 0);
+                    stack.setTagCompound(nbt);
+                }
             }
         }
 
@@ -74,38 +77,42 @@ public class UpgradeIris extends Item {
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean showDurabilityBar(@Nonnull ItemStack stack) {
         return getDamage(stack) != 0;
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
+    public double getDurabilityForDisplay(@Nonnull ItemStack stack) {
         return getDamage(stack) / (double) MAX_DAMAGE;
     }
 
+    @Nonnull
     @Override
     public Item setMaxDamage(int maxDamageIn) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(MAX_DAMAGE - getDamage(stack) + "/" + MAX_DAMAGE);
+    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
+        float percent = ((float) getDamage(stack)/MAX_DAMAGE) * 100f;
+        tooltip.add(String.format("%.2f", percent) + " %");
     }
 
     @Override
-    public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
+    public void onCreated(ItemStack stack, @Nonnull World worldIn, @Nonnull EntityPlayer playerIn) {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setInteger("damage", 0);
         stack.setTagCompound(nbt);
     }
 
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
+    @Override
+    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items)
     {
         if (this.isInCreativeTab(tab))
             items.add(getDefaultInstance());
     }
 
+    @Nonnull
     @Override
     public ItemStack getDefaultInstance() {
         ItemStack itemStack = new ItemStack(this);
@@ -114,7 +121,7 @@ public class UpgradeIris extends Item {
     }
 
     @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+    public boolean canApplyAtEnchantingTable(@Nonnull ItemStack stack, @Nonnull Enchantment enchantment) {
         if (JSGConfig.irisConfig.unbreakingChance == 0) return false;
         return (enchantment.getName().equals("enchantment.unbreaking"));
     }

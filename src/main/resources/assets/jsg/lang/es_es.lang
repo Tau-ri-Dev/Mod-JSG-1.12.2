@@ -377,8 +377,9 @@ tile.jsg.transportrings_controller_goauld_block.name=Controlador del Anillo Tran
 tile.jsg.transportrings_controller_block.not_linked=Controlador no vinculado
 
 # rings
-tile.jsg.transportrings_goauld_block.name=Anillo Transportador
-tile.jsg.transportrings_ori_block.name=Transport rings (Ori)
+tile.jsg.transportrings_goauld_block.name=Anillo Transportador (Goa'uld)
+tile.jsg.transportrings_ori_block.name=Anillo Transportador (Ori)
+tile.jsg.transportrings_ancient_block.name=Anillo Transportador (Ancient)
 
 tile.jsg.transportrings_block.non_existing_address=Imposible alcanzar esta dirección
 tile.jsg.transportrings_block.wrong_distance=Wrong distance, should be from -40 to 40

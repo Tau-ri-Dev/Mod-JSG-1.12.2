@@ -42,6 +42,7 @@ import tauri.dev.jsg.block.props.DestinyCountDownBlock;
 import tauri.dev.jsg.block.props.TRPlatformBlock;
 import tauri.dev.jsg.block.stargate.*;
 import tauri.dev.jsg.block.transportrings.TRControllerGoauldBlock;
+import tauri.dev.jsg.block.transportrings.TransportRingsAncientBlock;
 import tauri.dev.jsg.block.transportrings.TransportRingsGoauldBlock;
 import tauri.dev.jsg.block.transportrings.TransportRingsOriBlock;
 import tauri.dev.jsg.item.JSGItems;
@@ -101,6 +102,8 @@ public class JSGBlocks {
 
     public static final TransportRingsGoauldBlock TRANSPORT_RINGS_GOAULD_BLOCK = new TransportRingsGoauldBlock();
     public static final TransportRingsOriBlock TRANSPORT_RINGS_ORI_BLOCK = new TransportRingsOriBlock();
+    public static final TransportRingsAncientBlock TRANSPORT_RINGS_ANCIENT_BLOCK = new TransportRingsAncientBlock();
+
     public static final TRControllerGoauldBlock TR_CONTROLLER_GOAULD_BLOCK = new TRControllerGoauldBlock();
 
     // -----------------------------------------------------------------------------
@@ -155,7 +158,8 @@ public class JSGBlocks {
      */
     public static final JSGBlock[] RINGS_BLOCKS = {
             TRANSPORT_RINGS_GOAULD_BLOCK,
-            TRANSPORT_RINGS_ORI_BLOCK
+            TRANSPORT_RINGS_ORI_BLOCK,
+            TRANSPORT_RINGS_ANCIENT_BLOCK
     };
     /**
      * Used in {@link GDOItem#onUpdate}
@@ -182,6 +186,7 @@ public class JSGBlocks {
             TR_CONTROLLER_GOAULD_BLOCK,
             TRANSPORT_RINGS_GOAULD_BLOCK,
             TRANSPORT_RINGS_ORI_BLOCK,
+            TRANSPORT_RINGS_ANCIENT_BLOCK,
             TR_PLATFORM_BLOCK,
             BEAMER_BLOCK,
             MACHINE_ASSEMBLER,
@@ -239,6 +244,7 @@ public class JSGBlocks {
 
             TRANSPORT_RINGS_GOAULD_BLOCK,
             TRANSPORT_RINGS_ORI_BLOCK,
+            TRANSPORT_RINGS_ANCIENT_BLOCK,
 
             TR_CONTROLLER_GOAULD_BLOCK,
 

@@ -63,11 +63,6 @@ public abstract class Raycaster {
 				Box box = new Box(currentRay, lastRay, transverseRays.get(i), transverseRays.get(i+1), i);
 				
 				if (box.checkForPointInBox( new Vector2f( (float)lookVec.x, (float)lookVec.z ) )) {
-//					int button = x-1;
-//					if (i>0)
-//						button += 19;
-//					
-//					JSG.info("i:"+i+" x:"+x+" btn:"+button);
 					
 					check(world, pos, player, x, i);
 					

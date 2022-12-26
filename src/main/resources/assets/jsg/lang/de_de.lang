@@ -364,6 +364,7 @@ tile.jsg.transportrings_controller_block.not_linked=Steuerung nicht verbunden
 # rings
 tile.jsg.transportrings_goauld_block.name=Transportringe (Goa'uld)
 tile.jsg.transportrings_ori_block.name=Transportringe (Ori)
+tile.jsg.transportrings_ancient_block.name=Transportringe (Ancient)
 
 tile.jsg.transportrings_block.non_existing_address=Adresse existiert nicht
 tile.jsg.transportrings_block.wrong_distance=Falsche distanz, es sollte von -40 bis 40 sein

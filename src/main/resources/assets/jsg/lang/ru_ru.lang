@@ -377,8 +377,9 @@ tile.jsg.transportrings_controller_goauld_block.name=Панель Транспо
 tile.jsg.transportrings_controller_block.not_linked=Панель не подключена
 
 # rings
-tile.jsg.transportrings_goauld_block.name=Транспортные Кольца
-tile.jsg.transportrings_ori_block.name=Transport rings (Ori)
+tile.jsg.transportrings_goauld_block.name=Транспортные Кольца (Goa'uld)
+tile.jsg.transportrings_ori_block.name=Транспортные Кольца (Ori)
+tile.jsg.transportrings_ancient_block.name=Транспортные Кольца (Ancient)
 
 tile.jsg.transportrings_block.non_existing_address=Невозможно достигнуть адрес
 tile.jsg.transportrings_block.wrong_distance=Wrong distance, should be from -40 to 40

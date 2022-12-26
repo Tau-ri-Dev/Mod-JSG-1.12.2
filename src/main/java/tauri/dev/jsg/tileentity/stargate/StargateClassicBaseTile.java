@@ -328,6 +328,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (stargateState.dialingComputer() || stargateState.idle() || stargateState.dialing()) {
             spinStartTime = world.getTotalWorldTime() + 3000;
             isSpinning = false;
+            currentRingSymbol = targetRingSymbol;
             sendState(StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, true, 0));
             addFailedTaskAndPlaySound();
             playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);

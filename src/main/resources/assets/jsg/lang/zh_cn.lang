@@ -377,8 +377,9 @@ tile.jsg.transportrings_controller_goauld_block.name=传送环控制器
 tile.jsg.transportrings_controller_block.not_linked=控制器没有连接到传送环
 
 # rings
-tile.jsg.transportrings_goauld_block.name=传送环
-tile.jsg.transportrings_ori_block.name=Transport rings (Ori)
+tile.jsg.transportrings_goauld_block.name=传送环 (Goa'uld)
+tile.jsg.transportrings_ori_block.name=传送环 (Ori)
+tile.jsg.transportrings_ancient_block.name=传送环 (Ancient)
 
 tile.jsg.transportrings_block.non_existing_address=无法到达此地址
 tile.jsg.transportrings_block.wrong_distance=Wrong distance, should be from -40 to 40

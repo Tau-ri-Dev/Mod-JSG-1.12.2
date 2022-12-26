@@ -31,6 +31,12 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
         protected void onEnergyChanged() {
             markDirty();
         }
+
+        // we do not want ZPM to be chargeable
+        @Override
+        public int receiveEnergy(int maxEnergy, boolean simulate) {
+            return 0;
+        }
     };
     protected int energyStoredLastTick = 0;
     protected int energyTransferedLastTick = 0;

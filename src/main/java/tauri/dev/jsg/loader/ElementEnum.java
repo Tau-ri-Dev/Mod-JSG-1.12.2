@@ -66,8 +66,9 @@ public enum ElementEnum {
     // --------------------------------------------------------------------------------------------
     // Transport rings
 
-    RING_BLACK("transportrings/rings_ancient.obj", "transportrings/rings_ancient.jpg", true),
+    RING_GOAULD("transportrings/rings_goauld.obj", "transportrings/rings_goauld.jpg", false),
     RING_ORI("transportrings/rings_ori.obj", "transportrings/rings_ori.jpg", false),
+    RING_ANCIENT("transportrings/rings_ancient.obj", "transportrings/rings_ancient.jpg", false),
 
     RINGS_CONTROLLER_GOAULD("transportrings/controller/goauld/plate_goauld.obj", "transportrings/controller/goauld/goauld_panel.jpg", true),
     RINGS_CONTROLLER_GOAULD_LIGHT("transportrings/controller/goauld/indicator_lights.obj", "transportrings/controller/goauld/goauld_light.jpg", true),

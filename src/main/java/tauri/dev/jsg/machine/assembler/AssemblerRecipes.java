@@ -837,6 +837,65 @@ public class AssemblerRecipes {
             return new ItemStack(JSGBlocks.TRANSPORT_RINGS_ORI_BLOCK);
         }
     };
+    public static AssemblerRecipe TR_ANCIENT = new AssemblerRecipe() {
+        @Override
+        public String getUnlocalizedName() {
+            return "tile.jsg.transportrings_ancient_block.name";
+        }
+
+        @Override
+        public int getWorkingTime() {
+            return 600;
+        }
+
+        @Override
+        public boolean removeSubItem() {
+            return false;
+        }
+
+        @Override
+        public boolean removeDurabilitySubItem() {
+            return true;
+        }
+
+        @Override
+        public int getEnergyPerTick() {
+            return 1248;
+        }
+
+        @Override
+        public Item getSchematic() {
+            return JSGItems.SCHEMATIC_TR_ANCIENT;
+        }
+
+        @Override
+        public ArrayList<ItemStack> getPattern() {
+            ArrayList<ItemStack> array = new ArrayList<>();
+
+            array.add(new ItemStack(JSGItems.FRAGMENT_TR_ANCIENT));
+            array.add(new ItemStack(JSGItems.CRYSTAL_YELLOW));
+            array.add(new ItemStack(JSGItems.FRAGMENT_TR_ANCIENT));
+
+            array.add(new ItemStack(JSGItems.CRYSTAL_BLUE));
+            array.add(new ItemStack(JSGItems.CIRCUIT_CONTROL_NAQUADAH));
+            array.add(new ItemStack(JSGItems.CRYSTAL_ENDER));
+
+            array.add(new ItemStack(JSGItems.TITANIUM_INGOT));
+            array.add(new ItemStack(JSGItems.CRYSTAL_RED));
+            array.add(new ItemStack(JSGItems.TITANIUM_INGOT));
+            return array;
+        }
+
+        @Override
+        public ItemStack getSubItemStack() {
+            return new ItemStack(JSGItems.JSG_HAMMER);
+        }
+
+        @Override
+        public ItemStack getResult() {
+            return new ItemStack(JSGBlocks.TRANSPORT_RINGS_ANCIENT_BLOCK);
+        }
+    };
 
     public static AssemblerRecipe TR_GOAULD_CONTROLLER = new AssemblerRecipe() {
         @Override
@@ -917,6 +976,8 @@ public class AssemblerRecipes {
 
             TR_GOAULD,
             TR_ORI,
+            TR_ANCIENT,
+
             TR_GOAULD_CONTROLLER
     };
 
