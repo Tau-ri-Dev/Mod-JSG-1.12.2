@@ -37,7 +37,7 @@ public class UniverseEntryChangeGui extends AbstractAddressEntryChangeGui {
 	
 	protected GuiButton ocButton = null;
 	protected GuiButton abortButton = null;
-	protected GuiButton toggleFastDial = null;
+	//protected GuiButton toggleFastDial = null;
 	@Override
 	public void initGui() {
 		super.initGui();
@@ -56,11 +56,11 @@ public class UniverseEntryChangeGui extends AbstractAddressEntryChangeGui {
 		
 		buttonList.add(abortButton);
 
-		toggleFastDial = new JSGButton(101, 0, 0, 100, 20, new TextComponentTranslation("item.jsg.universe_dialer.toggle_fast_dial").getFormattedText())
+		/*--toggleFastDial = new JSGButton(101, 0, 0, 100, 20, new TextComponentTranslation("item.jsg.universe_dialer.toggle_fast_dial").getFormattedText())
 				.setFgColor(GuiUtils.getColorCode('f', true))
 				.setActionCallback(() -> JSGPacketHandler.INSTANCE.sendToServer(new UniverseDialerActionPacketToServer(UniverseDialerActionEnum.SET_FAST_DIAL, hand, false)));
 
-		buttonList.add(toggleFastDial);
+		buttonList.add(toggleFastDial);*/
 	}
 	
 	@Override
@@ -76,11 +76,11 @@ public class UniverseEntryChangeGui extends AbstractAddressEntryChangeGui {
 			abortButton.y = height- PADDING -3-20;
 		}
 
-		if(toggleFastDial != null) {
+		/*--if(toggleFastDial != null) {
 			toggleFastDial.visible = mainCompound.hasKey("linkedGate") && mainCompound.getBoolean("serverSideEnabledFastDial");
 			toggleFastDial.x = dispx- PADDING + 2 + 55;
 			toggleFastDial.y = height- PADDING -3-20;
-		}
+		}*/
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}

@@ -23,7 +23,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.relauncher.Side;
@@ -33,7 +32,6 @@ import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.capability.endpoint.ItemEndpointCapability;
 import tauri.dev.jsg.capability.endpoint.ItemEndpointInterface;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.linkable.LinkAbleCapabilityProvider;
@@ -61,7 +59,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
-import java.util.Map;
 
 import static tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode.NEARBY;
 
@@ -260,7 +257,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                     addrToBytes(gateTile.getDialedAddress(), compound, "dialedAddress");
                                     addrToBytes(((StargateUniverseBaseTile) gateTile).getAddressToDial(), compound, "toDialAddress");
                                     compound.setInteger("gateStatus", gateTile.getStargateState().id);
-                                    compound.setBoolean("serverSideEnabledFastDial", ((StargateClassicBaseTile) gateTile).getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ALLOW_FAST_DIAL.id).getBooleanValue());
+                                    compound.setBoolean("serverSideEnabledFastDial", ((StargateClassicBaseTile) gateTile).getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ENABLE_FAST_DIAL.id).getBooleanValue());
 
                                     ArrayList<NearbyGate> foundList = uniTile.getNearbyGates(SymbolTypeEnum.UNIVERSE, false, false);
 
@@ -309,7 +306,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                 if (tile instanceof StargateClassicBaseTile) {
                                     StargateClassicBaseTile t = (StargateClassicBaseTile) tile;
 
-                                    compound.setBoolean("serverSideEnabledFastDial", t.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ALLOW_FAST_DIAL.id).getBooleanValue());
+                                    compound.setBoolean("serverSideEnabledFastDial", t.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ENABLE_FAST_DIAL.id).getBooleanValue());
                                     compound.setInteger("gateStatus", t.getStargateState().id);
                                     compound.setString("gateOpenTime", t.getOpenedSeconds() > 0 ? t.getOpenedSecondsToDisplayAsMinutes() : "CLOSED");
                                     compound.setString("gateIrisState", t.hasIris() ? t.getIrisState().toString() : "MISSING");

@@ -330,7 +330,7 @@ public class JSGConfig {
         })
         public boolean fasterMWGateDial = false;
 
-        @Name("Enable switching between fast dialing")
+        @Name("Enable fast dialing of gates")
         @Comment({
                 "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
         })

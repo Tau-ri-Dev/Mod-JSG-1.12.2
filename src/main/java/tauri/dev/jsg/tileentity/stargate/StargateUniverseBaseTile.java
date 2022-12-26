@@ -81,7 +81,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     private boolean abortingDialing = false;
 
     // fast dialing
-    private boolean isFastDialing = false;
     private static final int fastDialingPeriod = 30; //ticks (1 symbol per this)
 
     // cooldown
@@ -166,15 +165,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         setCoolDown();
         markDirty();
         return true;
-    }
-
-    public boolean getFastDialState() {
-        return isFastDialing;
-    }
-
-    public void setFastDial(boolean state) {
-        if (stargateState.idle()) isFastDialing = state;
-        markDirty();
     }
 
     /**
@@ -679,7 +669,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         compound.setInteger("symbolsToDialCount", symbolsToDialCount);
         compound.setInteger("addressPosition", addressPosition);
         compound.setInteger("coolDown", coolDown);
-        compound.setBoolean("fastDialing", isFastDialing);
         compound.setBoolean("abortingDialing", abortingDialing);
 
         if (isLinked()) {
@@ -706,7 +695,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         addressPosition = compound.getInteger("addressPosition");
         symbolsToDialCount = compound.getInteger("symbolsToDialCount");
         coolDown = compound.getInteger("coolDown");
-        isFastDialing = compound.getBoolean("fastDialing");
         abortingDialing = compound.getBoolean("abortingDialing");
 
         if (compound.hasKey("countDownPos")) this.countDownPos = BlockPos.fromLong(compound.getLong("countDownPos"));

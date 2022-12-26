@@ -109,6 +109,16 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     private int irisMaxDurability = 0;
     protected boolean isFinalActive;
 
+    public boolean isFastDialing;
+    public boolean getFastDialState() {
+        return isFastDialing;
+    }
+
+    public void setFastDial(boolean state) {
+        if (stargateState.idle()) isFastDialing = state;
+        markDirty();
+    }
+
     protected double lastIrisHeat = -2;
     protected double lastGateHeat = -2;
     public double irisHeat;
@@ -639,6 +649,14 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public void update() {
+        // Fast dialing
+        if(!world.isRemote){
+            boolean shouldBeFast = getConfig().getOption(ENABLE_FAST_DIAL.id).getBooleanValue();
+            if(isFastDialing != shouldBeFast && getStargateState().idle()){
+                setFastDial(shouldBeFast);
+            }
+        }
+
         // Charging gate with lighting bold
         if (!world.isRemote && isMerged()) {
             BlockPos topBlockPos = getMergeHelper().getTopBlock().add(pos);
@@ -1095,6 +1113,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         compound.setDouble("gateHeat", gateHeat);
         compound.setDouble("lastGateHeat", lastGateHeat);
 
+        compound.setBoolean("fastDialing", isFastDialing);
+
         return super.writeToNBT(compound);
     }
 
@@ -1140,6 +1160,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         this.gateHeat = compound.getDouble("gateHeat");
         this.lastGateHeat = compound.getDouble("lastGateHeat");
 
+        this.isFastDialing = compound.getBoolean("fastDialing");
+
         super.readFromNBT(compound);
     }
 
@@ -1175,10 +1197,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 "while dialing milkyway gate with dhd",
                 " - ONLY FOR MW GATES - "
         ),
-        ALLOW_FAST_DIAL(
-                2, "allowFastDial", JSGConfigOptionTypeEnum.BOOLEAN, tauri.dev.jsg.config.JSGConfig.dialingConfig.enableFastDialing + "",
-                "Enable fast dialing toggle",
-                "button on this gate",
+        ENABLE_FAST_DIAL(
+                2, "enableFastDial", JSGConfigOptionTypeEnum.BOOLEAN, tauri.dev.jsg.config.JSGConfig.dialingConfig.enableFastDialing + "",
+                "Enable fast dialing",
                 " - ONLY FOR UNI GATES NOW - "
         ),
         ALLOW_RIG(
