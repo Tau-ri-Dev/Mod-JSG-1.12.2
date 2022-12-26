@@ -1,14 +1,5 @@
 package tauri.dev.jsg.gui.container.transportrings;
 
-import tauri.dev.jsg.block.JSGBlocks;
-import tauri.dev.jsg.gui.container.OpenTabHolderInterface;
-import tauri.dev.jsg.gui.util.ContainerHelper;
-import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.packet.StateUpdatePacketToClient;
-import tauri.dev.jsg.stargate.power.StargateClassicEnergyStorage;
-import tauri.dev.jsg.state.StateTypeEnum;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
-import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
@@ -23,6 +14,14 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.gui.container.OpenTabHolderInterface;
+import tauri.dev.jsg.gui.util.ContainerHelper;
+import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.packet.StateUpdatePacketToClient;
+import tauri.dev.jsg.stargate.power.StargateClassicEnergyStorage;
+import tauri.dev.jsg.state.StateTypeEnum;
+import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -187,7 +186,7 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
     public void addListener(@Nonnull IContainerListener listener) {
         super.addListener(listener);
 
-        if (listener instanceof EntityPlayerMP){
+        if (listener instanceof EntityPlayerMP) {
             JSGPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(pos, StateTypeEnum.GUI_STATE, trTile.getState(StateTypeEnum.GUI_STATE)), (EntityPlayerMP) listener);
         }
     }

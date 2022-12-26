@@ -110,6 +110,10 @@ public abstract class DHDAbstractContainerGui extends GuiContainer implements Ta
             capacity *= JSGConfig.dhdConfig.capacityUpgradeMultiplier;
         if (capacity != container.tankNaquadah.getCapacity())
             container.tankNaquadah.setCapacity(capacity);
+
+        if(container.tankNaquadah.getFluidAmount() > capacity){
+            container.tankNaquadah.setFluid(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, capacity));
+        }
     }
 
     @Override

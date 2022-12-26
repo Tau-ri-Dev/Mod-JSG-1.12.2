@@ -139,10 +139,10 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
         configTab = createConfigTab(container.trTile.getConfig(), xSize, ySize, guiLeft, guiTop);
 
-        tabs.add(settingsTab);
         tabs.add(goauldAddressTab);
         tabs.add(oriAddressTab);
         tabs.add(ancientAddressTab);
+        tabs.add(settingsTab);
         tabs.add(configTab);
 
         configTab.setOnTabClose(this::saveConfig);
