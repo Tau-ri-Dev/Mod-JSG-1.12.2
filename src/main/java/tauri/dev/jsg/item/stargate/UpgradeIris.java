@@ -94,7 +94,7 @@ public class UpgradeIris extends Item {
 
     @Override
     public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
-        float percent = ((float) getDamage(stack)/MAX_DAMAGE) * 100f;
+        float percent = ((float) (MAX_DAMAGE - getDamage(stack))/MAX_DAMAGE) * 100f;
         tooltip.add(String.format("%.2f", percent) + " %");
     }
 

@@ -88,7 +88,6 @@ public class PageRenderer {
 				float y = 0.20f*((int) Math.floor((float) i/3)) + 0.14f;
 
 				if (symbolType == SymbolTypeEnum.UNIVERSE) {
-					y = 0.20f*(i/3) + 0.18f;
 					x += 0.04f;
 					renderSymbol(x, y, 0.095f, 0.2f, stargateAddress.get(i), 0);
 				}
@@ -97,12 +96,12 @@ public class PageRenderer {
 				}
 			}
 
-			float x = 0.10f * 2;
-			float y = 0.20f*(3) + 0.14f;
+			float x = 0.21f*(10%3);
+			float y = 0.20f*((int) Math.floor((float) 10/3)) + 0.14f;
 			float w = 0.2f;
 			if (symbolType == SymbolTypeEnum.UNIVERSE) {
 				w = 0.095f;
-				x = 0.10f * 2.5f;
+				x += 0.04f;
 			}
 
 			renderSymbol(x, y, w, 0.2f, Objects.requireNonNull(symbolType.getOrigin()), originId);
@@ -117,7 +116,6 @@ public class PageRenderer {
 				float y = 0.20f*((int) Math.floor((float) i/3)) + 0.14f;
 
 				if (symbolType == SymbolTypeTransportRingsEnum.ANCIENT) {
-					y = 0.20f*(i/3) + 0.18f;
 					x += 0.04f;
 					renderSymbol(x, y, 0.095f, 0.2f, address.get(i), 0);
 				}
@@ -126,12 +124,12 @@ public class PageRenderer {
 				}
 			}
 
-			float x = 0.10f * 2;
-			float y = 0.20f*(3) + 0.14f;
+			float x = 0.21f*(10%3);
+			float y = 0.20f*((int) Math.floor((float) 10/3)) + 0.14f;
 			float w = 0.2f;
 			if (symbolType == SymbolTypeTransportRingsEnum.ANCIENT) {
 				w = 0.095f;
-				x = 0.10f * 2.5f;
+				x += 0.04f;
 			}
 			renderSymbol(x, y, w, 0.2f, Objects.requireNonNull(symbolType.getOrigin()), 0);
 		}

@@ -910,8 +910,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         if (getLinkedControllerTile(world) != null) {
             return getLinkedControllerTile(world).getSymbolType();
         }
-        return SymbolTypeTransportRingsEnum.valueOf(0);
+        return getSymbolTypeByThis();
     }
+
+    protected abstract SymbolTypeTransportRingsEnum getSymbolTypeByThis();
 
     @Override
     public boolean canLinkTo() {
@@ -1254,7 +1256,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 "Play press sound when dialing with OC"
         ),
         CAPACITORS_COUNT(
-                3, "maxCapacitors", JSGConfigOptionTypeEnum.NUMBER, "3", 0, 3,
+                3, "maxCapacitors", JSGConfigOptionTypeEnum.NUMBER, "2", 0, 3,
                 "Specifies how many",
                 "capacitors can be installed",
                 "into rings"
@@ -1526,7 +1528,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     public int getSupportedCapacitors() {
-        return getConfig().getOption(ConfigOptions.CAPACITORS_COUNT.id).getIntValue();
+        return Math.min(getConfig().getOption(ConfigOptions.CAPACITORS_COUNT.id).getIntValue() + (hasUpgrade(TransportRingsUpgradeEnum.CAPACITY_UPGRADE) ? 1 : 0), 3);
     }
 
     public abstract int getDefaultCapacitors();
@@ -1583,7 +1585,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     public enum TransportRingsUpgradeEnum implements EnumKeyInterface<Item> {
         GOAULD_UPGRADE(JSGItems.CRYSTAL_GLYPH_GOAULD, 0),
         ORI_UPGRADE(JSGItems.CRYSTAL_GLYPH_ORI, 1),
-        ANCIENT_UPGRADE(JSGItems.CRYSTAL_GLYPH_ANCIENT, 2);
+        ANCIENT_UPGRADE(JSGItems.CRYSTAL_GLYPH_ANCIENT, 2),
+        CAPACITY_UPGRADE(JSGItems.CRYSTAL_UPGRADE_CAPACITY, 3);
 
         private static final EnumKeyMap<Item, TransportRingsAbstractTile.TransportRingsUpgradeEnum> idMap = new EnumKeyMap<>(values());
         public final Item item;

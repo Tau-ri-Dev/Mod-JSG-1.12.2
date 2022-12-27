@@ -4,6 +4,9 @@ import tauri.dev.jsg.packet.gui.entry.EntryDataTypeEnum;
 import tauri.dev.jsg.stargate.network.StargateAddress;
 import tauri.dev.jsg.stargate.network.SymbolInterface;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.stargate.network.SymbolUniverseEnum;
+import tauri.dev.jsg.transportrings.SymbolAncientEnum;
+import tauri.dev.jsg.transportrings.SymbolGoauldEnum;
 import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
 import tauri.dev.jsg.transportrings.TransportRingsAddress;
 import net.minecraft.client.Minecraft;
@@ -21,7 +24,13 @@ public class NotebookEntry extends AbstractAddressEntry {
 	@Override
 	public void renderAt(int dx, int dy, int mouseX, int mouseY, float partialTicks) {
 		final int size = 20;
-		int x = dx+(ADDRESS_WIDTH-size*(maxSymbols))/2;
+		int sizeX = size;
+		if(stargateAddress != null && stargateAddress.getSymbolType() == SymbolTypeEnum.UNIVERSE)
+			sizeX /= 2;
+		if(ringsAddress != null && ringsAddress.getSymbolType() == SymbolTypeTransportRingsEnum.ANCIENT)
+			sizeX /= 2;
+
+		int x = dx+(ADDRESS_WIDTH-sizeX*(maxSymbols))/2;
 		
 		for (int i=0; i<maxSymbols; i++) {
 			SymbolInterface symbol = null;
@@ -31,8 +40,8 @@ public class NotebookEntry extends AbstractAddressEntry {
 				symbol = ringsAddress.get(i);
 
 			if(symbol != null)
-				renderSymbol(x, dy, size, size, mouseX, mouseY, symbol);
-			x += size;
+				renderSymbol(x, dy, sizeX, size, mouseX, mouseY, symbol);
+			x += sizeX;
 		}
 		super.renderAt(dx+ADDRESS_WIDTH+10, dy, mouseX, mouseY, partialTicks);
 	}

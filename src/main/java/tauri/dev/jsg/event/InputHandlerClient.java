@@ -278,19 +278,28 @@ public class InputHandlerClient {
 
         hand = getHand(JSGItems.NOTEBOOK_ITEM);
         if (hand != null) {
-            Minecraft.getMinecraft().displayGuiScreen(new NotebookEntryChangeGui(hand, player.getHeldItem(hand).getTagCompound()));
+            if(player.isSneaking())
+                Minecraft.getMinecraft().displayGuiScreen(new PageRenameGui(hand, player.getHeldItem(hand)));
+            else
+                Minecraft.getMinecraft().displayGuiScreen(new NotebookEntryChangeGui(hand, player.getHeldItem(hand).getTagCompound()));
             return;
         }
 
         hand = getHand(JSGItems.UNIVERSE_DIALER);
         if (hand != null) {
-            Minecraft.getMinecraft().displayGuiScreen(new UniverseEntryChangeGui(hand, player.getHeldItem(hand).getTagCompound(), player.world));
+            if(player.isSneaking())
+                Minecraft.getMinecraft().displayGuiScreen(new PageRenameGui(hand, player.getHeldItem(hand)));
+            else
+                Minecraft.getMinecraft().displayGuiScreen(new UniverseEntryChangeGui(hand, player.getHeldItem(hand).getTagCompound(), player.world));
             return;
         }
 
         hand = getHand(JSGItems.GDO);
-        if (hand != null && JSG.ocWrapper.isModLoaded()) {
-            Minecraft.getMinecraft().displayGuiScreen(new OCEntryChangeGui(hand, player.getHeldItem(hand).getTagCompound(), null));
+        if (hand != null) {
+            if(player.isSneaking())
+                Minecraft.getMinecraft().displayGuiScreen(new PageRenameGui(hand, player.getHeldItem(hand)));
+            else if(JSG.ocWrapper.isModLoaded())
+                Minecraft.getMinecraft().displayGuiScreen(new OCEntryChangeGui(hand, player.getHeldItem(hand).getTagCompound(), null));
 		}
     }
 }

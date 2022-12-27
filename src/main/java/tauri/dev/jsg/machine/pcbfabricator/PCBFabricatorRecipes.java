@@ -491,6 +491,93 @@ public class PCBFabricatorRecipes {
         }
     };
 
+    public static PCBFabricatorRecipe UPGRADE_CAPACITY = new PCBFabricatorRecipe() {
+        @Override
+        public FluidStack getSubFluidStack() {
+            return new FluidStack(JSGFluids.SILICON_MOLTEN_WHITE, ONE_INGOT_IN_FLUID_MB);
+        }
+
+        @Override
+        public int getWorkingTime() {
+            return 200;
+        }
+
+        @Override
+        public int getEnergyPerTick() {
+            return 232;
+        }
+
+        @Override
+        public ArrayList<ItemStack> getPattern() {
+            return new ArrayList<ItemStack>() {{
+                add(null);
+                add(new ItemStack(JSGItems.NAQUADAH_RAW_DUST));
+                add(null);
+
+                add(new ItemStack(JSGItems.CRYSTAL_RED));
+                add(new ItemStack(JSGItems.CIRCUIT_CONTROL_NAQUADAH));
+                add(new ItemStack(JSGItems.CRYSTAL_RED));
+
+                add(new ItemStack(Items.QUARTZ));
+                add(new ItemStack(Items.QUARTZ));
+                add(new ItemStack(Items.QUARTZ));
+            }};
+        }
+
+        @Override
+        public ItemStack getResult() {
+            return new ItemStack(JSGItems.CRYSTAL_UPGRADE_CAPACITY);
+        }
+
+        @Override
+        public float[] getBeamColors() {
+            return new float[]{1f, 1f, 1f};
+        }
+    };
+    public static PCBFabricatorRecipe UPGRADE_EFFICIENCY = new PCBFabricatorRecipe() {
+        @Override
+        public FluidStack getSubFluidStack() {
+            return new FluidStack(JSGFluids.SILICON_MOLTEN_WHITE, ONE_INGOT_IN_FLUID_MB);
+        }
+
+        @Override
+        public int getWorkingTime() {
+            return 200;
+        }
+
+        @Override
+        public int getEnergyPerTick() {
+            return 232;
+        }
+
+        @Override
+        public ArrayList<ItemStack> getPattern() {
+            return new ArrayList<ItemStack>() {{
+                add(null);
+                add(new ItemStack(JSGItems.TRINIUM_DUST));
+                add(null);
+
+                add(new ItemStack(JSGItems.CRYSTAL_WHITE));
+                add(new ItemStack(JSGItems.CIRCUIT_CONTROL_CRYSTAL));
+                add(new ItemStack(JSGItems.CRYSTAL_WHITE));
+
+                add(new ItemStack(Items.QUARTZ));
+                add(new ItemStack(Items.QUARTZ));
+                add(new ItemStack(Items.QUARTZ));
+            }};
+        }
+
+        @Override
+        public ItemStack getResult() {
+            return new ItemStack(JSGItems.CRYSTAL_UPGRADE_EFFICIENCY);
+        }
+
+        @Override
+        public float[] getBeamColors() {
+            return new float[]{1f, 1f, 1f};
+        }
+    };
+
     public static final PCBFabricatorRecipe[] RECIPES = {
             CIRCUIT_CONTROL_CRYSTAL,
             CIRCUIT_CONTROL_NAQUADAH,
@@ -505,7 +592,10 @@ public class PCBFabricatorRecipes {
             TR_CRYSTAL_ANCIENT,
 
             DHD_CRYSTAL_GLYPH,
-            DHD_CRYSTAL_CONTROL_PEGASUS
+            DHD_CRYSTAL_CONTROL_PEGASUS,
+
+            UPGRADE_CAPACITY,
+            UPGRADE_EFFICIENCY
     };
 
     public static void addToConfig() {

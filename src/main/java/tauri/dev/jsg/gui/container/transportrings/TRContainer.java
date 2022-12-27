@@ -55,7 +55,7 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
         trTile = (TransportRingsAbstractTile) world.getTileEntity(pos);
         IItemHandler itemHandler = Objects.requireNonNull(trTile).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
-        // Upgrades 2x2 (index 0-3)
+        // Upgrades 1x4 (index 0-3)
         for (int col = 0; col < 4; col++) {
             addSlotToContainer(new SlotItemHandler(itemHandler, col, 9 + 18 * col, 27));
         }
