@@ -25,15 +25,12 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.stargate.StargateClassicMemberBlockColor;
-import tauri.dev.jsg.entity.EntityKino;
 import tauri.dev.jsg.entity.friendly.TokraEntity;
-import tauri.dev.jsg.entity.renderer.KinoRenderer;
 import tauri.dev.jsg.entity.renderer.TokraRenderer;
 import tauri.dev.jsg.event.InputHandlerClient;
 import tauri.dev.jsg.fluid.JSGBlockFluid;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.item.color.PageMysteriousItemColor;
 import tauri.dev.jsg.item.color.PageNotebookItemColor;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
 import tauri.dev.jsg.loader.ReloadListener;
@@ -45,10 +42,11 @@ import tauri.dev.jsg.sound.SoundPositionedEnum;
 
 import static tauri.dev.jsg.block.JSGBlocks.BLOCKS;
 
+@SuppressWarnings({"rawtypes", "unused", "unchecked"})
 public class ProxyClient implements IProxy {
     public void preInit(FMLPreInitializationEvent event) {
         //setWindowIcon();
-        Display.setTitle(JSG.MOD_NAME + " | " + JSG.MC_VERSION + " | " + JSG.MOD_VERSION.replaceAll(JSG.MC_VERSION  + "-", ""));
+        Display.setTitle(JSG.MOD_NAME + " | " + JSG.MC_VERSION + " | " + JSG.MOD_VERSION.replaceAll(JSG.MC_VERSION + "-", ""));
         registerRenderers();
         registerFluidRenderers();
 

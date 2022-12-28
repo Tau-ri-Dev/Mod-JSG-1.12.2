@@ -10,11 +10,10 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import tauri.dev.jsg.advancements.JSGAdvancements;
 import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "unused"})
 public class ProxyServer implements IProxy {
     public void preInit(FMLPreInitializationEvent event) {
 
