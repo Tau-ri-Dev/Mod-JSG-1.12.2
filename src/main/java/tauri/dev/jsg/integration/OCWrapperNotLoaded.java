@@ -25,7 +25,7 @@ public class OCWrapperNotLoaded implements OCWrapperInterface {
 	}
 	
 	@Override
-	public void sendWirelessPacketPlayer(EntityPlayer player, ItemStack stack, String address, short port, Object[] data) {}
+	public void sendWirelessPacketPlayer(String packetPrefix, EntityPlayer player, ItemStack stack, String address, short port, Object[] data) {}
 	
 	@Override
 	public void joinWirelessNetwork(Object endpoint) {}

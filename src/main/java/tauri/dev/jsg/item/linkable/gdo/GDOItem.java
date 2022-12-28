@@ -200,7 +200,7 @@ public class GDOItem extends Item implements CustomModelItemInterface {
                 NBTTagCompound selectedCompound = tagList.getCompoundTagAt(selected);
                 ItemOCMessage message = new ItemOCMessage(selectedCompound);
                 JSG.debug("Sending OC message: " + message.toString());
-                JSG.ocWrapper.sendWirelessPacketPlayer(player, player.getHeldItem(hand), message.address, message.port, message.getData());
+                JSG.ocWrapper.sendWirelessPacketPlayer("gdo", player, player.getHeldItem(hand), message.address, message.port, message.getData());
             }
         }
 

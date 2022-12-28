@@ -19,7 +19,7 @@ public interface OCWrapperInterface {
 	 * @param name - name of the signal
 	 * @param params - params of the signal
 	 */
-	public void sendSignalToReachable(Node node, Context invoker, String name, Object... params);
+	void sendSignalToReachable(Node node, Context invoker, String name, Object... params);
 	
 	/**
 	 * Creates a new Node when OpenComputers is loaded.
@@ -30,24 +30,24 @@ public interface OCWrapperInterface {
 	 * @return {@link Node} or null.
 	 */
 	@Nullable
-	public Node createNode(TileEntity tileEntity, String componentName);
+	Node createNode(TileEntity tileEntity, String componentName);
 
 	/**
 	 * Joins the {@link TileEntity} to the {@link Network}.
 	 * 
 	 * @param tileEntity {@link TileEntity} to be linked.
 	 */
-	public void joinOrCreateNetwork(TileEntity tileEntity);
+	void joinOrCreateNetwork(TileEntity tileEntity);
 
 	/**
 	 * @return {@code True} if the OpenComputers mod is loaded, {@code false} otherwise.
 	 */
-	public boolean isModLoaded();
+	boolean isModLoaded();
 	
-	public void sendWirelessPacketPlayer(EntityPlayer player, ItemStack stack, String address, short port, Object[] data);
+	void sendWirelessPacketPlayer(String packetPrefix, EntityPlayer player, ItemStack stack, String address, short port, Object[] data);
 
-	public void joinWirelessNetwork(Object endpoint);
-	public void leaveWirelessNetwork(Object endpoint);
-	public void updateWirelessNetwork(Object endpoint);
+	void joinWirelessNetwork(Object endpoint);
+	void leaveWirelessNetwork(Object endpoint);
+	void updateWirelessNetwork(Object endpoint);
 
 }
