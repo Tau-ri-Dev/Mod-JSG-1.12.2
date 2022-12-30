@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "PSP",
+    "PPP"
+  ],
+
+  "key": {
+    "P": {
+      "type": "forge:ore_dict",
+      "ore": "plateTitanium"
+    },
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "stone"
+    }
+  },
+
+  "result": {
+    "item": "jsg:ancient_sign",
+    "count": 16
+  }
+}

@@ -408,6 +408,9 @@ tile.jsg.crystal_chamber_block.name=Chambre de cristal
 tile.jsg.pcb_fabricator_block.name=Fabricant de circuits imprimés
 tile.jsg.ore_washing_machine_block.name=Machine à laver les minerais
 
+# ancient sign
+tile.jsg.ancient_sign.name=Ancient Sign
+
 # -------------------
 
 # -------------------
@@ -742,13 +745,8 @@ gui.gdo.send_button=Envoyer le code
 # assembleur
 gui.assembler.name=Ancien Assembleur
 
-gui.assembler.milkyway=Articles de la voie lactée
-gui.assembler.pegasus=Articles de Pégase
-gui.assembler.universe=Articles de l'univers
-
-gui.assembler.goauld=Articles de Goa'uld
-gui.assembler.ori=Articles d'Ori
-gui.assembler.ancient=Articles d'Anciens
+# ancient sign
+gui.ancient_sign.edit=Edit ancient text
 
 # -------------------
 

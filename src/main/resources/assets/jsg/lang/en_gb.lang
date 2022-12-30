@@ -400,6 +400,9 @@ tile.jsg.crystal_chamber_block.name=Crystal Chamber
 tile.jsg.pcb_fabricator_block.name=PCB Fabricator
 tile.jsg.ore_washing_machine_block.name=Ore Washing Machine
 
+# ancient sign
+tile.jsg.ancient_sign.name=Ancient Sign
+
 # -------------------
 
 # -------------------
@@ -734,13 +737,8 @@ gui.gdo.send_button=Send code
 # assembler
 gui.assembler.name=Ancient Assembler
 
-gui.assembler.milkyway=Milky Way Items
-gui.assembler.pegasus=Pegasus Items
-gui.assembler.universe=Universe Items
-
-gui.assembler.goauld=Goa'uld Items
-gui.assembler.ori=Ori Items
-gui.assembler.ancient=Ancient Items
+# ancient sign
+gui.ancient_sign.edit=Edit ancient text
 
 # -------------------
 

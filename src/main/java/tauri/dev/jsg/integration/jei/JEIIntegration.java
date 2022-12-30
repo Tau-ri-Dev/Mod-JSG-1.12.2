@@ -106,6 +106,7 @@ public final class JEIIntegration implements IModPlugin {
                 @Override
                 public void getIngredients(@Nonnull IIngredients iIngredients) {
                     iIngredients.setInput(VanillaTypes.ITEM, new ItemStack(JSGItems.CRYSTAL_SEED, recipe.getNeededSeeds()));
+                    iIngredients.setInput(VanillaTypes.FLUID, getSubFluidStack());
                     iIngredients.setOutput(VanillaTypes.ITEM, recipe.getResult());
                 }
             };
@@ -132,6 +133,7 @@ public final class JEIIntegration implements IModPlugin {
                         list.add(Collections.singletonList(s));
 
                     iIngredients.setInputLists(VanillaTypes.ITEM, list);
+                    iIngredients.setInput(VanillaTypes.FLUID, getSubFluidStack());
                     iIngredients.setOutput(VanillaTypes.ITEM, recipe.getResult());
                 }
             };
@@ -153,6 +155,7 @@ public final class JEIIntegration implements IModPlugin {
                 @Override
                 public void getIngredients(@Nonnull IIngredients iIngredients) {
                     iIngredients.setInput(VanillaTypes.ITEM, recipe.getItemNeeded());
+                    iIngredients.setInput(VanillaTypes.FLUID, getSubFluidStack());
                     iIngredients.setOutput(VanillaTypes.ITEM, recipe.getResult());
                 }
             };

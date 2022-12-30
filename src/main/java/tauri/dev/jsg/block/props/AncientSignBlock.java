@@ -9,9 +9,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -27,8 +29,8 @@ import tauri.dev.jsg.block.JSGBlock;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.gui.AncientSignEditGui;
 import tauri.dev.jsg.renderer.props.AncientSignRenderer;
-import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.tileentity.props.AncientSignTile;
+import tauri.dev.jsg.util.JSGColorUtil;
 import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
@@ -172,7 +174,7 @@ public class AncientSignBlock extends JSGBlock {
         super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
     }
 
-    public boolean interact(@Nonnull World worldIn, @Nonnull BlockPos blockPos, @Nonnull EntityLivingBase entity, @Nullable EnumHand hand) {
+    public static boolean interact(@Nonnull World worldIn, @Nonnull BlockPos blockPos, @Nonnull EntityLivingBase entity, @Nullable EnumHand hand) {
         if (!(entity instanceof EntityPlayer)) return false;
         EntityPlayer player = (EntityPlayer) entity;
 
@@ -182,12 +184,9 @@ public class AncientSignBlock extends JSGBlock {
             if (hand != null) {
                 ItemStack stack = player.getHeldItem(hand);
                 if (stack.getItem() instanceof ItemDye) {
-                    if(!worldIn.isRemote){
-                        int index = stack.getMetadata();
-                        if (index < 0) index = 0;
-                        if (index > 15) index = 15;
-                        int newColor = ItemDye.DYE_COLORS[index];
-                        if(newColor != casted.color) {
+                    if (!worldIn.isRemote) {
+                        int newColor = JSGColorUtil.blendColors(casted.color, JSGColorUtil.getColorFromDyeItem(stack), 0.25f);
+                        if (newColor != casted.color) {
                             casted.color = newColor;
                             tile.markDirty();
                             if (!player.isCreative() && !player.isSpectator()) {
@@ -208,12 +207,25 @@ public class AncientSignBlock extends JSGBlock {
     }
 
     @SideOnly(Side.CLIENT)
-    private void displayGui(AncientSignTile tile){
+    private static void displayGui(AncientSignTile tile) {
         Minecraft.getMinecraft().displayGuiScreen(new AncientSignEditGui(tile));
     }
 
     @Override
     public void onBlockPlacedBy(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EntityLivingBase placer, @Nonnull ItemStack stack) {
+        if(stack.hasTagCompound()){
+            NBTTagCompound compound = stack.getTagCompound();
+            if(compound != null && compound.hasKey("BlockEntityTag")){
+                TileEntity tile = world.getTileEntity(pos);
+                if(tile instanceof AncientSignTile){
+                    AncientSignTile casted = (AncientSignTile) tile;
+                    NBTTagCompound c = compound.getCompoundTag("BlockEntityTag");
+                    casted.fromItemStack(c);
+                    casted.markDirty();
+                    return;
+                }
+            }
+        }
         interact(world, pos, placer, null);
     }
 

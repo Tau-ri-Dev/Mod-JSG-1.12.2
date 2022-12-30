@@ -67,6 +67,15 @@ public class AncientSignTile extends TileEntitySign implements StateProviderInte
         return super.writeToNBT(compound);
     }
 
+    public void fromItemStack(@Nonnull NBTTagCompound compound) {
+        for (int i = 0; i < LINES; ++i) {
+            this.ancientText[i] = compound.getString("AncientText" + (i + 1));
+        }
+        color = compound.getInteger("color");
+        markDirty();
+        sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
+    }
+
     public void readFromNBT(@Nonnull NBTTagCompound compound) {
         super.readFromNBT(compound);
 
