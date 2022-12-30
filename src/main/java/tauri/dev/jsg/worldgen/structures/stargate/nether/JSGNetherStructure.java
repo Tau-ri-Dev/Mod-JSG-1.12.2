@@ -67,6 +67,7 @@ public class JSGNetherStructure extends JSGStructure {
         JSG.info("Nether Structure " + structureName + " generation started!");
         if (mcServer == null) return null;
         worldToSpawn = (worldToSpawn == null ? mcServer.getWorld(dimensionToSpawn) : worldToSpawn);
+
         BlockPos start = posIn;
         BlockPos current = start;
         int count = 0;
@@ -146,6 +147,6 @@ public class JSGNetherStructure extends JSGStructure {
 
         BlockPos translate = new BlockPos(-7, y, -16).rotate(rotation);
         found = found.add(translate);
-        return super.generateStructure(executedInWorld, found, random, worldToSpawn);
+        return super.generateStructure(executedInWorld, found, random, worldToSpawn, rotation);
     }
 }

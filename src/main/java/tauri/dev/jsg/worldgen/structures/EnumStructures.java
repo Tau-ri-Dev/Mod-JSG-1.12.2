@@ -108,13 +108,13 @@ public enum EnumStructures {
             }}, null, 15, Rotation.CLOCKWISE_90, 0.7, 0.8, EnumGenerationHeight.LOW),
 
     // Nether
-    NETHER_MW("sg_nether_milkyway", 9, true, false, SymbolTypeEnum.MILKYWAY, 16, 16, -1, true, false, 0, new NetherProcessor(),
+    NETHER_MW("sg_nether_milkyway", 0, true, false, SymbolTypeEnum.MILKYWAY, 16, 16, -1, false, false, 0, new NetherProcessor(),
             new ArrayList<Block>() {{
                 add(Blocks.NETHERRACK);
                 add(Blocks.QUARTZ_ORE);
                 add(Blocks.NETHER_BRICK);
                 add(Blocks.SOUL_SAND);
-            }}, null, 12, Rotation.CLOCKWISE_180, 0.3, 0.8, EnumGenerationHeight.HEIGHT),
+            }}, null, 12, Rotation.NONE, 0.3, 0.8, EnumGenerationHeight.HEIGHT),
 
     // ---------------------------------------------------------------------------
     // GENERAL STRUCTURES

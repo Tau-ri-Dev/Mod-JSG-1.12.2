@@ -25,6 +25,9 @@ import java.util.Random;
 
 import static tauri.dev.jsg.worldgen.util.JSGWorldTopBlock.getTopBlock;
 
+/**
+ * @author MrJake222
+ */
 public class JSGStructuresGenerator implements IWorldGenerator {
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
@@ -47,12 +50,12 @@ public class JSGStructuresGenerator implements IWorldGenerator {
     public static GeneratedStargate generateStructure(EnumStructures structure, World world, Random random, int chunkX, int chunkZ, boolean notRandomGen, boolean notCommandGen, int dimId) {
         WorldServer worldToSpawn = Objects.requireNonNull(world.getMinecraftServer()).getWorld(dimId);
 
+        if(structure.getActualStructure(dimId) instanceof JSGNetherStructure){
+            return structure.getActualStructure(dimId).generateStructure(world, new BlockPos((chunkX * 16), 32, (chunkZ * 16)), random, worldToSpawn);
+        }
+
         int x = (chunkX * 16) + (notCommandGen ? random.nextInt(15) : 0);
         int z = (chunkZ * 16) + (notCommandGen ? random.nextInt(15) : 0);
-
-        if(structure.getActualStructure(dimId) instanceof JSGNetherStructure){
-            return structure.getActualStructure(dimId).generateStructure(world, new BlockPos(x, 15, z), random, worldToSpawn);
-        }
         JSGStructurePos structurePos = checkForPlace(worldToSpawn, chunkX, chunkZ, structure, dimId);
         if (notRandomGen && notCommandGen) {
             int tries = 0;

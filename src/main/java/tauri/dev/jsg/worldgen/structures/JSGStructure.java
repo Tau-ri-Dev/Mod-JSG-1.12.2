@@ -110,6 +110,9 @@ public class JSGStructure extends WorldGenerator {
 
     @Nullable
     public GeneratedStargate generateStructure(World executedInWorld, BlockPos pos, Random random, @Nullable WorldServer worldToSpawn) {
+        return generateStructure(executedInWorld, pos, random, worldToSpawn, null);
+    }
+    public GeneratedStargate generateStructure(World executedInWorld, BlockPos pos, Random random, @Nullable WorldServer worldToSpawn, @Nullable Rotation rotationOverride) {
         pos = pos.down(yNegativeOffset);
         MinecraftServer mcServer = executedInWorld.getMinecraftServer();
         JSG.info("Structure " + structureName + " generation started!");
@@ -126,6 +129,9 @@ public class JSGStructure extends WorldGenerator {
         EnumFacing facing = (findOptimalRotation ? findOptimalRotation(worldToSpawn, pos) : EnumFacing.NORTH);
         Rotation rotation = FacingToRotation.get(facing);
         rotation = rotation.add(rotationToNorth);
+
+        if(rotationOverride != null)
+            rotation = rotationOverride;
         template.addBlocksToWorld(worldToSpawn, pos, templateProcessor, defaultSettings.setRotation(rotation), 3);
 
         Map<BlockPos, String> dataBlocks = template.getDataBlocks(pos, defaultSettings);

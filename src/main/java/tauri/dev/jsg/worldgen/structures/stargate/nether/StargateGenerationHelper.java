@@ -112,7 +112,7 @@ public class StargateGenerationHelper {
 
         @Override
         public String toString() {
-            return "[dist="+distance+", ydiff="+ydiff+"]";
+            return "[dist=" + distance + ", ydiff=" + ydiff + "]";
         }
     }
 
@@ -121,28 +121,22 @@ public class StargateGenerationHelper {
         int ydiff = 0;
 
         while (distance < maxDistance) {
-            BlockPos offset = start.offset(direction.getDirection(), distance+1);
+            BlockPos offset = start.offset(direction.getDirection(), distance + 1);
             if (!blockAccess.isAirBlock(offset)) {
                 if (ydiff == direction.getMaxVertDiff())
                     break;
 
                 start = start.up();
                 ydiff++;
-            }
-
-            else if (blockAccess.isAirBlock(offset.down()) && direction.checkDown) {
+            } else if (blockAccess.isAirBlock(offset.down()) && direction.checkDown) {
                 if (-ydiff == direction.getMaxVertDiff())
                     break;
 
                 start = start.down();
                 ydiff--;
-            }
-
-            else if (!direction.checkDown(blockAccess.getBlockState(offset.down()), allowedBlocksBelow)) {
+            } else if (!direction.checkDown(blockAccess.getBlockState(offset.down()), allowedBlocksBelow)) {
                 break;
-            }
-
-            else {
+            } else {
                 distance++;
             }
         }
