@@ -27,6 +27,9 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 public class BeamerContainer extends Container {
 
 	public BeamerTile beamerTile;
@@ -47,30 +50,31 @@ public class BeamerContainer extends Container {
 	public BeamerContainer(IInventory playerInventory, World world, int x, int y, int z) {
 		pos = new BlockPos(x, y, z);
 		beamerTile = (BeamerTile) world.getTileEntity(pos);
-		IItemHandler itemHandler = beamerTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+		IItemHandler itemHandler = Objects.requireNonNull(beamerTile).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		
-		slotCrystal = new SlotItemHandler(itemHandler, 0, 80, 30);
+		slotCrystal = new SlotItemHandler(itemHandler, 0, 62, 47);
 		addSlotToContainer(slotCrystal);
 		
 		tank = (FluidTank) beamerTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 		
 		for (int row=0; row<2; row++) {
 			for (int col=0; col<2; col++) {				
-				addSlotToContainer(new SlotItemHandler(itemHandler, row*2+col+1, 9+18*col, 18+18*row));
+				addSlotToContainer(new SlotItemHandler(itemHandler, row*2+col+1, 8+18*col, 38+18*row));
 			}
 		}
 		
-		for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 86))
+		for (Slot slot : ContainerHelper.generatePlayerSlots(playerInventory, 98))
 			addSlotToContainer(slot);
 	}
 	
 	@Override
-	public boolean canInteractWith(EntityPlayer player) {
+	public boolean canInteractWith(@Nonnull EntityPlayer player) {
 		return true;
 	}
 
+	@Nonnull
 	@Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int index) {
+    public ItemStack transferStackInSlot(@Nonnull EntityPlayer player, int index) {
 		ItemStack stack = getSlot(index).getStack();
 		Item item = stack.getItem();
 		
@@ -110,8 +114,8 @@ public class BeamerContainer extends Container {
 		super.detectAndSendChanges();
 		
 		StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) beamerTile.getCapability(CapabilityEnergy.ENERGY, null);
-		
-		if (lastEnergyStored != energyStorage.getEnergyStored() || energyTransferedLastTick != beamerTile.getEnergyTransferredLastTick() || lastFluidStored != tank.getFluidAmount() || lastLinked != beamerTile.isLinked() || lastRole != beamerTile.getRole() || lastRedstoneMode != beamerTile.getRedstoneMode() || lastStart != beamerTile.getStart() || lastStop != beamerTile.getStop() || lastIn != beamerTile.getInactivity()) {
+
+		if (lastEnergyStored != Objects.requireNonNull(energyStorage).getEnergyStored() || energyTransferedLastTick != beamerTile.getEnergyTransferredLastTick() || lastFluidStored != tank.getFluidAmount() || lastLinked != beamerTile.isLinked() || lastRole != beamerTile.getRole() || lastRedstoneMode != beamerTile.getRedstoneMode() || lastStart != beamerTile.getStart() || lastStop != beamerTile.getStop() || lastIn != beamerTile.getInactivity()) {
 			for (IContainerListener listener : listeners) {
 				if (listener instanceof EntityPlayerMP) {
 					JSGPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(pos, StateTypeEnum.GUI_UPDATE, beamerTile.getState(StateTypeEnum.GUI_UPDATE)), (EntityPlayerMP) listener);
@@ -131,7 +135,7 @@ public class BeamerContainer extends Container {
 	}
 	
 	@Override
-	public void addListener(IContainerListener listener) {
+	public void addListener(@Nonnull IContainerListener listener) {
 		super.addListener(listener);
 		
 		if (listener instanceof EntityPlayerMP) {

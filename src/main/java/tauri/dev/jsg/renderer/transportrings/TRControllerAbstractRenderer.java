@@ -47,7 +47,7 @@ public abstract class TRControllerAbstractRenderer extends TileEntitySpecialRend
         GlStateManager.translate(x, y, z);
 
         Vector3f tr = getTranslation(facing);
-        int rot = FacingToRotation.getIntRotation(facing);
+        int rot = FacingToRotation.getIntRotation(facing, false);
 
         GlStateManager.translate(tr.x, tr.y, tr.z);
         GlStateManager.rotate(rot, 0, 1, 0);

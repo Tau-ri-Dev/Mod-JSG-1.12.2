@@ -55,7 +55,7 @@ public class RaycasterRingsGoauldController extends Raycaster {
 
     public void onActivated(World world, BlockPos pos, EntityPlayer player) {
         EnumFacing facing = world.getBlockState(pos).getValue(JSGProps.FACING_HORIZONTAL);
-        float rotation = FacingToRotation.getIntRotation(facing);
+        float rotation = FacingToRotation.getIntRotation(facing, false);
 
         super.onActivated(world, pos, player, rotation, EnumHand.MAIN_HAND);
     }

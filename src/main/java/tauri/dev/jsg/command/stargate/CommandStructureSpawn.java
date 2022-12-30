@@ -69,6 +69,7 @@ public class CommandStructureSpawn extends CommandBase {
     }
 
     @Nonnull
+    @Override
     public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, EnumStructures.getAllStructureNames());

@@ -5,11 +5,15 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.loader.texture.TextureLoader;
+
+import java.util.Objects;
 
 import static tauri.dev.jsg.Constants.*;
 
-public class AncientTimeRenderer {
+public class AncientRenderer {
 
     public static final double ONE_DIGIT_X = 5;
     public static final double SPACE_BETWEEN_X = (ONE_DIGIT_X / 3);
@@ -25,6 +29,7 @@ public class AncientTimeRenderer {
         int ticksDisplay = (int) ((Math.floor((double) (ticks % SECOND)) / 20) * 60); // convert ticks to "milliseconds"
         renderClock(hours, minutes, seconds, ticksDisplay, renderWholeTime, countToTicks, twoDim);
     }
+
     public static void renderClock(int hours, int minutes, int seconds, int ticks, boolean renderWholeTime, long countToTicks, boolean twoDim) {
         if (hours > 0 || renderWholeTime) {
             GlStateManager.translate(HOURS_START_X, 0, 0);
@@ -127,32 +132,93 @@ public class AncientTimeRenderer {
         GlStateManager.popMatrix();
     }
 
+    public static void renderString(String s, boolean twoDim) {
+        s = s.toLowerCase();
+        for (int i = 0; i < s.length(); i++) {
+            GlStateManager.pushMatrix();
+            try {
+                char c = s.charAt(i);
+                if(isCharNotAllowed(s.charAt(i)))
+                    c = '_';
+
+                String newPart = c + "";
+
+                if(newPart.equals(".")) newPart = "dot";
+                if(newPart.equals(",")) newPart = "comma";
+                if(newPart.equals(":")) newPart = "colon";
+                if(newPart.equals("?")) newPart = "question";
+                if(newPart.equals("!")) newPart = "exclamation";
+                if(newPart.equals("_")) newPart = "under";
+                if(newPart.equals("-")) newPart = "dash";
+
+                renderCharacter(newPart, twoDim);
+            } catch (Exception ignored) {}
+            GlStateManager.popMatrix();
+            GlStateManager.translate(ONE_DIGIT_X, 0, 0);
+        }
+    }
+
+    public static boolean isCharNotAllowed(char c) {
+        c = Character.toLowerCase(c);
+        final String allowed = "abcdefghijklmnopqrstuvwxyz1234567890_-:.,!? ";
+        for (int i = 0; i < allowed.length(); i++) {
+            char s = allowed.charAt(i);
+            if (s == c)
+                return false;
+        }
+        return true;
+    }
+
+    private static void renderCharacter(String character, boolean twoDim) {
+        try {
+
+            String path = "ancient/alphabet/" + character + ".png";
+
+            ResourceLocation tex = TextureLoader.getTextureResource(path);
+
+            if (TextureLoader.isNotTextureLoaded(tex))
+                return;
+
+            GlStateManager.pushMatrix();
+            if (!twoDim) {
+                GlStateManager.rotate(180, 0, 1, 0);
+                GlStateManager.rotate(180, 0, 0, 1);
+            }
+
+            if(Objects.equals(character, "comma")) // Move comma little down :)
+                GlStateManager.translate(0, (ONE_DIGIT_X/3), 0);
+
+            GlStateManager.pushMatrix();
+            GlStateManager.disableBlend();
+            GlStateManager.enableAlpha();
+            GlStateManager.enableTexture2D();
+            GlStateManager.disableLighting();
+            Minecraft.getMinecraft().getTextureManager().bindTexture(tex);
+
+            int uvSizeX = 3;
+            int uvSizeY = 10;
+
+            drawTexturedModalRect(0, 0, 0, 0, uvSizeX, uvSizeY, uvSizeX, uvSizeY);
+
+            GlStateManager.enableLighting();
+            GlStateManager.popMatrix();
+            GlStateManager.popMatrix();
+        } catch (Exception e) {
+            JSG.error("Error while rendering ancient character: " + character, e);
+        }
+    }
+
     public static void renderNumber(int number, boolean twoDim) {
         if (number < -2) number = -2;
         if (number > 9) number = 9;
 
-        String path = "ancient/numbers/" + (number >= 0 ? number : ("_" + Math.abs(number))) + ".png";
+        String character;
 
-        GlStateManager.pushMatrix();
-        if (!twoDim) {
-            GlStateManager.rotate(180, 0, 1, 0);
-            GlStateManager.rotate(180, 0, 0, 1);
-        }
-        GlStateManager.pushMatrix();
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlpha();
-        GlStateManager.enableTexture2D();
-        GlStateManager.disableLighting();
-        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureLoader.getTextureResource(path));
+        if (number == -2) character = "dot_center";
+        else if (number == -1) character = "colon";
+        else character = number + "";
 
-        int uvSizeX = 3;
-        int uvSizeY = 10;
-
-        drawTexturedModalRect(0, 0, 0, 0, uvSizeX, uvSizeY, uvSizeX, uvSizeY);
-
-        GlStateManager.enableLighting();
-        GlStateManager.popMatrix();
-        GlStateManager.popMatrix();
+        renderCharacter(character, twoDim);
     }
 
     public static void drawTexturedModalRect(int x, int y, float u, float v, int width, int height, float textureWidth, float textureHeight) {

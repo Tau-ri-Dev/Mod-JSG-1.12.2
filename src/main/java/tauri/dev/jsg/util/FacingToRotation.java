@@ -25,19 +25,19 @@ public class FacingToRotation {
 		return ROTATION_MAP.get(facing);
 	}
 
-	public static int getIntRotation(EnumFacing facing) {
+	public static int getIntRotation(EnumFacing facing, boolean inverted) {
 		switch (facing) {
 			case EAST:
-				return 270;
-
-			case SOUTH:
-				return 180;
-
-			case WEST:
 				return 90;
 
+			case SOUTH:
+				return (!inverted ? 180 : 0);
+
+			case WEST:
+				return 270;
+
 			default:
-				return 0;
+				return (inverted ? 180 : 0);
 		}
 	}
 }

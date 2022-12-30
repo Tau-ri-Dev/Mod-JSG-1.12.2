@@ -511,7 +511,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
             }
 
 
-            if (beamerMode == BeamerModeEnum.POWER) {
+            if (beamerMode == BeamerModeEnum.POWER || beamerMode == BeamerModeEnum.LASER) {
                 energyTransferredLastTick = energyStorage.getEnergyStored() - energyStoredLastTick;
                 energyStoredLastTick = energyStorage.getEnergyStored();
             }

@@ -22,7 +22,7 @@ import tauri.dev.jsg.item.oc.ItemOCMessage;
 import tauri.dev.jsg.item.renderer.ItemRenderHelper;
 import tauri.dev.jsg.item.renderer.JSGFontRenderer;
 import tauri.dev.jsg.loader.ElementEnum;
-import tauri.dev.jsg.renderer.AncientTimeRenderer;
+import tauri.dev.jsg.renderer.AncientRenderer;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.stargate.EnumStargateState;
 import tauri.dev.jsg.stargate.network.*;
@@ -397,7 +397,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
                         GlStateManager.rotate(180, 0, 0, 1);
                         GlStateManager.pushMatrix();
                         GlStateManager.color(1, 1, 1);
-                        AncientTimeRenderer.renderClock(ticks, false, time, true);
+                        AncientRenderer.renderClock(ticks, false, time, true);
                         GlStateManager.popMatrix();
                         GlStateManager.popMatrix();
                     }

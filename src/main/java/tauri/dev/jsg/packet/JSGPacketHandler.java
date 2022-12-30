@@ -52,6 +52,7 @@ public class JSGPacketHandler {
 		INSTANCE.registerMessage(SaveIrisCodeToServer.SaveIrisCodeToServerHandler.class, SaveIrisCodeToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(SaveConfigToServer.SaveConfigToServerHandler.class, SaveConfigToServer.class, id, Side.SERVER); id++;
 		INSTANCE.registerMessage(ZPMHubAnimationToServer.ZPMHubAnimationToServerHandler.class, ZPMHubAnimationToServer.class, id, Side.SERVER); id++;
+		INSTANCE.registerMessage(AncientSignSaveToServer.AncientSignSaveToServerHandler.class, AncientSignSaveToServer.class, id, Side.SERVER); id++;
 
 		// clientside packets
 		INSTANCE.registerMessage(StargateMotionToClient.RetrieveMotionClientHandler.class, StargateMotionToClient.class, id, Side.CLIENT); id++;

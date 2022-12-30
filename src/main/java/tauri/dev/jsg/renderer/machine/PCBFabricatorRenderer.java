@@ -49,7 +49,7 @@ public class PCBFabricatorRenderer extends TileEntitySpecialRenderer<PCBFabricat
                 GlStateManager.scale(0.8f, 0.8f, 0.8f);
 
                 EnumFacing facing = te.getWorld().getBlockState(te.getPos()).getValue(JSGProps.FACING_HORIZONTAL);
-                int rotation = FacingToRotation.getIntRotation(facing);
+                int rotation = FacingToRotation.getIntRotation(facing, false);
 
                 GlStateManager.rotate(rotation, 0, 1, 0);
                 GlStateManager.rotate(90, 1, 0, 0);
