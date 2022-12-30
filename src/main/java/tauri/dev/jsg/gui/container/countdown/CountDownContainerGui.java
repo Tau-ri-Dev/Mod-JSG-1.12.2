@@ -5,12 +5,12 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.input.Mouse;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.gui.container.stargate.StargateContainerGui;
-import tauri.dev.jsg.gui.element.ArrowButton;
-import tauri.dev.jsg.gui.element.tabs.*;
+import tauri.dev.jsg.gui.element.tabs.Tab;
+import tauri.dev.jsg.gui.element.tabs.TabConfig;
+import tauri.dev.jsg.gui.element.tabs.TabScrollAble;
+import tauri.dev.jsg.gui.element.tabs.TabbedContainerInterface;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.SetOpenTabToServer;
 import tauri.dev.jsg.packet.stargate.SaveConfigToServer;
@@ -37,7 +37,7 @@ public class CountDownContainerGui extends GuiContainer implements TabbedContain
         this.container = container;
 
         this.xSize = 176;
-        this.ySize = 99;
+        this.ySize = 128;
 
         this.pos = pos;
     }
@@ -63,6 +63,7 @@ public class CountDownContainerGui extends GuiContainer implements TabbedContain
         super.drawScreen(mouseX, mouseY, partialTicks);
         renderHoveredToolTip(mouseX, mouseY);
     }
+
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
@@ -85,7 +86,7 @@ public class CountDownContainerGui extends GuiContainer implements TabbedContain
         drawModalRectWithCustomSizedTexture(guiLeft, guiTop, 0, 0, xSize, ySize, 256, 256);
 
         // title
-        drawTexturedModalRect(guiLeft + 119 - 247 + 208, guiTop + 12 - 7, 209, 0, 247 - 208, 7);
+        drawTexturedModalRect(guiLeft + 119 - 247 + 208, guiTop + 12 - 7, 209, 0, 247 - 208, 8);
     }
 
     @Override

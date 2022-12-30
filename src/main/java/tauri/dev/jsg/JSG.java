@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.server.FMLServerHandler;
 import org.apache.logging.log4j.Logger;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.command.JSGCommands;
@@ -34,7 +35,7 @@ public class JSG {
     public static final int DATA_VERSION = 21;
     public static final String CONFIG_GENERAL_VERSION = "2.2";
     public static final String CONFIG_CRAFTINGS_VERSION = "1.1";
-    public static final String CONFIG_DIMENSIONS_VERSION = "1.0";
+    public static final String CONFIG_DIMENSIONS_VERSION = "1.1";
     public static final String MC_VERSION = "@MCVERSION@";
     public static final String CLIENT = "tauri.dev.jsg.proxy.ProxyClient";
     public static final String SERVER = "tauri.dev.jsg.proxy.ProxyServer";
