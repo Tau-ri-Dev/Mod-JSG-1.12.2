@@ -1,5 +1,11 @@
 package tauri.dev.jsg.tileentity.energy;
 
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.Environment;
+import li.cil.oc.api.network.Message;
+import li.cil.oc.api.network.Node;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,6 +15,7 @@ import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -33,7 +40,8 @@ import java.util.Objects;
 
 import static tauri.dev.jsg.util.JSGAdvancementsUtil.tryTriggerRangedAdvancement;
 
-public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProvider, StateProviderInterface {
+@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers")
+public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProvider, StateProviderInterface, Environment {
 
     private static final int SLIDING_ANIMATION_LENGTH = 50;// int ticks
 
@@ -145,9 +153,16 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         }
     }
 
+    private boolean addedToNetwork = false;
+
     @Override
     public void update() {
         if (!world.isRemote) {
+            if (!addedToNetwork) {
+                addedToNetwork = true;
+                JSG.ocWrapper.joinOrCreateNetwork(this);
+            }
+
             if (!isSlidingUp && !isAnimating) {
                 for (EnumFacing facing : EnumFacing.VALUES) {
                     TileEntity tile = world.getTileEntity(pos.offset(facing));
@@ -208,7 +223,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         compound.setTag("energyStorage", getEnergyStorage().serializeNBT());
         compound.setTag("itemStackHandler", itemStackHandler.serializeNBT());
 
@@ -216,17 +231,26 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         compound.setBoolean("isSlidingUp", isSlidingUp);
         compound.setLong("animationStart", animationStart);
 
+        if (node != null) {
+            NBTTagCompound nodeCompound = new NBTTagCompound();
+            node.save(nodeCompound);
+
+            compound.setTag("node", nodeCompound);
+        }
+
         return super.writeToNBT(compound);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         getEnergyStorage().deserializeNBT(compound.getCompoundTag("energyStorage"));
         itemStackHandler.deserializeNBT(compound.getCompoundTag("itemStackHandler"));
 
         isAnimating = compound.getBoolean("isAnimating");
         isSlidingUp = compound.getBoolean("isSlidingUp");
         animationStart = compound.getLong("animationStart");
+
+        if (node != null && compound.hasKey("node")) node.load(compound.getCompoundTag("node"));
 
         super.readFromNBT(compound);
     }
@@ -331,5 +355,72 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
             default:
                 break;
         }
+    }
+
+
+
+    // ------------------------------------------------------------
+    // Node-related work
+    private final Node node = JSG.ocWrapper.createNode(this, "zpmhub");
+
+    @Override
+    public void onChunkUnload() {
+        if (node != null) node.remove();
+    }
+
+    @Override
+    public void invalidate() {
+        if (node != null) node.remove();
+
+        super.invalidate();
+    }
+
+    @Override
+    @Optional.Method(modid = "opencomputers")
+    public Node node() {
+        return node;
+    }
+
+    @Override
+    @Optional.Method(modid = "opencomputers")
+    public void onConnect(Node node) {
+    }
+
+    @Override
+    @Optional.Method(modid = "opencomputers")
+    public void onDisconnect(Node node) {
+    }
+
+    @Override
+    @Optional.Method(modid = "opencomputers")
+    public void onMessage(Message message) {
+    }
+
+    public void sendSignal(Object context, String name, Object... params) {
+        JSG.ocWrapper.sendSignalToReachable(node, (Context) context, name, params);
+    }
+
+    // ------------------------------------------------------------
+    // Methods
+    // function(arg:type[, optionArg:type]):resultType; Description.
+
+    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    @Callback
+    @SuppressWarnings("unused")
+    public Object[] getJSGVersion(Context context, Arguments args) {
+        return new Object[]{JSG.MOD_VERSION};
+    }
+
+    @SuppressWarnings("unused")
+    @Optional.Method(modid = "opencomputers")
+    @Callback(doc = "function() -- Toggles ZPM slots")
+    public Object[] toggleSlots(Context context, Arguments args) {
+        if (!isAnimating) {
+            startAnimation();
+            if (!isSlidingUp)
+                return new Object[]{null, true, "slots_toggled_down", "Slots are sliding down now!"};
+            return new Object[]{null, true, "slots_toggled_up", "Slots are sliding up now!"};
+        }
+        return new Object[]{null, false, "slots_busy", "Slots are busy!"};
     }
 }

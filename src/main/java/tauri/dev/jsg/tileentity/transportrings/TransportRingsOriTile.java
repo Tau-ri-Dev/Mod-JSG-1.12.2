@@ -2,7 +2,7 @@ package tauri.dev.jsg.tileentity.transportrings;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import tauri.dev.jsg.advancements.JSGAdvancements;
-import tauri.dev.jsg.block.transportrings.TRControllerAbstractBlock;
+import tauri.dev.jsg.block.transportrings.controller.TRControllerAbstractBlock;
 import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
 
 import static tauri.dev.jsg.block.JSGBlocks.TR_CONTROLLER_GOAULD_BLOCK;

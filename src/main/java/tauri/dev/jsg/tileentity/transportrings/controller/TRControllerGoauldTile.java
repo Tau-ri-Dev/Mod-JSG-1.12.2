@@ -1,14 +1,15 @@
-package tauri.dev.jsg.tileentity.transportrings;
+package tauri.dev.jsg.tileentity.transportrings.controller;
 
 import tauri.dev.jsg.block.transportrings.TransportRingsAbstractBlock;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
-import tauri.dev.jsg.renderer.transportrings.TRControllerAbstractRendererState;
-import tauri.dev.jsg.renderer.transportrings.TRControllerGoauldRendererState;
+import tauri.dev.jsg.renderer.transportrings.controller.TRControllerAbstractRendererState;
+import tauri.dev.jsg.renderer.transportrings.controller.TRControllerGoauldRendererState;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.dialhomedevice.DHDActivateButtonState;
+import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import tauri.dev.jsg.transportrings.SymbolGoauldEnum;
 import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
 import tauri.dev.jsg.transportrings.TransportRingsAddress;
@@ -100,24 +101,20 @@ public class TRControllerGoauldTile extends TRControllerAbstractTile {
 
     @Override
     public State getState(StateTypeEnum stateType) {
-        switch (stateType) {
-            case RENDERER_STATE:
-                TransportRingsAddress address = new TransportRingsAddress(SymbolTypeTransportRingsEnum.GOAULD);
+        if (stateType == StateTypeEnum.RENDERER_STATE) {
+            TransportRingsAddress address = new TransportRingsAddress(SymbolTypeTransportRingsEnum.GOAULD);
 
-                if (isLinked()) {
-                    TransportRingsAbstractTile trTile = getLinkedRingsTile();
-                    if (trTile == null) return rendererState;
+            if (isLinked()) {
+                TransportRingsAbstractTile trTile = getLinkedRingsTile();
+                if (trTile == null) return rendererState;
 
-                    address.addAll(trTile.dialedAddress);
-                    boolean ringsAreConnected = trTile.isBusy();
+                address.addAll(trTile.dialedAddress);
+                boolean ringsAreConnected = trTile.isBusy();
 
-                    return new TRControllerGoauldRendererState(address, getBiomeOverlay(), ringsAreConnected);
-                }
+                return new TRControllerGoauldRendererState(address, getBiomeOverlay(), ringsAreConnected);
+            }
 
-                return new TRControllerGoauldRendererState(address, getBiomeOverlay(), false);
-
-            default:
-                break;
+            return new TRControllerGoauldRendererState(address, getBiomeOverlay(), false);
         }
         return super.getState(stateType);
     }

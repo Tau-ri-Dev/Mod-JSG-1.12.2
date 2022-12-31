@@ -1,4 +1,4 @@
-package tauri.dev.jsg.renderer.transportrings;
+package tauri.dev.jsg.renderer.effect;
 
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import net.minecraft.client.Minecraft;
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @EventBusSubscriber(Side.CLIENT)
-public class PlayerFadeOutRenderEvent {
+public class RingsWhiteFadeOut {
 
 	private static World world;
 

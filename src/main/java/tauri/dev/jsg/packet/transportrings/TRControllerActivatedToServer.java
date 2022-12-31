@@ -1,10 +1,8 @@
 package tauri.dev.jsg.packet.transportrings;
 
 import io.netty.buffer.ByteBuf;
-import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.packet.PositionedPacket;
-import tauri.dev.jsg.stargate.network.SymbolInterface;
-import tauri.dev.jsg.tileentity.transportrings.TRControllerAbstractTile;
+import tauri.dev.jsg.tileentity.transportrings.controller.TRControllerAbstractTile;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
 import tauri.dev.jsg.transportrings.TransportResult;

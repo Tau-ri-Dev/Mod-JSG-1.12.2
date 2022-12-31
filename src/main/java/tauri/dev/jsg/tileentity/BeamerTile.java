@@ -1085,8 +1085,6 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
                     }
 
                     if (beamerMode == BeamerModeEnum.LASER) {
-                        d1 += 0.5;
-
                         EnumFacing.Axis ax2 = world.getBlockState(basePos).getValue(JSGProps.FACING_HORIZONTAL).getAxis();
 
                         int x1 = 0;
@@ -1340,7 +1338,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 
     // ------------------------------------------------------------
     // Node-related work
-    private Node node = JSG.ocWrapper.createNode(this, "beamer");
+    private final Node node = JSG.ocWrapper.createNode(this, "beamer");
 
     @Override
     @Optional.Method(modid = "opencomputers")

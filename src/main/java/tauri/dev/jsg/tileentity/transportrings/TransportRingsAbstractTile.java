@@ -36,7 +36,7 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.props.TRPlatformBlock;
-import tauri.dev.jsg.block.transportrings.TRControllerAbstractBlock;
+import tauri.dev.jsg.block.transportrings.controller.TRControllerAbstractBlock;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.ingame.*;
 import tauri.dev.jsg.entity.friendly.TokraEntity;
@@ -61,6 +61,7 @@ import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.dialhomedevice.DHDActivateButtonState;
 import tauri.dev.jsg.state.transportrings.TransportRingsRendererState;
 import tauri.dev.jsg.state.transportrings.TransportRingsStartAnimationRequest;
+import tauri.dev.jsg.tileentity.transportrings.controller.TRControllerAbstractTile;
 import tauri.dev.jsg.tileentity.util.IUpgradable;
 import tauri.dev.jsg.tileentity.util.PreparableInterface;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
@@ -76,6 +77,7 @@ import static tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile
 import static tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile.ConfigOptions.RENDER_PLATFORM_MOVING;
 import static tauri.dev.jsg.transportrings.TransportRingsAddress.MAX_SYMBOLS;
 
+@SuppressWarnings("deprecation")
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
 public abstract class TransportRingsAbstractTile extends TileEntity implements ITickable, StateProviderInterface, ScheduledTaskExecutorInterface, ILinkable, Environment, IUpgradable, ITileConfig, PreparableInterface {
     public static final int FADE_OUT_TOTAL_TIME = 2 * 20; // 2s
@@ -1420,12 +1422,14 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     // ------------------------------------------------------------
     // Methods
 
+    @SuppressWarnings("unused")
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getJSGVersion(Context context, Arguments args) {
         return new Object[]{JSG.MOD_VERSION};
     }
 
+    @SuppressWarnings("unused")
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getAddress(Context context, Arguments args) {
@@ -1438,24 +1442,28 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return new Object[]{map};
     }
 
+    @SuppressWarnings("unused")
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getAvailableRingsAddresses(Context context, Arguments args) {
         return new Object[]{ringsMap.keySet()};
     }
 
+    @SuppressWarnings("unused")
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] isInGrid(Context context, Arguments args) {
         return new Object[]{getRings().isInGrid()};
     }
 
+    @SuppressWarnings("unused")
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getName(Context context, Arguments args) {
         return new Object[]{getRings().getName()};
     }
 
+    @SuppressWarnings("unused")
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] setName(Context context, Arguments args) {
@@ -1465,6 +1473,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return new Object[]{};
     }
 
+    @SuppressWarnings("unused")
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getAvailableRings(Context context, Arguments args) {
@@ -1478,6 +1487,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return new Object[]{values};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] addSymbolToAddress(Context context, Arguments args) {

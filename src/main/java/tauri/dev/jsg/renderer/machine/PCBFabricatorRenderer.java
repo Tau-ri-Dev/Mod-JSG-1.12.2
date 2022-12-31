@@ -34,7 +34,7 @@ public class PCBFabricatorRenderer extends TileEntitySpecialRenderer<PCBFabricat
                 if (rendererState.isWorking) {
                     GlStateManager.pushMatrix();
 
-                    BeamerBeam beam = new BeamerBeam(90f, 0, 1f, 0.02f);
+                    BeamerBeam beam = new BeamerBeam(90f, 0, 0.8f, 0.02f);
                     float[] colors = new float[]{
                             rendererState.colors.get(0),
                             rendererState.colors.get(1),

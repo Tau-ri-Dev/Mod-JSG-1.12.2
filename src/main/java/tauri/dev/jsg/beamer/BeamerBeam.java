@@ -158,7 +158,7 @@ public class BeamerBeam {
         JSGTextureLightningHelper.lightUpTexture(1f);
         Minecraft.getMinecraft().getTextureManager().bindTexture(TileEntityBeaconRenderer.TEXTURE_BEACON_BEAM);
         float lengthAnimCoefficient = (this.beamRadius/this.beamMaxRadius);
-        renderBeamSegment(partialTicks, (teRole == BeamerRoleEnum.TRANSMIT ? 1 : -1), tick, ((this.beamLength - 0.2D) * lengthAnimCoefficient), colors, this.beamRadius, this.beamRadius + 0.05f);
+        renderBeamSegment(partialTicks, (teRole == BeamerRoleEnum.TRANSMIT ? 1 : -1), tick, (this.beamLength * lengthAnimCoefficient), colors, this.beamRadius, this.beamRadius + 0.05f);
     }
 
     /**

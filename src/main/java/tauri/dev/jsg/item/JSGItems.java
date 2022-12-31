@@ -23,8 +23,7 @@ import tauri.dev.jsg.item.tools.zat.ZatItem;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-import static tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler.JSG_ITEMS_CREATIVE_TAB;
-import static tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler.JSG_TOOLS_CREATIVE_TAB;
+import static tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler.*;
 
 @EventBusSubscriber
 public class JSGItems {
@@ -72,9 +71,9 @@ public class JSGItems {
     /**
      * Different Naquadah(main Stargate building material) stages of purity
      */
-    public static final Item NAQUADAH_ORE_IMPURE = ItemHelper.createGenericItem("naquadah_impure", JSG_ITEMS_CREATIVE_TAB);
-    public static final Item NAQUADAH_ORE_PURIFIED = ItemHelper.createGenericItem("naquadah_purified", JSG_ITEMS_CREATIVE_TAB);
-    public static final Item NAQUADAH_ORE_RAW = ItemHelper.createGenericItem("naquadah_raw", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item NAQUADAH_ORE_IMPURE = ItemHelper.createGenericItem("naquadah_impure", JSG_ORES_CREATIVE_TAB);
+    public static final Item NAQUADAH_ORE_PURIFIED = ItemHelper.createGenericItem("naquadah_purified", JSG_ORES_CREATIVE_TAB);
+    public static final Item NAQUADAH_ORE_RAW = ItemHelper.createGenericItem("naquadah_raw", JSG_ORES_CREATIVE_TAB);
     public static final Item NAQUADAH_ALLOY_RAW = ItemHelper.createGenericItem("naquadah_alloy_raw", JSG_ITEMS_CREATIVE_TAB);
     public static final Item NAQUADAH_RAW_DUST = ItemHelper.createGenericItem("naquadah_raw_dust", JSG_ITEMS_CREATIVE_TAB);
     public static final Item NAQUADAH_RAW_NUGGET = ItemHelper.createGenericItem("naquadah_raw_nugget", JSG_ITEMS_CREATIVE_TAB);
@@ -86,16 +85,16 @@ public class JSGItems {
     /**
      * Titanium & Trinium
      */
-    public static final Item TITANIUM_ORE_IMPURE = ItemHelper.createGenericItem("titanium_impure", JSG_ITEMS_CREATIVE_TAB);
-    public static final Item TITANIUM_ORE_PURIFIED = ItemHelper.createGenericItem("titanium_purified", JSG_ITEMS_CREATIVE_TAB);
-    public static final Item TITANIUM_ORE_RAW = ItemHelper.createGenericItem("titanium_raw", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item TITANIUM_ORE_IMPURE = ItemHelper.createGenericItem("titanium_impure", JSG_ORES_CREATIVE_TAB);
+    public static final Item TITANIUM_ORE_PURIFIED = ItemHelper.createGenericItem("titanium_purified", JSG_ORES_CREATIVE_TAB);
+    public static final Item TITANIUM_ORE_RAW = ItemHelper.createGenericItem("titanium_raw", JSG_ORES_CREATIVE_TAB);
     public static final Item TITANIUM_INGOT = ItemHelper.createGenericItem("titanium_ingot", JSG_ITEMS_CREATIVE_TAB);
     public static final Item TITANIUM_DUST = ItemHelper.createGenericItem("titanium_dust", JSG_ITEMS_CREATIVE_TAB);
     public static final Item TITANIUM_NUGGET = ItemHelper.createGenericItem("titanium_nugget", JSG_ITEMS_CREATIVE_TAB);
 
-    public static final Item TRINIUM_ORE_IMPURE = ItemHelper.createGenericItem("trinium_impure", JSG_ITEMS_CREATIVE_TAB);
-    public static final Item TRINIUM_ORE_PURIFIED = ItemHelper.createGenericItem("trinium_purified", JSG_ITEMS_CREATIVE_TAB);
-    public static final Item TRINIUM_ORE_RAW = ItemHelper.createGenericItem("trinium_raw", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item TRINIUM_ORE_IMPURE = ItemHelper.createGenericItem("trinium_impure", JSG_ORES_CREATIVE_TAB);
+    public static final Item TRINIUM_ORE_PURIFIED = ItemHelper.createGenericItem("trinium_purified", JSG_ORES_CREATIVE_TAB);
+    public static final Item TRINIUM_ORE_RAW = ItemHelper.createGenericItem("trinium_raw", JSG_ORES_CREATIVE_TAB);
     public static final Item TRINIUM_INGOT = ItemHelper.createGenericItem("trinium_ingot", JSG_ITEMS_CREATIVE_TAB);
     public static final Item TRINIUM_DUST = ItemHelper.createGenericItem("trinium_dust", JSG_ITEMS_CREATIVE_TAB);
     public static final Item TRINIUM_NUGGET = ItemHelper.createGenericItem("trinium_nugget", JSG_ITEMS_CREATIVE_TAB);
@@ -146,6 +145,8 @@ public class JSGItems {
     public static final Item JSG_HAMMER = ItemHelper.createDurabilityItem("hammer", JSG_TOOLS_CREATIVE_TAB, 25, true).setMaxStackSize(1);
     public static final Item JSG_SCREWDRIVER = ItemHelper.createDurabilityItem("screwdriver", JSG_TOOLS_CREATIVE_TAB, 150, true).setMaxStackSize(1);
     public static final Item JSG_WRENCH = ItemHelper.createDurabilityItem("wrench", JSG_TOOLS_CREATIVE_TAB, 225, true).setMaxStackSize(1);
+
+    public static final Item TAURI_ANCIENT_ADAPTER = ItemHelper.createGenericItem("tauri_ancient_adapter", JSG_ITEMS_CREATIVE_TAB);
 
     /**
      * FRAGMENTS

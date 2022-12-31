@@ -72,6 +72,10 @@ public class ZPMHubContainerGui extends GuiContainer {
             maxEnergyStored += energyStorage.getMaxEnergyStored();
         }
         int width = Math.round((energyStored / ((float) maxEnergyStored) * 156));
+
+        if(maxEnergyStored == 0)
+            width = 0;
+
         renderPowerBar(width);
 
         error = container.hubTile.isAnimating;

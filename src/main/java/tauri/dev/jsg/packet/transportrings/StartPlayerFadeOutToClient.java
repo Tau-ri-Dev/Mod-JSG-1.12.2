@@ -6,7 +6,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.renderer.effect.DestinyFTL;
-import tauri.dev.jsg.renderer.transportrings.PlayerFadeOutRenderEvent;
+import tauri.dev.jsg.renderer.effect.RingsWhiteFadeOut;
 
 import static tauri.dev.jsg.packet.transportrings.StartPlayerFadeOutToClient.EnumFadeOutEffectType.FTL_IN;
 
@@ -58,7 +58,7 @@ public class StartPlayerFadeOutToClient implements IMessage {
             EnumFadeOutEffectType t = EnumFadeOutEffectType.valueOf(message.type);
             switch (t) {
                 case RINGS:
-                    JSG.proxy.addScheduledTaskClientSide(PlayerFadeOutRenderEvent::startFadeOut);
+                    JSG.proxy.addScheduledTaskClientSide(RingsWhiteFadeOut::startFadeOut);
                     break;
                 case FTL_IN:
                 case FTL_OUT:

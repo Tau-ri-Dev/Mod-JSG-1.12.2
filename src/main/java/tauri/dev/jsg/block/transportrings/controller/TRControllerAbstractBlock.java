@@ -1,10 +1,10 @@
-package tauri.dev.jsg.block.transportrings;
+package tauri.dev.jsg.block.transportrings.controller;
 
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.block.JSGBlock;
-import tauri.dev.jsg.tileentity.transportrings.TRControllerAbstractTile;
+import tauri.dev.jsg.tileentity.transportrings.controller.TRControllerAbstractTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

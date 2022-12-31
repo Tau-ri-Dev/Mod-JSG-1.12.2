@@ -32,7 +32,7 @@ public class JSG {
     public static final String MOD_ID = "jsg";
     public static final String MOD_NAME = "Just Stargate Mod";
     public static final String MOD_VERSION = "@VERSION@";
-    public static final int DATA_VERSION = 21;
+    public static final int DATA_VERSION = 22;
     public static final String CONFIG_GENERAL_VERSION = "2.2";
     public static final String CONFIG_CRAFTINGS_VERSION = "1.1";
     public static final String CONFIG_DIMENSIONS_VERSION = "1.1";

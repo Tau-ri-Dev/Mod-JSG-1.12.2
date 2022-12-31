@@ -1,4 +1,4 @@
-package tauri.dev.jsg.renderer.transportrings;
+package tauri.dev.jsg.renderer.transportrings.controller;
 
 import io.netty.buffer.ByteBuf;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;

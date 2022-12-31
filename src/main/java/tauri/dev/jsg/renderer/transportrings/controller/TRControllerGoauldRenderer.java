@@ -1,8 +1,8 @@
-package tauri.dev.jsg.renderer.transportrings;
+package tauri.dev.jsg.renderer.transportrings.controller;
 
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.model.ModelLoader;
-import tauri.dev.jsg.tileentity.transportrings.TRControllerAbstractTile;
+import tauri.dev.jsg.tileentity.transportrings.controller.TRControllerAbstractTile;
 import tauri.dev.jsg.transportrings.SymbolGoauldEnum;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;

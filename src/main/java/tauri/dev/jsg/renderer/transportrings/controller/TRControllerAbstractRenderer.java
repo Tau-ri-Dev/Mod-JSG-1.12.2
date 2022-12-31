@@ -1,11 +1,11 @@
-package tauri.dev.jsg.renderer.transportrings;
+package tauri.dev.jsg.renderer.transportrings.controller;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
-import tauri.dev.jsg.block.transportrings.TRControllerAbstractBlock;
-import tauri.dev.jsg.tileentity.transportrings.TRControllerAbstractTile;
+import tauri.dev.jsg.block.transportrings.controller.TRControllerAbstractBlock;
+import tauri.dev.jsg.tileentity.transportrings.controller.TRControllerAbstractTile;
 import tauri.dev.jsg.util.FacingToRotation;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.vector.Vector3f;

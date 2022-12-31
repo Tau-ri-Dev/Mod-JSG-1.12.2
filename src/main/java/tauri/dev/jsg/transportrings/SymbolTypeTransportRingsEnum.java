@@ -4,7 +4,6 @@ import tauri.dev.jsg.stargate.network.SymbolInterface;
 import tauri.dev.jsg.util.EnumKeyInterface;
 import tauri.dev.jsg.util.EnumKeyMap;
 
-import java.util.List;
 import java.util.Random;
 
 public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
@@ -56,19 +55,6 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
                 return getSymbol(6);
         }
         return getOrigin();
-    }
-
-    public List<SymbolInterface> stripOrigin(List<SymbolInterface> dialedAddress) {
-        switch (this) {
-            case GOAULD:
-                return SymbolGoauldEnum.stripOrigin(dialedAddress);
-            case ORI:
-                return SymbolOriEnum.stripOrigin(dialedAddress);
-            case ANCIENT:
-                return SymbolAncientEnum.stripOrigin(dialedAddress);
-        }
-
-        return null;
     }
 
     public SymbolInterface getOrigin() {
@@ -124,28 +110,11 @@ public enum SymbolTypeTransportRingsEnum implements EnumKeyInterface<Integer> {
         return null;
     }
 
-    public boolean hasOrigin() {
-        return getOrigin() != null;
-    }
-
-    public boolean validateDialedAddress(TransportRingsAddress address) {
-        switch (this) {
-            case GOAULD:
-                return SymbolGoauldEnum.validateDialedAddress(address);
-            case ORI:
-                return SymbolOriEnum.validateDialedAddress(address);
-            case ANCIENT:
-                return SymbolAncientEnum.validateDialedAddress(address);
-        }
-
-        return false;
-    }
-
 
     // ------------------------------------------------------------
     // Static
 
-    private static final EnumKeyMap<Integer, SymbolTypeTransportRingsEnum> ID_MAP = new EnumKeyMap<Integer, SymbolTypeTransportRingsEnum>(values());
+    private static final EnumKeyMap<Integer, SymbolTypeTransportRingsEnum> ID_MAP = new EnumKeyMap<>(values());
 
     @Override
     public Integer getKey() {

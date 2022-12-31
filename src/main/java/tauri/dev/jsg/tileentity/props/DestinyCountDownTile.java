@@ -48,7 +48,7 @@ import static tauri.dev.jsg.sound.JSGSoundHelper.playSoundEvent;
 import static tauri.dev.jsg.state.StateTypeEnum.RENDERER_UPDATE;
 import static tauri.dev.jsg.tileentity.props.DestinyCountDownTile.ConfigOptions.*;
 
-@Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers")})
+@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers")
 public class DestinyCountDownTile extends TileEntity implements ICapabilityProvider, ITickable, Environment, StateProviderInterface, ILinkable, PreparableInterface, ITileConfig {
 
     public long countdownTo = -1; // in ticks!

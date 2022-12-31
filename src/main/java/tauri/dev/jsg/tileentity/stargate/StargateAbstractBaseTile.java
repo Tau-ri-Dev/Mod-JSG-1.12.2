@@ -1891,7 +1891,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     // ------------------------------------------------------------
     // Node-related work
-    private Node node = JSG.ocWrapper.createNode(this, "stargate");
+    private final Node node = JSG.ocWrapper.createNode(this, "stargate");
 
     @Override
     @Optional.Method(modid = "opencomputers")
@@ -1924,6 +1924,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
+    @SuppressWarnings("unused")
     public Object[] getJSGVersion(Context context, Arguments args) {
         return new Object[]{JSG.MOD_VERSION};
     }

@@ -1,4 +1,4 @@
-package tauri.dev.jsg.block.transportrings;
+package tauri.dev.jsg.block.transportrings.controller;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -8,10 +8,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tauri.dev.jsg.raycaster.RaycasterRingsGoauldController;
-import tauri.dev.jsg.renderer.transportrings.TRControllerGoauldRenderer;
-import tauri.dev.jsg.tileentity.transportrings.TRControllerAbstractTile;
-import tauri.dev.jsg.tileentity.transportrings.TRControllerGoauldTile;
+import tauri.dev.jsg.raycaster.ringscontroller.RaycasterRingsGoauldController;
+import tauri.dev.jsg.renderer.transportrings.controller.TRControllerGoauldRenderer;
+import tauri.dev.jsg.tileentity.transportrings.controller.TRControllerAbstractTile;
+import tauri.dev.jsg.tileentity.transportrings.controller.TRControllerGoauldTile;
 
 public class TRControllerGoauldBlock extends TRControllerAbstractBlock {
 
