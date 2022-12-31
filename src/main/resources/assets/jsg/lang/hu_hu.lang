@@ -7,112 +7,112 @@ itemGroup.jsg_energy=JSG: Energia
 itemGroup.jsg_tools=JSG: Eszközök
 itemGroup.jsg_props=JSG: Kellékek
 itemGroup.jsg_machines=JSG: Gépek
-itemGroup.jsg_weapons=JSG: Weapons
+itemGroup.jsg_weapons=JSG: Fegyverek
 
 # -------------------
 # ADVANCEMENTS
 
-advancement.machines.title=Some gears and screws
-advancement.machines.desc=Category full of machinery stuff
+advancement.machines.title=Pár fogaskerék és csavar
+advancement.machines.desc=Gépészeti kategória
 
-advancement.wormhole_go.title=What wormhole? And why worm?
-advancement.wormhole_go.desc=Enter event Horizon of a Stargate
+advancement.wormhole_go.title=Milyen féreglyuk? Miért féreg?
+advancement.wormhole_go.desc=Lépj át egy Csillagkapu eseményhorizontján
 
-advancement.merged_orlin.title=You're going to need a new toaster
-advancement.merged_orlin.desc=Build a Orlin´s stargate
+advancement.merged_orlin.title=Szükséged lesz egy új pirítóra
+advancement.merged_orlin.desc=Építsd meg Orlin Csillagkapuját
 
-advancement.merged_milkyway.title=Pyramid with the sun directly above it
-advancement.merged_milkyway.desc=Build a Milky Way stargate
+advancement.merged_milkyway.title=Piramis, közvetlenül egy nap felette
+advancement.merged_milkyway.desc=Építs egy Tejút-Csillagkaput
 
-advancement.merged_pegasus.title=Jumper is not included
-advancement.merged_pegasus.desc=Build a Pegasus stargate
+advancement.merged_pegasus.title=Ugrót nem tartalmaz
+advancement.merged_pegasus.desc=Építs egy Pegazus-Csillagkaput
 
-advancement.merged_universe.title=Ancient, in both meanings
-advancement.merged_universe.desc=Build Universe stargate
+advancement.merged_universe.title=Ős tervezés, a szó minden értelmében
+advancement.merged_universe.desc=Építs egy Univerzum-Csillagkaput
 
-advancement.chevron_seven_locked.title=Chevron 7 locked!
-advancement.chevron_seven_locked.desc=Dial existing 7-symbols address
+advancement.chevron_seven_locked.title=Hetes ékzár kódolva!
+advancement.chevron_seven_locked.desc=Tárcsázz egy 7-ékzáras címet
 
-advancement.chevron_eight_locked.title=Address is not incorrect, but incomplete.
-advancement.chevron_eight_locked.desc=Dial existing 8-symbols address
+advancement.chevron_eight_locked.title=A cím nem helytelen, hanem hiányos
+advancement.chevron_eight_locked.desc=Tárcsázz egy 8-ékzáras címet
 
-advancement.chevron_nine_locked.title=Several billion light years from home
-advancement.chevron_nine_locked.desc=Dial existing 9-symbols address
+advancement.chevron_nine_locked.title=Több milliárd fényévnyire otthonunktól
+advancement.chevron_nine_locked.desc=Tárcsázz egy 9-ékzáras címet
 
-advancement.iris_impact.title=Knock, knock... Who's there?
-advancement.iris_impact.desc=Witness an object hit the iris
+advancement.iris_impact.title=Kopp, kopp... Ki az?
+advancement.iris_impact.desc=Légy tanúja az Írisz működésének
 
-advancement.gdo_used.title=Code accepted - Opening Iris
-advancement.gdo_used.desc=Use GDO to send code
+advancement.gdo_used.title=Kód elfogadva
+advancement.gdo_used.desc=Használd a Garázsajtó Nyitót
 
-advancement.kawoosh_cremation.title=Escaping Hadante
-advancement.kawoosh_cremation.desc=Experience Kawoosh cremation on yourself
+advancement.kawoosh_cremation.title=Menekvés a Hadantéról
+advancement.kawoosh_cremation.desc=Hamvasztódj el a Csillagkapu örvénye által
 
-advancement.first_zpm.title=What? ZPM, he is Canadian
-advancement.first_zpm.desc=Obtain a Zero Point Module
+advancement.first_zpm.title=Micsoda? ZPM, ő kanadai
+advancement.first_zpm.desc=Szerezz meg egy Zéro Pont Modult
 
-advancement.three_zpms.title=I can't believe my eyes: Three ZPMs
-advancement.three_zpms.desc=Use ZPM hub with three ZPMs in
+advancement.three_zpms.title=Nem hiszek a szemeimnek! Három ZPM...
+advancement.three_zpms.desc=Használj egy ZPM Központot három ZPM-mel
 
-advancement.zpm_slot.title=Oh yeah
-advancement.zpm_slot.desc=Use ZPM slot
+advancement.zpm_slot.title=Ó igen
+advancement.zpm_slot.desc=Használj egy ZPM Tartót
 
-advancement.upgrade_shield.title=Using power, using power...
-advancement.upgrade_shield.desc=Obtain stargate shield
+advancement.upgrade_shield.title=Fogyasztja az áramot, fogyasztja...
+advancement.upgrade_shield.desc=Szerezz meg egy Csillagkapu Pajzsot
 
-advancement.beamer.title=Beamers gonna beam
-advancement.beamer.desc=Obtain a beamer
+advancement.beamer.title=A vetítők vetíteni fognak
+advancement.beamer.desc=Szerezz meg egy Vetítőt
 
-advancement.titanium.title=Getting harder and tougher
-advancement.titanium.desc=Obtain a titanium ingot
+advancement.titanium.title=Egyre keményebb és keményebb
+advancement.titanium.desc=Szerezz meg egy Titániumrudat
 
-advancement.naquadah_raw.title=Naqua... What?
-advancement.naquadah_raw.desc=Craft a raw naquadah alloy
+advancement.naquadah_raw.title=Nakva... mi?
+advancement.naquadah_raw.desc=Barkácsolj egy Nyers Nakvadaötvözetet
 
-advancement.naquadah_alloy.title=The best Super Conductor
-advancement.naquadah_alloy.desc=Craft a naquadah alloy
+advancement.naquadah_alloy.title=A legjobb szupravezető
+advancement.naquadah_alloy.desc=Barkácsolj egy Nakvadaötvözetet
 
-advancement.trinium.title=Did you ask Xe´ls and T´akaya?!
-advancement.trinium.desc=Obtain a trinium ingot
+advancement.trinium.title=Megkérdezted Xe´ls-t és T´akaya-t?!
+advancement.trinium.desc=Szerezz meg egy Tríniumrudat
 
-advancement.unstable_eh_survive.title=For a moment there I thought we were in trouble
-advancement.unstable_eh_survive.desc=Enter an unstable wormhole and survive
+advancement.unstable_eh_survive.title=Egy pillanatra azt hittem, bajban vagyunk
+advancement.unstable_eh_survive.desc=Lépj be egy instabil féregjáratba és éld túl
 
-advancement.tokra_crystal.title=They live underground
-advancement.tokra_crystal.desc=Obtain tokra crystals
+advancement.tokra_crystal.title=Főldalatt élnek
+advancement.tokra_crystal.desc=Szerezz Tok'ra kristályokat
 
-advancement.beamer_crystal_laser.title=A particle accelerator firing through a Stargate?
-advancement.beamer_crystal_laser.desc=Obtain a beamer laser crystal
+advancement.beamer_crystal_laser.title=Egy részecskegyorsító, ami a Csillagkapuba lő?
+advancement.beamer_crystal_laser.desc=Szerezz meg egy Vetítő Lézerkristályt
 
-advancement.transportrings_goauld.title=Elevators are such a pain in a**
-advancement.transportrings_goauld.desc=Use goauld transport rings
+advancement.transportrings_goauld.title=A liftek olyan rosszak
+advancement.transportrings_goauld.desc=Használj Goa'uld Transzportgyűrűket
 
-advancement.transportrings_ori.title=Plains of Celestis
-advancement.transportrings_ori.desc=Use ori transport rings
+advancement.transportrings_ori.title=Celestis rétjei
+advancement.transportrings_ori.desc=Használj Ori Transzportgyűrűket
 
-advancement.transportrings_ancient.title=The original you might say
-advancement.transportrings_ancient.desc=Use ancient transport rings
+advancement.transportrings_ancient.title=Az eredeti, ha úgy tetszik
+advancement.transportrings_ancient.desc=Használj Ős Transzportgyűrűket
 
-advancement.assembler.title=Ancient factory
-advancement.assembler.desc=Craft an Ancient Assembler
+advancement.assembler.title=Ősgyár
+advancement.assembler.desc=Barkácsolj egy Ős Szerelőt
 
-advancement.chamber.title=Grow, crystals, Grow!
-advancement.chamber.desc=Craft a Crystal Chamber
+advancement.chamber.title=Nőjj, kristály, nőjj!
+advancement.chamber.desc=Barkácsolj egy Kristálykamrát
 
-advancement.pcb.title=Crystal based technology
-advancement.pcb.desc=Craft a PCB Fabricator
+advancement.pcb.title=Kristályalapú technológia
+advancement.pcb.desc=Barkácsolj egy PCB Összeszerelőt
 
-advancement.ore_washing.title=Purifying ores
-advancement.ore_washing.desc=Craft an Ore Washing Machine
+advancement.ore_washing.title=Érctisztítás
+advancement.ore_washing.desc=Barkácsolj egy Ércmosót
 
-advancement.chemicals.title=Is it Janus secret lab?
-advancement.chemicals.desc=Craft an Ancient Chemical Lab
+advancement.chemicals.title=Ez lenne Janus titkos laboratóriuma?
+advancement.chemicals.desc=Barkácsolj egy Ős Kémialabort
 
-advancement.refined_naquadah.title=Now that's a HOT stuff
-advancement.refined_naquadah.desc=Obtain a Refined Liquid Naquadah
+advancement.refined_naquadah.title=Na, ez a FORRÓ dolog!
+advancement.refined_naquadah.desc=Szerezz Finomított Folyékony Nakvadát
 
-advancement.myst_page.title=Abydos Cartouche
-advancement.myst_page.desc=Use Mysterious Page
+advancement.myst_page.title=Abydosi kartus
+advancement.myst_page.desc=Használj egy Titokzatos Oldalt
 
 # -------------------
 
@@ -133,30 +133,30 @@ item.jsg.shield_emitter.name=Pajzs Kibocsátó
 item.jsg.upgrade_shield.name=Pajzs Fejlesztés
 
 # ingots
-item.jsg.trinium_impure.name=Impure Trinium Ore
-item.jsg.trinium_purified.name=Purified Trinium Ore
-item.jsg.trinium_raw.name=Raw Trinium Ore
-item.jsg.trinium_ingot.name=Trinium Ingot
-item.jsg.trinium_dust.name=Trinium Dust
-item.jsg.trinium_nugget.name=Trinium Nugget
+item.jsg.trinium_impure.name=Szennyezett Tríniumérc
+item.jsg.trinium_purified.name=Tisztított Tríniumérc
+item.jsg.trinium_raw.name=Nyers Tríniumérc
+item.jsg.trinium_ingot.name=Tríniumrúd
+item.jsg.trinium_dust.name=Tríniumpor
+item.jsg.trinium_nugget.name=Tríniumrög
 
-item.jsg.titanium_impure.name=Impure Titanium Ore
-item.jsg.titanium_purified.name=Purified Titanium Ore
-item.jsg.titanium_raw.name=Raw Titanium Ore
-item.jsg.titanium_ingot.name=Titanium Ingot
-item.jsg.titanium_dust.name=Titanium Dust
-item.jsg.titanium_nugget.name=Titanium Nugget
+item.jsg.titanium_impure.name=Szennyezett Titániumérc
+item.jsg.titanium_purified.name=Tisztított Titániumérc
+item.jsg.titanium_raw.name=Nyers Titániumérc
+item.jsg.titanium_ingot.name=Titániumrúd
+item.jsg.titanium_dust.name=Titániumpor
+item.jsg.titanium_nugget.name=Titániumrög
 
-item.jsg.naquadah_impure.name=Impure Naquadah Ore
-item.jsg.naquadah_purified.name=Purified Naquadah Ore
-item.jsg.naquadah_raw.name=Raw Naquadah Ore
-item.jsg.naquadah_alloy_raw.name=Raw Naquadah Alloy Ingot
-item.jsg.naquadah_raw_dust.name=Raw Naquadah Dust
-item.jsg.naquadah_raw_nugget.name=Raw Naquadah Nugget
+item.jsg.naquadah_impure.name=Szennyezett Nakvadaérc
+item.jsg.naquadah_purified.name=Tisztított Nakvadaérc
+item.jsg.naquadah_raw.name=Nyers Nakvadaérc
+item.jsg.naquadah_alloy_raw.name=Nyers Nakvadaötvözet
+item.jsg.naquadah_raw_dust.name=Nyers Nakvadapor
+item.jsg.naquadah_raw_nugget.name=Nyers Nakvadarög
 
-item.jsg.naquadah_alloy.name=Naquadah Alloy Ingot
-item.jsg.naquadah_dust.name=Naquadah Dust
-item.jsg.naquadah_nugget.name=Naquadah Nugget
+item.jsg.naquadah_alloy.name=Nakvadaötvözet
+item.jsg.naquadah_dust.name=Nakvadapor
+item.jsg.naquadah_nugget.name=Nakvadarög
 
 # crystals
 item.jsg.crystal_fragment.name=Kristálymag
@@ -167,7 +167,7 @@ item.jsg.crystal_ender.name=Végzetkristály
 item.jsg.crystal_yellow.name=Fény Kristály
 item.jsg.crystal_white.name=Fehér Kristály
 item.jsg.crystal_blue_pegasus.name=Pegazus Kristály
-item.jsg.crystal_tokra.name=Tokra's Crystal
+item.jsg.crystal_tokra.name=Tok'ra Kristály
 
 item.jsg.circuit_control_base.name=Vezérlő Áramkör Alap
 item.jsg.circuit_control_naquadah.name=Nakvada Vezérlő Áramkör
@@ -185,44 +185,44 @@ item.jsg.crystal_glyph_goauld.name=Goa'uld Gyűrű Szimbólumkristály
 item.jsg.crystal_glyph_ori.name=Ori Gyűrű Szimbólumkristály
 item.jsg.crystal_glyph_ancient.name=Ős Gyűrű Szimbólumkristály
 
-item.jsg.crystal_upgrade_capacity.name=Capacity Upgrade Crystal
-item.jsg.crystal_upgrade_efficiency.name=Efficiency Upgrade Crystal
+item.jsg.crystal_upgrade_capacity.name=Kapacitásfejlesztő Kristály
+item.jsg.crystal_upgrade_efficiency.name=Hatékonyságfejlesztő Kristály
 
 # dhd
 item.jsg.dhd_brb.name=Világos Piros Gomb
 item.jsg.dhd_bbb.name=Világos Kék Gomb
 
 # fragments
-item.jsg.fragment_stargate_milkyway.name=Ring Fragment (Milky Way)
-item.jsg.fragment_stargate_pegasus.name=Ring Fragment (Pegasus)
-item.jsg.fragment_stargate_universe.name=Ring Fragment (Universe)
-item.jsg.fragment_transportrings_goauld.name=Transport Rings Fragment (Goa'uld)
-item.jsg.fragment_transportrings_ori.name=Transport Rings Fragment (Ori)
-item.jsg.fragment_transportrings_ancient.name=Transport Rings Fragment (Ancient)
+item.jsg.fragment_stargate_milkyway.name=Gyűrű Töredék (Tejút)
+item.jsg.fragment_stargate_pegasus.name=Gyűrű Töredék (Pegazus)
+item.jsg.fragment_stargate_universe.name=Gyűrű Töredék (Univerzum)
+item.jsg.fragment_transportrings_goauld.name=Transzportgyűrű Töredék (Goa'uld)
+item.jsg.fragment_transportrings_ori.name=Transzportgyűrű Töredék (Ori)
+item.jsg.fragment_transportrings_ancient.name=Transzportgyűrű Töredék (Ős)
 
 # holders
 item.jsg.holder_crystal.name=Kristálytartó
 item.jsg.holder_crystal_pegasus.name=Kristálytartó (Pegazus)
 
 # notebook
-item.jsg.page_notebook.name=Notebook Page
-item.jsg.page_notebook.empty=Empty
+item.jsg.page_notebook.name=Jegyzetfüzet oldal
+item.jsg.page_notebook.empty=Üres
 
 # mysterious page
-item.jsg.page_mysterious_milkyway.name=Mysterious Page (Milky Way)
-item.jsg.page_mysterious_pegasus.name=Mysterious Page (Pegasus)
-item.jsg.page_mysterious_universe.name=Mysterious Page (Universe)
-item.jsg.page_mysterious.tooltip=Who knows where it leads
+item.jsg.page_mysterious_milkyway.name=Titokzatos Oldal (Tejút)
+item.jsg.page_mysterious_pegasus.name=Titokzatos Oldal (Pegazus)
+item.jsg.page_mysterious_universe.name=Titokzatos Oldal (Univerzum)
+item.jsg.page_mysterious.tooltip=Ki tudja, merre vezet?
 
-item.jsg.page_mysterious.generation.start=Starting new stargate generation...
-item.jsg.page_mysterious.generation.success=Stargate generated successfully!
-item.jsg.page_mysterious.generation.failed=Stargate generation FAILED!
+item.jsg.page_mysterious.generation.start=Új Csillagkapu generálása...
+item.jsg.page_mysterious.generation.success=Csillagkapu sikeresen generálva!
+item.jsg.page_mysterious.generation.failed=Csillagkapu generálás meghiúsult!
 
 # beamer
 item.jsg.beamer_crystal_power.name=Vetítő Áramkristály
 item.jsg.beamer_crystal_fluid.name=Vetítő Folyadék Kristály
 item.jsg.beamer_crystal_items.name=Vetítő Tárgykristály
-item.jsg.beamer_crystal_laser.name=Beamer Laser Crystal
+item.jsg.beamer_crystal_laser.name=Vetítő Lézerkristály
 
 # universe dialer
 item.jsg.universe_dialer.name=Univerzum Tárcsázó
@@ -235,9 +235,9 @@ item.jsg.universe_dialer.mode_saved=Memória
 item.jsg.universe_dialer.mode_rings=Transzportgyűrűk
 item.jsg.universe_dialer.mode_oc=OpnCom
 item.jsg.universe_dialer.mode_info=Státusz
-item.jsg.universe_dialer.mode_countdown=Timer
-item.jsg.universe_dialer.countdown_not_sync=Not synchronized!
-item.jsg.universe_dialer.countdown_not_active=Countdown not active!
+item.jsg.universe_dialer.mode_countdown=Időzítő
+item.jsg.universe_dialer.countdown_not_sync=Nincs szinkronizálva!
+item.jsg.universe_dialer.countdown_not_active=Időzítő inaktív!
 item.jsg.universe_dialer.aborting=Tárcsázás leállítása
 item.jsg.universe_dialer.abort=Leáll
 item.jsg.universe_dialer.dial_start=A kapu tárcsázása...
@@ -290,21 +290,21 @@ item.jsg.zat.name=Zat'nik'tel
 item.jsg.staff.name=Goa'uld Botfegyver
 item.jsg.energyWeapon.available_shots=Maradék lövések:
 
-item.jsg.hammer.name=JSG Hammer
-item.jsg.screwdriver.name=JSG Screwdriver
-item.jsg.wrench.name=JSG Wrench
+item.jsg.hammer.name=JSG Kalapács
+item.jsg.screwdriver.name=JSG Csavarhúzó
+item.jsg.wrench.name=JSG Csavarkulcs
 
 # gears
-item.jsg.gear_titanium.name=Gear (Titanium)
-item.jsg.gear_trinium.name=Gear (Trinium)
-item.jsg.gear_naquadah_raw.name=Gear (Raw Naquadah)
-item.jsg.gear_naquadah.name=Gear (Naquadah)
+item.jsg.gear_titanium.name=Fogaskerék (Titánium)
+item.jsg.gear_trinium.name=Fogaskerék (Trínium)
+item.jsg.gear_naquadah_raw.name=Fogaskerék (Nyers Nakvada)
+item.jsg.gear_naquadah.name=Fogaskerék (Nakvada)
 
 # plates
-item.jsg.plate_titanium.name=Plate (Titanium)
-item.jsg.plate_trinium.name=Plate (Trinium)
-item.jsg.plate_naquadah_raw.name=Plate (Raw Naquadah)
-item.jsg.plate_naquadah.name=Plate (Naquadah)
+item.jsg.plate_titanium.name=Lemez (Titánium)
+item.jsg.plate_trinium.name=Lemez (Trínium)
+item.jsg.plate_naquadah_raw.name=Lemez (Nyers Nakvada)
+item.jsg.plate_naquadah.name=Lemez (Nakvada)
 
 # -------------------
 
@@ -312,7 +312,7 @@ item.jsg.plate_naquadah.name=Plate (Naquadah)
 # TILE ENTITIES/BLOCKS
 
 # special blocks
-tile.jsg.invisible_block.name=Nem láthatsz engem blokk
+tile.jsg.invisible_block.name=Nem-láthatsz-engem blokk
 
 # ores and ore blocks
 tile.jsg.naquadah_ore.name=Nakvada Érc
@@ -325,8 +325,8 @@ tile.jsg.trinium_block.name=Trínium Tömb
 tile.jsg.titanium_block.name=Titánium Tömb
 
 # decor blocks
-tile.jsg.tokra_crystal_block.name=Tokra's Crystal Block
-tile.jsg.destiny_countdown_block.name=Destiny Countdown Block
+tile.jsg.tokra_crystal_block.name=Tok'ra Kristály Blokk
+tile.jsg.destiny_countdown_block.name=Végzet Időzítő Blokk
 
 # props
 prop.jsg.platform_ships_block.name=Gyűrű platform (Hajók)
@@ -349,7 +349,7 @@ tile.jsg.stargate_milkyway_ring_block.name=Csillagkapu Gyűrű (Tejútrendszer)
 tile.jsg.stargate_milkyway_chevron_block.name=Csillagkapu Ékzár (Tejútrendszer)
 
 # stargate - ORLIN
-tile.jsg.stargate_orlin_base_block.open_count=Open count: %s / %s
+tile.jsg.stargate_orlin_base_block.open_count=Nyitás száma: %s / %s
 tile.jsg.stargate_orlin_base_block.name=Csillagkapu Alap (Orlin)
 tile.jsg.stargate_orlin_member_block.name=Csillagkapu Gyűrű (Orlin)
 
@@ -368,9 +368,9 @@ tile.jsg.capacitor_block.name=Kondenzátor
 tile.jsg.capacitor_block_empty.name=Kondenzátor (Üres)
 
 # zpm
-tile.jsg.zpm.name=Zero Point Module (ZPM)
-tile.jsg.zpm_hub_block.name=ZPM Hub (Ancient)
-tile.jsg.zpm_slot_block.name=ZPM Slot (Tau'ri)
+tile.jsg.zpm.name=Zéró Pont Modul (ZPM)
+tile.jsg.zpm_hub_block.name=ZPM Központ (Ancient)
+tile.jsg.zpm_slot_block.name=ZPM Tartó (Tau'ri)
 
 # rings controller
 tile.jsg.transportrings_controller_goauld_block.name=Transzportgyűrű Irányító
@@ -395,13 +395,13 @@ tile.jsg.transportrings_block.rings_distance=Távolság
 tile.jsg.beamer_block.name=Vetítőblokk
 
 # machines
-tile.jsg.assembler_machine_block.name=Ancient Assembler
-tile.jsg.crystal_chamber_block.name=Crystal Chamber
-tile.jsg.pcb_fabricator_block.name=PCB Fabricator
-tile.jsg.ore_washing_machine_block.name=Ore Washing Machine
+tile.jsg.assembler_machine_block.name=Ős Szerelő
+tile.jsg.crystal_chamber_block.name=Kristálykamra
+tile.jsg.pcb_fabricator_block.name=PCB Összeszerelő
+tile.jsg.ore_washing_machine_block.name=Ércmosó
 
 # ancient sign
-tile.jsg.ancient_sign.name=Ancient Sign
+tile.jsg.ancient_sign.name=Ős Tábla
 
 # -------------------
 
@@ -423,7 +423,7 @@ fluid.silicon_molten_red=Áram Keverék
 fluid.silicon_molten_blue=Teleportációs Keverék
 fluid.silicon_molten_ender=Végzetkeverék
 fluid.silicon_molten_yellow=Fény Keverék
-fluid.silicon_molten_pegasus=Pegasus Blend
+fluid.silicon_molten_pegasus=Pegazus Keverék
 
 # naquadah
 fluid.naquadah_molten_raw=Folyékony Nakvada
@@ -443,8 +443,8 @@ commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim=X] [map=Y] [id=Z]
 commands.sgquery.number_expected=Szám várva
 commands.sgquery.no_map=Nincs ilyen térkép
 commands.sgquery.stargates=Csillagkapuk %s
-commands.sgquery.wrong_id=Rossz ID vagy nem meghatározva
-commands.sgquery.wrong_map=Rossz térkép vagy nem meghatározva
+commands.sgquery.wrong_id=Rossz ID vagy nincs meghatározva
+commands.sgquery.wrong_map=Rossz térkép vagy nincs meghatározva
 commands.sgquery.wrong_sender=Rossz küldő (nem játékos)
 commands.sgquery.wrong_quantity=Helytelen oldalszám
 commands.sgquery.giving_page=Oldal odaadása: %s
@@ -657,29 +657,29 @@ gui.stargate.iris.auto_help=Az írisz automatikusan bezárul bejövő féregjár
 gui.stargate.iris.auto1_help=ki lehet nyitni a GDO-val a megadott kód küldésével
 gui.stargate.iris.oc_help=Az íriszt OpenComputers-szel lehet irányítani
 
-gui.stargate.biome_overlay=Biome overlay
+gui.stargate.biome_overlay=Biomok
 gui.stargate.biome_overlay.help=Helyezzen be egy blokkot, hogy felülírja
 gui.stargate.biome_overlay.normal=Normális
 gui.stargate.biome_overlay.frost=Fagyos
 gui.stargate.biome_overlay.mossy=Indás
 gui.stargate.biome_overlay.aged=Öreg
 gui.stargate.biome_overlay.sooty=Kormos
-gui.stargate.biome_overlay.sandy=Sandy
+gui.stargate.biome_overlay.sandy=Homokos
 gui.stargate.capacitors=Kondenzátorok
 gui.stargate.energyBuffer=Energiapuffer
 
 gui.stargate.state.closed=Csillagkapu zárva!
 gui.stargate.state.opened=Nyitva ennyi ideje:
-gui.stargate.state.gate_temp=Gate temp:
-gui.stargate.state.iris_temp=Iris temp:
+gui.stargate.state.gate_temp=Kapu hőmérséklet:
+gui.stargate.state.iris_temp=Írisz hőmérséklet:
 
 gui.stargate.info=Kapu információk
 
 # zpmhub
-gui.zpmhub.inProgress=ZPMs are moving!
-gui.zpmhub.slideDown=Engage ZPMs
-gui.zpmhub.slideUp=Disengage ZPMs
-gui.zpmhub.alert=Slots for ZPMs are locked!
+gui.zpmhub.inProgress=ZPM-ek mozgásban!
+gui.zpmhub.slideDown=ZPM-ek aktiválása
+gui.zpmhub.slideUp=ZPM-ek kikapcsolása
+gui.zpmhub.alert=ZPM tartók lezárva!
 
 # capacitor
 gui.capacitor.name=Kondenzátor
@@ -712,8 +712,8 @@ gui.beamer.disabled_by_logic=Vetítő logika által kikapcsolva
 gui.beamer.disabled_by_logic_target=Cél vetítő logika által kikapcsolva
 gui.beamer.running=Fut
 gui.beamer.no_crystal=Hiányzó kristály
-gui.beamer.no_power=Not enough power
-gui.beamer.can_not_receive=Can not receive
+gui.beamer.no_power=Nincs elég energia
+gui.beamer.can_not_receive=Nem tud fogadni
 
 gui.beamer.transmit=Küld
 gui.beamer.receive=Vesz
@@ -738,7 +738,7 @@ gui.gdo.send_button=Kód küldése
 gui.assembler.name=Ancient Assembler
 
 # ancient sign
-gui.ancient_sign.edit=Edit ancient text
+gui.ancient_sign.edit=Ős szöveg módosítása
 
 # -------------------
 
@@ -817,9 +817,9 @@ jsg.subtitle.universe_dialer_connect=Univerzum tárcsázó kapcsolódva
 jsg.subtitle.item_zat_shoot=Zat'nik'tel lő
 jsg.subtitle.item_staff_shoot=Goa'uld Botfegyver lő
 
-jsg.subtitle.destiny_countdown_start=Destiny's countdown started!
-jsg.subtitle.destiny_countdown_stop=Destiny's countdown reached zero
-jsg.subtitle.destiny_countdown_one_minute=One minute left on Destiny's countdown
+jsg.subtitle.destiny_countdown_start=Végzet időzítője elindult!
+jsg.subtitle.destiny_countdown_stop=Végzet időzítője lejárt
+jsg.subtitle.destiny_countdown_one_minute=Egy perc van hátra Végzet időzítőjéből
 
 # -------------------
 
