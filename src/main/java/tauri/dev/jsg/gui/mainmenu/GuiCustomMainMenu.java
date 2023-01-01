@@ -43,6 +43,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background3.jpg"));
         add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background4.jpg"));
         add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background5.jpg"));
+        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background6.jpg"));
     }};
 
     public static final ResourceLocation LOGO_TAURI = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/tauri_dev_logo.png");
