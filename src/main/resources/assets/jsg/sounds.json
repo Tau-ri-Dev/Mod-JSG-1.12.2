@@ -350,12 +350,6 @@
       "jsg:misc/page_flip"
     ]
   },
-  "mainmenu_ring_roll": {
-    "category": "ambient",
-    "sounds": [
-      "jsg:gui/mainmenu/ring_roll"
-    ]
-  },
   "mainmenu_music": {
     "category": "ambient",
     "sounds": [

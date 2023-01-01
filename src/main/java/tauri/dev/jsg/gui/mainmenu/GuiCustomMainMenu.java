@@ -37,12 +37,12 @@ public class GuiCustomMainMenu extends GuiScreen {
     public float tick;
 
     public static final ArrayList<ResourceLocation> BACKGROUNDS = new ArrayList<ResourceLocation>() {{
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background0.png"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background1.png"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background2.png"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background3.png"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background4.png"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background5.png"));
+        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background0.jpg"));
+        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background1.jpg"));
+        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background2.jpg"));
+        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background3.jpg"));
+        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background4.jpg"));
+        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background5.jpg"));
     }};
 
     public static final ResourceLocation LOGO_TAURI = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/tauri_dev_logo.png");
@@ -78,6 +78,14 @@ public class GuiCustomMainMenu extends GuiScreen {
         JSGSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.MAINMENU_MUSIC, play);
     }
 
+    public void updateMusic(){
+        isMusicPlaying = JSGSoundHelperClient.getRecord(SoundPositionedEnum.MAINMENU_MUSIC, new BlockPos(0, 0, 0)).isPlaying();
+        if (!isMusicPlaying && (tick - menuDisplayed) > 100 && JSGConfig.mainMenuConfig.playMusic) { // wait 5 seconds before first play
+            playMusic(false); // reset it
+            playMusic(true);
+        }
+    }
+
     public int[] getCenterPos(int rectWidth, int rectHeight) {
         return new int[]{((width - rectWidth) / 2), ((height - rectHeight) / 2)};
     }
@@ -91,9 +99,6 @@ public class GuiCustomMainMenu extends GuiScreen {
             updateChecked = false;
         }
         super.initGui();
-        if (!isMusicPlaying && JSGConfig.mainMenuConfig.playMusic)
-            playMusic(true);
-
         buttonList.clear();
         labelList.clear();
 
@@ -156,6 +161,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         tick = (float) JSGMinecraftHelper.getClientTickPrecise();
         if (menuDisplayed == -1) menuDisplayed = (long) tick;
         updateNotificationRendered = ((UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.NEWER_AVAILABLE || UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.ERROR) && !updateChecked);
+        updateMusic();
         drawBackground();
         drawButtons(mouseX, mouseY);
         drawTitles();
