@@ -838,7 +838,7 @@ chat.orlins.energyStored=Energia eltárolva: %s RF (Szükséges: %s RF, %s s)
 # MAIN MENU
 
 menu.about=JSG-ról
-menu.gate_overlay=Kapu
-menu.music_toggle=Zene
+menu.updater.download=Download
+menu.updater.close=Close
 
 # -------------------

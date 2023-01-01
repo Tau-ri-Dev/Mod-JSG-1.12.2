@@ -878,6 +878,8 @@ public class JSGConfig {
     public static class DevConfig {
         @Name("Dev mode")
         public boolean enableDevMode = false;
+        @Name("t1")
+        public boolean t1 = false;
         @Name("x")
         public float x = 0f;
         @Name("y")

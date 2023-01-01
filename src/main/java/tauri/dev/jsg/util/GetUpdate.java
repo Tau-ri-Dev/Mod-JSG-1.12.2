@@ -6,6 +6,7 @@ import tauri.dev.jsg.config.JSGConfig;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -33,6 +34,8 @@ public class GetUpdate {
     public static final String ERROR_STRING = "Error was occurred while updating JSG!";
 
     public static final String URL_BASE = "https://api.justsgmod.eu/?api=curseforge&version=" + JSG.MC_VERSION;
+
+    public static final String DOWNLOAD_URL_USER = "https://mod.justsgmod.eu/";
 
     public static final String GET_NAME_URL = URL_BASE + "&t=name";
 
@@ -64,6 +67,16 @@ public class GetUpdate {
             return new UpdateResult(EnumUpdateResult.ERROR, ERROR_STRING);
         }
         return new UpdateResult(EnumUpdateResult.UP_TO_DATE, currentVersion);
+    }
+
+    public static void openWebsiteToClient(String url){
+        try {
+            Class<?> ocClass = Class.forName("java.awt.Desktop");
+            Object object = ocClass.getMethod("getDesktop").invoke(null);
+            ocClass.getMethod("browse", URI.class).invoke(object, new URI(url));
+        } catch (Exception e) {
+            JSG.error("Couldn't open link", e);
+        }
     }
 
     private static String getSiteContent(String link) {

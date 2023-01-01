@@ -11,7 +11,7 @@ import static tauri.dev.jsg.gui.element.GuiHelper.isPointInRegion;
 
 public class IconButton extends GuiButton {
     public String[] label;
-    public final ResourceLocation texture;
+    public ResourceLocation texture;
     public final int u;
     public final int v;
     public final int width;

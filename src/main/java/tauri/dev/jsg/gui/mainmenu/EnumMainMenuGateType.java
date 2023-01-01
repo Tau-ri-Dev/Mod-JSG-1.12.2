@@ -40,7 +40,7 @@ public enum EnumMainMenuGateType {
         }
     }
 
-    public void renderGate(int x, int y, float size, long tick, float partialTicks) {
+    public void renderGate(int x, int y, float size, float tick) {
         GlStateManager.pushMatrix();
 
         GlStateManager.disableLighting();
@@ -57,13 +57,13 @@ public enum EnumMainMenuGateType {
             default:
                 break;
             case MILKYWAY:
-                renderMWGate(tick, partialTicks);
+                renderMWGate(tick);
                 break;
             case PEGASUS:
-                renderPEGGate(tick, partialTicks);
+                renderPEGGate(tick);
                 break;
             case UNIVERSE:
-                renderUNIGate(tick, partialTicks);
+                renderUNIGate(tick);
                 break;
         }
 
@@ -73,11 +73,11 @@ public enum EnumMainMenuGateType {
         GlStateManager.disableAlpha();
     }
 
-    private void renderMWGate(long tick, float partialTicks) {
+    private void renderMWGate(float tick) {
         // Ring
         GlStateManager.pushMatrix();
         GlStateManager.translate(StargateMilkyWayRenderer.RING_LOC.x, StargateMilkyWayRenderer.RING_LOC.z, StargateMilkyWayRenderer.RING_LOC.y);
-        GlStateManager.rotate(-((tick + partialTicks) * (A_ANGLE_PER_TICK/2)) % 360, 0, 0, 1);
+        GlStateManager.rotate(-(tick * (A_ANGLE_PER_TICK/2)) % 360, 0, 0, 1);
         GlStateManager.translate(-StargateMilkyWayRenderer.RING_LOC.x, -StargateMilkyWayRenderer.RING_LOC.z, -StargateMilkyWayRenderer.RING_LOC.y);
 
         ElementEnum.MILKYWAY_RING.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
@@ -107,9 +107,11 @@ public enum EnumMainMenuGateType {
         GlStateManager.popMatrix();
     }
 
-    private void renderUNIGate(long tick, float partialTicks) {
+    private void renderUNIGate(float tick) {
         GlStateManager.pushMatrix();
-        GlStateManager.rotate(-((tick + partialTicks) * (A_ANGLE_PER_TICK/2)) % 360, 0, 0, 1);
+        GlStateManager.scale(1.14f, 1.14f, 1.14f);
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate(-(tick * (A_ANGLE_PER_TICK/2)) % 360, 0, 0, 1);
 
         // Gate
         GlStateManager.pushMatrix();
@@ -134,6 +136,21 @@ public enum EnumMainMenuGateType {
         for (SymbolUniverseEnum symbol : SymbolUniverseEnum.values()) {
             if (symbol.modelResource != null) {
                 float color = 0.25f;
+                switch(symbol){
+                    case G17:
+                    case G10:
+                    case G15:
+                    case G20:
+                    case G26:
+                    case G28:
+                    case G13:
+                    case G18:
+                    case G6:
+                        color += 0.6f;
+                        break;
+                    default:
+                        break;
+                }
                 GlStateManager.pushMatrix();
                 GlStateManager.color(color, color, color);
                 ModelLoader.getModel(symbol.modelResource).render();
@@ -143,9 +160,10 @@ public enum EnumMainMenuGateType {
 
         GlStateManager.popMatrix();
         GlStateManager.color(1, 1, 1);
+        GlStateManager.popMatrix();
     }
 
-    private void renderPEGGate(long tick, float partialTicks) {
+    private void renderPEGGate(float tick) {
         // Ring
         GlStateManager.pushMatrix();
         ElementEnum.PEGASUS_RING.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
@@ -157,12 +175,12 @@ public enum EnumMainMenuGateType {
         GlStateManager.popMatrix();
 
         GlStateManager.pushMatrix();
-        int glyphsCount = (int) (((tick + partialTicks) / 2) % (37*3));
+        int glyphsCount = (int) ((tick / 2) % (37*3));
         if(glyphsCount > 36) glyphsCount = 36;
 
         int chevronsCount = glyphsCount / 4;
 
-        for (int i = -9; i < (glyphsCount - 9); i++) {
+        for (int i = -8; i < (glyphsCount - 8); i++) {
             int ii = (i % 36);
 
             if(ii < 0) ii = 36 + ii;

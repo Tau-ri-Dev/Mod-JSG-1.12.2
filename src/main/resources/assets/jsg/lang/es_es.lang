@@ -838,7 +838,7 @@ chat.orlins.energyStored=Energía almacenada: %s RF (Requerido: %s RF, %s s)
 # MAIN MENU
 
 menu.about=Acerca de JSG
-menu.gate_overlay=Gate
-menu.music_toggle=Music
+menu.updater.download=Download
+menu.updater.close=Close
 
 # -------------------

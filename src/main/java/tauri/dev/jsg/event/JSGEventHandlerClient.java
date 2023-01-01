@@ -60,7 +60,7 @@ public class JSGEventHandlerClient {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onGuiOpen(GuiOpenEvent event) {
         if (!JSGConfig.mainMenuConfig.disableJSGMainMenu) {
             if (!event.isCanceled() && event.getGui() instanceof GuiMainMenu) {

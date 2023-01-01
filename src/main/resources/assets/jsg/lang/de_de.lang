@@ -823,7 +823,7 @@ chat.orlins.energyStored=Energie gespeichert: %s RF (Benötigt: %s RF, %s s)
 # MAIN MENU
 
 menu.about=Über Just Stargate Mod
-menu.gate_overlay=Gate
-menu.music_toggle=Musik
+menu.updater.download=Download
+menu.updater.close=Close
 
 # -------------------

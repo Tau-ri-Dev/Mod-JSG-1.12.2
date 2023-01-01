@@ -21,19 +21,20 @@ import tauri.dev.jsg.util.JSGMinecraftHelper;
 import javax.annotation.Nonnull;
 import java.awt.*;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static tauri.dev.jsg.gui.element.GuiHelper.isPointInRegion;
+import static tauri.dev.jsg.util.GetUpdate.DOWNLOAD_URL_USER;
+import static tauri.dev.jsg.util.GetUpdate.openWebsiteToClient;
 
 @SideOnly(Side.CLIENT)
 public class GuiCustomMainMenu extends GuiScreen {
 
     public static final String WIKI_URL = "https://justsgmod.eu/wiki";
 
-    public long tick;
+    public float tick;
 
     public static final ArrayList<ResourceLocation> BACKGROUNDS = new ArrayList<ResourceLocation>() {{
         add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background0.png"));
@@ -44,13 +45,25 @@ public class GuiCustomMainMenu extends GuiScreen {
         add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background5.png"));
     }};
 
-    public static final ResourceLocation ICONS = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/icons.png");
     public static final ResourceLocation LOGO_TAURI = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/tauri_dev_logo.png");
     public static final ResourceLocation LOGO_MOJANG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/mojang_logo.png");
+    public static final ResourceLocation LOGO_JSG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/jsg_logo.png");
     public static final ResourceLocation NOTIFICATION = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/popup.png");
 
-    public static final GetUpdate.UpdateResult UPDATER_RESULT = GetUpdate.checkForUpdate();
-    public static final boolean updateChecked = false;
+    public ResourceLocation getIconsTexture() {
+        switch (gateType) {
+            case MILKYWAY:
+            default:
+                return new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/icons_mw.png");
+            case PEGASUS:
+                return new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/icons_pg.png");
+            case UNIVERSE:
+                return new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/icons_uni.png");
+        }
+    }
+
+    public static GetUpdate.UpdateResult UPDATER_RESULT = GetUpdate.checkForUpdate();
+    public static boolean updateChecked = false;
 
     public static final int BACKGROUNDS_COUNT = BACKGROUNDS.size();
 
@@ -58,7 +71,7 @@ public class GuiCustomMainMenu extends GuiScreen {
 
     public static long menuDisplayed = -1;
 
-    public static final int PADDING = 18;
+    public static final int PADDING = 10;
 
     public static void playMusic(boolean play) {
         isMusicPlaying = play;
@@ -69,8 +82,14 @@ public class GuiCustomMainMenu extends GuiScreen {
         return new int[]{((width - rectWidth) / 2), ((height - rectHeight) / 2)};
     }
 
+    public final ArrayList<GuiButton> updaterButtons = new ArrayList<>();
+
     @Override
     public void initGui() {
+        if (JSGConfig.devConfig.enableDevMode) {
+            UPDATER_RESULT = new GetUpdate.UpdateResult((JSGConfig.devConfig.t1 ? GetUpdate.EnumUpdateResult.ERROR : GetUpdate.EnumUpdateResult.NEWER_AVAILABLE), UPDATER_RESULT.newest);
+            updateChecked = false;
+        }
         super.initGui();
         if (!isMusicPlaying && JSGConfig.mainMenuConfig.playMusic)
             playMusic(true);
@@ -81,12 +100,25 @@ public class GuiCustomMainMenu extends GuiScreen {
         // buttons
         int id = -1;
         final int texSize = 128;
-        buttonList.add(new IconButton(++id, 0, 0, ICONS, texSize, 32, 32, 32, 32, false, I18n.format("menu.singleplayer")));
-        buttonList.add(new IconButton(++id, 0, 0, ICONS, texSize, 64, 32, 32, 32, false, I18n.format("menu.multiplayer")));
-        buttonList.add(new IconButton(++id, 0, 0, ICONS, texSize, 32, 0, 32, 32, false, I18n.format("menu.options")));
-        buttonList.add(new IconButton(++id, 0, 0, ICONS, texSize, 0, 32, 32, 32, false, I18n.format("menu.quit")));
-        buttonList.add(new IconButton(++id, 0, 0, ICONS, texSize, 0, 0, 32, 32, false, I18n.format("menu.about")));
-        buttonList.add(new IconButton(++id, 0, 0, ICONS, texSize, 64, 0, 32, 32, false, I18n.format("fml.menu.mods")));
+        buttonList.add(new IconButton(++id, 0, 0, getIconsTexture(), texSize, 32, 32, 32, 32, false, I18n.format("menu.singleplayer")));
+        buttonList.add(new IconButton(++id, 0, 0, getIconsTexture(), texSize, 64, 32, 32, 32, false, I18n.format("menu.multiplayer")));
+        buttonList.add(new IconButton(++id, 0, 0, getIconsTexture(), texSize, 32, 0, 32, 32, false, I18n.format("menu.options")));
+        buttonList.add(new IconButton(++id, 0, 0, getIconsTexture(), texSize, 0, 32, 32, 32, false, I18n.format("menu.quit")));
+        buttonList.add(new IconButton(++id, 0, 0, getIconsTexture(), texSize, 0, 0, 32, 32, false, I18n.format("menu.about")));
+        buttonList.add(new IconButton(++id, 0, 0, getIconsTexture(), texSize, 64, 0, 32, 32, false, I18n.format("fml.menu.mods")));
+
+        // ------------------------
+        // Updater
+
+        // Download (20)
+        String update = I18n.format("menu.updater.download");
+        int width = fontRenderer.getStringWidth(update) + 20;
+        updaterButtons.add(new GuiButton(20, -width - (PADDING / 2), 0, width, 20, update));
+
+        // Close (21)
+        update = I18n.format("menu.updater.close");
+        width = fontRenderer.getStringWidth(update) + 20;
+        updaterButtons.add(new GuiButton(21, (PADDING / 2), 0, width, 20, update));
     }
 
     private static int currentButton = 0;
@@ -117,10 +149,13 @@ public class GuiCustomMainMenu extends GuiScreen {
         return id;
     }
 
+    public boolean updateNotificationRendered = false;
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        tick = (long) JSGMinecraftHelper.getClientTickPrecise();
-        if (menuDisplayed == -1) menuDisplayed = tick;
+        tick = (float) JSGMinecraftHelper.getClientTickPrecise();
+        if (menuDisplayed == -1) menuDisplayed = (long) tick;
+        updateNotificationRendered = ((UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.NEWER_AVAILABLE || UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.ERROR) && !updateChecked);
         drawBackground();
         drawButtons(mouseX, mouseY);
         drawTitles();
@@ -136,73 +171,104 @@ public class GuiCustomMainMenu extends GuiScreen {
                     actionPerformed(guibutton);
                 }
             }
+            for (GuiButton guibutton : updaterButtons) {
+                if (guibutton.mousePressed(mc, mouseX, mouseY)) {
+                    guibutton.playPressSound(this.mc.getSoundHandler());
+                    actionPerformed(guibutton);
+                }
+            }
         }
     }
 
     @Override
     protected void actionPerformed(@Nonnull GuiButton button) {
-        if (button.id != currentButton) {
-            currentButton = button.id;
-            return;
-        }
-        switch (button.id) {
-            // main menu screens
-            case 0:
-                this.mc.displayGuiScreen(new GuiWorldSelection(this));
-                break;
-            case 1:
-                this.mc.displayGuiScreen(new GuiMultiplayer(this));
-                break;
-            case 2:
-                this.mc.displayGuiScreen(new GuiOptions(this, this.mc.gameSettings));
-                break;
-            case 3:
-                this.mc.shutdown();
-                break;
-            case 4:
-                try {
-                    Class<?> oclass = Class.forName("java.awt.Desktop");
-                    Object object = oclass.getMethod("getDesktop").invoke(null);
-                    oclass.getMethod("browse", URI.class).invoke(object, new URI(WIKI_URL));
-                } catch (Exception e) {
-                    JSG.debug("Couldn't open link", e);
-                }
-                break;
-            case 5:
-                this.mc.displayGuiScreen(new GuiModList(this));
-                break;
+        if (button.id < 20) {
+            if (button.id != currentButton) {
+                currentButton = button.id;
+                return;
+            }
+            switch (button.id) {
+                // main menu screens
+                case 0:
+                    this.mc.displayGuiScreen(new GuiWorldSelection(this));
+                    break;
+                case 1:
+                    this.mc.displayGuiScreen(new GuiMultiplayer(this));
+                    break;
+                case 2:
+                    this.mc.displayGuiScreen(new GuiOptions(this, this.mc.gameSettings));
+                    break;
+                case 3:
+                    this.mc.shutdown();
+                    break;
+                case 4:
+                    openWebsiteToClient(WIKI_URL);
+                    break;
+                case 5:
+                    this.mc.displayGuiScreen(new GuiModList(this));
+                    break;
+            }
+        } else {
+            // Probably updater button
+            switch (button.id) {
+                case 20:
+                    openWebsiteToClient(DOWNLOAD_URL_USER);
+                    break;
+                case 21:
+                    updateChecked = true;
+                    break;
+            }
         }
     }
 
     /**
      * Used to draw buttons
      */
-    private final ArrayList<Integer> buttonsRendered = new ArrayList<>();
-
     public void drawButtons(int mouseX, int mouseY) {
-        buttonsRendered.clear();
+        // Updater buttons
+        if (!updateNotificationRendered) {
+            for (GuiButton button : updaterButtons) {
+                button.visible = false;
+                button.enabled = false;
+            }
+        }
+
+        // General buttons
         for (GuiButton button : buttonList) {
             // just make sure that Button will not be activated by any chance
-            button.x = -500;
+            button.visible = false;
+            button.enabled = !updateNotificationRendered;
+            if (button instanceof IconButton)
+                ((IconButton) button).texture = getIconsTexture();
         }
         for (int i = -2; i <= 2; i++) {
             GlStateManager.enableBlend();
             int btn = getButtonForDisplay(i);
             IconButton button = (IconButton) buttonList.get(btn);
-            int x = (width - (button.width + PADDING));
+            int x = (width - (button.width + PADDING * 2));
             int y = getCenterPos(button.width, button.height)[1] + (i * (button.height + 10));
             button.x = x;
             button.y = y;
+            button.visible = true;
             button.drawButton(mouseX, mouseY);
             if (i == 0) {
                 button.drawButton(mouseX, mouseY);
                 button.drawButton(mouseX, mouseY);
                 button.drawButton(mouseX, mouseY);
+
+                String[] label = button.label;
+                int labelHigh = label.length * 10;
+                int syDefault = (button.y + (button.height / 2));
+                int syStart = syDefault - (labelHigh / 2);
+                int color = 0xffffff;
+                for (int ii = 0; ii < label.length; ii++) {
+                    fontRenderer.drawString(label[ii], button.x - PADDING / 2 - fontRenderer.getStringWidth(label[ii]), syStart + ii * 10, color);
+                    color = 0x404040;
+                }
             }
             if (i == -1 || i == 1) {
                 button.drawButton(mouseX, mouseY);
             }
-            buttonsRendered.add(btn);
             GlStateManager.disableBlend();
         }
     }
@@ -217,7 +283,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         double timeHere = tick % BACKGROUND_STAY_TIME;
         if (timeHere > (BACKGROUND_STAY_TIME - ((double) BACKGROUND_CHANGE_ANIMATION_LENGTH / 2))) {
             if (backgroundChangeStart == -1) {
-                backgroundChangeStart = tick;
+                backgroundChangeStart = (long) tick;
             }
         }
 
@@ -240,9 +306,9 @@ public class GuiCustomMainMenu extends GuiScreen {
         drawScaledCustomSizeModalRect(-(width / 2), -(height / 2), 0, 0, 1921, 1018, width, height, 1920, 1017);
         GlStateManager.popMatrix();
 
-        drawRect(0, 0, width, height, new Color(255, 255, 255, (int) (255 * coef)).getRGB());
+        drawRect(0, 0, width, height, new Color(0, 0, 0, (int) (255 * coef)).getRGB());
 
-        gateType.renderGate(width + 55, getCenterPos(0, 0)[1], 45, tick, 0);
+        gateType.renderGate(width + 20, getCenterPos(0, 0)[1], 45, tick);
     }
 
     public EnumMainMenuGateType gateType = EnumMainMenuGateType.random();
@@ -253,9 +319,16 @@ public class GuiCustomMainMenu extends GuiScreen {
     public void drawTitles() {
         if (JSGConfig.mainMenuConfig.debugMode) {
             // Debug
-            fontRenderer.drawString("timeHere: " + (tick % BACKGROUND_STAY_TIME), PADDING, 90, 0xffffff);
-            fontRenderer.drawString("currentButton: " + currentButton, PADDING, 100, 0xffffff);
+            fontRenderer.drawString("width: " + width, PADDING, 90, 0xffffff);
+            fontRenderer.drawString("height: " + height, PADDING, 100, 0xffffff);
+            fontRenderer.drawString("timeHere: " + (tick % BACKGROUND_STAY_TIME), PADDING, 110, 0xffffff);
+            fontRenderer.drawString("time: " + (long) tick, PADDING, 120, 0xffffff);
+            fontRenderer.drawString("currentButton: " + currentButton, PADDING, 130, 0xffffff);
         }
+
+
+        fontRenderer.drawString("Just Stargate Mod v" + JSG.MOD_VERSION.replaceAll(JSG.MC_VERSION + "-", ""), PADDING, PADDING, 0xffffff);
+        fontRenderer.drawString("Running on Minecraft Java " + JSG.MC_VERSION, PADDING, PADDING + 10, 0xffffff);
 
 
         int sizeXTauri = width / 10;
@@ -263,29 +336,27 @@ public class GuiCustomMainMenu extends GuiScreen {
         int sizeXMojang = width / 10;
         int sizeYMojang = (52 * sizeXMojang) / 300;
 
-        int sizeX = width / 7;
-        int sizeY = (230 * sizeX) / 411;
+        int sizeXJSG = (int) (width / 2.33);
+        int sizeYJSG = (603 * sizeXJSG) / 1586;
 
-        int[] center = getCenterPos(sizeX, sizeY);
-        int x = center[0] - 80;
-        int y = center[1] - 60;
+        int[] center = getCenterPos(sizeXJSG, sizeYJSG);
+        int x = (int) (center[0] * 0.25);
+        int y = (int) (center[1] * 0.5);
+
+        GlStateManager.enableBlend();
 
         // Tauri dev logo
-        GlStateManager.enableBlend();
         Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_TAURI);
         drawScaledCustomSizeModalRect(PADDING, height - PADDING - sizeYTauri - sizeYMojang - 8, 0, 0, 411, 230, sizeXTauri, sizeYTauri, 410, 229);
-        GlStateManager.disableBlend();
 
         // Mojang logo
-        GlStateManager.enableBlend();
         Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_MOJANG);
         drawScaledCustomSizeModalRect(PADDING, height - PADDING - sizeYMojang, 0, 0, 301, 53, sizeXMojang, sizeYMojang, 300, 52);
-        GlStateManager.disableBlend();
 
         // JSG logo
-        GlStateManager.enableBlend();
-        Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_TAURI);
-        drawScaledCustomSizeModalRect(x, y, 0, 0, 411, 230, sizeX, sizeY, 410, 229);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_JSG);
+        drawScaledCustomSizeModalRect(x, y, 0, 0, 1586, 603, sizeXJSG, sizeYJSG, 1586, 603);
+
         GlStateManager.disableBlend();
     }
 
@@ -293,63 +364,90 @@ public class GuiCustomMainMenu extends GuiScreen {
      * Used to draw hovered texts & updater notification
      */
     public void drawFg(int mouseX, int mouseY) {
-        for (GuiButton b : buttonList) {
-            if (b instanceof IconButton && buttonsRendered.contains(b.id))
-                ((IconButton) b).drawFg(mouseX, mouseY, this);
-        }
+        if (!updateNotificationRendered) {
+            for (GuiButton b : buttonList) {
+                if (b instanceof IconButton && b.visible && b.id != currentButton)
+                    ((IconButton) b).drawFg(mouseX, mouseY, this);
+            }
 
-        int sizeXTauri = width / 10;
-        int sizeYTauri = (230 * sizeXTauri) / 411;
-        int sizeYMojang = (52 * sizeXTauri) / 300;
-        if (isPointInRegion(PADDING, height - PADDING - sizeYTauri - sizeYMojang - 8, sizeXTauri, sizeYTauri, mouseX, mouseY)) {
-            List<String> power = Arrays.asList(
-                    TextFormatting.WHITE.toString() + TextFormatting.BOLD + "Just Stargate Mod developed by:",
-                    TextFormatting.GRAY + "MineDragonCZ_",
-                    TextFormatting.GRAY + "matousss",
-                    TextFormatting.GRAY + "Fredyman_95",
-                    TextFormatting.GRAY + "Harald De Luca",
-                    TextFormatting.GRAY + "",
-                    TextFormatting.WHITE.toString() + TextFormatting.BOLD + "Base of this mod by:",
-                    TextFormatting.GRAY + "MrJake222"
-                    );
-            drawHoveringText(power, mouseX, mouseY);
+            int sizeXTauri = width / 10;
+            int sizeYTauri = (230 * sizeXTauri) / 411;
+            int sizeYMojang = (52 * sizeXTauri) / 300;
+            if (isPointInRegion(PADDING, height - PADDING - sizeYTauri - sizeYMojang - 8, sizeXTauri, sizeYTauri, mouseX, mouseY)) {
+                List<String> power = Arrays.asList(
+                        TextFormatting.WHITE.toString() + TextFormatting.BOLD + "Just Stargate Mod developed by:",
+                        TextFormatting.GRAY + "MineDragonCZ_",
+                        TextFormatting.GRAY + "matousss",
+                        TextFormatting.GRAY + "Fredyman_95",
+                        TextFormatting.GRAY + "Harald De Luca",
+                        TextFormatting.GRAY + "",
+                        TextFormatting.WHITE.toString() + TextFormatting.BOLD + "Base of this mod by:",
+                        TextFormatting.GRAY + "MrJake222"
+                );
+                drawHoveringText(power, mouseX, mouseY);
+            }
         }
 
 
         // updater notification
-        if(!updateChecked && UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.NEWER_AVAILABLE) {
-            int sizeX = width / 2;
-            int sizeY = (139 * sizeX) / 176;
+        if (updateNotificationRendered) {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(0, 0, 50);
+            drawGradientRect(0, 0, width, height, -1072689136, -804253680);
 
-            int[] center = getCenterPos(sizeX, sizeY);
+            int backgroundWidth = 300;
+            int backgroundHeight = 140;
+
+            int[] center = getCenterPos(backgroundWidth, backgroundHeight);
             int x = center[0];
             int y = center[1];
-            GlStateManager.pushMatrix();
-            GlStateManager.translate(x, y, 0);
-            GlStateManager.enableBlend();
 
-            center = getCenterPos(0, 0);
-            center[0] = center[0] - x;
-            center[1] = center[1] - y;
+            int[] center1 = getCenterPos(0, 0);
+            int xCenter = center1[0];
 
-            // background
+            // Background
             Minecraft.getMinecraft().getTextureManager().bindTexture(NOTIFICATION);
-            drawScaledCustomSizeModalRect(0, 0, 0, 0, 177, 140, sizeX, sizeY, 176, 139);
+            drawModalRectWithCustomSizedTexture(x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
 
-            // title
-            GlStateManager.pushMatrix();
-            GlStateManager.translate(center[0] - (fontRenderer.getStringWidth("New update is available!") / 2f), 20, 0);
-            GlStateManager.scale(2, 2, 2);
-            fontRenderer.drawString("New update is available!", 0, 0, 0x404040);
-            GlStateManager.popMatrix();
+            boolean error = UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.ERROR;
 
-            fontRenderer.drawString("You can update to version " + UPDATER_RESULT.newest, 8, 45, 0x404040);
+            // Titles
+            updaterButtons.get(0).y = y + backgroundHeight - 30;
+            if (!error) {
+                drawCenteredString(fontRenderer, "New update is available!", xCenter, y + 20, 0x404040, false);
 
-            // Todo(Mine): buttons for updater
+                drawCenteredString(fontRenderer, "You can update to version " + UPDATER_RESULT.newest, xCenter, y + 50, 0x404040, false);
+                drawCenteredString(fontRenderer, "It is highly recommended to update to this version!", xCenter, y + 60, 0x404040, false);
+                drawCenteredString(fontRenderer, "Some dangerous bugs should be fixed in this version.", xCenter, y + 70, 0x404040, false);
 
-            GlStateManager.disableBlend();
+                updaterButtons.get(0).x = xCenter - updaterButtons.get(0).width - (PADDING / 2);
+                updaterButtons.get(0).enabled = true;
+                updaterButtons.get(0).drawButton(mc, mouseX, mouseY, 0);
+            } else {
+                drawCenteredString(fontRenderer, "Error while checking update!", xCenter, y + 20, 0x404040, false);
+
+                drawCenteredString(fontRenderer, "Can not get response from the server!", xCenter, y + 50, 0x404040, false);
+                drawCenteredString(fontRenderer, "Please check your internet connection.", xCenter, y + 60, 0x404040, false);
+                updaterButtons.get(0).enabled = false;
+            }
+
+            updaterButtons.get(1).enabled = true;
+            updaterButtons.get(1).x = xCenter + (PADDING / 2);
+            if (error)
+                updaterButtons.get(1).x = xCenter - (updaterButtons.get(1).width / 2);
+            updaterButtons.get(1).y = updaterButtons.get(0).y;
+            updaterButtons.get(1).drawButton(mc, mouseX, mouseY, 0);
+
             GlStateManager.popMatrix();
         }
 
+    }
+
+    public void drawCenteredString(FontRenderer fontRendererIn, @Nonnull String text, int x, int y, int color, boolean shadow) {
+        if (shadow) {
+            super.drawCenteredString(fontRendererIn, text, x, y, color);
+            return;
+        }
+        fontRendererIn.drawString(text, (x - fontRendererIn.getStringWidth(text) / 2), y, color);
     }
 }

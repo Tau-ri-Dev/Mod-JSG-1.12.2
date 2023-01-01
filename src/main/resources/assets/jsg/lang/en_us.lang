@@ -846,7 +846,7 @@ chat.orlins.energyStored=Energy stored: %s RF (Required: %s RF, %s s)
 # MAIN MENU
 
 menu.about=About JSG Mod
-menu.gate_overlay=Gate
-menu.music_toggle=Music
+menu.updater.download=Download
+menu.updater.close=Close
 
 # -------------------
