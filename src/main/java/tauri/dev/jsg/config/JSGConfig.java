@@ -742,10 +742,10 @@ public class JSGConfig {
         public boolean triniumEnabled = true;
 
         @Name("Trinium vein size")
-        public int triniumVeinSize = 2;
+        public int triniumVeinSize = 4;
 
         @Name("Trinium max veins in chunk")
-        public int triniumMaxVeinInChunk = 4;
+        public int triniumMaxVeinInChunk = 16;
 
         @Name("Enable Titanium ore generation")
         @Comment({
@@ -757,7 +757,7 @@ public class JSGConfig {
         public int titaniumVeinSize = 4;
 
         @Name("Titanium max veins in chunk")
-        public int titaniumMaxVeinInChunk = 8;
+        public int titaniumMaxVeinInChunk = 16;
     }
 
     public static class WorldStargateGenerator {

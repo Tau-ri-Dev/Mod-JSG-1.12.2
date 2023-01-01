@@ -2,7 +2,6 @@ package tauri.dev.jsg.loader.model;
 
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
-import tauri.dev.jsg.JSG;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
