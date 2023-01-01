@@ -17,7 +17,7 @@ Transport rings work on short distance, like an elevator.
 Tutorial can be found [here](https://www.youtube.com/watch?v=Adrj8sjAyC8).
 If you prefer reading, you can try our [wiki](https://wiki.justsgmod.eu) (in 6 languages)
 ***
-[![Trailer](https://img.youtube.com/vi/2Mb3S61cCWI/0.jpg)](https://www.youtube.com/watch?v=2Mb3S61cCWI)
+[![Trailer](https://img.youtube.com/vi/Ip-lWaQ3CnE/0.jpg)](https://www.youtube.com/watch?v=Ip-lWaQ3CnE)
 ***
 Disclaimer: Base of this repo is from another mod (The Aunis Mod). Author of that mod knows about this repo. (more in License)
 
