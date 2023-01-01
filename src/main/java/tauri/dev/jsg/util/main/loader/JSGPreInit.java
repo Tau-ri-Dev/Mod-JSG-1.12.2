@@ -11,6 +11,7 @@ import tauri.dev.jsg.entity.EntityRegister;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.integration.TConstructIntegration;
 import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.sound.JSGSoundCategory;
 
 import java.io.File;
 
@@ -25,8 +26,10 @@ public class JSGPreInit {
         File source = event.getSourceFile();
         JSG.clientModPath = source.getAbsolutePath();
 
-        //JSG.JSG_SOUNDS = JSGSoundCategory.add("jsg");
-        JSG.JSG_SOUNDS = SoundCategory.BLOCKS;
+        if(JSGConfig.avConfig.enableCustomSoundCategory)
+            JSG.JSG_SOUNDS = JSGSoundCategory.add("jsg");
+        else
+            JSG.JSG_SOUNDS = SoundCategory.BLOCKS;
 
         JSG.info("Started loading JSG mod in " + JSG.clientModPath);
         JSG.info("Loading JSG version " + JSG.MOD_VERSION);

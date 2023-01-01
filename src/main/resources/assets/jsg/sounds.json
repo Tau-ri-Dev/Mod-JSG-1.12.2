@@ -359,7 +359,10 @@
   "mainmenu_music": {
     "category": "ambient",
     "sounds": [
-      "jsg:gui/mainmenu/music"
+      "jsg:gui/mainmenu/pegasus_theme",
+      "jsg:gui/mainmenu/destiny_theme",
+      "jsg:gui/mainmenu/origin_theme",
+      "jsg:gui/mainmenu/stargate_theme_1"
     ]
   },
   "gui_send_code_button_press": {

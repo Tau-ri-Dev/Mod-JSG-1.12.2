@@ -14,6 +14,10 @@ public class JSGMinecraftHelper {
         return (long) Math.floor((Minecraft.getSystemTime() / (double) 1000) * 20);
     }
 
+    public static double getClientTickPrecise() {
+        return ((Minecraft.getSystemTime() / 1000D) * 20D);
+    }
+
     public static long getPlayerTickClientSide() {
         EntityPlayer player = Minecraft.getMinecraft().player;
         if(player == null) return 0;

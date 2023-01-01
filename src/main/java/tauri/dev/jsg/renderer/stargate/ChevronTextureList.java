@@ -17,13 +17,13 @@ public class ChevronTextureList {
   //	private String chevronTextureBase;
 
   // Saved
-  private List<ChevronEnum> activeChevrons = new ArrayList<>(9);
+  private final List<ChevronEnum> activeChevrons = new ArrayList<>(9);
   //	private int activeChevrons;
   //	private boolean isFinalActive;
 
   // Not saved
   public Map<ChevronEnum, Integer> CHEVRON_STATE_MAP = new HashMap<>(9);
-  private List<Activation<ChevronEnum>> activationList = new ArrayList<>();
+  private final List<Activation<ChevronEnum>> activationList = new ArrayList<>();
 
   private final Map<BiomeOverlayEnum, Map<Integer, ResourceLocation>> CHEVRON_RESOURCE_MAP = new HashMap<>();
   private final Map<Integer, ResourceLocation> CHEVRON_LIGHT_RESOURCE_MAP = new HashMap<>();

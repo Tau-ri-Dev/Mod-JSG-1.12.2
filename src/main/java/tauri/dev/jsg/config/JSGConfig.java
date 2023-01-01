@@ -699,6 +699,10 @@ public class JSGConfig {
                 "Disable this if it causes lags."
         })
         public boolean renderEmissive = true;
+
+        @Name("Enable custom sounds category")
+        @Comment({"Disable this if it causes crash."})
+        public boolean enableCustomSoundCategory = true;
     }
 
     public static class PointOfOriginConfig {
@@ -794,32 +798,8 @@ public class JSGConfig {
         })
         public boolean disableJSGMainMenu = false;
 
-        @Name("Disable custom positions of buttons")
-        @Comment({
-                "Disables custom positions of buttons in main menu",
-        })
-        public boolean disablePosButtons = false;
-
         @Name("Enable debug mode")
         public boolean debugMode = false;
-
-        @Name("Enable event horizon in mainmenu")
-        @Comment({
-                "Do you want gate activation when starting game?",
-        })
-        public boolean enableEventHorizon = true;
-
-        @Name("Enable changing gate overlay")
-        @Comment({
-                "Enable/disable random gate overlays in main menu",
-        })
-        public boolean changingGateOverlay = true;
-
-        @Name("Enable gate rotation")
-        @Comment({
-                "Should ring of gate be static in main menu?",
-        })
-        public boolean gateRotation = true;
 
         @Name("Play music in main menu")
         public boolean playMusic = true;

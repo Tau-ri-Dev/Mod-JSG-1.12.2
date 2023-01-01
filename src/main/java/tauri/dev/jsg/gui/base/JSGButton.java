@@ -30,7 +30,7 @@ public class JSGButton extends GuiButton {
 		return this;
 	}
 	
-	public static interface ActionCallback {
-		public void performAction();
+	public interface ActionCallback {
+		void performAction();
 	}
 }

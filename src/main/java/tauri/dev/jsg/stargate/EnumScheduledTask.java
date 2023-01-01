@@ -52,20 +52,20 @@ public enum EnumScheduledTask {
   STARGATE_RESET(33, 20), // used only for uni gates
   BEGIN_SPIN(34, -1);
 
-    public int id;
-  public int waitTicks;
+    public final int id;
+  public final int waitTicks;
 
   /**
    * Should the task be called on nearest occasion
    * even when the scheduled wait time exceeded?
    */
-  public boolean overtime;
+  public final boolean overtime;
 
-  private EnumScheduledTask(int id, int waitTicks) {
+  EnumScheduledTask(int id, int waitTicks) {
     this(id, waitTicks, true);
   }
 
-  private EnumScheduledTask(int id, int waitTicks, boolean overtime) {
+  EnumScheduledTask(int id, int waitTicks, boolean overtime) {
     this.id = id;
     this.waitTicks = waitTicks;
     this.overtime = overtime;

@@ -1,6 +1,5 @@
 package tauri.dev.jsg.sound;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
@@ -30,8 +29,12 @@ public class JSGPositionedSound extends PositionedSoundRecord {
         getHandler().stopSound(this);
     }
 
+    public boolean isPlaying(){
+        return getHandler().isSoundPlaying(this);
+    }
+
     public void play() {
-        if (!getHandler().isSoundPlaying(this)) {
+        if (!isPlaying()) {
             getHandler().playSound(this);
         }
     }

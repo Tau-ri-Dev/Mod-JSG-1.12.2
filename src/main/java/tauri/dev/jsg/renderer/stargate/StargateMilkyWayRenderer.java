@@ -14,7 +14,7 @@ import tauri.dev.jsg.util.math.MathRange;
 
 public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMilkyWayRendererState> {
 
-    private static final Vec3d RING_LOC = new Vec3d(0.0, -0.122333, -0.000597);
+    public static final Vec3d RING_LOC = new Vec3d(0.0, -0.122333, -0.000597);
     private static final float GATE_DIAMETER = 10.1815f;
 
     @Override

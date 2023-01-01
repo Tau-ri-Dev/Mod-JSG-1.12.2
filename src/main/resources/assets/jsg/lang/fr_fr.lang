@@ -9,6 +9,9 @@ itemGroup.jsg_props=JSG : Accessoires
 itemGroup.jsg_machines=JSG : Machines
 itemGroup.jsg_weapons=JSG : Armes
 
+# Sound category
+soundCategory.jsg=Just Stargate Mod
+
 # -------------------
 # AVANCEMENTS
 

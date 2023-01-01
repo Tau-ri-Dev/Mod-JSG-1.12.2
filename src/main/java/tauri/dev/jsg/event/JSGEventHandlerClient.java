@@ -3,13 +3,12 @@ package tauri.dev.jsg.event;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.client.gui.GuiScreenOptionsSounds;
+import net.minecraft.client.gui.*;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.common.config.Config.Type;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
@@ -19,11 +18,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
-import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.gui.mainmenu.JSGMainMenu;
-import tauri.dev.jsg.gui.mainmenu.JSGMainMenuOnLoad;
-import tauri.dev.jsg.util.main.JSGProps;
+import tauri.dev.jsg.gui.mainmenu.GuiCustomMainMenu;
+
+import static net.minecraft.init.SoundEvents.MUSIC_MENU;
 
 @EventBusSubscriber(Side.CLIENT)
 public class JSGEventHandlerClient {
@@ -64,12 +62,22 @@ public class JSGEventHandlerClient {
 
     @SubscribeEvent
     public static void onGuiOpen(GuiOpenEvent event) {
-        if (!JSGConfig.mainMenuConfig.disableJSGMainMenu && !JSGConfig.devConfig.enableDevMode) {
-            if (!event.isCanceled() && event.getGui() instanceof GuiMainMenu && !(event.getGui() instanceof JSGMainMenu) && !(event.getGui() instanceof JSGMainMenuOnLoad)) {
+        if (!JSGConfig.mainMenuConfig.disableJSGMainMenu) {
+            if (!event.isCanceled() && event.getGui() instanceof GuiMainMenu) {
                 event.setCanceled(true);
-                //Minecraft.getMinecraft().displayGuiScreen(new JSGMainMenu());
-                Minecraft.getMinecraft().displayGuiScreen(new JSGMainMenuOnLoad());
+                Minecraft.getMinecraft().displayGuiScreen(new GuiCustomMainMenu());
             }
+        }
+
+        if(event.getGui() instanceof GuiWorldSelection || event.getGui() instanceof GuiScreenServerList){
+            GuiCustomMainMenu.isMusicPlaying = false;
+        }
+    }
+
+    @SubscribeEvent
+    public static void onSounds(PlaySoundEvent event) {
+        if(event.getSound().getSoundLocation().equals(MUSIC_MENU.getSoundName())){
+            event.setResultSound(null);
         }
     }
 }

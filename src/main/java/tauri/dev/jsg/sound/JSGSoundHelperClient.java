@@ -9,7 +9,7 @@ public class JSGSoundHelperClient {
 
     private static final Map<BlockPos, Map<SoundPositionedEnum, JSGPositionedSound>> positionedSoundRecordsMap = new HashMap<>();
 
-    public static void playPositionedSoundClientSide(BlockPos pos, SoundPositionedEnum soundEnum, boolean play) {
+    public static JSGPositionedSound getRecord(SoundPositionedEnum soundEnum, BlockPos pos){
         Map<SoundPositionedEnum, JSGPositionedSound> soundRecordsMap = positionedSoundRecordsMap.computeIfAbsent(pos, k -> new HashMap<>());
 
         JSGPositionedSound soundRecord = soundRecordsMap.get(soundEnum);
@@ -19,6 +19,12 @@ public class JSGSoundHelperClient {
             soundRecordsMap.put(soundEnum, soundRecord);
             positionedSoundRecordsMap.put(pos, soundRecordsMap);
         }
+
+        return soundRecord;
+    }
+
+    public static void playPositionedSoundClientSide(BlockPos pos, SoundPositionedEnum soundEnum, boolean play) {
+        JSGPositionedSound soundRecord = getRecord(soundEnum, pos);
 
         if (play)
             soundRecord.play();
