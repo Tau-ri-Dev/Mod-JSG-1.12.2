@@ -80,10 +80,12 @@ public class GuiCustomMainMenu extends GuiScreen {
 
     public void updateMusic(){
         isMusicPlaying = JSGSoundHelperClient.getRecord(SoundPositionedEnum.MAINMENU_MUSIC, new BlockPos(0, 0, 0)).isPlaying();
-        if (!isMusicPlaying && (tick - menuDisplayed) > 100 && JSGConfig.mainMenuConfig.playMusic) { // wait 5 seconds before first play
+        if (!isMusicPlaying && (tick - menuDisplayed) > 20*2 && JSGConfig.mainMenuConfig.playMusic) { // wait 2 seconds before first play
             playMusic(false); // reset it
             playMusic(true);
         }
+        if(!JSGConfig.mainMenuConfig.playMusic && isMusicPlaying)
+            playMusic(false);
     }
 
     public int[] getCenterPos(int rectWidth, int rectHeight) {
@@ -154,6 +156,17 @@ public class GuiCustomMainMenu extends GuiScreen {
         return id;
     }
 
+    public EnumMainMenuGateType gateType = EnumMainMenuGateType.random();
+
+    private long lastGateChange = 0;
+    public void updateGateType(){
+        if((tick - lastGateChange) > 30*20){
+            // Every 30 seconds
+            lastGateChange = (long) tick;
+            gateType = EnumMainMenuGateType.random();
+        }
+    }
+
     public boolean updateNotificationRendered = false;
 
     @Override
@@ -162,6 +175,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         if (menuDisplayed == -1) menuDisplayed = (long) tick;
         updateNotificationRendered = ((UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.NEWER_AVAILABLE || UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.ERROR) && !updateChecked);
         updateMusic();
+        updateGateType();
         drawBackground();
         drawButtons(mouseX, mouseY);
         drawTitles();
@@ -317,19 +331,18 @@ public class GuiCustomMainMenu extends GuiScreen {
         gateType.renderGate(width + 20, getCenterPos(0, 0)[1], 45, tick);
     }
 
-    public EnumMainMenuGateType gateType = EnumMainMenuGateType.random();
-
     /**
      * Used to draw texts on the screen
      */
     public void drawTitles() {
         if (JSGConfig.mainMenuConfig.debugMode) {
+            int[] center = getCenterPos(0, 0);
             // Debug
-            fontRenderer.drawString("width: " + width, PADDING, 90, 0xffffff);
-            fontRenderer.drawString("height: " + height, PADDING, 100, 0xffffff);
-            fontRenderer.drawString("timeHere: " + (tick % BACKGROUND_STAY_TIME), PADDING, 110, 0xffffff);
-            fontRenderer.drawString("time: " + (long) tick, PADDING, 120, 0xffffff);
-            fontRenderer.drawString("currentButton: " + currentButton, PADDING, 130, 0xffffff);
+            fontRenderer.drawString("width: " + width, PADDING, center[1], 0xffffff);
+            fontRenderer.drawString("height: " + height, PADDING, center[1] + 10, 0xffffff);
+            fontRenderer.drawString("timeHere: " + (tick % BACKGROUND_STAY_TIME), PADDING, center[1] + 20, 0xffffff);
+            fontRenderer.drawString("time: " + (long) tick, PADDING, center[1] + 30, 0xffffff);
+            fontRenderer.drawString("currentButton: " + currentButton, PADDING, center[1] + 40, 0xffffff);
         }
 
 

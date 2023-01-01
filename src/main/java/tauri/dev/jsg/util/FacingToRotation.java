@@ -28,13 +28,13 @@ public class FacingToRotation {
 	public static int getIntRotation(EnumFacing facing, boolean inverted) {
 		switch (facing) {
 			case EAST:
-				return 90;
+				return (inverted ? 90 : 270);
 
 			case SOUTH:
 				return (!inverted ? 180 : 0);
 
 			case WEST:
-				return 270;
+				return (!inverted ? 90 : 270);
 
 			default:
 				return (inverted ? 180 : 0);
