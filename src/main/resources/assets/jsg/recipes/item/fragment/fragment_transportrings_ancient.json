@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "   ",
+    "TTT"
+  ],
+  "key": {
+    "P": {
+      "type": "forge:ore_dict",
+      "ore": "plateTitanium"
+    },
+    "T": {
+      "type": "forge:ore_dict",
+      "ore": "plateTrinium"
+    }
+  },
+  "result": {
+    "item": "jsg:fragment_transportrings_ancient",
+    "count": 2
+  }
+}
