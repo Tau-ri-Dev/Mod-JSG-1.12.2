@@ -10,6 +10,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.GuiModList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Mouse;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.gui.element.IconButton;
@@ -32,9 +33,35 @@ import static tauri.dev.jsg.util.GetUpdate.openWebsiteToClient;
 @SideOnly(Side.CLIENT)
 public class GuiCustomMainMenu extends GuiScreen {
 
-    public static final String WIKI_URL = "https://justsgmod.eu/wiki";
+    public static final String WEBSITE = "https://justsgmod.eu/";
+    public static final String GITHUB = "https://github.com/Tau-ri-Dev";
+    public static final String MINECRAFT_SITES = "https://minecraft.net/en-us";
+    public static final String JSG_RUNNING_TEXT = "Just Stargate Mod v" + JSG.MOD_VERSION.replaceAll(JSG.MC_VERSION + "-", "");
 
-    public float tick;
+    public double tick;
+
+    // Stores the larges number of FPS
+    private static int bestFPS = 0;
+
+    public void tick(){
+        // If sync is enabled then sync local ticks with mc ticks
+        if(JSGConfig.mainMenuConfig.syncEnabled) {
+            tick = JSGMinecraftHelper.getClientTickPrecise();
+        }
+        else {
+            int currentFPS = Minecraft.getDebugFPS();
+            if(currentFPS > bestFPS) bestFPS = currentFPS;
+            tick += (bestFPS > 0 ? ((30D / (double) bestFPS) * (20D / (double) bestFPS)) : 1D);
+        }
+    }
+
+    public void createFadeIn() {
+        backgroundChangeStart = (long) (tick - (BACKGROUND_CHANGE_ANIMATION_LENGTH / 3));
+    }
+    public GuiCustomMainMenu() {
+        tick = JSGMinecraftHelper.getClientTickPrecise();
+        createFadeIn();
+    }
 
     public static final ArrayList<ResourceLocation> BACKGROUNDS = new ArrayList<ResourceLocation>() {{
         add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background0.jpg"));
@@ -63,6 +90,12 @@ public class GuiCustomMainMenu extends GuiScreen {
         }
     }
 
+    private static int currentButton = 0;
+
+    private static final int BACKGROUND_CHANGE_ANIMATION_LENGTH = 60; //ticks
+    private static final int BACKGROUND_STAY_TIME = 400; //ticks
+    private long backgroundChangeStart = 0;
+
     public static GetUpdate.UpdateResult UPDATER_RESULT = GetUpdate.checkForUpdate();
     public static boolean updateChecked = false;
 
@@ -79,13 +112,13 @@ public class GuiCustomMainMenu extends GuiScreen {
         JSGSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.MAINMENU_MUSIC, play);
     }
 
-    public void updateMusic(){
+    public void updateMusic() {
         isMusicPlaying = JSGSoundHelperClient.getRecord(SoundPositionedEnum.MAINMENU_MUSIC, new BlockPos(0, 0, 0)).isPlaying();
-        if (!isMusicPlaying && (tick - menuDisplayed) > 20*2 && JSGConfig.mainMenuConfig.playMusic) { // wait 2 seconds before first play
+        if (!isMusicPlaying && (tick - menuDisplayed) > 20 * 2 && JSGConfig.mainMenuConfig.playMusic) { // wait 2 seconds before first play
             playMusic(false); // reset it
             playMusic(true);
         }
-        if(!JSGConfig.mainMenuConfig.playMusic && isMusicPlaying)
+        if (!JSGConfig.mainMenuConfig.playMusic && isMusicPlaying)
             playMusic(false);
     }
 
@@ -95,13 +128,34 @@ public class GuiCustomMainMenu extends GuiScreen {
 
     public final ArrayList<GuiButton> updaterButtons = new ArrayList<>();
 
+    /*--@Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        int wheel = Mouse.getEventDWheel();
+
+        if (wheel != 0) {
+            GuiButton firstBtn = buttonList.get(getPreviousButton(2));
+            GuiButton lastBtn = buttonList.get(getNextButton(2));
+            int x = firstBtn.x;
+            int y = firstBtn.y;
+            int width = firstBtn.width;
+            int height = (lastBtn.x - firstBtn.x);
+            if (isPointInRegion(x, y, width, height, Mouse.getEventX(), Mouse.getEventY())) {
+                JSG.info("Lol: " + wheel);
+                if (wheel < 0) currentButton = getNextButton(1);
+                if (wheel > 0) currentButton = getPreviousButton(1);
+            }
+        }
+    }*/
+
     @Override
     public void initGui() {
         if (JSGConfig.devConfig.enableDevMode) {
-            UPDATER_RESULT = new GetUpdate.UpdateResult((JSGConfig.devConfig.t1 ? GetUpdate.EnumUpdateResult.ERROR : GetUpdate.EnumUpdateResult.NEWER_AVAILABLE), UPDATER_RESULT.newest);
+            UPDATER_RESULT = new GetUpdate.UpdateResult((JSGConfig.devConfig.t1 ? GetUpdate.EnumUpdateResult.ERROR : GetUpdate.EnumUpdateResult.NEWER_AVAILABLE), (JSGConfig.devConfig.t1 ? "Test error" : UPDATER_RESULT.response));
             updateChecked = false;
         }
         super.initGui();
+        createFadeIn();
         buttonList.clear();
         labelList.clear();
 
@@ -129,12 +183,6 @@ public class GuiCustomMainMenu extends GuiScreen {
         updaterButtons.add(new GuiButton(21, (PADDING / 2), 0, width, 20, update));
     }
 
-    private static int currentButton = 0;
-
-    private static final int BACKGROUND_CHANGE_ANIMATION_LENGTH = 80; //ticks
-    private static final int BACKGROUND_STAY_TIME = BACKGROUND_CHANGE_ANIMATION_LENGTH * 5; //ticks
-    private static long backgroundChangeStart = -BACKGROUND_CHANGE_ANIMATION_LENGTH;
-
     public int getButtonForDisplay(int offset) {
         if (offset > 0)
             return getNextButton(offset);
@@ -160,8 +208,9 @@ public class GuiCustomMainMenu extends GuiScreen {
     public EnumMainMenuGateType gateType = EnumMainMenuGateType.random();
 
     private long lastGateChange = 0;
-    public void updateGateType(){
-        if((tick - lastGateChange) > 30*20){
+
+    public void updateGateType() {
+        if (JSGConfig.mainMenuConfig.enableGateChanging && (tick - lastGateChange) > 30 * 20) {
             // Every 30 seconds
             lastGateChange = (long) tick;
             gateType = EnumMainMenuGateType.random();
@@ -172,8 +221,11 @@ public class GuiCustomMainMenu extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        tick = (float) JSGMinecraftHelper.getClientTickPrecise();
-        if (menuDisplayed == -1) menuDisplayed = (long) tick;
+        tick();
+        if (menuDisplayed == -1) {
+            menuDisplayed = (long) tick;
+            createFadeIn();
+        }
         updateNotificationRendered = ((UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.NEWER_AVAILABLE || UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.ERROR) && !updateChecked);
         updateMusic();
         updateGateType();
@@ -197,6 +249,33 @@ public class GuiCustomMainMenu extends GuiScreen {
                     guibutton.playPressSound(this.mc.getSoundHandler());
                     actionPerformed(guibutton);
                 }
+            }
+
+            // Clickable images/texts
+            int sizeXTauri = width / 10;
+            int sizeYTauri = (230 * sizeXTauri) / 411;
+            int sizeYMojang = (52 * sizeXTauri) / 300;
+            if(isPointInRegion(PADDING, height - PADDING - sizeYTauri - sizeYMojang - 8, sizeXTauri, sizeYTauri, mouseX, mouseY)){
+                openWebsiteToClient(GITHUB);
+            }
+            if(isPointInRegion(PADDING, height - PADDING - sizeYMojang, sizeXTauri, sizeYMojang, mouseX, mouseY)){
+                openWebsiteToClient(MINECRAFT_SITES);
+            }
+
+            // JSG text
+            int jsgSizeX = fontRenderer.getStringWidth(JSG_RUNNING_TEXT);
+            int jsgSizeY = 10;
+
+            // JSG Logo
+            int sizeXJSG = (int) (width / 2.33);
+            int sizeYJSG = (603 * sizeXJSG) / 1586;
+
+            int[] center = getCenterPos(sizeXJSG, sizeYJSG);
+            int x = (int) (center[0] * 0.25);
+            int y = (int) (center[1] * 0.5);
+
+            if(isPointInRegion(PADDING, PADDING, jsgSizeX, jsgSizeY, mouseX, mouseY) || isPointInRegion(x, y, sizeXJSG, sizeYJSG, mouseX, mouseY)){
+                openWebsiteToClient(WEBSITE);
             }
         }
     }
@@ -223,7 +302,7 @@ public class GuiCustomMainMenu extends GuiScreen {
                     this.mc.shutdown();
                     break;
                 case 4:
-                    openWebsiteToClient(WIKI_URL);
+                    openWebsiteToClient(WEBSITE);
                     break;
                 case 5:
                     this.mc.displayGuiScreen(new GuiModList(this));
@@ -297,9 +376,11 @@ public class GuiCustomMainMenu extends GuiScreen {
     /**
      * Used to draw background texture (panorama)
      */
+    private double backgroundScale = 1;
+    private int currentBackground = 0;
     public void drawBackground() {
 
-        int currentBackground = (int) (Math.floor((double) tick / BACKGROUND_STAY_TIME) % BACKGROUNDS_COUNT);
+        currentBackground = (int) (Math.floor(tick / BACKGROUND_STAY_TIME) % BACKGROUNDS_COUNT);
 
         double timeHere = tick % BACKGROUND_STAY_TIME;
         if (timeHere > (BACKGROUND_STAY_TIME - ((double) BACKGROUND_CHANGE_ANIMATION_LENGTH / 2))) {
@@ -311,10 +392,10 @@ public class GuiCustomMainMenu extends GuiScreen {
         float scale = 1f + (float) ((timeHere / BACKGROUND_STAY_TIME) * 0.2f);
 
         double coef = 0;
-        double current = (double) tick - backgroundChangeStart;
+        double current = tick - backgroundChangeStart;
         if (backgroundChangeStart != -1) {
             if (current <= BACKGROUND_CHANGE_ANIMATION_LENGTH)
-                coef = Math.sin((current / BACKGROUND_CHANGE_ANIMATION_LENGTH) * Math.PI);
+                coef = Math.min(Math.sin((current / BACKGROUND_CHANGE_ANIMATION_LENGTH) * Math.PI) * 1.1, 1);
             else
                 backgroundChangeStart = -1;
         }
@@ -323,6 +404,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         int[] center = getCenterPos(0, 0);
         GlStateManager.translate(center[0], center[1], 0);
         GlStateManager.scale(scale, scale, 1);
+        backgroundScale = scale;
         Minecraft.getMinecraft().getTextureManager().bindTexture(BACKGROUNDS.get(currentBackground));
         drawScaledCustomSizeModalRect(-(width / 2), -(height / 2), 0, 0, 1921, 1018, width, height, 1920, 1017);
         GlStateManager.popMatrix();
@@ -338,16 +420,24 @@ public class GuiCustomMainMenu extends GuiScreen {
     public void drawTitles() {
         if (JSGConfig.mainMenuConfig.debugMode) {
             int[] center = getCenterPos(0, 0);
+            center[1] -= 30;
             // Debug
-            fontRenderer.drawString("width: " + width, PADDING, center[1], 0xffffff);
-            fontRenderer.drawString("height: " + height, PADDING, center[1] + 10, 0xffffff);
-            fontRenderer.drawString("timeHere: " + (tick % BACKGROUND_STAY_TIME), PADDING, center[1] + 20, 0xffffff);
-            fontRenderer.drawString("time: " + (long) tick, PADDING, center[1] + 30, 0xffffff);
-            fontRenderer.drawString("currentButton: " + currentButton, PADDING, center[1] + 40, 0xffffff);
+            int i = 0;
+            fontRenderer.drawString("FPS: " + Minecraft.getDebugFPS(), PADDING, center[1] + (10 * (++i)), 0xffffff);
+            fontRenderer.drawString("width: " + width, PADDING, center[1] + (10 * (++i)), 0xffffff);
+            fontRenderer.drawString("height: " + height, PADDING, center[1] + (10 * (++i)), 0xffffff);
+            fontRenderer.drawString("time: " + String.format("%.4f", tick), PADDING, center[1] + (10 * (++i)), 0xffffff);
+            fontRenderer.drawString("timeHere: " + String.format("%.4f", (tick % BACKGROUND_STAY_TIME)), PADDING, center[1] + (10 * (++i)), 0xffffff);
+            fontRenderer.drawString("backgroundScale: " + String.format("%.4f", backgroundScale), PADDING, center[1] + (10 * (++i)), 0xffffff);
+            fontRenderer.drawString("backgroundChangeStart: " + backgroundChangeStart, PADDING, center[1] + (10 * (++i)), 0xffffff);
+            fontRenderer.drawString("currentBackground: " + currentBackground, PADDING, center[1] + (10 * (++i)), 0xffffff);
+            fontRenderer.drawString("gateType: " + gateType.toString(), PADDING, center[1] + (10 * (++i)), 0xffffff);
+            fontRenderer.drawString("currentButton: " + currentButton, PADDING, center[1] + (10 * (++i)), 0xffffff);
+            fontRenderer.drawString("updater: (Status: " + UPDATER_RESULT.result.toString() + "; Got: " + UPDATER_RESULT.response + ")", PADDING, center[1] + (10 * (++i)), 0xffffff);
         }
 
 
-        fontRenderer.drawString("Just Stargate Mod v" + JSG.MOD_VERSION.replaceAll(JSG.MC_VERSION + "-", ""), PADDING, PADDING, 0xffffff);
+        fontRenderer.drawString(JSG_RUNNING_TEXT, PADDING, PADDING, 0xffffff);
         fontRenderer.drawString("Running on Minecraft Java " + JSG.MC_VERSION, PADDING, PADDING + 10, 0xffffff);
 
 
@@ -436,7 +526,7 @@ public class GuiCustomMainMenu extends GuiScreen {
             if (!error) {
                 drawCenteredString(fontRenderer, "New update is available!", xCenter, y + 20, 0x404040, false);
 
-                drawCenteredString(fontRenderer, "You can update to version " + UPDATER_RESULT.newest, xCenter, y + 50, 0x404040, false);
+                drawCenteredString(fontRenderer, "You can update to version " + UPDATER_RESULT.response, xCenter, y + 50, 0x404040, false);
                 drawCenteredString(fontRenderer, "It is highly recommended to update to this version!", xCenter, y + 60, 0x404040, false);
                 drawCenteredString(fontRenderer, "Some dangerous bugs should be fixed in this version.", xCenter, y + 70, 0x404040, false);
 
@@ -445,6 +535,7 @@ public class GuiCustomMainMenu extends GuiScreen {
                 updaterButtons.get(0).drawButton(mc, mouseX, mouseY, 0);
             } else {
                 drawCenteredString(fontRenderer, "Error while checking update!", xCenter, y + 20, 0x404040, false);
+                drawCenteredString(fontRenderer, UPDATER_RESULT.response, xCenter, y + 30, 0x404040, false);
 
                 drawCenteredString(fontRenderer, "Can not get response from the server!", xCenter, y + 50, 0x404040, false);
                 drawCenteredString(fontRenderer, "Please check your internet connection.", xCenter, y + 60, 0x404040, false);

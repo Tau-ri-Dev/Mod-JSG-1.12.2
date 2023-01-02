@@ -45,7 +45,6 @@ import static tauri.dev.jsg.block.JSGBlocks.BLOCKS;
 @SuppressWarnings({"rawtypes", "unused", "unchecked"})
 public class ProxyClient implements IProxy {
     public void preInit(FMLPreInitializationEvent event) {
-        //setWindowIcon();
         Display.setTitle(JSG.MOD_NAME + " | " + JSG.MC_VERSION + " | " + JSG.MOD_VERSION.replaceAll(JSG.MC_VERSION + "-", ""));
         registerRenderers();
         registerFluidRenderers();

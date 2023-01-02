@@ -40,7 +40,7 @@ public enum EnumMainMenuGateType {
         }
     }
 
-    public void renderGate(int x, int y, float size, float tick) {
+    public void renderGate(int x, int y, float size, double tick) {
         GlStateManager.pushMatrix();
 
         GlStateManager.disableLighting();
@@ -73,11 +73,11 @@ public enum EnumMainMenuGateType {
         GlStateManager.disableAlpha();
     }
 
-    private void renderMWGate(float tick) {
+    private void renderMWGate(double tick) {
         // Ring
         GlStateManager.pushMatrix();
         GlStateManager.translate(StargateMilkyWayRenderer.RING_LOC.x, StargateMilkyWayRenderer.RING_LOC.z, StargateMilkyWayRenderer.RING_LOC.y);
-        GlStateManager.rotate(-(tick * (A_ANGLE_PER_TICK/2)) % 360, 0, 0, 1);
+        GlStateManager.rotate((float) (-(tick * (A_ANGLE_PER_TICK/2)) % 360), 0, 0, 1);
         GlStateManager.translate(-StargateMilkyWayRenderer.RING_LOC.x, -StargateMilkyWayRenderer.RING_LOC.z, -StargateMilkyWayRenderer.RING_LOC.y);
 
         ElementEnum.MILKYWAY_RING.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
@@ -107,11 +107,11 @@ public enum EnumMainMenuGateType {
         GlStateManager.popMatrix();
     }
 
-    private void renderUNIGate(float tick) {
+    private void renderUNIGate(double tick) {
         GlStateManager.pushMatrix();
         GlStateManager.scale(1.14f, 1.14f, 1.14f);
         GlStateManager.pushMatrix();
-        GlStateManager.rotate(-(tick * (A_ANGLE_PER_TICK/2)) % 360, 0, 0, 1);
+        GlStateManager.rotate((float) (-(tick * (A_ANGLE_PER_TICK/2)) % 360), 0, 0, 1);
 
         // Gate
         GlStateManager.pushMatrix();
@@ -163,7 +163,7 @@ public enum EnumMainMenuGateType {
         GlStateManager.popMatrix();
     }
 
-    private void renderPEGGate(float tick) {
+    private void renderPEGGate(double tick) {
         // Ring
         GlStateManager.pushMatrix();
         ElementEnum.PEGASUS_RING.bindTextureAndRender(BiomeOverlayEnum.NORMAL);

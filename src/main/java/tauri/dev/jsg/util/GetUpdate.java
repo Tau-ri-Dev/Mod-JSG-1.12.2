@@ -18,16 +18,17 @@ public class GetUpdate {
     public enum EnumUpdateResult{
         UP_TO_DATE,
         NEWER_AVAILABLE,
-        ERROR
+        ERROR,
+        DISABLED
     }
 
     public static class UpdateResult {
         public final EnumUpdateResult result;
-        public final String newest;
+        public final String response;
 
         public UpdateResult(EnumUpdateResult result, String newestVersion){
             this.result = result;
-            this.newest = newestVersion;
+            this.response = newestVersion;
         }
     }
 
@@ -41,11 +42,12 @@ public class GetUpdate {
 
     public static UpdateResult checkForUpdate(){
         String currentVersion = JSG.MOD_VERSION.replace(JSG.MC_VERSION + "-", "");
-        if(!JSGConfig.enableAutoUpdater) return new UpdateResult(EnumUpdateResult.UP_TO_DATE, currentVersion);
-        String[] got = getSiteContent(GET_NAME_URL).split("-");
-        if(got.length < 3) return new UpdateResult(EnumUpdateResult.UP_TO_DATE, currentVersion);
+        if(!JSGConfig.enableAutoUpdater) return new UpdateResult(EnumUpdateResult.DISABLED, currentVersion);
+        String webData = getSiteContent(GET_NAME_URL);
+        if(webData.equalsIgnoreCase(ERROR_STRING)) return new UpdateResult(EnumUpdateResult.ERROR, "Exit code: 1");
+        String[] got = webData.split("-");
+        if(got.length < 3) return new UpdateResult(EnumUpdateResult.ERROR, "Exit code: 2");
         String gotVersion = got[2];
-        if(gotVersion.equals(ERROR_STRING)) return new UpdateResult(EnumUpdateResult.ERROR, ERROR_STRING);
 
         String[] currentVersionSplit = currentVersion.split("\\.");
         String[] gotVersionSplit = gotVersion.split("\\.");
@@ -59,14 +61,15 @@ public class GetUpdate {
                 }
 
                 if (parseInt(currentVersionSplit[i]) > parseInt(gotVersionSplit[i])){
-                    return new UpdateResult(EnumUpdateResult.UP_TO_DATE, currentVersion);
+                    return new UpdateResult(EnumUpdateResult.UP_TO_DATE, gotVersion);
                 }
             }
         }
-        catch(Exception ignored){
-            return new UpdateResult(EnumUpdateResult.ERROR, ERROR_STRING);
+        catch(Exception e){
+            JSG.warn("Error while checking for update!", e);
+            return new UpdateResult(EnumUpdateResult.ERROR, "Exit code: 3");
         }
-        return new UpdateResult(EnumUpdateResult.UP_TO_DATE, currentVersion);
+        return new UpdateResult(EnumUpdateResult.UP_TO_DATE, gotVersion);
     }
 
     public static void openWebsiteToClient(String url){

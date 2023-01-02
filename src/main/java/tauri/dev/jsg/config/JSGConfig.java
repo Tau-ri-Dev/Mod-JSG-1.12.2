@@ -803,6 +803,12 @@ public class JSGConfig {
 
         @Name("Play music in main menu")
         public boolean playMusic = true;
+
+        @Name("Enable sync with minecraft ticks")
+        public boolean syncEnabled = false;
+
+        @Name("Enable changing gate type")
+        public boolean enableGateChanging = true;
     }
 
     public static class IntegrationsConfig {
