@@ -208,7 +208,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         updateNotificationRendered = ((UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.NEWER_AVAILABLE || UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.ERROR) && !updateChecked);
         updateMusic();
         updateGateType();
-        drawBackground();
+        drawBackground(mouseX, mouseY);
         drawButtons(mouseX, mouseY);
         drawTitles();
         drawFg(mouseX, mouseY);
@@ -358,7 +358,7 @@ public class GuiCustomMainMenu extends GuiScreen {
     private double backgroundScale = 1;
     private int currentBackground = 0;
 
-    public void drawBackground() {
+    public void drawBackground(int mouseX, int mouseY) {
 
         currentBackground = (int) (Math.floor(tick / BACKGROUND_STAY_TIME) % BACKGROUNDS_COUNT);
 

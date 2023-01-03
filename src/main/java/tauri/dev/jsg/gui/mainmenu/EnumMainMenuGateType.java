@@ -54,9 +54,6 @@ public enum EnumMainMenuGateType {
         GlStateManager.scale(size, -size, size);
         GlStateManager.disableRescaleNormal();
 
-        JSGConfig.rotateToConfig();
-        JSGConfig.rescaleToConfig();
-
         switch (this) {
             default:
                 break;
