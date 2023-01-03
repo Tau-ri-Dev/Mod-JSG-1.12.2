@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.model.ModelLoader;
 import tauri.dev.jsg.loader.texture.TextureLoader;
@@ -52,6 +53,9 @@ public enum EnumMainMenuGateType {
         GlStateManager.translate(x, y, 0);
         GlStateManager.scale(size, -size, size);
         GlStateManager.disableRescaleNormal();
+
+        JSGConfig.rotateToConfig();
+        JSGConfig.rescaleToConfig();
 
         switch (this) {
             default:

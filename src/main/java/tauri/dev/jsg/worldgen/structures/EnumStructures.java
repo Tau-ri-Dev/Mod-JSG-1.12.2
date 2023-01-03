@@ -38,7 +38,7 @@ public enum EnumStructures {
                 add("desert");
                 add("mesa");
             }}, 35, Rotation.CLOCKWISE_90, 0.7, 0.8, EnumGenerationHeight.MIDDLE),
-    MOSSY_MW("sg_mossy_milkyway", 1, true, false, SymbolTypeEnum.MILKYWAY, 13, 13, 0, true, JSGConfig.stargateGeneratorConfig.stargateRandomGeneratorEnabled, JSGConfig.stargateGeneratorConfig.stargateRGChanceOverworld, new OverworldProcessor(),
+    MOSSY_MW("sg_mossy_milkyway", 0, true, false, SymbolTypeEnum.MILKYWAY, 13, 13, 0, true, JSGConfig.stargateGeneratorConfig.stargateRandomGeneratorEnabled, JSGConfig.stargateGeneratorConfig.stargateRGChanceOverworld, new OverworldProcessor(),
             new ArrayList<Block>() {{
                 add(Blocks.GRASS);
                 add(Blocks.DIRT);
@@ -129,6 +129,15 @@ public enum EnumStructures {
                 add(Blocks.SAND);
                 add(Blocks.GRASS);
             }}, null, 35, Rotation.NONE, 0.88, 0.8, EnumGenerationHeight.LOW),
+
+    ANCIENT_TOTEM("ancient_totem", 0, false, false, null, 3, 3, 0, false, JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled, 0.0008f, null,
+            new ArrayList<Block>(){{
+                add(Blocks.GRASS);
+                add(Blocks.SAND);
+                add(Blocks.STONE);
+                add(Blocks.DIRT);
+                add(Blocks.GRAVEL);
+            }}, null, 5, Rotation.NONE, 0.3, 0.3, EnumGenerationHeight.MIDDLE),
     ;
 
     public final String name;

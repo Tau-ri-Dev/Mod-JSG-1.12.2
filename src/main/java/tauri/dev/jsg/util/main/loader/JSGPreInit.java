@@ -23,15 +23,16 @@ public class JSGPreInit {
         JSG.modConfigDir = event.getModConfigurationDirectory();
 
         // mod file path - used in updater
-        File source = event.getSourceFile();
-        JSG.clientModPath = source.getAbsolutePath();
+        JSG.clientModPath = event.getSourceFile();
+        JSG.modsDirectory = event.getSourceFile().getParentFile();
 
         if(JSGConfig.avConfig.enableCustomSoundCategory)
             JSG.JSG_SOUNDS = JSGSoundCategory.add("jsg");
         else
             JSG.JSG_SOUNDS = SoundCategory.BLOCKS;
 
-        JSG.info("Started loading JSG mod in " + JSG.clientModPath);
+        JSG.info("Started loading JSG mod in " + JSG.clientModPath.getAbsolutePath());
+        JSG.info("Mods directory: " + JSG.modsDirectory.getAbsolutePath());
         JSG.info("Loading JSG version " + JSG.MOD_VERSION);
 
         JSGPacketHandler.registerPackets();

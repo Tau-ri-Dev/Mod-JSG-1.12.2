@@ -168,7 +168,14 @@ public class JSGStructure extends WorldGenerator {
                                     storage.receiveEnergy(((int) (storage.getMaxEnergyStored() * 0.5)), false);
                             }
                             gateContainer.insertItem(4, capacitor, false); // insert capacitor
-                            gateContainer.insertItem(0, new ItemStack(JSGItems.CRYSTAL_GLYPH_MILKYWAY), false); // insert glyph crystal for mw gates
+
+                            if(isMilkyWayGate)
+                                gateContainer.insertItem(0, new ItemStack(JSGItems.CRYSTAL_GLYPH_MILKYWAY), false);
+                            if(isPegasusGate)
+                                gateContainer.insertItem(0, new ItemStack(JSGItems.CRYSTAL_GLYPH_PEGASUS), false);
+                            if(isUniverseGate)
+                                gateContainer.insertItem(0, new ItemStack(JSGItems.CRYSTAL_GLYPH_UNIVERSE), false);
+
                             if (hasUpgrade)
                                 gateContainer.insertItem(1, new ItemStack(JSGItems.CRYSTAL_GLYPH_STARGATE), false);
                         }
@@ -249,6 +256,7 @@ public class JSGStructure extends WorldGenerator {
                 case "loot_nether":
                 case "loot_zpm":
                 case "loot_end":
+                case "loot_obelisk":
                     lootPos = dataPos.down();
                     generateLoot(worldToSpawn, lootPos, random, name);
                     worldToSpawn.setBlockToAir(dataPos);

@@ -1,4 +1,4 @@
-package tauri.dev.jsg.util;
+package tauri.dev.jsg.util.updater;
 
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
@@ -15,7 +15,7 @@ import java.util.Map;
 import static java.lang.Integer.parseInt;
 
 public class GetUpdate {
-    public enum EnumUpdateResult{
+    public enum EnumUpdateResult {
         UP_TO_DATE,
         NEWER_AVAILABLE,
         ERROR,
@@ -23,10 +23,10 @@ public class GetUpdate {
     }
 
     public static class UpdateResult {
-        public final EnumUpdateResult result;
+        public EnumUpdateResult result;
         public final String response;
 
-        public UpdateResult(EnumUpdateResult result, String newestVersion){
+        public UpdateResult(EnumUpdateResult result, String newestVersion) {
             this.result = result;
             this.response = newestVersion;
         }
@@ -36,17 +36,18 @@ public class GetUpdate {
 
     public static final String URL_BASE = "https://api.justsgmod.eu/?api=curseforge&version=" + JSG.MC_VERSION;
 
-    public static final String DOWNLOAD_URL_USER = "https://mod.justsgmod.eu/";
-
     public static final String GET_NAME_URL = URL_BASE + "&t=name";
+    public static final String GET_DOWNLOAD_URL = URL_BASE + "&t=url";
 
-    public static UpdateResult checkForUpdate(){
+    public static final String DOWNLOAD_URL_USER = getSiteContent(GET_DOWNLOAD_URL);
+
+    public static UpdateResult checkForUpdate() {
         String currentVersion = JSG.MOD_VERSION.replace(JSG.MC_VERSION + "-", "");
-        if(!JSGConfig.enableAutoUpdater) return new UpdateResult(EnumUpdateResult.DISABLED, currentVersion);
+        if (!JSGConfig.enableAutoUpdater) return new UpdateResult(EnumUpdateResult.DISABLED, currentVersion);
         String webData = getSiteContent(GET_NAME_URL);
-        if(webData.equalsIgnoreCase(ERROR_STRING)) return new UpdateResult(EnumUpdateResult.ERROR, "Exit code: 1");
+        if (webData.equalsIgnoreCase(ERROR_STRING)) return new UpdateResult(EnumUpdateResult.ERROR, "Exit code: 1");
         String[] got = webData.split("-");
-        if(got.length < 3) return new UpdateResult(EnumUpdateResult.ERROR, "Exit code: 2");
+        if (got.length < 3) return new UpdateResult(EnumUpdateResult.ERROR, "Exit code: 2");
         String gotVersion = got[2];
 
         String[] currentVersionSplit = currentVersion.split("\\.");
@@ -56,23 +57,22 @@ public class GetUpdate {
                 if (gotVersionSplit.length < i + 1 || currentVersionSplit.length < i + 1)
                     continue;
 
-                if (parseInt(currentVersionSplit[i]) < parseInt(gotVersionSplit[i])){
+                if (parseInt(currentVersionSplit[i]) < parseInt(gotVersionSplit[i])) {
                     return new UpdateResult(EnumUpdateResult.NEWER_AVAILABLE, gotVersion);
                 }
 
-                if (parseInt(currentVersionSplit[i]) > parseInt(gotVersionSplit[i])){
+                if (parseInt(currentVersionSplit[i]) > parseInt(gotVersionSplit[i])) {
                     return new UpdateResult(EnumUpdateResult.UP_TO_DATE, gotVersion);
                 }
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             JSG.warn("Error while checking for update!", e);
             return new UpdateResult(EnumUpdateResult.ERROR, "Exit code: 3");
         }
         return new UpdateResult(EnumUpdateResult.UP_TO_DATE, gotVersion);
     }
 
-    public static void openWebsiteToClient(String url){
+    public static void openWebsiteToClient(String url) {
         try {
             Class<?> ocClass = Class.forName("java.awt.Desktop");
             Object object = ocClass.getMethod("getDesktop").invoke(null);
@@ -82,7 +82,7 @@ public class GetUpdate {
         }
     }
 
-    private static String getSiteContent(String link) {
+    public static String getSiteContent(String link) {
         URL Url;
         try {
             Url = new URL(link);
@@ -95,7 +95,7 @@ public class GetUpdate {
         } catch (IOException e1) {
             return ERROR_STRING;
         }
-        if(Http == null) return ERROR_STRING;
+        if (Http == null) return ERROR_STRING;
         Map<String, List<String>> Header = Http.getHeaderFields();
 
         try {
@@ -115,8 +115,7 @@ public class GetUpdate {
                     Header = Http.getHeaderFields();
                 }
             }
-        }
-        catch(Exception ignored){
+        } catch (Exception ignored) {
             return ERROR_STRING;
         }
 

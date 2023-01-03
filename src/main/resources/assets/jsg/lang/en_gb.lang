@@ -380,7 +380,7 @@ tile.jsg.transportrings_controller_goauld_block.name=Transport rings controller
 tile.jsg.transportrings_controller_block.not_linked=Controller not linked
 
 # rings
-tile.jsg.transportrings_goauld_block.name=Transport rings
+tile.jsg.transportrings_goauld_block.name=Transport rings (Goa'uld)
 tile.jsg.transportrings_ori_block.name=Transport rings (Ori)
 tile.jsg.transportrings_ancient_block.name=Transport rings (Ancient)
 

@@ -39,6 +39,7 @@ public class OreWashingTile extends AbstractMachineTile {
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             markDirty();
+            sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
     protected final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(OreWashingBlock.MAX_ENERGY, OreWashingBlock.MAX_ENERGY_TRANSFER) {
@@ -143,6 +144,7 @@ public class OreWashingTile extends AbstractMachineTile {
                 rendererState = (OreWashingRendererState) state;
                 this.machineProgress = rendererState.machineProgress;
                 this.isWorking = rendererState.isWorking;
+                markDirty();
                 break;
         }
     }

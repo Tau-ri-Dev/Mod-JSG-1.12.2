@@ -10,14 +10,13 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.GuiModList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Mouse;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.gui.element.IconButton;
 import tauri.dev.jsg.sound.JSGSoundHelperClient;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
-import tauri.dev.jsg.util.GetUpdate;
 import tauri.dev.jsg.util.JSGMinecraftHelper;
+import tauri.dev.jsg.util.updater.GetUpdate;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -27,8 +26,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static tauri.dev.jsg.gui.element.GuiHelper.isPointInRegion;
-import static tauri.dev.jsg.util.GetUpdate.DOWNLOAD_URL_USER;
-import static tauri.dev.jsg.util.GetUpdate.openWebsiteToClient;
+import static tauri.dev.jsg.util.updater.GetUpdate.DOWNLOAD_URL_USER;
+import static tauri.dev.jsg.util.updater.GetUpdate.openWebsiteToClient;
 
 @SideOnly(Side.CLIENT)
 public class GuiCustomMainMenu extends GuiScreen {
@@ -43,14 +42,13 @@ public class GuiCustomMainMenu extends GuiScreen {
     // Stores the larges number of FPS
     private static int bestFPS = 0;
 
-    public void tick(){
+    public void tick() {
         // If sync is enabled then sync local ticks with mc ticks
-        if(JSGConfig.mainMenuConfig.syncEnabled) {
+        if (JSGConfig.mainMenuConfig.syncEnabled) {
             tick = JSGMinecraftHelper.getClientTickPrecise();
-        }
-        else {
+        } else {
             int currentFPS = Minecraft.getDebugFPS();
-            if(currentFPS > bestFPS) bestFPS = currentFPS;
+            if (currentFPS > bestFPS) bestFPS = Math.min(currentFPS, 30);
             tick += (bestFPS > 0 ? ((30D / (double) bestFPS) * (20D / (double) bestFPS)) : 1D);
         }
     }
@@ -58,6 +56,7 @@ public class GuiCustomMainMenu extends GuiScreen {
     public void createFadeIn() {
         backgroundChangeStart = (long) (tick - (BACKGROUND_CHANGE_ANIMATION_LENGTH / 3));
     }
+
     public GuiCustomMainMenu() {
         tick = JSGMinecraftHelper.getClientTickPrecise();
         createFadeIn();
@@ -127,26 +126,6 @@ public class GuiCustomMainMenu extends GuiScreen {
     }
 
     public final ArrayList<GuiButton> updaterButtons = new ArrayList<>();
-
-    /*--@Override
-    public void handleMouseInput() throws IOException {
-        super.handleMouseInput();
-        int wheel = Mouse.getEventDWheel();
-
-        if (wheel != 0) {
-            GuiButton firstBtn = buttonList.get(getPreviousButton(2));
-            GuiButton lastBtn = buttonList.get(getNextButton(2));
-            int x = firstBtn.x;
-            int y = firstBtn.y;
-            int width = firstBtn.width;
-            int height = (lastBtn.x - firstBtn.x);
-            if (isPointInRegion(x, y, width, height, Mouse.getEventX(), Mouse.getEventY())) {
-                JSG.info("Lol: " + wheel);
-                if (wheel < 0) currentButton = getNextButton(1);
-                if (wheel > 0) currentButton = getPreviousButton(1);
-            }
-        }
-    }*/
 
     @Override
     public void initGui() {
@@ -255,10 +234,10 @@ public class GuiCustomMainMenu extends GuiScreen {
             int sizeXTauri = width / 10;
             int sizeYTauri = (230 * sizeXTauri) / 411;
             int sizeYMojang = (52 * sizeXTauri) / 300;
-            if(isPointInRegion(PADDING, height - PADDING - sizeYTauri - sizeYMojang - 8, sizeXTauri, sizeYTauri, mouseX, mouseY)){
+            if (isPointInRegion(PADDING, height - PADDING - sizeYTauri - sizeYMojang - 8, sizeXTauri, sizeYTauri, mouseX, mouseY)) {
                 openWebsiteToClient(GITHUB);
             }
-            if(isPointInRegion(PADDING, height - PADDING - sizeYMojang, sizeXTauri, sizeYMojang, mouseX, mouseY)){
+            if (isPointInRegion(PADDING, height - PADDING - sizeYMojang, sizeXTauri, sizeYMojang, mouseX, mouseY)) {
                 openWebsiteToClient(MINECRAFT_SITES);
             }
 
@@ -274,7 +253,7 @@ public class GuiCustomMainMenu extends GuiScreen {
             int x = (int) (center[0] * 0.25);
             int y = (int) (center[1] * 0.5);
 
-            if(isPointInRegion(PADDING, PADDING, jsgSizeX, jsgSizeY, mouseX, mouseY) || isPointInRegion(x, y, sizeXJSG, sizeYJSG, mouseX, mouseY)){
+            if (isPointInRegion(PADDING, PADDING, jsgSizeX, jsgSizeY, mouseX, mouseY) || isPointInRegion(x, y, sizeXJSG, sizeYJSG, mouseX, mouseY)) {
                 openWebsiteToClient(WEBSITE);
             }
         }
@@ -378,6 +357,7 @@ public class GuiCustomMainMenu extends GuiScreen {
      */
     private double backgroundScale = 1;
     private int currentBackground = 0;
+
     public void drawBackground() {
 
         currentBackground = (int) (Math.floor(tick / BACKGROUND_STAY_TIME) % BACKGROUNDS_COUNT);
@@ -532,6 +512,9 @@ public class GuiCustomMainMenu extends GuiScreen {
 
                 updaterButtons.get(0).x = xCenter - updaterButtons.get(0).width - (PADDING / 2);
                 updaterButtons.get(0).enabled = true;
+                updaterButtons.get(1).enabled = true;
+                updaterButtons.get(0).visible = true;
+                updaterButtons.get(1).visible = true;
                 updaterButtons.get(0).drawButton(mc, mouseX, mouseY, 0);
             } else {
                 drawCenteredString(fontRenderer, "Error while checking update!", xCenter, y + 20, 0x404040, false);
@@ -540,9 +523,11 @@ public class GuiCustomMainMenu extends GuiScreen {
                 drawCenteredString(fontRenderer, "Can not get response from the server!", xCenter, y + 50, 0x404040, false);
                 drawCenteredString(fontRenderer, "Please check your internet connection.", xCenter, y + 60, 0x404040, false);
                 updaterButtons.get(0).enabled = false;
+                updaterButtons.get(1).enabled = true;
+                updaterButtons.get(0).visible = false;
+                updaterButtons.get(1).visible = true;
             }
 
-            updaterButtons.get(1).enabled = true;
             updaterButtons.get(1).x = xCenter + (PADDING / 2);
             if (error)
                 updaterButtons.get(1).x = xCenter - (updaterButtons.get(1).width / 2);

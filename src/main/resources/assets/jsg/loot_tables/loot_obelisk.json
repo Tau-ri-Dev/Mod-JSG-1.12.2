@@ -1,0 +1,40 @@
+{
+  "pools": [
+    {
+      "name": "main",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "jsg:zpm",
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "jsg:trinium_ingot",
+          "weight": 15
+        },
+        {
+          "type": "item",
+          "name": "jsg:titanium_ingot",
+          "weight": 15
+        },
+        {
+          "type": "item",
+          "name": "jsg:capacitor_block",
+          "weight": 15
+        },
+        {
+          "type": "item",
+          "name": "minecraft:web",
+          "weight": 35
+        },
+        {
+          "type": "item",
+          "name": "minecraft:cobblestone",
+          "weight": 15
+        }
+      ]
+    }
+  ]
+}

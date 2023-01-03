@@ -22,6 +22,7 @@ public class ThermalIntegration {
 		ThermalExpansionHelper.addBrewerRecipe(defaultEnergy*3, new ItemStack(Items.DYE, 1, 4), new FluidStack(JSGFluids.SILICON_MOLTEN_BLACK, oneIngot/5), new FluidStack(JSGFluids.SILICON_MOLTEN_BLUE, oneIngot/4));
 		ThermalExpansionHelper.addBrewerRecipe(defaultEnergy*3, new ItemStack(Items.ENDER_PEARL), new FluidStack(JSGFluids.SILICON_MOLTEN_BLACK, oneIngot/5*4), new FluidStack(JSGFluids.SILICON_MOLTEN_ENDER, oneIngot));
 		ThermalExpansionHelper.addBrewerRecipe(defaultEnergy*3, new ItemStack(Items.GLOWSTONE_DUST), new FluidStack(JSGFluids.SILICON_MOLTEN_BLACK, oneIngot/5), new FluidStack(JSGFluids.SILICON_MOLTEN_YELLOW, oneIngot/4));
+		ThermalExpansionHelper.addBrewerRecipe(defaultEnergy*3, new ItemStack(Items.ENDER_PEARL), new FluidStack(JSGFluids.SILICON_MOLTEN_BLACK, oneIngot/5*4), new FluidStack(JSGFluids.SILICON_MOLTEN_PEGASUS, oneIngot));
 		ThermalExpansionHelper.addRefineryRecipe(defaultEnergy, new FluidStack(JSGFluids.SILICON_MOLTEN_BLACK, oneIngot/4), new FluidStack(JSGFluids.SILICON_MOLTEN_WHITE, oneIngot/4), ItemStack.EMPTY);
 
 		

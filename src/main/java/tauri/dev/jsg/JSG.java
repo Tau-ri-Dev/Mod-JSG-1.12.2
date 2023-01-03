@@ -48,7 +48,8 @@ public class JSG {
     public static Logger logger;
     public static File modConfigDir;
     public static OCWrapperInterface ocWrapper;
-    public static String clientModPath;
+    public static File clientModPath;
+    public static File modsDirectory;
 
     // --------------------------------------------
     // PROXY
