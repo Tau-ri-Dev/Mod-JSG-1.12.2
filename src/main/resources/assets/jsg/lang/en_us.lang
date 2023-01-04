@@ -18,16 +18,16 @@ soundCategory.jsg=Just Stargate Mod
 advancement.machines.title=Some gears and screws
 advancement.machines.desc=Category full of machinery stuff
 
-advancement.wormhole_go.title=What wormhole? And why worm?
+advancement.wormhole_go.title=What's a wormhole? And why a worm?
 advancement.wormhole_go.desc=Enter event Horizon of a Stargate
 
 advancement.merged_orlin.title=You're going to need a new toaster
-advancement.merged_orlin.desc=Build a Orlin´s stargate
+advancement.merged_orlin.desc=Build Orlin´s stargate
 
 advancement.merged_milkyway.title=Pyramid with the sun directly above it
 advancement.merged_milkyway.desc=Build a Milky Way stargate
 
-advancement.merged_pegasus.title=Jumper is not included
+advancement.merged_pegasus.title=Jumper not included (TM)
 advancement.merged_pegasus.desc=Build a Pegasus stargate
 
 advancement.merged_universe.title=Ancient, in both meanings
@@ -36,7 +36,7 @@ advancement.merged_universe.desc=Build Universe stargate
 advancement.chevron_seven_locked.title=Chevron 7 locked!
 advancement.chevron_seven_locked.desc=Dial existing 7-symbols address
 
-advancement.chevron_eight_locked.title=Address is not incorrect, but incomplete.
+advancement.chevron_eight_locked.title=Your address is not incorrect, but incomplete.
 advancement.chevron_eight_locked.desc=Dial existing 8-symbols address
 
 advancement.chevron_nine_locked.title=Several billion light years from home
@@ -51,7 +51,7 @@ advancement.gdo_used.desc=Use GDO to send code
 advancement.kawoosh_cremation.title=Escaping Hadante
 advancement.kawoosh_cremation.desc=Experience Kawoosh cremation on yourself
 
-advancement.first_zpm.title=What? ZPM, he is Canadian
+advancement.first_zpm.title=What? Zed-PM, he's Canadian
 advancement.first_zpm.desc=Obtain a Zero Point Module
 
 advancement.three_zpms.title=I can't believe my eyes: Three ZPMs
@@ -108,10 +108,10 @@ advancement.pcb.desc=Craft a PCB Fabricator
 advancement.ore_washing.title=Purifying ores
 advancement.ore_washing.desc=Craft an Ore Washing Machine
 
-advancement.chemicals.title=Is it Janus secret lab?
+advancement.chemicals.title=Is it Janus' secret lab?
 advancement.chemicals.desc=Craft an Ancient Chemical Lab
 
-advancement.refined_naquadah.title=Now that's a HOT stuff
+advancement.refined_naquadah.title=Now that's HOT stuff
 advancement.refined_naquadah.desc=Obtain a Refined Liquid Naquadah
 
 advancement.myst_page.title=Abydos Cartouche
@@ -454,8 +454,8 @@ commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim=X] [map=Y] [id=Z]
 commands.sgquery.number_expected=Number expected
 commands.sgquery.no_map=No such map
 commands.sgquery.stargates=Stargates %s
-commands.sgquery.wrong_id=Wrong ID or not given any
-commands.sgquery.wrong_map=Wrong map or not given any
+commands.sgquery.wrong_id=Wrong ID or no ID given
+commands.sgquery.wrong_map=Wrong map or no map given
 commands.sgquery.wrong_sender=Wrong sender (not a player)
 commands.sgquery.wrong_quantity=Wrong quantity of pages given
 commands.sgquery.giving_page=Giving page to %s
