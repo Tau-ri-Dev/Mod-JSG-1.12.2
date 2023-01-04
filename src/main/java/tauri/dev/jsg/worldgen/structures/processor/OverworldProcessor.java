@@ -1,4 +1,4 @@
-package tauri.dev.jsg.worldgen.structures.stargate.processor;
+package tauri.dev.jsg.worldgen.structures.processor;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.ITemplateProcessor;
 import net.minecraft.world.gen.structure.template.Template.BlockInfo;
+import tauri.dev.jsg.block.JSGBlock;
 import tauri.dev.jsg.block.dialhomedevice.DHDAbstractBlock;
 import tauri.dev.jsg.block.stargate.StargateAbstractBaseBlock;
 import tauri.dev.jsg.block.stargate.StargateAbstractMemberBlock;
@@ -26,10 +27,12 @@ public class OverworldProcessor implements ITemplateProcessor {
                 || blockToPlace instanceof StargateAbstractMemberBlock
                 || blockToPlace instanceof DHDAbstractBlock
                 || blockToPlace instanceof BlockChest
-                || blockToPlace instanceof BlockStructure)
+                || blockToPlace instanceof BlockStructure
+                || blockToPlace instanceof JSGBlock
+        )
             return blockInfoIn;
 
-        if (blockToPlace != Blocks.STONEBRICK && world.isAirBlock(pos.down()))
+        if (blockToPlace != Blocks.STONEBRICK && blockToPlace != Blocks.STONE_BRICK_STAIRS && world.isAirBlock(pos.down()))
             return null;
 
         if (blockToPlace != Blocks.AIR && blockInWorldState.getBlock().isLeaves(blockInWorldState, world, pos))

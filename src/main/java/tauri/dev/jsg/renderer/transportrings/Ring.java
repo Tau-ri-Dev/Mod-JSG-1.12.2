@@ -1,11 +1,13 @@
 package tauri.dev.jsg.renderer.transportrings;
 
 import io.netty.buffer.ByteBuf;
-import tauri.dev.jsg.loader.ElementEnum;
-import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
+import tauri.dev.jsg.loader.ElementEnum;
+import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
+import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 
 /**
  * Contains single instance of a transport ring
@@ -33,7 +35,7 @@ public class Ring {
         this.fromBytes(buf);
     }
 
-    public void toBytes(ByteBuf buf){
+    public void toBytes(ByteBuf buf) {
         buf.writeInt(index);
         buf.writeBoolean(shouldRender);
         buf.writeBoolean(shouldAnimate);
@@ -43,7 +45,7 @@ public class Ring {
         buf.writeDouble(yMax);
     }
 
-    public void fromBytes(ByteBuf buf){
+    public void fromBytes(ByteBuf buf) {
         index = buf.readInt();
         shouldRender = buf.readBoolean();
         shouldAnimate = buf.readBoolean();
@@ -53,20 +55,23 @@ public class Ring {
         yMax = buf.readDouble();
     }
 
-    public void render(double partialTicks, ElementEnum type, int distance) {
-        if(world == null) return;
+    public void render(double partialTicks, ElementEnum type, int distance, float addToYMax) {
+        if (world == null) return;
         if (distance >= 0) {
-            yMax = (distance * 2) - index + 1.5 + 4;
+            yMax = (distance * 2) - index + 1.5 + addToYMax;
         } else {
-            yMax = (distance * 2) + index - (1.5 * 2) - 2;
+            yMax = (distance * 2) + index - (1.5 * 2) - addToYMax;
         }
-        if (shouldRender) {
+
+        if (shouldRender || config.getOption(TransportRingsAbstractTile.ConfigOptions.ENABLE_NONACTIVE_RENDER.id).getBooleanValue()) {
+            double y = this.y;
+            if (!shouldRender) y = 0;
+
             GlStateManager.pushMatrix();
             GlStateManager.translate(0, y, 0);
 
             type.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
             GlStateManager.popMatrix();
-
         }
 
         if (shouldAnimate) {
@@ -89,7 +94,6 @@ public class Ring {
             if (!ringsUprising && effTick == Math.PI)
                 shouldRender = false;
 
-//			JSG.info("y = " + y);
         }
     }
 
@@ -108,8 +112,14 @@ public class Ring {
         shouldRender = true;
     }
 
-    public void setWorld(World world){
+    public void setWorld(World world) {
         this.world = world;
+    }
+
+    public JSGTileEntityConfig config = new JSGTileEntityConfig();
+
+    public void setConfig(JSGTileEntityConfig config) {
+        this.config = config;
     }
 
     public void setDown() {

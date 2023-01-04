@@ -1,18 +1,24 @@
 {
   "pools": [
     {
-      "name": "main",
+      "name": "zpm",
       "rolls": 1,
       "entries": [
         {
           "type": "item",
           "name": "jsg:zpm",
           "weight": 1
-        },
+        }
+      ]
+    },
+    {
+      "name": "other",
+      "rolls": 25,
+      "entries": [
         {
           "type": "item",
           "name": "jsg:trinium_ingot",
-          "weight": 15
+          "weight": 10
         },
         {
           "type": "item",
@@ -22,7 +28,7 @@
         {
           "type": "item",
           "name": "jsg:capacitor_block",
-          "weight": 15
+          "weight": 3
         },
         {
           "type": "item",

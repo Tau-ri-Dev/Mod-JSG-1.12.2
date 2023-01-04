@@ -29,7 +29,7 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
     public static final float PLATFORM_MAX_Y = 0.8f;
     public static final float PLATFORM_MAX_X = 5.0f;
 
-    public abstract void renderRings(TransportRingsRendererState state, float partialTicks, int distance);
+    public abstract void renderRings(TransportRingsRendererState state, float partialTicks, int distance, float addToYMax);
 
     @Override
     public void render(TransportRingsAbstractTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -46,6 +46,7 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
         }
         for (Ring ring : state.rings) {
             ring.setWorld(world);
+            ring.setConfig(state.ringsConfig);
         }
 
 
@@ -56,9 +57,11 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
         GlStateManager.translate(0.50, 0.63271 / 2 + 1.35, 0.50);
         GlStateManager.scale(0.5, 0.5, 0.5);
 
-        int relativeY = -4;
+        float relativeY = -5f;
+        int coef = 1;
         if (ringsDistance < 0) {
             relativeY = 2;
+            coef = -1;
         }
 
         // ---------------------------------------------------------------------------
@@ -67,7 +70,7 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
         renderPlatform(state, tick, te);
 
         GlStateManager.translate(0, relativeY, 0);
-        renderRings(state, partialTicks, ringsDistance);
+        renderRings(state, partialTicks, ringsDistance, -relativeY * coef);
         GlStateManager.popMatrix();
 
         if (state.isAnimationActive) {
@@ -123,7 +126,6 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
                             state.rings.get(state.currentRing).animate(state.ringsUprising);
 
                             state.lastRingAnimated = state.currentRing;
-                            state.lastTick = tick;
                         } else {
                             state.isAnimationActive = false;
                         }

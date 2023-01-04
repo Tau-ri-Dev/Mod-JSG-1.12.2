@@ -7,8 +7,8 @@ import net.minecraft.world.gen.structure.template.ITemplateProcessor;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.worldgen.structures.stargate.nether.JSGNetherStructure;
-import tauri.dev.jsg.worldgen.structures.stargate.processor.NetherProcessor;
-import tauri.dev.jsg.worldgen.structures.stargate.processor.OverworldProcessor;
+import tauri.dev.jsg.worldgen.structures.processor.NetherProcessor;
+import tauri.dev.jsg.worldgen.structures.processor.OverworldProcessor;
 import tauri.dev.jsg.worldgen.util.EnumGenerationHeight;
 
 import javax.annotation.Nonnull;
@@ -130,14 +130,14 @@ public enum EnumStructures {
                 add(Blocks.GRASS);
             }}, null, 35, Rotation.NONE, 0.88, 0.8, EnumGenerationHeight.LOW),
 
-    ANCIENT_TOTEM("ancient_totem", 0, false, false, null, 3, 3, 0, false, JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled, 0.0008f, null,
+    ANCIENT_TOTEM("ancient_totem", 0, false, false, null, 3, 3, 0, false, JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled, 0.0008f, new OverworldProcessor(),
             new ArrayList<Block>(){{
                 add(Blocks.GRASS);
                 add(Blocks.SAND);
                 add(Blocks.STONE);
                 add(Blocks.DIRT);
                 add(Blocks.GRAVEL);
-            }}, null, 5, Rotation.NONE, 0.3, 0.3, EnumGenerationHeight.MIDDLE),
+            }}, null, 5, Rotation.NONE, 0.3, 0.3, EnumGenerationHeight.LOW),
     ;
 
     public final String name;

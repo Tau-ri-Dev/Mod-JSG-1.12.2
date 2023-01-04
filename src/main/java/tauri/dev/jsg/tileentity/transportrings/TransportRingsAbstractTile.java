@@ -1263,6 +1263,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 "capacitors can be installed",
                 "into rings"
         ),
+        ENABLE_NONACTIVE_RENDER(
+                4, "nonactiveRender", JSGConfigOptionTypeEnum.BOOLEAN, "false",
+                "Render ring under ground if rings are not active"
+        ),
         ;
 
         public final int id;

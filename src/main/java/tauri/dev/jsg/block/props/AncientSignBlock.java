@@ -164,16 +164,12 @@ public class AncientSignBlock extends JSGBlock {
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, @Nonnull Block blockIn, @Nonnull BlockPos fromPos) {
-        /*
-
-        Disabled because of structures
-
         EnumFacing enumfacing = state.getValue(JSGProps.FACING_HORIZONTAL);
 
         if (!worldIn.getBlockState(pos.offset(enumfacing.getOpposite())).getMaterial().isSolid()) {
             this.dropBlockAsItem(worldIn, pos, state, 0);
             worldIn.setBlockToAir(pos);
-        }*/
+        }
 
         super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
     }
