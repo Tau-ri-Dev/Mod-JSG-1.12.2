@@ -110,6 +110,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     protected boolean isFinalActive;
 
     public boolean isFastDialing;
+
     public boolean getFastDialState() {
         return isFastDialing;
     }
@@ -629,10 +630,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     /**
-     *
      * @return temperature of air/blocks/liquids around the gate
      */
-    public double getTemperatureAroundGate(){
+    public double getTemperatureAroundGate() {
         double lavaCount = getAroundGateLiquid(true, false);
         double waterCount = getAroundGateLiquid(false, false);
         double airCount = getTemperatureAroundGate(0, false);
@@ -651,9 +651,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Override
     public void update() {
         // Fast dialing
-        if(!world.isRemote){
+        if (!world.isRemote) {
             boolean shouldBeFast = getConfig().getOption(ENABLE_FAST_DIAL.id).getBooleanValue();
-            if(isFastDialing != shouldBeFast && getStargateState().idle()){
+            if (isFastDialing != shouldBeFast && getStargateState().idle()) {
                 setFastDial(shouldBeFast);
             }
         }
@@ -683,9 +683,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
             double middleTemperature = TemperatureHelper.asKelvins(getTemperatureAroundGate()).toCelsius();
 
-            double cc = Math.min(Math.abs(gateHeat/(middleTemperature*2)), 0.5);
+            double cc = Math.min(Math.abs(gateHeat / (middleTemperature * 2)), 0.5);
 
-            double c = Math.sin(cc)*0.7 + 0.05;
+            double c = Math.sin(cc) * 0.7 + 0.05;
 
             tryHeatUp(false, true, c, c, c, middleTemperature, middleTemperature);
             if (!hasIris()) {
@@ -1220,9 +1220,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 "into this gate"
         ),
         PEG_DIAL_ANIMATION(
-                6, "pegDialAnim", JSGConfigOptionTypeEnum.BOOLEAN, tauri.dev.jsg.config.JSGConfig.dhdConfig.animatePegDHDDial + "",
-                "Enable pegasus dialing",
-                "animation with DHD"
+                6, "pegDialAnim", "1", // default value here is index of value in array below
+                new ArrayList<JSGConfigEnumEntry>() {{
+                    add(new JSGConfigEnumEntry("Slow", "-1"));
+                    add(new JSGConfigEnumEntry("Normal", "0"));
+                    add(new JSGConfigEnumEntry("Fast", "1"));
+                }}, "Speed of pegasus gate dialing with DHD"
         ),
         SPIN_GATE_INCOMING(
                 7, "incomingSpin", JSGConfigOptionTypeEnum.BOOLEAN, "true",
@@ -1569,6 +1572,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // -----------------------------------------------------------------
     // Scheduled tasks
 
+    protected long lastSpinFinishedIn = 0;
+
     @Override
     public void executeTask(EnumScheduledTask scheduledTask, NBTTagCompound customData) {
         boolean fastDial = false;
@@ -1597,12 +1602,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 break;
 
             case STARGATE_SPIN_FINISHED:
+                lastSpinFinishedIn = world.getTotalWorldTime();
                 if (fastDial) break;
                 isSpinning = false;
                 currentRingSymbol = targetRingSymbol;
-                if (!(this instanceof StargatePegasusBaseTile))
-                    playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
-                else if (!((StargatePegasusBaseTile) this).continueDialing)
+                if (!(this instanceof StargatePegasusBaseTile) || !((StargatePegasusBaseTile) this).continueDialing)
                     playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
 
                 playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);

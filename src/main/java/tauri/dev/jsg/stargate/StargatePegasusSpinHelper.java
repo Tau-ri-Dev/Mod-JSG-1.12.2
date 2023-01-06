@@ -47,6 +47,10 @@ public class StargatePegasusSpinHelper implements ISpinHelper {
     return targetSymbol;
   }
 
+  public void setTargetSymbol(SymbolInterface symbol){
+    this.targetSymbol = symbol;
+  }
+
   public StargatePegasusSpinHelper(SymbolTypeEnum symbolType, SymbolInterface currentSymbol, EnumSpinDirection spinDirection, boolean isSpinning, SymbolInterface targetRingSymbol, long spinStartTime, int plusRounds) {
     this.symbolType = symbolType;
     this.currentSymbol = currentSymbol;

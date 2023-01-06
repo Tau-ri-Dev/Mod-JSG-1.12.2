@@ -24,8 +24,7 @@
       "ore": "plateTitanium"
     },
     "B": {
-      "type": "item",
-      "ore": "minecraft:bucket"
+      "item": "minecraft:bucket"
     }
   },
 

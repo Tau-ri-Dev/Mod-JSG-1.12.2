@@ -137,7 +137,7 @@ public enum EnumStructures {
                 add(Blocks.STONE);
                 add(Blocks.DIRT);
                 add(Blocks.GRAVEL);
-            }}, null, 5, Rotation.NONE, 0.3, 0.3, EnumGenerationHeight.LOW),
+            }}, null, 5, Rotation.NONE, 0.9, 0.3, EnumGenerationHeight.LOW),
     ;
 
     public final String name;

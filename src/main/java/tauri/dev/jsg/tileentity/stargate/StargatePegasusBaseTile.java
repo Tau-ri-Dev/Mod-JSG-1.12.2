@@ -25,10 +25,7 @@ import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
 import tauri.dev.jsg.sound.StargateSoundEventEnum;
 import tauri.dev.jsg.sound.StargateSoundPositionedEnum;
-import tauri.dev.jsg.stargate.EnumScheduledTask;
-import tauri.dev.jsg.stargate.EnumSpinDirection;
-import tauri.dev.jsg.stargate.EnumStargateState;
-import tauri.dev.jsg.stargate.StargateOpenResult;
+import tauri.dev.jsg.stargate.*;
 import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import tauri.dev.jsg.stargate.merging.StargatePegasusMergeHelper;
 import tauri.dev.jsg.stargate.network.StargatePos;
@@ -48,10 +45,7 @@ import tauri.dev.jsg.util.ILinkable;
 import tauri.dev.jsg.util.LinkingHelper;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.SPIN_GATE_INCOMING;
 
@@ -86,6 +80,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
     @Override
     protected void addFailedTaskAndPlaySound() {
+        continueDialing = false;
+        markDirty();
         if (stargateState == EnumStargateState.DIALING || stargateState == EnumStargateState.DIALING_COMPUTER || stargateState == EnumStargateState.IDLE) {
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_FAIL, stargateState.dialingComputer() ? 83 : 53));
             playSoundEvent(StargateSoundEventEnum.DIAL_FAILED);
@@ -414,7 +410,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
     private BlockPos lastPos = BlockPos.ORIGIN;
 
-    protected List<SymbolPegasusEnum> toDialSymbols = new ArrayList<SymbolPegasusEnum>();
+    protected List<SymbolPegasusEnum> toDialSymbols = new ArrayList<>();
     protected EntityPlayer lastSender;
 
     public void resetToDialSymbols() {
@@ -436,8 +432,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
         if (!world.isRemote) {
 
-            if ((toDialSymbols.size() > 0) && (world.getTotalWorldTime() % 2 == 0) && stargateState.idle()) {
-                if (canAddSymbolInternal(toDialSymbols.get(0)) || toDialSymbols.get(0) == SymbolPegasusEnum.BBB)
+            if ((toDialSymbols.size() > 0) && ((world.getTotalWorldTime() - lastSpinFinishedIn) > (continueDialing ? 2 : 10)) && stargateState.idle()) {
+                if (toDialSymbols.get(0) == SymbolPegasusEnum.BBB || canAddSymbolInternal(toDialSymbols.get(0)))
                     addSymbolToAddressByList(toDialSymbols.get(0));
                 if (toDialSymbols.size() > 0)
                     toDialSymbols.remove(0);
@@ -547,6 +543,12 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
                     break;
 
                 case SPIN_STATE:
+                    StargateSpinState spinState = (StargateSpinState) state;
+                    if (spinState.setOnly) {
+                        getRendererStateClient().spinHelper.setIsSpinning(false);
+                        ((StargatePegasusSpinHelper) getRendererStateClient().spinHelper).setTargetSymbol(spinState.targetSymbol);
+                    }
+
                     if (getRendererStateClient().chevronTextureList.getNextChevron().rotationIndex == 1) {
                         getRendererStateClient().slotToGlyphMap.clear();
                     }
@@ -618,67 +620,74 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     }
 
     public void addSymbolToAddressByList(SymbolInterface targetSymbol) {
+        lastSpinFinishedIn = 0;
         if (((SymbolPegasusEnum) targetSymbol).brb()) {
             StargateOpenResult openResult = attemptOpenAndFail();
             if (openResult == StargateOpenResult.NOT_ENOUGH_POWER && lastSender != null)
                 lastSender.sendStatusMessage(new TextComponentTranslation("tile.jsg.dhd_block.not_enough_power"), true);
+            continueDialing = false;
+            markDirty();
             return;
         }
-        if (getConfig().getOption(ConfigOptions.PEG_DIAL_ANIMATION.id).getBooleanValue()) {
-            stargateState = EnumStargateState.DIALING;
 
-            targetRingSymbol = targetSymbol;
-            spinDirection = spinDirection.opposite();
+        boolean fastDial = (getConfig().getOption(ConfigOptions.PEG_DIAL_ANIMATION.id).getEnumValue().getIntValue() == 1);
+        boolean canContinueByConfig = (getConfig().getOption(ConfigOptions.PEG_DIAL_ANIMATION.id).getEnumValue().getIntValue() == 0);
 
-            ChevronEnum targetChevron = stargateWillLock(targetSymbol, true) ? ChevronEnum.getFinal() : ChevronEnum.valueOf(dialedAddress.size());
-            ChevronEnum currentChevron = dialedAddress.size() == 0 ? ChevronEnum.C1 : ChevronEnum.valueOf(targetChevron.index - 1);
+        stargateState = EnumStargateState.DIALING;
 
-            if (stargateWillLock(targetSymbol, true) && dialedAddress.size() == 6) currentChevron = ChevronEnum.C6;
+        targetRingSymbol = targetSymbol;
+        spinDirection = spinDirection.opposite();
 
-            int indexDiff = slotFromChevron(currentChevron) - slotFromChevron(targetChevron);
+        if(fastDial){
+            continueDialing = false;
+            markDirty();
 
-            EnumSpinDirection counterDirection = indexDiff < 0 ? EnumSpinDirection.COUNTER_CLOCKWISE : EnumSpinDirection.CLOCKWISE;
-
-            if (spinDirection == counterDirection) {
-                indexDiff = 36 - Math.abs(indexDiff);
-            }
-
-            float distance = (float) Math.abs(indexDiff);
-            if (distance <= 20) distance += 36;
-
-            int duration = (int) (distance);
-            doIncomingAnimation(duration, true, targetSymbol);
-
-            //JSG.logger.debug("addSymbolToAddressManual: " + "current:" + currentRingSymbol + ", " + "target:" + targetSymbol + ", " + "direction:" + spinDirection + ", " + "distance:" + distance + ", " + "duration:" + duration + ", " + "moveOnly:" + moveOnly);
-
-            JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, 0)), targetPoint);
-            lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 1);
-            addTask(lastSpinFinished);
-            if (!continueDialing) {
-                addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, 15));
-                playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL_START, true);
-            }
-
-            isSpinning = true;
-            spinStartTime = world.getTotalWorldTime();
-
-            ringSpinContext = null;
+            JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, EnumSpinDirection.CLOCKWISE, true, 0)), targetPoint);
+            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, 5 + new Random().nextInt(5)));
+            doIncomingAnimation(10, true);
             sendSignal(null, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), stargateWillLock(targetRingSymbol), targetSymbol.getEnglishName()});
-
-        } else {
-            addSymbolToAddress(targetSymbol);
-            stargateState = EnumStargateState.DIALING;
-            targetRingSymbol = targetSymbol;
-            JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, true, 0)), targetPoint);
-
-            if (stargateWillLock(targetSymbol)) {
-                isFinalActive = true;
-            }
-
-            sendSignal(null, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), isFinalActive, targetSymbol.getEnglishName()});
-            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10));
-            doIncomingAnimation(10, false);
+            return;
         }
+
+        ChevronEnum targetChevron = stargateWillLock(targetSymbol, true) ? ChevronEnum.getFinal() : ChevronEnum.valueOf(dialedAddress.size());
+        ChevronEnum currentChevron = dialedAddress.size() == 0 ? ChevronEnum.C1 : ChevronEnum.valueOf(targetChevron.index - 1);
+
+        if (stargateWillLock(targetSymbol, true) && dialedAddress.size() == 6) currentChevron = ChevronEnum.C6;
+
+        int indexDiff = slotFromChevron(currentChevron) - slotFromChevron(targetChevron);
+
+        EnumSpinDirection counterDirection = indexDiff < 0 ? EnumSpinDirection.COUNTER_CLOCKWISE : EnumSpinDirection.CLOCKWISE;
+
+        if (spinDirection == counterDirection) {
+            indexDiff = 36 - Math.abs(indexDiff);
+        }
+
+        float distance = (float) Math.abs(indexDiff);
+        if (distance <= 20) distance += 36;
+
+        int duration = (int) (distance);
+        doIncomingAnimation(duration, true, targetSymbol);
+
+        JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, 0)), targetPoint);
+        lastSpinFinished = new ScheduledTask(EnumScheduledTask.STARGATE_SPIN_FINISHED, duration - 1);
+        addTask(lastSpinFinished);
+        if (!continueDialing) {
+            addTask(new ScheduledTask(EnumScheduledTask.GATE_RING_ROLL, 15));
+            playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL_START, true);
+        }
+
+
+        int toDialSize = toDialSymbols.size();
+        if(toDialSymbols.contains(SymbolPegasusEnum.BBB))
+            toDialSize--;
+        continueDialing = (canContinueByConfig && (toDialSize >= 2) && (targetChevron != ChevronEnum.getFinal()));
+        markDirty();
+
+        isSpinning = true;
+        spinStartTime = world.getTotalWorldTime();
+
+        ringSpinContext = null;
+        sendSignal(null, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), stargateWillLock(targetRingSymbol), targetSymbol.getEnglishName()});
         markDirty();
     }
 
@@ -771,8 +780,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
                 sendRenderingUpdate(StargateRendererActionState.EnumGateAction.CHEVRON_OPEN, 0, false);
 
                 if (canAddSymbol(targetRingSymbol)) {
-                    if (stargateState == EnumStargateState.DIALING_COMPUTER) addSymbolToAddress(targetRingSymbol, true);
-                    else addSymbolToAddress(targetRingSymbol, false);
+                    addSymbolToAddress(targetRingSymbol, stargateState == EnumStargateState.DIALING_COMPUTER);
                     addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN_SECOND, 0));
                 } else addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_FAIL, 60));
 
