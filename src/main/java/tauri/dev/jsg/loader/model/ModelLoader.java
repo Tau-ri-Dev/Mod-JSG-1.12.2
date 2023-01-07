@@ -6,6 +6,7 @@ import net.minecraftforge.fml.common.ProgressManager.ProgressBar;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.FolderLoader;
+import tauri.dev.jsg.loader.ReloadListener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,8 +57,12 @@ public class ModelLoader {
 
             InputStream stream = JSG.class.getClassLoader().getResourceAsStream(modelPath);
             OBJModel model = OBJLoader.loadModel(stream);
-            if (model == null) continue;
+            if (model == null){
+                ReloadListener.LoadingStats.notLoadedModels++;
+                continue;
+            }
             LOADED_MODELS.put(new ResourceLocation(JSG.MOD_ID, modelResourcePath), model);
+            ReloadListener.LoadingStats.loadedModels++;
         }
 
         JSG.info("Loaded " + modelPaths.size() + " models in " + (System.currentTimeMillis() - start) + " ms");

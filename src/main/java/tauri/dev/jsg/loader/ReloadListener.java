@@ -14,6 +14,17 @@ import java.util.function.Predicate;
 
 public class ReloadListener implements ISelectiveResourceReloadListener {
 
+    public static class LoadingStats{
+        public static int errors = 0;
+        public static int warnings = 0;
+        public static int loadedTextures = 0;
+        public static int notLoadedTextures = 0;
+        public static int loadedModels = 0;
+        public static int notLoadedModels = 0;
+        public static boolean loadedAnimatedEHs = false;
+        public static boolean loadedNewKawoosh = false;
+    }
+
     @Override
     public void onResourceManagerReload(@Nonnull IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
         if (resourcePredicate.test(VanillaResourceType.MODELS)) {

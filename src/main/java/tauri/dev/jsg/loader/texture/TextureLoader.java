@@ -14,6 +14,7 @@ import org.apache.commons.io.IOUtils;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.FolderLoader;
+import tauri.dev.jsg.loader.ReloadListener;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -113,15 +114,18 @@ public class TextureLoader {
                 JSG.info("Loading texture: " + texturePath);
             BufferedImage bufferedImage = TextureUtil.readBufferedImage(resource.getInputStream());
             LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage));
+            ReloadListener.LoadingStats.loadedTextures++;
         } catch (IOException e) {
             JSG.error("Failed to load texture " + texturePath);
             e.printStackTrace();
+            ReloadListener.LoadingStats.notLoadedTextures++;
         } finally {
             IOUtils.closeQuietly(resource);
         }
     }
 
     private static void loadEH(ProgressBar progressBar, String texturePath, IResourceManager resourceManager) {
+        ReloadListener.LoadingStats.loadedAnimatedEHs = true;
         progressBar.step(texturePath.replaceFirst("textures/tesr/", ""));
         ResourceLocation resourceLocation = new ResourceLocation(JSG.MOD_ID, texturePath);
         IResource resource = null;
@@ -133,29 +137,36 @@ public class TextureLoader {
             BufferedImage bufferedImage = TextureUtil.readBufferedImage(resource.getInputStream());
 
             LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage));
+            ReloadListener.LoadingStats.loadedTextures++;
 
-            ProgressBar subProgressBar = ProgressManager.push("JSG - Event Horizon Sub-Textures", EH_ANIMATED_TEXTURE_SUB_TEXTURES);
+            if(!JSGConfig.horizonConfig.disableNewKawoosh) {
 
-            final int onePiece = bufferedImage.getWidth() / 14;
+                ProgressBar subProgressBar = ProgressManager.push("JSG - Event Horizon Sub-Textures", EH_ANIMATED_TEXTURE_SUB_TEXTURES);
 
-            for (int i = 0; i < EH_ANIMATED_TEXTURE_SUB_TEXTURES; i++) {
-                int texIndex = (i % EH_ANIMATED_TEXTURE_SUB_TEXTURES);
-                int x = texIndex % 14;
-                int y = texIndex / 14;
-                String subPath = (texturePath + "_" + x + "." + y);
+                final int onePiece = bufferedImage.getWidth() / 14;
 
-                subProgressBar.step(x + ":" + y);
-                if (JSGConfig.debugConfig.logTexturesLoading)
-                    JSG.info("Loading sub-texture: " + subPath);
+                for (int i = 0; i < EH_ANIMATED_TEXTURE_SUB_TEXTURES; i++) {
+                    int texIndex = (i % EH_ANIMATED_TEXTURE_SUB_TEXTURES);
+                    int x = texIndex % 14;
+                    int y = texIndex / 14;
+                    String subPath = (texturePath + "_" + x + "." + y);
 
-                BufferedImage texturePart = bufferedImage.getSubimage(x * onePiece, y * onePiece, onePiece, onePiece);
-                LOADED_TEXTURES.put(new ResourceLocation(JSG.MOD_ID, subPath), new Texture(texturePart));
+                    subProgressBar.step(x + ":" + y);
+                    if (JSGConfig.debugConfig.logTexturesLoading)
+                        JSG.info("Loading sub-texture: " + subPath);
+
+                    BufferedImage texturePart = bufferedImage.getSubimage(x * onePiece, y * onePiece, onePiece, onePiece);
+                    LOADED_TEXTURES.put(new ResourceLocation(JSG.MOD_ID, subPath), new Texture(texturePart));
+                    ReloadListener.LoadingStats.loadedTextures++;
+                }
+
+                ReloadListener.LoadingStats.loadedNewKawoosh = true;
+                ProgressManager.pop(subProgressBar);
             }
-
-            ProgressManager.pop(subProgressBar);
         } catch (IOException e) {
             JSG.error("Failed to load texture " + texturePath);
             e.printStackTrace();
+            ReloadListener.LoadingStats.notLoadedTextures++;
         } finally {
             IOUtils.closeQuietly(resource);
         }

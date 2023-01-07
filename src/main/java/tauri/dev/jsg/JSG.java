@@ -15,6 +15,7 @@ import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.command.JSGCommands;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.integration.OCWrapperInterface;
+import tauri.dev.jsg.loader.ReloadListener;
 import tauri.dev.jsg.proxy.IProxy;
 import tauri.dev.jsg.util.main.loader.JSGInit;
 import tauri.dev.jsg.util.main.loader.JSGPreInit;
@@ -87,26 +88,32 @@ public class JSG {
 
     public static void warn(String string) {
         logger.warn(string);
+        ReloadListener.LoadingStats.warnings++;
     }
 
     public static void warn(Object... p) {
         logger.warn(p);
+        ReloadListener.LoadingStats.warnings++;
     }
 
     public static void warn(String string, Exception e) {
         logger.warn(string, e);
+        ReloadListener.LoadingStats.warnings++;
     }
 
     public static void error(String string) {
         logger.error(string);
+        ReloadListener.LoadingStats.errors++;
     }
 
     public static void error(Object... o) {
         logger.error(o);
+        ReloadListener.LoadingStats.errors++;
     }
 
     public static void error(String string, Exception e) {
         logger.error(string, e);
+        ReloadListener.LoadingStats.errors++;
     }
 
     public static void debug(String string) {
