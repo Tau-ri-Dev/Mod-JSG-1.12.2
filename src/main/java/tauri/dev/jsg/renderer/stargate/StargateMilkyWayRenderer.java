@@ -95,8 +95,12 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
     @Override
     protected void renderChevron(StargateMilkyWayRendererState rendererState, double partialTicks, ChevronEnum chevron, boolean onlyLight) {
         GlStateManager.pushMatrix();
-
         GlStateManager.rotate(chevron.rotation, 0, 0, 1);
+
+        if(onlyLight){
+            float color = rendererState.chevronTextureList.getColor(chevron);
+            GlStateManager.color(color, color, color);
+        }
 
         TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron, onlyLight)).bindTexture();
 
@@ -125,5 +129,6 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
 
 
         GlStateManager.popMatrix();
+        GlStateManager.color(1, 1, 1);
     }
 }

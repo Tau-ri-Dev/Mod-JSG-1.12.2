@@ -16,28 +16,15 @@ public enum ElementEnum {
     KAWOOSH("kawoosh.obj", "kawoosh.png", false), // kawoosh.png does not exist, but different texture is binding instead of it! - MineDragonCZ_
 
     // --------------------------------------------------------------------------------------------
-    // Main Menu
-
-    MILKYWAY_GATE_MAINMENU("mainmenu/gate.obj", "mainmenu/gatering7.jpg", true),
-    MILKYWAY_RING_MAINMENU("mainmenu/ring.obj", "mainmenu/gatering7.jpg", true),
-
-    MILKYWAY_CHEVRON_LIGHT_MAINMENU("mainmenu/chevronLight.obj", "mainmenu/chevron0.jpg", true),
-    MILKYWAY_CHEVRON_FRAME_MAINMENU("mainmenu/chevronFrame.obj", "mainmenu/gatering7.jpg", true),
-    MILKYWAY_CHEVRON_MOVING_MAINMENU("mainmenu/chevronMoving.obj", "mainmenu/chevron0.jpg", true),
-
-    MILKYWAY_CHEVRON_LIGHT_ACTIVE_MAINMENU("mainmenu/chevronLight.obj", "mainmenu/chevron10.jpg", true),
-    MILKYWAY_CHEVRON_MOVING_ACTIVE_MAINMENU("mainmenu/chevronMoving.obj", "mainmenu/chevron10.jpg", true),
-
-    // --------------------------------------------------------------------------------------------
     // Milky Way
 
     MILKYWAY_DHD("milkyway/DHD.obj", "milkyway/dhd.jpg", true),
     MILKYWAY_GATE("milkyway/gate.obj", "milkyway/gatering7.jpg", true),
     MILKYWAY_RING("milkyway/ring.obj", "milkyway/gatering7.jpg", true),
 
-    MILKYWAY_CHEVRON_LIGHT("milkyway/chevronLight.obj", "milkyway/chevron0.jpg", true),
+    MILKYWAY_CHEVRON_LIGHT("milkyway/chevronLight.obj", "milkyway/chevron.png", true),
     MILKYWAY_CHEVRON_FRAME("milkyway/chevronFrame.obj", "milkyway/gatering7.jpg", true),
-    MILKYWAY_CHEVRON_MOVING("milkyway/chevronMoving.obj", "milkyway/chevron0.jpg", true),
+    MILKYWAY_CHEVRON_MOVING("milkyway/chevronMoving.obj", "milkyway/chevron.png", true),
     MILKYWAY_CHEVRON_BACK("milkyway/chevronBack.obj", "milkyway/gatering7.jpg", true),
 
     ORLIN_GATE("orlin/gate_orlin.obj", "orlin/gate_orlin.jpg", true),
@@ -46,7 +33,8 @@ public enum ElementEnum {
     // Universe
 
     UNIVERSE_GATE("universe/universe_gate.obj", "universe/universe_gate.jpg", true),
-    UNIVERSE_CHEVRON("universe/universe_chevron.obj", "universe/universe_chevron10.jpg", true),
+    UNIVERSE_CHEVRON("universe/universe_chevron.obj", "universe/universe_chevron.png", true),
+    UNIVERSE_SYMBOL("universe/universe_chevron.obj", "universe/universe_chevron_light.png", true),
     UNIVERSE_DIALER("universe/universe_dialer.obj", "universe/universe_dialer.jpg", true),
     UNIVERSE_DIALER_BROKEN("universe/universe_dialer.obj", "universe/universe_dialer_broken.jpg", true),
 
@@ -57,9 +45,9 @@ public enum ElementEnum {
     PEGASUS_GATE("pegasus/gate.obj", "pegasus/gatering7.jpg", true),
     PEGASUS_RING("pegasus/ring_atlantis.obj", "pegasus/gatering7.jpg", true),
 
-    PEGASUS_CHEVRON_LIGHT("pegasus/chevronLight.obj", "pegasus/chevron0.jpg", true),
+    PEGASUS_CHEVRON_LIGHT("pegasus/chevronLight.obj", "pegasus/chevron.png", true),
     PEGASUS_CHEVRON_FRAME("pegasus/chevronFrame.obj", "pegasus/gatering7.jpg", true),
-    PEGASUS_CHEVRON_MOVING("pegasus/chevronMoving.obj", "pegasus/chevron0.jpg", true),
+    PEGASUS_CHEVRON_MOVING("pegasus/chevronMoving.obj", "pegasus/chevron.png", true),
     PEGASUS_CHEVRON_BACK("pegasus/chevronBack.obj", "pegasus/gatering7.jpg", true),
 
 

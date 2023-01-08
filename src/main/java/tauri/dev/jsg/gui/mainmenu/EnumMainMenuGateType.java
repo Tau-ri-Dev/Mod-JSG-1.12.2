@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
-import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.model.ModelLoader;
 import tauri.dev.jsg.loader.texture.TextureLoader;
@@ -78,7 +77,7 @@ public enum EnumMainMenuGateType {
         // Ring
         GlStateManager.pushMatrix();
         GlStateManager.translate(StargateMilkyWayRenderer.RING_LOC.x, StargateMilkyWayRenderer.RING_LOC.z, StargateMilkyWayRenderer.RING_LOC.y);
-        GlStateManager.rotate((float) (-(tick * (A_ANGLE_PER_TICK/2)) % 360), 0, 0, 1);
+        GlStateManager.rotate((float) (-(tick * (A_ANGLE_PER_TICK / 2)) % 360), 0, 0, 1);
         GlStateManager.translate(-StargateMilkyWayRenderer.RING_LOC.x, -StargateMilkyWayRenderer.RING_LOC.z, -StargateMilkyWayRenderer.RING_LOC.y);
 
         ElementEnum.MILKYWAY_RING.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
@@ -91,14 +90,26 @@ public enum EnumMainMenuGateType {
         ChevronTextureList chevrons = new ChevronTextureList("milkyway/chevron", 7, true);
         chevrons.initClient();
         for (ChevronEnum chevron : ChevronEnum.values()) {
-            GlStateManager.pushMatrix();
-            GlStateManager.rotate(chevron.rotation, 0, 0, 1);
-            TextureLoader.getTexture(chevrons.get(BiomeOverlayEnum.NORMAL, chevron, false)).bindTexture();
-            ElementEnum.MILKYWAY_CHEVRON_MOVING.render();
-            ElementEnum.MILKYWAY_CHEVRON_LIGHT.render();
-            ElementEnum.MILKYWAY_CHEVRON_FRAME.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
-            ElementEnum.MILKYWAY_CHEVRON_BACK.render();
-            GlStateManager.popMatrix();
+            for (int i = 0; i < 2; i++) {
+                boolean light = (i == 1);
+                GlStateManager.pushMatrix();
+                GlStateManager.rotate(chevron.rotation, 0, 0, 1);
+                if (light) {
+                    float color = chevrons.getColor(chevron);
+                    GlStateManager.color(color, color, color);
+                }
+                else
+                    GlStateManager.color(1, 1, 1);
+                TextureLoader.getTexture(chevrons.get(BiomeOverlayEnum.NORMAL, chevron, light)).bindTexture();
+                ElementEnum.MILKYWAY_CHEVRON_MOVING.render();
+                ElementEnum.MILKYWAY_CHEVRON_LIGHT.render();
+                if(!light) {
+                    ElementEnum.MILKYWAY_CHEVRON_FRAME.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
+                    ElementEnum.MILKYWAY_CHEVRON_BACK.render();
+                }
+                GlStateManager.popMatrix();
+                GlStateManager.color(1, 1, 1);
+            }
         }
         GlStateManager.popMatrix();
 
@@ -112,7 +123,7 @@ public enum EnumMainMenuGateType {
         GlStateManager.pushMatrix();
         GlStateManager.scale(1.14f, 1.14f, 1.14f);
         GlStateManager.pushMatrix();
-        GlStateManager.rotate((float) (-(tick * (A_ANGLE_PER_TICK/2)) % 360), 0, 0, 1);
+        GlStateManager.rotate((float) (-(tick * (A_ANGLE_PER_TICK / 2)) % 360), 0, 0, 1);
 
         // Gate
         GlStateManager.pushMatrix();
@@ -124,20 +135,30 @@ public enum EnumMainMenuGateType {
         ChevronTextureList chevrons = new ChevronTextureList("universe/universe_chevron", 9, true);
         chevrons.initClient();
         for (ChevronEnum chevron : ChevronEnum.values()) {
-            GlStateManager.pushMatrix();
-            GlStateManager.rotate(chevron.rotation, 0, 0, 1);
-            TextureLoader.getTexture(chevrons.get(BiomeOverlayEnum.NORMAL, chevron, false)).bindTexture();
-            ElementEnum.UNIVERSE_CHEVRON.render();
-            GlStateManager.popMatrix();
+            for (int i = 0; i < 2; i++) {
+                boolean light = (i == 1);
+                GlStateManager.pushMatrix();
+                GlStateManager.rotate(chevron.rotation, 0, 0, 1);
+                if (light) {
+                    float color = chevrons.getColor(chevron);
+                    GlStateManager.color(color, color, color);
+                }
+                else
+                    GlStateManager.color(1, 1, 1);
+                TextureLoader.getTexture(chevrons.get(BiomeOverlayEnum.NORMAL, chevron, light)).bindTexture();
+                ElementEnum.UNIVERSE_CHEVRON.render();
+                GlStateManager.popMatrix();
+                GlStateManager.color(1, 1, 1);
+            }
         }
         GlStateManager.popMatrix();
 
         // Symbols
-        ElementEnum.UNIVERSE_CHEVRON.bindTexture(BiomeOverlayEnum.NORMAL);
+        ElementEnum.UNIVERSE_SYMBOL.bindTexture(BiomeOverlayEnum.NORMAL);
         for (SymbolUniverseEnum symbol : SymbolUniverseEnum.values()) {
             if (symbol.modelResource != null) {
                 float color = 0.25f;
-                switch(symbol){
+                switch (symbol) {
                     case G17:
                     case G10:
                     case G15:
@@ -176,15 +197,15 @@ public enum EnumMainMenuGateType {
         GlStateManager.popMatrix();
 
         GlStateManager.pushMatrix();
-        int glyphsCount = (int) ((tick / 2) % (37*3));
-        if(glyphsCount > 36) glyphsCount = 36;
+        int glyphsCount = (int) ((tick / 2) % (37 * 3));
+        if (glyphsCount > 36) glyphsCount = 36;
 
         int chevronsCount = glyphsCount / 4;
 
         for (int i = -8; i < (glyphsCount - 8); i++) {
             int ii = (i % 36);
 
-            if(ii < 0) ii = 36 + ii;
+            if (ii < 0) ii = 36 + ii;
 
             ii = 36 - ii;
 
@@ -193,22 +214,34 @@ public enum EnumMainMenuGateType {
         GlStateManager.popMatrix();
 
         // Chevrons
-        if(chevronsCount == 4) chevronsCount = 3;
-        if(chevronsCount == 5) chevronsCount = 3;
-        if(chevronsCount > 5) chevronsCount -= 2;
+        if (chevronsCount == 4) chevronsCount = 3;
+        if (chevronsCount == 5) chevronsCount = 3;
+        if (chevronsCount > 5) chevronsCount -= 2;
         GlStateManager.pushMatrix();
         ChevronTextureList chevrons = new ChevronTextureList("pegasus/chevron", chevronsCount, (chevronsCount == 7));
         chevrons.initClient();
 
         for (ChevronEnum chevron : ChevronEnum.values()) {
-            GlStateManager.pushMatrix();
-            GlStateManager.rotate(chevron.rotation, 0, 0, 1);
-            TextureLoader.getTexture(chevrons.get(BiomeOverlayEnum.NORMAL, chevron, false)).bindTexture();
-            ElementEnum.PEGASUS_CHEVRON_MOVING.render();
-            ElementEnum.PEGASUS_CHEVRON_LIGHT.render();
-            ElementEnum.PEGASUS_CHEVRON_FRAME.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
-            ElementEnum.PEGASUS_CHEVRON_BACK.render();
-            GlStateManager.popMatrix();
+            for (int i = 0; i < 2; i++) {
+                boolean light = (i == 1);
+                GlStateManager.pushMatrix();
+                GlStateManager.rotate(chevron.rotation, 0, 0, 1);
+                if (light) {
+                    float color = chevrons.getColor(chevron);
+                    GlStateManager.color(color, color, color);
+                }
+                else
+                    GlStateManager.color(1, 1, 1);
+                TextureLoader.getTexture(chevrons.get(BiomeOverlayEnum.NORMAL, chevron, light)).bindTexture();
+                ElementEnum.PEGASUS_CHEVRON_MOVING.render();
+                ElementEnum.PEGASUS_CHEVRON_LIGHT.render();
+                if(!light) {
+                    ElementEnum.PEGASUS_CHEVRON_FRAME.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
+                    ElementEnum.PEGASUS_CHEVRON_BACK.render();
+                }
+                GlStateManager.popMatrix();
+                GlStateManager.color(1, 1, 1);
+            }
         }
         GlStateManager.popMatrix();
     }

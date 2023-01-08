@@ -104,6 +104,11 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
         GlStateManager.rotate(chevron.rotation, 0, 0, 1);
 
+        if(onlyLight){
+            float color = rendererState.chevronTextureList.getColor(chevron);
+            GlStateManager.color(color, color, color);
+        }
+
         Texture chevronTexture = TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron, onlyLight));
         if (chevronTexture != null) {
             chevronTexture.bindTexture();
@@ -132,6 +137,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
 
             GlStateManager.popMatrix();
+            GlStateManager.color(1, 1, 1);
         }
     }
 
