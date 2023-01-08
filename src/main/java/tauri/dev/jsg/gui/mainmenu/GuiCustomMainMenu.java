@@ -111,14 +111,20 @@ public class GuiCustomMainMenu extends GuiScreen {
 
     public static void playMusic(boolean play) {
         isMusicPlaying = play;
-        JSGSoundHelperClient.playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.MAINMENU_MUSIC, play);
+        JSGSoundHelperClient.playPositionedSoundClientSide(lastSoundPlayingPos, SoundPositionedEnum.MAINMENU_MUSIC, false);
+        JSGSoundHelperClient.playPositionedSoundClientSide(JSG.lastPlayerPosInWorld, SoundPositionedEnum.MAINMENU_MUSIC, play);
     }
 
+    private static BlockPos lastSoundPlayingPos = new BlockPos(0, 0, 0);
+
     public void updateMusic() {
-        isMusicPlaying = JSGSoundHelperClient.getRecord(SoundPositionedEnum.MAINMENU_MUSIC, new BlockPos(0, 0, 0)).isPlaying();
-        if (!isMusicPlaying && (tick - menuDisplayed) > 20 * 2 && JSGConfig.mainMenuConfig.playMusic) { // wait 2 seconds before first play
+        if ((tick - menuDisplayed) <= 20 * 7 || (Minecraft.getDebugFPS() < 24 && (tick - menuDisplayed) <= 20 * 30))
+            return; // wait some seconds before first play
+        isMusicPlaying = JSGSoundHelperClient.getRecord(SoundPositionedEnum.MAINMENU_MUSIC, JSG.lastPlayerPosInWorld).isPlaying();
+        if (!isMusicPlaying && JSGConfig.mainMenuConfig.playMusic) {
             playMusic(false); // reset it
             playMusic(true);
+            lastSoundPlayingPos = JSG.lastPlayerPosInWorld;
         }
         if (!JSGConfig.mainMenuConfig.playMusic && isMusicPlaying)
             playMusic(false);
@@ -134,23 +140,23 @@ public class GuiCustomMainMenu extends GuiScreen {
 
     private static int updaterNotification = -1;
 
-    static{
-        if(JSGConfig.mainMenuConfig.debugMode){
+    static {
+        if (JSGConfig.mainMenuConfig.debugMode) {
             NOTIFIER.add(new MainMenuNotifications.Notification(new ArrayList<GuiButton>() {{
                 // Close (21)
                 String close = I18n.format("menu.updater.close");
                 int width = Minecraft.getMinecraft().fontRenderer.getStringWidth(close) + 20;
-                add(new GuiButton(BUTTONS_ID_START + 1, -width/2, 0, width, 20, close));
+                add(new GuiButton(BUTTONS_ID_START + 1, -width / 2, 0, width, 20, close));
             }}, "Report from startup:",
                     "",
-                    "Total errors/warning: "+ ReloadListener.LoadingStats.errors + "/" + ReloadListener.LoadingStats.warnings,
+                    "Total errors/warning: " + ReloadListener.LoadingStats.errors + "/" + ReloadListener.LoadingStats.warnings,
                     "Total textures loaded/not: " + ReloadListener.LoadingStats.loadedTextures + "/" + ReloadListener.LoadingStats.notLoadedTextures,
                     "Total models loaded/not: " + ReloadListener.LoadingStats.loadedModels + "/" + ReloadListener.LoadingStats.notLoadedModels,
                     "Loaded animated EH: " + ReloadListener.LoadingStats.loadedAnimatedEHs,
                     "Loaded new kawoosh: " + ReloadListener.LoadingStats.loadedNewKawoosh
-            ){
+            ) {
                 @Override
-                public void render(int mouseX, int mouseY, int width, int height, int rectX, int rectY, GuiScreen parentScreen){
+                public void render(int mouseX, int mouseY, int width, int height, int rectX, int rectY, GuiScreen parentScreen) {
                     super.renderText(mouseX, mouseY, width, height, rectX, rectY, parentScreen);
                     int xCenter = getCenterPos(0, 0, width, height)[0];
 
@@ -160,7 +166,7 @@ public class GuiCustomMainMenu extends GuiScreen {
                 }
 
                 @Override
-                public void actionPerformed(@Nonnull GuiButton button){
+                public void actionPerformed(@Nonnull GuiButton button) {
                     if (button.id == BUTTONS_ID_START + 1) {
                         dismiss();
                     }
@@ -457,11 +463,11 @@ public class GuiCustomMainMenu extends GuiScreen {
         Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_JSG);
         drawScaledCustomSizeModalRect(x, y, 0, 0, 1586, 603, sizeXJSG, sizeYJSG, 1586, 603);
 
-        int startY = -(tip.length*10);
+        int startY = -(tip.length * 10);
         int i = 0;
         center = getCenterPos(0, 0);
-        for(String s : tip){
-            drawCenteredString(fontRenderer, s, center[0], height - PADDING + startY + i*10, 0xCEAD28, true);
+        for (String s : tip) {
+            drawCenteredString(fontRenderer, s, center[0], height - PADDING + startY + i * 10, 0xCEAD28, true);
             i++;
         }
 
@@ -495,8 +501,7 @@ public class GuiCustomMainMenu extends GuiScreen {
                 );
                 drawHoveringText(power, mouseX, mouseY);
             }
-        }
-        else{
+        } else {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0, 0, 50);
             drawGradientRect(0, 0, width, height, -1072689136, -804253680);
@@ -513,11 +518,11 @@ public class GuiCustomMainMenu extends GuiScreen {
         fontRendererIn.drawString(text, (x - fontRendererIn.getStringWidth(text) / 2), y, color);
     }
 
-    public void initUpdaterNotifier(){
-        if(UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.NEWER_AVAILABLE || UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.ERROR){
+    public void initUpdaterNotifier() {
+        if (UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.NEWER_AVAILABLE || UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.ERROR) {
             boolean error = UPDATER_RESULT.result == GetUpdate.EnumUpdateResult.ERROR;
-            if(updaterNotification == -1 || NOTIFIER.get(updaterNotification) == null){
-                if(!error) {
+            if (updaterNotification == -1 || NOTIFIER.get(updaterNotification) == null) {
+                if (!error) {
                     updaterNotification = NOTIFIER.add(new MainMenuNotifications.Notification(new ArrayList<GuiButton>() {{
                         // Download (20)
                         String update = I18n.format("menu.updater.download");
@@ -534,9 +539,9 @@ public class GuiCustomMainMenu extends GuiScreen {
                             "You can update to version " + UPDATER_RESULT.response,
                             "It is highly recommended to update to this version!",
                             "Some dangerous bugs should be fixed in this version."
-                    ){
+                    ) {
                         @Override
-                        public void render(int mouseX, int mouseY, int width, int height, int rectX, int rectY, GuiScreen parentScreen){
+                        public void render(int mouseX, int mouseY, int width, int height, int rectX, int rectY, GuiScreen parentScreen) {
                             super.renderText(mouseX, mouseY, width, height, rectX, rectY, parentScreen);
                             int xCenter = getCenterPos(0, 0)[0];
 
@@ -549,33 +554,33 @@ public class GuiCustomMainMenu extends GuiScreen {
                         }
 
                         @Override
-                        public void actionPerformed(@Nonnull GuiButton button){
-                            switch(button.id){
+                        public void actionPerformed(@Nonnull GuiButton button) {
+                            switch (button.id) {
                                 case BUTTONS_ID_START:
                                     openWebsiteToClient(DOWNLOAD_URL_USER);
                                     break;
                                 case BUTTONS_ID_START + 1:
                                     dismiss();
                                     break;
-                                default: break;
+                                default:
+                                    break;
                             }
                         }
                     });
-                }
-                else{
+                } else {
                     updaterNotification = NOTIFIER.add(new MainMenuNotifications.Notification(new ArrayList<GuiButton>() {{
                         // Close (21)
                         String close = I18n.format("menu.updater.close");
                         int width = fontRenderer.getStringWidth(close) + 20;
-                        add(new GuiButton(BUTTONS_ID_START + 1, -width/2, 0, width, 20, close));
+                        add(new GuiButton(BUTTONS_ID_START + 1, -width / 2, 0, width, 20, close));
                     }}, "Error while checking update!",
                             UPDATER_RESULT.response,
                             "",
                             "Can not get response from the server!",
                             "Please check your internet connection."
-                    ){
+                    ) {
                         @Override
-                        public void render(int mouseX, int mouseY, int width, int height, int rectX, int rectY, GuiScreen parentScreen){
+                        public void render(int mouseX, int mouseY, int width, int height, int rectX, int rectY, GuiScreen parentScreen) {
                             super.renderText(mouseX, mouseY, width, height, rectX, rectY, parentScreen);
                             int xCenter = getCenterPos(0, 0)[0];
 
@@ -585,7 +590,7 @@ public class GuiCustomMainMenu extends GuiScreen {
                         }
 
                         @Override
-                        public void actionPerformed(@Nonnull GuiButton button){
+                        public void actionPerformed(@Nonnull GuiButton button) {
                             if (button.id == BUTTONS_ID_START + 1) {
                                 dismiss();
                             }
