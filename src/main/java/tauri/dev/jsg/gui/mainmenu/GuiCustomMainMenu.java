@@ -101,7 +101,7 @@ public class GuiCustomMainMenu extends GuiScreen {
 
     public static final int BACKGROUNDS_COUNT = BACKGROUNDS.size();
 
-    public static boolean isMusicPlaying = false;
+    public boolean isMusicPlaying = false;
 
     public static long menuDisplayed = -1;
 
@@ -110,21 +110,19 @@ public class GuiCustomMainMenu extends GuiScreen {
     public static final MainMenuNotifications NOTIFIER = MainMenuNotifications.getManager();
 
     public static void playMusic(boolean play) {
-        isMusicPlaying = play;
-        JSGSoundHelperClient.playPositionedSoundClientSide(lastSoundPlayingPos, SoundPositionedEnum.MAINMENU_MUSIC, false);
         JSGSoundHelperClient.playPositionedSoundClientSide(JSG.lastPlayerPosInWorld, SoundPositionedEnum.MAINMENU_MUSIC, play);
     }
 
-    private static BlockPos lastSoundPlayingPos = new BlockPos(0, 0, 0);
-
     public void updateMusic() {
-        if ((tick - menuDisplayed) <= 20 * 7 || (Minecraft.getDebugFPS() < 24 && (tick - menuDisplayed) <= 20 * 30))
+        if ((tick - menuDisplayed) <= 20 * 7 || (Minecraft.getDebugFPS() < 28 && (tick - menuDisplayed) <= 20 * 30))
             return; // wait some seconds before first play
-        isMusicPlaying = JSGSoundHelperClient.getRecord(SoundPositionedEnum.MAINMENU_MUSIC, JSG.lastPlayerPosInWorld).isPlaying();
+
+        if((tick - menuDisplayed) > 20*30)
+            isMusicPlaying = JSGSoundHelperClient.getRecord(SoundPositionedEnum.MAINMENU_MUSIC, JSG.lastPlayerPosInWorld).isPlaying();
+
         if (!isMusicPlaying && JSGConfig.mainMenuConfig.playMusic) {
-            playMusic(false); // reset it
+            isMusicPlaying = true;
             playMusic(true);
-            lastSoundPlayingPos = JSG.lastPlayerPosInWorld;
         }
         if (!JSGConfig.mainMenuConfig.playMusic && isMusicPlaying)
             playMusic(false);

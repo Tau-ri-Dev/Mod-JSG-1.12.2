@@ -1,11 +1,8 @@
 package tauri.dev.jsg;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderException;
@@ -14,13 +11,11 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.logging.log4j.Logger;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.command.JSGCommands;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
-import tauri.dev.jsg.event.EventTick;
+import tauri.dev.jsg.event.EventTickClient;
 import tauri.dev.jsg.integration.OCWrapperInterface;
 import tauri.dev.jsg.loader.ReloadListener;
 import tauri.dev.jsg.proxy.IProxy;
@@ -168,7 +163,6 @@ public class JSG {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
-        MinecraftForge.EVENT_BUS.register(new EventTick());
     }
 
     @EventHandler
@@ -195,7 +189,7 @@ public class JSG {
     /**
      * Contains las pos of player (client side) - helps to debug sound in main menu.
      *
-     * Updated in {@link tauri.dev.jsg.event.EventTick}
+     * Updated in {@link EventTickClient}
      */
     public static BlockPos lastPlayerPosInWorld = new BlockPos(0, 0, 0);
 

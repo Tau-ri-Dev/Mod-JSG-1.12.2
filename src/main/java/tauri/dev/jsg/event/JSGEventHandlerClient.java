@@ -68,10 +68,6 @@ public class JSGEventHandlerClient {
                 Minecraft.getMinecraft().displayGuiScreen(new GuiCustomMainMenu());
             }
         }
-
-        if(event.getGui() instanceof GuiWorldSelection || event.getGui() instanceof GuiScreenServerList){
-            GuiCustomMainMenu.isMusicPlaying = false;
-        }
     }
 
     @SubscribeEvent

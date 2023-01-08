@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -27,6 +28,7 @@ import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.stargate.StargateClassicMemberBlockColor;
 import tauri.dev.jsg.entity.friendly.TokraEntity;
 import tauri.dev.jsg.entity.renderer.TokraRenderer;
+import tauri.dev.jsg.event.EventTickClient;
 import tauri.dev.jsg.event.InputHandlerClient;
 import tauri.dev.jsg.fluid.JSGBlockFluid;
 import tauri.dev.jsg.fluid.JSGFluids;
@@ -60,6 +62,7 @@ public class ProxyClient implements IProxy {
 
     public void postInit(FMLPostInitializationEvent event) {
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(new ReloadListener());
+        MinecraftForge.EVENT_BUS.register(new EventTickClient());
     }
 
     public String localize(String unlocalized, Object... args) {
