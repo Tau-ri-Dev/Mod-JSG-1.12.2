@@ -35,7 +35,7 @@ public class JSGRecipeHandler {
         FurnaceRecipes.instance().addSmelting(JSGItems.NAQUADAH_RAW_DUST, new ItemStack(JSGItems.NAQUADAH_ALLOY_RAW), 2f);
         FurnaceRecipes.instance().addSmelting(JSGItems.PLATE_NAQUADAH_RAW, new ItemStack(JSGItems.NAQUADAH_ALLOY_RAW), 2f);
         FurnaceRecipes.instance().addSmelting(JSGItems.GEAR_NAQUADAH_RAW, new ItemStack(JSGItems.NAQUADAH_ALLOY_RAW, 4), 2f);
-        FurnaceRecipes.instance().addSmelting(JSGItems.NAQUADAH_ORE_IMPURE, new ItemStack(JSGItems.NAQUADAH_ALLOY_RAW, 4), 2f);
+        FurnaceRecipes.instance().addSmelting(JSGItems.NAQUADAH_ORE_IMPURE, new ItemStack(JSGItems.NAQUADAH_RAW_NUGGET, 4), 2f);
         FurnaceRecipes.instance().addSmelting(JSGItems.NAQUADAH_ORE_PURIFIED, new ItemStack(JSGItems.NAQUADAH_ALLOY_RAW), 3f);
         FurnaceRecipes.instance().addSmelting(JSGItems.NAQUADAH_ORE_RAW, new ItemStack(JSGItems.NAQUADAH_ALLOY_RAW, 2), 4f);
 
