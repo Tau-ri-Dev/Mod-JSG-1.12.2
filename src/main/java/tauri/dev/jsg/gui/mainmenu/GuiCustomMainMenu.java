@@ -5,7 +5,6 @@ import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.GuiModList;
 import net.minecraftforge.fml.relauncher.Side;
@@ -222,16 +221,20 @@ public class GuiCustomMainMenu extends GuiScreen {
         return id;
     }
 
-    public EnumMainMenuGateType gateType = EnumMainMenuGateType.random();
+    public EnumMainMenuGateType gateType = EnumMainMenuGateType.random(null);
 
     private long lastGateChange = 0;
 
     public void updateGateType() {
-        if (JSGConfig.mainMenuConfig.enableGateChanging && (tick - lastGateChange) > 30 * 20) {
-            // Every 30 seconds
-            lastGateChange = (long) tick;
-            gateType = EnumMainMenuGateType.random();
+        if((tick - lastGateChange) < 30 * 20) return;
+        lastGateChange = (long) tick;
+        // Every 30 seconds
+
+        if (JSGConfig.mainMenuConfig.enableGateChanging) {
+            gateType = EnumMainMenuGateType.random(gateType);
         }
+
+        tipEnum = EnumMainMenuTips.random(tipEnum);
     }
 
     @Override
@@ -406,7 +409,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         gateType.renderGate(width + 20, getCenterPos(0, 0)[1], 45, tick);
     }
 
-    private final String[] tip = EnumMainMenuTips.random().text;
+    private EnumMainMenuTips tipEnum = EnumMainMenuTips.random(null);
 
     /**
      * Used to draw texts on the screen
@@ -460,6 +463,8 @@ public class GuiCustomMainMenu extends GuiScreen {
         // JSG logo - main
         Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_JSG);
         drawScaledCustomSizeModalRect(x, y, 0, 0, 1586, 603, sizeXJSG, sizeYJSG, 1586, 603);
+
+        String[] tip = tipEnum.text;
 
         int startY = -(tip.length * 10);
         int i = 0;

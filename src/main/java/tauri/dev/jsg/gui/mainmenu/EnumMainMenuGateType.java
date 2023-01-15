@@ -19,6 +19,7 @@ import tauri.dev.jsg.stargate.network.SymbolPegasusEnum;
 import tauri.dev.jsg.stargate.network.SymbolUniverseEnum;
 import tauri.dev.jsg.util.math.NumberUtils;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 import static tauri.dev.jsg.stargate.StargateClassicSpinHelper.A_ANGLE_PER_TICK;
@@ -28,16 +29,23 @@ public enum EnumMainMenuGateType {
     UNIVERSE,
     PEGASUS;
 
-    public static EnumMainMenuGateType random() {
-        int i = new Random().nextInt(3);
-        switch (i) {
-            default:
-                return MILKYWAY;
-            case 1:
-                return PEGASUS;
-            case 2:
-                return UNIVERSE;
-        }
+    public static EnumMainMenuGateType random(@Nullable EnumMainMenuGateType previousType) {
+        EnumMainMenuGateType newType;
+        do {
+            int i = new Random().nextInt(3);
+            switch (i) {
+                default:
+                    newType = MILKYWAY;
+                    break;
+                case 1:
+                    newType = PEGASUS;
+                    break;
+                case 2:
+                    newType = UNIVERSE;
+                    break;
+            }
+        } while (newType == previousType);
+        return newType;
     }
 
     public void renderGate(int x, int y, float size, double tick) {
@@ -97,13 +105,12 @@ public enum EnumMainMenuGateType {
                 if (light) {
                     float color = chevrons.getColor(chevron);
                     GlStateManager.color(color, color, color);
-                }
-                else
+                } else
                     GlStateManager.color(1, 1, 1);
                 TextureLoader.getTexture(chevrons.get(BiomeOverlayEnum.NORMAL, chevron, light)).bindTexture();
                 ElementEnum.MILKYWAY_CHEVRON_MOVING.render();
                 ElementEnum.MILKYWAY_CHEVRON_LIGHT.render();
-                if(!light) {
+                if (!light) {
                     ElementEnum.MILKYWAY_CHEVRON_FRAME.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
                     ElementEnum.MILKYWAY_CHEVRON_BACK.render();
                 }
@@ -142,8 +149,7 @@ public enum EnumMainMenuGateType {
                 if (light) {
                     float color = chevrons.getColor(chevron);
                     GlStateManager.color(color, color, color);
-                }
-                else
+                } else
                     GlStateManager.color(1, 1, 1);
                 TextureLoader.getTexture(chevrons.get(BiomeOverlayEnum.NORMAL, chevron, light)).bindTexture();
                 ElementEnum.UNIVERSE_CHEVRON.render();
@@ -229,13 +235,12 @@ public enum EnumMainMenuGateType {
                 if (light) {
                     float color = chevrons.getColor(chevron);
                     GlStateManager.color(color, color, color);
-                }
-                else
+                } else
                     GlStateManager.color(1, 1, 1);
                 TextureLoader.getTexture(chevrons.get(BiomeOverlayEnum.NORMAL, chevron, light)).bindTexture();
                 ElementEnum.PEGASUS_CHEVRON_MOVING.render();
                 ElementEnum.PEGASUS_CHEVRON_LIGHT.render();
-                if(!light) {
+                if (!light) {
                     ElementEnum.PEGASUS_CHEVRON_FRAME.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
                     ElementEnum.PEGASUS_CHEVRON_BACK.render();
                 }
