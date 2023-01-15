@@ -79,7 +79,7 @@ public class AssemblerRecipes {
 
         @Override
         public int getWorkingTime() {
-            return 100;
+            return 200;
         }
 
         @Override
@@ -127,7 +127,7 @@ public class AssemblerRecipes {
 
         @Override
         public ItemStack getResult() {
-            return new ItemStack(JSGBlocks.STARGATE_MILKY_WAY_MEMBER_BLOCK, 1, JSGBlocks.STARGATE_MILKY_WAY_MEMBER_BLOCK.CHEVRON_META);
+            return new ItemStack(JSGBlocks.STARGATE_MILKY_WAY_MEMBER_BLOCK, 2, JSGBlocks.STARGATE_MILKY_WAY_MEMBER_BLOCK.CHEVRON_META);
         }
     };
     public static AssemblerRecipe SG_MW_RING_BLOCK = new AssemblerRecipe() {
@@ -138,7 +138,7 @@ public class AssemblerRecipes {
 
         @Override
         public int getWorkingTime() {
-            return 100;
+            return 200;
         }
 
         @Override
@@ -186,7 +186,7 @@ public class AssemblerRecipes {
 
         @Override
         public ItemStack getResult() {
-            return new ItemStack(JSGBlocks.STARGATE_MILKY_WAY_MEMBER_BLOCK, 1, JSGBlocks.STARGATE_MILKY_WAY_MEMBER_BLOCK.RING_META);
+            return new ItemStack(JSGBlocks.STARGATE_MILKY_WAY_MEMBER_BLOCK, 2, JSGBlocks.STARGATE_MILKY_WAY_MEMBER_BLOCK.RING_META);
         }
     };
     public static AssemblerRecipe SG_MW_DHD = new AssemblerRecipe() {
@@ -316,7 +316,7 @@ public class AssemblerRecipes {
 
         @Override
         public int getWorkingTime() {
-            return 100;
+            return 200;
         }
 
         @Override
@@ -364,7 +364,7 @@ public class AssemblerRecipes {
 
         @Override
         public ItemStack getResult() {
-            return new ItemStack(JSGBlocks.STARGATE_PEGASUS_MEMBER_BLOCK, 1, JSGBlocks.STARGATE_PEGASUS_MEMBER_BLOCK.CHEVRON_META);
+            return new ItemStack(JSGBlocks.STARGATE_PEGASUS_MEMBER_BLOCK, 2, JSGBlocks.STARGATE_PEGASUS_MEMBER_BLOCK.CHEVRON_META);
         }
     };
     public static AssemblerRecipe SG_PEG_RING_BLOCK = new AssemblerRecipe() {
@@ -375,7 +375,7 @@ public class AssemblerRecipes {
 
         @Override
         public int getWorkingTime() {
-            return 100;
+            return 200;
         }
 
         @Override
@@ -423,7 +423,7 @@ public class AssemblerRecipes {
 
         @Override
         public ItemStack getResult() {
-            return new ItemStack(JSGBlocks.STARGATE_PEGASUS_MEMBER_BLOCK, 1, JSGBlocks.STARGATE_PEGASUS_MEMBER_BLOCK.RING_META);
+            return new ItemStack(JSGBlocks.STARGATE_PEGASUS_MEMBER_BLOCK, 2, JSGBlocks.STARGATE_PEGASUS_MEMBER_BLOCK.RING_META);
         }
     };
     public static AssemblerRecipe SG_PEG_DHD = new AssemblerRecipe() {
@@ -553,7 +553,7 @@ public class AssemblerRecipes {
 
         @Override
         public int getWorkingTime() {
-            return 100;
+            return 200;
         }
 
         @Override
@@ -601,7 +601,7 @@ public class AssemblerRecipes {
 
         @Override
         public ItemStack getResult() {
-            return new ItemStack(JSGBlocks.STARGATE_UNIVERSE_MEMBER_BLOCK, 1, JSGBlocks.STARGATE_UNIVERSE_MEMBER_BLOCK.CHEVRON_META);
+            return new ItemStack(JSGBlocks.STARGATE_UNIVERSE_MEMBER_BLOCK, 2, JSGBlocks.STARGATE_UNIVERSE_MEMBER_BLOCK.CHEVRON_META);
         }
     };
     public static AssemblerRecipe SG_UNI_RING_BLOCK = new AssemblerRecipe() {
@@ -612,7 +612,7 @@ public class AssemblerRecipes {
 
         @Override
         public int getWorkingTime() {
-            return 100;
+            return 200;
         }
 
         @Override
@@ -660,7 +660,7 @@ public class AssemblerRecipes {
 
         @Override
         public ItemStack getResult() {
-            return new ItemStack(JSGBlocks.STARGATE_UNIVERSE_MEMBER_BLOCK, 1, JSGBlocks.STARGATE_UNIVERSE_MEMBER_BLOCK.RING_META);
+            return new ItemStack(JSGBlocks.STARGATE_UNIVERSE_MEMBER_BLOCK, 2, JSGBlocks.STARGATE_UNIVERSE_MEMBER_BLOCK.RING_META);
         }
     };
 
