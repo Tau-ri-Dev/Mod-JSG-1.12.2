@@ -51,7 +51,10 @@ import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.linkable.gdo.GDOMessages;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.item.stargate.UpgradeIris;
+import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
+import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRenderer;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRendererState.StargateClassicRendererStateBuilder;
@@ -1405,7 +1408,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 .setIrisType(irisType)
                 .setIrisMode(irisMode)
                 .setIrisCode(irisCode)
-                .setIrisAnimation(irisAnimation);
+                .setIrisAnimation(irisAnimation)
+                .setConfig(getConfig());
     }
 
     @Override
@@ -1467,6 +1471,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Override
     public void setState(StateTypeEnum stateType, State state) {
         switch (stateType) {
+            case RENDERER_STATE:
+                config = ((StargateClassicRendererState) state).config;
+                markDirty();
+                break;
+
             case RENDERER_UPDATE:
                 if (getRendererStateClient() == null) break;
                 StargateRendererActionState gateActionState = (StargateRendererActionState) state;

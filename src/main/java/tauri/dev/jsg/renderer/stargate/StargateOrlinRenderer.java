@@ -10,6 +10,7 @@ import tauri.dev.jsg.particle.ParticleBlender;
 import tauri.dev.jsg.particle.ParticleBlenderSmoke;
 import tauri.dev.jsg.particle.ParticleBlenderSparks;
 import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.util.main.JSGProps;
 
 import java.util.Arrays;
@@ -25,7 +26,7 @@ public class StargateOrlinRenderer extends StargateAbstractRenderer<StargateAbst
 	// Render
 
 	@Override
-	protected void renderGate(StargateAbstractRendererState rendererState, double partialTicks) {
+	protected void renderGate(StargateAbstractBaseTile te, StargateAbstractRendererState rendererState, double partialTicks) {
 	//	GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
 		
 		ElementEnum.ORLIN_GATE.bindTextureAndRender(rendererState.getBiomeOverlay());

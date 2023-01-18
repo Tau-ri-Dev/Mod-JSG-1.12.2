@@ -21,6 +21,7 @@ import tauri.dev.jsg.stargate.EnumIrisState;
 import tauri.dev.jsg.stargate.EnumIrisType;
 import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.util.FacingToRotation;
 import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.JSGMinecraftHelper;
@@ -98,7 +99,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
                 GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
 
-                renderGate(rendererState, partialTicks);
+                renderGate(te, rendererState, partialTicks);
                 renderIris(partialTicks, getWorld(), rendererState, true);
 
                 if (rendererState.doEventHorizonRender) {
@@ -149,7 +150,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
     protected abstract void applyTransformations(S rendererState);
 
-    protected abstract void renderGate(S rendererState, double partialTicks);
+    protected abstract void renderGate(StargateAbstractBaseTile te, S rendererState, double partialTicks);
 
     protected ResourceLocation getEventHorizonTextureResource(StargateAbstractRendererState rendererState, boolean kawoosh) {
         return new ResourceLocation(JSG.MOD_ID, getEventHorizonTexturePath(rendererState, kawoosh));

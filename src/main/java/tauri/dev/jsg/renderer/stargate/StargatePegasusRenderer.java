@@ -11,6 +11,7 @@ import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.texture.Texture;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.stargate.network.SymbolPegasusEnum;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
 import tauri.dev.jsg.util.math.NumberUtils;
 
@@ -32,7 +33,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
     }
 
     @Override
-    protected void renderGate(StargatePegasusRendererState rendererState, double partialTicks) {
+    protected void renderGate(StargateAbstractBaseTile te, StargatePegasusRendererState rendererState, double partialTicks) {
         setGateHeatColor(rendererState);
         renderRing(rendererState, partialTicks);
         renderChevrons(rendererState, partialTicks);
@@ -104,7 +105,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
         GlStateManager.rotate(chevron.rotation, 0, 0, 1);
 
-        if(onlyLight){
+        if (onlyLight) {
             float color = rendererState.chevronTextureList.getColor(chevron);
             GlStateManager.color(color, color, color);
         }

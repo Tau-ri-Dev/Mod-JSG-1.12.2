@@ -10,6 +10,7 @@ import tauri.dev.jsg.loader.model.ModelLoader;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.stargate.EnumIrisType;
 import tauri.dev.jsg.stargate.network.SymbolUniverseEnum;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
 
 public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUniverseRendererState> {
@@ -27,7 +28,7 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
     }
 
     @Override
-    protected void renderGate(StargateUniverseRendererState rendererState, double partialTicks) {
+    protected void renderGate(StargateAbstractBaseTile te, StargateUniverseRendererState rendererState, double partialTicks) {
         setGateHeatColor(rendererState);
         float angularRotation = rendererState.spinHelper.getCurrentSymbol().getAngle();
 

@@ -1,12 +1,14 @@
 package tauri.dev.jsg.config.ingame;
 
-import com.google.common.collect.Lists;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class JSGTileEntityConfig {
 
@@ -37,7 +39,7 @@ public class JSGTileEntityConfig {
     public JSGConfigOption getOption(int id, boolean canBeNull) {
         if (id < options.size())
             return options.get(id);
-        if(canBeNull) return null;
+        if (canBeNull) return null;
         return new JSGConfigOption(id).setLabel("error while getting option! (" + id + ")").setComment("").setType(JSGConfigOptionTypeEnum.TEXT).setValue("");
     }
 
@@ -81,6 +83,7 @@ public class JSGTileEntityConfig {
     public static void initConfig(JSGTileEntityConfig config, ITileConfigEntry[] entries) {
         initConfig(config, Arrays.asList(entries));
     }
+
     public static void initConfig(JSGTileEntityConfig config, List<ITileConfigEntry> entries) {
         if (config.getOptions().size() != entries.size()) {
             config.clearOptions();
@@ -103,18 +106,18 @@ public class JSGTileEntityConfig {
         // setup config option when there is a change (by config for example)
         for (ITileConfigEntry option : entries) {
             JSGConfigOption o = config.getOption(option.getId(), true);
-            if(o == null) continue;
+            if (o == null) continue;
 
-            if(o.type != option.getType()) o.setType(option.getType());
-            if(!Objects.equals(o.defaultValue, option.getDefaultValue())) o.setDefaultValue(option.getDefaultValue());
-            if(!Objects.equals(o.getLabel(), option.getLabel())) o.setLabel(option.getLabel());
-            if(!o.getComment().equals(Arrays.asList(option.getComment()))) o.setComment(option.getComment());
+            if (o.type != option.getType()) o.setType(option.getType());
+            if (!Objects.equals(o.defaultValue, option.getDefaultValue())) o.setDefaultValue(option.getDefaultValue());
+            if (!Objects.equals(o.getLabel(), option.getLabel())) o.setLabel(option.getLabel());
+            if (!o.getComment().equals(Arrays.asList(option.getComment()))) o.setComment(option.getComment());
 
             o.setMaxInt(option.getMax());
             o.setMinInt(option.getMin());
 
             if (option.getType() != JSGConfigOptionTypeEnum.SWITCH) continue;
-            if (option.getPossibleValues().equals(o.possibleValues)) continue;
+            if (option.getPossibleValues().size() == o.possibleValues.size()) continue;
             o.setPossibleValues(option.getPossibleValues()).setDefaultValue(option.getDefaultValue()).setValue(option.getDefaultValue());
         }
     }

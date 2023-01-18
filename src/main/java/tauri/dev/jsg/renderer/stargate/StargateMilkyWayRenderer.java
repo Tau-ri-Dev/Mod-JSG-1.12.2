@@ -7,6 +7,7 @@ import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.model.ModelLoader;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.util.math.MathFunction;
 import tauri.dev.jsg.util.math.MathFunctionImpl;
@@ -28,9 +29,9 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
     }
 
     @Override
-    protected void renderGate(StargateMilkyWayRendererState rendererState, double partialTicks) {
+    protected void renderGate(StargateAbstractBaseTile te, StargateMilkyWayRendererState rendererState, double partialTicks) {
         setGateHeatColor(rendererState);
-        renderRing(rendererState, partialTicks);
+        renderRing(te, rendererState, partialTicks);
         renderChevrons(rendererState, partialTicks);
 
         GlStateManager.pushMatrix();
@@ -42,7 +43,7 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
     // ----------------------------------------------------------------------------------------
     // Ring
 
-    private void renderRing(StargateMilkyWayRendererState rendererState, double partialTicks) {
+    private void renderRing(StargateAbstractBaseTile te, StargateMilkyWayRendererState rendererState, double partialTicks) {
         GlStateManager.pushMatrix();
         applyLightMap(rendererState, partialTicks);
         float angularRotation = rendererState.spinHelper.getCurrentSymbol().getAngle();
@@ -56,7 +57,7 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
         GlStateManager.translate(-RING_LOC.x, -RING_LOC.z, -RING_LOC.y);
 
         ElementEnum.MILKYWAY_RING.bindTextureAndRender(rendererState.getBiomeOverlay());
-        ModelLoader.getModel(((SymbolMilkyWayEnum) SymbolMilkyWayEnum.getOrigin()).getModelResource(rendererState.getBiomeOverlay(), getWorld().provider.getDimension(), false, false, rendererState.config.getOption(StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL.id).getEnumValue().getIntValue())).render();
+        ModelLoader.getModel(((SymbolMilkyWayEnum) SymbolMilkyWayEnum.getOrigin()).getModelResource(rendererState.getBiomeOverlay(), getWorld().provider.getDimension(), false, false, ((StargateClassicBaseTile) te).getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL.id).getEnumValue().getIntValue())).render();
 
         GlStateManager.popMatrix();
     }
@@ -97,7 +98,7 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
         GlStateManager.pushMatrix();
         GlStateManager.rotate(chevron.rotation, 0, 0, 1);
 
-        if(onlyLight){
+        if (onlyLight) {
             float color = rendererState.chevronTextureList.getColor(chevron);
             GlStateManager.color(color, color, color);
         }

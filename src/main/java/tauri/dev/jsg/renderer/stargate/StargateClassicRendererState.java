@@ -26,6 +26,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
         this.irisType = builder.irisType;
         this.irisAnimation = builder.irisAnimation;
         this.stargateSize = builder.stargateSize;
+        this.config = builder.config;
     }
 
     @Override
@@ -98,7 +99,11 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
         buf.writeLong(irisAnimation);
         buf.writeDouble(irisHeat);
         buf.writeDouble(gateHeat);
-        config.toBytes(buf);
+        if(config != null){
+            buf.writeBoolean(true);
+            config.toBytes(buf);
+        }
+        buf.writeBoolean(false);
         super.toBytes(buf);
     }
 
@@ -127,7 +132,9 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
         irisAnimation = buf.readLong();
         irisHeat = buf.readDouble();
         gateHeat = buf.readDouble();
-        config = new JSGTileEntityConfig(buf);
+        if (buf.readBoolean()) {
+            config = new JSGTileEntityConfig(buf);
+        }
         super.fromBytes(buf);
     }
 
@@ -168,6 +175,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
         public int irisCode;
         public EnumIrisMode irisMode;
         public long irisAnimation;
+        public JSGTileEntityConfig config;
 
         public StargateClassicRendererStateBuilder(StargateAbstractRendererStateBuilder superBuilder) {
             setStargateState(superBuilder.stargateState);
@@ -248,8 +256,12 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
             return this;
         }
 
-        public StargateClassicRendererStateBuilder setPlusRounds(int rounds) {
+        public void setPlusRounds(int rounds) {
             this.plusRounds = rounds;
+        }
+
+        public StargateClassicRendererStateBuilder setConfig(JSGTileEntityConfig config){
+            this.config = config;
             return this;
         }
     }
