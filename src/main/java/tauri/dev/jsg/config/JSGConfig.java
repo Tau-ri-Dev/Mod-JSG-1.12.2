@@ -566,6 +566,9 @@ public class JSGConfig {
 
         @Name("Show loading textures in log")
         public boolean logTexturesLoading = false;
+
+        @Name("Log debug messages as info")
+        public boolean logDebugAsInfo = false;
     }
 
     public static class MysteriousConfig {

@@ -2,7 +2,6 @@ package tauri.dev.jsg.util.main.loader;
 
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.util.CompoundDataFixer;
 import net.minecraftforge.common.util.ModFixs;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -34,6 +33,7 @@ public class JSGInit {
     private static final String OC_WRAPPER_LOADED = "tauri.dev.jsg.integration.OCWrapperLoaded";
     private static final String OC_WRAPPER_NOT_LOADED = "tauri.dev.jsg.integration.OCWrapperNotLoaded";
 
+    @SuppressWarnings("unused")
     public static void init(FMLInitializationEvent event) {
         GameRegistry.registerWorldGenerator(new JSGOresGenerator(), 0);
         GameRegistry.registerWorldGenerator(new JSGStructuresGenerator(), 0);
@@ -64,21 +64,20 @@ public class JSGInit {
         OreWashingRecipes.addToConfig();
 
         CraftingConfig.load(JSG.modConfigDir);
+        JSG.info("Successfully loaded CraftingConfig!");
 
         // Structures config
         EnumStructures.initConfig();
 
         StructureConfig.load(JSG.modConfigDir);
+        JSG.info("Successfully loaded StructureConfig!");
 
         StargateSizeEnum.init();
         JSG.info("Successfully registered Stargate sizes!");
-
-        //JSGFluids.registerWaterLogs();
-        //JSG.info("Successfully registered Water logged blocks! - jk... maybe later");
     }
 
     public static void fixData() {
-        ModFixs modFixs = ((CompoundDataFixer) FMLCommonHandler.instance().getDataFixer()).init(JSG.MOD_ID, JSG.DATA_VERSION);
+        ModFixs modFixs = FMLCommonHandler.instance().getDataFixer().init(JSG.MOD_ID, JSG.DATA_VERSION);
         modFixs.registerFix(FixTypes.BLOCK_ENTITY, new TileNamesFixer());
     }
 

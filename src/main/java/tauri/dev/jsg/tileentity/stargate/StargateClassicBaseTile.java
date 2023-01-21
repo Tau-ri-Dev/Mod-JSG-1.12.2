@@ -52,9 +52,8 @@ import tauri.dev.jsg.item.linkable.gdo.GDOMessages;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.item.stargate.UpgradeIris;
 import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.packet.StateUpdatePacketToClient;
+import tauri.dev.jsg.packet.StateUpdateRequestToServer;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
-import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRenderer;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRendererState.StargateClassicRendererStateBuilder;
@@ -653,6 +652,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public void update() {
+        if (world.isRemote) {
+            if(getConfig().getOptions().size() < 1) {
+                JSGPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.GUI_STATE));
+            }
+        }
+
         // Fast dialing
         if (!world.isRemote) {
             boolean shouldBeFast = getConfig().getOption(ENABLE_FAST_DIAL.id).getBooleanValue();
@@ -1408,8 +1413,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 .setIrisType(irisType)
                 .setIrisMode(irisMode)
                 .setIrisCode(irisCode)
-                .setIrisAnimation(irisAnimation)
-                .setConfig(getConfig());
+                .setIrisAnimation(irisAnimation);
     }
 
     @Override

@@ -3,12 +3,14 @@ package tauri.dev.jsg.renderer.stargate;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.model.ModelLoader;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
+import tauri.dev.jsg.util.JSGMinecraftHelper;
 import tauri.dev.jsg.util.math.MathFunction;
 import tauri.dev.jsg.util.math.MathFunctionImpl;
 import tauri.dev.jsg.util.math.MathRange;
@@ -55,6 +57,10 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
         GlStateManager.translate(RING_LOC.x, RING_LOC.z, RING_LOC.y);
         GlStateManager.rotate(-angularRotation, 0, 0, 1);
         GlStateManager.translate(-RING_LOC.x, -RING_LOC.z, -RING_LOC.y);
+
+        if(JSGMinecraftHelper.getClientTick() % 20 == 0){
+            JSG.info("State: " + ((StargateClassicBaseTile) te).getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL.id).getEnumValue());
+        }
 
         ElementEnum.MILKYWAY_RING.bindTextureAndRender(rendererState.getBiomeOverlay());
         ModelLoader.getModel(((SymbolMilkyWayEnum) SymbolMilkyWayEnum.getOrigin()).getModelResource(rendererState.getBiomeOverlay(), getWorld().provider.getDimension(), false, false, ((StargateClassicBaseTile) te).getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL.id).getEnumValue().getIntValue())).render();

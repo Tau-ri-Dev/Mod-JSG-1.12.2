@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.stargate.*;
@@ -26,7 +25,6 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
         this.irisType = builder.irisType;
         this.irisAnimation = builder.irisAnimation;
         this.stargateSize = builder.stargateSize;
-        this.config = builder.config;
     }
 
     @Override
@@ -65,8 +63,6 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     public double irisHeat = 0;
     public double gateHeat = 0;
 
-    public JSGTileEntityConfig config = new JSGTileEntityConfig();
-
     @Override
     public BiomeOverlayEnum getBiomeOverlay() {
         if (biomeOverride != null) return biomeOverride;
@@ -83,7 +79,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
 
     @Override
     public void toBytes(ByteBuf buf) {
-        if(stargateSize == null) stargateSize = JSGConfig.stargateSize;
+        if (stargateSize == null) stargateSize = JSGConfig.stargateSize;
         buf.writeInt(stargateSize.id);
         chevronTextureList.toBytes(buf);
         spinHelper.toBytes(buf);
@@ -99,11 +95,6 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
         buf.writeLong(irisAnimation);
         buf.writeDouble(irisHeat);
         buf.writeDouble(gateHeat);
-        if(config != null){
-            buf.writeBoolean(true);
-            config.toBytes(buf);
-        }
-        buf.writeBoolean(false);
         super.toBytes(buf);
     }
 
@@ -132,9 +123,6 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
         irisAnimation = buf.readLong();
         irisHeat = buf.readDouble();
         gateHeat = buf.readDouble();
-        if (buf.readBoolean()) {
-            config = new JSGTileEntityConfig(buf);
-        }
         super.fromBytes(buf);
     }
 
@@ -175,7 +163,6 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
         public int irisCode;
         public EnumIrisMode irisMode;
         public long irisAnimation;
-        public JSGTileEntityConfig config;
 
         public StargateClassicRendererStateBuilder(StargateAbstractRendererStateBuilder superBuilder) {
             setStargateState(superBuilder.stargateState);
@@ -258,11 +245,6 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
 
         public void setPlusRounds(int rounds) {
             this.plusRounds = rounds;
-        }
-
-        public StargateClassicRendererStateBuilder setConfig(JSGTileEntityConfig config){
-            this.config = config;
-            return this;
         }
     }
 }

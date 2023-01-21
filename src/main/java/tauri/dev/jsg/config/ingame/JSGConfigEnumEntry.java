@@ -16,4 +16,9 @@ public class JSGConfigEnumEntry {
         catch(Exception ignored){}
         return -1;
     }
+
+    @Override
+    public String toString(){
+        return "[name=" + name + ", value=" + value + "]";
+    }
 }
