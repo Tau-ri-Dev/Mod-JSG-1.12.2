@@ -58,6 +58,10 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
         GlStateManager.rotate(-angularRotation, 0, 0, 1);
         GlStateManager.translate(-RING_LOC.x, -RING_LOC.z, -RING_LOC.y);
 
+        if(JSGMinecraftHelper.getClientTick() % 20 == 0){
+            JSG.info("State: " + ((StargateClassicBaseTile) te).getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL.id).getEnumValue());
+        }
+
         ElementEnum.MILKYWAY_RING.bindTextureAndRender(rendererState.getBiomeOverlay());
         ModelLoader.getModel(((SymbolMilkyWayEnum) SymbolMilkyWayEnum.getOrigin()).getModelResource(rendererState.getBiomeOverlay(), getWorld().provider.getDimension(), false, false, ((StargateClassicBaseTile) te).getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL.id).getEnumValue().getIntValue())).render();
 
