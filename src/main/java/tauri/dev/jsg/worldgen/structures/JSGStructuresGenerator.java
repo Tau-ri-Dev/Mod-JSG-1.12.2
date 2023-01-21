@@ -34,8 +34,8 @@ public class JSGStructuresGenerator implements IWorldGenerator {
         for (EnumStructures structure : EnumStructures.values()) {
             if(world.getWorldType() == WorldType.FLAT) return;
             if (structure.getActualStructure(world.provider.getDimension()).dimensionToSpawn == world.provider.getDimension()) {
-                if (structure.randomGenEnable) {
-                    if (structure.chance > 0 && (random.nextFloat() < structure.chance)) {
+                if (structure.randomGeneratorEnabled()) {
+                    if (structure.getChance() > 0 && (random.nextFloat() < structure.getChance())) {
                         JSGStructuresGenerator.generateStructure(structure, world, random, chunkX, chunkZ, false);
                         return; // - if not -> causing cascading worldgen lag
                     }

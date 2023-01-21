@@ -5,6 +5,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.Rotation;
 import net.minecraft.world.gen.structure.template.ITemplateProcessor;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.structures.StructureConfig;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.worldgen.structures.stargate.nether.JSGNetherStructure;
 import tauri.dev.jsg.worldgen.structures.processor.NetherProcessor;
@@ -143,7 +144,7 @@ public enum EnumStructures {
     public final String name;
     private final JSGStructure structure;
     private final JSGNetherStructure netherStructure;
-    public final boolean randomGenEnable;
+    public final boolean randomGenEnableDefault;
     public final float chance;
     public final List<String> allowedInBiomes;
     public final List<Block> allowedOnBlocks;
@@ -153,7 +154,7 @@ public enum EnumStructures {
         this.netherStructure = new JSGNetherStructure(structureName, yNegativeOffset, isStargateStructure, isRingsStructure, symbolType, structureSizeX, structureSizeZ, airCountUp, dimensionToSpawn, findOptimalRotation, templateProcessor, rotationToNorth, terrainFlatPercents, topBlockMatchPercent, genHeight);
         this.structure = new JSGStructure(structureName, yNegativeOffset, isStargateStructure, isRingsStructure, symbolType, structureSizeX, structureSizeZ, airCountUp, dimensionToSpawn, findOptimalRotation, templateProcessor, rotationToNorth, terrainFlatPercents, topBlockMatchPercent, genHeight);
 
-        this.randomGenEnable = randomGenEnable;
+        this.randomGenEnableDefault = randomGenEnable;
         this.chance = chanceToGenerateRandom;
 
         this.allowedInBiomes = allowedInBiomes;
@@ -163,6 +164,39 @@ public enum EnumStructures {
     public JSGStructure getActualStructure(int dimId){
         if(dimId == -1) return netherStructure;
         return structure;
+    }
+
+    public static void initConfig(){
+        StructureConfig configStargates = new StructureConfig("stargateStructures");
+        StructureConfig configRings = new StructureConfig("ringsStructures");
+        StructureConfig configOther = new StructureConfig("otherStructures");
+        for(EnumStructures s : EnumStructures.values()){
+            if(s.name.startsWith("sg_"))
+                configStargates.addKey(s.name, s.randomGenEnableDefault, s.chance);
+            else if(s.name.startsWith("tr_"))
+                configRings.addKey(s.name, s.randomGenEnableDefault, s.chance);
+            else
+                configOther.addKey(s.name, s.randomGenEnableDefault, s.chance);
+        }
+        StructureConfig.addConfig(configStargates);
+        StructureConfig.addConfig(configRings);
+        StructureConfig.addConfig(configOther);
+    }
+
+    public boolean randomGeneratorEnabled() {
+        if(name.startsWith("sg_"))
+            return StructureConfig.isEnabled("stargateStructures", name);
+        if(name.startsWith("tr_"))
+            return StructureConfig.isEnabled("ringsStructures", name);
+        return StructureConfig.isEnabled("otherStructures", name);
+    }
+
+    public float getChance() {
+        if(name.startsWith("sg_"))
+            return StructureConfig.getChance("stargateStructures", name);
+        if(name.startsWith("tr_"))
+            return StructureConfig.getChance("ringsStructures", name);
+        return StructureConfig.getChance("otherStructures", name);
     }
 
     @Nullable

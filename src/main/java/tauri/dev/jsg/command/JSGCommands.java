@@ -27,7 +27,7 @@ public final class JSGCommands {
             new CommandAgs(),
             new CommandActiveAll(),
             new CommandCountdownSet(),
-            new CommandReloadCraftingConfigs(),
+            new CommandReloadConfigs(),
             new CommandDestinyFTL(),
             new CommandStargateSetFakePos(),
             new CommandStargateGetFakePos(),

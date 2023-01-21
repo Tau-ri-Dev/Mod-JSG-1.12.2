@@ -16,6 +16,7 @@ import tauri.dev.jsg.chunkloader.ChunkLoadingCallback;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.craftings.CraftingConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
+import tauri.dev.jsg.config.structures.StructureConfig;
 import tauri.dev.jsg.datafixer.TileNamesFixer;
 import tauri.dev.jsg.gui.JSGGuiHandler;
 import tauri.dev.jsg.integration.OCWrapperInterface;
@@ -25,6 +26,7 @@ import tauri.dev.jsg.machine.chamber.CrystalChamberRecipes;
 import tauri.dev.jsg.machine.orewashing.OreWashingRecipes;
 import tauri.dev.jsg.machine.pcbfabricator.PCBFabricatorRecipes;
 import tauri.dev.jsg.worldgen.JSGOresGenerator;
+import tauri.dev.jsg.worldgen.structures.EnumStructures;
 import tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator;
 
 public class JSGInit {
@@ -62,6 +64,11 @@ public class JSGInit {
         OreWashingRecipes.addToConfig();
 
         CraftingConfig.load(JSG.modConfigDir);
+
+        // Structures config
+        EnumStructures.initConfig();
+
+        StructureConfig.load(JSG.modConfigDir);
 
         StargateSizeEnum.init();
         JSG.info("Successfully registered Stargate sizes!");

@@ -504,13 +504,6 @@ public class JSGConfig {
         @RangeInt(min = 1)
         public int rangeVertical = 15;
 
-        @Name("Pegasus DHD do dial animation")
-        @Comment({
-                "Disable this, to disable animation when dial gate with DHD (pegasus)",
-                "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
-        })
-        public boolean animatePegDHDDial = true;
-
         @Name("Enable press sound when dialing with computer")
         @Comment({
                 "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
@@ -699,10 +692,6 @@ public class JSGConfig {
                 "Disable this if it causes lags."
         })
         public boolean renderEmissive = true;
-
-        @Name("Enable custom sounds category")
-        @Comment({"Disable this if it causes crash."})
-        public boolean enableCustomSoundCategory = true;
     }
 
     public static class PointOfOriginConfig {
