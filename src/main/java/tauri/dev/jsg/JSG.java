@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.event.*;
 import org.apache.logging.log4j.Logger;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.command.JSGCommands;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.event.EventTickClient;
 import tauri.dev.jsg.integration.OCWrapperInterface;
@@ -121,14 +122,20 @@ public class JSG {
 
     public static void debug(String string) {
         logger.debug(string);
+        if(JSGConfig.debugConfig.logDebugAsInfo)
+            info("[DEBUG] " + string);
     }
 
     public static void debug(Object... o) {
         logger.debug(o);
+        if(JSGConfig.debugConfig.logDebugAsInfo)
+            info("[DEBUG] ", o);
     }
 
     public static void debug(String string, Exception e) {
         logger.debug(string, e);
+        if(JSGConfig.debugConfig.logDebugAsInfo)
+            info("[DEBUG] " + string, e);
     }
 
     // --------------------------------------------

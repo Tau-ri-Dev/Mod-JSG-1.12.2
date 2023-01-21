@@ -75,7 +75,7 @@ public class StructureConfig {
 
     public static void load(File configDir) {
         StructureConfig.configDir = configDir;
-        configFile = new File(configDir, "jsg/jsgEnabledStructures_" + JSG.CONFIG_STRUCTURES_VERSION + ".json");
+        configFile = new File(configDir, "jsg/jsgStructuresConfig_" + JSG.CONFIG_STRUCTURES_VERSION + ".json");
 
         try {
             Type typeOfHashMap = new TypeToken<Map<String, Map<String, StructureConfigEntry>>>() {
