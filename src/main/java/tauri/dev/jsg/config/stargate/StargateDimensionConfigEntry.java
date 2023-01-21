@@ -23,6 +23,8 @@ public class StargateDimensionConfigEntry {
         this.keepAlive = keepAlive;
         this.groups = groups;
         this.milkyWayOrigins = origins;
+        if(this.groups == null)
+            this.groups = new ArrayList<>();
     }
 
     @Override
