@@ -359,6 +359,12 @@
       "jsg:gui/mainmenu/stargate_theme_1"
     ]
   },
+  "loading_music": {
+    "category": "ambient",
+    "sounds": [
+      "jsg:gui/mainmenu/loading_music"
+    ]
+  },
   "gui_send_code_button_press": {
     "category": "ambient",
     "subtitle": "jsg.subtitle.gdo_button_beep",

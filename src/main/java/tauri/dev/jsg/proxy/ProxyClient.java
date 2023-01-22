@@ -32,6 +32,7 @@ import tauri.dev.jsg.event.EventTickClient;
 import tauri.dev.jsg.event.InputHandlerClient;
 import tauri.dev.jsg.fluid.JSGBlockFluid;
 import tauri.dev.jsg.fluid.JSGFluids;
+import tauri.dev.jsg.gui.mainmenu.GuiCustomMainMenu;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.color.PageNotebookItemColor;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
@@ -55,6 +56,7 @@ public class ProxyClient implements IProxy {
     }
 
     public void init(FMLInitializationEvent event) {
+        playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.LOADING_MUSIC, true);
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new PageNotebookItemColor(), JSGItems.PAGE_NOTEBOOK_ITEM);
 
         Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new StargateClassicMemberBlockColor(), JSGBlocks.STARGATE_MILKY_WAY_MEMBER_BLOCK, JSGBlocks.STARGATE_UNIVERSE_MEMBER_BLOCK, JSGBlocks.STARGATE_PEGASUS_MEMBER_BLOCK);
@@ -133,5 +135,10 @@ public class ProxyClient implements IProxy {
         DestinyFTL.jumpingOut = false;
         DestinyFTL.jumpingIn = false;
         Minecraft.getMinecraft().gameSettings.setOptionFloatValue(GameSettings.Options.FOV, DestinyFTL.defaultFov);
+    }
+
+    @Override
+    public void loadCompleted() {
+        playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.LOADING_MUSIC, false);
     }
 }

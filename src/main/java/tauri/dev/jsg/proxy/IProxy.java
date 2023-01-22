@@ -29,4 +29,5 @@ public interface IProxy {
 	
 	void openGui(GuiScreen gui);
 	void shutDown();
+	void loadCompleted();
 }

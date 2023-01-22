@@ -24,7 +24,8 @@ public enum SoundPositionedEnum {
   WORMHOLE_LOOP(1, "wormhole_loop", JSG.JSG_SOUNDS, true, 0.4f),
 
   // main menu
-  MAINMENU_MUSIC(6, "mainmenu_music", JSG.JSG_SOUNDS, false, 0.05f);
+  MAINMENU_MUSIC(6, "mainmenu_music", JSG.JSG_SOUNDS, false, 0.05f),
+  LOADING_MUSIC(7, "loading_music", JSG.JSG_SOUNDS, true, 0.07f);
 
   public final int id;
   public final ResourceLocation resourceLocation;

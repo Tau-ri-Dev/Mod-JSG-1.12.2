@@ -64,4 +64,9 @@ public class ProxyServer implements IProxy {
     @Override
     public void shutDown() {
     }
+
+    @Override
+    public void loadCompleted() {
+
+    }
 }

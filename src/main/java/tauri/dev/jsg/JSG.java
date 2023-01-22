@@ -176,6 +176,7 @@ public class JSG {
     @EventHandler
     public void loadComplete(FMLLoadCompleteEvent event) {
         JSG.info("Just Stargate Mod loading completed!");
+        proxy.loadCompleted();
     }
 
     @EventHandler
