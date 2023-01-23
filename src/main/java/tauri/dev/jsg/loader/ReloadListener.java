@@ -5,6 +5,7 @@ import net.minecraftforge.client.resource.IResourceType;
 import net.minecraftforge.client.resource.ISelectiveResourceReloadListener;
 import net.minecraftforge.client.resource.VanillaResourceType;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.config.origins.OriginsLoader;
 import tauri.dev.jsg.loader.model.ModelLoader;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 
@@ -27,6 +28,7 @@ public class ReloadListener implements ISelectiveResourceReloadListener {
 
     @Override
     public void onResourceManagerReload(@Nonnull IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
+        OriginsLoader.NOT_LOADED_ORIGINS.clear();
         if (resourcePredicate.test(VanillaResourceType.MODELS)) {
             try {
                 ModelLoader.reloadModels();

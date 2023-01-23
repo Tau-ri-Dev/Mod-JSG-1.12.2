@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.ProgressManager.ProgressBar;
 import org.apache.commons.io.IOUtils;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.origins.OriginsLoader;
 import tauri.dev.jsg.loader.FolderLoader;
 import tauri.dev.jsg.loader.ReloadListener;
 
@@ -45,6 +46,8 @@ public class TextureLoader {
     public static void reloadTextures(IResourceManager resourceManager) throws IOException {
         for (Texture texture : LOADED_TEXTURES.values())
             texture.deleteTexture();
+
+        OriginsLoader.registerTextures(LOADED_TEXTURES);
 
         // ----------------------------------
         // INIT

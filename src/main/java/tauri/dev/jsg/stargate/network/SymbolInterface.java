@@ -29,6 +29,10 @@ public interface SymbolInterface {
         return getIconResource(BiomeOverlayEnum.NORMAL, 0);
     }
 
+    default boolean renderIconByMinecraft(int originId){
+        return true;
+    }
+
     String localize();
 
     SymbolTypeEnum getSymbolType();

@@ -5,8 +5,11 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.SlotItemHandler;
 import tauri.dev.jsg.gui.element.GuiHelper;
+import tauri.dev.jsg.loader.texture.TextureLoader;
+import tauri.dev.jsg.stargate.network.SymbolInterface;
 import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
@@ -56,7 +59,13 @@ public class TabAddress extends Tab {
                 color = 0.0f;
 
             for (int i = 0; i < maxSymbols; i++) {
-                Minecraft.getMinecraft().getTextureManager().bindTexture(Objects.requireNonNull(gateTile.getStargateAddress(symbolType)).get(i).getIconResource(StargateClassicBaseTile.getOriginId(gateTile.getBiomeOverlayWithOverride(true), gateTile.getWorld().provider.getDimension(), gateTile.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL.id).getEnumValue().getIntValue())));
+                int originId = StargateClassicBaseTile.getOriginId(gateTile.getBiomeOverlayWithOverride(true), gateTile.getWorld().provider.getDimension(), gateTile.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL.id).getEnumValue().getIntValue());
+                SymbolInterface symbol = Objects.requireNonNull(gateTile.getStargateAddress(symbolType)).get(i);
+
+                if(symbol.renderIconByMinecraft(originId))
+                    Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource(originId));
+                else
+                    TextureLoader.getTexture(symbol.getIconResource(originId)).bindTexture();
 
                 SymbolCoords symbolCoords = getSymbolCoords(i);
                 GuiHelper.drawTexturedRectWithShadow(symbolCoords.x, symbolCoords.y, shadow, shadow, symbolType.iconWidht, symbolType.iconHeight, color);

@@ -3,6 +3,8 @@ package tauri.dev.jsg.item.notebook;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.item.renderer.JSGFontRenderer;
 import tauri.dev.jsg.item.renderer.ItemRenderHelper;
+import tauri.dev.jsg.loader.ElementEnum;
+import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.stargate.network.StargateAddress;
 import tauri.dev.jsg.stargate.network.SymbolInterface;
@@ -26,8 +28,11 @@ public class PageRenderer {
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableBlend();
 		GlStateManager.color(0, 0, 0, (float) JSGConfig.notebookOptions.glyphTransparency);
-		
-		Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource(originId));
+
+		if(symbol.renderIconByMinecraft(originId))
+			Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource(originId));
+		else
+			TextureLoader.getTexture(symbol.getIconResource(originId)).bindTexture();
 		GL11.glBegin(GL11.GL_QUADS);
 		
 		GL11.glTexCoord2f(0, 1); GL11.glVertex3f(0.04f + x, 0.79f - y, z);

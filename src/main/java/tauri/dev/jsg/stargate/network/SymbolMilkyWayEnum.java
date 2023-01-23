@@ -1,12 +1,10 @@
 package tauri.dev.jsg.stargate.network;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.DimensionManager;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
+import tauri.dev.jsg.config.origins.OriginsLoader;
 import tauri.dev.jsg.loader.model.ModelLoader;
-import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 
@@ -14,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import static tauri.dev.jsg.config.origins.OriginsLoader.DEFAULT_ORIGIN_ID;
+import static tauri.dev.jsg.config.origins.OriginsLoader.MOD_POINT_OF_ORIGINS_COUNT;
 
 public enum SymbolMilkyWayEnum implements SymbolInterface {
     SCULPTOR(0, 19, "Sculptor", "0.obj"),
@@ -114,16 +115,22 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
         return getEnglishName();
     }
 
-    private static final int DEFAULT_ORIGIN_ID = 5;
-
     @Override
     public ResourceLocation getIconResource(int originId) {
         if (this == ORIGIN) {
-            if (JSGConfig.originsConfig.enableDiffOrigins)
+            if (JSGConfig.originsConfig.enableDiffOrigins) {
+                if (originId >= MOD_POINT_OF_ORIGINS_COUNT)
+                    return OriginsLoader.getResource(OriginsLoader.EnumOriginFileType.TEXTURE, originId);
                 return new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/milkyway/origin_" + originId + ".png");
+            }
             return new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/milkyway/origin_" + DEFAULT_ORIGIN_ID + ".png");
         }
         return getIconResource(BiomeOverlayEnum.NORMAL, 0, originId);
+    }
+
+    @Override
+    public boolean renderIconByMinecraft(int originId){
+        return (this != ORIGIN || !JSGConfig.originsConfig.enableDiffOrigins || originId < MOD_POINT_OF_ORIGINS_COUNT);
     }
 
     @Override
@@ -131,10 +138,6 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
         if (this == ORIGIN)
             return getIconResource(StargateClassicBaseTile.getOriginId(overlay, dimensionId, configOrigin));
         return iconResource;
-    }
-
-    public ResourceLocation getModelResource(BiomeOverlayEnum overlay, int dimensionId, boolean forDHD) {
-        return getModelResource(overlay, dimensionId, forDHD, false, -1);
     }
 
     public ResourceLocation getModelResource(BiomeOverlayEnum overlay, int dimensionId, boolean forDHD, boolean lightModel, int configOrigin) {
