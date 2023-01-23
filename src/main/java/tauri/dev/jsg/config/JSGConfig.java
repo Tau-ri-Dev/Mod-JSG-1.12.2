@@ -801,6 +801,9 @@ public class JSGConfig {
 
         @Name("Enable changing gate type")
         public boolean enableGateChanging = true;
+
+        @Name("Enable loading music")
+        public boolean loadingMusic = true;
     }
 
     public static class IntegrationsConfig {

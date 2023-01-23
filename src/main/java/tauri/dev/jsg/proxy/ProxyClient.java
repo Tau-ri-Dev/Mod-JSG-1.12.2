@@ -26,6 +26,7 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.stargate.StargateClassicMemberBlockColor;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.entity.friendly.TokraEntity;
 import tauri.dev.jsg.entity.renderer.TokraRenderer;
 import tauri.dev.jsg.event.EventTickClient;
@@ -56,7 +57,9 @@ public class ProxyClient implements IProxy {
     }
 
     public void init(FMLInitializationEvent event) {
-        playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.LOADING_MUSIC, true);
+        if(JSGConfig.mainMenuConfig.loadingMusic)
+            playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.LOADING_MUSIC, true);
+
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new PageNotebookItemColor(), JSGItems.PAGE_NOTEBOOK_ITEM);
 
         Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new StargateClassicMemberBlockColor(), JSGBlocks.STARGATE_MILKY_WAY_MEMBER_BLOCK, JSGBlocks.STARGATE_UNIVERSE_MEMBER_BLOCK, JSGBlocks.STARGATE_PEGASUS_MEMBER_BLOCK);
@@ -139,6 +142,7 @@ public class ProxyClient implements IProxy {
 
     @Override
     public void loadCompleted() {
-        playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.LOADING_MUSIC, false);
+        if(JSGConfig.mainMenuConfig.loadingMusic)
+            playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.LOADING_MUSIC, false);
     }
 }
