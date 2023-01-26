@@ -136,8 +136,9 @@ public class CommandStargateQuery extends CommandBase {
 				String gateString = " " + id + ". [";
 				gateString += "x=" + pos.getX() + ", ";
 				gateString += "y=" + pos.getY() + ", ";
-				gateString += "z=" + pos.getZ() + "]";
-				
+				gateString += "z=" + pos.getZ() + ", ";
+				gateString += "dim=" + selectedStargatePos.getWorld().provider.getDimension() + " (" + selectedStargatePos.getWorld().provider.getDimensionType().getName() + ")]";
+
 				if (symbolType != null) {			
 					gateString += ": " + TextFormatting.DARK_GREEN;
 					
