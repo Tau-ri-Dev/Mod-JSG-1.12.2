@@ -43,6 +43,7 @@ import tauri.dev.jsg.entity.friendly.TokraEntity;
 import tauri.dev.jsg.gui.container.transportrings.TRGuiState;
 import tauri.dev.jsg.gui.container.transportrings.TRGuiUpdate;
 import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.item.energy.CapacitorItemBlock;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
@@ -140,7 +141,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
             Item item = stack.getItem();
-            boolean isItemCapacitor = (item == Item.getItemFromBlock(JSGBlocks.CAPACITOR_BLOCK));
+            boolean isItemCapacitor = (item instanceof CapacitorItemBlock);
             switch (slot) {
                 case 0:
                 case 1:

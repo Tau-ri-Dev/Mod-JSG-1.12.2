@@ -38,11 +38,13 @@ public class CapacitorBlock extends JSGAbstractCustomItemBlock {
 	
 	public static final String BLOCK_NAME = "capacitor_block";
 	
-	public CapacitorBlock() {		
+	public CapacitorBlock(boolean registered) {
 		super(Material.IRON);
-		
-		setRegistryName(JSG.MOD_ID + ":" + BLOCK_NAME);
-		setUnlocalizedName(JSG.MOD_ID + "." + BLOCK_NAME);
+
+		if(!registered) {
+			setRegistryName(JSG.MOD_ID + ":" + BLOCK_NAME);
+			setUnlocalizedName(JSG.MOD_ID + "." + BLOCK_NAME);
+		}
 		
 		setSoundType(SoundType.METAL); 
 		setCreativeTab(JSGCreativeTabsHandler.JSG_ENERGY_CREATIVE_TAB);
@@ -169,6 +171,6 @@ public class CapacitorBlock extends JSGAbstractCustomItemBlock {
 
 	@Override
 	public ItemBlock getItemBlock() {
-		return new CapacitorItemBlock(this);
+		return new CapacitorItemBlock(this, false);
 	}
 }

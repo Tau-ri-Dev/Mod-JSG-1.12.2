@@ -48,6 +48,7 @@ import tauri.dev.jsg.config.stargate.StargateTimeLimitModeEnum;
 import tauri.dev.jsg.gui.container.stargate.StargateContainerGuiState;
 import tauri.dev.jsg.gui.container.stargate.StargateContainerGuiUpdate;
 import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.item.energy.CapacitorItemBlock;
 import tauri.dev.jsg.item.linkable.gdo.GDOMessages;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.item.stargate.UpgradeIris;
@@ -1856,7 +1857,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
             Item item = stack.getItem();
-            boolean isItemCapacitor = (item == Item.getItemFromBlock(JSGBlocks.CAPACITOR_BLOCK));
+            boolean isItemCapacitor = (item instanceof CapacitorItemBlock);
             switch (slot) {
                 case 0:
                 case 1:

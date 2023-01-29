@@ -35,10 +35,12 @@ public class ZPMBlock extends JSGAbstractCustomItemBlock {
 
     public static final String BLOCK_NAME = "zpm";
 
-    public ZPMBlock() {
+    public ZPMBlock(boolean registered) {
         super(Material.GLASS);
-        setRegistryName(JSG.MOD_ID + ":" + BLOCK_NAME);
-        setUnlocalizedName(JSG.MOD_ID + "." + BLOCK_NAME);
+        if(!registered) {
+            setRegistryName(JSG.MOD_ID + ":" + BLOCK_NAME);
+            setUnlocalizedName(JSG.MOD_ID + "." + BLOCK_NAME);
+        }
 
         setSoundType(SoundType.GLASS);
         setCreativeTab(JSGCreativeTabsHandler.JSG_ENERGY_CREATIVE_TAB);
@@ -127,7 +129,7 @@ public class ZPMBlock extends JSGAbstractCustomItemBlock {
 
     @Override
     public ItemBlock getItemBlock() {
-        return new ZPMItemBlock(this);
+        return new ZPMItemBlock(this, false);
     }
 
     @Override

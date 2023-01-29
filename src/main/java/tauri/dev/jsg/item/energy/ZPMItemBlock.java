@@ -12,6 +12,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import tauri.dev.jsg.block.energy.ZPMBlock;
+import tauri.dev.jsg.block.energy.ZPMBlockCreative;
 import tauri.dev.jsg.capability.ItemCapabilityProvider;
 import tauri.dev.jsg.capability.ItemEnergyCapabilityWithoutReceiving;
 import tauri.dev.jsg.config.JSGConfig;
@@ -23,10 +24,10 @@ import java.util.List;
 
 public class ZPMItemBlock extends ItemBlock {
 
-    public ZPMItemBlock(Block block) {
+    public ZPMItemBlock(Block block, boolean creative) {
         super(block);
 
-        setRegistryName(ZPMBlock.BLOCK_NAME);
+        setRegistryName(creative ? ZPMBlockCreative.BLOCK_NAME : ZPMBlock.BLOCK_NAME);
         setMaxStackSize(1);
         setHasSubtypes(true);
     }

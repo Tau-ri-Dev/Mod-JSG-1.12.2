@@ -1,6 +1,7 @@
 package tauri.dev.jsg.item.energy;
 
 import tauri.dev.jsg.block.energy.capacitor.CapacitorBlock;
+import tauri.dev.jsg.block.energy.capacitor.CapacitorBlockCreative;
 import tauri.dev.jsg.capability.ItemCapabilityProvider;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.stargate.power.StargateItemEnergyStorage;
@@ -21,10 +22,10 @@ import java.util.List;
 
 public class CapacitorItemBlock extends ItemBlock {
 
-	public CapacitorItemBlock(Block block) {
+	public CapacitorItemBlock(Block block, boolean creative) {
 		super(block);
-		
-		setRegistryName(CapacitorBlock.BLOCK_NAME);
+
+		setRegistryName(creative ? CapacitorBlockCreative.BLOCK_NAME : CapacitorBlock.BLOCK_NAME);
 		setMaxStackSize(1);
 		setHasSubtypes(true);
 	}

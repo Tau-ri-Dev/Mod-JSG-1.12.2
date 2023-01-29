@@ -841,4 +841,10 @@ menu.about=Acerca de JSG
 menu.updater.download=Download
 menu.updater.close=Close
 
+# tips
+menu.nether_Gate=TIP: If you go into Nether, do not forget to save Nether's gate address!
+menu.energy=TIP: If you plug cables for gate into multiple gate's blocks, the gate will charge faster!
+menu.dhd=TIP: Do not forget that DHDs can be upgraded with Capacity and Efficiency upgrades!
+menu.gdo=TIP: If you install iris on your gate, do not forget to sometimes check it's durability!
+
 # -------------------

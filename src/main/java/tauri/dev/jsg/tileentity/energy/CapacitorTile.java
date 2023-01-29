@@ -24,6 +24,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 public class CapacitorTile extends TileEntity implements ITickable, ICapabilityProvider, StateProviderInterface {
 
     // ------------------------------------------------------------------------
@@ -32,7 +35,7 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
     protected final ItemStackHandler itemStackHandler = new JSGItemStackHandler(1) {
 
         @Override
-        public boolean isItemValid(int slot, ItemStack stack) {
+        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             if (slot == 0) {
                 return stack.hasCapability(CapabilityEnergy.ENERGY, null);
             }
@@ -40,7 +43,7 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
         }
 
         @Override
-        protected int getStackLimit(int slot, ItemStack stack) {
+        protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
             return 1;
         }
 
@@ -99,10 +102,10 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
                 TileEntity tile = world.getTileEntity(pos.offset(facing));
 
                 if (tile != null && tile.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
-                    int extracted = energyStorage.extractEnergy(tauri.dev.jsg.config.JSGConfig.powerConfig.stargateMaxEnergyTransfer, true);
-                    extracted = tile.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).receiveEnergy(extracted, false);
+                    int extracted = getEnergyStorage().extractEnergy(tauri.dev.jsg.config.JSGConfig.powerConfig.stargateMaxEnergyTransfer, true);
+                    extracted = Objects.requireNonNull(tile.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite())).receiveEnergy(extracted, false);
 
-                    energyStorage.extractEnergy(extracted, false);
+                    getEnergyStorage().extractEnergy(extracted, false);
                 }
             }
 
@@ -110,24 +113,25 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
             if (!stack.isEmpty() && stack.hasCapability(CapabilityEnergy.ENERGY, null)) {
                 IEnergyStorage targetEnergyStorage = stack.getCapability(CapabilityEnergy.ENERGY, null);
                 if (targetEnergyStorage != null) {
-                    int extracted = energyStorage.extractEnergy(JSGConfig.powerConfig.stargateMaxEnergyTransfer, true);
+                    int extracted = getEnergyStorage().extractEnergy(JSGConfig.powerConfig.stargateMaxEnergyTransfer, true);
                     extracted = targetEnergyStorage.receiveEnergy(extracted, false);
-                    energyStorage.extractEnergy(extracted, false);
+                    getEnergyStorage().extractEnergy(extracted, false);
                 }
             }
 
-            powerLevel = Math.round(energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored() * 10);
+            powerLevel = Math.round(getEnergyStorage().getEnergyStored() / (float) getEnergyStorage().getMaxEnergyStored() * 10);
             if (powerLevel != lastPowerLevel) {
                 JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE)), targetPoint);
 
                 lastPowerLevel = powerLevel;
             }
 
-            energyTransferedLastTick = energyStorage.getEnergyStored() - energyStoredLastTick;
-            energyStoredLastTick = energyStorage.getEnergyStored();
+            energyTransferedLastTick = getEnergyStorage().getEnergyStored() - energyStoredLastTick;
+            energyStoredLastTick = getEnergyStorage().getEnergyStored();
         }
     }
 
+    @Nonnull
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         compound.setTag("energyStorage", getEnergyStorage().serializeNBT());
@@ -149,12 +153,12 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
         return (capability == CapabilityEnergy.ENERGY) || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityEnergy.ENERGY)
             return CapabilityEnergy.ENERGY.cast(getEnergyStorage());
 
@@ -175,7 +179,7 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
                 return new CapacitorPowerLevelUpdate(powerLevel);
 
             case GUI_UPDATE:
-                return new CapacitorContainerGuiUpdate(energyStorage.getEnergyStored(), energyTransferedLastTick);
+                return new CapacitorContainerGuiUpdate(getEnergyStorage().getEnergyStored(), energyTransferedLastTick);
 
             default:
                 return null;
@@ -208,7 +212,7 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
 
             case GUI_UPDATE:
                 CapacitorContainerGuiUpdate guiUpdate = (CapacitorContainerGuiUpdate) state;
-                energyStorage.setEnergyStored(guiUpdate.energyStored);
+                getEnergyStorage().setEnergyStored(guiUpdate.energyStored);
                 energyTransferedLastTick = guiUpdate.energyTransferedLastTick;
                 break;
 

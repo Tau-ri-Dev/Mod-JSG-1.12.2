@@ -33,7 +33,7 @@ public class ItemHelper {
     public static Item createDurabilityItem(String name, JSGCreativeTabs tab, int maxDamage, boolean shouldStayInCrafting) {
         Item item = new Item() {
             @Override
-            public void setDamage(ItemStack stack, int damage) {
+            public void setDamage(@Nonnull ItemStack stack, int damage) {
                 if (damage >= maxDamage) {
                     stack.setCount(0);
                     return;
@@ -69,11 +69,13 @@ public class ItemHelper {
             public int getDamage(ItemStack stack) {
                 if (stack.hasTagCompound()) {
                     NBTTagCompound nbt = stack.getTagCompound();
-                    if (nbt.hasKey("damage")) {
-                        return nbt.getInteger("damage");
-                    } else {
-                        nbt.setInteger("damage", 0);
-                        stack.setTagCompound(nbt);
+                    if (nbt != null) {
+                        if (nbt.hasKey("damage")) {
+                            return nbt.getInteger("damage");
+                        } else {
+                            nbt.setInteger("damage", 0);
+                            stack.setTagCompound(nbt);
+                        }
                     }
                 }
                 return 0;

@@ -1,0 +1,32 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "jsg:capacitor_block_creative",
+		"textures": { "overlay_front": "jsg:blocks/capacitor/capacitor_block_creative_front" }
+	},
+	"variants": {
+		"normal": [{}],
+		"inventory": [{}],
+		
+		"facing": {
+			"south": { "y": 180 },
+			"west": { "y": 270 },
+			"north": {},
+			"east": { "y": 90 }
+		},
+		
+		"level": {
+			"0": {},
+			"1": {},
+			"2": {},
+			"3": {},
+			"4": {},
+			"5": {},
+			"6": {},
+			"7": {},
+			"8": {},
+			"9": {},
+			"10": {}
+		}
+	}
+}

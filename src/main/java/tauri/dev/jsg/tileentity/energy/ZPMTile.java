@@ -76,15 +76,15 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
     @Override
     public void update() {
         if (!world.isRemote) {
-            powerLevel = ZPMHubTile.getZPMPowerLevel(energyStorage.getEnergyStored(), energyStorage.getMaxEnergyStored());
+            powerLevel = ZPMHubTile.getZPMPowerLevel(getEnergyStorage().getEnergyStored(), getEnergyStorage().getMaxEnergyStored());
             if (powerLevel != lastPowerLevel) {
                 JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE)), targetPoint);
 
                 lastPowerLevel = powerLevel;
             }
 
-            energyTransferedLastTick = energyStorage.getEnergyStored() - energyStoredLastTick;
-            energyStoredLastTick = energyStorage.getEnergyStored();
+            energyTransferedLastTick = getEnergyStorage().getEnergyStored() - energyStoredLastTick;
+            energyStoredLastTick = getEnergyStorage().getEnergyStored();
         }
     }
 

@@ -25,9 +25,11 @@ import tauri.dev.jsg.block.beamer.BeamerBlock;
 import tauri.dev.jsg.block.dialhomedevice.DHDBlock;
 import tauri.dev.jsg.block.dialhomedevice.DHDPegasusBlock;
 import tauri.dev.jsg.block.energy.ZPMBlock;
+import tauri.dev.jsg.block.energy.ZPMBlockCreative;
 import tauri.dev.jsg.block.energy.ZPMHubBlock;
 import tauri.dev.jsg.block.energy.ZPMSlotBlock;
 import tauri.dev.jsg.block.energy.capacitor.CapacitorBlock;
+import tauri.dev.jsg.block.energy.capacitor.CapacitorBlockCreative;
 import tauri.dev.jsg.block.energy.capacitor.CapacitorBlockEmpty;
 import tauri.dev.jsg.block.invisible.InvisibleBlock;
 import tauri.dev.jsg.block.invisible.IrisBlock;
@@ -120,7 +122,7 @@ public class JSGBlocks {
     // CAPACITORS & BEAMER
 
     public static final CapacitorBlockEmpty CAPACITOR_BLOCK_EMPTY = new CapacitorBlockEmpty();
-    public static final CapacitorBlock CAPACITOR_BLOCK = new CapacitorBlock();
+    public static final CapacitorBlock CAPACITOR_BLOCK = new CapacitorBlock(false);
     public static final BeamerBlock BEAMER_BLOCK = new BeamerBlock();
 
     // -----------------------------------------------------------------------------
@@ -139,7 +141,7 @@ public class JSGBlocks {
     // -----------------------------------------------------------------------------
     // ZPM stuff
 
-    public static final ZPMBlock ZPM = new ZPMBlock();
+    public static final ZPMBlock ZPM = new ZPMBlock(false);
     public static final ZPMHubBlock ZPM_HUB = new ZPMHubBlock();
     public static final ZPMSlotBlock ZPM_SLOT = new ZPMSlotBlock();
 
@@ -151,6 +153,10 @@ public class JSGBlocks {
     public static final AncientSignBlock ANCIENT_SIGN_BLOCK = new AncientSignBlock();
 
     // -----------------------------------------------------------------------------
+    // CREATIVE ITEMS/BLOCKS
+
+    public static final CapacitorBlockCreative CAPACITOR_BLOCK_CREATIVE = new CapacitorBlockCreative();
+    public static final ZPMBlockCreative ZPM_CREATIVE = new ZPMBlockCreative();
 
 
     // -----------------------------------------------------------------------------
@@ -195,7 +201,10 @@ public class JSGBlocks {
             MACHINE_ASSEMBLER,
             MACHINE_CHAMBER,
             ZPM,
-            ZPM_HUB
+            ZPM_HUB,
+            ZPM_SLOT,
+            CAPACITOR_BLOCK_CREATIVE,
+            ZPM_CREATIVE
     };
     /**
      * Used in {@link tauri.dev.jsg.beamer.BeamerBeam}
@@ -273,7 +282,10 @@ public class JSGBlocks {
 
             DECOR_CRYSTAL_BLOCK,
             DESTINY_COUNTDOWN_BLOCK,
-            ANCIENT_SIGN_BLOCK
+            ANCIENT_SIGN_BLOCK,
+
+            CAPACITOR_BLOCK_CREATIVE,
+            ZPM_CREATIVE
 
     };
 

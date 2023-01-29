@@ -1,0 +1,10 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "jsg:creative_zpm"
+	},
+	"variants": {
+		"normal": [{}],
+		"inventory": [{}]
+	}
+}

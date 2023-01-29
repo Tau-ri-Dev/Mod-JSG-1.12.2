@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.block.energy.ZPMBlock;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.gui.container.zpmhub.ZPMHubContainerGuiUpdate;
 import tauri.dev.jsg.packet.JSGPacketHandler;
@@ -67,7 +67,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
             if (!isSlidingUp || isAnimating) return false;
             if (stack.getItem() instanceof ItemBlock) {
                 ItemBlock itemBlock = (ItemBlock) stack.getItem();
-                return itemBlock.getBlock() == JSGBlocks.ZPM;
+                return itemBlock.getBlock() instanceof ZPMBlock;
             }
             return false;
         }
@@ -176,7 +176,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                 }
             }
 
-            if(energyStoredLastTick != (energyStorage.getEnergyStored() - energyStoredLastTick)){
+            if (energyStoredLastTick != (energyStorage.getEnergyStored() - energyStoredLastTick)) {
                 sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             }
 
@@ -356,7 +356,6 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                 break;
         }
     }
-
 
 
     // ------------------------------------------------------------

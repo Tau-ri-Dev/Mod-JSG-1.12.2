@@ -17,6 +17,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.gui.container.OpenTabHolderInterface;
 import tauri.dev.jsg.gui.util.ContainerHelper;
+import tauri.dev.jsg.item.energy.CapacitorItemBlock;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.stargate.power.StargateClassicEnergyStorage;
@@ -108,7 +109,7 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
         // Transferring from player's inventory to tile
         else {
             // Capacitors
-            if (stack.getItem() == Item.getItemFromBlock(JSGBlocks.CAPACITOR_BLOCK)) {
+            if (stack.getItem() instanceof CapacitorItemBlock) {
                 for (int i = 4; i < 7; i++) {
                     if (!getSlot(i).getHasStack() && getSlot(i).isItemValid(stack)) {
                         ItemStack stack1 = stack.copy();

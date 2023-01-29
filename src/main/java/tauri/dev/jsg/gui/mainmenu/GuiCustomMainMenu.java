@@ -470,7 +470,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         int i = 0;
         center = getCenterPos(0, 0);
         for (String s : tip) {
-            drawCenteredString(fontRenderer, s, center[0], height - PADDING + startY + i * 10, 0xCEAD28, true);
+            drawCenteredString(fontRenderer, I18n.format(s), center[0], height - PADDING + startY + i * 10, 0xCEAD28, true);
             i++;
         }
 
