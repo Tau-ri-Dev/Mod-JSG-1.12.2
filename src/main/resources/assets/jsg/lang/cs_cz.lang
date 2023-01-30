@@ -842,7 +842,7 @@ menu.updater.download=Stáhnout
 menu.updater.close=Zavřít
 
 # tips
-menu.nether_Gate=TIP: Když půjdeš do Netheru, nezapoměň si uložit adresu Nether brány!
+menu.nether_gate=TIP: Když půjdeš do Netheru, nezapoměň si uložit adresu Nether brány!
 menu.energy=TIP: Když připojíš kabely do více blocků bárny, bude se nabíjet rychleji!
 menu.dhd=TIP: Nezapomeň, že DHD lze upgradovat pomocí vylepšení kapacity a účinnosti!
 menu.gdo=TIP: Pokud instaluješ iris na tvou bránu, nezapomeň někdy zkontrolovat její životnost!
