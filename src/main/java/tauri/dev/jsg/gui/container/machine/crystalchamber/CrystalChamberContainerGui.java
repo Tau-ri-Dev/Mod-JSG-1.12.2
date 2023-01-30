@@ -8,7 +8,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.energy.CapabilityEnergy;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.gui.element.FluidTankElement;
-import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 
 import java.util.Arrays;
 import java.util.List;

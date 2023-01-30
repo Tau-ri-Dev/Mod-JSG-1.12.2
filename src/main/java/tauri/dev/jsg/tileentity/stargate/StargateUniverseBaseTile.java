@@ -19,7 +19,7 @@ import tauri.dev.jsg.stargate.*;
 import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import tauri.dev.jsg.stargate.merging.StargateUniverseMergeHelper;
 import tauri.dev.jsg.stargate.network.*;
-import tauri.dev.jsg.stargate.power.StargateEnergyRequired;
+import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.stargate.StargateRendererActionState;

@@ -9,14 +9,14 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.capability.CapabilityEnergyZPM;
 import tauri.dev.jsg.gui.util.ContainerHelper;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
-import tauri.dev.jsg.stargate.power.StargateClassicEnergyStorage;
+import tauri.dev.jsg.power.zpm.ZPMHubEnergyStorage;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.tileentity.energy.ZPMHubTile;
 
@@ -28,11 +28,11 @@ public class ZPMHubContainer extends Container {
     public ZPMHubTile hubTile;
     public ArrayList<Slot> slots;
     private final BlockPos pos;
-    private int lastEnergyStored;
-    private int energyTransferedLastTick;
+    private long lastEnergyStored;
+    private long energyTransferedLastTick;
 
     @Nonnull
-    public ArrayList<Slot> getSlots(IItemHandler itemHandler){
+    public ArrayList<Slot> getSlots(IItemHandler itemHandler) {
         ArrayList<Slot> slots = new ArrayList<>();
         slots.add(new SlotItemHandler(itemHandler, 0, 80, 27));
         slots.add(new SlotItemHandler(itemHandler, 1, 56, 51));
@@ -99,7 +99,7 @@ public class ZPMHubContainer extends Container {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        StargateClassicEnergyStorage energyStorage = (StargateClassicEnergyStorage) hubTile.getCapability(CapabilityEnergy.ENERGY, null);
+        ZPMHubEnergyStorage energyStorage = (ZPMHubEnergyStorage) hubTile.getCapability(CapabilityEnergyZPM.ENERGY, null);
 
         if (energyStorage != null && (lastEnergyStored != energyStorage.getEnergyStoredInternally() || energyTransferedLastTick != hubTile.getEnergyTransferedLastTick())) {
             for (IContainerListener listener : listeners) {

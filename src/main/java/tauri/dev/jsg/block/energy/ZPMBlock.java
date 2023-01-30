@@ -13,23 +13,23 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGAbstractCustomItemBlock;
+import tauri.dev.jsg.capability.CapabilityEnergyZPM;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.item.energy.ZPMItemBlock;
+import tauri.dev.jsg.power.zpm.IEnergyStorageZPM;
+import tauri.dev.jsg.power.zpm.ZPMEnergyStorage;
 import tauri.dev.jsg.renderer.zpm.ZPMRenderer;
-import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
-import tauri.dev.jsg.stargate.power.StargateItemEnergyStorage;
 import tauri.dev.jsg.tileentity.energy.ZPMTile;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class ZPMBlock extends JSGAbstractCustomItemBlock {
 
@@ -37,7 +37,7 @@ public class ZPMBlock extends JSGAbstractCustomItemBlock {
 
     public ZPMBlock(boolean registered) {
         super(Material.GLASS);
-        if(!registered) {
+        if (!registered) {
             setRegistryName(JSG.MOD_ID + ":" + BLOCK_NAME);
             setUnlocalizedName(JSG.MOD_ID + "." + BLOCK_NAME);
         }
@@ -53,21 +53,23 @@ public class ZPMBlock extends JSGAbstractCustomItemBlock {
     // Block actions
 
     @Override
-    public void onBlockPlacedBy(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        IEnergyStorage energyStorage = stack.getCapability(CapabilityEnergy.ENERGY, null);
+    public void onBlockPlacedBy(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EntityLivingBase placer, ItemStack stack) {
+        IEnergyStorageZPM energyStorage = stack.getCapability(CapabilityEnergyZPM.ENERGY, null);
 
-        StargateAbstractEnergyStorage capacitorEnergyStorage = (StargateAbstractEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
-        capacitorEnergyStorage.setEnergyStored(energyStorage.getEnergyStored());
+        ZPMEnergyStorage zpmStorage = (ZPMEnergyStorage) Objects.requireNonNull(world.getTileEntity(pos)).getCapability(CapabilityEnergyZPM.ENERGY, null);
+        if (energyStorage != null) {
+            Objects.requireNonNull(zpmStorage).setEnergyStored(energyStorage.getEnergyStored());
+        }
     }
 
 
     @Nonnull
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IBlockState state, int fortune) {
-        StargateAbstractEnergyStorage capacitorEnergyStorage = (StargateAbstractEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
+        ZPMEnergyStorage capacitorEnergyStorage = (ZPMEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergyZPM.ENERGY, null);
 
         ItemStack stack = new ItemStack(this);
-        ((StargateItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null)).setEnergyStored(capacitorEnergyStorage.getEnergyStored());
+        ((ZPMEnergyStorage) stack.getCapability(CapabilityEnergyZPM.ENERGY, null)).setEnergyStored(capacitorEnergyStorage.getEnergyStored());
 
         return Collections.singletonList(stack);
     }

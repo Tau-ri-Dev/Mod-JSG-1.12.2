@@ -20,7 +20,7 @@ import tauri.dev.jsg.gui.element.tabs.TabSideEnum;
 import tauri.dev.jsg.gui.element.tabs.TabbedContainerInterface;
 import tauri.dev.jsg.packet.BeamerChangeRoleToServer;
 import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 
 import javax.annotation.Nonnull;
 import java.awt.*;

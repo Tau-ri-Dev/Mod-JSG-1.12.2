@@ -6,17 +6,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import tauri.dev.jsg.capability.CapabilityEnergyZPM;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
-import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
-import tauri.dev.jsg.state.energy.CapacitorPowerLevelUpdate;
+import tauri.dev.jsg.power.zpm.ZPMEnergyStorage;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateProviderInterface;
 import tauri.dev.jsg.state.StateTypeEnum;
+import tauri.dev.jsg.state.energy.CapacitorPowerLevelUpdate;
 
 import javax.annotation.Nonnull;
 
@@ -25,21 +25,14 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
     // ------------------------------------------------------------------------
     // Loading & ticking
 
-    private final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(JSGConfig.powerConfig.zpmCapacity, JSGConfig.powerConfig.zpmHubMaxEnergyTransfer) {
-
+    private final ZPMEnergyStorage energyStorage = new ZPMEnergyStorage((long) JSGConfig.powerConfig.zpmCapacity, JSGConfig.powerConfig.zpmHubMaxEnergyTransfer/3) {
         @Override
         protected void onEnergyChanged() {
             markDirty();
         }
-
-        // we do not want ZPM to be chargeable
-        @Override
-        public int receiveEnergy(int maxEnergy, boolean simulate) {
-            return 0;
-        }
     };
-    protected int energyStoredLastTick = 0;
-    protected int energyTransferedLastTick = 0;
+    protected long energyStoredLastTick = 0;
+    protected long energyTransferedLastTick = 0;
     private TargetPoint targetPoint;
     private int powerLevel;
     private int lastPowerLevel;
@@ -56,7 +49,7 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
     // ------------------------------------------------------------------------
     // NBT
 
-    public StargateAbstractEnergyStorage getEnergyStorage() {
+    public ZPMEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
 
@@ -103,19 +96,19 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
         super.readFromNBT(compound);
     }
 
-    public int getEnergyTransferedLastTick() {
+    public long getEnergyTransferedLastTick() {
         return energyTransferedLastTick;
     }
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
-        return (facing == null && capability == CapabilityEnergy.ENERGY) || super.hasCapability(capability, facing);
+        return (facing == null && capability == CapabilityEnergyZPM.ENERGY) || super.hasCapability(capability, facing);
     }
 
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
-        if (facing == null && capability == CapabilityEnergy.ENERGY)
-            return CapabilityEnergy.ENERGY.cast(getEnergyStorage());
+        if (facing == null && capability == CapabilityEnergyZPM.ENERGY)
+            return CapabilityEnergyZPM.ENERGY.cast(getEnergyStorage());
 
         return super.getCapability(capability, facing);
     }

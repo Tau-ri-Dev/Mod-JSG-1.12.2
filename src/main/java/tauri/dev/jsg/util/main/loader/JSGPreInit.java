@@ -5,6 +5,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.capability.CapabilityEnergyZPM;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.entity.EntityRegister;
@@ -32,6 +33,9 @@ public class JSGPreInit {
         JSG.info("Started loading JSG mod in " + JSG.clientModPath.getAbsolutePath());
         JSG.info("Mods directory: " + JSG.modsDirectory.getAbsolutePath());
         JSG.info("Loading JSG version " + JSG.MOD_VERSION);
+
+        CapabilityEnergyZPM.register();
+        JSG.info("Successfully registered Capabilities (phase 1)!");
 
         JSGPacketHandler.registerPackets();
         JSG.info("Successfully registered Packets!");

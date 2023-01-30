@@ -2,7 +2,7 @@ package tauri.dev.jsg.gui.container.capacitor;
 
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;

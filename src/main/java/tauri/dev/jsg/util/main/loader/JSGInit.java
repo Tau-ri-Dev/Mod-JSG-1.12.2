@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.advancements.JSGAdvancements;
+import tauri.dev.jsg.capability.CapabilityEnergyZPM;
 import tauri.dev.jsg.capability.endpoint.ItemEndpointCapability;
 import tauri.dev.jsg.chunkloader.ChunkLoadingCallback;
 import tauri.dev.jsg.config.JSGConfig;
@@ -40,10 +41,12 @@ public class JSGInit {
         JSG.info("Successfully registered World Generation!");
 
         NetworkRegistry.INSTANCE.registerGuiHandler(JSG.instance, new JSGGuiHandler());
-        ItemEndpointCapability.register();
         ForgeChunkManager.setForcedChunkLoadingCallback(JSG.instance, ChunkLoadingCallback.INSTANCE);
         JSGOreDictionary.registerOreDictionary();
         JSG.info("Successfully registered OreDictionary!");
+
+        ItemEndpointCapability.register();
+        JSG.info("Successfully registered Capabilities (phase 2)!");
 
         // Advancements
         JSGAdvancements.register();

@@ -21,8 +21,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGAbstractCustomItemBlock;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
-import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
-import tauri.dev.jsg.stargate.power.StargateItemEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateItemEnergyStorage;
 import tauri.dev.jsg.util.ItemHandlerHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 

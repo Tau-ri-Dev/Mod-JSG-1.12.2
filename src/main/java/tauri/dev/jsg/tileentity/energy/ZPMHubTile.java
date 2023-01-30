@@ -15,18 +15,20 @@ import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.energy.ZPMBlock;
+import tauri.dev.jsg.capability.CapabilityEnergyZPM;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.gui.container.zpmhub.ZPMHubContainerGuiUpdate;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
-import tauri.dev.jsg.stargate.power.StargateClassicEnergyStorage;
+import tauri.dev.jsg.power.zpm.ZPMHubEnergyStorage;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateProviderInterface;
 import tauri.dev.jsg.state.StateTypeEnum;
@@ -94,23 +96,17 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         }
     };
 
-    private final StargateClassicEnergyStorage energyStorage = new StargateClassicEnergyStorage(0, JSGConfig.powerConfig.zpmHubMaxEnergyTransfer) {
+    private final ZPMHubEnergyStorage energyStorage = new ZPMHubEnergyStorage(JSGConfig.powerConfig.zpmHubMaxEnergyTransfer) {
 
         @Override
         protected void onEnergyChanged() {
             markDirty();
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
-
-        @Override
-        public int receiveEnergy(int maxReceive, boolean simulate) {
-            // We don't want to have ZPMs rechargeable... Obvious...
-            return 0;
-        }
     };
 
-    protected int energyStoredLastTick = 0;
-    protected int energyTransferedLastTick = 0;
+    protected long energyStoredLastTick = 0;
+    protected long energyTransferedLastTick = 0;
     private EnumFacing facing;
     public float facingAngle;
     private NetworkRegistry.TargetPoint targetPoint;
@@ -138,7 +134,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         return targetPoint;
     }
 
-    public StargateClassicEnergyStorage getEnergyStorage() {
+    public ZPMHubEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
 
@@ -168,21 +164,21 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                     TileEntity tile = world.getTileEntity(pos.offset(facing));
 
                     if (tile != null && tile.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
-                        int extracted = energyStorage.extractEnergy(JSGConfig.powerConfig.zpmHubMaxEnergyTransfer, true);
+                        int extracted = getEnergyStorage().extractEnergy(JSGConfig.powerConfig.zpmHubMaxEnergyTransfer, true);
                         extracted = Objects.requireNonNull(tile.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite())).receiveEnergy(extracted, false);
 
-                        energyStorage.extractEnergy(extracted, false);
+                        getEnergyStorage().extractEnergy(extracted, false);
                     }
                 }
             }
 
-            if (energyStoredLastTick != (energyStorage.getEnergyStored() - energyStoredLastTick)) {
+            if (energyStoredLastTick != (getEnergyStorage().getEnergyStored() - energyStoredLastTick)) {
                 sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             }
 
-            energyTransferedLastTick = energyStorage.getEnergyStored() - energyStoredLastTick;
+            energyTransferedLastTick = getEnergyStorage().getEnergyStored() - energyStoredLastTick;
             if (energyTransferedLastTick > 0) energyTransferedLastTick = 0;
-            energyStoredLastTick = energyStorage.getEnergyStored();
+            energyStoredLastTick = getEnergyStorage().getEnergyStored();
             markDirty();
 
             if (isAnimating) {
@@ -209,13 +205,13 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
 
         if (powerTier != currentPowerTier) {
             currentPowerTier = powerTier;
-            energyStorage.clearStorages();
+            getEnergyStorage().clearStorages();
 
             for (int i = 0; i < getContainerSize(); i++) {
                 ItemStack stack = itemStackHandler.getStackInSlot(i);
 
                 if (!stack.isEmpty()) {
-                    energyStorage.addStorage(stack.getCapability(CapabilityEnergy.ENERGY, null));
+                    getEnergyStorage().addStorage(stack.getCapability(CapabilityEnergyZPM.ENERGY, null));
                 }
             }
         }
@@ -255,19 +251,22 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         super.readFromNBT(compound);
     }
 
-    public int getEnergyTransferedLastTick() {
+    public long getEnergyTransferedLastTick() {
         return energyTransferedLastTick;
     }
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
-        return (capability == CapabilityEnergy.ENERGY) || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+        return (capability == CapabilityEnergyZPM.ENERGY) || (capability == CapabilityEnergy.ENERGY) || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityEnergyZPM.ENERGY)
+            return CapabilityEnergyZPM.ENERGY.cast(getEnergyStorage());
+
         if (capability == CapabilityEnergy.ENERGY)
-            return CapabilityEnergy.ENERGY.cast(getEnergyStorage());
+            return CapabilityEnergy.ENERGY.cast(new EnergyStorage((int) Math.min(getEnergyStorage().getMaxEnergyStored(), Integer.MAX_VALUE), getEnergyStorage().maxReceive, getEnergyStorage().maxExtract, (int) Math.min(getEnergyStorage().getEnergyStored(), Integer.MAX_VALUE)));
 
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemStackHandler);
@@ -275,7 +274,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         return super.getCapability(capability, facing);
     }
 
-    public static int getZPMPowerLevel(int energyStored, int maxEnergy) {
+    public static int getZPMPowerLevel(long energyStored, long maxEnergy) {
         return Math.round(energyStored / (float) maxEnergy * 5);
     }
 
@@ -300,14 +299,14 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                 ItemStack stack2 = getContainerSize() > 1 ? itemStackHandler.getStackInSlot(1) : ItemStack.EMPTY;
                 ItemStack stack3 = getContainerSize() > 2 ? itemStackHandler.getStackInSlot(2) : ItemStack.EMPTY;
 
-                int zpm1Level = stack1.isEmpty() ? -1 : getZPMPowerLevel(Objects.requireNonNull(stack1.getCapability(CapabilityEnergy.ENERGY, null)).getEnergyStored(), Objects.requireNonNull(stack1.getCapability(CapabilityEnergy.ENERGY, null)).getMaxEnergyStored());
-                int zpm2Level = stack2.isEmpty() ? -1 : getZPMPowerLevel(Objects.requireNonNull(stack2.getCapability(CapabilityEnergy.ENERGY, null)).getEnergyStored(), Objects.requireNonNull(stack2.getCapability(CapabilityEnergy.ENERGY, null)).getMaxEnergyStored());
-                int zpm3Level = stack3.isEmpty() ? -1 : getZPMPowerLevel(Objects.requireNonNull(stack3.getCapability(CapabilityEnergy.ENERGY, null)).getEnergyStored(), Objects.requireNonNull(stack3.getCapability(CapabilityEnergy.ENERGY, null)).getMaxEnergyStored());
+                int zpm1Level = stack1.isEmpty() ? -1 : getZPMPowerLevel(Objects.requireNonNull(stack1.getCapability(CapabilityEnergyZPM.ENERGY, null)).getEnergyStored(), Objects.requireNonNull(stack1.getCapability(CapabilityEnergyZPM.ENERGY, null)).getMaxEnergyStored());
+                int zpm2Level = stack2.isEmpty() ? -1 : getZPMPowerLevel(Objects.requireNonNull(stack2.getCapability(CapabilityEnergyZPM.ENERGY, null)).getEnergyStored(), Objects.requireNonNull(stack2.getCapability(CapabilityEnergyZPM.ENERGY, null)).getMaxEnergyStored());
+                int zpm3Level = stack3.isEmpty() ? -1 : getZPMPowerLevel(Objects.requireNonNull(stack3.getCapability(CapabilityEnergyZPM.ENERGY, null)).getEnergyStored(), Objects.requireNonNull(stack3.getCapability(CapabilityEnergyZPM.ENERGY, null)).getMaxEnergyStored());
 
                 return new ZPMHubRendererUpdate(animationStart, isAnimating, isSlidingUp, zpm1Level, zpm2Level, zpm3Level, (facing.getHorizontalIndex() - 2) * 90);
 
             case GUI_UPDATE:
-                return new ZPMHubContainerGuiUpdate(energyStorage.getEnergyStoredInternally(), energyTransferedLastTick);
+                return new ZPMHubContainerGuiUpdate(getEnergyStorage().getEnergyStoredInternally(), energyTransferedLastTick);
 
             default:
                 return null;
@@ -348,7 +347,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
 
             case GUI_UPDATE:
                 ZPMHubContainerGuiUpdate guiUpdate = (ZPMHubContainerGuiUpdate) state;
-                energyStorage.setEnergyStoredInternally(guiUpdate.energyStored);
+                getEnergyStorage().setEnergyStoredInternally(guiUpdate.energyStored);
                 energyTransferedLastTick = guiUpdate.energyTransferedLastTick;
                 break;
 

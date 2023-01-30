@@ -9,14 +9,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import tauri.dev.jsg.block.energy.ZPMBlock;
 import tauri.dev.jsg.block.energy.ZPMBlockCreative;
-import tauri.dev.jsg.capability.ItemCapabilityProvider;
-import tauri.dev.jsg.capability.ItemEnergyCapabilityWithoutReceiving;
+import tauri.dev.jsg.capability.CapabilityEnergyZPM;
+import tauri.dev.jsg.capability.ZPMItemCapabilityProvider;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.stargate.power.StargateItemEnergyStorage;
+import tauri.dev.jsg.power.zpm.IEnergyStorageZPM;
+import tauri.dev.jsg.power.zpm.ZPMItemEnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,7 +37,7 @@ public class ZPMItemBlock extends ItemBlock {
             items.add(new ItemStack(this));
 
             ItemStack stack = new ItemStack(this);
-            StargateItemEnergyStorage energyStorage = (StargateItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null);
+            ZPMItemEnergyStorage energyStorage = (ZPMItemEnergyStorage) stack.getCapability(CapabilityEnergyZPM.ENERGY, null);
             energyStorage.setEnergyStored(energyStorage.getMaxEnergyStored());
             items.add(stack);
         }
@@ -46,20 +45,20 @@ public class ZPMItemBlock extends ItemBlock {
 
     @Override
     public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {
-        IEnergyStorage energyStorage = stack.getCapability(CapabilityEnergy.ENERGY, null);
+        IEnergyStorageZPM energyStorage = stack.getCapability(CapabilityEnergyZPM.ENERGY, null);
 
         String energy = String.format("%,d", energyStorage.getEnergyStored());
         String capacity = String.format("%,d", energyStorage.getMaxEnergyStored());
 
         tooltip.add(energy + " / " + capacity + " RF");
 
-        String energyPercent = String.format("%.2f", energyStorage.getEnergyStored()/(float)energyStorage.getMaxEnergyStored() * 100) + " %";
+        String energyPercent = String.format("%.2f", energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored() * 100) + " %";
         tooltip.add(energyPercent);
     }
 
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new ItemEnergyCapabilityWithoutReceiving(stack, nbt, JSGConfig.powerConfig.zpmCapacity);
+        return new ZPMItemCapabilityProvider(stack, nbt, (long) JSGConfig.powerConfig.zpmCapacity, false);
     }
 
     @Override
@@ -69,8 +68,8 @@ public class ZPMItemBlock extends ItemBlock {
 
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
-        IEnergyStorage energyStorage = stack.getCapability(CapabilityEnergy.ENERGY, null);
+        IEnergyStorageZPM energyStorage = stack.getCapability(CapabilityEnergyZPM.ENERGY, null);
 
-        return 1 - (energyStorage.getEnergyStored() / (double)energyStorage.getMaxEnergyStored());
+        return 1 - (energyStorage.getEnergyStored() / (double) energyStorage.getMaxEnergyStored());
     }
 }

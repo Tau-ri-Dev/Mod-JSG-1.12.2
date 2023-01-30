@@ -3,7 +3,7 @@ package tauri.dev.jsg.gui.container.capacitor;
 import tauri.dev.jsg.gui.util.ContainerHelper;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
-import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.tileentity.energy.CapacitorTile;
 import net.minecraft.entity.player.EntityPlayer;

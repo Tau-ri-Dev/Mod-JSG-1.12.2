@@ -131,7 +131,7 @@ public enum EnumStructures {
                 add(Blocks.GRASS);
             }}, null, 35, Rotation.NONE, 0.88, 0.8, EnumGenerationHeight.LOW),
 
-    ANCIENT_TOTEM("ancient_totem", 0, false, false, null, 3, 3, 0, false, JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled, 0.0008f, new OverworldProcessor(),
+    ANCIENT_TOTEM("ancient_totem", 0, false, false, null, 3, 3, 0, false, JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled, 0.00008f, new OverworldProcessor(),
             new ArrayList<Block>(){{
                 add(Blocks.GRASS);
                 add(Blocks.SAND);

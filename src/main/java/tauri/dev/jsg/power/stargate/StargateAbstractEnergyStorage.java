@@ -1,4 +1,4 @@
-package tauri.dev.jsg.stargate.power;
+package tauri.dev.jsg.power.stargate;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;

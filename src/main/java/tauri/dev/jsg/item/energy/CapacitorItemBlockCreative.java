@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
-import tauri.dev.jsg.stargate.power.StargateItemEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateItemEnergyStorage;
 
 import java.util.List;
 

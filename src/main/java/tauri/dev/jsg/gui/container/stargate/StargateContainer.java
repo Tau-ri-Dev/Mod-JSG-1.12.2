@@ -1,13 +1,12 @@
 package tauri.dev.jsg.gui.container.stargate;
 
-import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.gui.container.OpenTabHolderInterface;
 import tauri.dev.jsg.gui.util.ContainerHelper;
 import tauri.dev.jsg.item.energy.CapacitorItemBlock;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.stargate.EnumIrisMode;
-import tauri.dev.jsg.stargate.power.StargateClassicEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.StargateUpgradeEnum;
@@ -17,7 +16,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

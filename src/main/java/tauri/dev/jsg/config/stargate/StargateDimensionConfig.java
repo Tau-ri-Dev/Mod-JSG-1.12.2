@@ -6,7 +6,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
-import tauri.dev.jsg.stargate.power.StargateEnergyRequired;
+import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
 
 import javax.annotation.Nullable;
 import java.io.*;

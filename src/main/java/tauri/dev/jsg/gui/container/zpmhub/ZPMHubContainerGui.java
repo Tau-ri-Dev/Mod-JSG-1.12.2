@@ -6,12 +6,12 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.capability.CapabilityEnergyZPM;
 import tauri.dev.jsg.gui.element.BetterButton;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.ZPMHubAnimationToServer;
+import tauri.dev.jsg.power.zpm.IEnergyStorageZPM;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -20,11 +20,11 @@ import java.util.List;
 
 public class ZPMHubContainerGui extends GuiContainer {
 
-    public ResourceLocation getBackground(){
+    public ResourceLocation getBackground() {
         return new ResourceLocation(JSG.MOD_ID, "textures/gui/container_zpmhub.png");
     }
 
-    public String getGuiUnlocalizedName(){
+    public String getGuiUnlocalizedName() {
         return "tile.jsg.zpm_hub_block.name";
     }
 
@@ -64,7 +64,7 @@ public class ZPMHubContainerGui extends GuiContainer {
         long maxEnergyStored = 0;
 
         for (int i = 0; i < 3; i++) {
-            IEnergyStorage energyStorage = container.getSlot(i).getStack().getCapability(CapabilityEnergy.ENERGY, null);
+            IEnergyStorageZPM energyStorage = container.getSlot(i).getStack().getCapability(CapabilityEnergyZPM.ENERGY, null);
             if (energyStorage == null)
                 continue;
 
@@ -73,7 +73,7 @@ public class ZPMHubContainerGui extends GuiContainer {
         }
         int width = Math.round((energyStored / ((float) maxEnergyStored) * 156));
 
-        if(maxEnergyStored == 0)
+        if (maxEnergyStored == 0)
             width = 0;
 
         renderPowerBar(width);
@@ -83,26 +83,26 @@ public class ZPMHubContainerGui extends GuiContainer {
         button.setEnabled(!error);
         button.drawButton(mouseX, mouseY);
 
-        if(!container.hubTile.isSlidingUp)
+        if (!container.hubTile.isSlidingUp)
             error = true;
 
-        if(error){
+        if (error) {
             GlStateManager.enableBlend();
             drawTexturedModalRect(button.x + 7, button.y + 6, 176, 16, 16, 16);
             GlStateManager.disableBlend();
         }
     }
 
-    public void renderPowerBar(int width){
+    public void renderPowerBar(int width) {
         drawGradientRect(guiLeft + 10, guiTop + 75, guiLeft + 10 + width, guiTop + 75 + 6, 0xffcc2828, 0xff731616);
     }
 
-    public void renderPowerText(String energyPercent){
+    public void renderPowerText(String energyPercent) {
         fontRenderer.drawString(energyPercent, xSize - 8 - fontRenderer.getStringWidth(energyPercent), 85, 4210752);
     }
 
-    public void renderHoverTexts(int mouseX, int mouseY, long energyStored, long maxEnergyStored){
-        int transferred = container.hubTile.getEnergyTransferedLastTick();
+    public void renderHoverTexts(int mouseX, int mouseY, long energyStored, long maxEnergyStored) {
+        long transferred = container.hubTile.getEnergyTransferedLastTick();
         TextFormatting transferredFormatting = TextFormatting.GRAY;
         String transferredSign = "";
 
@@ -129,7 +129,7 @@ public class ZPMHubContainerGui extends GuiContainer {
         long maxEnergyStored = 0;
 
         for (int i = 0; i < container.hubTile.getContainerSize(); i++) {
-            IEnergyStorage energyStorage = container.getSlot(i).getStack().getCapability(CapabilityEnergy.ENERGY, null);
+            IEnergyStorageZPM energyStorage = container.getSlot(i).getStack().getCapability(CapabilityEnergyZPM.ENERGY, null);
             if (energyStorage == null)
                 continue;
 
@@ -142,11 +142,10 @@ public class ZPMHubContainerGui extends GuiContainer {
 
         renderHoverTexts(mouseX, mouseY, energyStored, maxEnergyStored);
 
-        if(error && isPointInRegion(button.x - guiLeft + 9, button.y - guiTop + 9, 16, 16, mouseX, mouseY)){
+        if (error && isPointInRegion(button.x - guiLeft + 9, button.y - guiTop + 9, 16, 16, mouseX, mouseY)) {
             List<String> s = Collections.singletonList(I18n.format("gui.zpmhub.alert"));
             drawHoveringText(s, mouseX - guiLeft, mouseY - guiTop);
-        }
-        else if (isPointInRegion(button.x - guiLeft, button.y - guiTop, 16, 16, mouseX, mouseY)) {
+        } else if (isPointInRegion(button.x - guiLeft, button.y - guiTop, 16, 16, mouseX, mouseY)) {
             List<String> s = Collections.singletonList((container.hubTile.isAnimating ? I18n.format("gui.zpmhub.inProgress") : (container.hubTile.isSlidingUp ? I18n.format("gui.zpmhub.slideDown") : I18n.format("gui.zpmhub.slideUp"))));
             drawHoveringText(s, mouseX - guiLeft, mouseY - guiTop);
         }

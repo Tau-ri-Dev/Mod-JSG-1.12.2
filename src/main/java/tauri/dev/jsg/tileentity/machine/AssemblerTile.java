@@ -2,8 +2,6 @@ package tauri.dev.jsg.tileentity.machine;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.items.ItemStackHandler;
 import tauri.dev.jsg.block.machine.AssemblerBlock;
 import tauri.dev.jsg.gui.container.machine.assembler.AssemblerContainerGuiUpdate;
 import tauri.dev.jsg.item.JSGItems;
@@ -15,7 +13,7 @@ import tauri.dev.jsg.renderer.machine.AssemblerRendererState;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
-import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.util.JSGItemStackHandler;

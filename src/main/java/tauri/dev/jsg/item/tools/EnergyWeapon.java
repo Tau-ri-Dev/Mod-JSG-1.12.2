@@ -7,7 +7,7 @@ import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.entity.JSGEnergyProjectile;
 import tauri.dev.jsg.item.renderer.CustomModel;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
-import tauri.dev.jsg.stargate.power.StargateItemEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateItemEnergyStorage;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;

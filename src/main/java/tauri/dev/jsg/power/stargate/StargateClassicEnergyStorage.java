@@ -1,4 +1,4 @@
-package tauri.dev.jsg.stargate.power;
+package tauri.dev.jsg.power.stargate;
 
 import net.minecraftforge.energy.IEnergyStorage;
 
@@ -7,11 +7,7 @@ import java.util.List;
 
 public class StargateClassicEnergyStorage extends StargateAbstractEnergyStorage {
 	
-	private List<IEnergyStorage> storages = new ArrayList<IEnergyStorage>();
-	
-	public StargateClassicEnergyStorage(int capacity, int maxTransfer) {
-		super(capacity, maxTransfer);
-	}
+	private final List<IEnergyStorage> storages = new ArrayList<>();
 	
 	public StargateClassicEnergyStorage() {
 		super();

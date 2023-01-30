@@ -1,6 +1,6 @@
 package tauri.dev.jsg.tileentity.energy;
 
-import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 
 public class CapacitorCreativeTile extends CapacitorTile {
     private final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage() {

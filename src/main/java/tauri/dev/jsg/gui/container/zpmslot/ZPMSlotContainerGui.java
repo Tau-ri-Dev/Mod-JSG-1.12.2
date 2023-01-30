@@ -9,7 +9,6 @@ import tauri.dev.jsg.gui.container.zpmhub.ZPMHubContainerGui;
 import tauri.dev.jsg.gui.element.BetterButton;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class ZPMSlotContainerGui extends ZPMHubContainerGui {
@@ -25,18 +24,18 @@ public class ZPMSlotContainerGui extends ZPMHubContainerGui {
     }
 
     @Override
-    public void renderPowerBar(int width){
+    public void renderPowerBar(int width) {
         drawGradientRect(guiLeft + 10, guiTop + 59, guiLeft + 10 + width, guiTop + 59 + 6, 0xffcc2828, 0xff731616);
     }
 
     @Override
-    public void renderPowerText(String energyPercent){
+    public void renderPowerText(String energyPercent) {
         fontRenderer.drawString(energyPercent, xSize - 8 - fontRenderer.getStringWidth(energyPercent), 69, 4210752);
     }
 
     @Override
-    public void renderHoverTexts(int mouseX, int mouseY, long energyStored, long maxEnergyStored){
-        int transferred = container.hubTile.getEnergyTransferedLastTick();
+    public void renderHoverTexts(int mouseX, int mouseY, long energyStored, long maxEnergyStored) {
+        long transferred = container.hubTile.getEnergyTransferedLastTick();
         TextFormatting transferredFormatting = TextFormatting.GRAY;
         String transferredSign = "";
 
@@ -56,12 +55,12 @@ public class ZPMSlotContainerGui extends ZPMHubContainerGui {
     }
 
     @Override
-    public ResourceLocation getBackground(){
+    public ResourceLocation getBackground() {
         return new ResourceLocation(JSG.MOD_ID, "textures/gui/container_zpmslot.png");
     }
 
     @Override
-    public String getGuiUnlocalizedName(){
+    public String getGuiUnlocalizedName() {
         return "tile.jsg.zpm_slot_block.name";
     }
 }

@@ -22,7 +22,7 @@ import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.SetOpenTabToServer;
 import tauri.dev.jsg.packet.stargate.SaveConfigToServer;
 import tauri.dev.jsg.packet.transportrings.SaveRingsParametersToServer;
-import tauri.dev.jsg.stargate.power.StargateClassicEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
 

@@ -459,7 +459,7 @@ public class JSGConfig {
         public int universeCapacitors = 0;
 
         @Name("ZPM capacity (RF)")
-        public int zpmCapacity = 2_000_000_000;
+        public double zpmCapacity = 4_398_046_511_104D;
 
         @Name("ZPMHub's max power throughput")
         @RangeInt(min = 1)

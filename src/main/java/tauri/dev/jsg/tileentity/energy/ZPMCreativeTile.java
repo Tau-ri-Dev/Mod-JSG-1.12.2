@@ -1,10 +1,9 @@
 package tauri.dev.jsg.tileentity.energy;
 
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.stargate.power.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.zpm.ZPMEnergyStorage;
 
 public class ZPMCreativeTile extends ZPMTile {
-    private final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(JSGConfig.powerConfig.zpmCapacity, JSGConfig.powerConfig.zpmHubMaxEnergyTransfer) {
+    private final ZPMEnergyStorage energyStorage = new ZPMEnergyStorage(Long.MAX_VALUE, Integer.MAX_VALUE) {
 
         @Override
         public int extractEnergy(int maxExtract, boolean simulate) {
@@ -33,7 +32,7 @@ public class ZPMCreativeTile extends ZPMTile {
     };
 
     @Override
-    public StargateAbstractEnergyStorage getEnergyStorage() {
+    public ZPMEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
 }

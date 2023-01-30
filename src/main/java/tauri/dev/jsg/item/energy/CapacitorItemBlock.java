@@ -4,7 +4,7 @@ import tauri.dev.jsg.block.energy.capacitor.CapacitorBlock;
 import tauri.dev.jsg.block.energy.capacitor.CapacitorBlockCreative;
 import tauri.dev.jsg.capability.ItemCapabilityProvider;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.stargate.power.StargateItemEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateItemEnergyStorage;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;

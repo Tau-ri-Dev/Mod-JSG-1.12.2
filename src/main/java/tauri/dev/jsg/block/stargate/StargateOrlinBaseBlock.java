@@ -9,7 +9,7 @@ import tauri.dev.jsg.renderer.stargate.StargateOrlinRenderer;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.stargate.merging.StargateOrlinMergeHelper;
 import tauri.dev.jsg.stargate.network.StargateNetwork;
-import tauri.dev.jsg.stargate.power.StargateEnergyRequired;
+import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
 import tauri.dev.jsg.tileentity.stargate.StargateOrlinBaseTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

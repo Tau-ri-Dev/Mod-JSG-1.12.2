@@ -6,23 +6,23 @@ import tauri.dev.jsg.state.State;
 public class ZPMHubContainerGuiUpdate extends State {
 	public ZPMHubContainerGuiUpdate() {}
 	
-	public int energyStored;
-	public int energyTransferedLastTick;
+	public long energyStored;
+	public long energyTransferedLastTick;
 	
-	public ZPMHubContainerGuiUpdate(int energyStored, int energyTransferedLastTick) {
+	public ZPMHubContainerGuiUpdate(long energyStored, long energyTransferedLastTick) {
 		this.energyStored = energyStored;
 		this.energyTransferedLastTick = energyTransferedLastTick;
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(energyStored);
-		buf.writeInt(energyTransferedLastTick);
+		buf.writeLong(energyStored);
+		buf.writeLong(energyTransferedLastTick);
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		energyStored = buf.readInt();
-		energyTransferedLastTick = buf.readInt();
+		energyStored = buf.readLong();
+		energyTransferedLastTick = buf.readLong();
 	}
 }
