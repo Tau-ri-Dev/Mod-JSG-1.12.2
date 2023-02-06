@@ -17,14 +17,14 @@ import net.minecraft.world.World;
 
 public class BeamerLinkingHelper {
 	
-	private static final int SIDE = (JSGConfig.stargateSize != StargateSizeEnum.EXTRA_LARGE ? 2 : 4);
-	private static final int DOWN = (JSGConfig.stargateSize != StargateSizeEnum.EXTRA_LARGE ? 6 : 9);
+	private static final int SIDE = (JSGConfig.Stargate.stargateSize != StargateSizeEnum.EXTRA_LARGE ? 2 : 4);
+	private static final int DOWN = (JSGConfig.Stargate.stargateSize != StargateSizeEnum.EXTRA_LARGE ? 6 : 9);
 	
 	public static void findGateInFrontAndLink(World world, BlockPos pos, EnumFacing blockFacing) {
 		EnumFacing left = blockFacing.rotateYCCW();
 		EnumFacing right = blockFacing.rotateY();
 		
-		Iterable<MutableBlockPos> blocks = BlockPos.getAllInBoxMutable(pos.offset(left, SIDE).down(DOWN).offset(blockFacing, 1), pos.offset(right, SIDE).down().offset(blockFacing, JSGConfig.beamerConfig.reach));
+		Iterable<MutableBlockPos> blocks = BlockPos.getAllInBoxMutable(pos.offset(left, SIDE).down(DOWN).offset(blockFacing, 1), pos.offset(right, SIDE).down().offset(blockFacing, JSGConfig.Beamer.mechanics.reach));
 		
 		for (MutableBlockPos scanPos : blocks) {
 			IBlockState state = world.getBlockState(scanPos);

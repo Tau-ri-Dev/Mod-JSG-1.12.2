@@ -58,7 +58,7 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 			NBTTagCompound compound = stack.getTagCompound();
 			
 			if (compound.hasKey("openCount")) {
-				tooltip.add(JSG.proxy.localize("tile.jsg.stargate_orlin_base_block.open_count", compound.getInteger("openCount"), JSGConfig.stargateConfig.stargateOrlinMaxOpenCount));
+				tooltip.add(JSG.proxy.localize("tile.jsg.stargate_orlin_base_block.open_count", compound.getInteger("openCount"), JSGConfig.Stargate.mechanics.stargateOrlinMaxOpenCount));
 			}
 		}
 	}

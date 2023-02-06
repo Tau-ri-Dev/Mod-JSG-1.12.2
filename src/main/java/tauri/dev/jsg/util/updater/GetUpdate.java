@@ -43,7 +43,7 @@ public class GetUpdate {
 
     public static UpdateResult checkForUpdate() {
         String currentVersion = JSG.MOD_VERSION.replace(JSG.MC_VERSION + "-", "");
-        if (!JSGConfig.enableAutoUpdater) return new UpdateResult(EnumUpdateResult.DISABLED, currentVersion);
+        if (!JSGConfig.General.enableAutoUpdater) return new UpdateResult(EnumUpdateResult.DISABLED, currentVersion);
         String webData = getSiteContent(GET_NAME_URL);
         if (webData.equalsIgnoreCase(ERROR_STRING)) return new UpdateResult(EnumUpdateResult.ERROR, "Exit code: 1");
         String[] got = webData.split("-");

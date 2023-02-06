@@ -190,7 +190,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
     }
 
     public BlockPos getNearest(World world, BlockPos pos, ArrayList<BlockPos> blacklist, UniverseDialerMode mode) {
-        return LinkingHelper.findClosestPos(world, pos, new BlockPos(JSGConfig.stargateConfig.universeDialerReach, 40, tauri.dev.jsg.config.JSGConfig.stargateConfig.universeDialerReach), mode.matchBlocks, blacklist);
+        return LinkingHelper.findClosestPos(world, pos, new BlockPos(JSGConfig.DialHomeDevice.mechanics.universeDialerReach, 40, tauri.dev.jsg.config.JSGConfig.DialHomeDevice.mechanics.universeDialerReach), mode.matchBlocks, blacklist);
     }
 
     @Override
@@ -216,7 +216,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
             if (world.getTotalWorldTime() % 20 == 0 && isSelected && compound != null) {
                 BlockPos pos = entity.getPosition();
 
-                int reachSquared = tauri.dev.jsg.config.JSGConfig.stargateConfig.universeDialerReach * tauri.dev.jsg.config.JSGConfig.stargateConfig.universeDialerReach * 2;
+                int reachSquared = tauri.dev.jsg.config.JSGConfig.DialHomeDevice.mechanics.universeDialerReach * tauri.dev.jsg.config.JSGConfig.DialHomeDevice.mechanics.universeDialerReach * 2;
                 UniverseDialerMode mode = UniverseDialerMode.valueOf(compound.getByte("mode"));
                 compound.setBoolean("serverSideEnabledFastDial", false);
 

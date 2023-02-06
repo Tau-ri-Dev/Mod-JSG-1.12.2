@@ -110,7 +110,7 @@ public class EventHorizon {
 
                         scheduledTeleportMap.put(entityId, packet.setMotion(motion));
                         teleportEntity(entityId);
-                    } else if ((gateTile == null || !gateTile.entitiesPassedLast.containsKey(entityId)) && !closedIris && !teleport && front && tauri.dev.jsg.config.JSGConfig.horizonConfig.wrongSideKilling)
+                    } else if ((gateTile == null || !gateTile.entitiesPassedLast.containsKey(entityId)) && !closedIris && !teleport && front && JSGConfig.Stargate.eventHorizon.wrongSideKilling)
                         wrongSideKill(entity);
                 }
             }
@@ -154,13 +154,13 @@ public class EventHorizon {
 
 
                 } else {
-                    if (tauri.dev.jsg.config.JSGConfig.irisConfig.killAtDestination) {
+                    if (JSGConfig.Stargate.iris.killAtDestination) {
                         packet.teleport(false);
                     }
-                    if (JSGConfig.irisConfig.allowCreative
+                    if (JSGConfig.Stargate.iris.allowCreative
                             && packet.getEntity() instanceof EntityPlayer
                             && ((EntityPlayer) packet.getEntity()).capabilities.isCreativeMode) {
-                        if (!tauri.dev.jsg.config.JSGConfig.irisConfig.killAtDestination) {
+                        if (!tauri.dev.jsg.config.JSGConfig.Stargate.iris.killAtDestination) {
                             packet.teleport();
                         }
                     } else {
@@ -189,7 +189,7 @@ public class EventHorizon {
                 ItemStack irisItem = classicTargetGate.getItemHandler().getStackInSlot(11);
                 if (irisItem.getItem() instanceof UpgradeIris && irisItem.isItemStackDamageable()) {
                     // different damages per source
-                    int chance = EnchantmentHelper.getEnchantments(irisItem).containsKey(Enchantments.UNBREAKING) ? (tauri.dev.jsg.config.JSGConfig.irisConfig.unbreakingChance * EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, irisItem)) : 0;
+                    int chance = EnchantmentHelper.getEnchantments(irisItem).containsKey(Enchantments.UNBREAKING) ? (tauri.dev.jsg.config.JSGConfig.Stargate.iris.unbreakingChance * EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, irisItem)) : 0;
                     int random = randomGenerator.nextInt(100);
 
                     if (random > chance) {
@@ -209,7 +209,7 @@ public class EventHorizon {
 
             } else {
                 if (baseTile != null && baseTile.isCurrentlyUnstable)
-                    if (Math.random() < JSGConfig.horizonConfig.ehDeathChance)
+                    if (Math.random() < JSGConfig.Stargate.eventHorizon.ehDeathChance)
                         unstableEhKill(packet.getEntity());
                     else {
                         packet.teleport();

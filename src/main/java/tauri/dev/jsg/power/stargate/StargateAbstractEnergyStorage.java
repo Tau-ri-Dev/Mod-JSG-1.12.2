@@ -8,7 +8,7 @@ import tauri.dev.jsg.config.JSGConfig;
 public class StargateAbstractEnergyStorage extends EnergyStorage implements INBTSerializable<NBTTagCompound> {
 
 	public StargateAbstractEnergyStorage() {
-		super(JSGConfig.powerConfig.stargateEnergyStorage/4, tauri.dev.jsg.config.JSGConfig.powerConfig.stargateMaxEnergyTransfer, 0);
+		super(JSGConfig.Stargate.power.stargateEnergyStorage/4, tauri.dev.jsg.config.JSGConfig.Stargate.power.stargateMaxEnergyTransfer, 0);
 	}
 	
 	public StargateAbstractEnergyStorage(int capacity, int maxTransfer) {
@@ -16,7 +16,7 @@ public class StargateAbstractEnergyStorage extends EnergyStorage implements INBT
 	}
 
 	public StargateAbstractEnergyStorage(int capacity) {
-		super(capacity, tauri.dev.jsg.config.JSGConfig.powerConfig.stargateMaxEnergyTransfer);
+		super(capacity, tauri.dev.jsg.config.JSGConfig.Stargate.power.stargateMaxEnergyTransfer);
 	}
 	
 	@Override

@@ -67,7 +67,7 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
     @Override
     protected String getEventHorizonTexturePath(StargateAbstractRendererState rendererState, boolean kawoosh) {
         String texture = (kawoosh ? EV_HORIZON_DESATURATED_KAWOOSH_TEXTURE_ANIMATED : EV_HORIZON_DESATURATED_TEXTURE_ANIMATED);
-        if (JSGConfig.horizonConfig.disableAnimatedEventHorizon || !isEhAnimatedLoaded())
+        if (JSGConfig.Stargate.eventHorizon.disableAnimatedEventHorizon || !isEhAnimatedLoaded())
             texture = EV_HORIZON_DESATURATED_TEXTURE;
 
         return texture;

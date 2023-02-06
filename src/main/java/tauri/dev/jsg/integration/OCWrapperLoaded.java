@@ -70,7 +70,7 @@ public class OCWrapperLoaded implements OCWrapperInterface {
 
         Packet packet = Network.newPacket(packetPrefix + "-" + player.getName(), address, port, data);
 
-        Network.sendWirelessPacket((WirelessEndpoint) endpointStack.getEndpoint(), JSGConfig.integrationsConfig.ocIntegrationWirelessRange, packet);
+        Network.sendWirelessPacket((WirelessEndpoint) endpointStack.getEndpoint(), JSGConfig.General.integration.ocIntegrationWirelessRange, packet);
     }
 
     @Override

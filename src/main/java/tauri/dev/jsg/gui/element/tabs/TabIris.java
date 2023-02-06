@@ -41,7 +41,7 @@ public class TabIris extends Tab {
         this.irisMode = builder.irisMode;
         code = builder.code;
         buttonChangeMode.setCurrentState(irisMode.id);
-        inputField.setMaxStringLength(JSGConfig.irisConfig.irisCodeLength);
+        inputField.setMaxStringLength(JSGConfig.Stargate.iris.irisCodeLength);
         inputField.setText(code > -1 ? Integer.toString(code) : "");
         inputField.setEnabled(buttonChangeMode.getCurrentState() == EnumIrisMode.AUTO.id);
     }

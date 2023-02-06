@@ -57,7 +57,7 @@ public class CapacitorItemBlock extends ItemBlock {
 	
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-		return new ItemCapabilityProvider(stack, nbt, JSGConfig.powerConfig.stargateEnergyStorage/4);
+		return new ItemCapabilityProvider(stack, nbt, JSGConfig.Stargate.power.stargateEnergyStorage/4);
 	}
 	
 	@Override

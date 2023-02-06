@@ -224,7 +224,7 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
                 }
             }
         }
-        if (JSGConfig.devConfig.enableDevMode && platformBase != null) {
+        if (JSGConfig.General.devConfig.enableDevMode && platformBase != null) {
             if (state.ringsConfig.getOption(TransportRingsAbstractTile.ConfigOptions.RENDER_PLATFORM_BASE.id).getBooleanValue()) {
 
                 GlStateManager.pushMatrix();

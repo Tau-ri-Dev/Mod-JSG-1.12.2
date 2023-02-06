@@ -37,14 +37,14 @@ public class JSG {
     public static final String MOD_NAME = "Just Stargate Mod";
     public static final String MOD_VERSION = "@VERSION@";
     public static final int DATA_VERSION = 23;
-    public static final String CONFIG_GENERAL_VERSION = "2.4";
+    public static final String CONFIG_GENERAL_VERSION = "3.0";
     public static final String CONFIG_CRAFTINGS_VERSION = "1.1";
     public static final String CONFIG_STRUCTURES_VERSION = "1.0";
     public static final String CONFIG_DIMENSIONS_VERSION = "1.1";
     public static final String MC_VERSION = "@MCVERSION@";
     public static final String CLIENT = "tauri.dev.jsg.proxy.ProxyClient";
     public static final String SERVER = "tauri.dev.jsg.proxy.ProxyServer";
-    public static final String AGS_PATH = "pastebin run pAqHB264";
+    public static final String AGS_DEFAULT_PATH = "pastebin run pAqHB264";
     public static SoundCategory JSG_SOUNDS;
 
     // --------------------------------------------
@@ -122,19 +122,19 @@ public class JSG {
 
     public static void debug(String string) {
         logger.debug(string);
-        if(JSGConfig.debugConfig.logDebugAsInfo)
+        if(JSGConfig.General.debug.logDebugAsInfo)
             info("[DEBUG] " + string);
     }
 
     public static void debug(Object... o) {
         logger.debug(o);
-        if(JSGConfig.debugConfig.logDebugAsInfo)
+        if(JSGConfig.General.debug.logDebugAsInfo)
             info("[DEBUG] ", o);
     }
 
     public static void debug(String string, Exception e) {
         logger.debug(string, e);
-        if(JSGConfig.debugConfig.logDebugAsInfo)
+        if(JSGConfig.General.debug.logDebugAsInfo)
             info("[DEBUG] " + string, e);
     }
 

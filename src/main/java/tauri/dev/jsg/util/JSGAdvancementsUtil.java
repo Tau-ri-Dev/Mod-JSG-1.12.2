@@ -25,7 +25,7 @@ public class JSGAdvancementsUtil {
         World world = tile.getWorld();
         BlockPos pos = tile.getPos();
 
-        int radius = JSGConfig.advancementsConfig.radius;
+        int radius = JSGConfig.General.advancementsConfig.radius;
 
         List<EntityPlayerMP> players = world.getEntitiesWithinAABB(EntityPlayerMP.class, new JSGAxisAlignedBB(pos.add(-radius, -radius, -radius), pos.add(radius, radius, radius)));
         for (EntityPlayerMP player : players) {

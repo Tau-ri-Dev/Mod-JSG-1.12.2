@@ -27,6 +27,7 @@ import tauri.dev.jsg.block.JSGBlock;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.stargate.StargateClassicMemberBlockColor;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.JSGConfigUtil;
 import tauri.dev.jsg.entity.friendly.TokraEntity;
 import tauri.dev.jsg.entity.renderer.TokraRenderer;
 import tauri.dev.jsg.event.EventTickClient;
@@ -49,15 +50,17 @@ import static tauri.dev.jsg.block.JSGBlocks.BLOCKS;
 @SuppressWarnings({"rawtypes", "unused", "unchecked"})
 public class ProxyClient implements IProxy {
     public void preInit(FMLPreInitializationEvent event) {
-        Display.setTitle(JSG.MOD_NAME + " | " + JSG.MC_VERSION + " | " + JSG.MOD_VERSION.replaceAll(JSG.MC_VERSION + "-", ""));
+        Display.setTitle(Display.getTitle() + " w/" + JSG.MOD_NAME + " " + JSG.MOD_VERSION.replaceAll(JSG.MC_VERSION + "-", ""));
         registerRenderers();
         registerFluidRenderers();
 
         InputHandlerClient.registerKeybindings();
+
+        MinecraftForge.EVENT_BUS.register(new JSGConfigUtil());
     }
 
     public void init(FMLInitializationEvent event) {
-        if(JSGConfig.mainMenuConfig.loadingMusic)
+        if(JSGConfig.General.mainMenuConfig.loadingMusic)
             playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.LOADING_MUSIC, true);
 
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new PageNotebookItemColor(), JSGItems.PAGE_NOTEBOOK_ITEM);
@@ -142,7 +145,7 @@ public class ProxyClient implements IProxy {
 
     @Override
     public void loadCompleted() {
-        if(JSGConfig.mainMenuConfig.loadingMusic)
+        if(JSGConfig.General.mainMenuConfig.loadingMusic)
             playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.LOADING_MUSIC, false);
     }
 }

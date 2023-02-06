@@ -73,8 +73,8 @@ public class BeamerBeam {
     }
 
     public static boolean isSomethingInBeam(BeamerTile beamer, boolean destroyBlocks, boolean hitEntities) {
-        if (!JSGConfig.beamerConfig.damageEntities) hitEntities = false;
-        if (!JSGConfig.beamerConfig.destroyBlocks) destroyBlocks = false;
+        if (!JSGConfig.Beamer.mechanics.damageEntities) hitEntities = false;
+        if (!JSGConfig.Beamer.mechanics.destroyBlocks) destroyBlocks = false;
 
         boolean debug = false;
 
@@ -143,7 +143,7 @@ public class BeamerBeam {
     // -------------------------------------------
     // RENDERING
     public void render(float partialTicks, long tick, BeamerRoleEnum teRole, float[] colors, boolean transferringFluid, Fluid lastFluidTransferred) {
-        if (transferringFluid && tauri.dev.jsg.config.JSGConfig.beamerConfig.enableFluidBeamColorization) {
+        if (transferringFluid && JSGConfig.Beamer.visual.enableFluidBeamColorization) {
             if (lastFluidTransferred != null) {
                 FluidColors.FloatColors fluidColors = FluidColors.getAverageColor(lastFluidTransferred);
                 if (fluidColors != null) {

@@ -102,7 +102,7 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
                 TileEntity tile = world.getTileEntity(pos.offset(facing));
 
                 if (tile != null && tile.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
-                    int extracted = getEnergyStorage().extractEnergy(tauri.dev.jsg.config.JSGConfig.powerConfig.stargateMaxEnergyTransfer, true);
+                    int extracted = getEnergyStorage().extractEnergy(JSGConfig.Stargate.power.stargateMaxEnergyTransfer, true);
                     extracted = Objects.requireNonNull(tile.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite())).receiveEnergy(extracted, false);
 
                     getEnergyStorage().extractEnergy(extracted, false);
@@ -113,7 +113,7 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
             if (!stack.isEmpty() && stack.hasCapability(CapabilityEnergy.ENERGY, null)) {
                 IEnergyStorage targetEnergyStorage = stack.getCapability(CapabilityEnergy.ENERGY, null);
                 if (targetEnergyStorage != null) {
-                    int extracted = getEnergyStorage().extractEnergy(JSGConfig.powerConfig.stargateMaxEnergyTransfer, true);
+                    int extracted = getEnergyStorage().extractEnergy(JSGConfig.Stargate.power.stargateMaxEnergyTransfer, true);
                     extracted = targetEnergyStorage.receiveEnergy(extracted, false);
                     getEnergyStorage().extractEnergy(extracted, false);
                 }

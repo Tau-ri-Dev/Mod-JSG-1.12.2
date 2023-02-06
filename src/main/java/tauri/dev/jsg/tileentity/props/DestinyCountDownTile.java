@@ -111,14 +111,14 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
 
             long i = getCountdownTicks();
 
-            if (i < -(20L * JSGConfig.countdownConfig.zeroDelay)) {
+            if (i < -(20L * JSGConfig.General.countdownConfig.zeroDelay)) {
                 countdownTo = -1;
                 markDirty();
                 sendSignal(null, "countdown_reset", new Object[]{i});
                 sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
             }
 
-            if (getConfig().getOption(ENABLE_GATE_OPENING.id).getBooleanValue() && !gateOpenedThisRound && i > 1300 && (world.getTotalWorldTime() - countStart) > (20L * JSGConfig.countdownConfig.dialStartDelay) && (world.getTotalWorldTime() % 40 == 0)) {
+            if (getConfig().getOption(ENABLE_GATE_OPENING.id).getBooleanValue() && !gateOpenedThisRound && i > 1300 && (world.getTotalWorldTime() - countStart) > (20L * JSGConfig.General.countdownConfig.dialStartDelay) && (world.getTotalWorldTime() % 40 == 0)) {
                 if (isLinked()) {
                     StargateUniverseBaseTile gate = getLinkedGate(world);
                     if (gate != null) {

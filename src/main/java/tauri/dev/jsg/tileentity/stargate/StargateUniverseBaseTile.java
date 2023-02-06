@@ -311,15 +311,15 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         if (distance < 5000) distance *= 0.8;
         else distance = 5000 * Math.log10(distance) / Math.log10(5000);
 
-        StargateEnergyRequired energyRequired = new StargateEnergyRequired(JSGConfig.powerConfig.openingBlockToEnergyRatio, JSGConfig.powerConfig.keepAliveBlockToEnergyRatioPerTick);
+        StargateEnergyRequired energyRequired = new StargateEnergyRequired(JSGConfig.Stargate.power.openingBlockToEnergyRatio, JSGConfig.Stargate.power.keepAliveBlockToEnergyRatioPerTick);
         energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(sourceDim, targetDim));
 
         if (dialedAddress.size() == 9)
-            energyRequired.mul(JSGConfig.powerConfig.nineSymbolAddressMul);
+            energyRequired.mul(JSGConfig.Stargate.power.nineSymbolAddressMul);
         if (dialedAddress.size() == 8)
-            energyRequired.mul(JSGConfig.powerConfig.eightSymbolAddressMul);
+            energyRequired.mul(JSGConfig.Stargate.power.eightSymbolAddressMul);
 
-        return energyRequired.mul(JSGConfig.powerConfig.stargateUniverseEnergyMul);
+        return energyRequired.mul(JSGConfig.Stargate.power.stargateUniverseEnergyMul);
     }
 
     @Override
@@ -621,9 +621,9 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
 
     @Override
     protected boolean onGateMergeRequested() {
-        if (stargateSize != JSGConfig.stargateSize) {
-            StargateUniverseMergeHelper.INSTANCE.convertToPattern(world, pos, facing, stargateSize, tauri.dev.jsg.config.JSGConfig.stargateSize);
-            stargateSize = tauri.dev.jsg.config.JSGConfig.stargateSize;
+        if (stargateSize != JSGConfig.Stargate.stargateSize) {
+            StargateUniverseMergeHelper.INSTANCE.convertToPattern(world, pos, facing, stargateSize, tauri.dev.jsg.config.JSGConfig.Stargate.stargateSize);
+            stargateSize = tauri.dev.jsg.config.JSGConfig.Stargate.stargateSize;
         }
 
         return StargateUniverseMergeHelper.INSTANCE.checkBlocks(world, pos, facing);
@@ -656,7 +656,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
 
     @Override
     public int getDefaultCapacitors() {
-        return JSGConfig.powerConfig.universeCapacitors;
+        return JSGConfig.Stargate.power.universeCapacitors;
     }
 
 

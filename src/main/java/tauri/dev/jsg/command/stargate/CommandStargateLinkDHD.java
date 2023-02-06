@@ -23,8 +23,8 @@ public final class CommandStargateLinkDHD extends CommandBase {
 
   @Override
   public final void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-    final int radius = args.length > 0 ? parseInt(args[0]) : JSGConfig.dhdConfig.rangeFlat;
-    final int verticalRadius = args.length > 1 ? parseInt(args[1]) : tauri.dev.jsg.config.JSGConfig.dhdConfig.rangeVertical;
+    final int radius = args.length > 0 ? parseInt(args[0]) : JSGConfig.DialHomeDevice.mechanics.rangeFlat;
+    final int verticalRadius = args.length > 1 ? parseInt(args[1]) : tauri.dev.jsg.config.JSGConfig.DialHomeDevice.mechanics.rangeVertical;
 
     final BlockPos radiusPos = new BlockPos(radius, verticalRadius, radius);
 

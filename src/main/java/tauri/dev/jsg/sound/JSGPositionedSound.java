@@ -14,7 +14,7 @@ import tauri.dev.jsg.config.JSGConfig;
 @SideOnly(Side.CLIENT)
 public class JSGPositionedSound extends PositionedSoundRecord {
     public static JSGPositionedSound getSoundRecord(SoundPositionedEnum soundEnum, BlockPos pos) {
-        return new JSGPositionedSound(soundEnum.resourceLocation, soundEnum.soundCategory, soundEnum.volume * JSGConfig.avConfig.volume * 5f, 1.0f, soundEnum.repeat, 0, ISound.AttenuationType.LINEAR, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f);
+        return new JSGPositionedSound(soundEnum.resourceLocation, soundEnum.soundCategory, soundEnum.volume * JSGConfig.General.audio.volume * 5f, 1.0f, soundEnum.repeat, 0, ISound.AttenuationType.LINEAR, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f);
     }
 
     private JSGPositionedSound(ResourceLocation soundId, SoundCategory categoryIn, float volumeIn, float pitchIn, boolean repeatIn, int repeatDelayIn, AttenuationType attenuationTypeIn, float xIn, float yIn, float zIn) {

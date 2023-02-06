@@ -31,6 +31,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.JSGConfigUtil;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.gui.container.dhd.DHDContainerGuiUpdate;
 import tauri.dev.jsg.item.JSGItems;
@@ -69,7 +70,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.SOOTY, BiomeOverlayEnum.AGED);
     public static final List<Item> SUPPORTED_UPGRADES = Arrays.asList(JSGItems.CRYSTAL_GLYPH_DHD, JSGItems.CRYSTAL_UPGRADE_CAPACITY, JSGItems.CRYSTAL_UPGRADE_EFFICIENCY);
     public static final int BIOME_OVERRIDE_SLOT = 5;
-    protected final FluidTank fluidHandler = new FluidTank(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, 0), tauri.dev.jsg.config.JSGConfig.dhdConfig.fluidCapacity) {
+    protected final FluidTank fluidHandler = new FluidTank(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, 0), JSGConfig.DialHomeDevice.mechanics.fluidCapacity) {
 
         @Override
         public boolean canFillFluidType(FluidStack fluid) {
@@ -124,7 +125,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
                     return false;
 
                 case BIOME_OVERRIDE_SLOT:
-                    BiomeOverlayEnum override = tauri.dev.jsg.config.JSGConfig.stargateConfig.getBiomeOverrideItemMetaPairs().get(new ItemMetaPair(stack));
+                    BiomeOverlayEnum override = JSGConfigUtil.getBiomeOverrideItemMetaPairs().get(new ItemMetaPair(stack));
                     if (override == null) return false;
 
                     return getSupportedOverlays().contains(override);
@@ -276,9 +277,9 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
             }
 
             // Fluid upgrades
-            int newFluidCapacity = JSGConfig.dhdConfig.fluidCapacity;
+            int newFluidCapacity = JSGConfig.DialHomeDevice.mechanics.fluidCapacity;
             if(hasUpgrade(DHDUpgradeEnum.CAPACITY_UPGRADE))
-                newFluidCapacity *= JSGConfig.dhdConfig.capacityUpgradeMultiplier;
+                newFluidCapacity *= JSGConfig.DialHomeDevice.power.capacityUpgradeMultiplier;
 
             if(fluidHandler.getCapacity() != newFluidCapacity){
                 fluidHandler.setCapacity(newFluidCapacity);
@@ -299,7 +300,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
 
                     IEnergyStorage energyStorage = (IEnergyStorage) gateTile.getCapability(CapabilityEnergy.ENERGY, null);
 
-                    int amount = tauri.dev.jsg.config.JSGConfig.dhdConfig.powerGenerationMultiplier;
+                    int amount = JSGConfig.DialHomeDevice.power.powerGenerationMultiplier;
 
                     if (reactorState != ReactorStateEnum.STANDBY) {
                         FluidStack simulatedDrain = fluidHandler.drainInternal(amount, false);
@@ -312,19 +313,19 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
                     if (reactorState == ReactorStateEnum.ONLINE || reactorState == ReactorStateEnum.STANDBY) {
                         float percent = Objects.requireNonNull(energyStorage).getEnergyStored() / (float) energyStorage.getMaxEnergyStored();
 
-                        if (percent < tauri.dev.jsg.config.JSGConfig.dhdConfig.activationLevel)
+                        if (percent < tauri.dev.jsg.config.JSGConfig.DialHomeDevice.power.activationLevel)
                             reactorState = ReactorStateEnum.ONLINE;
 
-                        else if (percent >= JSGConfig.dhdConfig.deactivationLevel)
+                        else if (percent >= JSGConfig.DialHomeDevice.power.deactivationLevel)
                             reactorState = ReactorStateEnum.STANDBY;
                     }
 
                     if (reactorState == ReactorStateEnum.ONLINE) {
                         fluidHandler.drainInternal(amount, true);
-                        int energyPerOne = JSGConfig.dhdConfig.energyPerNaquadah;
+                        int energyPerOne = JSGConfig.DialHomeDevice.power.energyPerNaquadah;
                         if(hasUpgrade(DHDUpgradeEnum.EFFICIENCY_UPGRADE))
-                            energyPerOne *= JSGConfig.dhdConfig.efficiencyUpgradeMultiplier;
-                        energyStorage.receiveEnergy(energyPerOne * tauri.dev.jsg.config.JSGConfig.dhdConfig.powerGenerationMultiplier, false);
+                            energyPerOne *= JSGConfig.DialHomeDevice.power.efficiencyUpgradeMultiplier;
+                        energyStorage.receiveEnergy(energyPerOne * tauri.dev.jsg.config.JSGConfig.DialHomeDevice.power.powerGenerationMultiplier, false);
                     }
                 }
 
@@ -349,7 +350,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
             return null;
         }
 
-        BiomeOverlayEnum biomeOverlay = tauri.dev.jsg.config.JSGConfig.stargateConfig.getBiomeOverrideItemMetaPairs().get(new ItemMetaPair(stack));
+        BiomeOverlayEnum biomeOverlay = JSGConfigUtil.getBiomeOverrideItemMetaPairs().get(new ItemMetaPair(stack));
 
         if (getSupportedOverlays().contains(biomeOverlay)) {
             return biomeOverlay;

@@ -17,7 +17,7 @@ public class StargateItemEnergyStorage implements IEnergyStorage {
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
         int energyStored = getEnergyStored();
-        int energyReceived = Math.min(getMaxEnergyStored() - energyStored, Math.min(JSGConfig.powerConfig.stargateMaxEnergyTransfer, maxReceive));
+        int energyReceived = Math.min(getMaxEnergyStored() - energyStored, Math.min(JSGConfig.Stargate.power.stargateMaxEnergyTransfer, maxReceive));
         if (!simulate)
             setEnergyStored(energyStored + energyReceived);
         return energyReceived;

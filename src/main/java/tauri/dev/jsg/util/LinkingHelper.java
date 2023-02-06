@@ -106,8 +106,8 @@ public class LinkingHelper {
    * @return DHD range.
    */
   public static BlockPos getDhdRange() {
-    int xz = tauri.dev.jsg.config.JSGConfig.dhdConfig.rangeFlat;
-    int y = JSGConfig.dhdConfig.rangeVertical;
+    int xz = JSGConfig.DialHomeDevice.mechanics.rangeFlat;
+    int y = JSGConfig.DialHomeDevice.mechanics.rangeVertical;
 
     return new BlockPos(xz, y, xz);
   }

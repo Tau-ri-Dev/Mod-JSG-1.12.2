@@ -12,6 +12,7 @@ import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.dialhomedevice.DHDBlock;
 import tauri.dev.jsg.chunkloader.ChunkManager;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.JSGConfigUtil;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
@@ -183,7 +184,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     public boolean canAcceptConnectionFrom(StargatePos targetGatePos) {
-        boolean allowConnectToDialing = JSGConfig.dialingConfig.allowConnectToDialing;
+        boolean allowConnectToDialing = JSGConfig.Stargate.mechanics.allowConnectToDialing;
 
         if (allowConnectToDialing) {
             if (isMerged) {
@@ -933,7 +934,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             }
 
             // Autoclose
-            if (world.getTotalWorldTime() % 20 == 0 && stargateState == EnumStargateState.ENGAGED && tauri.dev.jsg.config.JSGConfig.autoCloseConfig.autocloseEnabled && shouldAutoclose()) {
+            if (world.getTotalWorldTime() % 20 == 0 && stargateState == EnumStargateState.ENGAGED && JSGConfig.Stargate.autoClose.autocloseEnabled && shouldAutoclose()) {
                 if (targetGatePos != null)
                     targetGatePos.getTileEntity().attemptClose(StargateClosedReasonEnum.AUTOCLOSE);
                 else attemptClose(StargateClosedReasonEnum.AUTOCLOSE);
@@ -986,14 +987,14 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                      */
 
                     // Horizon becomes unstable
-                    if (horizonFlashTask == null && energySecondsToClose < tauri.dev.jsg.config.JSGConfig.powerConfig.instabilitySeconds && energyTransferedLastTick < 0) {
+                    if (horizonFlashTask == null && energySecondsToClose < JSGConfig.Stargate.power.instabilitySeconds && energyTransferedLastTick < 0) {
                         resetFlashingSequence();
 
                         setHorizonFlashTask(new ScheduledTask(EnumScheduledTask.HORIZON_FLASH, (int) (Math.random() * 40) + 5));
                     }
 
                     // Horizon becomes stable
-                    if (horizonFlashTask != null && (energySecondsToClose > tauri.dev.jsg.config.JSGConfig.powerConfig.instabilitySeconds || energyTransferedLastTick >= 0)) {
+                    if (horizonFlashTask != null && (energySecondsToClose > JSGConfig.Stargate.power.instabilitySeconds || energyTransferedLastTick >= 0)) {
                         horizonFlashTask = null;
                         isCurrentlyUnstable = false;
 
@@ -1059,7 +1060,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             for (BlockPos dPos : blocks) {
                 if (!dPos.equals(getGateCenterPos())) {
                     IBlockState state = world.getBlockState(dPos);
-                    if (!world.isAirBlock(dPos) && state.getBlockHardness(world, dPos) >= 0.0f && tauri.dev.jsg.config.JSGConfig.stargateConfig.canKawooshDestroyBlock(state)) {
+                    if (!world.isAirBlock(dPos) && state.getBlockHardness(world, dPos) >= 0.0f && JSGConfigUtil.canKawooshDestroyBlock(state)) {
                         world.setBlockToAir(dPos);
                         JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.STARGATE_VAPORIZE_BLOCK_PARTICLES, new StargateVaporizeBlockParticlesRequest(dPos)), targetPoint);
                     }
@@ -1099,9 +1100,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected int doTimeLimitFunc() {
         int morePower = 0;
         getOpenedSeconds();
-        int configPower = JSGConfig.openLimitConfig.maxOpenedPowerDrawAfterLimit;
-        int maxSeconds = JSGConfig.openLimitConfig.maxOpenedSeconds;
-        StargateTimeLimitModeEnum limitMode = JSGConfig.openLimitConfig.maxOpenedWhat;
+        int configPower = JSGConfig.Stargate.openLimit.maxOpenedPowerDrawAfterLimit;
+        int maxSeconds = JSGConfig.Stargate.openLimit.maxOpenedSeconds;
+        StargateTimeLimitModeEnum limitMode = JSGConfig.Stargate.openLimit.maxOpenedWhat;
 
         if(this instanceof StargateClassicBaseTile){
             StargateClassicBaseTile casted = ((StargateClassicBaseTile) this);
@@ -1634,7 +1635,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
                     else {
                         // Schedule next flash sequence
-                        float mul = energySecondsToClose / (float) tauri.dev.jsg.config.JSGConfig.powerConfig.instabilitySeconds;
+                        float mul = energySecondsToClose / (float) JSGConfig.Stargate.power.instabilitySeconds;
                         int min = (int) (15 * mul);
                         int off = (int) (20 * mul);
                         setHorizonFlashTask(new ScheduledTask(EnumScheduledTask.HORIZON_FLASH, min + (int) (Math.random() * off)));
@@ -1691,13 +1692,13 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         if (distance < 5000) distance *= 0.8;
         else distance = 5000 * Math.log10(distance) / Math.log10(5000);
 
-        StargateEnergyRequired energyRequired = new StargateEnergyRequired(tauri.dev.jsg.config.JSGConfig.powerConfig.openingBlockToEnergyRatio, tauri.dev.jsg.config.JSGConfig.powerConfig.keepAliveBlockToEnergyRatioPerTick);
+        StargateEnergyRequired energyRequired = new StargateEnergyRequired(JSGConfig.Stargate.power.openingBlockToEnergyRatio, JSGConfig.Stargate.power.keepAliveBlockToEnergyRatioPerTick);
         energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(world.provider.getDimensionType(), targetDim));
 
         if(dialedAddress.size() == 9)
-            energyRequired.mul(JSGConfig.powerConfig.nineSymbolAddressMul);
+            energyRequired.mul(JSGConfig.Stargate.power.nineSymbolAddressMul);
         if(dialedAddress.size() == 8)
-            energyRequired.mul(JSGConfig.powerConfig.eightSymbolAddressMul);
+            energyRequired.mul(JSGConfig.Stargate.power.eightSymbolAddressMul);
 
         //JSG.logger.info(String.format("Energy required to dial [distance=%,d, from=%s, to=%s] = %,d / keepAlive: %,d/t, stored=%,d", Math.round(distance), sourceDim, targetDim, energyRequired.energyToOpen, energyRequired.keepAlive, getEnergyStorage().getEnergyStored()));
 

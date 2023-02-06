@@ -14,7 +14,7 @@ public class BeamerRenderer extends TileEntitySpecialRenderer<BeamerTile> {
     @Override
     public void render(@Nonnull BeamerTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 
-        if (JSGConfig.debugConfig.renderBoundingBoxes) {
+        if (JSGConfig.General.debug.renderBoundingBoxes) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(x, y, z);
             te.getRenderBoxForDisplay().render();

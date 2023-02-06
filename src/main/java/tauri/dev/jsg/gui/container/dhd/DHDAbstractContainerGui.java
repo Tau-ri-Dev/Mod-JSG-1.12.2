@@ -105,9 +105,9 @@ public abstract class DHDAbstractContainerGui extends GuiContainer implements Ta
     }
 
     public void updateTank() {
-        int capacity = JSGConfig.dhdConfig.fluidCapacity;
+        int capacity = JSGConfig.DialHomeDevice.mechanics.fluidCapacity;
         if (container.dhdTile.hasUpgrade(DHDAbstractTile.DHDUpgradeEnum.CAPACITY_UPGRADE))
-            capacity *= JSGConfig.dhdConfig.capacityUpgradeMultiplier;
+            capacity *= JSGConfig.DialHomeDevice.power.capacityUpgradeMultiplier;
         if (capacity != container.tankNaquadah.getCapacity())
             container.tankNaquadah.setCapacity(capacity);
 

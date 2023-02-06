@@ -96,7 +96,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         }
     };
 
-    private final ZPMHubEnergyStorage energyStorage = new ZPMHubEnergyStorage(JSGConfig.powerConfig.zpmHubMaxEnergyTransfer) {
+    private final ZPMHubEnergyStorage energyStorage = new ZPMHubEnergyStorage(JSGConfig.ZPM.power.zpmHubMaxEnergyTransfer) {
 
         @Override
         protected void onEnergyChanged() {
@@ -164,7 +164,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                     TileEntity tile = world.getTileEntity(pos.offset(facing));
 
                     if (tile != null && tile.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
-                        int extracted = getEnergyStorage().extractEnergy(JSGConfig.powerConfig.zpmHubMaxEnergyTransfer, true);
+                        int extracted = getEnergyStorage().extractEnergy(JSGConfig.ZPM.power.zpmHubMaxEnergyTransfer, true);
                         extracted = Objects.requireNonNull(tile.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite())).receiveEnergy(extracted, false);
 
                         getEnergyStorage().extractEnergy(extracted, false);

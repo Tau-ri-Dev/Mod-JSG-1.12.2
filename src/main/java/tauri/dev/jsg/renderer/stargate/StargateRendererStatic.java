@@ -96,7 +96,7 @@ public class StargateRendererStatic {
         }
 
         public void render(float tick, boolean white, Float alpha, float mul, byte animationOverride) {
-            boolean animated = !JSGConfig.horizonConfig.disableAnimatedEventHorizon && isEhAnimatedLoaded();
+            boolean animated = !JSGConfig.Stargate.eventHorizon.disableAnimatedEventHorizon && isEhAnimatedLoaded();
             if (animationOverride == -1) animated = false;
             if (animationOverride == 1) animated = true;
 
@@ -219,7 +219,7 @@ public class StargateRendererStatic {
         }
 
         public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul, boolean reversed, boolean red, byte animationOverride) {
-            boolean animate = !tauri.dev.jsg.config.JSGConfig.horizonConfig.disableAnimatedEventHorizon && isEhAnimatedLoaded();
+            boolean animate = !tauri.dev.jsg.config.JSGConfig.Stargate.eventHorizon.disableAnimatedEventHorizon && isEhAnimatedLoaded();
             if (animationOverride == -1) animate = false;
             if (animationOverride == 1) animate = true;
 

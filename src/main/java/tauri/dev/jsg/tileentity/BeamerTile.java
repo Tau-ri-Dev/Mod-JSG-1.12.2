@@ -110,7 +110,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 
     public void updateFacing(EnumFacing facing) {
         this.facing = facing;
-        this.renderBox = new JSGAxisAlignedBB(-0.5, 0, -0.5, 0.5, 1, tauri.dev.jsg.config.JSGConfig.beamerConfig.reach).rotate(facing).offset(0.5, 0, 0.5);
+        this.renderBox = new JSGAxisAlignedBB(-0.5, 0, -0.5, 0.5, 1, JSGConfig.Beamer.mechanics.reach).rotate(facing).offset(0.5, 0, 0.5);
         this.renderBoxOffsetted = this.renderBox.offset(pos);
     }
 
@@ -178,7 +178,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
         if ((isLaser && !gateTile.getStargateState().initiating()) || (!isLaser && beamerMode != BeamerModeEnum.POWER && ((gateTile.getStargateState().initiating() && beamerRole != BeamerRoleEnum.TRANSMIT) || (gateTile.getStargateState() == EnumStargateState.ENGAGED && beamerRole != BeamerRoleEnum.RECEIVE))))
             return BeamerStatusEnum.INCOMING;
 
-        if (isLaser && this.energyStorage.getEnergyStored() < JSGConfig.beamerConfig.laserEnergy)
+        if (isLaser && this.energyStorage.getEnergyStored() < JSGConfig.Beamer.power.laserEnergy)
             return BeamerStatusEnum.NO_POWER;
 
         switch (redstoneMode) {
@@ -301,14 +301,14 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 
                     switch (beamerMode) {
                         case POWER:
-                            int tx = energyStorage.extractEnergy(tauri.dev.jsg.config.JSGConfig.beamerConfig.energyTransfer, true);
+                            int tx = energyStorage.extractEnergy(JSGConfig.Beamer.container.energyTransfer, true);
                             tx = targetBeamerTile.energyStorage.receiveEnergyInternal(tx, false);
                             energyStorage.extractEnergy(tx, false);
                             powerTransferredSinceLastSignal += tx;
                             break;
 
                         case FLUID:
-                            FluidStack fluid = fluidHandler.drainInternal(tauri.dev.jsg.config.JSGConfig.beamerConfig.fluidTransfer, false);
+                            FluidStack fluid = fluidHandler.drainInternal(tauri.dev.jsg.config.JSGConfig.Beamer.container.fluidTransfer, false);
                             int filled = targetBeamerTile.fluidHandler.fillInternal(fluid, true);
                             fluidHandler.drainInternal(filled, true);
 
@@ -329,7 +329,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
                             break;
 
                         case ITEMS:
-                            int toTransfer = tauri.dev.jsg.config.JSGConfig.beamerConfig.itemTransfer;
+                            int toTransfer = tauri.dev.jsg.config.JSGConfig.Beamer.container.itemTransfer;
 
                             for (int i = 1; i < 5; i++) {
                                 ItemStack stack = itemStackHandler.extractItem(i, toTransfer, true);
@@ -376,14 +376,14 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
                                     break;
                             }
 
-                            if (toTransfer == tauri.dev.jsg.config.JSGConfig.beamerConfig.itemTransfer && world.getTotalWorldTime() % 20 == 0) {
+                            if (toTransfer == tauri.dev.jsg.config.JSGConfig.Beamer.container.itemTransfer && world.getTotalWorldTime() % 20 == 0) {
                                 timeWithoutItemTransfer++;
                             }
 
                             break;
 
                         case LASER:
-                            int lx = energyStorage.extractEnergy(tauri.dev.jsg.config.JSGConfig.beamerConfig.laserEnergy, false);
+                            int lx = energyStorage.extractEnergy(JSGConfig.Beamer.power.laserEnergy, false);
                             StargateClassicBaseTile gate = ((StargateClassicBaseTile) this.targetGatePos.getTileEntity());
                             gate.tryHeatUp(true, true, 0.3, 0.6, 0, -1, -1);
                             powerTransferredSinceLastSignal += lx;
@@ -393,7 +393,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
                             break;
                     }
 
-                    if (world.getTotalWorldTime() % JSGConfig.beamerConfig.signalIntervalTicks == 0) {
+                    if (world.getTotalWorldTime() % JSGConfig.Beamer.mechanics.signalIntervalTicks == 0) {
                         // Every second send signal about transferred power/fluids/items
 
 //						JSG.info(String.format("power=%d, fluids=%s, items=%s", powerTransferredSinceLastSignal, fluidsTransferredSinceLastSignal.toString(), itemsTransferredSinceLastSignal.toString()));
@@ -454,7 +454,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
                             case POWER:
                                 if (tileEntity.hasCapability(CapabilityEnergy.ENERGY, side.getOpposite())) {
                                     IEnergyStorage targetEnergyStorage = tileEntity.getCapability(CapabilityEnergy.ENERGY, side.getOpposite());
-                                    int tx = energyStorage.extractEnergy(tauri.dev.jsg.config.JSGConfig.beamerConfig.energyTransfer, true);
+                                    int tx = energyStorage.extractEnergy(tauri.dev.jsg.config.JSGConfig.Beamer.container.energyTransfer, true);
                                     tx = targetEnergyStorage.receiveEnergy(tx, false);
                                     energyStorage.extractEnergy(tx, false);
                                 }
@@ -464,7 +464,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
                             case FLUID:
                                 if (tileEntity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite())) {
                                     IFluidHandler targetFluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite());
-                                    FluidStack drained = fluidHandler.drain(tauri.dev.jsg.config.JSGConfig.beamerConfig.fluidTransfer, false);
+                                    FluidStack drained = fluidHandler.drain(tauri.dev.jsg.config.JSGConfig.Beamer.container.fluidTransfer, false);
                                     int filled = targetFluidHandler.fill(drained, true);
                                     fluidHandler.drain(filled, true);
                                 }
@@ -479,7 +479,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
                                 if (tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite())) {
                                     IItemHandler targetItemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite());
 
-                                    int toTransfer = tauri.dev.jsg.config.JSGConfig.beamerConfig.itemTransfer;
+                                    int toTransfer = tauri.dev.jsg.config.JSGConfig.Beamer.container.itemTransfer;
 
                                     for (int i = 1; i < 5; i++) {
                                         ItemStack stack = itemStackHandler.extractItem(i, toTransfer, true);
@@ -666,7 +666,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 
     public BlockPos getNearest(World world, BlockPos pos, ArrayList<BlockPos> blacklist) {
         Block[] blocks = {BEAMER_BLOCK};
-        return LinkingHelper.findClosestPos(world, pos, new BlockPos(JSGConfig.beamerConfig.reach, JSGConfig.beamerConfig.reach, JSGConfig.beamerConfig.reach), blocks, blacklist);
+        return LinkingHelper.findClosestPos(world, pos, new BlockPos(JSGConfig.Beamer.mechanics.reach, JSGConfig.Beamer.mechanics.reach, JSGConfig.Beamer.mechanics.reach), blocks, blacklist);
     }
 
     public void clearTargetBeamerPos() {
@@ -907,7 +907,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 
     private Fluid previouslyStoredFluid = null;
 
-    private FluidTank fluidHandler = new FluidTank(null, tauri.dev.jsg.config.JSGConfig.beamerConfig.fluidCapacity) {
+    private FluidTank fluidHandler = new FluidTank(null, tauri.dev.jsg.config.JSGConfig.Beamer.container.fluidCapacity) {
 
         protected void onContentsChanged() {
             if (beamerRole == BeamerRoleEnum.TRANSMIT && (fluid == null || fluid.getFluid() != previouslyStoredFluid)) {
@@ -939,7 +939,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
     // -----------------------------------------------------------------------------
     // Power system
 
-    private final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(tauri.dev.jsg.config.JSGConfig.beamerConfig.energyCapacity, tauri.dev.jsg.config.JSGConfig.beamerConfig.energyTransfer) {
+    private final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(tauri.dev.jsg.config.JSGConfig.Beamer.container.energyCapacity, JSGConfig.Beamer.container.energyTransfer) {
 
         @Override
         protected void onEnergyChanged() {

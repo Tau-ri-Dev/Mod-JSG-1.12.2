@@ -66,10 +66,10 @@ public class OriginsLoader {
 
     public static void registerTextures(Map<ResourceLocation, Texture> texturesArray) throws IOException {
         checkDirectory();
-        if(JSGConfig.originsConfig.additionalOrigins.length < 1) return;
+        if(JSGConfig.Stargate.pointOfOrigins.additionalOrigins.length < 1) return;
 
-        ProgressManager.ProgressBar progressBar = ProgressManager.push("JSG - Custom PoO models", JSGConfig.originsConfig.additionalOrigins.length);
-        for(String s : JSGConfig.originsConfig.additionalOrigins){
+        ProgressManager.ProgressBar progressBar = ProgressManager.push("JSG - Custom PoO models", JSGConfig.Stargate.pointOfOrigins.additionalOrigins.length);
+        for(String s : JSGConfig.Stargate.pointOfOrigins.additionalOrigins){
             int id = Integer.parseInt(s.split(":")[0]);
             progressBar.step("Origin " + id);
             if(!getOriginFile(EnumOriginFileType.TEXTURE, id).exists()){
@@ -84,10 +84,10 @@ public class OriginsLoader {
 
     public static void loadModels(Map<ResourceLocation, OBJModel> modelsArray) throws IOException {
         checkDirectory();
-        if(JSGConfig.originsConfig.additionalOrigins.length < 1) return;
+        if(JSGConfig.Stargate.pointOfOrigins.additionalOrigins.length < 1) return;
 
-        ProgressManager.ProgressBar progressBar = ProgressManager.push("JSG - Custom PoO models", JSGConfig.originsConfig.additionalOrigins.length);
-        for(String s : JSGConfig.originsConfig.additionalOrigins){
+        ProgressManager.ProgressBar progressBar = ProgressManager.push("JSG - Custom PoO models", JSGConfig.Stargate.pointOfOrigins.additionalOrigins.length);
+        for(String s : JSGConfig.Stargate.pointOfOrigins.additionalOrigins){
             int id = Integer.parseInt(s.split(":")[0]);
             progressBar.step("Origin " + id);
             if(!getOriginFile(EnumOriginFileType.MODEL_DHD, id).exists() || !getOriginFile(EnumOriginFileType.MODEL_RING, id).exists() || !getOriginFile(EnumOriginFileType.MODEL_DHD_LIGHT, id).exists()){

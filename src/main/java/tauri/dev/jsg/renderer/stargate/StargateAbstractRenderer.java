@@ -77,10 +77,10 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
             if (shouldRender(rendererState)) {
 
-                if (tauri.dev.jsg.config.JSGConfig.debugConfig.renderBoundingBoxes || JSGConfig.debugConfig.renderWholeKawooshBoundingBox) {
+                if (JSGConfig.General.debug.renderBoundingBoxes || JSGConfig.General.debug.renderWholeKawooshBoundingBox) {
                     te.getEventHorizonLocalBox().render();
 
-                    int segments = tauri.dev.jsg.config.JSGConfig.debugConfig.renderWholeKawooshBoundingBox ? te.getLocalKillingBoxes().size() : rendererState.horizonSegments;
+                    int segments = tauri.dev.jsg.config.JSGConfig.General.debug.renderWholeKawooshBoundingBox ? te.getLocalKillingBoxes().size() : rendererState.horizonSegments;
 
                     for (int i = 0; i < segments; i++) {
                         te.getLocalKillingBoxes().get(i).render();
@@ -106,7 +106,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                     GlStateManager.pushMatrix();
                     renderKawoosh(rendererState, partialTicks);
                     GlStateManager.popMatrix();
-                } else if (JSGConfig.avConfig.renderEHifTheyNot) {
+                } else if (JSGConfig.Stargate.eventHorizon.renderEHifTheyNot) {
                     GlStateManager.pushMatrix();
                     preRenderKawoosh(rendererState, partialTicks);
                     GlStateManager.popMatrix();
@@ -114,7 +114,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
                 renderIris(partialTicks, getWorld(), rendererState, false);
 
-            } else if (JSGConfig.avConfig.renderStargateNotPlaced) {
+            } else if (JSGConfig.Stargate.visual.renderStargateNotPlaced) {
                 GlStateManager.enableBlend();
                 GlStateManager.blendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
                 GL14.glBlendColor(0, 0, 0, 0.7f);
@@ -159,7 +159,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
     protected String getEventHorizonTexturePath(StargateAbstractRendererState rendererState, boolean kawoosh) {
 
         String texture = (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE_ANIMATED : (kawoosh ? EV_HORIZON_KAWOOSH_TEXTURE_ANIMATED : EV_HORIZON_NORMAL_TEXTURE_ANIMATED));
-        if (tauri.dev.jsg.config.JSGConfig.horizonConfig.disableAnimatedEventHorizon || !isEhAnimatedLoaded())
+        if (tauri.dev.jsg.config.JSGConfig.Stargate.eventHorizon.disableAnimatedEventHorizon || !isEhAnimatedLoaded())
             texture = (rendererState.horizonUnstable ? EV_HORIZON_DESATURATED_TEXTURE : EV_HORIZON_NORMAL_TEXTURE);
 
         return texture;
@@ -291,7 +291,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                                 renderWortex = false;
                             }
                         }
-                        if (!JSGConfig.horizonConfig.disableNewKawoosh && isEhKawooshLoaded()) {
+                        if (!JSGConfig.Stargate.eventHorizon.disableNewKawoosh && isEhKawooshLoaded()) {
                             if (mul >= 0) {
                                 renderEventHorizon(partialTicks, false, 0f, false, mul);
                                 if (renderWortex) {
@@ -308,7 +308,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                                     int y = texIndex / 14;
 
                                     String subPathEnd = "_" + x + "." + y;
-                                    if (tauri.dev.jsg.config.JSGConfig.horizonConfig.disableAnimatedEventHorizon || !isEhAnimatedLoaded())
+                                    if (tauri.dev.jsg.config.JSGConfig.Stargate.eventHorizon.disableAnimatedEventHorizon || !isEhAnimatedLoaded())
                                         subPathEnd = "";
 
                                     ResourceLocation tex = new ResourceLocation(JSG.MOD_ID, ehTextureResKawooshPath + subPathEnd);

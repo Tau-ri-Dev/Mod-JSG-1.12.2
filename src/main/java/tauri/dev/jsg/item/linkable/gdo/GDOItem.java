@@ -120,7 +120,7 @@ public class GDOItem extends Item implements CustomModelItemInterface {
             if (world.getTotalWorldTime() % 20 == 0 && isSelected) {
                 BlockPos pos = entity.getPosition();
 
-                int reachSquared = tauri.dev.jsg.config.JSGConfig.stargateConfig.universeDialerReach * tauri.dev.jsg.config.JSGConfig.stargateConfig.universeDialerReach;
+                int reachSquared = JSGConfig.DialHomeDevice.mechanics.universeDialerReach * tauri.dev.jsg.config.JSGConfig.DialHomeDevice.mechanics.universeDialerReach;
                 GDOMode mode = GDOMode.valueOf(compound.getByte("mode"));
 
                 if (mode.linkable) {
@@ -173,7 +173,7 @@ public class GDOItem extends Item implements CustomModelItemInterface {
     }
 
     public BlockPos getNearest(World world, BlockPos pos, ArrayList<BlockPos> blacklist) {
-        return LinkingHelper.findClosestPos(world, pos, new BlockPos(tauri.dev.jsg.config.JSGConfig.stargateConfig.universeDialerReach, 10, JSGConfig.stargateConfig.universeDialerReach), JSGBlocks.STARGATE_BASE_BLOCKS, blacklist);
+        return LinkingHelper.findClosestPos(world, pos, new BlockPos(tauri.dev.jsg.config.JSGConfig.DialHomeDevice.mechanics.universeDialerReach, 10, JSGConfig.DialHomeDevice.mechanics.universeDialerReach), JSGBlocks.STARGATE_BASE_BLOCKS, blacklist);
     }
 
     @Override

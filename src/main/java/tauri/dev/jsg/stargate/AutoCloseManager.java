@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 
@@ -62,7 +63,7 @@ public class AutoCloseManager implements INBTSerializable<NBTTagCompound> {
                 }
             }
 
-            if (secondsPassed >= tauri.dev.jsg.config.JSGConfig.autoCloseConfig.secondsToAutoclose) {
+            if (secondsPassed >= JSGConfig.Stargate.autoClose.secondsToAutoclose) {
                 return true;
             }
         }

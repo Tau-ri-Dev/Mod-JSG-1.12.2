@@ -46,7 +46,7 @@ public class GuiCustomMainMenu extends GuiScreen {
 
     public void tick() {
         // If sync is enabled then sync local ticks with mc ticks
-        if (JSGConfig.mainMenuConfig.syncEnabled) {
+        if (JSGConfig.General.mainMenuConfig.syncEnabled) {
             tick = JSGMinecraftHelper.getClientTickPrecise();
         } else {
             int currentFPS = Minecraft.getDebugFPS();
@@ -119,11 +119,11 @@ public class GuiCustomMainMenu extends GuiScreen {
         if((tick - menuDisplayed) > 20*30)
             isMusicPlaying = JSGSoundHelperClient.getRecord(SoundPositionedEnum.MAINMENU_MUSIC, JSG.lastPlayerPosInWorld).isPlaying();
 
-        if (!isMusicPlaying && JSGConfig.mainMenuConfig.playMusic) {
+        if (!isMusicPlaying && JSGConfig.General.mainMenuConfig.playMusic) {
             isMusicPlaying = true;
             playMusic(true);
         }
-        if (!JSGConfig.mainMenuConfig.playMusic && isMusicPlaying)
+        if (!JSGConfig.General.mainMenuConfig.playMusic && isMusicPlaying)
             playMusic(false);
     }
 
@@ -138,7 +138,7 @@ public class GuiCustomMainMenu extends GuiScreen {
     private static int updaterNotification = -1;
 
     static {
-        if (JSGConfig.mainMenuConfig.debugMode) {
+        if (JSGConfig.General.mainMenuConfig.debugMode) {
             NOTIFIER.add(new MainMenuNotifications.Notification(new ArrayList<GuiButton>() {{
                 // Close (21)
                 String close = I18n.format("menu.updater.close");
@@ -174,8 +174,8 @@ public class GuiCustomMainMenu extends GuiScreen {
 
     @Override
     public void initGui() {
-        if (JSGConfig.devConfig.enableDevMode) {
-            UPDATER_RESULT = new GetUpdate.UpdateResult((JSGConfig.devConfig.t1 ? GetUpdate.EnumUpdateResult.ERROR : GetUpdate.EnumUpdateResult.NEWER_AVAILABLE), (JSGConfig.devConfig.t1 ? "Test error" : UPDATER_RESULT.response));
+        if (JSGConfig.General.devConfig.enableDevMode) {
+            UPDATER_RESULT = new GetUpdate.UpdateResult((JSGConfig.General.devConfig.t1 ? GetUpdate.EnumUpdateResult.ERROR : GetUpdate.EnumUpdateResult.NEWER_AVAILABLE), (JSGConfig.General.devConfig.t1 ? "Test error" : UPDATER_RESULT.response));
             updaterNotification = -1;
         }
         super.initGui();
@@ -230,7 +230,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         lastGateChange = (long) tick;
         // Every 30 seconds
 
-        if (JSGConfig.mainMenuConfig.enableGateChanging) {
+        if (JSGConfig.General.mainMenuConfig.enableGateChanging) {
             gateType = EnumMainMenuGateType.random(gateType);
         }
 
@@ -415,7 +415,7 @@ public class GuiCustomMainMenu extends GuiScreen {
      * Used to draw texts on the screen
      */
     public void drawTitles() {
-        if (JSGConfig.mainMenuConfig.debugMode) {
+        if (JSGConfig.General.mainMenuConfig.debugMode) {
             int[] center = getCenterPos(0, 0);
             center[1] -= 30;
             // Debug

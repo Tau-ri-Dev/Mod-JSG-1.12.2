@@ -365,7 +365,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
         for (int i = container.gateTile.getPowerTier(); i < 4; i++)
             drawModalRectWithCustomSizedTexture(guiLeft + 10 + 39 * i, guiTop + 69, 0, 173, 39, 6, 512, 512);
 
-        int width = Math.round((energyStored / (float) tauri.dev.jsg.config.JSGConfig.powerConfig.stargateEnergyStorage * 156));
+        int width = Math.round((energyStored / (float) JSGConfig.Stargate.power.stargateEnergyStorage * 156));
         drawGradientRect(guiLeft + 10, guiTop + 69, guiLeft + 10 + width, guiTop + 69 + 6, 0xffcc2828, 0xff731616);
 
         // Draw ancient title
@@ -469,7 +469,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
         TextFormatting toCloseFormatting = TextFormatting.GRAY;
 
         if (toClose > 0) {
-            if (toClose < JSGConfig.powerConfig.instabilitySeconds)
+            if (toClose < JSGConfig.Stargate.power.instabilitySeconds)
                 toCloseFormatting = TextFormatting.DARK_RED;
             else
                 toCloseFormatting = TextFormatting.GREEN;

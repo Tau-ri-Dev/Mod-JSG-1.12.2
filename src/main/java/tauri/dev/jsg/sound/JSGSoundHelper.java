@@ -22,15 +22,15 @@ public class JSGSoundHelper {
 	}
 	
 	public static void playSoundEventClientSide(World world, BlockPos pos, SoundEventEnum soundEventEnum) {		
-		world.playSound(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, soundEventEnum.soundEvent, JSG.JSG_SOUNDS, soundEventEnum.volume * tauri.dev.jsg.config.JSGConfig.avConfig.volume * 5f, 1.0f, false);
+		world.playSound(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, soundEventEnum.soundEvent, JSG.JSG_SOUNDS, soundEventEnum.volume * tauri.dev.jsg.config.JSGConfig.General.audio.volume * 5f, 1.0f, false);
 	}	
 	
 	public static void playSoundEvent(World world, BlockPos pos, SoundEventEnum soundEventEnum) {		
-		world.playSound(null, pos, soundEventEnum.soundEvent, JSG.JSG_SOUNDS, soundEventEnum.volume * JSGConfig.avConfig.volume * 5f, 1.0f);
+		world.playSound(null, pos, soundEventEnum.soundEvent, JSG.JSG_SOUNDS, soundEventEnum.volume * JSGConfig.General.audio.volume * 5f, 1.0f);
 	}
 	
 	public static void playSoundToPlayer(EntityPlayerMP player, SoundEventEnum soundEventEnum, BlockPos pos) {
-		player.connection.sendPacket(new SPacketSoundEffect(soundEventEnum.soundEvent, JSG.JSG_SOUNDS, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, soundEventEnum.volume * tauri.dev.jsg.config.JSGConfig.avConfig.volume * 5f, 1.0f));
+		player.connection.sendPacket(new SPacketSoundEffect(soundEventEnum.soundEvent, JSG.JSG_SOUNDS, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, soundEventEnum.volume * tauri.dev.jsg.config.JSGConfig.General.audio.volume * 5f, 1.0f));
 	}
 	
 	@SubscribeEvent

@@ -25,7 +25,7 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
     // ------------------------------------------------------------------------
     // Loading & ticking
 
-    private final ZPMEnergyStorage energyStorage = new ZPMEnergyStorage((long) JSGConfig.powerConfig.zpmCapacity, JSGConfig.powerConfig.zpmHubMaxEnergyTransfer/3) {
+    private final ZPMEnergyStorage energyStorage = new ZPMEnergyStorage((long) JSGConfig.ZPM.power.zpmCapacity, JSGConfig.ZPM.power.zpmHubMaxEnergyTransfer/3) {
         @Override
         protected void onEnergyChanged() {
             markDirty();

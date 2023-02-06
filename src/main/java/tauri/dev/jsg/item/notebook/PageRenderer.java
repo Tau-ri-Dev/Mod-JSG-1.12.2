@@ -27,7 +27,7 @@ public class PageRenderer {
 		float z = 0.011f;
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableBlend();
-		GlStateManager.color(0, 0, 0, (float) JSGConfig.notebookOptions.glyphTransparency);
+		GlStateManager.color(0, 0, 0, (float) JSGConfig.General.visual.glyphTransparency);
 
 		if(symbol.renderIconByMinecraft(originId))
 			Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource(originId));
@@ -65,7 +65,7 @@ public class PageRenderer {
 			ItemRenderHelper.renderArmFirstPersonSide(0, handSide, 0, null);
 		    GlStateManager.popMatrix();
 		    
-		    float narrow = tauri.dev.jsg.config.JSGConfig.notebookOptions.pageNarrowing;
+		    float narrow = JSGConfig.General.visual.pageNarrowing;
 		    GlStateManager.translate(mainhand ? 0.5f-narrow : -0.25f+narrow, 0.2f, 0);
 		}
 		

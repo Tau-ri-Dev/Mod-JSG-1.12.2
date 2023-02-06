@@ -58,7 +58,7 @@ public class InvisibleBlock extends JSGBlock {
 	// ------------------------------------------------------------------------
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return JSGConfig.debugConfig.renderInvisibleBlocks ? EnumBlockRenderType.MODEL : EnumBlockRenderType.INVISIBLE;
+		return JSGConfig.General.debug.renderInvisibleBlocks ? EnumBlockRenderType.MODEL : EnumBlockRenderType.INVISIBLE;
 	}
 	
 	@Override

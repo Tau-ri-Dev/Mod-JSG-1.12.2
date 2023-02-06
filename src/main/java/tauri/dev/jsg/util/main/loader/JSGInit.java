@@ -2,6 +2,8 @@ package tauri.dev.jsg.util.main.loader;
 
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.common.util.ModFixs;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -77,6 +79,8 @@ public class JSGInit {
 
         StargateSizeEnum.init();
         JSG.info("Successfully registered Stargate sizes!");
+
+        ConfigManager.sync(JSG.MOD_ID, Config.Type.INSTANCE);
     }
 
     public static void fixData() {
@@ -85,7 +89,7 @@ public class JSGInit {
     }
 
     public static void registerThermal() {
-        if (Loader.isModLoaded("thermalexpansion") && tauri.dev.jsg.config.JSGConfig.integrationsConfig.tExpansionIntegration) {
+        if (Loader.isModLoaded("thermalexpansion") && JSGConfig.General.integration.tExpansionIntegration) {
             JSG.info("Thermal Expansion found and connection is enabled... Connecting...");
 
             ThermalIntegration.registerRecipes();
@@ -95,7 +99,7 @@ public class JSGInit {
 
     public static void registerOC() {
         try {
-            if (Loader.isModLoaded("opencomputers") && JSGConfig.integrationsConfig.ocIntegration) {
+            if (Loader.isModLoaded("opencomputers") && JSGConfig.General.integration.ocIntegration) {
                 JSG.info("OpenComputers found and connection is enabled... Connecting...");
                 JSG.ocWrapper = (OCWrapperInterface) Class.forName(OC_WRAPPER_LOADED).newInstance();
                 JSG.info("Successfully connected into OpenComputers!");

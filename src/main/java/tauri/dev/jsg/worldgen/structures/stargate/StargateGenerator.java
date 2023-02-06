@@ -6,6 +6,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.worldgen.structures.EnumStructures;
 import tauri.dev.jsg.worldgen.util.GeneratedStargate;
@@ -32,8 +33,8 @@ public class StargateGenerator {
         WorldServer worldToSpawn = Objects.requireNonNull(pWorld.getMinecraftServer()).getWorld(dimensionToSpawn);
         EnumStructures structure = null;
 
-        int min = tauri.dev.jsg.config.JSGConfig.mysteriousConfig.minOverworldCoords;
-        int max = tauri.dev.jsg.config.JSGConfig.mysteriousConfig.maxOverworldCoords;
+        int min = JSGConfig.WorldGen.mystPage.minOverworldCoords;
+        int max = JSGConfig.WorldGen.mystPage.maxOverworldCoords;
 
         BlockPos pPos = playerIn.getPosition();
         int x = (Math.abs(pPos.getX()) + (min + (int) (rand.nextFloat() * max)));

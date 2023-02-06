@@ -151,7 +151,7 @@ public abstract class StargateAbstractMergeHelper {
    * @return {@code true} if the structure matches, {@code false} otherwise.
    */
   public boolean checkBlocks(IBlockAccess blockAccess, BlockPos basePos, EnumFacing baseFacing) {
-    if (JSGConfig.debugConfig.checkGateMerge) {
+    if (JSGConfig.General.debug.checkGateMerge) {
       for (BlockPos pos : getRingBlocks()) {
         if (!checkMemberBlock(blockAccess, pos.rotate(FacingToRotation.get(baseFacing)).add(basePos), baseFacing, EnumMemberVariant.RING))
           return false;

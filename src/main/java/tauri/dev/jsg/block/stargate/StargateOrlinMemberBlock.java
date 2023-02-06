@@ -59,7 +59,7 @@ public final class StargateOrlinMemberBlock extends StargateAbstractMemberBlock 
 			NBTTagCompound compound = stack.getTagCompound();
 			
 			if (compound.hasKey("openCount")) {
-				tooltip.add(JSG.proxy.localize("tile.jsg.stargate_orlin_base_block.open_count", compound.getInteger("openCount"), JSGConfig.stargateConfig.stargateOrlinMaxOpenCount));
+				tooltip.add(JSG.proxy.localize("tile.jsg.stargate_orlin_base_block.open_count", compound.getInteger("openCount"), JSGConfig.Stargate.mechanics.stargateOrlinMaxOpenCount));
 			}
 		}
 	}
@@ -110,7 +110,7 @@ public final class StargateOrlinMemberBlock extends StargateAbstractMemberBlock 
 			NBTTagCompound compound = stack.getTagCompound();
 			if(compound != null){
 				if(compound.hasKey("openCount")){
-					if(compound.getInteger("openCount") >= JSGConfig.stargateConfig.stargateOrlinMaxOpenCount)
+					if(compound.getInteger("openCount") >= JSGConfig.Stargate.mechanics.stargateOrlinMaxOpenCount)
 						broken = true;
 				}
 			}

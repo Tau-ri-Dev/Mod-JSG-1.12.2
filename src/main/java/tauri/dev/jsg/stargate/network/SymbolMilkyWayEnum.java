@@ -118,7 +118,7 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
     @Override
     public ResourceLocation getIconResource(int originId) {
         if (this == ORIGIN) {
-            if (JSGConfig.originsConfig.enableDiffOrigins) {
+            if (JSGConfig.Stargate.pointOfOrigins.enableDiffOrigins) {
                 if (originId >= MOD_POINT_OF_ORIGINS_COUNT)
                     return OriginsLoader.getResource(OriginsLoader.EnumOriginFileType.TEXTURE, originId);
                 return new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/milkyway/origin_" + originId + ".png");
@@ -130,7 +130,7 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
 
     @Override
     public boolean renderIconByMinecraft(int originId){
-        return (this != ORIGIN || !JSGConfig.originsConfig.enableDiffOrigins || originId < MOD_POINT_OF_ORIGINS_COUNT);
+        return (this != ORIGIN || !JSGConfig.Stargate.pointOfOrigins.enableDiffOrigins || originId < MOD_POINT_OF_ORIGINS_COUNT);
     }
 
     @Override
@@ -147,7 +147,7 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
     private ResourceLocation getModelResource(BiomeOverlayEnum overlay, int dimensionId, boolean forDHD, boolean lightModel, boolean notFound, int configOrigin) {
         ResourceLocation modelResource;
         if (this == ORIGIN) {
-            if (!notFound && JSGConfig.originsConfig.enableDiffOrigins)
+            if (!notFound && JSGConfig.Stargate.pointOfOrigins.enableDiffOrigins)
                 modelResource = ModelLoader.getModelResource("milkyway/" + (!forDHD ? "ring/" : "") + "origin_" + StargateClassicBaseTile.getOriginId(overlay, dimensionId, configOrigin) + (lightModel ? "_light" : "") + ".obj");
             else
                 modelResource = ModelLoader.getModelResource("milkyway/" + (!forDHD ? "ring/" : "") + "origin_" + DEFAULT_ORIGIN_ID + (lightModel ? "_light" : "") + ".obj");
@@ -247,7 +247,7 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
 
     public static int getMinimalSymbolCountTo(SymbolTypeEnum symbolType, boolean localDial) {
 
-        boolean eightChevrons = JSGConfig.dialingConfig.pegAndMilkUseEightChevrons;
+        boolean eightChevrons = JSGConfig.Stargate.mechanics.pegAndMilkUseEightChevrons;
 
         switch (symbolType) {
             case MILKYWAY:

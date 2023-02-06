@@ -58,10 +58,10 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 	 * @return True if the gate (or any of it's parts) had been used 2 times (default)
 	 */
 	public boolean isBroken() {
-		if (openCount == tauri.dev.jsg.config.JSGConfig.stargateConfig.stargateOrlinMaxOpenCount)
+		if (openCount == JSGConfig.Stargate.mechanics.stargateOrlinMaxOpenCount)
 			return true;
 
-		if (StargateOrlinMergeHelper.INSTANCE.getMaxOpenCount(world, pos, facing) == tauri.dev.jsg.config.JSGConfig.stargateConfig.stargateOrlinMaxOpenCount)
+		if (StargateOrlinMergeHelper.INSTANCE.getMaxOpenCount(world, pos, facing) == JSGConfig.Stargate.mechanics.stargateOrlinMaxOpenCount)
 			return true;
 
 		return false;
@@ -69,7 +69,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 
 	public void addDrops(List<ItemStack> drops) {
 
-		if (openCount == tauri.dev.jsg.config.JSGConfig.stargateConfig.stargateOrlinMaxOpenCount) {
+		if (openCount == JSGConfig.Stargate.mechanics.stargateOrlinMaxOpenCount) {
 			Random rand = new Random();
 
 			drops.add(new ItemStack(Items.IRON_INGOT, 2 + rand.nextInt(3)));
@@ -420,7 +420,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 	// ------------------------------------------------------------------------
 	// Power
 
-	private StargateAbstractEnergyStorage energyStorate = new StargateAbstractEnergyStorage();
+	private final StargateAbstractEnergyStorage energyStorate = new StargateAbstractEnergyStorage();
 
 	@Override
 	protected StargateAbstractEnergyStorage getEnergyStorage() {
@@ -429,7 +429,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 
 	@Override
 	protected StargateEnergyRequired getEnergyRequiredToDial(StargatePos targetGatePos) {
-		return super.getEnergyRequiredToDial(targetGatePos).mul(tauri.dev.jsg.config.JSGConfig.powerConfig.stargateOrlinEnergyMul).cap(JSGConfig.powerConfig.stargateEnergyStorage/4 - 1000000);
+		return super.getEnergyRequiredToDial(targetGatePos).mul(JSGConfig.Stargate.power.stargateOrlinEnergyMul).cap(JSGConfig.Stargate.power.stargateEnergyStorage/4 - 1000000);
 	}
 
 //	@Override

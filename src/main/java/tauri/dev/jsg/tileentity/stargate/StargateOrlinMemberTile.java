@@ -19,12 +19,12 @@ public class StargateOrlinMemberTile extends StargateAbstractMemberTile {
 	private int openCount = 0;
 	
 	public boolean isBroken() {
-		return openCount == JSGConfig.stargateConfig.stargateOrlinMaxOpenCount;
+		return openCount == JSGConfig.Stargate.mechanics.stargateOrlinMaxOpenCount;
 	}
 	
 	public void incrementOpenCount() {
 		openCount++;
-		if(openCount >= JSGConfig.stargateConfig.stargateOrlinMaxOpenCount){
+		if(openCount >= JSGConfig.Stargate.mechanics.stargateOrlinMaxOpenCount){
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(JSGProps.ORLIN_BROKEN, true));
 		}
 		markDirty();

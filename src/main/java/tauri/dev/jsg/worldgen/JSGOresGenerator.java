@@ -24,26 +24,26 @@ public class JSGOresGenerator implements IWorldGenerator {
 	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		switch(world.provider.getDimensionType()) {
 			case NETHER:
-				if (tauri.dev.jsg.config.JSGConfig.oreGeneratorConfig.naquadahEnable) {
+				if (JSGConfig.WorldGen.ores.naquadahEnable) {
 					runGenerator(JSGBlocks.ORE_NAQUADAH_BLOCK.getDefaultState(),
-							tauri.dev.jsg.config.JSGConfig.oreGeneratorConfig.naquadahVeinSize,
-							tauri.dev.jsg.config.JSGConfig.oreGeneratorConfig.naquadahMaxVeinInChunk, 0, 128,
+							tauri.dev.jsg.config.JSGConfig.WorldGen.ores.naquadahVeinSize,
+							tauri.dev.jsg.config.JSGConfig.WorldGen.ores.naquadahMaxVeinInChunk, 0, 128,
 							BlockMatcher.forBlock(Blocks.NETHERRACK), world, rand, chunkX, chunkZ);
 				}
 				break;
 			case OVERWORLD:
-				if (JSGConfig.oreGeneratorConfig.titaniumEnable) {
+				if (JSGConfig.WorldGen.ores.titaniumEnable) {
 					runGenerator(JSGBlocks.ORE_TITANIUM_BLOCK.getDefaultState(),
-							tauri.dev.jsg.config.JSGConfig.oreGeneratorConfig.titaniumVeinSize,
-							tauri.dev.jsg.config.JSGConfig.oreGeneratorConfig.titaniumMaxVeinInChunk, 0, 25,
+							tauri.dev.jsg.config.JSGConfig.WorldGen.ores.titaniumVeinSize,
+							tauri.dev.jsg.config.JSGConfig.WorldGen.ores.titaniumMaxVeinInChunk, 0, 25,
 							BlockMatcher.forBlock(Blocks.STONE), world, rand, chunkX, chunkZ);
 				}
 				break;
 			case THE_END:
-				if (tauri.dev.jsg.config.JSGConfig.oreGeneratorConfig.triniumEnabled) {
+				if (tauri.dev.jsg.config.JSGConfig.WorldGen.ores.triniumEnabled) {
 					runGenerator(JSGBlocks.ORE_TRINIUM_BLOCK.getDefaultState(),
-							tauri.dev.jsg.config.JSGConfig.oreGeneratorConfig.triniumVeinSize,
-							tauri.dev.jsg.config.JSGConfig.oreGeneratorConfig.triniumMaxVeinInChunk, 0, 128,
+							tauri.dev.jsg.config.JSGConfig.WorldGen.ores.triniumVeinSize,
+							tauri.dev.jsg.config.JSGConfig.WorldGen.ores.triniumMaxVeinInChunk, 0, 128,
 							BlockMatcher.forBlock(Blocks.END_STONE), world, rand, chunkX, chunkZ);
 				}
 				break;

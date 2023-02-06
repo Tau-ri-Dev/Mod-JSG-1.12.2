@@ -195,7 +195,7 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 	}
 	
 	public static int getMinimalSymbolCountTo(SymbolTypeEnum symbolType, boolean localDial) {
-		if(JSGConfig.dialingConfig.useStrictSevenSymbolsUniGate)
+		if(JSGConfig.Stargate.mechanics.useStrictSevenSymbolsUniGate)
 			localDial = true;
 
 		switch (symbolType) {

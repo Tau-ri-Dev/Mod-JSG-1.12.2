@@ -100,8 +100,8 @@ public class JSGStructuresGenerator implements IWorldGenerator {
                     }
                 }
                 if (contains) {
-                    if (notRandomGen || (structure.getActualStructure(dimId).isStargateStructure && JSGConfig.stargateGeneratorConfig.stargateRandomGeneratorEnabled) ||
-                            (!structure.getActualStructure(dimId).isStargateStructure && JSGConfig.stargateGeneratorConfig.structuresRandomGeneratorEnabled)) {
+                    if (notRandomGen || (structure.getActualStructure(dimId).isStargateStructure && JSGConfig.WorldGen.structures.stargateRandomGeneratorEnabled) ||
+                            (!structure.getActualStructure(dimId).isStargateStructure && JSGConfig.WorldGen.structures.structuresRandomGeneratorEnabled)) {
                         return structure.getActualStructure(dimId).generateStructure(world, structurePos.foundPos, random, worldToSpawn);
                     }
                 }

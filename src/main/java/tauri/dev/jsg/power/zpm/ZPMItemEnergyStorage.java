@@ -17,7 +17,7 @@ public class ZPMItemEnergyStorage implements IEnergyStorageZPM {
     public int receiveEnergy(int maxReceive, boolean simulate) {
         if (!canReceive()) return 0;
         long energyStored = getEnergyStored();
-        int energyReceived = (int) Math.min(getMaxEnergyStored() - energyStored, Math.min(JSGConfig.powerConfig.zpmHubMaxEnergyTransfer / 3, maxReceive));
+        int energyReceived = (int) Math.min(getMaxEnergyStored() - energyStored, Math.min(JSGConfig.ZPM.power.zpmHubMaxEnergyTransfer / 3, maxReceive));
         if (!simulate)
             setEnergyStored(energyStored + energyReceived);
         return energyReceived;

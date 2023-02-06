@@ -502,7 +502,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         if (distance < 200) distance *= 0.8;
         else distance = 200 * Math.log10(distance) / Math.log10(200);
 
-        int energyBase = tauri.dev.jsg.config.JSGConfig.powerConfig.ringsKeepAliveBlockToEnergyRatioPerTick;
+        int energyBase = JSGConfig.Rings.power.ringsKeepAliveBlockToEnergyRatioPerTick;
         StargateEnergyRequired energyRequired = new StargateEnergyRequired(energyBase, energyBase);
         energyRequired = energyRequired.mul(distance);
 
@@ -548,8 +548,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 int targetRingsHeight = targetTile.getRings().getRingsDistance();
 
                 for (Entity entity : teleportList) {
-                    int extracted = getEnergyStorage().extractEnergy(tauri.dev.jsg.config.JSGConfig.powerConfig.ringsTeleportPowerDraw, true);
-                    if (!initiating || extracted >= tauri.dev.jsg.config.JSGConfig.powerConfig.ringsTeleportPowerDraw || !(entity instanceof EntityLivingBase)) {
+                    int extracted = getEnergyStorage().extractEnergy(tauri.dev.jsg.config.JSGConfig.Rings.power.ringsTeleportPowerDraw, true);
+                    if (!initiating || extracted >= tauri.dev.jsg.config.JSGConfig.Rings.power.ringsTeleportPowerDraw || !(entity instanceof EntityLivingBase)) {
 
                         if (entity instanceof EntityLivingBase && initiating)
                             getEnergyStorage().extractEnergy(extracted, false);
@@ -850,7 +850,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     private boolean checkIfObstructed() {
-        if (JSGConfig.ringsConfig.ignoreObstructionCheck) return false;
+        if (JSGConfig.Rings.mechanics.ignoreObstructionCheck) return false;
 
         for (int y = 0; y < 3; y++) {
             for (Rotation rotation : Rotation.values()) {
@@ -996,10 +996,10 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         int x = pos.getX();
         int z = pos.getZ();
 
-        int radius = tauri.dev.jsg.config.JSGConfig.ringsConfig.rangeFlat;
+        int radius = JSGConfig.Rings.mechanics.rangeFlat;
 
         int y = pos.getY();
-        int vertical = tauri.dev.jsg.config.JSGConfig.ringsConfig.rangeVertical;
+        int vertical = tauri.dev.jsg.config.JSGConfig.Rings.mechanics.rangeVertical;
 
         List<TransportRingsAbstractTile> ringsTilesInRange = new ArrayList<>();
 

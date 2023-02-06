@@ -29,7 +29,7 @@ public class ModelLoader {
 
         List<String> modelPaths = FolderLoader.getAllFiles(MODELS_PATH, ".obj");
 
-        for (String poo : JSGConfig.originsConfig.additionalOrigins) {
+        for (String poo : JSGConfig.Stargate.pointOfOrigins.additionalOrigins) {
             int i = Integer.parseInt(poo.split(":")[0]);
             String s = "assets/jsg/models/tesr/milkyway/origin_" + i + ".obj";
             if (!modelPaths.contains(s)) {
@@ -52,7 +52,7 @@ public class ModelLoader {
         JSG.info("Started loading models...");
         for (String modelPath : modelPaths) {
             String modelResourcePath = modelPath.replaceFirst("assets/jsg/", "");
-            if (JSGConfig.debugConfig.logTexturesLoading)
+            if (JSGConfig.General.debug.logTexturesLoading)
                 JSG.info("Loading model: " + modelResourcePath);
             progressBar.step(modelResourcePath.replaceFirst("models/", ""));
 

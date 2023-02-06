@@ -122,7 +122,7 @@ public class UpgradeIris extends Item {
 
     @Override
     public boolean canApplyAtEnchantingTable(@Nonnull ItemStack stack, @Nonnull Enchantment enchantment) {
-        if (JSGConfig.irisConfig.unbreakingChance == 0) return false;
+        if (JSGConfig.Stargate.iris.unbreakingChance == 0) return false;
         return (enchantment.getName().equals("enchantment.unbreaking"));
     }
 

@@ -151,7 +151,7 @@ public enum SymbolPegasusEnum implements SymbolInterface {
 
   public static int getMinimalSymbolCountTo(SymbolTypeEnum symbolType, boolean localDial) {
 
-    boolean eightChevrons = JSGConfig.dialingConfig.pegAndMilkUseEightChevrons;
+    boolean eightChevrons = JSGConfig.Stargate.mechanics.pegAndMilkUseEightChevrons;
 
     switch (symbolType) {
       case MILKYWAY:

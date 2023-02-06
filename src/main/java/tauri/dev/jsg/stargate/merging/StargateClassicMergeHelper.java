@@ -8,7 +8,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.stargate.StargateClassicBaseBlock;
 import tauri.dev.jsg.block.stargate.StargateMilkyWayBaseBlock;
 import tauri.dev.jsg.block.stargate.StargateMilkyWayMemberBlock;
@@ -143,7 +142,7 @@ public abstract class StargateClassicMergeHelper extends StargateAbstractMergeHe
     @Nonnull
     @Override
     public List<BlockPos> getRingBlocks() {
-        switch (JSGConfig.stargateSize) {
+        switch (JSGConfig.Stargate.stargateSize) {
             case LARGE:
                 return RING_BLOCKS_LARGE;
             case EXTRA_LARGE:
@@ -157,7 +156,7 @@ public abstract class StargateClassicMergeHelper extends StargateAbstractMergeHe
     @Nonnull
     @Override
     public List<BlockPos> getChevronBlocks() {
-        switch (tauri.dev.jsg.config.JSGConfig.stargateSize) {
+        switch (JSGConfig.Stargate.stargateSize) {
             case LARGE:
                 return CHEVRON_BLOCKS_LARGE;
             case EXTRA_LARGE:
@@ -170,7 +169,7 @@ public abstract class StargateClassicMergeHelper extends StargateAbstractMergeHe
 
     @Override
     public JSGAxisAlignedBB getBaseSearchBox() {
-        switch (tauri.dev.jsg.config.JSGConfig.stargateSize) {
+        switch (JSGConfig.Stargate.stargateSize) {
             case SMALL:
             case MEDIUM:
                 return BASE_SEARCH_BOX_SMALL;

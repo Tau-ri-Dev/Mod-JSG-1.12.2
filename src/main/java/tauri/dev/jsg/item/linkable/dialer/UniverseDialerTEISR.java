@@ -385,7 +385,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
                         if (countdown < 0) ticks = 0;
 
                         // must be there because client doesn't get message when timerCountTo reaches -1
-                        if (countdown < -(20L * JSGConfig.countdownConfig.zeroDelay)) time = -1;
+                        if (countdown < -(20L * JSGConfig.General.countdownConfig.zeroDelay)) time = -1;
 
                         float y = (0.32f * 2) + (0.20f * 2) - 0.8f;
                         float x = -0.52f + 0.90f;

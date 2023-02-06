@@ -2,6 +2,7 @@ package tauri.dev.jsg.renderer.biomes;
 
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.JSGConfigUtil;
 import tauri.dev.jsg.util.BlockHelpers;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -76,10 +77,10 @@ public enum BiomeOverlayEnum {
 		if (world.provider.getDimensionType() != DimensionType.NETHER && !BlockHelpers.isBlockDirectlyUnderSky(world, topmostBlock))
 			return NORMAL;
 		
-		if (biome.getTemperature(topmostBlock) <= JSGConfig.stargateConfig.frostyTemperatureThreshold)
+		if (biome.getTemperature(topmostBlock) <= JSGConfig.Stargate.visual.frostyTemperatureThreshold)
 			return FROST;
 		
-		BiomeOverlayEnum overlay = tauri.dev.jsg.config.JSGConfig.stargateConfig.getBiomeOverrideBiomes().get(biome);
+		BiomeOverlayEnum overlay = JSGConfigUtil.getBiomeOverrideBiomes().get(biome);
 		
 		if (overlay != null)
 			return overlay;

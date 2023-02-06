@@ -58,7 +58,7 @@ public class ZPMItemBlock extends ItemBlock {
 
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new ZPMItemCapabilityProvider(stack, nbt, (long) JSGConfig.powerConfig.zpmCapacity, false);
+        return new ZPMItemCapabilityProvider(stack, nbt, (long) JSGConfig.ZPM.power.zpmCapacity, false);
     }
 
     @Override

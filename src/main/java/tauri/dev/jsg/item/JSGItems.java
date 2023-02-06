@@ -39,11 +39,11 @@ public class JSGItems {
      */
     public static final Item IRIS_BLADE = ItemHelper.createGenericItem("iris_blade", JSG_ITEMS_CREATIVE_TAB);
     public static final Item QUAD_IRIS_BLADE = ItemHelper.createGenericItem("quad_iris_blade", JSG_ITEMS_CREATIVE_TAB);
-    public static final Item UPGRADE_IRIS = new UpgradeIris("upgrade_iris", tauri.dev.jsg.config.JSGConfig.irisConfig.titaniumIrisDurability);
+    public static final Item UPGRADE_IRIS = new UpgradeIris("upgrade_iris", JSGConfig.Stargate.iris.titaniumIrisDurability);
 
     public static final Item IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("iris_blade_trinium", JSG_ITEMS_CREATIVE_TAB);
     public static final Item QUAD_IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("quad_iris_blade_trinium", JSG_ITEMS_CREATIVE_TAB);
-    public static final Item UPGRADE_IRIS_TRINIUM = new UpgradeIris("upgrade_iris_trinium", JSGConfig.irisConfig.triniumIrisDurability);
+    public static final Item UPGRADE_IRIS_TRINIUM = new UpgradeIris("upgrade_iris_trinium", JSGConfig.Stargate.iris.triniumIrisDurability);
 
     public static final Item UPGRADE_SHIELD = ItemHelper.createGenericItem("upgrade_shield", JSG_ITEMS_CREATIVE_TAB);
     public static final Item SHIELD_EMITTER = ItemHelper.createGenericItem("shield_emitter", JSG_ITEMS_CREATIVE_TAB);

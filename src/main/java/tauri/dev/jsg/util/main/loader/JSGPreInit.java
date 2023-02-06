@@ -54,7 +54,7 @@ public class JSGPreInit {
     }
 
     public static void registerTIC() {
-        if (Loader.isModLoaded("tconstruct") && JSGConfig.integrationsConfig.tConstructIntegration) {
+        if (Loader.isModLoaded("tconstruct") && JSGConfig.General.integration.tConstructIntegration) {
             JSG.info("TConstruct found and connection is enabled... Connecting...");
             TConstructIntegration.initFluids();
             JSG.info("Successfully connected into TConstruct!");

@@ -83,7 +83,7 @@ public class TextureLoader {
 
         // ----------------------------------
         // LOAD EVENT HORIZONS
-        if (!JSGConfig.horizonConfig.disableAnimatedEventHorizon && !JSGConfig.devConfig.enableDevMode) {
+        if (!JSGConfig.Stargate.eventHorizon.disableAnimatedEventHorizon && !JSGConfig.General.devConfig.enableDevMode) {
             progressBar = ProgressManager.push("JSG - Animated textures", ehPaths.size());
             start = System.currentTimeMillis();
             JSG.info("Started loading event horizon textures...");
@@ -101,7 +101,7 @@ public class TextureLoader {
             JSG.info("Loaded " + ehPaths.size() + " textures in " + (System.currentTimeMillis() - start) + " ms");
             ProgressManager.pop(progressBar);
         } else {
-            if (tauri.dev.jsg.config.JSGConfig.debugConfig.logTexturesLoading)
+            if (JSGConfig.General.debug.logTexturesLoading)
                 JSG.info("Skipping loading EH textures!");
         }
         // ----------------------------------
@@ -113,7 +113,7 @@ public class TextureLoader {
         IResource resource = null;
         try {
             resource = resourceManager.getResource(resourceLocation);
-            if (JSGConfig.debugConfig.logTexturesLoading)
+            if (JSGConfig.General.debug.logTexturesLoading)
                 JSG.info("Loading texture: " + texturePath);
             BufferedImage bufferedImage = TextureUtil.readBufferedImage(resource.getInputStream());
             LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage));
@@ -134,7 +134,7 @@ public class TextureLoader {
         IResource resource = null;
         try {
             resource = resourceManager.getResource(resourceLocation);
-            if (JSGConfig.debugConfig.logTexturesLoading)
+            if (JSGConfig.General.debug.logTexturesLoading)
                 JSG.info("Loading texture: " + texturePath);
 
             BufferedImage bufferedImage = TextureUtil.readBufferedImage(resource.getInputStream());
@@ -142,7 +142,7 @@ public class TextureLoader {
             LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage));
             ReloadListener.LoadingStats.loadedTextures++;
 
-            if(!JSGConfig.horizonConfig.disableNewKawoosh) {
+            if(!JSGConfig.Stargate.eventHorizon.disableNewKawoosh) {
 
                 ProgressBar subProgressBar = ProgressManager.push("JSG - Event Horizon Sub-Textures", EH_ANIMATED_TEXTURE_SUB_TEXTURES);
 
@@ -155,7 +155,7 @@ public class TextureLoader {
                     String subPath = (texturePath + "_" + x + "." + y);
 
                     subProgressBar.step(x + ":" + y);
-                    if (JSGConfig.debugConfig.logTexturesLoading)
+                    if (JSGConfig.General.debug.logTexturesLoading)
                         JSG.info("Loading sub-texture: " + subPath);
 
                     BufferedImage texturePart = bufferedImage.getSubimage(x * onePiece, y * onePiece, onePiece, onePiece);

@@ -50,8 +50,8 @@ public abstract class AbstractPageMysteriousItem extends Item {
     public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         if (!world.isRemote) {
             sendPlayerMessageAboutGeneration(player, true, false);
-            if (JSGConfig.mysteriousConfig.pageCooldown > 0)
-                player.getCooldownTracker().setCooldown(this, JSGConfig.mysteriousConfig.pageCooldown);
+            if (JSGConfig.WorldGen.mystPage.pageCooldown > 0)
+                player.getCooldownTracker().setCooldown(this, JSGConfig.WorldGen.mystPage.pageCooldown);
             GeneratedStargate stargate = StargateGenerator.mystPageGeneration(world, symbolType, dimensionToSpawn, player);
 
             if (stargate != null) {

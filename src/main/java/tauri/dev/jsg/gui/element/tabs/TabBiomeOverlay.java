@@ -1,6 +1,7 @@
 package tauri.dev.jsg.gui.element.tabs;
 
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.JSGConfigUtil;
 import tauri.dev.jsg.gui.element.GuiHelper;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.util.ItemMetaPair;
@@ -57,7 +58,7 @@ public class TabBiomeOverlay extends Tab {
 					
 					StringBuilder line = new StringBuilder(biomeOverlay.getLocalizedColorizedName() + ": ");
 					
-					for (ItemMetaPair itemMeta : JSGConfig.stargateConfig.getBiomeOverrideBlocks().get(biomeOverlay)) {
+					for (ItemMetaPair itemMeta : JSGConfigUtil.getBiomeOverrideBlocks().get(biomeOverlay)) {
 						line.append(itemMeta.getDisplayName()).append(", ");
 					}
 					

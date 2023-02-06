@@ -18,7 +18,7 @@ public class JSGTextureLightningHelper {
     }
 
     public static void lightUpTexture(World world, ArrayList<BlockPos> poses, float lightIntensity) {
-        if (!JSGConfig.avConfig.renderEmissive) return;
+        if (!JSGConfig.General.visual.renderEmissive) return;
         final int count = poses.size();
         int skyLight = 0;
         int blockLight = 0;
@@ -40,7 +40,7 @@ public class JSGTextureLightningHelper {
      * @param lightIntensity Is 0-1F when 0 is the lowest light
      */
     public static void lightUpTexture(float lightIntensity) {
-        if (!JSGConfig.avConfig.renderEmissive) return;
+        if (!JSGConfig.General.visual.renderEmissive) return;
         RenderHelper.enableStandardItemLighting();
         if (lightIntensity > 1) lightIntensity = 1;
         if (lightIntensity < 0) lightIntensity = 0;

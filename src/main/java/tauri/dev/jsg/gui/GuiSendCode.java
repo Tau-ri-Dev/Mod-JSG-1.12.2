@@ -1,8 +1,13 @@
 package tauri.dev.jsg.gui;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.EnumHand;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.gui.base.JSGGuiButton;
 import tauri.dev.jsg.gui.base.JSGGuiBase;
+import tauri.dev.jsg.gui.base.JSGGuiButton;
 import tauri.dev.jsg.gui.element.NumberOnlyTextField;
 import tauri.dev.jsg.item.linkable.gdo.GDOActionEnum;
 import tauri.dev.jsg.item.linkable.gdo.GDOActionPacketToServer;
@@ -11,11 +16,6 @@ import tauri.dev.jsg.item.linkable.gdo.GDOMessages;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.EnumHand;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class GuiSendCode extends JSGGuiBase {
         super.initGui();
         keyPadButtons.clear();
         codeField = new NumberOnlyTextField(0, Minecraft.getMinecraft().fontRenderer, width / 2 - 80, height / 2 - 75, 160, 20);
-        codeField.setMaxStringLength(tauri.dev.jsg.config.JSGConfig.irisConfig.irisCodeLength);
+        codeField.setMaxStringLength(JSGConfig.Stargate.iris.irisCodeLength);
         codeField.setFocused(true);
         // init num pad
         int i = 0;
@@ -123,7 +123,7 @@ public class GuiSendCode extends JSGGuiBase {
         backButton.enabled = sendButton.enabled;
 
         for (JSGGuiButton button : keyPadButtons) {
-            button.enabled = codeField.getText().length() < JSGConfig.irisConfig.irisCodeLength;
+            button.enabled = codeField.getText().length() < JSGConfig.Stargate.iris.irisCodeLength;
         }
     }
 
@@ -157,21 +157,18 @@ public class GuiSendCode extends JSGGuiBase {
     }
 
 
-
-
-
     public void sendCode() {
-        if(GDOItem.isLinked(this.mc.player.getHeldItem(hand))) {
+        if (GDOItem.isLinked(this.mc.player.getHeldItem(hand))) {
 
-                if (codeField.getText().isEmpty()) {
-                    message = GDOMessages.CODE_NOT_SET.textComponent.getFormattedText();
-                    messageColor = 14876672;
-                    codeField.setFocused(true);
-                    return;
-                }
-                int code = Integer.parseInt(codeField.getText());
-                JSGPacketHandler.INSTANCE.sendToServer(new GDOActionPacketToServer(GDOActionEnum.SEND_CODE, hand, code, false));
-                this.mc.player.closeScreen();
+            if (codeField.getText().isEmpty()) {
+                message = GDOMessages.CODE_NOT_SET.textComponent.getFormattedText();
+                messageColor = 14876672;
+                codeField.setFocused(true);
+                return;
+            }
+            int code = Integer.parseInt(codeField.getText());
+            JSGPacketHandler.INSTANCE.sendToServer(new GDOActionPacketToServer(GDOActionEnum.SEND_CODE, hand, code, false));
+            this.mc.player.closeScreen();
 
         }
     }

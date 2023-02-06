@@ -38,7 +38,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
 
     // Gate
     // Saved
-    public StargateSizeEnum stargateSize = JSGConfig.stargateSize;
+    public StargateSizeEnum stargateSize = JSGConfig.Stargate.stargateSize;
 
     // Chevrons
     // Saved
@@ -79,7 +79,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
 
     @Override
     public void toBytes(ByteBuf buf) {
-        if (stargateSize == null) stargateSize = JSGConfig.stargateSize;
+        if (stargateSize == null) stargateSize = JSGConfig.Stargate.stargateSize;
         buf.writeInt(stargateSize.id);
         chevronTextureList.toBytes(buf);
         spinHelper.toBytes(buf);

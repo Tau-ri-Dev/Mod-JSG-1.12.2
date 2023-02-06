@@ -82,7 +82,7 @@ public class JSGStructure extends WorldGenerator {
     public EnumGenerationHeight genHeight;
 
     public JSGStructure(String structureName, int yNegativeOffset, boolean isStargateStructure, boolean isRingsStructure, SymbolTypeEnum symbolType, int structureSizeX, int structureSizeZ, int airUp, int dimensionToSpawn, boolean findOptimalRotation, @Nullable ITemplateProcessor templateProcessor, Rotation rotationToNorth, double terrainFlatPercents, double topBlockMatchPercent, @Nonnull EnumGenerationHeight genHeight) {
-        this.structureName = structureName + (isStargateStructure ? (tauri.dev.jsg.config.JSGConfig.stargateSize == StargateSizeEnum.LARGE ? "_large" : "_small") : "");
+        this.structureName = structureName + (isStargateStructure ? (tauri.dev.jsg.config.JSGConfig.Stargate.stargateSize == StargateSizeEnum.LARGE ? "_large" : "_small") : "");
         this.yNegativeOffset = yNegativeOffset;
         this.isStargateStructure = isStargateStructure;
         this.isRingsStructure = isRingsStructure;
@@ -160,7 +160,7 @@ public class JSGStructure extends WorldGenerator {
                     if (gateTile == null) break;
                     IItemHandler gateContainer = gateTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
                     if (gateContainer != null) {
-                        if (!isUniverseGate || JSGConfig.powerConfig.universeCapacitors > 0) {
+                        if (!isUniverseGate || JSGConfig.Stargate.power.universeCapacitors > 0) {
                             // is not uni gate OR capacitors are enabled for these gates
                             ItemStack capacitor = new ItemStack(JSGBlocks.CAPACITOR_BLOCK);
                             if (isUniverseGate) {
@@ -201,14 +201,14 @@ public class JSGStructure extends WorldGenerator {
                         worldToSpawn.setBlockState(dhdPos, dhd, 3);
                     }
 
-                    if (random.nextFloat() < JSGConfig.mysteriousConfig.despawnDhdChance) {
+                    if (random.nextFloat() < JSGConfig.WorldGen.mystPage.despawnDhdChance) {
                         worldToSpawn.setBlockToAir(dhdPos);
                         break;
                     }
                     DHDAbstractTile dhdTile = (DHDAbstractTile) worldToSpawn.getTileEntity(dhdPos);
                     if (dhdTile == null) break;
 
-                    final int fluid = JSGConfig.powerConfig.stargateEnergyStorage / JSGConfig.dhdConfig.energyPerNaquadah;
+                    final int fluid = JSGConfig.Stargate.power.stargateEnergyStorage / JSGConfig.DialHomeDevice.power.energyPerNaquadah;
                     final ItemStack crystal = new ItemStack(isPegasusGate ? JSGItems.CRYSTAL_CONTROL_PEGASUS_DHD : JSGItems.CRYSTAL_CONTROL_MILKYWAY_DHD);
                     IItemHandler dhdContainer = dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
                     IFluidHandler dhdFluidTank = dhdTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);

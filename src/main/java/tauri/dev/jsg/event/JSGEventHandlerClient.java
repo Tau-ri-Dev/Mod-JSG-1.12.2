@@ -19,20 +19,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.JSGConfigUtil;
 import tauri.dev.jsg.gui.mainmenu.GuiCustomMainMenu;
 
 import static net.minecraft.init.SoundEvents.MUSIC_MENU;
 
 @EventBusSubscriber(Side.CLIENT)
 public class JSGEventHandlerClient {
-
-    @SubscribeEvent
-    public static void onConfigChangedEvent(OnConfigChangedEvent event) {
-        if (event.getModID().equals(JSG.MOD_ID)) {
-            ConfigManager.sync(JSG.MOD_ID, Type.INSTANCE);
-            tauri.dev.jsg.config.JSGConfig.resetCache();
-        }
-    }
 
     @SubscribeEvent
     public static void onDrawHighlight(DrawBlockHighlightEvent event) {
@@ -62,7 +55,7 @@ public class JSGEventHandlerClient {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onGuiOpen(GuiOpenEvent event) {
-        if (!JSGConfig.mainMenuConfig.disableJSGMainMenu) {
+        if (!JSGConfig.General.mainMenuConfig.disableJSGMainMenu) {
             if (!event.isCanceled() && event.getGui() instanceof GuiMainMenu) {
                 event.setCanceled(true);
                 Minecraft.getMinecraft().displayGuiScreen(new GuiCustomMainMenu());

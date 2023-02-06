@@ -38,7 +38,7 @@ public class NotebookTEISR extends TileEntityItemStackRenderer {
 			final float scale = 0.0031f;
 			
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(0.55f- JSGConfig.notebookOptions.pageNarrowing, 0.295f, 0.011f);
+			GlStateManager.translate(0.55f- JSGConfig.General.visual.pageNarrowing, 0.295f, 0.011f);
 			GlStateManager.rotate(180, 0, 0, 1);
 			GlStateManager.scale(scale, scale, scale);
 			

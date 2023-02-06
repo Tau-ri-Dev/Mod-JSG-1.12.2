@@ -35,7 +35,7 @@ public class ZPMItemBlockCreative extends ZPMItemBlock {
 
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new ZPMItemCapabilityProvider(stack, nbt, (long) JSGConfig.powerConfig.zpmCapacity, true);
+        return new ZPMItemCapabilityProvider(stack, nbt, (long) JSGConfig.ZPM.power.zpmCapacity, true);
     }
 
     @Override

@@ -388,9 +388,9 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
     @Override
     protected boolean onGateMergeRequested() {
-        if (stargateSize != JSGConfig.stargateSize) {
-            StargateMilkyWayMergeHelper.INSTANCE.convertToPattern(world, pos, facing, stargateSize, tauri.dev.jsg.config.JSGConfig.stargateSize);
-            stargateSize = tauri.dev.jsg.config.JSGConfig.stargateSize;
+        if (stargateSize != JSGConfig.Stargate.stargateSize) {
+            StargateMilkyWayMergeHelper.INSTANCE.convertToPattern(world, pos, facing, stargateSize, tauri.dev.jsg.config.JSGConfig.Stargate.stargateSize);
+            stargateSize = tauri.dev.jsg.config.JSGConfig.Stargate.stargateSize;
         }
 
         return StargateMilkyWayMergeHelper.INSTANCE.checkBlocks(world, pos, facing);

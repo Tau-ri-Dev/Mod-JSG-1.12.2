@@ -41,6 +41,7 @@ import tauri.dev.jsg.beamer.BeamerLinkingHelper;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.chunkloader.ChunkManager;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.JSGConfigUtil;
 import tauri.dev.jsg.config.ingame.*;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
@@ -127,9 +128,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     protected double lastGateHeat = -2;
     public double irisHeat;
     public double gateHeat;
-    public static final double IRIS_MAX_HEAT_TITANIUM = JSGConfig.irisConfig.irisTitaniumMaxHeat;
-    public static final double IRIS_MAX_HEAT_TRINIUM = JSGConfig.irisConfig.irisTriniumMaxHeat;
-    public static final double GATE_MAX_HEAT = JSGConfig.stargateConfig.gateMaxHeat;
+    public static final double IRIS_MAX_HEAT_TITANIUM = JSGConfig.Stargate.iris.irisTitaniumMaxHeat;
+    public static final double IRIS_MAX_HEAT_TRINIUM = JSGConfig.Stargate.iris.irisTriniumMaxHeat;
+    public static final double GATE_MAX_HEAT = JSGConfig.Stargate.mechanics.gateMaxHeat;
 
     public void tryHeatUp(boolean byIrisHit, double irisHeatUpCoefficient) {
         tryHeatUp(byIrisHit, false, 1, irisHeatUpCoefficient, 1, -1, -1);
@@ -166,7 +167,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         double maxHeat = getMaxIrisHeat();
         if (irisHeat >= maxHeat) {
             int heatCoefficient = (int) Math.round(Math.abs(irisHeat - maxHeat));
-            if (JSGConfig.irisConfig.enableIrisOverHeatCollapse) {
+            if (JSGConfig.Stargate.iris.enableIrisOverHeatCollapse) {
                 if (world.getTotalWorldTime() % (((int) (Math.random() * 70)) + 1) == 0) {
                     if (isPhysicalIris() && irisItem.isItemStackDamageable()) {
                         irisItem.getItem().setDamage(irisItem, irisItem.getItem().getDamage(irisItem) + (new Random().nextInt(heatCoefficient) + 1));
@@ -180,7 +181,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         // gate explosion
         if (gateHeat >= GATE_MAX_HEAT) {
-            if (JSGConfig.stargateConfig.enableGateOverHeatExplosion)
+            if (JSGConfig.Stargate.mechanics.enableGateOverHeatExplosion)
                 world.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 60, false, true);
             //gateHeat = GATE_MAX_HEAT;
         }
@@ -199,7 +200,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
 
-    protected StargateSizeEnum stargateSize = JSGConfig.stargateSize;
+    protected StargateSizeEnum stargateSize = JSGConfig.Stargate.stargateSize;
 
     /**
      * Returns stargate state either from config or from client's state.
@@ -209,7 +210,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
      * @return Stargate's size
      */
     protected StargateSizeEnum getStargateSizeConfig(boolean server) {
-        return server ? tauri.dev.jsg.config.JSGConfig.stargateSize : getRendererStateClient().stargateSize;
+        return server ? JSGConfig.Stargate.stargateSize : getRendererStateClient().stargateSize;
     }
 
     @Override
@@ -673,8 +674,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             if (world.getWorldInfo().isThundering() && BlockHelpers.isBlockDirectlyUnderSky(world, topBlockPos)) {
                 Random rand = new Random();
                 float chance = rand.nextFloat();
-                if (chance < JSGConfig.stargateConfig.lightingBoldChance) {
-                    int max = JSGConfig.powerConfig.stargateEnergyStorage / 17;
+                if (chance < JSGConfig.Stargate.mechanics.lightingBoldChance) {
+                    int max = JSGConfig.Stargate.power.stargateEnergyStorage / 17;
                     int min = max / 6;
                     int energy = (int) ((rand.nextFloat() * (max - min)) + min);
                     getEnergyStorage().receiveEnergy(energy, false);
@@ -723,7 +724,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     int chanceToRandom = rand.nextInt(1000);
 
                     //if chance && stargate state is idle or dialing by DHD and RANDOM INCOMING IS NOT ACTIVATED YET
-                    if (chanceToRandom <= tauri.dev.jsg.config.JSGConfig.randomIncoming.chance) {
+                    if (chanceToRandom <= JSGConfig.Stargate.rig.chance) {
                         int entities = rand.nextInt(25);
                         int delay = rand.nextInt(200);
                         if (this instanceof StargateUniverseBaseTile) {
@@ -808,7 +809,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                         randomIncomingState++;
 
                         // Load entities
-                        String[] entityListString = tauri.dev.jsg.config.JSGConfig.randomIncoming.entitiesToSpawn;
+                        String[] entityListString = JSGConfig.Stargate.rig.entitiesToSpawn;
                         List<Entity> entityList = new ArrayList<Entity>();
                         for (String entityString : entityListString) {
                             String[] entityTemporallyList = entityString.split(":");
@@ -864,7 +865,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                                 ItemStack irisItem = getItemHandler().getStackInSlot(11);
                                 if (irisItem.getItem() instanceof UpgradeIris) {
                                     // different damages per source
-                                    int chance = EnchantmentHelper.getEnchantments(irisItem).containsKey(Enchantments.UNBREAKING) ? (tauri.dev.jsg.config.JSGConfig.irisConfig.unbreakingChance * EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, irisItem)) : 0;
+                                    int chance = EnchantmentHelper.getEnchantments(irisItem).containsKey(Enchantments.UNBREAKING) ? (JSGConfig.Stargate.iris.unbreakingChance * EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, irisItem)) : 0;
                                     int random = rand.nextInt(100);
 
                                     if (random > chance) {
@@ -907,7 +908,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
          */
         extractEnergyByShield(0);
         if (!world.isRemote && isShieldIris()) {
-            shieldKeepAlive = tauri.dev.jsg.config.JSGConfig.irisConfig.shieldPowerDraw;
+            shieldKeepAlive = JSGConfig.Stargate.iris.shieldPowerDraw;
             shieldKeepAlive += irisHeat * (irisHeat / IRIS_MAX_HEAT_TRINIUM);
             if (isIrisClosed()) extractEnergyByShield(shieldKeepAlive);
             if (getEnergyStorage().getEnergyStored() < shieldKeepAlive) {
@@ -1027,7 +1028,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             return null;
         }
 
-        BiomeOverlayEnum biomeOverlay = tauri.dev.jsg.config.JSGConfig.stargateConfig.getBiomeOverrideItemMetaPairs().get(new ItemMetaPair(stack));
+        BiomeOverlayEnum biomeOverlay = JSGConfigUtil.getBiomeOverrideItemMetaPairs().get(new ItemMetaPair(stack));
 
         if (getSupportedOverlays().contains(biomeOverlay)) {
             return biomeOverlay;
@@ -1134,7 +1135,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         else {
             if (compound.hasKey("stargateSize"))
                 stargateSize = StargateSizeEnum.fromId(compound.getInteger("stargateSize"));
-            else stargateSize = JSGConfig.stargateSize;
+            else stargateSize = JSGConfig.Stargate.stargateSize;
         }
 
         itemStackHandler.deserializeNBT(compound.getCompoundTag("itemHandler"));
@@ -1197,28 +1198,28 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     public enum ConfigOptions implements ITileConfigEntry {
         ALLOW_INCOMING(
-                0, "allowIncomingAnim", JSGConfigOptionTypeEnum.BOOLEAN, tauri.dev.jsg.config.JSGConfig.dialingConfig.allowIncomingAnimations + "",
+                0, "allowIncomingAnim", JSGConfigOptionTypeEnum.BOOLEAN, JSGConfig.Stargate.visual.allowIncomingAnimations + "",
                 "Enable incoming animation",
                 "on this gate"
         ),
         DHD_TOP_LOCK(
-                1, "dhdLockPoO", JSGConfigOptionTypeEnum.BOOLEAN, JSGConfig.dialingConfig.dhdLastOpen + "",
+                1, "dhdLockPoO", JSGConfigOptionTypeEnum.BOOLEAN, JSGConfig.DialHomeDevice.visual.dhdLastOpen + "",
                 "Enable opening last chevron",
                 "while dialing milkyway gate with dhd",
                 " - ONLY FOR MW GATES - "
         ),
         ENABLE_FAST_DIAL(
-                2, "enableFastDial", JSGConfigOptionTypeEnum.BOOLEAN, tauri.dev.jsg.config.JSGConfig.dialingConfig.enableFastDialing + "",
+                2, "enableFastDial", JSGConfigOptionTypeEnum.BOOLEAN, JSGConfig.Stargate.visual.enableFastDialing + "",
                 "Enable fast dialing",
                 " - ONLY FOR UNI GATES NOW - "
         ),
         ALLOW_RIG(
-                3, "enableRIG", JSGConfigOptionTypeEnum.BOOLEAN, tauri.dev.jsg.config.JSGConfig.randomIncoming.enableRandomIncoming + "",
+                3, "enableRIG", JSGConfigOptionTypeEnum.BOOLEAN, JSGConfig.Stargate.rig.enableRandomIncoming + "",
                 "Enable random incoming",
                 "generator on this gate"
         ),
         ENABLE_DHD_PRESS_SOUND(
-                4, "dhdPressSound", JSGConfigOptionTypeEnum.BOOLEAN, tauri.dev.jsg.config.JSGConfig.dhdConfig.computerDialSound + "",
+                4, "dhdPressSound", JSGConfigOptionTypeEnum.BOOLEAN, JSGConfig.DialHomeDevice.audio.computerDialSound + "",
                 "Enable DHD press sound",
                 "when dialing with OC"
         ),
@@ -1252,7 +1253,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     add(new JSGConfigEnumEntry("Antarctica", "3"));
                     add(new JSGConfigEnumEntry("Abydos", "4"));
                     add(new JSGConfigEnumEntry("Tauri", "5"));
-                    for (String poo : JSGConfig.originsConfig.additionalOrigins) {
+                    for (String poo : JSGConfig.Stargate.pointOfOrigins.additionalOrigins) {
                         String name = poo.split(":")[1];
                         String value = poo.split(":")[0];
                         add(new JSGConfigEnumEntry(name, value));
@@ -1262,11 +1263,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 " - ONLY FOR MW ADDRESS/GATE - "
         ),
         ENABLE_BURY_STATE(
-                9, "enableBuryState", JSGConfigOptionTypeEnum.BOOLEAN, JSGConfig.stargateConfig.enableBurriedState + "",
+                9, "enableBuryState", JSGConfigOptionTypeEnum.BOOLEAN, JSGConfig.Stargate.mechanics.enableBurriedState + "",
                 "Enable bury state for the gate?"
         ),
         TIME_LIMIT_MODE(
-                10, "timeLimitMode", JSGConfig.openLimitConfig.maxOpenedWhat.id + "",
+                10, "timeLimitMode", JSGConfig.Stargate.openLimit.maxOpenedWhat.id + "",
                 new ArrayList<JSGConfigEnumEntry>() {{
                     add(new JSGConfigEnumEntry(StargateTimeLimitModeEnum.DISABLED.name, StargateTimeLimitModeEnum.DISABLED.id + ""));
                     add(new JSGConfigEnumEntry(StargateTimeLimitModeEnum.CLOSE_GATE.name, StargateTimeLimitModeEnum.CLOSE_GATE.id + ""));
@@ -1275,12 +1276,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 "Gate open time limit mode"
         ),
         TIME_LIMIT_TIME(
-                11, "timeLimitTime", JSGConfigOptionTypeEnum.NUMBER, JSGConfig.openLimitConfig.maxOpenedSeconds + "",
+                11, "timeLimitTime", JSGConfigOptionTypeEnum.NUMBER, JSGConfig.Stargate.openLimit.maxOpenedSeconds + "",
                 0, -1,
                 "Seconds of gate's open time limit."
         ),
         TIME_LIMIT_POWER(
-                12, "timeLimitPower", JSGConfigOptionTypeEnum.NUMBER, JSGConfig.openLimitConfig.maxOpenedPowerDrawAfterLimit + "",
+                12, "timeLimitPower", JSGConfigOptionTypeEnum.NUMBER, JSGConfig.Stargate.openLimit.maxOpenedPowerDrawAfterLimit + "",
                 0, -1,
                 "Power draw when gate runs",
                 "out of open time limit.",
@@ -1725,7 +1726,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             plusRounds += 1;
         }
 
-        if (!tauri.dev.jsg.config.JSGConfig.dialingConfig.fasterMWGateDial && targetRingSymbol != SymbolUniverseEnum.getTopSymbol()) {
+        if (!JSGConfig.Stargate.visual.fasterMWGateDial && targetRingSymbol != SymbolUniverseEnum.getTopSymbol()) {
             if (distance < 90) {
                 distance += 360;
                 plusRounds += 1;
@@ -1880,7 +1881,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     return item == JSGItems.PAGE_NOTEBOOK_ITEM || item == JSGItems.UNIVERSE_DIALER;
 
                 case BIOME_OVERRIDE_SLOT:
-                    BiomeOverlayEnum override = tauri.dev.jsg.config.JSGConfig.stargateConfig.getBiomeOverrideItemMetaPairs().get(new ItemMetaPair(stack));
+                    BiomeOverlayEnum override = JSGConfigUtil.getBiomeOverrideItemMetaPairs().get(new ItemMetaPair(stack));
                     if (override == null) return false;
 
                     return getSupportedOverlays().contains(override);
@@ -2014,7 +2015,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         irisDurability = 0;
         irisMaxDurability = 0;
         if (isPhysicalIris()) {
-            irisMaxDurability = (irisType == IRIS_TITANIUM ? tauri.dev.jsg.config.JSGConfig.irisConfig.titaniumIrisDurability : tauri.dev.jsg.config.JSGConfig.irisConfig.triniumIrisDurability);
+            irisMaxDurability = (irisType == IRIS_TITANIUM ? JSGConfig.Stargate.iris.titaniumIrisDurability : JSGConfig.Stargate.iris.triniumIrisDurability);
             irisDurability = irisMaxDurability - itemStackHandler.getStackInSlot(11).getItem().getDamage(itemStackHandler.getStackInSlot(11));
         }
     }
@@ -2196,7 +2197,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             if (set) {
 
                 if (world.getBlockState(newPos).getMaterial() != Material.AIR) {
-                    if (!tauri.dev.jsg.config.JSGConfig.irisConfig.irisDestroysBlocks) continue;
+                    if (!JSGConfig.Stargate.iris.irisDestroysBlocks) continue;
                     world.destroyBlock(newPos, true);
                 }
                 world.setBlockState(newPos, invBlockState, 3);
@@ -2336,7 +2337,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     public ArrayList<NearbyGate> getNearbyGates(@Nullable SymbolTypeEnum gateType, boolean ignoreIfInstance, boolean checkAddressAndEnergy) {
         if (gateType == null) gateType = getSymbolType();
-        double squaredGate = (double) JSGConfig.stargateConfig.universeGateNearbyReach * tauri.dev.jsg.config.JSGConfig.stargateConfig.universeGateNearbyReach;
+        double squaredGate = (double) JSGConfig.Stargate.mechanics.universeGateNearbyReach * JSGConfig.Stargate.mechanics.universeGateNearbyReach;
 
         ArrayList<NearbyGate> addresses = new ArrayList<>();
 
