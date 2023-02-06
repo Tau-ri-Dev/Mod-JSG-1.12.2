@@ -9,6 +9,28 @@ itemGroup.jsg_props=JSG: Dekorace
 itemGroup.jsg_machines=JSG: Stroje
 itemGroup.jsg_weapons=JSG: Zbraně
 
+# config file
+config.jsg.general=General Config
+config.jsg.general.tooltip=Configuration of misc things
+
+config.jsg.zpm=ZPM Config
+config.jsg.zpm.tooltip=Configuration of ZPM and ZPM Hubs
+
+config.jsg.stargates=Stargates Config
+config.jsg.stargates.tooltip=Configuration of Stargates
+
+config.jsg.rings=Transport Rings Config
+config.jsg.rings.tooltip=Configuration of Transport Rings
+
+config.jsg.dhd=DHD Config
+config.jsg.dhd.tooltip=Configuration of DHD and Universe Dialer
+
+config.jsg.beamers=Beamers Config
+config.jsg.beamers.tooltip=Configuration of Beamers
+
+config.jsg.worldgen=World Generation Config
+config.jsg.worldgen.tooltip=Configuration of World Gen and Mysterious Pages
+
 # Sound category
 soundCategory.jsg=Just Stargate Mod
 
