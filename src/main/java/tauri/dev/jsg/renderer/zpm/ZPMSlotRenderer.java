@@ -19,12 +19,11 @@ public class ZPMSlotRenderer extends ZPMHubRenderer {
     @Override
     protected void renderZPM(int zpmId, ZPMHubTile te, float plusY) {
         if (zpmId != 0) return;
-        int level = te.zpm1Level;
         float zx = -0.1f;
         float zz = -0.08f;
         GlStateManager.pushMatrix();
         GlStateManager.translate(zx, 1 + (plusY * 0.8), zz);
-        ZPMRenderer.renderZPM(this.getWorld(), te.getPos(), level, 0.57f, (!te.isSlidingUp && !te.isAnimating));
+        ZPMRenderer.renderZPM(this.getWorld(), te.getPos(), te.zpm1Level, 0.57f, (!te.isSlidingUp && !te.isAnimating), te.zpm1Type);
         GlStateManager.popMatrix();
     }
 }

@@ -29,6 +29,7 @@ import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
 import tauri.dev.jsg.power.zpm.ZPMHubEnergyStorage;
+import tauri.dev.jsg.renderer.zpm.ZPMRenderer;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateProviderInterface;
 import tauri.dev.jsg.state.StateTypeEnum;
@@ -119,6 +120,10 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     public int zpm1Level;
     public int zpm2Level;
     public int zpm3Level;
+
+    public ZPMRenderer.ZPMModelType zpm1Type;
+    public ZPMRenderer.ZPMModelType zpm2Type;
+    public ZPMRenderer.ZPMModelType zpm3Type;
     // ---------------
 
     public void startAnimation() {
@@ -275,7 +280,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     }
 
     public static int getZPMPowerLevel(long energyStored, long maxEnergy) {
-        return Math.round(energyStored / (float) maxEnergy * 5);
+        return (int) Math.round((energyStored / (double) maxEnergy) * 5);
     }
 
 
@@ -303,7 +308,11 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                 int zpm2Level = stack2.isEmpty() ? -1 : getZPMPowerLevel(Objects.requireNonNull(stack2.getCapability(CapabilityEnergyZPM.ENERGY, null)).getEnergyStored(), Objects.requireNonNull(stack2.getCapability(CapabilityEnergyZPM.ENERGY, null)).getMaxEnergyStored());
                 int zpm3Level = stack3.isEmpty() ? -1 : getZPMPowerLevel(Objects.requireNonNull(stack3.getCapability(CapabilityEnergyZPM.ENERGY, null)).getEnergyStored(), Objects.requireNonNull(stack3.getCapability(CapabilityEnergyZPM.ENERGY, null)).getMaxEnergyStored());
 
-                return new ZPMHubRendererUpdate(animationStart, isAnimating, isSlidingUp, zpm1Level, zpm2Level, zpm3Level, (facing.getHorizontalIndex() - 2) * 90);
+                ZPMRenderer.ZPMModelType zpm1Type = ZPMRenderer.ZPMModelType.byStack(stack1);
+                ZPMRenderer.ZPMModelType zpm2Type = ZPMRenderer.ZPMModelType.byStack(stack2);
+                ZPMRenderer.ZPMModelType zpm3Type = ZPMRenderer.ZPMModelType.byStack(stack3);
+
+                return new ZPMHubRendererUpdate(animationStart, isAnimating, isSlidingUp, zpm1Level, zpm2Level, zpm3Level, zpm1Type, zpm2Type, zpm3Type, (facing.getHorizontalIndex() - 2) * 90);
 
             case GUI_UPDATE:
                 return new ZPMHubContainerGuiUpdate(getEnergyStorage().getEnergyStoredInternally(), energyTransferedLastTick);
@@ -337,9 +346,15 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                 this.animationStart = s.animationStart;
                 this.isAnimating = s.isAnimating;
                 this.isSlidingUp = s.slidingUp;
+
                 this.zpm1Level = s.zpm1Level;
                 this.zpm2Level = s.zpm2Level;
                 this.zpm3Level = s.zpm3Level;
+
+                this.zpm1Type = s.zpm1Type;
+                this.zpm2Type = s.zpm2Type;
+                this.zpm3Type = s.zpm3Type;
+
                 this.facingAngle = s.facing;
                 world.markBlockRangeForRenderUpdate(pos, pos);
                 markDirty();

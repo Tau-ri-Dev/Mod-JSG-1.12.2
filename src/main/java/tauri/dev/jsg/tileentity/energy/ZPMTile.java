@@ -13,6 +13,7 @@ import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
 import tauri.dev.jsg.power.zpm.ZPMEnergyStorage;
+import tauri.dev.jsg.renderer.zpm.ZPMRenderer;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateProviderInterface;
 import tauri.dev.jsg.state.StateTypeEnum;
@@ -36,6 +37,8 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
     private TargetPoint targetPoint;
     private int powerLevel;
     private int lastPowerLevel;
+
+    public boolean isCorrupted = false;
 
     public TargetPoint getTargetPoint() {
         return targetPoint;
@@ -141,5 +144,11 @@ public class ZPMTile extends TileEntity implements ITickable, ICapabilityProvide
             powerLevel = ((CapacitorPowerLevelUpdate) state).powerLevel;
             world.markBlockRangeForRenderUpdate(pos, pos);
         }
+    }
+
+    public ZPMRenderer.ZPMModelType getType() {
+        if (isCorrupted)
+            return ZPMRenderer.ZPMModelType.EXPLOSIVE;
+        return ZPMRenderer.ZPMModelType.NORMAL;
     }
 }

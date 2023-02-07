@@ -117,8 +117,7 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip,
-                               @Nonnull ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
         tooltip.add(JSG.getInProgress());
         tooltip.add("");
         IEnergyStorage energyStorage = stack.getCapability(CapabilityEnergy.ENERGY, null);

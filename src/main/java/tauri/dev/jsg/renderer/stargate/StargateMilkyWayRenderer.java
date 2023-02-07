@@ -34,7 +34,9 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
     protected void renderGate(StargateAbstractBaseTile te, StargateMilkyWayRendererState rendererState, double partialTicks) {
         setGateHeatColor(rendererState);
         renderRing(te, rendererState, partialTicks);
+        setGateHeatColor(rendererState);
         renderChevrons(rendererState, partialTicks);
+        setGateHeatColor(rendererState);
 
         GlStateManager.pushMatrix();
         applyLightMap(rendererState, partialTicks);
@@ -104,6 +106,8 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
             float color = rendererState.chevronTextureList.getColor(chevron);
             GlStateManager.color(color, color, color);
         }
+        else
+            setGateHeatColor(rendererState);
 
         TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron, onlyLight)).bindTexture();
 
@@ -125,6 +129,7 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
         }
 
         if (!onlyLight) {
+            setGateHeatColor(rendererState);
             applyLightMap(rendererState, partialTicks);
             ElementEnum.MILKYWAY_CHEVRON_FRAME.bindTextureAndRender(rendererState.getBiomeOverlay());
             ElementEnum.MILKYWAY_CHEVRON_BACK.render();

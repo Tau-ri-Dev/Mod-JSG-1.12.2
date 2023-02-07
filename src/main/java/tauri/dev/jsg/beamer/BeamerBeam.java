@@ -163,7 +163,7 @@ public class BeamerBeam {
 
     /**
      * This method is copy of Minecraft Beam Render method
-     * <p>
+     * <br>
      * - edited some ints to doubles
      */
     private static void renderBeamSegment(double partialTicks, double textureScale, double totalWorldTime, double height, float[] colors, double beamRadius, double glowRadius) {

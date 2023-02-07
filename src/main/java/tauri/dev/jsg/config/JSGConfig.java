@@ -966,7 +966,7 @@ public class JSGConfig {
             @Config.Name("Energy/tick needed to keep laser alive")
             @Config.RangeInt(min = 10000, max = 500000)
             @Config.SlidingOption
-            public int laserEnergy = 163840;
+            public int laserEnergy = 25360;
         }
     }
 

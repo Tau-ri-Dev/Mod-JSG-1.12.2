@@ -6,8 +6,8 @@ import net.minecraftforge.energy.IEnergyStorage;
 import tauri.dev.jsg.config.JSGConfig;
 
 public class StargateItemEnergyStorage implements IEnergyStorage {
-    private final ItemStack stack;
-    private final int maxEnergyStored;
+    protected final ItemStack stack;
+    protected final int maxEnergyStored;
 
     public StargateItemEnergyStorage(ItemStack stack, int maxEnergyStored) {
         this.stack = stack;
@@ -56,7 +56,7 @@ public class StargateItemEnergyStorage implements IEnergyStorage {
         return true;
     }
 
-    private final NBTTagCompound getOrCreateCompound(ItemStack stack) {
+    protected NBTTagCompound getOrCreateCompound(ItemStack stack) {
         if(!stack.hasTagCompound())
             stack.setTagCompound(new NBTTagCompound());
         return stack.getTagCompound();

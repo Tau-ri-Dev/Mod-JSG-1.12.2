@@ -59,22 +59,26 @@ public class ZPMHubRenderer extends TileEntitySpecialRenderer<ZPMHubTile> {
 
     protected void renderZPM(int zpmId, ZPMHubTile te, float plusY) {
         int level = -1;
+        ZPMRenderer.ZPMModelType type = ZPMRenderer.ZPMModelType.NORMAL;
         float zx = 0;
         float zy = 0.9f;
         float zz = 0;
         switch (zpmId) {
             case 0:
                 level = te.zpm1Level;
+                type = te.zpm1Type;
                 zx = 0.2f;
                 zz = 0.18f;
                 break;
             case 1:
                 level = te.zpm2Level;
+                type = te.zpm2Type;
                 zx = -0.33f;
                 zz = 0.18f;
                 break;
             case 2:
                 level = te.zpm3Level;
+                type = te.zpm3Type;
                 zx = -0.07f;
                 zz = -0.27f;
                 break;
@@ -83,7 +87,7 @@ public class ZPMHubRenderer extends TileEntitySpecialRenderer<ZPMHubTile> {
         }
         GlStateManager.pushMatrix();
         GlStateManager.translate(zx, zy + plusY, zz);
-        ZPMRenderer.renderZPM(getWorld(), te.getPos(), level, 0.4f, (!te.isSlidingUp && !te.isAnimating));
+        ZPMRenderer.renderZPM(getWorld(), te.getPos(), level, 0.4f, (!te.isSlidingUp && !te.isAnimating), type);
         GlStateManager.popMatrix();
     }
 }

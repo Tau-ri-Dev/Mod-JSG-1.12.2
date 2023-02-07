@@ -8,11 +8,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import tauri.dev.jsg.capability.CapabilityEnergyZPM;
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.capability.ZPMItemCapabilityProvider;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.power.zpm.ZPMItemEnergyStorage;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -24,12 +24,7 @@ public class ZPMItemBlockCreative extends ZPMItemBlock {
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (isInCreativeTab(tab)) {
-            ItemStack stack = new ItemStack(this);
-            ZPMItemEnergyStorage energyStorage = (ZPMItemEnergyStorage) stack.getCapability(CapabilityEnergyZPM.ENERGY, null);
-            if (energyStorage != null) {
-                energyStorage.setEnergyStored(energyStorage.getMaxEnergyStored());
-            }
-            items.add(stack);
+            items.add(new ItemStack(this));
         }
     }
 
@@ -40,5 +35,16 @@ public class ZPMItemBlockCreative extends ZPMItemBlock {
 
     @Override
     public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(JSG.getInProgress());
+    }
+
+    @Override
+    public boolean showDurabilityBar(@Nonnull ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack) {
+        return 0;
     }
 }

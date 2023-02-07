@@ -36,7 +36,9 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
     protected void renderGate(StargateAbstractBaseTile te, StargatePegasusRendererState rendererState, double partialTicks) {
         setGateHeatColor(rendererState);
         renderRing(rendererState, partialTicks);
+        setGateHeatColor(rendererState);
         renderChevrons(rendererState, partialTicks);
+        setGateHeatColor(rendererState);
 
         GlStateManager.pushMatrix();
         applyLightMap(rendererState, partialTicks);
@@ -109,6 +111,8 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
             float color = rendererState.chevronTextureList.getColor(chevron);
             GlStateManager.color(color, color, color);
         }
+        else
+            setGateHeatColor(rendererState);
 
         Texture chevronTexture = TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron, onlyLight));
         if (chevronTexture != null) {

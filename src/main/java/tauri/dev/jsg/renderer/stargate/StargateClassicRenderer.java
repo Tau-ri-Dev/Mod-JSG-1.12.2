@@ -70,6 +70,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     protected void renderChevrons(S rendererState, double partialTicks) {
 
         for (ChevronEnum chevron : ChevronEnum.values()) {
+            setGateHeatColor(rendererState);
             GlStateManager.pushMatrix();
             // not emissive
             renderChevron(rendererState, partialTicks, chevron, false);

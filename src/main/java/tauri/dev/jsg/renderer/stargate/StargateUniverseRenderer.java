@@ -106,6 +106,8 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
             float color = rendererState.chevronTextureList.getColor(chevron);
             GlStateManager.color(color, color, color);
         }
+        else
+            setGateHeatColor(rendererState);
 
         TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron, onlyLight)).bindTexture();
         ElementEnum.UNIVERSE_CHEVRON.render();

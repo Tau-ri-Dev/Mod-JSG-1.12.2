@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class WeaponCapabilityProvider extends ItemCapabilityProvider {
@@ -18,12 +19,12 @@ public class WeaponCapabilityProvider extends ItemCapabilityProvider {
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
         return capability == ItemEndpointCapability.ENDPOINT_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
         if (capability == ItemEndpointCapability.ENDPOINT_CAPABILITY)
             return ItemEndpointCapability.ENDPOINT_CAPABILITY.cast(itemEndpoint);
 

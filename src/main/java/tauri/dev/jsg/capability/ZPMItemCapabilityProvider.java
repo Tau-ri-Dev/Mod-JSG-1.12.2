@@ -21,6 +21,18 @@ public class ZPMItemCapabilityProvider implements ICapabilityProvider {
             public void setEnergyStored(long energy){
                 super.setEnergyStored(creative? maxEnergyStored : energy);
             }
+            @Override
+            public long getEnergyStored(){
+                if(creative)
+                    return maxEnergyStored;
+                return super.getEnergyStored();
+            }
+            @Override
+            public int extractEnergy(int max, boolean simulate){
+                if(creative)
+                    return max;
+                return super.extractEnergy(max, simulate);
+            }
         };
         if (nbt != null && nbt.hasKey("Parent", Constants.NBT.TAG_COMPOUND))
             backwardsCompat(nbt.getCompoundTag("Parent"));
