@@ -29,6 +29,7 @@ import tauri.dev.jsg.stargate.network.SymbolUniverseEnum;
 import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.StargateUpgradeEnum;
+import tauri.dev.jsg.util.math.TemperatureHelper;
 
 import java.awt.*;
 import java.io.IOException;
@@ -241,9 +242,9 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
                 y += 9;
             }
             // gate temp
-            int gateTemperature = (int) Math.round(container.gateTile.gateHeat);
+            double gateTemperature = container.gateTile.gateHeat;
             // iris temp
-            int irisTemperature = (int) Math.round(container.gateTile.irisHeat);
+            double irisTemperature = container.gateTile.irisHeat;
 
             String format = TextFormatting.DARK_GREEN.toString();
             if (gateTemperature >= (StargateClassicBaseTile.GATE_MAX_HEAT * 0.5))
@@ -251,7 +252,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
             if (gateTemperature >= (StargateClassicBaseTile.GATE_MAX_HEAT * 0.75))
                 format = TextFormatting.RED.toString();
 
-            infoTab.addString(new TabInfo.InfoString(I18n.format("gui.stargate.state.gate_temp") + " " + format + gateTemperature + "\u00B0C", 4, y));
+            infoTab.addString(new TabInfo.InfoString(I18n.format("gui.stargate.state.gate_temp") + " " + format + JSGConfig.General.visual.temperatureUnit.getTemperatureToDisplay(TemperatureHelper.asKelvins(TemperatureHelper.asCelsius(gateTemperature).toKelvins()), 0), 4, y));
             y += 9;
             if (container.gateTile.isPhysicalIris()) {
                 //irisTemperature = gateTemperature;
@@ -264,7 +265,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
                 if (irisTemperature > (maxHeat * 0.75))
                     format = TextFormatting.RED.toString();
 
-                infoTab.addString(new TabInfo.InfoString(I18n.format("gui.stargate.state.iris_temp") + " " + format + irisTemperature + "\u00B0C", 4, y));
+                infoTab.addString(new TabInfo.InfoString(I18n.format("gui.stargate.state.iris_temp") + " " + format + JSGConfig.General.visual.temperatureUnit.getTemperatureToDisplay(TemperatureHelper.asKelvins(TemperatureHelper.asCelsius(irisTemperature).toKelvins()), 0) + "\u00B0C", 4, y));
             }
         }
 

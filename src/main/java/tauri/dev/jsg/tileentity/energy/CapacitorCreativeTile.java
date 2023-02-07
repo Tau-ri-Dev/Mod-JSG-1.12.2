@@ -52,6 +52,7 @@ public class CapacitorCreativeTile extends CapacitorTile {
                 getEnergyStorage().setEnergyStored(getEnergyStorage().getMaxEnergyStored());
             }
         }
+        super.update();
     }
 
     @Override

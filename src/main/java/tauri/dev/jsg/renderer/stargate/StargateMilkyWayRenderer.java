@@ -3,14 +3,12 @@ package tauri.dev.jsg.renderer.stargate;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.model.ModelLoader;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
-import tauri.dev.jsg.util.JSGMinecraftHelper;
 import tauri.dev.jsg.util.math.MathFunction;
 import tauri.dev.jsg.util.math.MathFunctionImpl;
 import tauri.dev.jsg.util.math.MathRange;
@@ -105,8 +103,7 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
         if (onlyLight) {
             float color = rendererState.chevronTextureList.getColor(chevron);
             GlStateManager.color(color, color, color);
-        }
-        else
+        } else
             setGateHeatColor(rendererState);
 
         TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron, onlyLight)).bindTexture();

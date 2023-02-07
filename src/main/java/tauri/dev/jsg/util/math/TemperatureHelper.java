@@ -2,6 +2,36 @@ package tauri.dev.jsg.util.math;
 
 @SuppressWarnings("unused")
 public class TemperatureHelper {
+    public enum EnumTemperatureUnit {
+        KELVIN(0, "K"),
+        CELSIUS(1, "\u00B0C"),
+        FAHRENHEITS(2, "\u00B0F");
+
+        public final int id;
+        public final String displayUnit;
+
+        EnumTemperatureUnit(int id, String displayUnit){
+            this.id = id;
+            this.displayUnit = displayUnit;
+        }
+
+        public double getTemperature(Kelvins temperature){
+            switch(this){
+                default:
+                    return temperature.n;
+                case CELSIUS:
+                    return temperature.toCelsius();
+                case FAHRENHEITS:
+                    return temperature.toFahrenheits();
+            }
+        }
+
+        public String getTemperatureToDisplay(Kelvins temperature, int decimals){
+            final double temp = getTemperature(temperature);
+            return String.format("%." + decimals + "f", temp) + displayUnit;
+        }
+    }
+
     public static Kelvins asKelvins(double n) {
         return new Kelvins(n);
     }
@@ -15,7 +45,7 @@ public class TemperatureHelper {
     }
 
     public static class Kelvins {
-        final double n;
+        public final double n;
 
         private Kelvins(double n) {
             this.n = n;
@@ -31,7 +61,7 @@ public class TemperatureHelper {
     }
 
     public static class Celsius {
-        final double n;
+        public final double n;
 
         private Celsius(double n) {
             this.n = n;
@@ -47,7 +77,7 @@ public class TemperatureHelper {
     }
 
     public static class Fahrenheits {
-        final double n;
+        public final double n;
 
         private Fahrenheits(double n) {
             this.n = n;

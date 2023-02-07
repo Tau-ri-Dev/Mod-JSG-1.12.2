@@ -17,16 +17,16 @@ import javax.annotation.Nullable;
 
 public class ZPMRenderer extends TileEntitySpecialRenderer<ZPMTile> {
     public enum ZPMModelType {
-        NORMAL(0, 0f, 0f, 0f),
-        CREATIVE(1, 0.9f, 0f, 1f),
-        EXPLOSIVE(2, 0.615f, 0.976f, 0.952f);
+        NORMAL(0, ""),
+        CREATIVE(1, "_creative"),
+        EXPLOSIVE(2, "");
 
         public final int id;
-        public final float[] color;
+        public final String suffix;
 
-        ZPMModelType(int id, float... color) {
+        ZPMModelType(int id, String suffix) {
             this.id = id;
-            this.color = color;
+            this.suffix = suffix;
         }
 
         public static ZPMModelType byId(int id) {
@@ -73,16 +73,15 @@ public class ZPMRenderer extends TileEntitySpecialRenderer<ZPMTile> {
     public static void renderZPM(World world, BlockPos pos, int powerLevel, float size, boolean on, @Nullable ZPMModelType type) {
         if (powerLevel < 0) return;
         if(type == null) type = ZPMModelType.NORMAL;
-        final float[] color = type.color;
-
+        if(type == ZPMModelType.CREATIVE) powerLevel = 5;
         GlStateManager.pushMatrix();
-        GlStateManager.color(1 + color[0], 1 + color[1],  1 + color[2]);
+        GlStateManager.disableLighting();
         JSGTextureLightningHelper.lightUpTexture(1f);
         GlStateManager.scale(size, size, size);
-        TextureLoader.getTexture(TextureLoader.getTextureResource("zpm/zpm" + powerLevel + (on ? "" : "_off") + ".png")).bindTexture();
+        TextureLoader.getTexture(TextureLoader.getTextureResource("zpm/zpm" + powerLevel + (on ? "" : "_off") + type.suffix + ".png")).bindTexture();
         ElementEnum.ZPM.render();
         JSGTextureLightningHelper.resetLight(world, pos);
+        GlStateManager.enableLighting();
         GlStateManager.popMatrix();
-        GlStateManager.color(1, 1, 1);
     }
 }

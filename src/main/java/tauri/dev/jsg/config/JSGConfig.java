@@ -5,6 +5,7 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.config.stargate.StargateTimeLimitModeEnum;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
+import tauri.dev.jsg.util.math.TemperatureHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,13 +20,15 @@ public class JSGConfig {
     public static class General {
         @Config.Name("Check for updates")
         @Config.Comment({
-                "Should JSG check for update on startup?"
+                "Should JSG check for update on startup?",
+                "SIDE: CLIENT"
         })
         public static boolean enableAutoUpdater = true;
 
         @Config.Name("AGS path")
         @Config.Comment({
-                "The pastebin of AGS (used in /ags command)"
+                "The pastebin of AGS (used in /ags command)",
+                "SIDE: SERVER"
         })
         public static String agsPath = AGS_DEFAULT_PATH;
 
@@ -80,7 +83,8 @@ public class JSGConfig {
         public static class Audio {
             @Config.Name("JSG volume")
             @Config.Comment({
-                    "Specifies volume of sounds from JSG"
+                    "Specifies volume of sounds from JSG",
+                    "SIDE: CLIENT"
             })
             @Config.RangeDouble(min = 0, max = 1)
             @Config.SlidingOption
@@ -90,7 +94,8 @@ public class JSGConfig {
         public static class Visual {
             @Config.Name("Notebook page Glyph transparency")
             @Config.Comment({
-                    "Specifies transparency of glyphs on notebook page"
+                    "Specifies transparency of glyphs on notebook page",
+                    "SIDE: CLIENT"
             })
             @Config.RangeDouble(min = 0, max = 1)
             @Config.SlidingOption
@@ -101,6 +106,7 @@ public class JSGConfig {
                     "Greater values render the Page more to the center of the screen, smaller render it closer to the borders.",
                     "0 - for standard 16:9 (default),",
                     "0.2 - for 4:3.",
+                    "SIDE: CLIENT"
             })
             @Config.RangeDouble(min = 0, max = 1)
             @Config.SlidingOption
@@ -109,42 +115,58 @@ public class JSGConfig {
             @Config.Name("Render emissive textures")
             @Config.Comment({
                     "Render light of some textures.",
-                    "Disable this if it causes lags."
+                    "Disable this if it causes lags.",
+                    "SIDE: CLIENT"
             })
             public boolean renderEmissive = true;
+
+            @Config.Name("Temperature unit")
+            @Config.Comment({
+                    "Specifies what unit will be used to display temperatures",
+                    "SIDE: CLIENT"
+            })
+            public TemperatureHelper.EnumTemperatureUnit temperatureUnit = TemperatureHelper.EnumTemperatureUnit.CELSIUS;
         }
 
         public static class Debug {
             @Config.Name("Check gate merge")
             @Config.Comment({
-                    "Check if gate is merged?"
+                    "Check if gate is merged?",
+                    "SIDE: SERVER"
             })
             public boolean checkGateMerge = true;
 
             @Config.Name("Render bounding boxes")
             @Config.Comment({
-                    "Render bounding boxes of stargates?"
+                    "Render bounding boxes of stargates?",
+                    "SIDE: CLIENT"
             })
             public boolean renderBoundingBoxes = false;
 
             @Config.Name("Render whole kawoosh bounding box")
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
             public boolean renderWholeKawooshBoundingBox = false;
 
             @Config.Name("Render invisible blocks")
             @Config.Comment({
-                    "Should render iris/stargate merged/rings barricade blocks?"
+                    "Should render iris/stargate merged/rings barricade blocks?",
+                    "SIDE: CLIENT"
             })
             public boolean renderInvisibleBlocks = false;
 
             @Config.Name("Show loading textures in log")
             @Config.Comment({
-                    "Should log every single texture while loading the mod?"
+                    "Should log every single texture while loading the mod?",
+                    "SIDE: SERVER/CLIENT"
             })
             public boolean logTexturesLoading = false;
 
             @Config.Name("Log debug messages as info")
             @Config.Comment({
-                    "If debug console not working, should display debug as info?"
+                    "If debug console not working, should display debug as info?",
+                    "SIDE: SERVER/CLIENT"
             })
             public boolean logDebugAsInfo = false;
         }
@@ -153,26 +175,32 @@ public class JSGConfig {
             @Config.RequiresMcRestart
             @Config.Name("Enable Tinkers' Construct integration")
             @Config.Comment({
-                    "WARNING! - Requires reloading!"
+                    "WARNING! - Requires reloading!",
+                    "SIDE: SERVER/CLIENT"
             })
             public boolean tConstructIntegration = true;
 
             @Config.RequiresMcRestart
             @Config.Name("Enable Open Computers integration")
             @Config.Comment({
-                    "WARNING! - Requires reloading!"
+                    "WARNING! - Requires reloading!",
+                    "SIDE: SERVER/CLIENT"
             })
             public boolean ocIntegration = true;
 
             @Config.Name("OC wireless network range (in blocks)")
             @Config.RangeInt(min = 0, max = 100)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int ocIntegrationWirelessRange = 20;
 
             @Config.RequiresMcRestart
             @Config.Name("Enable Thermal Expansion integration")
             @Config.Comment({
-                    "WARNING! - Requires reloading!"
+                    "WARNING! - Requires reloading!",
+                    "SIDE: SERVER/CLIENT"
             })
             public boolean tExpansionIntegration = true;
         }
@@ -180,7 +208,8 @@ public class JSGConfig {
         public static class AdvancementsConfig {
             @Config.Name("Ranged Advancements radius")
             @Config.Comment({
-                    "Players in this radius around triggered pos will get Advancement."
+                    "Players in this radius around triggered pos will get Advancement.",
+                    "SIDE: SERVER"
             })
             @Config.RangeInt(min = 0, max = 100)
             @Config.SlidingOption
@@ -191,11 +220,17 @@ public class JSGConfig {
             @Config.Name("Delay after zero-time (seconds)")
             @Config.RangeInt(min = 0, max = 60)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int zeroDelay = 5;
 
             @Config.Name("Delay to start dialing after countdown start (seconds)")
             @Config.RangeInt(min = 0, max = 60)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int dialStartDelay = 5;
         }
 
@@ -231,23 +266,39 @@ public class JSGConfig {
             @Config.Name("Disable JSG main menu")
             @Config.Comment({
                     "Disables showing custom main menu",
-                    "WARNING! - Requires reloading!"
+                    "WARNING! - Requires reloading!",
+                    "SIDE: CLIENT"
             })
             public boolean disableJSGMainMenu = false;
 
             @Config.Name("Enable debug mode")
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
             public boolean debugMode = false;
 
             @Config.Name("Play music in main menu")
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
             public boolean playMusic = true;
 
             @Config.Name("Enable sync with minecraft ticks")
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
             public boolean syncEnabled = false;
 
             @Config.Name("Enable changing gate type")
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
             public boolean enableGateChanging = true;
 
             @Config.Name("Enable loading music")
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
             public boolean loadingMusic = true;
         }
     }
@@ -263,11 +314,17 @@ public class JSGConfig {
 
         public static class Power {
             @Config.Name("ZPM capacity (RF)")
+            @Config.Comment({
+                    "SIDE: SERVER/CLIENT"
+            })
             public double zpmCapacity = 4_398_046_511_104D;
 
             @Config.Name("ZPMHub's max power throughput")
             @Config.RangeInt(min = 1, max = 1043600)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int zpmHubMaxEnergyTransfer = 104360;
         }
 
@@ -279,7 +336,8 @@ public class JSGConfig {
 
         @Config.Name("Stargate size")
         @Config.Comment({
-                "Defines size of stargate's model"
+                "Defines size of stargate's model",
+                "SIDE: SERVER/CLIENT"
         })
         @Config.RequiresWorldRestart
         public static StargateSizeEnum stargateSize = StargateSizeEnum.MEDIUM;
@@ -341,24 +399,32 @@ public class JSGConfig {
         public static class Mechanics {
             @Config.Name("Enable burried state for gates")
             @Config.Comment({
-                    "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
+                    "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI",
+                    "SIDE: SERVER"
             })
             public boolean enableBurriedState = true;
 
             @Config.Name("Orlin's gate max open count")
             @Config.RangeInt(min = 0, max = 15000)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER/CLIENT"
+            })
             public int stargateOrlinMaxOpenCount = 2;
 
             @Config.Name("Universe dialer nearby radius")
             @Config.RangeInt(min = 5)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int universeGateNearbyReach = 1024;
 
             @Config.Name("Enable gate overheat with explosion")
             @Config.Comment({
                     "Should gate explode when its overheated?",
-                    "This method is not implemented yet!"
+                    "This method is not implemented yet!",
+                    "SIDE: SERVER"
             })
             public boolean enableGateOverHeatExplosion = false;
 
@@ -366,11 +432,17 @@ public class JSGConfig {
             @Config.Name("Max stargate heat")
             @Config.RangeDouble(min = 0)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER/CLIENT"
+            })
             public double gateMaxHeat = 83400;
 
             @Config.Name("Chance of lighting strike that charge a gate")
             @Config.RangeDouble(min = 0, max = 1)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public float lightingBoldChance = 0.0005f;
 
             @Config.Name("Connect to dialing gate")
@@ -380,31 +452,38 @@ public class JSGConfig {
                     "If this is set to false and the dialed gate dialing address,",
                     "the connection will not established.",
                     "If it cause issues, set it to false.",
+                    "SIDE: SERVER"
             })
             public boolean allowConnectToDialing = true;
 
             @Config.Name("Use 8 chevrons between MW and PG gates")
             @Config.Comment({
-                    "Change this to true, if you want to use 8 chevrons between pegasus and milkyway gates"
+                    "Change this to true, if you want to use 8 chevrons between pegasus and milkyway gates",
+                    "SIDE: SERVER"
             })
             public boolean pegAndMilkUseEightChevrons = true;
 
             @Config.Name("Need only 7 symbols between Uni gates")
             @Config.Comment({
-                    "If you want to dial UNI-UNI only with seven symbols (interdimensional for example), set this to true"
+                    "If you want to dial UNI-UNI only with seven symbols (interdimensional for example), set this to true",
+                    "SIDE: SERVER"
             })
             public boolean useStrictSevenSymbolsUniGate = false;
         }
 
         public static class Iris {
             @Config.Name("Iris kills at destination")
-            @Config.Comment("If set to 'false' player get killed by iris on entering event horizon")
+            @Config.Comment({
+                    "If set to 'false' player get killed by iris on entering event horizon",
+                    "SIDE: SERVER"
+            })
             public boolean killAtDestination = true;
 
             @Config.Name("Titanium iris durability")
             @Config.Comment({
                     "Durability of Titanium iris",
-                    "set it to 0, if u want to make it unbreakable"
+                    "set it to 0, if u want to make it unbreakable",
+                    "SIDE: SERVER/CLIENT"
             })
             @Config.RangeInt(min = 0, max = 50000)
             @Config.SlidingOption
@@ -413,7 +492,8 @@ public class JSGConfig {
             @Config.Name("Trinium iris durability")
             @Config.Comment({
                     "Durability of Trinium iris",
-                    "set it to 0, if u want to make it unbreakable"
+                    "set it to 0, if u want to make it unbreakable",
+                    "SIDE: SERVER/CLIENT"
             })
             @Config.RangeInt(min = 0, max = 50000)
             @Config.SlidingOption
@@ -421,7 +501,8 @@ public class JSGConfig {
 
             @Config.Name("Shield power draw")
             @Config.Comment({
-                    "Energy/tick used for make shield closed"
+                    "Energy/tick used for make shield closed",
+                    "SIDE: SERVER"
             })
             @Config.RangeInt(min = 0, max = 500000)
             @Config.SlidingOption
@@ -430,27 +511,39 @@ public class JSGConfig {
             @Config.Name("Allow creative bypass")
             @Config.Comment({
                     "Set it to true, if u want to bypass",
-                    "shield/iris damage by creative gamemode"
+                    "shield/iris damage by creative gamemode",
+                    "SIDE: SERVER"
             })
             public boolean allowCreative = false;
 
             @Config.Name("Maximum iris code length")
             @Config.RangeInt(min = 0, max = 32)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER/CLIENT"
+            })
             public int irisCodeLength = 9;
 
             @Config.Name("Can iris destroy blocks")
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public boolean irisDestroysBlocks = false;
 
             @Config.Name("Unbreaking chance per level")
-            @Config.Comment({"0 - disables unbreaking on iris", "100 - unbreaking makes iris unbreakable"})
+            @Config.Comment({
+                    "0 - disables unbreaking on iris",
+                    "100 - unbreaking makes iris unbreakable",
+                    "SIDE: SERVER"
+            })
             @Config.RangeInt(min = 0, max = 100)
             @Config.SlidingOption
             public int unbreakingChance = 10;
 
             @Config.Name("Enable iris overheat collapse")
             @Config.Comment({
-                    "Should iris break when its overheated?"
+                    "Should iris break when its overheated?",
+                    "SIDE: SERVER"
             })
             public boolean enableIrisOverHeatCollapse = true;
 
@@ -458,12 +551,18 @@ public class JSGConfig {
             @Config.Name("Max titanium iris heat")
             @Config.RangeDouble(min = 0)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER/CLIENT"
+            })
             public double irisTitaniumMaxHeat = 1668;
 
             @Config.RequiresMcRestart
             @Config.Name("Max trinium iris heat")
             @Config.RangeDouble(min = 0)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER/CLIENT"
+            })
             public double irisTriniumMaxHeat = 3336;
         }
 
@@ -471,26 +570,39 @@ public class JSGConfig {
             @Config.Name("Stargate's internal buffer size")
             @Config.RangeInt(min = 4608)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER/CLIENT"
+            })
             public int stargateEnergyStorage = 71280000;
 
             @Config.Name("Stargate's max power throughput")
             @Config.RangeInt(min = 1, max = 500000)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int stargateMaxEnergyTransfer = 26360;
 
             @Config.Name("Stargate wormhole open power draw")
             @Config.RangeInt(min = 0, max = 500000)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int openingBlockToEnergyRatio = 4608;
 
             @Config.Name("Stargate wormhole sustain power draw")
             @Config.RangeInt(min = 0, max = 50)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int keepAliveBlockToEnergyRatioPerTick = 2;
 
             @Config.Name("Stargate instability threshold")
             @Config.Comment({
                     "Seconds of energy left before gate becomes unstable",
+                    "SIDE: SERVER"
             })
             @Config.RangeInt(min = 1, max = 120)
             @Config.SlidingOption
@@ -499,16 +611,23 @@ public class JSGConfig {
             @Config.Name("Orlin's gate energy multiplier")
             @Config.RangeDouble(min = 0, max = 100)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public double stargateOrlinEnergyMul = 2.0;
 
             @Config.Name("Universe gate energy multiplier")
             @Config.RangeDouble(min = 0, max = 100)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public double stargateUniverseEnergyMul = 1.5;
 
             @Config.Name("Capacitors supported by Universe gates")
             @Config.Comment({
-                    "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
+                    "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI",
+                    "SIDE: SERVER/CLIENT"
             })
             @Config.RangeInt(min = 0, max = 3)
             @Config.SlidingOption
@@ -517,7 +636,8 @@ public class JSGConfig {
             @Config.Name("Stargate eight symbols address power mul")
             @Config.Comment({
                     "Specifies the multiplier of power needed to keep the gate alive",
-                    "when 8-symbols address is dialed"
+                    "when 8-symbols address is dialed",
+                    "SIDE: SERVER"
             })
             @Config.RangeDouble(min = 0, max = 100)
             @Config.SlidingOption
@@ -526,7 +646,8 @@ public class JSGConfig {
             @Config.Name("Stargate nine symbols address power mul")
             @Config.Comment({
                     "Specifies the multiplier of power needed to keep the gate alive",
-                    "when 9-symbols address is dialed"
+                    "when 9-symbols address is dialed",
+                    "SIDE: SERVER"
             })
             @Config.RangeDouble(min = 0, max = 100)
             @Config.SlidingOption
@@ -537,7 +658,8 @@ public class JSGConfig {
             @Config.Name("Temperature threshold for frosty overlay")
             @Config.Comment({
                     "Below this biome temperature the gate will receive frosty texture.",
-                    "Set to negative value to disable."
+                    "Set to negative value to disable.",
+                    "SIDE: CLIENT"
             })
             @Config.RangeDouble(min = 0, max = 5)
             @Config.SlidingOption
@@ -549,7 +671,8 @@ public class JSGConfig {
                     "You can disable the temperature check by setting it to a negative value.",
                     "Format: \"modid:biomename\", for example: ",
                     "\"minecraft:dark_forest\"",
-                    "\"minecraft:forest\""
+                    "\"minecraft:forest\"",
+                    "SIDE: SERVER/CLIENT"
             })
             public Map<String, String[]> biomeMatches = new HashMap<String, String[]>() {
                 {
@@ -565,7 +688,8 @@ public class JSGConfig {
             @Config.Comment({
                     "Format: \"modid:blockid[:meta]\", for example: ",
                     "\"minecraft:wool:7\"",
-                    "\"minecraft:stone\""
+                    "\"minecraft:stone\"",
+                    "SIDE: SERVER/CLIENT"
             })
             public Map<String, String[]> biomeOverrideBlocks = new HashMap<String, String[]>() {
                 {
@@ -580,29 +704,39 @@ public class JSGConfig {
             @Config.Name("Allow incoming animations")
             @Config.Comment({
                     "If the incoming animations of gates generate issues, set it to false",
-                    "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
+                    "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI",
+                    "SIDE: SERVER"
             })
             public boolean allowIncomingAnimations = true;
 
             @Config.Name("Faster MilkyWay and Universe gates computer dial")
+            @Config.RequiresMcRestart
             @Config.Comment({
-                    "Speed up dialing with computer on MW and UNI gates"
+                    "Speed up dialing with computer on MW and UNI gates",
+                    "SIDE: SERVER/CLIENT"
             })
             public boolean fasterMWGateDial = false;
 
             @Config.Name("Enable fast dialing of gates")
             @Config.Comment({
                     "Enable fast dialing on gates by default",
-                    "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
+                    "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI",
+                    "SIDE: SERVER/CLIENT"
             })
             public boolean enableFastDialing = false;
 
             @Config.Name("Render not placed blocks of s stargate")
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
             public boolean renderStargateNotPlaced = true;
         }
 
         public static class PointOfOrigins {
             @Config.Name("Enable different Point Of Origins for MW gate")
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
             public boolean enableDiffOrigins = true;
 
             @Config.RequiresMcRestart
@@ -613,7 +747,8 @@ public class JSGConfig {
                     "Format: \"id:name\", for example: ",
                     "\"6:Tollan\"",
                     "\"7:P4X-256\"",
-                    "!DO NOT CHANGE ANYTHING IF YOU DON'T KNOW WHAT ARE YOU DOING!"
+                    "!DO NOT CHANGE ANYTHING IF YOU DON'T KNOW WHAT ARE YOU DOING!",
+                    "SIDE: CLIENT/SERVER"
             })
             public String[] additionalOrigins = {};
         }
@@ -623,20 +758,30 @@ public class JSGConfig {
             @Config.RequiresMcRestart
             @Config.Comment({
                     "Changing this option will require you to reload resources manually.",
-                    "Just restart your game"
+                    "Just restart your game",
+                    "SIDE: CLIENT"
             })
             public boolean disableAnimatedEventHorizon = false;
 
             @Config.Name("Enable wrong side killing")
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public boolean wrongSideKilling = true;
 
             @Config.Name("Unstable Event Horizon chance of death")
             @Config.RangeDouble(min = 0, max = 1)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public float ehDeathChance = 0.07f;
 
             @Config.Name("Disable new kawoosh model (from 4.11.0.0)")
             @Config.RequiresMcRestart
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
             public boolean disableNewKawoosh = false;
 
             @Config.Name("Kawoosh invincible blocks")
@@ -644,7 +789,8 @@ public class JSGConfig {
                     "Format: \"modid:blockid[:meta/*]\", for example: ",
                     "\"minecraft:wool:7\"",
                     "\"minecraft:stone\"",
-                    "\"minecraft:concrete:*\""
+                    "\"minecraft:concrete:*\"",
+                    "SIDE: SERVER"
             })
             public String[] kawooshInvincibleBlocks = {
                     "minecraft:snow_layer:*",
@@ -660,23 +806,33 @@ public class JSGConfig {
             };
 
             @Config.Name("Render EHs even if they are not rendering")
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
             public boolean renderEHifTheyNot = true;
         }
 
         public static class AutoCloseConfig {
             @Config.Name("Autoclose enabled")
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public boolean autocloseEnabled = true;
 
             @Config.Name("Seconds to autoclose with no players nearby")
             @Config.RangeInt(min = 1, max = 300)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int secondsToAutoclose = 5;
         }
 
         public static class OpenLimitConfig {
             @Config.Name("Maximum seconds of gate should be open")
             @Config.Comment({
-                    "(in seconds (2280 = 38 minutes))"
+                    "(in seconds (2280 = 38 minutes))",
+                    "SIDE: SERVER"
             })
             @Config.RangeInt(min = 5, max = 3000)
             @Config.SlidingOption
@@ -684,13 +840,17 @@ public class JSGConfig {
 
             @Config.Name("Gate open time limit mode")
             @Config.Comment({
-                    "What happens after gate's open time reaches limit?"
+                    "What happens after gate's open time reaches limit?",
+                    "SIDE: SERVER"
             })
             public StargateTimeLimitModeEnum maxOpenedWhat = StargateTimeLimitModeEnum.DRAW_MORE_POWER;
 
             @Config.Name("Power draw after opened time limit")
             @Config.RangeInt(min = 0, max = 50000)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int maxOpenedPowerDrawAfterLimit = 10000;
         }
 
@@ -698,13 +858,15 @@ public class JSGConfig {
             @Config.Name("Enable random incoming wormholes")
             @Config.Comment({
                     "Enable random incoming wormholes generator",
-                    "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
+                    "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI",
+                    "SIDE: SERVER"
             })
             public boolean enableRandomIncoming = true;
 
             @Config.Name("Chance of spawning")
             @Config.Comment({
-                    "10 = 1%"
+                    "10 = 1%",
+                    "SIDE: SERVER"
             })
             @Config.RangeInt(min = 1, max = 100)
             @Config.SlidingOption
@@ -714,7 +876,8 @@ public class JSGConfig {
             @Config.Comment({
                     "Format: \"modid:entityid\", for example: ",
                     "\"minecraft:zombie\"",
-                    "\"minecraft:creeper\""
+                    "\"minecraft:creeper\"",
+                    "SIDE: SERVER"
             })
             public String[] entitiesToSpawn = {
                     "minecraft:zombie",
@@ -742,21 +905,31 @@ public class JSGConfig {
             @Config.Name("Rings range's radius horizontal")
             @Config.RangeInt(min = 1, max = 256)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int rangeFlat = 25;
 
             @Config.Name("Rings vertical reach")
             @Config.RangeInt(min = 1, max = 256)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int rangeVertical = 256;
 
             @Config.Name("Ignore rings check for blocks to replace")
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public boolean ignoreObstructionCheck = false;
         }
 
         public static class Power {
             @Config.Name("Transport Rings active power draw")
             @Config.Comment({
-                    "Energy extracted from rings every tick when they are active (calculated by distance from these rings)"
+                    "Energy extracted from rings every tick when they are active (calculated by distance from these rings)",
+                    "SIDE: SERVER"
             })
             @Config.RangeInt(min = 0, max = 100)
             @Config.SlidingOption
@@ -764,7 +937,8 @@ public class JSGConfig {
 
             @Config.Name("Transport Rings teleport power draw")
             @Config.Comment({
-                    "Energy extracted from rings when they teleport LIVING entity (not drop)"
+                    "Energy extracted from rings when they teleport LIVING entity (not drop)",
+                    "SIDE: SERVER"
             })
             @Config.RangeInt(min = 0, max = 25600)
             @Config.SlidingOption
@@ -803,21 +977,33 @@ public class JSGConfig {
             @Config.Name("DHD range's radius horizontal")
             @Config.RangeInt(min = 1, max = 64)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int rangeFlat = 25;
 
             @Config.Name("DHD range's radius vertical")
             @Config.RangeInt(min = 1, max = 64)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int rangeVertical = 15;
 
             @Config.Name("Universe dialer max horizontal reach radius")
             @Config.RangeInt(min = 0, max = 64)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int universeDialerReach = 10;
 
             @Config.Name("DHD's max fluid capacity")
             @Config.RangeInt(min = 1, max = 128000)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER/CLIENT"
+            })
             public int fluidCapacity = 16000;
         }
 
@@ -826,7 +1012,8 @@ public class JSGConfig {
             @Config.RangeDouble(min = 1.0, max = 5.0)
             @Config.Comment({
                     "When capacity upgrade is placed in the DHD,",
-                    "then multiply internal capacity by this number"
+                    "then multiply internal capacity by this number",
+                    "SIDE: SERVER/CLIENT"
             })
             @Config.SlidingOption
             public float capacityUpgradeMultiplier = 2f;
@@ -834,13 +1021,17 @@ public class JSGConfig {
             @Config.Name("Energy per 1mB Naquadah")
             @Config.RangeInt(min = 1, max = 50000)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int energyPerNaquadah = 10240;
 
             @Config.Name("Generation multiplier")
             @Config.RangeInt(min = 1, max = 5)
             @Config.Comment({
                     "Energy per 1mB is multiplied by this",
-                    "Consumed mB/t is equal to this"
+                    "Consumed mB/t is equal to this",
+                    "SIDE: SERVER"
             })
             @Config.SlidingOption
             public int powerGenerationMultiplier = 1;
@@ -849,7 +1040,8 @@ public class JSGConfig {
             @Config.RangeDouble(min = 1.0, max = 5.0)
             @Config.Comment({
                     "Energy per 1mB is multiplied by this",
-                    "when efficiency upgrade is placed in the DHD"
+                    "when efficiency upgrade is placed in the DHD",
+                    "SIDE: SERVER"
             })
             @Config.SlidingOption
             public float efficiencyUpgradeMultiplier = 1.4f;
@@ -857,29 +1049,41 @@ public class JSGConfig {
             @Config.Name("Cold fusion reactor activation energy level")
             @Config.RangeDouble(min = 0, max = 1)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public double activationLevel = 0.9;
 
             @Config.Name("Cold fusion reactor deactivation energy level")
             @Config.RangeDouble(min = 0, max = 1)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public double deactivationLevel = 0.98;
         }
 
         public static class Audio {
             @Config.Name("Enable press sound when dialing with computer")
             @Config.Comment({
-                    "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
+                    "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI",
+                    "SIDE: SERVER"
             })
             public boolean computerDialSound = false;
         }
 
         public static class Visual {
             @Config.Name("Enable hint when dialing on DHDs with notebook page")
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
             public boolean enablePageHint = true;
+
             @Config.Name("Enable opening last chevron while dialing with dhd")
             @Config.Comment({
                     "Enable opening last chevron while dialing milkyway gate with dhd",
-                    "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI"
+                    "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI",
+                    "SIDE: SERVER"
             })
             public boolean dhdLastOpen = true;
         }
@@ -916,17 +1120,29 @@ public class JSGConfig {
             @Config.Name("Max gate-beamer distance")
             @Config.RangeInt(min = 3, max = 50)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int reach = 10;
 
             @Config.Name("Interval of signals being send to OC about transfers (in ticks)")
             @Config.RangeInt(min = 10, max = 400)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int signalIntervalTicks = 20;
 
             @Config.Name("Damage entities in a beam")
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public boolean damageEntities = true;
 
             @Config.Name("Destroy blocks in a beam")
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public boolean destroyBlocks = true;
         }
 
@@ -934,31 +1150,49 @@ public class JSGConfig {
             @Config.Name("Fluid buffer capacity")
             @Config.RangeInt(min = 3000, max = 600000)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER/CLIENT"
+            })
             public int fluidCapacity = 60000;
 
             @Config.Name("Energy buffer capacity")
             @Config.RangeInt(min = 3000)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER/CLIENT"
+            })
             public int energyCapacity = 17820000;
 
             @Config.Name("Energy buffer max transfer")
             @Config.RangeInt(min = 1)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int energyTransfer = 26360;
 
             @Config.Name("Fluid max transfer")
             @Config.RangeInt(min = 1, max = 5000)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int fluidTransfer = 100;
 
             @Config.Name("Item max transfer")
             @Config.RangeInt(min = 1, max = 64)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int itemTransfer = 4;
         }
 
         public static class Visual {
             @Config.Name("Should the beam be responsive to fluid color")
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
             public boolean enableFluidBeamColorization = true;
         }
 
@@ -966,6 +1200,9 @@ public class JSGConfig {
             @Config.Name("Energy/tick needed to keep laser alive")
             @Config.RangeInt(min = 10000, max = 500000)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int laserEnergy = 25360;
         }
     }
@@ -995,21 +1232,33 @@ public class JSGConfig {
             @Config.Name("Max XZ-coords generation")
             @Config.RangeInt(min = 1000, max = 30000)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int maxOverworldCoords = 15000;
 
             @Config.Name("Min XZ-coords generation")
             @Config.RangeInt(min = 1000, max = 30000)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int minOverworldCoords = 5000;
 
             @Config.Name("Chance of despawning DHD")
             @Config.RangeDouble(min = 0, max = 1)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public double despawnDhdChance = 0.05;
 
             @Config.Name("Mysterious page cooldown")
             @Config.RangeInt(min = 0, max = 400)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int pageCooldown = 40;
         }
 
@@ -1017,49 +1266,70 @@ public class JSGConfig {
             @Config.Name("Enable Naquadah ore generation")
             @Config.Comment({
                     "Do you want to spawn naquadah ores in the Nether?",
+                    "SIDE: SERVER"
             })
             public boolean naquadahEnable = true;
 
             @Config.Name("Naquadah vein size")
             @Config.RangeInt(min = 0, max = 64)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int naquadahVeinSize = 8;
 
             @Config.Name("Naquadah max veins in chunk")
             @Config.RangeInt(min = 0, max = 64)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int naquadahMaxVeinInChunk = 16;
 
             @Config.Name("Enable Trinium ore generation")
             @Config.Comment({
                     "Do you want to spawn trinium ores in the End?",
+                    "SIDE: SERVER"
             })
             public boolean triniumEnabled = true;
 
             @Config.Name("Trinium vein size")
             @Config.RangeInt(min = 0, max = 64)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int triniumVeinSize = 4;
 
             @Config.Name("Trinium max veins in chunk")
             @Config.RangeInt(min = 0, max = 64)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int triniumMaxVeinInChunk = 16;
 
             @Config.Name("Enable Titanium ore generation")
             @Config.Comment({
                     "Do you want to spawn titanium ores in the Overworld?",
+                    "SIDE: SERVER"
             })
             public boolean titaniumEnable = true;
 
             @Config.Name("Titanium vein size")
             @Config.RangeInt(min = 0, max = 64)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int titaniumVeinSize = 4;
 
             @Config.Name("Titanium max veins in chunk")
             @Config.RangeInt(min = 0, max = 64)
             @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
             public int titaniumMaxVeinInChunk = 16;
         }
 
@@ -1068,7 +1338,8 @@ public class JSGConfig {
             @Config.RequiresMcRestart
             @Config.Comment({
                     "Generate stargate in world random.",
-                    "CAN BE OVERRIDE IN STRUCTURES CONFIG FILE"
+                    "CAN BE OVERRIDE IN STRUCTURES CONFIG FILE",
+                    "SIDE: SERVER"
             })
             public boolean stargateRandomGeneratorEnabled = true;
 
@@ -1077,7 +1348,8 @@ public class JSGConfig {
             @Config.Comment({
                     "Enable generation of structures in the world.",
                     "This will not disable the stargate generation!",
-                    "CAN BE OVERRIDE IN STRUCTURES CONFIG FILE"
+                    "CAN BE OVERRIDE IN STRUCTURES CONFIG FILE",
+                    "SIDE: SERVER"
             })
             public boolean structuresRandomGeneratorEnabled = true;
 
@@ -1086,12 +1358,20 @@ public class JSGConfig {
             @Config.RequiresMcRestart
             @Config.RangeDouble(min = 0, max = 1f)
             @Config.SlidingOption
+            @Config.Comment({
+                    "CAN BE OVERRIDE IN STRUCTURES CONFIG FILE",
+                    "SIDE: SERVER"
+            })
             public float stargateRGChanceOverworld = 0.0001f;
 
             @Config.Name("Chance of generating stargates in End")
             @Config.RequiresMcRestart
             @Config.RangeDouble(min = 0, max = 1f)
             @Config.SlidingOption
+            @Config.Comment({
+                    "CAN BE OVERRIDE IN STRUCTURES CONFIG FILE",
+                    "SIDE: SERVER"
+            })
             public float stargateRGChanceTheEnd = 0.00007f;
         }
     }
