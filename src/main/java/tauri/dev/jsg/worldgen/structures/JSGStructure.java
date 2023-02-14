@@ -27,15 +27,17 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.capability.CapabilityEnergyZPM;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
+import tauri.dev.jsg.power.zpm.IEnergyStorageZPM;
+import tauri.dev.jsg.power.zpm.ZPMEnergyStorage;
 import tauri.dev.jsg.stargate.network.StargateAddress;
 import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
-import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
-import tauri.dev.jsg.power.stargate.StargateItemEnergyStorage;
 import tauri.dev.jsg.tileentity.dialhomedevice.DHDAbstractTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
@@ -307,10 +309,10 @@ public class JSGStructure extends WorldGenerator {
                 for (int i = 0; i < handler.getSlots(); i++) {
                     ItemStack stack = handler.getStackInSlot(i);
                     if (!stack.isEmpty()) {
-                        IEnergyStorage energyStorage = stack.getCapability(CapabilityEnergy.ENERGY, null);
-                        if (energyStorage instanceof StargateItemEnergyStorage) {
-                            StargateItemEnergyStorage energyCasted = (StargateItemEnergyStorage) energyStorage;
-                            energyCasted.setEnergyStored((int) (energyCasted.getMaxEnergyStored() * (Math.random() * 0.8f)));
+                        IEnergyStorageZPM energyStorage = stack.getCapability(CapabilityEnergyZPM.ENERGY, null);
+                        if (energyStorage instanceof ZPMEnergyStorage) {
+                            ZPMEnergyStorage energyCasted = (ZPMEnergyStorage) energyStorage;
+                            energyCasted.setEnergyStored((long) (energyCasted.getMaxEnergyStored() * (Math.random() * 0.7f) + 0.1f));
                         }
                     }
                 }
