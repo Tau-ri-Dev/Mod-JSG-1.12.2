@@ -35,6 +35,7 @@ import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
 import tauri.dev.jsg.power.zpm.IEnergyStorageZPM;
 import tauri.dev.jsg.power.zpm.ZPMEnergyStorage;
+import tauri.dev.jsg.power.zpm.ZPMItemEnergyStorage;
 import tauri.dev.jsg.stargate.network.StargateAddress;
 import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
@@ -310,8 +311,8 @@ public class JSGStructure extends WorldGenerator {
                     ItemStack stack = handler.getStackInSlot(i);
                     if (!stack.isEmpty()) {
                         IEnergyStorageZPM energyStorage = stack.getCapability(CapabilityEnergyZPM.ENERGY, null);
-                        if (energyStorage instanceof ZPMEnergyStorage) {
-                            ZPMEnergyStorage energyCasted = (ZPMEnergyStorage) energyStorage;
+                        if (energyStorage instanceof ZPMItemEnergyStorage) {
+                            ZPMItemEnergyStorage energyCasted = (ZPMItemEnergyStorage) energyStorage;
                             energyCasted.setEnergyStored((long) (energyCasted.getMaxEnergyStored() * (Math.random() * 0.7f) + 0.1f));
                         }
                     }
