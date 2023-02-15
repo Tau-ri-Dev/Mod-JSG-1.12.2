@@ -265,7 +265,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
                 if (irisTemperature > (maxHeat * 0.75))
                     format = TextFormatting.RED.toString();
 
-                infoTab.addString(new TabInfo.InfoString(I18n.format("gui.stargate.state.iris_temp") + " " + format + JSGConfig.General.visual.temperatureUnit.getTemperatureToDisplay(TemperatureHelper.asKelvins(TemperatureHelper.asCelsius(irisTemperature).toKelvins()), 0) + "\u00B0C", 4, y));
+                infoTab.addString(new TabInfo.InfoString(I18n.format("gui.stargate.state.iris_temp") + " " + format + JSGConfig.General.visual.temperatureUnit.getTemperatureToDisplay(TemperatureHelper.asKelvins(TemperatureHelper.asCelsius(irisTemperature).toKelvins()), 0), 4, y));
             }
         }
 
