@@ -173,17 +173,18 @@ public class TabConfig extends TabScrollAble {
         if (resetFields) {
             FIELDS.clear();
             BUTTONS.clear();
-            for (int i = 0; i < this.config.getOptions().size(); i++) {
-                JSGConfigOption option = this.config.getOption(i);
-                if (option.type == JSGConfigOptionTypeEnum.SWITCH || option.type == JSGConfigOptionTypeEnum.BOOLEAN) {
-                    ModeButton btn = option.createButton(k);
-                    if (btn != null) {
-                        BUTTONS.add(btn);
-                    }
-                } else {
-                    GuiTextField field = option.createField(k);
-                    if (field != null) {
-                        FIELDS.add(field);
+            if (config != null) {
+                for (JSGConfigOption option : config.getOptions()) {
+                    if (option.type == JSGConfigOptionTypeEnum.SWITCH || option.type == JSGConfigOptionTypeEnum.BOOLEAN) {
+                        ModeButton btn = option.createButton(k);
+                        if (btn != null) {
+                            BUTTONS.add(btn);
+                        }
+                    } else {
+                        GuiTextField field = option.createField(k);
+                        if (field != null) {
+                            FIELDS.add(field);
+                        }
                     }
                 }
             }

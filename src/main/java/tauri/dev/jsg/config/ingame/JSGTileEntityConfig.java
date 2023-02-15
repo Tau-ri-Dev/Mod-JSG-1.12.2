@@ -86,8 +86,9 @@ public class JSGTileEntityConfig {
 
     public static void initConfig(JSGTileEntityConfig config, List<ITileConfigEntry> entries) {
         if (config.getOptions().size() != entries.size()) {
-            config.clearOptions();
+            //config.clearOptions();
             for (ITileConfigEntry option : entries) {
+                if(config.getOption(option.getId(), true) != null) continue;
                 JSGConfigOption optionNew = new JSGConfigOption(option.getId()).setType(option.getType());
 
                 if (option.getType() == JSGConfigOptionTypeEnum.SWITCH)

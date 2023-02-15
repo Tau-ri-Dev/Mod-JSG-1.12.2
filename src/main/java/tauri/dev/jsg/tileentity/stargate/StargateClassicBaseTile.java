@@ -655,6 +655,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Override
     public void update() {
         if (world.isRemote) {
+            // Client -> request to update client config
             if(getConfig().getOptions().size() < 1) {
                 JSGPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.GUI_STATE));
             }
@@ -1286,6 +1287,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 "Power draw when gate runs",
                 "out of open time limit.",
                 " - TIME LIMIT MODE MUST BE SET TO \"DRAW_POWER\" - "
+        ),
+        STARGATE_SPIN_SPEED(
+                13, "spinSpeed", JSGConfigOptionTypeEnum.NUMBER, "100",
+                1, 300,
+                "Speed factor of the gate",
+                " - ONLY FOR MW AND UNI GATES - "
         );
 
         public final int id;
@@ -1369,6 +1376,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             this.config.getOption(o.id).setValue(o.getStringValue());
         }
         markDirty();
+    }
+
+    public void setConfigAndUpdate(JSGTileEntityConfig config){
+        setConfig(config);
+        JSGPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.GUI_STATE));
     }
 
     @Override
@@ -1557,8 +1569,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 if (spinState.setOnly) {
                     getRendererStateClient().spinHelper.setIsSpinning(false);
                     getRendererStateClient().spinHelper.setCurrentSymbol(spinState.targetSymbol);
-                } else
-                    getRendererStateClient().spinHelper.initRotation(world.getTotalWorldTime(), spinState.targetSymbol, spinState.direction, getSpinStartOffset(), spinState.plusRounds);
+                } else {
+                    int speed = getConfig().getOption(STARGATE_SPIN_SPEED.id).getIntValue();
+                    getRendererStateClient().spinHelper.initRotation(speed / 100f, world.getTotalWorldTime(), spinState.targetSymbol, spinState.direction, getSpinStartOffset(), spinState.plusRounds);
+                }
 
                 break;
 
@@ -1743,7 +1757,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             plusRounds = 0;
         }
 
-        int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
+
+        float speedFactor = getConfig().getOption(STARGATE_SPIN_SPEED.id).getIntValue() / 100f;
+        int duration = StargateClassicSpinHelper.getAnimationDuration(speedFactor, distance);
         doIncomingAnimation(duration, true, targetRingSymbol);
 
         sendState(StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, plusRounds));
@@ -1775,11 +1791,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             rounds *= -1;
         }
 
+        float speedFactor = getConfig().getOption(STARGATE_SPIN_SPEED.id).getIntValue() / 100f;
+
         float distance = 360 * rounds;
         if (findNearest) { // spinRing() was called by incoming wormhole -> do animation
             rounds = 0;
             float currentAngle = currentRingSymbol.getAngle();
-            float angle = StargateClassicSpinHelper.getAnimationDistance(time);
+            float angle = StargateClassicSpinHelper.getAnimationDistance(speedFactor, time);
             if (angle > 360) {
                 rounds = (int) Math.floor(angle / 360);
                 angle = angle - (rounds * 360);
@@ -1807,7 +1825,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         NBTTagCompound compound = new NBTTagCompound();
         compound.setBoolean("onlySpin", true);
 
-        int duration = StargateClassicSpinHelper.getAnimationDuration(distance);
+        int duration = StargateClassicSpinHelper.getAnimationDuration(speedFactor, distance);
 
         if (targetPoint != null)
             sendState(StateTypeEnum.SPIN_STATE, new StargateSpinState(targetRingSymbol, spinDirection, false, rounds));
@@ -2587,11 +2605,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             int time;
             if (args.isInteger(0)) {
                 time = args.checkInteger(0);
-                int rounds = 1;
-                if (time < 0)
-                    rounds = -1;
+                boolean changeState = true;
+                if(args.isBoolean(1))
+                    changeState = args.checkBoolean(1);
                 if (time != 0) {
-                    spinRing(rounds, true, true, time);
+                    spinRing(1, changeState, true, time);
                     return new Object[]{null, "stargate_spin"};
                 }
                 return new Object[]{null, "stargate_failure_wrong_usage", "Time is 0"};
@@ -2691,6 +2709,22 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
 
         return new Object[]{null, true, "success", map};
+    }
+
+    @SuppressWarnings("unused")
+    @Optional.Method(modid = "opencomputers")
+    @Callback(doc = "function(spinSpeed:int) -- Sets speed of gate ring (in percentage)")
+    public Object[] setGateSpeed(Context context, Arguments args) {
+        if (!isMerged()) return new Object[]{null, false, "gate_not_merged", "Gate is not merged!"};
+        if(!args.isInteger(0)) return new Object[]{null, false, "wrong_argument", "First parameter should be a number!"};
+        int speed = args.checkInteger(0);
+        if(speed < 1 || speed > 200) return new Object[]{null, false, "wrong_argument", "Speed should be between 1 and 300!"};
+
+        JSGTileEntityConfig cfg = getConfig();
+        cfg.getOption(STARGATE_SPIN_SPEED.id).setValue(speed + "");
+        setConfigAndUpdate(cfg);
+
+        return new Object[]{null, true, "gate_speed_set", "Speed of gate set to: " + speed + "%"};
     }
 
 }

@@ -13,7 +13,7 @@ public class StargatePegasusRendererState extends StargateClassicRendererState {
 
     private StargatePegasusRendererState(StargatePegasusRendererStateBuilder builder) {
         super(builder);
-        this.spinHelper = new StargatePegasusSpinHelper(builder.symbolType, builder.currentRingSymbol, builder.spinDirection, builder.isSpinning, builder.targetRingSymbol, builder.spinStartTime, 0);
+        this.spinHelper = new StargatePegasusSpinHelper(builder.symbolType, builder.currentRingSymbol, builder.spinDirection, builder.isSpinning, builder.targetRingSymbol, builder.spinStartTime);
     }
 
     public Map<Integer, Integer> slotToGlyphMap = new HashMap<Integer, Integer>();
