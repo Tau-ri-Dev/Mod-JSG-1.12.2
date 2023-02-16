@@ -591,7 +591,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
         if (gateTile == null)
             return new Object[]{null, "dhd_not_connected", "DHD is not connected to stargate"};
 
-        if (!gateTile.getStargateState().idle() && !gateTile.getStargateState().dialingDHD()) {
+        if (!gateTile.getStargateState().idle()) {
             return new Object[]{null, "dhd_failure_busy", "Linked stargate is busy, state: " + gateTile.getStargateState().toString()};
         }
 
