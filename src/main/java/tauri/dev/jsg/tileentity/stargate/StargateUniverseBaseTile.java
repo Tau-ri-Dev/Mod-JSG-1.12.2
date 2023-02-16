@@ -344,8 +344,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     @Override
     protected void addSymbolToAddress(SymbolInterface symbol) {
         activateSymbolServer(symbol);
-        if (isFastDialing)
-            playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
+        //if (isFastDialing)
+        //    playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
         super.addSymbolToAddress(symbol);
     }
 
@@ -371,7 +371,9 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
                     if (!canAddSymbol(tempSymbol) || tempSymbol == TOP_CHEVRON)
                         break;
                     addSymbolToAddress(tempSymbol);
-                    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_FINISHED, 10));
+                    playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
+                    //addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_FINISHED, 10));
+                    sendSignal(ringSpinContext, "stargate_spin_chevron_engaged", new Object[]{dialedAddress.size(), stargateWillLock(targetRingSymbol), targetRingSymbol.getEnglishName()});
                     doIncomingAnimation(fastDialingPeriod * 2, true, getNextSymbol(false));
                     if (!stargateWillLock(tempSymbol)) {
                         addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, fastDialingPeriod));
@@ -409,22 +411,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
                     break;
 
                 if ((targetRingSymbol != TOP_CHEVRON)) {
-                    if (canAddSymbol(targetRingSymbol)) {
-                        addSymbolToAddress(targetRingSymbol);
-                        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_FINISHED, 10));
-
-                        if (stargateState.dialingComputer()) {
-                            if (!abortingDialing) stargateState = EnumStargateState.IDLE;
-                        } else {
-                            if (!stargateWillLock(targetRingSymbol)) {
-                                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 24));
-                            } else
-                                attemptOpenAndFail();
-                        }
-                    } else if (!stargateState.incoming()) {
-                        dialingFailed(StargateOpenResult.ADDRESS_MALFORMED);
-                        stargateState = EnumStargateState.IDLE;
-                    }
+                    playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
+                    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_FINISHED, 10));
                 } else {
                     dialingFailed(StargateOpenResult.ABORTED);
                     stargateState = EnumStargateState.IDLE;
@@ -446,6 +434,21 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
                 break;
 
             case STARGATE_DIAL_FINISHED:
+                if(abortingDialing) return;
+                if (canAddSymbol(targetRingSymbol)) {
+                    addSymbolToAddress(targetRingSymbol);
+                    if (stargateState.dialingComputer()) {
+                        if (!abortingDialing) stargateState = EnumStargateState.IDLE;
+                    } else {
+                        if (!stargateWillLock(targetRingSymbol)) {
+                            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_NEXT, 24));
+                        } else
+                            attemptOpenAndFail();
+                    }
+                } else if (!stargateState.incoming()) {
+                    dialingFailed(StargateOpenResult.ADDRESS_MALFORMED);
+                    stargateState = EnumStargateState.IDLE;
+                }
                 sendSignal(ringSpinContext, "stargate_spin_chevron_engaged", new Object[]{dialedAddress.size(), stargateWillLock(targetRingSymbol), targetRingSymbol.getEnglishName()});
                 break;
 

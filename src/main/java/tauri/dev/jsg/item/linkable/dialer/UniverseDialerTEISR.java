@@ -426,7 +426,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
 
                                     boolean hasUpgrade = entryCompound.getBoolean("hasUpgrade");
 
-                                    int symbolCount = SymbolUniverseEnum.getMaxSymbolsDisplay((hasUpgrade && mode != NEARBY));
+                                    int symbolCount = SymbolUniverseEnum.getMaxSymbolsDisplay(hasUpgrade);
 
                                     // gate status (might be used in future)
                                     EnumStargateState gateStatus = EnumStargateState.valueOf(compound.getInteger("gateStatus"));
