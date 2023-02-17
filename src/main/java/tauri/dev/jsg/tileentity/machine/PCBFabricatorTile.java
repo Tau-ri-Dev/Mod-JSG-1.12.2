@@ -135,7 +135,7 @@ public class PCBFabricatorTile extends AbstractMachineTile {
             case RENDERER_UPDATE:
                 ItemStack stack = currentRecipe != null ? ((PCBFabricatorRecipe) currentRecipe).getResult() : itemStackHandler.getStackInSlot(9);
                 float[] colors = currentRecipe != null ? ((PCBFabricatorRecipe) currentRecipe).getBeamColors() : new float[]{1f, 1f, 1f};
-                return new PCBFabricatorRendererState(machineProgress, isWorking, stack, colors);
+                return new PCBFabricatorRendererState(workStateChanged, machineProgress, isWorking, stack, colors);
         }
         return null;
     }

@@ -7,7 +7,7 @@ public class OreWashingRendererState extends AbstractMachineRendererState {
         super();
     }
 
-    public OreWashingRendererState(int machineProgress, boolean isWorking, ItemStack workingOnItemStack) {
-        super(machineProgress, isWorking, workingOnItemStack);
+    public OreWashingRendererState(long workStateChanged, int machineProgress, boolean isWorking, ItemStack workingOnItemStack) {
+        super(workStateChanged, machineProgress, isWorking, workingOnItemStack);
     }
 }

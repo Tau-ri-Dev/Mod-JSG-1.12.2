@@ -14,8 +14,8 @@ public class PCBFabricatorRendererState extends AbstractMachineRendererState {
     public PCBFabricatorRendererState() {
     }
 
-    public PCBFabricatorRendererState(int machineProgress, boolean isWorking, ItemStack workingOnItemStack, float[] colors) {
-        super(machineProgress, isWorking, workingOnItemStack);
+    public PCBFabricatorRendererState(long workStateChanged, int machineProgress, boolean isWorking, ItemStack workingOnItemStack, float[] colors) {
+        super(workStateChanged, machineProgress, isWorking, workingOnItemStack);
         this.colors = new ArrayList<Float>() {{
             for (float color : colors) add(color);
         }};

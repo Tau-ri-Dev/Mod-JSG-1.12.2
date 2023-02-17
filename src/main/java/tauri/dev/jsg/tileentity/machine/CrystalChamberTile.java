@@ -118,7 +118,7 @@ public class CrystalChamberTile extends AbstractMachineTile {
                 return new CrystalChamberContainerGuiUpdate(energyStorage.getEnergyStored(), (fluidHandler.getFluid() != null ? new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()) : null), energyTransferedLastTick, machineStart, machineEnd);
             case RENDERER_UPDATE:
                 ItemStack stack = currentRecipe != null ? ((CrystalChamberRecipe) currentRecipe).getResult() : itemStackHandler.getStackInSlot(1);
-                return new CrystalChamberRendererState(machineProgress, isWorking, stack);
+                return new CrystalChamberRendererState(workStateChanged, machineProgress, isWorking, stack);
         }
         return null;
     }
@@ -150,6 +150,7 @@ public class CrystalChamberTile extends AbstractMachineTile {
                 rendererState = (CrystalChamberRendererState) state;
                 this.machineProgress = rendererState.machineProgress;
                 this.isWorking = rendererState.isWorking;
+                markDirty();
                 break;
         }
     }

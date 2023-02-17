@@ -21,6 +21,21 @@ public class AssemblerRenderer extends TileEntitySpecialRenderer<AssemblerTile> 
         AssemblerRendererState rendererState = (AssemblerRendererState) te.getRendererState();
         if (rendererState != null) {
             long tick = te.getWorld().getTotalWorldTime();
+            float color = 1f;
+            final float MIN_COLOR = 0.3f;
+            final int ANIMATION_TIME = 20;
+
+            final long workingTime = (te.getWorld().getTotalWorldTime() - rendererState.workStateChanged);
+
+            if (workingTime < ANIMATION_TIME) {
+                if (rendererState.isWorking && rendererState.craftingStack != null)
+                    color = (float) workingTime / ANIMATION_TIME * (1 - MIN_COLOR) + MIN_COLOR;
+                else
+                    color = 1f - (float) workingTime / ANIMATION_TIME * (1 - MIN_COLOR) + MIN_COLOR;
+            }
+
+            boolean isMachineOn = false;
+
 
             GlStateManager.pushMatrix();
             GlStateManager.translate(x, y, z);
@@ -41,15 +56,25 @@ public class AssemblerRenderer extends TileEntitySpecialRenderer<AssemblerTile> 
                             motion.z = -0.5f + (Math.random() * 1f);
                         }).spawn(te.getWorld(), te.getPos(), 90, true);
                     }
-                    ElementEnum.ASSEMBLER_MACHINE.bindTexture(BiomeOverlayEnum.NORMAL);
-                } else
-                    TextureLoader.getTexture(TextureLoader.getTextureResource("machine/assembler/assembler_off.png")).bindTexture();
-            } else
-                TextureLoader.getTexture(TextureLoader.getTextureResource("machine/assembler/assembler_off.png")).bindTexture();
+                    isMachineOn = true;
+                }
+            }
 
             GlStateManager.translate(0, -1, 0);
             GlStateManager.scale(0.03, 0.03, 0.03);
+
+            GlStateManager.pushMatrix();
+            GlStateManager.color(color, color, color, 1f);
+            if (isMachineOn || workingTime < ANIMATION_TIME)
+                TextureLoader.getTexture(TextureLoader.getTextureResource("machine/assembler/assembler_on.png")).bindTexture();
+            else
+                TextureLoader.getTexture(TextureLoader.getTextureResource("machine/assembler/assembler_off.png")).bindTexture();
             ElementEnum.ASSEMBLER_MACHINE.render();
+            GlStateManager.popMatrix();
+            GlStateManager.color(1, 1, 1);
+
+            ElementEnum.ASSEMBLER_MACHINE.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
+
             GlStateManager.popMatrix();
         }
     }

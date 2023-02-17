@@ -176,8 +176,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         addressPosition++;
         int pos = addressPosition;
         if (!addOne) addressPosition--;
-
         markDirty();
+        if(addressToDial == null) return null;
         if (pos >= (addressToDial.getSize() + 1)) return getSymbolType().getTopSymbol();
         if (pos >= symbolsToDialCount && addOne)
             return getSymbolType().getOrigin(); // return origin when symbols is last one

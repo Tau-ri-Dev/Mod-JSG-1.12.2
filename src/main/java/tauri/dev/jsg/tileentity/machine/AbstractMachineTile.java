@@ -32,6 +32,7 @@ public abstract class AbstractMachineTile extends TileEntity implements IUpgrada
     protected long machineEnd = -1;
     protected boolean isWorking = false;
     protected boolean isWorkingLast = false;
+    protected long workStateChanged;
 
     protected AbstractMachineRecipe currentRecipe = null;
     protected AbstractMachineRecipe currentRecipeLast = null;
@@ -106,6 +107,7 @@ public abstract class AbstractMachineTile extends TileEntity implements IUpgrada
             if (isWorking) {
                 if (currentRecipe == null) {
                     isWorking = false;
+                    workStateChanged = world.getTotalWorldTime();
                     machineProgress = 0;
                     machineStart = -1;
                     machineEnd = -1;
@@ -124,6 +126,7 @@ public abstract class AbstractMachineTile extends TileEntity implements IUpgrada
                 }
             } else if (currentRecipe != null) {
                 isWorking = true;
+                workStateChanged = world.getTotalWorldTime();
                 machineStart = this.world.getTotalWorldTime();
                 machineEnd = currentRecipe.getWorkingTime() + this.world.getTotalWorldTime();
                 markDirty();
@@ -180,6 +183,7 @@ public abstract class AbstractMachineTile extends TileEntity implements IUpgrada
         compound.setLong("machineStart", machineStart);
         compound.setLong("machineEnd", machineEnd);
         compound.setInteger("progress", machineProgress);
+        compound.setLong("workStart", workStateChanged);
 
         return super.writeToNBT(compound);
     }
@@ -193,6 +197,7 @@ public abstract class AbstractMachineTile extends TileEntity implements IUpgrada
         machineStart = compound.getLong("machineStart");
         machineEnd = compound.getLong("machineEnd");
         machineProgress = compound.getInteger("machineProgress");
+        workStateChanged = compound.getLong("workStart");
 
         super.readFromNBT(compound);
     }

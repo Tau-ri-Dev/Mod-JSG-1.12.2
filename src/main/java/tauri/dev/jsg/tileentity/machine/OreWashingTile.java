@@ -112,7 +112,7 @@ public class OreWashingTile extends AbstractMachineTile {
                 return new OreWashingContainerGuiUpdate(energyStorage.getEnergyStored(), (fluidHandler.getFluid() != null ? new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()) : null), energyTransferedLastTick, machineStart, machineEnd);
             case RENDERER_UPDATE:
                 ItemStack stack = currentRecipe != null ? ((OreWashingRecipe) currentRecipe).getResult() : itemStackHandler.getStackInSlot(1);
-                return new OreWashingRendererState(machineProgress, isWorking, stack);
+                return new OreWashingRendererState(workStateChanged, machineProgress, isWorking, stack);
         }
         return null;
     }

@@ -7,7 +7,7 @@ public class CrystalChamberRendererState extends AbstractMachineRendererState {
         super();
     }
 
-    public CrystalChamberRendererState(int machineProgress, boolean isWorking, ItemStack workingOnItemStack) {
-        super(machineProgress, isWorking, workingOnItemStack);
+    public CrystalChamberRendererState(long workStateChanged, int machineProgress, boolean isWorking, ItemStack workingOnItemStack) {
+        super(workStateChanged, machineProgress, isWorking, workingOnItemStack);
     }
 }

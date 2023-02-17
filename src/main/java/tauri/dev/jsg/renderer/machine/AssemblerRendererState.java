@@ -7,7 +7,7 @@ public class AssemblerRendererState extends AbstractMachineRendererState {
         super();
     }
 
-    public AssemblerRendererState(int machineProgress, boolean isWorking, ItemStack workingOnItemStack) {
-        super(machineProgress, isWorking, workingOnItemStack);
+    public AssemblerRendererState(long workStateChanged, int machineProgress, boolean isWorking, ItemStack workingOnItemStack) {
+        super(workStateChanged, machineProgress, isWorking, workingOnItemStack);
     }
 }

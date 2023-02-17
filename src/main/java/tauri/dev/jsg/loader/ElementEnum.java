@@ -85,7 +85,7 @@ public enum ElementEnum {
     // --------------------------------------------------------------------------------------------
     // Machines
 
-    ASSEMBLER_MACHINE("machine/assembler/assembler.obj", "machine/assembler/assembler_on.png", false),
+    ASSEMBLER_MACHINE("machine/assembler/assembler.obj", "machine/assembler/assembler_base.png", false),
 
     // --------------------------------------------------------------------------------------------
     // ZPM

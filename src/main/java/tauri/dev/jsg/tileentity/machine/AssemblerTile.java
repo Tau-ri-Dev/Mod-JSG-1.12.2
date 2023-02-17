@@ -128,7 +128,7 @@ public class AssemblerTile extends AbstractMachineTile {
                 return new AssemblerContainerGuiUpdate(energyStorage.getEnergyStored(), energyTransferedLastTick, machineStart, machineEnd);
             case RENDERER_UPDATE:
                 ItemStack stack = currentRecipe != null ? ((AssemblerRecipe) currentRecipe).getResult() : itemStackHandler.getStackInSlot(11);
-                return new AssemblerRendererState(machineProgress, isWorking, stack);
+                return new AssemblerRendererState(workStateChanged, machineProgress, isWorking, stack);
         }
         return null;
     }
@@ -159,6 +159,7 @@ public class AssemblerTile extends AbstractMachineTile {
                 rendererState = (AssemblerRendererState) state;
                 this.machineProgress = rendererState.machineProgress;
                 this.isWorking = rendererState.isWorking;
+                markDirty();
                 break;
         }
     }
