@@ -462,6 +462,36 @@
     "sounds": [
       "jsg:misc/destiny/ftl_out"
     ]
+  },
+  "record_destiny": {
+    "category": "record",
+    "sounds": [
+      "jsg:gui/mainmenu/destiny_theme"
+    ]
+  },
+  "record_atlantis": {
+    "category": "record",
+    "sounds": [
+      "jsg:gui/mainmenu/pegasus_theme"
+    ]
+  },
+  "record_origins": {
+    "category": "record",
+    "sounds": [
+      "jsg:gui/mainmenu/origin_theme"
+    ]
+  },
+  "record_sgc": {
+    "category": "record",
+    "sounds": [
+      "jsg:gui/mainmenu/stargate_theme_1"
+    ]
+  },
+  "record_elevator": {
+    "category": "record",
+    "sounds": [
+      "jsg:gui/mainmenu/loading_music"
+    ]
   }
 }
 

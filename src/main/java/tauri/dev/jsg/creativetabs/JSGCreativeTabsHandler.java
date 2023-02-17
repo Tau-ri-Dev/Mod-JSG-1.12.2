@@ -75,4 +75,11 @@ public class JSGCreativeTabsHandler {
             return new ItemStack(JSGItems.JSG_SCREWDRIVER);
         }
     };
+    public static final JSGCreativeTabs JSG_RECORDS = new JSGCreativeTabs("jsg_records") {
+        @Nonnull
+        @Override
+        public ItemStack getTabIconItem() {
+            return new ItemStack(JSGItems.JSG_SCREWDRIVER);
+        }
+    };
 }

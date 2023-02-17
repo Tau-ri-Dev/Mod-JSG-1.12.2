@@ -331,6 +331,9 @@ public class JSGItems {
 
             event.getRegistry().register(item);
         }
+        for(Item record : CustomDiscsRegistry.getRecordItems()){
+            event.getRegistry().register(record);
+        }
     }
 
     @SubscribeEvent
@@ -340,6 +343,9 @@ public class JSGItems {
                 ((CustomModelItemInterface) item).setCustomModelLocation();
             else
                 ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Objects.requireNonNull(item.getRegistryName()), "inventory"));
+        }
+        for(Item record : CustomDiscsRegistry.getRecordItems()){
+            ModelLoader.setCustomModelResourceLocation(record, 0, new ModelResourceLocation(Objects.requireNonNull(record.getRegistryName()), "inventory"));
         }
     }
 

@@ -100,7 +100,16 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     // ----------------------------------------------------------
     // Entities
     ZAT_SHOOT(140, "item_zat_shoot", 0.1f),
-    STAFF_SHOOT(141, "item_staff_shoot", 0.1f);
+    STAFF_SHOOT(141, "item_staff_shoot", 0.1f),
+
+    // ----------------------------------------------------------
+    // Records
+    RECORD_DESTINY(150, "record_destiny", 0.05f),
+    RECORD_ATLANTIS(151, "record_atlantis", 0.05f),
+    RECORD_ORIGINS(152, "record_origins", 0.05f),
+    RECORD_SGC(153, "record_sgc", 0.05f),
+    RECORD_ELEVATOR(154, "record_elevator", 0.05f);
+
 
     // ----------------------------------------------------------
 
@@ -122,7 +131,7 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
         return idMap.valueOf(id);
     }
 
-    private static SoundEvent createSoundEvent(String name) {
+    public static SoundEvent createSoundEvent(String name) {
         ResourceLocation resourceLocation = new ResourceLocation(JSG.MOD_ID, name);
         return new SoundEvent(resourceLocation).setRegistryName(resourceLocation);
     }
