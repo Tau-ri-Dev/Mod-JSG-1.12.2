@@ -53,15 +53,15 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 	
 	public static final int ANGLE_PER_SECTION = 8;
 	
-	public int id;
+	public final int id;
 	public ResourceLocation modelResource;
-	public int angle;
-	public int angleIndex;
-	public String englishName;
-	public String translationKey;
-	public ResourceLocation iconResource;
+	public final int angle;
+	public final int angleIndex;
+	public final String englishName;
+	public final String translationKey;
+	public final ResourceLocation iconResource;
 
-	private SymbolUniverseEnum(int id, String model) {
+	SymbolUniverseEnum(int id, String model) {
 		this.id = id;
 		
 		if (model != null)
@@ -172,7 +172,7 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 	// Static
 	
 	public static SymbolUniverseEnum getRandomSymbol(Random random) {		
-		int id = 0;
+		int id;
 		do { 
 			id = random.nextInt(36) + 1;
 		} while (id == getOrigin().getId());
@@ -183,11 +183,8 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 	public static boolean validateDialedAddress(StargateAddressDynamic stargateAddress) {		
 		if (stargateAddress.size() != 7 && stargateAddress.size() != 9)
 			return false;
-		
-		if (!stargateAddress.get(stargateAddress.size()-1).origin())
-			return false;
-		
-		return true;
+
+		return stargateAddress.get(stargateAddress.size() - 1).origin();
 	}
 	
 	public static List<SymbolInterface> stripOrigin(List<SymbolInterface> dialedAddress) {
@@ -232,11 +229,11 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 		}
 	}
 	
-	public static final SymbolUniverseEnum valueOf(int id) {
+	public static SymbolUniverseEnum valueOf(int id) {
 		return ID_MAP.get(id);
 	}
 	
-	public static final SymbolUniverseEnum fromEnglishName(String englishName) {
+	public static SymbolUniverseEnum fromEnglishName(String englishName) {
 		return ENGLISH_NAME_MAP.get(englishName.toLowerCase());
 	}
 }

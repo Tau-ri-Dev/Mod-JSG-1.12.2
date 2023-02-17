@@ -390,10 +390,12 @@ tile.jsg.stargate_pegasus_chevron_block.name=Stargate Chevron (Pegasus)
 
 # capacitor
 tile.jsg.capacitor_block.name=Capacitor Bank
+tile.jsg.capacitor_block_creative.name=Capacitor Bank (Creative)
 tile.jsg.capacitor_block_empty.name=Capacitor Bank (Empty)
 
 # zpm
 tile.jsg.zpm.name=Zero Point Module (ZPM)
+tile.jsg.creative_zpm.name=Zero Point Module (ZPM) (Creative)
 tile.jsg.zpm_hub_block.name=ZPM Hub (Ancient)
 tile.jsg.zpm_slot_block.name=ZPM Slot (Tau'ri)
 

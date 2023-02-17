@@ -390,10 +390,12 @@ tile.jsg.stargate_pegasus_chevron_block.name=Шеврон Звёздных Вр�
 
 # capacitor
 tile.jsg.capacitor_block.name=Конденсатор
+tile.jsg.capacitor_block_creative.name=Конденсатор (Creative)
 tile.jsg.capacitor_block_empty.name=Конденсатор (Пустой)
 
 # zpm
 tile.jsg.zpm.name=Модуль нулевой точки (МНТ)
+tile.jsg.creative_zpm.name=Модуль нулевой точки (МНТ) (Creative)
 tile.jsg.zpm_hub_block.name=Модуль МНТ (Древние)
 tile.jsg.zpm_slot_block.name=Модуль МНТ (Таури)
 

@@ -398,10 +398,12 @@ tile.jsg.stargate_pegasus_chevron_block.name=Chevron de la porte des étoiles (P
 
 # Condensateur
 tile.jsg.capacitor_block.name=Banque de condensateurs
+tile.jsg.capacitor_block_creative.name=Banque de condensateurs (Creative)
 tile.jsg.capacitor_block_empty.name=Banque de condensateurs (vide)
 
 # zpm
 tile.jsg.zpm.name=Module de point zéro (E2PZ)
+tile.jsg.creative_zpm.name=Module de point zéro (E2PZ) (Creative)
 tile.jsg.zpm_hub_block.name=Hub d'E2PZ (Ancien)
 tile.jsg.zpm_slot_block.name=Slot E2PZ (Tau'ri)
 

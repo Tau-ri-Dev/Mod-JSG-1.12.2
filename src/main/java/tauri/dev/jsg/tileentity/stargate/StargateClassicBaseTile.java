@@ -1671,16 +1671,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public static int getOriginId(BiomeOverlayEnum overlay, int dimId, int configOrigin) {
-		/*
-		IDS:
-		5/0- normal - overworld
-		0- mossy - unknown
-		0- aged - unknown
-		1- end - tornado
-		2- sooty - nether
-		3- frosty - beta
-		4- aged - Abydos
-		 */
         if (configOrigin >= 0) return configOrigin;
 
         if (overlay == null) overlay = BiomeOverlayEnum.NORMAL;
@@ -1736,18 +1726,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         spinDirection = spinDirection.opposite();
         float distance = spinDirection.getDistance(currentRingSymbol, targetRingSymbol);
         if (moveOnly) {
-            distance = 360;
             plusRounds += 1;
         }
 
-        if (!JSGConfig.Stargate.visual.fasterMWGateDial && targetRingSymbol != SymbolUniverseEnum.getTopSymbol()) {
-            if (distance < 90) {
-                distance += 360;
+        if (!JSGConfig.Stargate.visual.fasterMWGateDial) {
+            if (distance < 90 && plusRounds == 0) {
                 plusRounds += 1;
             }
-            if (distance < 270 && getConfig().getOption(ALLOW_INCOMING.id).getBooleanValue()) {
+            if (distance < 270 && plusRounds == 0 && getConfig().getOption(ALLOW_INCOMING.id).getBooleanValue()) {
                 if (targetRingSymbol == targetRingSymbol.getSymbolType().getOrigin()) {
-                    distance += 360;
                     plusRounds += 1;
                 }
             }
@@ -1756,6 +1743,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             distance = spinDirection.getDistance(currentRingSymbol, targetRingSymbol);
             plusRounds = 0;
         }
+
+        distance += (plusRounds * 360);
 
 
         float speedFactor = getConfig().getOption(STARGATE_SPIN_SPEED.id).getIntValue() / 100f;

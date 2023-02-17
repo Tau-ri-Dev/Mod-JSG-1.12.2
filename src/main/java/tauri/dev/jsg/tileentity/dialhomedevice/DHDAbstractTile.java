@@ -59,7 +59,10 @@ import tauri.dev.jsg.util.JSGItemStackHandler;
 import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Objects;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
 public abstract class DHDAbstractTile extends TileEntity implements ILinkable, IUpgradable, StateProviderInterface, ITickable, Environment, WirelessEndpoint {
@@ -278,10 +281,10 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
 
             // Fluid upgrades
             int newFluidCapacity = JSGConfig.DialHomeDevice.mechanics.fluidCapacity;
-            if(hasUpgrade(DHDUpgradeEnum.CAPACITY_UPGRADE))
+            if (hasUpgrade(DHDUpgradeEnum.CAPACITY_UPGRADE))
                 newFluidCapacity *= JSGConfig.DialHomeDevice.power.capacityUpgradeMultiplier;
 
-            if(fluidHandler.getCapacity() != newFluidCapacity){
+            if (fluidHandler.getCapacity() != newFluidCapacity) {
                 fluidHandler.setCapacity(newFluidCapacity);
                 markDirty();
                 JSG.debug("DHD at " + pos.toString() + " set itself new capacity! (" + newFluidCapacity + "mb)");
@@ -298,7 +301,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
                         return;
                     }
 
-                    IEnergyStorage energyStorage = (IEnergyStorage) gateTile.getCapability(CapabilityEnergy.ENERGY, null);
+                    IEnergyStorage energyStorage = gateTile.getCapability(CapabilityEnergy.ENERGY, null);
 
                     int amount = JSGConfig.DialHomeDevice.power.powerGenerationMultiplier;
 
@@ -323,7 +326,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
                     if (reactorState == ReactorStateEnum.ONLINE) {
                         fluidHandler.drainInternal(amount, true);
                         int energyPerOne = JSGConfig.DialHomeDevice.power.energyPerNaquadah;
-                        if(hasUpgrade(DHDUpgradeEnum.EFFICIENCY_UPGRADE))
+                        if (hasUpgrade(DHDUpgradeEnum.EFFICIENCY_UPGRADE))
                             energyPerOne *= JSGConfig.DialHomeDevice.power.efficiencyUpgradeMultiplier;
                         energyStorage.receiveEnergy(energyPerOne * tauri.dev.jsg.config.JSGConfig.DialHomeDevice.power.powerGenerationMultiplier, false);
                     }
@@ -443,12 +446,12 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     // Capabilities
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && (facing == null || facing == EnumFacing.DOWN)) || super.hasCapability(capability, facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemStackHandler);
 
@@ -580,6 +583,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
         JSG.ocWrapper.sendSignalToReachable(node, (Context) context, name, params);
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(symbolName:string) -- Activates DHD symbol")
     public Object[] pressButton(Context context, Arguments args) {
@@ -591,8 +595,8 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
         if (gateTile == null)
             return new Object[]{null, "dhd_not_connected", "DHD is not connected to stargate"};
 
-        if (!gateTile.getStargateState().idle()) {
-            return new Object[]{null, "dhd_failure_busy", "Linked stargate is busy, state: " + gateTile.getStargateState().toString()};
+        if (!gateTile.getStargateState().idle() && !(gateTile.getStargateState().dialing() && JSGConfig.DialHomeDevice.visual.enableOldBug)) {
+            return new Object[]{null, "dhd_failure_busy", "Linked stargate is busy, state: " + gateTile.getStargateState()};
         }
 
         if (gateTile.getDialedAddress().size() == 9) {
@@ -628,6 +632,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
     // ------------------------------------------------------------
     // Methods
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(symbolName:string) -- Activates DHD´s BRB")
     public Object[] pressBRB(Context context, Arguments args) {
@@ -639,7 +644,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
             return new Object[]{null, "dhd_disengage", "Closing gate..."};
         }
         if (!gateTile.getStargateState().idle()) {
-            return new Object[]{null, "dhd_failure_busy", "Linked stargate is busy, state: " + gateTile.getStargateState().toString()};
+            return new Object[]{null, "dhd_failure_busy", "Linked stargate is busy, state: " + gateTile.getStargateState()};
         }
         StargateOpenResult result = gateTile.attemptOpenAndFail();
         if (result.ok())

@@ -14,6 +14,9 @@ import java.util.Map;
  * @author MrJake222
  */
 public class StargateClassicSpinHelper implements ISpinHelper {
+
+    // IntelliJ is stupid, and because of that, this constructor MUST be there!!!
+    @SuppressWarnings("unused")
     public StargateClassicSpinHelper() {
 
     }

@@ -13,6 +13,7 @@ public class StargatePegasusSpinHelper implements ISpinHelper {
 
 
     // IntelliJ is stupid, and because of that, this constructor MUST be there!!!
+    @SuppressWarnings("unused")
     public StargatePegasusSpinHelper() {
     }
 

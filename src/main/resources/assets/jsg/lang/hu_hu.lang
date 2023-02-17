@@ -390,10 +390,12 @@ tile.jsg.stargate_pegasus_chevron_block.name=Csillagkapu Ékzár (Pegazus)
 
 # capacitor
 tile.jsg.capacitor_block.name=Kondenzátor
+tile.jsg.capacitor_block_creative.name=Kondenzátor (Creative)
 tile.jsg.capacitor_block_empty.name=Kondenzátor (Üres)
 
 # zpm
 tile.jsg.zpm.name=Zéró Pont Modul (ZPM)
+tile.jsg.creative_zpm.name=Zéró Pont Modul (ZPM) (Creative)
 tile.jsg.zpm_hub_block.name=ZPM Központ (Ős)
 tile.jsg.zpm_slot_block.name=ZPM Tartó (Tau'ri)
 

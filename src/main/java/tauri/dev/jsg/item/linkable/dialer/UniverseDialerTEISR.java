@@ -326,7 +326,7 @@ public class UniverseDialerTEISR extends TileEntityItemStackRenderer {
                     float second = 0.90f;
 
                     drawStringWithShadow(x, top - (row * 0), "State:", false, false);
-                    drawStringWithShadow(x, top - (row * 1), "Opened:", false, false);
+                    drawStringWithShadow(x, top - (row * 1), "Wormhole:", false, false);
                     drawStringWithShadow(x, top - (row * 2), "Iris:", false, false);
                     drawStringWithShadow(x, top - (row * 3), "Last glyph:", false, false);
 
