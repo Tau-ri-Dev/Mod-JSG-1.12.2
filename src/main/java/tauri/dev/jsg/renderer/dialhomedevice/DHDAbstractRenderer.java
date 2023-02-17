@@ -1,6 +1,8 @@
 package tauri.dev.jsg.renderer.dialhomedevice;
 
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.util.JSGColorUtil;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.item.notebook.NotebookItem;
@@ -20,6 +22,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.awt.*;
 
 public abstract class DHDAbstractRenderer extends TileEntitySpecialRenderer<DHDAbstractTile> {
 
@@ -83,10 +87,15 @@ public abstract class DHDAbstractRenderer extends TileEntitySpecialRenderer<DHDA
 
                 // set color
                 if ((stargateAddress.contains(symbol) || symbol.origin()) && displayedSymbol == symbol) {
-                    if (!symbol.origin())
-                        GlStateManager.color(0.5f, 1, 1, 1);
-                    else
-                        GlStateManager.color(0.5f, 1, 0.5f, 1);
+                    String sColor = JSGConfig.DialHomeDevice.visual.pageHintColors.get(!symbol.origin() ? ((activatedButtons < 6) ? "Normal" : "ExtraSymbols") : "Origin");
+                    int color = 0xFFFFFF;
+                    try {
+                        color = Integer.decode(sColor);
+                    } catch (Exception e){
+                        JSG.error("Error while parsing color of dial helper from config!", e);
+                    }
+                    Color c = JSGColorUtil.toColor(color);
+                    GlStateManager.color(c.getRed()/255f, c.getGreen()/255f, c.getBlue()/255f, c.getAlpha()/255f);
                     JSGTextureLightningHelper.lightUpTexture(getWorld(), rendererState.pos, 0.5f);
                 }
             }

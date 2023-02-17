@@ -1079,6 +1079,20 @@ public class JSGConfig {
             })
             public boolean enablePageHint = true;
 
+            @Config.Name("Dialing helper colors")
+            @Config.Comment({
+                    "Set colors of each dial helper button",
+                    "You should use HEX values",
+                    "SIDE: CLIENT"
+            })
+            public Map<String, String> pageHintColors = new HashMap<String, String>() {
+                {
+                    put("Normal", "#7FFFFF");
+                    put("ExtraSymbols", "#E56BEE");
+                    put("Origin", "#7FFF7F");
+                }
+            };
+
             @Config.Name("Enable opening last chevron while dialing with dhd")
             @Config.Comment({
                     "Enable opening last chevron while dialing milkyway gate with dhd",
@@ -1086,6 +1100,12 @@ public class JSGConfig {
                     "SIDE: SERVER"
             })
             public boolean dhdLastOpen = true;
+
+            @Config.Name("Enable old mechanics of DHD OC dialing")
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
+            public boolean enableOldBug = false;
         }
     }
 
