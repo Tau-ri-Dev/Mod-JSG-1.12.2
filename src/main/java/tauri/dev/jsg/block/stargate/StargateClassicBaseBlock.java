@@ -47,7 +47,7 @@ public abstract class StargateClassicBaseBlock extends StargateAbstractBaseBlock
 			world.setBlockState(pos, state);
 					
 			gateTile.updateFacing(facing, verticalFacing, true);
-			gateTile.updateMergeState(gateTile.getMergeHelper().checkBlocks(world, pos, facing), facing);
+			gateTile.updateMergeState(gateTile.getMergeHelper().checkBlocks(world, pos, facing, verticalFacing), facing, verticalFacing);
 		}
 	}
 

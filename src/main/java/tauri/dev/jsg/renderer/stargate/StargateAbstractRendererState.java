@@ -27,7 +27,7 @@ public class StargateAbstractRendererState extends State {
 			facing = facing.getOpposite();
 		
 		this.horizontalRotation = facing.getHorizontalAngle();
-		this.verticalRotation = facing.getHorizontalAngle();
+		this.verticalRotation = (facingVertical == EnumFacing.DOWN ? 90 : facingVertical == EnumFacing.UP ? 270 : 0);
 		this.biomeOverlay = biomeOverlay;
 		
 		return this;

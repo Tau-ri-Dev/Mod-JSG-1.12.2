@@ -930,7 +930,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 generateAddresses(!hasUpgrade(StargateClassicBaseTile.StargateUpgradeEnum.CHEVRON_UPGRADE));
 
                 if (isMerged()) {
-                    updateMergeState(onGateMergeRequested(), facing);
+                    updateMergeState(onGateMergeRequested(), facing, facingVertical);
                 }
             }
 

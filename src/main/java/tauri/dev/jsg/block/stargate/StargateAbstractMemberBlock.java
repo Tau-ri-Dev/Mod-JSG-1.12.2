@@ -62,7 +62,7 @@ public abstract class StargateAbstractMemberBlock extends JSGBlock {
         StargateAbstractBaseTile gateTile = memberTile.getBaseTile(world);
 
         if (gateTile == null) return;
-        gateTile.updateMergeState(false, world.getBlockState(gateTile.getPos()).getValue(JSGProps.FACING_HORIZONTAL));
+        gateTile.updateMergeState(false, world.getBlockState(gateTile.getPos()).getValue(JSGProps.FACING_HORIZONTAL), world.getBlockState(gateTile.getPos()).getValue(JSGProps.FACING_VERTICAL));
     }
 
     @Override

@@ -1334,7 +1334,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * @param shouldBeMerged - True if gate's multiblock structure is valid
      * @param facing         Facing of the base block.
      */
-    public final void updateMergeState(boolean shouldBeMerged, EnumFacing facing) {
+    public final void updateMergeState(boolean shouldBeMerged, EnumFacing facing, EnumFacing facingVertical) {
         if (!shouldBeMerged) {
             if (isMerged) onGateBroken();
 
@@ -1348,7 +1348,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         if (this.isMerged == shouldBeMerged) {
             if (shouldBeMerged) {
-                getMergeHelper().updateMembersBasePos(world, pos, facing);
+                getMergeHelper().updateMembersBasePos(world, pos, facing, facingVertical);
             }
             return;
         }
@@ -1361,7 +1361,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             world.setBlockState(pos, actualState.withProperty(JSGProps.RENDER_BLOCK, !shouldBeMerged), 2);
         }
 
-        getMergeHelper().updateMembersMergeStatus(world, pos, facing, shouldBeMerged);
+        getMergeHelper().updateMembersMergeStatus(world, pos, facing, facingVertical, shouldBeMerged);
 
         markDirty();
     }

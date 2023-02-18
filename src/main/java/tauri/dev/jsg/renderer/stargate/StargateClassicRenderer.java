@@ -50,14 +50,14 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     }
 
     @Override
-    protected Map<BlockPos, IBlockState> getMemberBlockStates(StargateAbstractMergeHelper mergeHelper, EnumFacing facing) {
+    protected Map<BlockPos, IBlockState> getMemberBlockStates(StargateAbstractMergeHelper mergeHelper, EnumFacing facing, EnumFacing facingVertical) {
         Map<BlockPos, IBlockState> map = new HashMap<>();
 
         for (BlockPos pos : mergeHelper.getRingBlocks())
-            map.put(pos, mergeHelper.getMemberBlock().getDefaultState().withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.RING).withProperty(JSGProps.FACING_HORIZONTAL, facing));
+            map.put(pos, mergeHelper.getMemberBlock().getDefaultState().withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.RING).withProperty(JSGProps.FACING_HORIZONTAL, facing).withProperty(JSGProps.FACING_VERTICAL, facingVertical));
 
         for (BlockPos pos : mergeHelper.getChevronBlocks())
-            map.put(pos, mergeHelper.getMemberBlock().getDefaultState().withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.CHEVRON).withProperty(JSGProps.FACING_HORIZONTAL, facing));
+            map.put(pos, mergeHelper.getMemberBlock().getDefaultState().withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.CHEVRON).withProperty(JSGProps.FACING_HORIZONTAL, facing).withProperty(JSGProps.FACING_VERTICAL, facingVertical));
 
         return map;
     }

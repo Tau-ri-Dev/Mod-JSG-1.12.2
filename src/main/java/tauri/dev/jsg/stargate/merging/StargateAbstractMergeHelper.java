@@ -1,15 +1,5 @@
 package tauri.dev.jsg.stargate.merging;
 
-import tauri.dev.jsg.block.stargate.StargateAbstractMemberBlock;
-import tauri.dev.jsg.block.stargate.StargateMilkyWayBaseBlock;
-import tauri.dev.jsg.block.stargate.StargateMilkyWayMemberBlock;
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.stargate.EnumMemberVariant;
-import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateMilkyWayBaseTile;
-import tauri.dev.jsg.util.JSGAxisAlignedBB;
-import tauri.dev.jsg.util.BlockHelpers;
-import tauri.dev.jsg.util.FacingHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -18,6 +8,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import tauri.dev.jsg.block.stargate.StargateAbstractMemberBlock;
+import tauri.dev.jsg.block.stargate.StargateMilkyWayBaseBlock;
+import tauri.dev.jsg.block.stargate.StargateMilkyWayMemberBlock;
+import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.stargate.EnumMemberVariant;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
+import tauri.dev.jsg.tileentity.stargate.StargateMilkyWayBaseTile;
+import tauri.dev.jsg.util.BlockHelpers;
+import tauri.dev.jsg.util.FacingHelper;
+import tauri.dev.jsg.util.JSGAxisAlignedBB;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,172 +26,167 @@ import java.util.stream.Collectors;
 
 public abstract class StargateAbstractMergeHelper {
 
-  /**
-   * @return {@link List} of {@link BlockPos} pointing to ring blocks. Positions are relative
-   */
-  @Nonnull
-  public abstract List<BlockPos> getRingBlocks();
+    /**
+     * @return {@link List} of {@link BlockPos} pointing to ring blocks. Positions are relative
+     */
+    @Nonnull
+    public abstract List<BlockPos> getRingBlocks();
 
-  /**
-   * @return {@link List} of {@link BlockPos} pointing to chevron blocks. Positions are relative
-   */
-  @Nonnull
-  public abstract List<BlockPos> getChevronBlocks();
+    /**
+     * @return {@link List} of {@link BlockPos} pointing to chevron blocks. Positions are relative
+     */
+    @Nonnull
+    public abstract List<BlockPos> getChevronBlocks();
 
-  private BlockPos topBlock = null;
+    private BlockPos topBlock = null;
 
-  /**
-   * For Classic gate returns top chevron position (relative).
-   * For Orlin's gate returns top ring position (no chevrons).
-   *
-   * @return Gate's top block.
-   */
-  public BlockPos getTopBlock() {
-    // null - not initialized
-    if (topBlock == null) topBlock = BlockHelpers.getHighest(getChevronBlocks());
+    /**
+     * For Classic gate returns top chevron position (relative).
+     * For Orlin's gate returns top ring position (no chevrons).
+     *
+     * @return Gate's top block.
+     */
+    public BlockPos getTopBlock() {
+        // null - not initialized
+        if (topBlock == null) topBlock = BlockHelpers.getHighest(getChevronBlocks());
 
-    // Still null - chevron list empty (Orlin's gate)
-    if (topBlock == null) topBlock = BlockHelpers.getHighest(getRingBlocks());
+        // Still null - chevron list empty (Orlin's gate)
+        if (topBlock == null) topBlock = BlockHelpers.getHighest(getRingBlocks());
 
-    return topBlock;
-  }
-
-  /**
-   * @return {@link List} of {@link BlockPos} pointing to absent blocks of variant given. Positions are absolute.
-   */
-  @Nonnull
-  public List<BlockPos> getAbsentBlockPositions(IBlockAccess world, BlockPos basePos, EnumFacing facing, EnumFacing facingVertical, EnumMemberVariant variant) {
-    List<BlockPos> blocks = null;
-
-    switch (variant) {
-      case CHEVRON:
-        blocks = getChevronBlocks();
-        break;
-
-      case RING:
-        blocks = getRingBlocks();
-        break;
+        return topBlock;
     }
 
-    return blocks.stream().map(pos -> FacingHelper.rotateBlock(pos, facing, facingVertical).add(basePos)).filter(pos -> !matchMember(world.getBlockState(pos))).collect(Collectors.toList());
-  }
+    /**
+     * @return {@link List} of {@link BlockPos} pointing to absent blocks of variant given. Positions are absolute.
+     */
+    @Nonnull
+    public List<BlockPos> getAbsentBlockPositions(IBlockAccess world, BlockPos basePos, EnumFacing facing, EnumFacing facingVertical, EnumMemberVariant variant) {
+        List<BlockPos> blocks = null;
 
-  @Nullable
-  public abstract EnumMemberVariant getMemberVariantFromItemStack(ItemStack stack);
+        switch (variant) {
+            case CHEVRON:
+                blocks = getChevronBlocks();
+                break;
 
-  /**
-   * @return Max box where to search for the base.
-   */
-  public abstract JSGAxisAlignedBB getBaseSearchBox();
+            case RING:
+                blocks = getRingBlocks();
+                break;
+        }
 
-  /**
-   * @param state State of the block for the check.
-   *
-   * @return True if the {@link IBlockState} represents the Base block, false otherwise.
-   */
-  public abstract boolean matchBase(IBlockState state);
-
-  /**
-   * @param state State of the block for the check.
-   *
-   * @return True if the {@link IBlockState} represents the Member block, false otherwise.
-   */
-  public abstract boolean matchMember(IBlockState state);
-
-  /**
-   * @return Member block.
-   */
-  public abstract StargateAbstractMemberBlock getMemberBlock();
-
-  /**
-   * Method searches for a {@link StargateMilkyWayBaseBlock}
-   * and returns it's {@link TileEntity}.
-   *
-   * @param blockAccess Usually {@link World}.
-   * @param memberPos   Starting position.
-   * @param facing      Facing of the member blocks.
-   *
-   * @return {@link StargateMilkyWayBaseTile} if found, {@code null} otherwise.
-   */
-  @Nullable
-  public StargateAbstractBaseTile findBaseTile(IBlockAccess blockAccess, BlockPos memberPos, EnumFacing facing) {
-    JSGAxisAlignedBB globalBox = getBaseSearchBox().rotate(facing).offset(memberPos);
-
-    for (MutableBlockPos pos : BlockPos.getAllInBoxMutable(globalBox.getMinBlockPos(), globalBox.getMaxBlockPos())) {
-      if (matchBase(blockAccess.getBlockState(pos))) {
-        return (StargateAbstractBaseTile) blockAccess.getTileEntity(pos.toImmutable());
-      }
+        return blocks.stream().map(pos -> FacingHelper.rotateBlock(pos, facing, facingVertical).add(basePos)).filter(pos -> !matchMember(world.getBlockState(pos))).collect(Collectors.toList());
     }
 
-    return null;
-  }
+    @Nullable
+    public abstract EnumMemberVariant getMemberVariantFromItemStack(ItemStack stack);
 
-  /**
-   * Check the given {@link BlockPos} for the {@link StargateMilkyWayMemberBlock},
-   * it's correct variant and facing.
-   *
-   * @param blockAccess Usually {@link World}.
-   * @param pos         {@link BlockPos} to be checked.
-   * @param facing      Expected {@link EnumFacing}.
-   * @param variant     Expected {@link EnumMemberVariant}.
-   *
-   * @return {@code true} if the block matches given parameters, {@code false} otherwise.
-   */
-  protected abstract boolean checkMemberBlock(IBlockAccess blockAccess, BlockPos pos, EnumFacing facing, EnumFacing facingVertical, EnumMemberVariant variant);
+    /**
+     * @return Max box where to search for the base.
+     */
+    public abstract JSGAxisAlignedBB getBaseSearchBox();
 
-  /**
-   * Called on block placement. Checks the found base block
-   * for other Stargate blocks and returns the result.
-   *
-   * @param blockAccess Usually {@link World}.
-   * @param basePos     Found {@link StargateMilkyWayBaseBlock}.
-   * @param baseFacing  Current base facing.
-   *
-   * @return {@code true} if the structure matches, {@code false} otherwise.
-   */
-  public boolean checkBlocks(IBlockAccess blockAccess, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical) {
-    if (JSGConfig.General.debug.checkGateMerge) {
-      for (BlockPos pos : getRingBlocks()) {
-        if (!checkMemberBlock(blockAccess, FacingHelper.rotateBlock(pos, baseFacing, baseFacingVertical).add(basePos), baseFacing, baseFacingVertical, EnumMemberVariant.RING))
-          return false;
-      }
+    /**
+     * @param state State of the block for the check.
+     * @return True if the {@link IBlockState} represents the Base block, false otherwise.
+     */
+    public abstract boolean matchBase(IBlockState state);
 
-      for (BlockPos pos : getChevronBlocks()) {
-        if (!checkMemberBlock(blockAccess, FacingHelper.rotateBlock(pos, baseFacing, baseFacingVertical).add(basePos), baseFacing, baseFacingVertical, EnumMemberVariant.CHEVRON))
-          return false;
-      }
+    /**
+     * @param state State of the block for the check.
+     * @return True if the {@link IBlockState} represents the Member block, false otherwise.
+     */
+    public abstract boolean matchMember(IBlockState state);
+
+    /**
+     * @return Member block.
+     */
+    public abstract StargateAbstractMemberBlock getMemberBlock();
+
+    /**
+     * Method searches for a {@link StargateMilkyWayBaseBlock}
+     * and returns it's {@link TileEntity}.
+     *
+     * @param blockAccess Usually {@link World}.
+     * @param memberPos   Starting position.
+     * @param facing      Facing of the member blocks.
+     * @return {@link StargateMilkyWayBaseTile} if found, {@code null} otherwise.
+     */
+    @Nullable
+    public StargateAbstractBaseTile findBaseTile(IBlockAccess blockAccess, BlockPos memberPos, EnumFacing facing, EnumFacing verticalFacing) {
+        JSGAxisAlignedBB globalBox = getBaseSearchBox().rotate(verticalFacing).rotate(facing).offset(memberPos);
+
+        for (MutableBlockPos pos : BlockPos.getAllInBoxMutable(globalBox.getMinBlockPos(), globalBox.getMaxBlockPos())) {
+            if (matchBase(blockAccess.getBlockState(pos))) {
+                return (StargateAbstractBaseTile) blockAccess.getTileEntity(pos.toImmutable());
+            }
+        }
+
+        return null;
     }
 
-    return true;
-  }
+    /**
+     * Check the given {@link BlockPos} for the {@link StargateMilkyWayMemberBlock},
+     * it's correct variant and facing.
+     *
+     * @param blockAccess Usually {@link World}.
+     * @param pos         {@link BlockPos} to be checked.
+     * @param facing      Expected {@link EnumFacing}.
+     * @param variant     Expected {@link EnumMemberVariant}.
+     * @return {@code true} if the block matches given parameters, {@code false} otherwise.
+     */
+    protected abstract boolean checkMemberBlock(IBlockAccess blockAccess, BlockPos pos, EnumFacing facing, EnumFacing facingVertical, EnumMemberVariant variant);
 
-  /**
-   * Updates merge status of the given block.
-   *
-   * @param world          {@link World} instance.
-   * @param checkPos       Position of the currently checked {@link StargateMilkyWayMemberBlock}.
-   * @param basePos        Position of {@link StargateMilkyWayBaseBlock} the tiles should be linked to.
-   * @param baseFacing     Facing of the base block
-   * @param shouldBeMerged {@code true} if the structure is merging, false otherwise.
-   */
-  protected abstract void updateMemberMergeStatus(World world, BlockPos checkPos, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical, boolean shouldBeMerged);
+    /**
+     * Called on block placement. Checks the found base block
+     * for other Stargate blocks and returns the result.
+     *
+     * @param blockAccess Usually {@link World}.
+     * @param basePos     Found {@link StargateMilkyWayBaseBlock}.
+     * @param baseFacing  Current base facing.
+     * @return {@code true} if the structure matches, {@code false} otherwise.
+     */
+    public boolean checkBlocks(IBlockAccess blockAccess, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical) {
+        if (JSGConfig.General.debug.checkGateMerge) {
+            for (BlockPos pos : getRingBlocks()) {
+                if (!checkMemberBlock(blockAccess, FacingHelper.rotateBlock(pos, baseFacing, baseFacingVertical).add(basePos), baseFacing, baseFacingVertical, EnumMemberVariant.RING))
+                    return false;
+            }
 
-  /**
-   * Updates merge status of the Stargate.
-   *
-   * @param world          {@link World} instance.
-   * @param basePos        Position of {@link StargateMilkyWayBaseBlock} the tiles should be linked to.
-   * @param baseFacing     Facing of {@link StargateMilkyWayBaseBlock}.
-   * @param shouldBeMerged {@code true} if the structure is merging, false otherwise.
-   */
-  public void updateMembersMergeStatus(World world, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical, boolean shouldBeMerged) {
-    for (BlockPos pos : getRingBlocks())
-      updateMemberMergeStatus(world, pos, basePos, baseFacing, baseFacingVertical, shouldBeMerged);
+            for (BlockPos pos : getChevronBlocks()) {
+                if (!checkMemberBlock(blockAccess, FacingHelper.rotateBlock(pos, baseFacing, baseFacingVertical).add(basePos), baseFacing, baseFacingVertical, EnumMemberVariant.CHEVRON))
+                    return false;
+            }
+        }
 
-    for (BlockPos pos : getChevronBlocks())
-      updateMemberMergeStatus(world, pos, basePos, baseFacing, baseFacingVertical, shouldBeMerged);
-  }
+        return true;
+    }
 
-  public void updateMembersBasePos(IBlockAccess blockAccess, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical) {
-  }
+    /**
+     * Updates merge status of the given block.
+     *
+     * @param world          {@link World} instance.
+     * @param checkPos       Position of the currently checked {@link StargateMilkyWayMemberBlock}.
+     * @param basePos        Position of {@link StargateMilkyWayBaseBlock} the tiles should be linked to.
+     * @param baseFacing     Facing of the base block
+     * @param shouldBeMerged {@code true} if the structure is merging, false otherwise.
+     */
+    protected abstract void updateMemberMergeStatus(World world, BlockPos checkPos, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical, boolean shouldBeMerged);
+
+    /**
+     * Updates merge status of the Stargate.
+     *
+     * @param world          {@link World} instance.
+     * @param basePos        Position of {@link StargateMilkyWayBaseBlock} the tiles should be linked to.
+     * @param baseFacing     Facing of {@link StargateMilkyWayBaseBlock}.
+     * @param shouldBeMerged {@code true} if the structure is merging, false otherwise.
+     */
+    public void updateMembersMergeStatus(World world, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical, boolean shouldBeMerged) {
+        for (BlockPos pos : getRingBlocks())
+            updateMemberMergeStatus(world, pos, basePos, baseFacing, baseFacingVertical, shouldBeMerged);
+
+        for (BlockPos pos : getChevronBlocks())
+            updateMemberMergeStatus(world, pos, basePos, baseFacing, baseFacingVertical, shouldBeMerged);
+    }
+
+    public void updateMembersBasePos(IBlockAccess blockAccess, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical) {
+    }
 }

@@ -4,19 +4,39 @@
 		"model": "jsg:stargate_pegasus_base_block"
 	},
 	"variants": {
-		"normal": [{}],
-		"inventory": [{}],
-		
-		"facing": {
-			"south": { "y": 180 },
-			"west": { "y": 270 },
-			"north": {},
-			"east": { "y": 90 }
-		},
-		
-		"render_block": {
-			"true": {},
-			"false": {}
-		}
+		"inventory": { "model": "jsg:stargate_pegasus_base_block" },
+		"normal": { "model": "jsg:stargate_pegasus_base_block" },
+
+
+		"facing=south,facing_vertical=south,render_block=false": { "y": 180, "x": 0, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=west,facing_vertical=south,render_block=false": { "y": 270, "x": 0, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=north,facing_vertical=south,render_block=false": { "y": 0, "x": 0, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=east,facing_vertical=south,render_block=false": { "y": 90, "x": 0, "model": "jsg:stargate_pegasus_base_block" },
+
+		"facing=south,facing_vertical=down,render_block=false": { "y": 180, "x": 90, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=west,facing_vertical=down,render_block=false": { "y": 270, "x": 90, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=north,facing_vertical=down,render_block=false": { "y": 0, "x": 90, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=east,facing_vertical=down,render_block=false": { "y": 90, "x": 90, "model": "jsg:stargate_pegasus_base_block" },
+
+		"facing=south,facing_vertical=up,render_block=false": { "y": 180, "x": 270, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=west,facing_vertical=up,render_block=false": { "y": 270, "x": 270, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=north,facing_vertical=up,render_block=false": { "y": 0, "x": 270, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=east,facing_vertical=up,render_block=false": { "y": 90, "x": 270, "model": "jsg:stargate_pegasus_base_block" },
+
+
+		"facing=south,facing_vertical=south,render_block=true": { "y": 180, "x": 0, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=west,facing_vertical=south,render_block=true": { "y": 270, "x": 0, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=north,facing_vertical=south,render_block=true": { "y": 0, "x": 0, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=east,facing_vertical=south,render_block=true": { "y": 90, "x": 0, "model": "jsg:stargate_pegasus_base_block" },
+
+		"facing=south,facing_vertical=down,render_block=true": { "y": 180, "x": 90, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=west,facing_vertical=down,render_block=true": { "y": 270, "x": 90, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=north,facing_vertical=down,render_block=true": { "y": 0, "x": 90, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=east,facing_vertical=down,render_block=true": { "y": 90, "x": 90, "model": "jsg:stargate_pegasus_base_block" },
+
+		"facing=south,facing_vertical=up,render_block=true": { "y": 180, "x": 270, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=west,facing_vertical=up,render_block=true": { "y": 270, "x": 270, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=north,facing_vertical=up,render_block=true": { "y": 0, "x": 270, "model": "jsg:stargate_pegasus_base_block" },
+		"facing=east,facing_vertical=up,render_block=true": { "y": 90, "x": 270, "model": "jsg:stargate_pegasus_base_block" }
 	}
 }

@@ -6,6 +6,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.renderer.stargate.StargateOrlinRenderer;
+import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.stargate.merging.StargateOrlinMergeHelper;
 import tauri.dev.jsg.stargate.network.StargateNetwork;
@@ -114,7 +115,7 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 			world.setBlockState(pos, state);
 			gateTile.initializeFromItemStack(stack);
 			gateTile.updateFacing(facing, EnumFacing.SOUTH, true);
-			gateTile.updateMergeState(StargateOrlinMergeHelper.INSTANCE.checkBlocks(world, pos, facing), facing);
+			gateTile.updateMergeState(StargateOrlinMergeHelper.INSTANCE.checkBlocks(world, pos, facing, EnumFacing.SOUTH), facing, EnumFacing.SOUTH);
 			
 			// ------------------------------------------
 			// Nether handler

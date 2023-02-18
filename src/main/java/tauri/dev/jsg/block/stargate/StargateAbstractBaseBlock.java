@@ -122,7 +122,7 @@ public abstract class StargateAbstractBaseBlock extends JSGBlock {
 
                         // If it was the last chevron/ring
                         if (posList.size() == 1)
-                            gateTile.updateMergeState(gateTile.getMergeHelper().checkBlocks(world, basePos, facing), facing);
+                            gateTile.updateMergeState(gateTile.getMergeHelper().checkBlocks(world, basePos, facing, facingVertical), facing, facingVertical);
 
                         return true;
                     }
@@ -139,7 +139,7 @@ public abstract class StargateAbstractBaseBlock extends JSGBlock {
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         if (!world.isRemote) {
             StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(pos);
-            gateTile.updateMergeState(false, state.getValue(JSGProps.FACING_HORIZONTAL));
+            gateTile.updateMergeState(false, state.getValue(JSGProps.FACING_HORIZONTAL), state.getValue(JSGProps.FACING_VERTICAL));
             gateTile.onBlockBroken();
         }
     }

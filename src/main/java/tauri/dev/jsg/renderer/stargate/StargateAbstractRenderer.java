@@ -91,12 +91,13 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                     te.getRenderBoundingBoxForDisplay().render();
                 }
 
+
+                GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
+                GlStateManager.rotate(rendererState.verticalRotation, 1, 0, 0);
+
                 applyTransformations(rendererState);
                 GlStateManager.disableRescaleNormal();
                 applyLightMap(rendererState, partialTicks);
-
-
-                GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
 
                 renderGate(te, rendererState, partialTicks);
                 renderIris(partialTicks, getWorld(), rendererState, true);
@@ -118,7 +119,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                 GlStateManager.blendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
                 GL14.glBlendColor(0, 0, 0, 0.7f);
 
-                for (Map.Entry<BlockPos, IBlockState> entry : getMemberBlockStates(te.getMergeHelper(), rendererState.facing).entrySet()) {
+                for (Map.Entry<BlockPos, IBlockState> entry : getMemberBlockStates(te.getMergeHelper(), rendererState.facing, rendererState.facingVertical).entrySet()) {
                     BlockPos pos = FacingHelper.rotateBlock(entry.getKey(), rendererState.facing, rendererState.facingVertical); // entry.getKey().rotate(FacingHelper.getRotation(rendererState.facing));
                     BlockPos absolutePos = pos.add(rendererState.pos);
 
@@ -143,7 +144,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
      * @param mergeHelper Merge helper instance.
      * @return {@link Map} of {@link BlockPos} to {@link IBlockState} for rendering of the ghost blocks.
      */
-    protected abstract Map<BlockPos, IBlockState> getMemberBlockStates(StargateAbstractMergeHelper mergeHelper, EnumFacing facing);
+    protected abstract Map<BlockPos, IBlockState> getMemberBlockStates(StargateAbstractMergeHelper mergeHelper, EnumFacing facing, EnumFacing facingVertical);
 
     protected abstract void applyLightMap(S rendererState, double partialTicks);
 

@@ -2,6 +2,7 @@ package tauri.dev.jsg.block.stargate;
 
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import tauri.dev.jsg.stargate.merging.StargateOrlinMergeHelper;
@@ -121,10 +122,10 @@ public final class StargateOrlinMemberBlock extends StargateAbstractMemberBlock 
 			world.setBlockState(pos, state, 0);
 			memberTile.initializeFromItemStack(stack);
 			
-			StargateAbstractBaseTile gateTile = getMergeHelper().findBaseTile(world, pos, facing);
+			StargateAbstractBaseTile gateTile = getMergeHelper().findBaseTile(world, pos, facing, EnumFacing.SOUTH);
 			
 			if (gateTile != null) {
-				gateTile.updateMergeState(getMergeHelper().checkBlocks(world, gateTile.getPos(), world.getBlockState(gateTile.getPos()).getValue(JSGProps.FACING_HORIZONTAL)), facing);
+				gateTile.updateMergeState(getMergeHelper().checkBlocks(world, gateTile.getPos(), world.getBlockState(gateTile.getPos()).getValue(JSGProps.FACING_HORIZONTAL), EnumFacing.SOUTH), facing, EnumFacing.SOUTH);
 			}				
 		}
 	}

@@ -33,7 +33,7 @@ public class StargateOrlinRenderer extends StargateAbstractRenderer<StargateAbst
 	}
 
 	@Override
-	protected Map<BlockPos, IBlockState> getMemberBlockStates(StargateAbstractMergeHelper mergeHelper, EnumFacing facing) {
+	protected Map<BlockPos, IBlockState> getMemberBlockStates(StargateAbstractMergeHelper mergeHelper, EnumFacing facing, EnumFacing facingVertical) {
 		Map<BlockPos, IBlockState> map = new HashMap<BlockPos, IBlockState>();
 		
 		for (BlockPos pos : mergeHelper.getRingBlocks())

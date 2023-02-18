@@ -2,6 +2,7 @@ package tauri.dev.jsg.block.stargate;
 
 import net.minecraft.init.Items;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.dialhomedevice.DHDAbstractBlock;
@@ -191,7 +192,7 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
             if (!(heldItem instanceof ItemBlock) && heldItem != Items.WATER_BUCKET && camoBlockState == null) {
                 BlockPos basePos = memberTile.getBasePos();
                 if(basePos == null || world.getTileEntity(basePos) == null || !(world.getTileEntity(basePos) instanceof StargateClassicBaseTile)){
-                    StargateAbstractBaseTile gateTile = getMergeHelper().findBaseTile(memberTile.getWorld(), memberTile.getPos(), blockState.getBaseState().getValue(JSGProps.FACING_HORIZONTAL));
+                    StargateAbstractBaseTile gateTile = getMergeHelper().findBaseTile(memberTile.getWorld(), memberTile.getPos(), blockState.getBaseState().getValue(JSGProps.FACING_HORIZONTAL), blockState.getBaseState().getValue(JSGProps.FACING_VERTICAL));
                     if(gateTile == null)
                         return false;
                     memberTile.setBasePos(gateTile.getPos());
@@ -300,15 +301,16 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         if (!world.isRemote) {
             EnumFacing facing = placer.getHorizontalFacing().getOpposite();
+            EnumFacing verticalFacing = FacingHelper.getVerticalFacingFromPitch(placer.rotationPitch);
 
-            state = state.withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.byId((stack.getMetadata() >> 3) & 0x01)).withProperty(JSGProps.RENDER_BLOCK, true).withProperty(JSGProps.FACING_HORIZONTAL, facing);
+            state = state.withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.byId((stack.getMetadata() >> 3) & 0x01)).withProperty(JSGProps.RENDER_BLOCK, true).withProperty(JSGProps.FACING_HORIZONTAL, facing).withProperty(JSGProps.FACING_VERTICAL, verticalFacing);
 
             world.setBlockState(pos, state);
 
-            StargateAbstractBaseTile gateTile = getMergeHelper().findBaseTile(world, pos, facing);
+            StargateAbstractBaseTile gateTile = getMergeHelper().findBaseTile(world, pos, facing, verticalFacing);
 
             if (gateTile != null && !gateTile.isMerged())
-                gateTile.updateMergeState(gateTile.getMergeHelper().checkBlocks(world, gateTile.getPos(), world.getBlockState(gateTile.getPos()).getValue(JSGProps.FACING_HORIZONTAL)), facing);
+                gateTile.updateMergeState(gateTile.getMergeHelper().checkBlocks(world, gateTile.getPos(), world.getBlockState(gateTile.getPos()).getValue(JSGProps.FACING_HORIZONTAL), world.getBlockState(gateTile.getPos()).getValue(JSGProps.FACING_VERTICAL)), facing, verticalFacing);
         }
     }
 

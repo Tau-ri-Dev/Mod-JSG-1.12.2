@@ -4,27 +4,68 @@
 		
 	},
 	"variants": {
-		"facing": {
-			"south": { "y": 180 },
-			"west": { "y": 270 },
-			"north": {},
-			"east": { "y": 90 },
-			"up": {},
-			"down": {}
-		},
-		
-		"member_variant": {
-			"ring": {
-				"model": "jsg:stargate_universe_ring_block"
-			},
-			"chevron": {
-				"model": "jsg:stargate_universe_chevron_block"
-			}
-		},
-		
-		"render_block": {
-			"false": {},
-			"true": {}
-		}
+		"facing=south,facing_vertical=south,member_variant=ring,render_block=false": { "y": 180, "x": 0, "model": "jsg:stargate_universe_ring_block" },
+		"facing=west,facing_vertical=south,member_variant=ring,render_block=false": { "y": 270, "x": 0, "model": "jsg:stargate_universe_ring_block" },
+		"facing=north,facing_vertical=south,member_variant=ring,render_block=false": { "y": 0, "x": 0, "model": "jsg:stargate_universe_ring_block" },
+		"facing=east,facing_vertical=south,member_variant=ring,render_block=false": { "y": 90, "x": 0, "model": "jsg:stargate_universe_ring_block" },
+
+		"facing=south,facing_vertical=down,member_variant=ring,render_block=false": { "y": 180, "x": 90, "model": "jsg:stargate_universe_ring_block" },
+		"facing=west,facing_vertical=down,member_variant=ring,render_block=false": { "y": 270, "x": 90, "model": "jsg:stargate_universe_ring_block" },
+		"facing=north,facing_vertical=down,member_variant=ring,render_block=false": { "y": 0, "x": 90, "model": "jsg:stargate_universe_ring_block" },
+		"facing=east,facing_vertical=down,member_variant=ring,render_block=false": { "y": 90, "x": 90, "model": "jsg:stargate_universe_ring_block" },
+
+		"facing=south,facing_vertical=up,member_variant=ring,render_block=false": { "y": 180, "x": 270, "model": "jsg:stargate_universe_ring_block" },
+		"facing=west,facing_vertical=up,member_variant=ring,render_block=false": { "y": 270, "x": 270, "model": "jsg:stargate_universe_ring_block" },
+		"facing=north,facing_vertical=up,member_variant=ring,render_block=false": { "y": 0, "x": 270, "model": "jsg:stargate_universe_ring_block" },
+		"facing=east,facing_vertical=up,member_variant=ring,render_block=false": { "y": 90, "x": 270, "model": "jsg:stargate_universe_ring_block" },
+
+
+		"facing=south,facing_vertical=south,member_variant=chevron,render_block=false": { "y": 180, "x": 0, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=west,facing_vertical=south,member_variant=chevron,render_block=false": { "y": 270, "x": 0, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=north,facing_vertical=south,member_variant=chevron,render_block=false": { "y": 0, "x": 0, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=east,facing_vertical=south,member_variant=chevron,render_block=false": { "y": 90, "x": 0, "model": "jsg:stargate_universe_chevron_block" },
+
+		"facing=south,facing_vertical=down,member_variant=chevron,render_block=false": { "y": 180, "x": 90, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=west,facing_vertical=down,member_variant=chevron,render_block=false": { "y": 270, "x": 90, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=north,facing_vertical=down,member_variant=chevron,render_block=false": { "y": 0, "x": 90, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=east,facing_vertical=down,member_variant=chevron,render_block=false": { "y": 90, "x": 90, "model": "jsg:stargate_universe_chevron_block" },
+
+		"facing=south,facing_vertical=up,member_variant=chevron,render_block=false": { "y": 180, "x": 270, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=west,facing_vertical=up,member_variant=chevron,render_block=false": { "y": 270, "x": 270, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=north,facing_vertical=up,member_variant=chevron,render_block=false": { "y": 0, "x": 270, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=east,facing_vertical=up,member_variant=chevron,render_block=false": { "y": 90, "x": 270, "model": "jsg:stargate_universe_chevron_block" },
+
+
+
+		"facing=south,facing_vertical=south,member_variant=ring,render_block=true": { "y": 180, "x": 0, "model": "jsg:stargate_universe_ring_block" },
+		"facing=west,facing_vertical=south,member_variant=ring,render_block=true": { "y": 270, "x": 0, "model": "jsg:stargate_universe_ring_block" },
+		"facing=north,facing_vertical=south,member_variant=ring,render_block=true": { "y": 0, "x": 0, "model": "jsg:stargate_universe_ring_block" },
+		"facing=east,facing_vertical=south,member_variant=ring,render_block=true": { "y": 90, "x": 0, "model": "jsg:stargate_universe_ring_block" },
+
+		"facing=south,facing_vertical=down,member_variant=ring,render_block=true": { "y": 180, "x": 90, "model": "jsg:stargate_universe_ring_block" },
+		"facing=west,facing_vertical=down,member_variant=ring,render_block=true": { "y": 270, "x": 90, "model": "jsg:stargate_universe_ring_block" },
+		"facing=north,facing_vertical=down,member_variant=ring,render_block=true": { "y": 0, "x": 90, "model": "jsg:stargate_universe_ring_block" },
+		"facing=east,facing_vertical=down,member_variant=ring,render_block=true": { "y": 90, "x": 90, "model": "jsg:stargate_universe_ring_block" },
+
+		"facing=south,facing_vertical=up,member_variant=ring,render_block=true": { "y": 180, "x": 270, "model": "jsg:stargate_universe_ring_block" },
+		"facing=west,facing_vertical=up,member_variant=ring,render_block=true": { "y": 270, "x": 270, "model": "jsg:stargate_universe_ring_block" },
+		"facing=north,facing_vertical=up,member_variant=ring,render_block=true": { "y": 0, "x": 270, "model": "jsg:stargate_universe_ring_block" },
+		"facing=east,facing_vertical=up,member_variant=ring,render_block=true": { "y": 90, "x": 270, "model": "jsg:stargate_universe_ring_block" },
+
+
+		"facing=south,facing_vertical=south,member_variant=chevron,render_block=true": { "y": 180, "x": 0, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=west,facing_vertical=south,member_variant=chevron,render_block=true": { "y": 270, "x": 0, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=north,facing_vertical=south,member_variant=chevron,render_block=true": { "y": 0, "x": 0, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=east,facing_vertical=south,member_variant=chevron,render_block=true": { "y": 90, "x": 0, "model": "jsg:stargate_universe_chevron_block" },
+
+		"facing=south,facing_vertical=down,member_variant=chevron,render_block=true": { "y": 180, "x": 90, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=west,facing_vertical=down,member_variant=chevron,render_block=true": { "y": 270, "x": 90, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=north,facing_vertical=down,member_variant=chevron,render_block=true": { "y": 0, "x": 90, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=east,facing_vertical=down,member_variant=chevron,render_block=true": { "y": 90, "x": 90, "model": "jsg:stargate_universe_chevron_block" },
+
+		"facing=south,facing_vertical=up,member_variant=chevron,render_block=true": { "y": 180, "x": 270, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=west,facing_vertical=up,member_variant=chevron,render_block=true": { "y": 270, "x": 270, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=north,facing_vertical=up,member_variant=chevron,render_block=true": { "y": 0, "x": 270, "model": "jsg:stargate_universe_chevron_block" },
+		"facing=east,facing_vertical=up,member_variant=chevron,render_block=true": { "y": 90, "x": 270, "model": "jsg:stargate_universe_chevron_block" }
 	}
 }

@@ -625,11 +625,11 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     @Override
     protected boolean onGateMergeRequested() {
         if (stargateSize != JSGConfig.Stargate.stargateSize) {
-            StargateUniverseMergeHelper.INSTANCE.convertToPattern(world, pos, facing, stargateSize, tauri.dev.jsg.config.JSGConfig.Stargate.stargateSize);
+            StargateUniverseMergeHelper.INSTANCE.convertToPattern(world, pos, facing, facingVertical, stargateSize, tauri.dev.jsg.config.JSGConfig.Stargate.stargateSize);
             stargateSize = tauri.dev.jsg.config.JSGConfig.Stargate.stargateSize;
         }
 
-        return StargateUniverseMergeHelper.INSTANCE.checkBlocks(world, pos, facing);
+        return StargateUniverseMergeHelper.INSTANCE.checkBlocks(world, pos, facing, facingVertical);
     }
 
     @Override

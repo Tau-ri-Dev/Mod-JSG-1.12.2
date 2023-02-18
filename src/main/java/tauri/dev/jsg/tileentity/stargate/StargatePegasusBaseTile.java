@@ -401,11 +401,11 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     @Override
     protected boolean onGateMergeRequested() {
         if (stargateSize != JSGConfig.Stargate.stargateSize) {
-            StargatePegasusMergeHelper.INSTANCE.convertToPattern(world, pos, facing, stargateSize, JSGConfig.Stargate.stargateSize);
+            StargatePegasusMergeHelper.INSTANCE.convertToPattern(world, pos, facing, facingVertical, stargateSize, JSGConfig.Stargate.stargateSize);
             stargateSize = JSGConfig.Stargate.stargateSize;
         }
 
-        return StargatePegasusMergeHelper.INSTANCE.checkBlocks(world, pos, facing);
+        return StargatePegasusMergeHelper.INSTANCE.checkBlocks(world, pos, facing, facingVertical);
     }
 
     private BlockPos lastPos = BlockPos.ORIGIN;
