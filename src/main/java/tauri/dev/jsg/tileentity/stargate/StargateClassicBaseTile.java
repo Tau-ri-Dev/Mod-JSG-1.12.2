@@ -281,7 +281,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public boolean isGateBurried() {
         if (!getConfig().getOption(ENABLE_BURY_STATE.id).getBooleanValue()) return false;
         for (BlockPos targetPos : Objects.requireNonNull(StargateSizeEnum.getIrisBlocksPattern(getStargateSize()))) {
-            BlockPos newPos = pos.add(targetPos.rotate(FacingToRotation.get(facing)));
+            BlockPos newPos = pos.add(FacingHelper.rotateBlock(targetPos, facing, facingVertical));
             IBlockState state = world.getBlockState(newPos);
             if (isLiquidBlock(false, state) || isLiquidBlock(true, state))
                 return false;
@@ -552,7 +552,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         double suma = 0;
         // check chevron blocks
         for (BlockPos chevron : getMergeHelper().getChevronBlocks()) {
-            chevron = chevron.rotate(FacingToRotation.get(this.facing)).add(pos);
+            chevron = FacingHelper.rotateBlock(chevron, facing, facingVertical).add(pos);
             for (EnumFacing facing : EnumFacing.values()) {
                 BlockPos newPos = chevron.add(facing.getDirectionVec());
                 IBlockState state = world.getBlockState(newPos);
@@ -580,7 +580,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         // check ring blocks
         for (BlockPos ring : getMergeHelper().getRingBlocks()) {
-            ring = ring.rotate(FacingToRotation.get(this.facing)).add(pos);
+            ring = FacingHelper.rotateBlock(ring, facing, facingVertical).add(pos);
             for (EnumFacing facing : EnumFacing.values()) {
                 BlockPos newPos = ring.add(facing.getDirectionVec());
                 IBlockState state = world.getBlockState(newPos);
@@ -1400,7 +1400,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (isFinalActive) lightUp--;
 
         for (int i = 0; i < 9; i++) {
-            BlockPos chevPos = getMergeHelper().getChevronBlocks().get(i).rotate(FacingToRotation.get(facing)).add(pos);
+            BlockPos chevPos = FacingHelper.rotateBlock(getMergeHelper().getChevronBlocks().get(i), facing, facingVertical).add(pos);
 
             if (getMergeHelper().matchMember(world.getBlockState(chevPos))) {
                 StargateClassicMemberTile memberTile = (StargateClassicMemberTile) world.getTileEntity(chevPos);
@@ -2196,10 +2196,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     private void setIrisBlocks(boolean set) {
         IBlockState invBlockState = JSGBlocks.IRIS_BLOCK.getDefaultState();
         if (set) invBlockState = JSGBlocks.IRIS_BLOCK.getStateFromMeta(getFacing().getHorizontalIndex());
-        Rotation invBlocksRotation = FacingToRotation.get(facing);
         BlockPos startPos = this.pos;
         for (BlockPos invPos : Objects.requireNonNull(StargateSizeEnum.getIrisBlocksPattern(getStargateSize()))) {
-            BlockPos newPos = startPos.add(invPos.rotate(invBlocksRotation));
+            BlockPos newPos = startPos.add(FacingHelper.rotateBlock(invPos, facing, facingVertical));
 
             if (set) {
 

@@ -6,7 +6,7 @@ import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.stargate.StargateOrlinMemberBlock;
 import tauri.dev.jsg.stargate.EnumMemberVariant;
 import tauri.dev.jsg.tileentity.stargate.StargateOrlinMemberTile;
-import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.FacingHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.item.ItemBlock;
@@ -84,7 +84,7 @@ public class StargateOrlinMergeHelper extends StargateAbstractMergeHelper {
 	}
 	
 	@Override
-	protected boolean checkMemberBlock(IBlockAccess blockAccess, BlockPos pos, EnumFacing facing, EnumMemberVariant variant) {
+	protected boolean checkMemberBlock(IBlockAccess blockAccess, BlockPos pos, EnumFacing facing, EnumFacing baseFacingVertical, EnumMemberVariant variant) {
 		IBlockState state = blockAccess.getBlockState(pos);
 				
 		return MEMBER_MATCHER.apply(state) &&
@@ -93,10 +93,10 @@ public class StargateOrlinMergeHelper extends StargateAbstractMergeHelper {
 	}
 
 	@Override
-	protected void updateMemberMergeStatus(World world, BlockPos checkPos, BlockPos basePos, EnumFacing baseFacing, boolean shouldBeMerged) {		
+	protected void updateMemberMergeStatus(World world, BlockPos checkPos, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical, boolean shouldBeMerged) {
 		EnumFacing variant = BLOCK_MAP.get(checkPos);
 		
-		checkPos = checkPos.rotate(FacingToRotation.get(baseFacing)).add(basePos);
+		checkPos = FacingHelper.rotateBlock(checkPos, baseFacing, baseFacingVertical).add(basePos);
 		IBlockState memberState = world.getBlockState(checkPos);
 		
 		if (MEMBER_MATCHER.apply(memberState)) {
@@ -128,7 +128,7 @@ public class StargateOrlinMergeHelper extends StargateAbstractMergeHelper {
 	
 	public void incrementMembersOpenCount(World world, BlockPos basePos, EnumFacing baseFacing) {
 		for (BlockPos pos : getRingBlocks()) {
-			pos = pos.rotate(FacingToRotation.get(baseFacing)).add(basePos);
+			pos = FacingHelper.rotateBlock(pos, baseFacing, EnumFacing.SOUTH).add(basePos);
 			
 			if (MEMBER_MATCHER.apply(world.getBlockState(pos))) {
 				StargateOrlinMemberTile memberTile = (StargateOrlinMemberTile) world.getTileEntity(pos);
@@ -141,7 +141,7 @@ public class StargateOrlinMergeHelper extends StargateAbstractMergeHelper {
 		int max = 0;
 		
 		for (BlockPos pos : getRingBlocks()) {
-			pos = pos.rotate(FacingToRotation.get(baseFacing)).add(basePos);
+			pos = FacingHelper.rotateBlock(pos, baseFacing, EnumFacing.SOUTH).add(basePos);
 
 			if (MEMBER_MATCHER.apply(world.getBlockState(pos))) {
 				StargateOrlinMemberTile memberTile = (StargateOrlinMemberTile) world.getTileEntity(pos);

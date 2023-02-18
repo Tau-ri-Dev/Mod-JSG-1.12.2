@@ -18,9 +18,10 @@ public class StargateAbstractRendererState extends State {
 		}
 	}
 	
-	public StargateAbstractRendererState initClient(BlockPos pos, EnumFacing facing, BiomeOverlayEnum biomeOverlay) {
+	public StargateAbstractRendererState initClient(BlockPos pos, EnumFacing facing, EnumFacing facingVertical, BiomeOverlayEnum biomeOverlay) {
 		this.pos = pos;
 		this.facing = facing;
+		this.facingVertical = facingVertical;
 		
 		if (facing.getAxis() == EnumFacing.Axis.X)
 			facing = facing.getOpposite();
@@ -36,6 +37,7 @@ public class StargateAbstractRendererState extends State {
 	// Not saved
 	public BlockPos pos;
 	public EnumFacing facing;
+	public EnumFacing facingVertical;
 	public float horizontalRotation;
 	public float verticalRotation;
 	private BiomeOverlayEnum biomeOverlay;

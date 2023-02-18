@@ -482,7 +482,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     public void refresh() {
         this.setGateAddress(this.getSymbolType(), this.getStargateAddress(this.getSymbolType()));
-        updateFacing(this.world.getBlockState(this.pos).getValue(JSGProps.FACING_HORIZONTAL), true);
+        updateFacing(this.world.getBlockState(this.pos).getValue(JSGProps.FACING_HORIZONTAL), this.world.getBlockState(this.pos).getValue(JSGProps.FACING_VERTICAL), true);
     }
 
     public StargateAddressDynamic getDialedAddress() {
@@ -825,11 +825,17 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         return facing;
     }
 
+    protected EnumFacing facingVertical = EnumFacing.SOUTH;
+
+    public EnumFacing getFacingVertical(){
+        return facingVertical;
+    }
+
     @Override
     public void onLoad() {
         if (!world.isRemote) {
             lastPos = pos;
-            updateFacing(world.getBlockState(pos).getValue(JSGProps.FACING_HORIZONTAL), true);
+            updateFacing(world.getBlockState(pos).getValue(JSGProps.FACING_HORIZONTAL), world.getBlockState(pos).getValue(JSGProps.FACING_VERTICAL), true);
             network = StargateNetwork.get(world);
 
             targetPoint = new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
@@ -1242,7 +1248,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     private AxisAlignedBB renderBoundingBox = TileEntity.INFINITE_EXTENT_AABB;
 
     public JSGAxisAlignedBB getRenderBoundingBoxForDisplay() {
-        return getRenderBoundingBoxRaw().rotate((int) facing.getHorizontalAngle()).offset(0.5, 0, 0.5);
+        return getRenderBoundingBoxRaw().rotate(facingVertical).rotate(facing).offset(0.5, 0, 0.5);
     }
 
     protected StargateAbstractRendererStateBuilder getRendererStateServer() {
@@ -1266,10 +1272,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     protected abstract JSGAxisAlignedBB getRenderBoundingBoxRaw();
 
-    public void updateFacing(EnumFacing facing, boolean server) {
+    public void updateFacing(EnumFacing facing, EnumFacing verticalFacing, boolean server) {
         this.facing = facing;
-        this.eventHorizon = new EventHorizon(world, pos, getGateCenterPos(), facing, getHorizonTeleportBox(server));
-        this.renderBoundingBox = getRenderBoundingBoxRaw().rotate((int) facing.getHorizontalAngle()).offset(0.5, 0, 0.5).offset(pos);
+        this.facingVertical = verticalFacing;
+        this.eventHorizon = new EventHorizon(world, pos, getGateCenterPos(), facing, verticalFacing, getHorizonTeleportBox(server));
+        this.renderBoundingBox = getRenderBoundingBoxRaw().rotate(verticalFacing).rotate(facing).offset(0.5, 0, 0.5).offset(pos);
 
         JSGAxisAlignedBB kBox = getHorizonKillingBox(server);
         double width = kBox.maxZ - kBox.minZ;
@@ -1278,7 +1285,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         localKillingBoxes = new ArrayList<>(getHorizonSegmentCount(server));
         for (int i = 0; i < getHorizonSegmentCount(server); i++) {
             JSGAxisAlignedBB box = new JSGAxisAlignedBB(kBox.minX, kBox.minY, kBox.minZ + width * i, kBox.maxX, kBox.maxY, kBox.minZ + width * (i + 1));
-            box = box.rotate(facing).offset(0.5, 0, 0.5);
+            box = box.rotate(verticalFacing).rotate(facing).offset(0.5, 0, 0.5);
 
             localKillingBoxes.add(box);
         }
@@ -1286,8 +1293,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         localInnerBlockBoxes = new ArrayList<>();
         localInnerEntityBoxes = new ArrayList<>();
         for (JSGAxisAlignedBB lBox : getGateVaporizingBoxes(server)) {
-            localInnerBlockBoxes.add(lBox.rotate(facing).offset(0.5, 0, 0.5));
-            localInnerEntityBoxes.add(lBox.grow(0, 0, -0.25).rotate(facing).offset(0.5, 0, 0.5));
+            localInnerBlockBoxes.add(lBox.rotate(verticalFacing).rotate(facing).offset(0.5, 0, 0.5));
+            localInnerEntityBoxes.add(lBox.grow(0, 0, -0.25).rotate(verticalFacing).rotate(facing).offset(0.5, 0, 0.5));
         }
     }
 
@@ -1477,10 +1484,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         switch (stateType) {
             case RENDERER_STATE:
                 EnumFacing facing = world.getBlockState(pos).getValue(JSGProps.FACING_HORIZONTAL);
+                EnumFacing facingVertical = world.getBlockState(pos).getValue(JSGProps.FACING_VERTICAL);
 
-                setRendererStateClient(((StargateAbstractRendererState) state).initClient(pos, facing, getBiomeOverlayWithOverride(false)));
+                setRendererStateClient(((StargateAbstractRendererState) state).initClient(pos, facing, facingVertical, getBiomeOverlayWithOverride(false)));
 
-                updateFacing(facing, false);
+                updateFacing(facing, facingVertical, false);
 
                 break;
 

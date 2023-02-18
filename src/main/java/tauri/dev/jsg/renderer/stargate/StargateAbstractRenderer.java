@@ -21,8 +21,7 @@ import tauri.dev.jsg.stargate.EnumIrisState;
 import tauri.dev.jsg.stargate.EnumIrisType;
 import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
-import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.JSGMinecraftHelper;
 import tauri.dev.jsg.util.main.JSGProps;
@@ -120,7 +119,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                 GL14.glBlendColor(0, 0, 0, 0.7f);
 
                 for (Map.Entry<BlockPos, IBlockState> entry : getMemberBlockStates(te.getMergeHelper(), rendererState.facing).entrySet()) {
-                    BlockPos pos = entry.getKey().rotate(FacingToRotation.get(rendererState.facing));
+                    BlockPos pos = FacingHelper.rotateBlock(entry.getKey(), rendererState.facing, rendererState.facingVertical); // entry.getKey().rotate(FacingHelper.getRotation(rendererState.facing));
                     BlockPos absolutePos = pos.add(rendererState.pos);
 
                     if (getWorld().getBlockState(absolutePos).getBlock().isReplaceable(getWorld(), absolutePos))
@@ -171,7 +170,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
     protected void preRenderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
 
-        StargateAbstractRendererState rs = new StargateAbstractRendererState().initClient(rendererState.pos, rendererState.facing, rendererState.getBiomeOverlay());
+        StargateAbstractRendererState rs = new StargateAbstractRendererState().initClient(rendererState.pos, rendererState.facing, rendererState.facingVertical, rendererState.getBiomeOverlay());
 
         for (int i = 0; i < 2; i++) {
             rs.vortexState = (i == 0 ? EnumVortexState.STILL : EnumVortexState.FORMING);

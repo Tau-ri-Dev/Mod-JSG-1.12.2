@@ -8,7 +8,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.renderer.AncientRenderer;
 import tauri.dev.jsg.tileentity.props.AncientSignTile;
-import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
@@ -30,7 +30,7 @@ public class AncientSignRenderer extends TileEntitySpecialRenderer<AncientSignTi
         EnumFacing facing = blockState.getValue(JSGProps.FACING_HORIZONTAL);
 
         GlStateManager.pushMatrix();
-        int rot = FacingToRotation.getIntRotation(facing, true);
+        int rot = FacingHelper.getIntRotation(facing, true);
         GlStateManager.rotate(rot, 0, 1, 0);
         GlStateManager.translate(0, 0, -0.5);
 

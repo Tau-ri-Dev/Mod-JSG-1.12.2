@@ -34,7 +34,6 @@ import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
 import tauri.dev.jsg.power.zpm.IEnergyStorageZPM;
-import tauri.dev.jsg.power.zpm.ZPMEnergyStorage;
 import tauri.dev.jsg.power.zpm.ZPMItemEnergyStorage;
 import tauri.dev.jsg.stargate.network.StargateAddress;
 import tauri.dev.jsg.stargate.network.StargatePos;
@@ -42,7 +41,7 @@ import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.tileentity.dialhomedevice.DHDAbstractTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
-import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.LinkingHelper;
 import tauri.dev.jsg.worldgen.util.EnumGenerationHeight;
 import tauri.dev.jsg.worldgen.util.GeneratedStargate;
@@ -132,7 +131,7 @@ public class JSGStructure extends WorldGenerator {
         Biome biome = worldToSpawn.getBiome(pos);
         worldToSpawn.notifyBlockUpdate(pos, state, state, 3);
         EnumFacing facing = (findOptimalRotation ? findOptimalRotation(worldToSpawn, pos) : EnumFacing.SOUTH);
-        Rotation rotation = FacingToRotation.get(facing);
+        Rotation rotation = FacingHelper.getRotation(facing);
         rotation = rotation.add(rotationToNorth);
 
         if (rotationOverride != null)
@@ -189,7 +188,7 @@ public class JSGStructure extends WorldGenerator {
                     IEnergyStorage gateEnergy = gateTile.getCapability(CapabilityEnergy.ENERGY, null);
                     if (gateEnergy != null)
                         gateEnergy.receiveEnergy(((int) (((StargateClassicEnergyStorage) gateEnergy).getMaxEnergyStoredInternally() * 0.75)), false);
-                    gateTile.getMergeHelper().updateMembersBasePos(worldToSpawn, gatePos, facing);
+                    gateTile.getMergeHelper().updateMembersBasePos(worldToSpawn, gatePos, facing, EnumFacing.SOUTH);
                     break;
                 case "dhd":
                     worldToSpawn.setBlockState(dataPos, worldToSpawn.getBlockState(dataPos.east()));
@@ -275,7 +274,7 @@ public class JSGStructure extends WorldGenerator {
             if (dhdPos != null)
                 LinkingHelper.updateLinkedGate(worldToSpawn, gatePos, dhdPos);
             gateTile.refresh();
-            gateTile.getMergeHelper().updateMembersMergeStatus(worldToSpawn, gateTile.getPos(), gateTile.getFacing(), true);
+            gateTile.getMergeHelper().updateMembersMergeStatus(worldToSpawn, gateTile.getPos(), gateTile.getFacing(), gateTile.getFacingVertical(), true);
             gateTile.markDirty();
 
             StargateAddress address = gateTile.getStargateAddress(symbolType);

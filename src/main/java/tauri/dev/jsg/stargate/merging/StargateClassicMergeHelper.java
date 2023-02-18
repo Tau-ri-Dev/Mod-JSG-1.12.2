@@ -16,7 +16,7 @@ import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.stargate.EnumMemberVariant;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicMemberTile;
 import tauri.dev.jsg.tileentity.stargate.StargateMilkyWayMemberTile;
-import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.main.JSGProps;
 
@@ -195,7 +195,7 @@ public abstract class StargateClassicMergeHelper extends StargateAbstractMergeHe
      * @param currentStargateSize Current Stargate size as read from NBT.
      * @param targetStargateSize  Target Stargate size as defined in config.
      */
-    public void convertToPattern(World world, BlockPos basePos, EnumFacing baseFacing, StargateSizeEnum currentStargateSize, StargateSizeEnum targetStargateSize) {
+    public void convertToPattern(World world, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical, StargateSizeEnum currentStargateSize, StargateSizeEnum targetStargateSize) {
         JSG.debug(basePos + ": Converting Stargate from " + currentStargateSize + " to " + targetStargateSize);
         List<BlockPos> oldPatternBlocks = new ArrayList<>();
 
@@ -217,28 +217,29 @@ public abstract class StargateClassicMergeHelper extends StargateAbstractMergeHe
         }
 
         for (BlockPos pos : oldPatternBlocks)
-            world.setBlockToAir(pos.rotate(FacingToRotation.get(baseFacing)).add(basePos));
+            world.setBlockToAir(FacingHelper.rotateBlock(pos, baseFacing, baseFacingVertical).add(basePos));
 
         IBlockState memberState = getMemberBlock().getDefaultState()
                 .withProperty(JSGProps.FACING_HORIZONTAL, baseFacing)
+                .withProperty(JSGProps.FACING_VERTICAL, baseFacingVertical)
                 .withProperty(JSGProps.RENDER_BLOCK, false);
 
         for (BlockPos pos : getRingBlocks())
-            world.setBlockState(pos.rotate(FacingToRotation.get(baseFacing)).add(basePos), memberState.withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.RING));
+            world.setBlockState(FacingHelper.rotateBlock(pos, baseFacing, baseFacingVertical).add(basePos), memberState.withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.RING));
 
         for (BlockPos pos : getChevronBlocks())
-            world.setBlockState(pos.rotate(FacingToRotation.get(baseFacing)).add(basePos), memberState.withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.CHEVRON));
+            world.setBlockState(FacingHelper.rotateBlock(pos, baseFacing, baseFacingVertical).add(basePos), memberState.withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.CHEVRON));
     }
 
 
-    protected boolean checkMemberBlock(IBlockAccess blockAccess, BlockPos pos, EnumFacing facing, EnumMemberVariant variant) {
+    protected boolean checkMemberBlock(IBlockAccess blockAccess, BlockPos pos, EnumFacing facing, EnumFacing facingVertical, EnumMemberVariant variant) {
         IBlockState state = blockAccess.getBlockState(pos);
 
-        return matchMember(state) && state.getValue(JSGProps.FACING_HORIZONTAL) == facing && state.getValue(JSGProps.MEMBER_VARIANT) == variant;
+        return matchMember(state) && state.getValue(JSGProps.FACING_HORIZONTAL) == facing && state.getValue(JSGProps.FACING_VERTICAL) == facingVertical && state.getValue(JSGProps.MEMBER_VARIANT) == variant;
     }
 
-    protected void updateMemberMergeStatus(World world, BlockPos checkPos, BlockPos basePos, EnumFacing baseFacing, boolean shouldBeMerged) {
-        checkPos = checkPos.rotate(FacingToRotation.get(baseFacing)).add(basePos);
+    protected void updateMemberMergeStatus(World world, BlockPos checkPos, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical, boolean shouldBeMerged) {
+        checkPos = FacingHelper.rotateBlock(checkPos, baseFacing, baseFacingVertical).add(basePos);
         IBlockState state = world.getBlockState(checkPos);
 
         if (matchMember(state)) {
@@ -272,7 +273,7 @@ public abstract class StargateClassicMergeHelper extends StargateAbstractMergeHe
      * @param basePos     Position of {@link StargateMilkyWayBaseBlock} the tiles should be linked to.
      * @param baseFacing  Facing of {@link StargateMilkyWayBaseBlock}.
      */
-    private void updateMemberBasePos(IBlockAccess blockAccess, BlockPos pos, BlockPos basePos, EnumFacing baseFacing) {
+    private void updateMemberBasePos(IBlockAccess blockAccess, BlockPos pos, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical) {
         IBlockState state = blockAccess.getBlockState(pos);
 
         if (matchMember(state)) {
@@ -291,11 +292,11 @@ public abstract class StargateClassicMergeHelper extends StargateAbstractMergeHe
      * @param baseFacing  Facing of {@link StargateMilkyWayBaseBlock}.
      */
     @Override
-    public void updateMembersBasePos(IBlockAccess blockAccess, BlockPos basePos, EnumFacing baseFacing) {
+    public void updateMembersBasePos(IBlockAccess blockAccess, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical) {
         for (BlockPos pos : getRingBlocks())
-            updateMemberBasePos(blockAccess, pos.rotate(FacingToRotation.get(baseFacing)).add(basePos), basePos, baseFacing);
+            updateMemberBasePos(blockAccess, FacingHelper.rotateBlock(pos, baseFacing, baseFacingVertical).add(basePos), basePos, baseFacing, baseFacingVertical);
 
         for (BlockPos pos : getChevronBlocks())
-            updateMemberBasePos(blockAccess, pos.rotate(FacingToRotation.get(baseFacing)).add(basePos), basePos, baseFacing);
+            updateMemberBasePos(blockAccess, FacingHelper.rotateBlock(pos, baseFacing, baseFacingVertical).add(basePos), basePos, baseFacing, baseFacingVertical);
     }
 }

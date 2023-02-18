@@ -1,5 +1,6 @@
 package tauri.dev.jsg.block.stargate;
 
+import net.minecraft.block.state.BlockStateContainer;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.gui.GuiIdEnum;
@@ -21,6 +22,8 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static tauri.dev.jsg.util.FacingHelper.getVerticalFacingFromPitch;
+
 public abstract class StargateClassicBaseBlock extends StargateAbstractBaseBlock {
 	
 	public StargateClassicBaseBlock(String blockName) {
@@ -34,14 +37,16 @@ public abstract class StargateClassicBaseBlock extends StargateAbstractBaseBlock
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		StargateClassicBaseTile gateTile = (StargateClassicBaseTile) world.getTileEntity(pos);
 		EnumFacing facing = placer.getHorizontalFacing().getOpposite();
+		EnumFacing verticalFacing = getVerticalFacingFromPitch(placer.rotationPitch);
 		
 		if (!world.isRemote) {			
 			state = state.withProperty(JSGProps.FACING_HORIZONTAL, facing)
+					.withProperty(JSGProps.FACING_VERTICAL, verticalFacing)
 					.withProperty(JSGProps.RENDER_BLOCK, true);
 		
 			world.setBlockState(pos, state);
 					
-			gateTile.updateFacing(facing, true);
+			gateTile.updateFacing(facing, verticalFacing, true);
 			gateTile.updateMergeState(gateTile.getMergeHelper().checkBlocks(world, pos, facing), facing);
 		}
 	}
@@ -54,10 +59,29 @@ public abstract class StargateClassicBaseBlock extends StargateAbstractBaseBlock
 		}
 	}
 
+	// --------------------------------------------------------------------------------------
+	// Block states
+
 	@Override
-	protected IBlockState createMemberState(IBlockState memberState, EnumFacing facing, int meta) {
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, JSGProps.FACING_HORIZONTAL, JSGProps.FACING_VERTICAL, JSGProps.RENDER_BLOCK);
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return (state.getValue(JSGProps.RENDER_BLOCK) ? 0x04 : 0) | state.getValue(JSGProps.FACING_HORIZONTAL).getHorizontalIndex() | (state.getValue(JSGProps.FACING_VERTICAL).getIndex() == 0 ? 0x05 : state.getValue(JSGProps.FACING_VERTICAL).getIndex() == 1 ? 0x06 : 0);
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(JSGProps.RENDER_BLOCK, (meta & 0x04) != 0).withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.getHorizontal(meta & 0x03)).withProperty(JSGProps.FACING_VERTICAL, (((meta & 0x05) != 0) ? EnumFacing.DOWN : ((meta & 0x06) != 0) ? EnumFacing.UP : EnumFacing.SOUTH));
+	}
+
+	@Override
+	protected IBlockState createMemberState(IBlockState memberState, EnumFacing facing, EnumFacing facingVertical, int meta) {
 		return memberState.withProperty(JSGProps.RENDER_BLOCK, true)
 				.withProperty(JSGProps.FACING_HORIZONTAL, facing)
+				.withProperty(JSGProps.FACING_VERTICAL, facingVertical)
 				.withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.byId((meta >> 3) & 0x01));
 	}
 

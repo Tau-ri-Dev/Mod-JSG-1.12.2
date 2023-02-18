@@ -7,7 +7,7 @@ import net.minecraft.util.EnumFacing;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.renderer.AncientRenderer;
 import tauri.dev.jsg.tileentity.props.DestinyCountDownTile;
-import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 
@@ -38,7 +38,7 @@ public class DestinyCountDownRenderer extends TileEntitySpecialRenderer<DestinyC
             IBlockState blockState = te.getWorld().getBlockState(te.getPos());
             EnumFacing facing = blockState.getValue(JSGProps.FACING_HORIZONTAL);
             GlStateManager.pushMatrix();
-            int rot = FacingToRotation.getIntRotation(facing, false);
+            int rot = FacingHelper.getIntRotation(facing, false);
             GlStateManager.rotate(rot + 180, 0, 1, 0);
 
             GlStateManager.translate(0, 0, -0.5);

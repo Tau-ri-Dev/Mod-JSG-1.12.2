@@ -16,7 +16,7 @@ import tauri.dev.jsg.stargate.EnumMemberVariant;
 import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import tauri.dev.jsg.stargate.merging.StargateMilkyWayMergeHelper;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
-import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 
@@ -43,7 +43,8 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
         final int chevronCount = 6;
         ArrayList<BlockPos> list = new ArrayList<>();
         for (int i = 0; i < chevronCount; i++) {
-            list.add(StargateMilkyWayMergeHelper.INSTANCE.getChevronBlocks().get(i).rotate(FacingToRotation.get(rendererState.facing)).add(rendererState.pos));
+            list.add(FacingHelper.rotateBlock(StargateMilkyWayMergeHelper.INSTANCE.getChevronBlocks().get(i), rendererState.facing, rendererState.facingVertical).add(rendererState.pos));
+            //list.add(StargateMilkyWayMergeHelper.INSTANCE.getChevronBlocks().get(i).rotate(FacingHelper.getRotation(rendererState.facing)).add(rendererState.pos));
         }
         JSGTextureLightningHelper.resetLight(getWorld(), list);
     }

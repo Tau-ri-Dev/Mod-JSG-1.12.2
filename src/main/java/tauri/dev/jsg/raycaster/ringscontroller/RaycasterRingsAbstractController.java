@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import tauri.dev.jsg.raycaster.Raycaster;
 import tauri.dev.jsg.raycaster.util.Ray;
 import tauri.dev.jsg.renderer.transportrings.controller.TRControllerAbstractRenderer;
-import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.vector.Vector3f;
 
@@ -24,7 +24,7 @@ public abstract class RaycasterRingsAbstractController extends Raycaster {
 
     public void onActivated(World world, BlockPos pos, EntityPlayer player) {
         EnumFacing facing = world.getBlockState(pos).getValue(JSGProps.FACING_HORIZONTAL);
-        float rotation = FacingToRotation.getIntRotation(facing, false);
+        float rotation = FacingHelper.getIntRotation(facing, false);
 
         super.onActivated(world, pos, player, rotation, EnumHand.MAIN_HAND);
     }

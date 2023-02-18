@@ -34,20 +34,20 @@ import java.util.*;
 import static tauri.dev.jsg.util.JSGAdvancementsUtil.tryTriggerRangedAdvancement;
 
 public class EventHorizon {
-    private World world;
-    private BlockPos pos;
-    private BlockPos gateCenter;
+    private final World world;
+    private final BlockPos pos;
+    private final BlockPos gateCenter;
 
-    private JSGAxisAlignedBB localBox;
-    private JSGAxisAlignedBB globalBox;
+    private final JSGAxisAlignedBB localBox;
+    private final JSGAxisAlignedBB globalBox;
     public static Random randomGenerator = new Random();
 
-    public EventHorizon(World world, BlockPos pos, BlockPos gateCenter, EnumFacing facing, JSGAxisAlignedBB localBox) {
+    public EventHorizon(World world, BlockPos pos, BlockPos gateCenter, EnumFacing facing, EnumFacing verticalFacing, JSGAxisAlignedBB localBox) {
         this.world = world;
         this.pos = pos;
         this.gateCenter = gateCenter;
 
-        this.localBox = localBox.rotate(facing).offset(0.5, 0, 0.5);
+        this.localBox = localBox.rotate(verticalFacing).rotate(facing).offset(0.5, 0, 0.5);
         this.globalBox = this.localBox.offset(pos);
     }
 

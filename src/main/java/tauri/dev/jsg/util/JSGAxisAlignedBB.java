@@ -43,7 +43,19 @@ public class JSGAxisAlignedBB extends AxisAlignedBB {
 	}
 	
 	public JSGAxisAlignedBB rotate(EnumFacing facing) {
-		return rotate((int) facing.getHorizontalAngle());
+		if(facing != EnumFacing.UP && facing != EnumFacing.DOWN)
+			return rotate((int) facing.getHorizontalAngle());
+
+		switch (facing) {
+
+			case UP:
+				return new JSGAxisAlignedBB(minX, minZ, -minY, maxX, maxZ, -maxY);
+			case DOWN:
+				return new JSGAxisAlignedBB(minX, -minZ, minY, maxX, -maxZ, maxY);
+			default:
+				break;
+		}
+		return this;
 	}
 	
 	@Override

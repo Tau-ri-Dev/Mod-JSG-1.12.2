@@ -9,7 +9,7 @@ import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateMilkyWayBaseTile;
 import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.BlockHelpers;
-import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.FacingHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -24,7 +24,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//ToDo Well, idk if getRingBlocks() should be relative... Maybe return absolute positions too. But not sure
 public abstract class StargateAbstractMergeHelper {
 
   /**
@@ -61,7 +60,7 @@ public abstract class StargateAbstractMergeHelper {
    * @return {@link List} of {@link BlockPos} pointing to absent blocks of variant given. Positions are absolute.
    */
   @Nonnull
-  public List<BlockPos> getAbsentBlockPositions(IBlockAccess world, BlockPos basePos, EnumFacing facing, EnumMemberVariant variant) {
+  public List<BlockPos> getAbsentBlockPositions(IBlockAccess world, BlockPos basePos, EnumFacing facing, EnumFacing facingVertical, EnumMemberVariant variant) {
     List<BlockPos> blocks = null;
 
     switch (variant) {
@@ -74,7 +73,7 @@ public abstract class StargateAbstractMergeHelper {
         break;
     }
 
-    return blocks.stream().map(pos -> pos.rotate(FacingToRotation.get(facing)).add(basePos)).filter(pos -> !matchMember(world.getBlockState(pos))).collect(Collectors.toList());
+    return blocks.stream().map(pos -> FacingHelper.rotateBlock(pos, facing, facingVertical).add(basePos)).filter(pos -> !matchMember(world.getBlockState(pos))).collect(Collectors.toList());
   }
 
   @Nullable
@@ -138,7 +137,7 @@ public abstract class StargateAbstractMergeHelper {
    *
    * @return {@code true} if the block matches given parameters, {@code false} otherwise.
    */
-  protected abstract boolean checkMemberBlock(IBlockAccess blockAccess, BlockPos pos, EnumFacing facing, EnumMemberVariant variant);
+  protected abstract boolean checkMemberBlock(IBlockAccess blockAccess, BlockPos pos, EnumFacing facing, EnumFacing facingVertical, EnumMemberVariant variant);
 
   /**
    * Called on block placement. Checks the found base block
@@ -150,15 +149,15 @@ public abstract class StargateAbstractMergeHelper {
    *
    * @return {@code true} if the structure matches, {@code false} otherwise.
    */
-  public boolean checkBlocks(IBlockAccess blockAccess, BlockPos basePos, EnumFacing baseFacing) {
+  public boolean checkBlocks(IBlockAccess blockAccess, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical) {
     if (JSGConfig.General.debug.checkGateMerge) {
       for (BlockPos pos : getRingBlocks()) {
-        if (!checkMemberBlock(blockAccess, pos.rotate(FacingToRotation.get(baseFacing)).add(basePos), baseFacing, EnumMemberVariant.RING))
+        if (!checkMemberBlock(blockAccess, FacingHelper.rotateBlock(pos, baseFacing, baseFacingVertical).add(basePos), baseFacing, baseFacingVertical, EnumMemberVariant.RING))
           return false;
       }
 
       for (BlockPos pos : getChevronBlocks()) {
-        if (!checkMemberBlock(blockAccess, pos.rotate(FacingToRotation.get(baseFacing)).add(basePos), baseFacing, EnumMemberVariant.CHEVRON))
+        if (!checkMemberBlock(blockAccess, FacingHelper.rotateBlock(pos, baseFacing, baseFacingVertical).add(basePos), baseFacing, baseFacingVertical, EnumMemberVariant.CHEVRON))
           return false;
       }
     }
@@ -175,7 +174,7 @@ public abstract class StargateAbstractMergeHelper {
    * @param baseFacing     Facing of the base block
    * @param shouldBeMerged {@code true} if the structure is merging, false otherwise.
    */
-  protected abstract void updateMemberMergeStatus(World world, BlockPos checkPos, BlockPos basePos, EnumFacing baseFacing, boolean shouldBeMerged);
+  protected abstract void updateMemberMergeStatus(World world, BlockPos checkPos, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical, boolean shouldBeMerged);
 
   /**
    * Updates merge status of the Stargate.
@@ -185,14 +184,14 @@ public abstract class StargateAbstractMergeHelper {
    * @param baseFacing     Facing of {@link StargateMilkyWayBaseBlock}.
    * @param shouldBeMerged {@code true} if the structure is merging, false otherwise.
    */
-  public void updateMembersMergeStatus(World world, BlockPos basePos, EnumFacing baseFacing, boolean shouldBeMerged) {
+  public void updateMembersMergeStatus(World world, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical, boolean shouldBeMerged) {
     for (BlockPos pos : getRingBlocks())
-      updateMemberMergeStatus(world, pos, basePos, baseFacing, shouldBeMerged);
+      updateMemberMergeStatus(world, pos, basePos, baseFacing, baseFacingVertical, shouldBeMerged);
 
     for (BlockPos pos : getChevronBlocks())
-      updateMemberMergeStatus(world, pos, basePos, baseFacing, shouldBeMerged);
+      updateMemberMergeStatus(world, pos, basePos, baseFacing, baseFacingVertical, shouldBeMerged);
   }
 
-  public void updateMembersBasePos(IBlockAccess blockAccess, BlockPos basePos, EnumFacing baseFacing) {
+  public void updateMembersBasePos(IBlockAccess blockAccess, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical) {
   }
 }

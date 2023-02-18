@@ -27,12 +27,12 @@ public class StargateUniverseRendererState extends StargateClassicRendererState 
     }
 
     @Override
-    public StargateAbstractRendererState initClient(BlockPos pos, EnumFacing facing, BiomeOverlayEnum biomeOverlay) {
+    public StargateAbstractRendererState initClient(BlockPos pos, EnumFacing facing, EnumFacing facingVertical, BiomeOverlayEnum biomeOverlay) {
         for (SymbolUniverseEnum symbol : SymbolUniverseEnum.values()) {
             symbolStateMap.put(symbol, getFloatValue(dialedAddress.contains(symbol)));
         }
 
-        return super.initClient(pos, facing, biomeOverlay);
+        return super.initClient(pos, facing, facingVertical, biomeOverlay);
     }
 
     @Override

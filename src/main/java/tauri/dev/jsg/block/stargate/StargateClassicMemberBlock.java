@@ -47,7 +47,7 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     public StargateClassicMemberBlock(String blockName) {
         super(blockName);
 
-        setDefaultState(blockState.getBaseState().withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.NORTH).withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.RING).withProperty(JSGProps.RENDER_BLOCK, true));
+        setDefaultState(blockState.getBaseState().withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.NORTH).withProperty(JSGProps.FACING_VERTICAL, EnumFacing.SOUTH).withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.RING).withProperty(JSGProps.RENDER_BLOCK, true));
     }
 
     @Override
@@ -87,7 +87,7 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
 
     // ------------------------------------------------------------------------
     @SuppressWarnings("rawtypes")
-    private static final IProperty[] LISTED_PROPS = new IProperty[]{JSGProps.RENDER_BLOCK, JSGProps.FACING_HORIZONTAL, JSGProps.MEMBER_VARIANT};
+    private static final IProperty[] LISTED_PROPS = new IProperty[]{JSGProps.RENDER_BLOCK, JSGProps.FACING_HORIZONTAL, JSGProps.FACING_VERTICAL, JSGProps.MEMBER_VARIANT};
 
     @SuppressWarnings("rawtypes")
     private static final IUnlistedProperty[] UNLISTED_PROPS = new IUnlistedProperty[]{JSGProps.CAMO_BLOCKSTATE};
@@ -99,12 +99,12 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return (state.getValue(JSGProps.MEMBER_VARIANT).id << 3) | (state.getValue(JSGProps.RENDER_BLOCK) ? 0x04 : 0) | state.getValue(JSGProps.FACING_HORIZONTAL).getHorizontalIndex();
+        return (state.getValue(JSGProps.MEMBER_VARIANT).id << 3) | (state.getValue(JSGProps.RENDER_BLOCK) ? 0x04 : 0) | state.getValue(JSGProps.FACING_HORIZONTAL).getHorizontalIndex() | (state.getValue(JSGProps.FACING_VERTICAL).getIndex() == 0 ? 0x05 : state.getValue(JSGProps.FACING_VERTICAL).getIndex() == 1 ? 0x06 : 0);
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.byId((meta >> 3) & 0x01)).withProperty(JSGProps.RENDER_BLOCK, (meta & 0x04) != 0).withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.getHorizontal(meta & 0x03));
+        return getDefaultState().withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.byId((meta >> 3) & 0x01)).withProperty(JSGProps.RENDER_BLOCK, (meta & 0x04) != 0).withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.getHorizontal(meta & 0x03)).withProperty(JSGProps.FACING_VERTICAL, (((meta & 0x05) != 0) ? EnumFacing.DOWN : ((meta & 0x06) != 0) ? EnumFacing.UP : EnumFacing.SOUTH));
     }
 
 

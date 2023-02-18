@@ -18,7 +18,7 @@ import net.minecraftforge.fluids.Fluid;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.tileentity.BeamerTile;
-import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.FluidColors;
 import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
@@ -110,7 +110,7 @@ public class BeamerBeam {
                 else if ((i - 1) % 3 == 0) x = Math.round(offX);
                 else x = Math.ceil(offX);
 
-                BlockPos stepPos = new BlockPos(x, y, off).rotate(FacingToRotation.get(facing));
+                BlockPos stepPos = new BlockPos(x, y, off).rotate(FacingHelper.getRotation(facing));
 
                 stepPos = stepPos.add(pos);
 

@@ -5,13 +5,12 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.beamer.BeamerBeam;
 import tauri.dev.jsg.beamer.BeamerRoleEnum;
 import tauri.dev.jsg.particle.ParticleBlenderSmoke;
 import tauri.dev.jsg.renderer.BlockRenderer;
 import tauri.dev.jsg.tileentity.machine.PCBFabricatorTile;
-import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
@@ -49,7 +48,7 @@ public class PCBFabricatorRenderer extends TileEntitySpecialRenderer<PCBFabricat
                 GlStateManager.scale(0.8f, 0.8f, 0.8f);
 
                 EnumFacing facing = te.getWorld().getBlockState(te.getPos()).getValue(JSGProps.FACING_HORIZONTAL);
-                int rotation = FacingToRotation.getIntRotation(facing, false);
+                int rotation = FacingHelper.getIntRotation(facing, false);
 
                 GlStateManager.rotate(rotation, 0, 1, 0);
                 GlStateManager.rotate(90, 1, 0, 0);

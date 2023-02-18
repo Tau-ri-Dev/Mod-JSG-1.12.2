@@ -13,7 +13,7 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.worldgen.structures.stargate.nether.JSGNetherStructure;
 import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 import tauri.dev.jsg.worldgen.util.JSGStructurePos;
@@ -129,7 +129,7 @@ public class JSGStructuresGenerator implements IWorldGenerator {
         BlockPos pos = new BlockPos(x, 50, z);
         ArrayList<BlockPos> bestPositions = new ArrayList<>();
         int topBlocksOk = 0;
-        Rotation rotation = FacingToRotation.get(findOptimalRotation(world, pos));
+        Rotation rotation = FacingHelper.getRotation(findOptimalRotation(world, pos));
         for (int xx = -1; xx <= (structureSizeX + 1); xx++) {
             for (int zz = -1; zz <= (structureSizeZ + 1); zz++) {
                 BlockPos newPos = pos.add((new BlockPos(xx, 0, zz).rotate(rotation)));

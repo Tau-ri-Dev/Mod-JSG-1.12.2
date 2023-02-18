@@ -13,6 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -94,6 +95,7 @@ public abstract class StargateAbstractBaseBlock extends JSGBlock {
     protected boolean tryAutobuild(EntityPlayer player, World world, BlockPos basePos, EnumHand hand) {
         final StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(basePos);
         final EnumFacing facing = gateTile.getFacing();
+        final EnumFacing facingVertical = gateTile.getFacingVertical();
 
         StargateAbstractMergeHelper mergeHelper = gateTile.getMergeHelper();
         ItemStack stack = player.getHeldItem(hand);
@@ -104,14 +106,14 @@ public abstract class StargateAbstractBaseBlock extends JSGBlock {
             EnumMemberVariant variant = mergeHelper.getMemberVariantFromItemStack(stack);
 
             if (variant != null) {
-                List<BlockPos> posList = mergeHelper.getAbsentBlockPositions(world, basePos, facing, variant);
+                List<BlockPos> posList = mergeHelper.getAbsentBlockPositions(world, basePos, facing, facingVertical, variant);
 
                 if (!posList.isEmpty()) {
                     BlockPos pos = posList.get(0);
 
                     if (world.getBlockState(pos).getBlock().isReplaceable(world, pos)) {
                         IBlockState memberState = mergeHelper.getMemberBlock().getDefaultState();
-                        world.setBlockState(pos, createMemberState(memberState, facing, stack.getMetadata()));
+                        world.setBlockState(pos, createMemberState(memberState, facing, facingVertical, stack.getMetadata()));
 
                         SoundType soundtype = memberState.getBlock().getSoundType(memberState, world, pos, player);
                         world.playSound(null, pos, soundtype.getBreakSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
@@ -131,7 +133,7 @@ public abstract class StargateAbstractBaseBlock extends JSGBlock {
         return false;
     }
 
-    protected abstract IBlockState createMemberState(IBlockState memberState, EnumFacing facing, int meta);
+    protected abstract IBlockState createMemberState(IBlockState memberState, EnumFacing facing, EnumFacing facingVertical, int meta);
 
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {

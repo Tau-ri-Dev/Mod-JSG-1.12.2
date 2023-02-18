@@ -28,10 +28,10 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
     }
 
     @Override
-    public StargateAbstractRendererState initClient(BlockPos pos, EnumFacing facing, BiomeOverlayEnum biomeOverlay) {
+    public StargateAbstractRendererState initClient(BlockPos pos, EnumFacing facing, EnumFacing facingVertical, BiomeOverlayEnum biomeOverlay) {
         chevronTextureList.initClient();
 
-        return super.initClient(pos, facing, biomeOverlay);
+        return super.initClient(pos, facing, facingVertical, biomeOverlay);
     }
 
     protected abstract String getChevronTextureBase();

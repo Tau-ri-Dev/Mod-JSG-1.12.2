@@ -25,9 +25,18 @@ public class JSGProps {
 	/**
 	 * Holds horizontal facing of the block
 	 * 
-	 * Used for ex. by Stargate blocks since only vertical Stargates are supported at the moment
+	 * Used for any facing block
 	 */
 	public static final PropertyDirection FACING_HORIZONTAL = PropertyDirection.create("facing", Arrays.asList(EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST));
+
+	/**
+	 * Holds vertical facing of the block
+	 *
+	 * Used for Stargates
+	 *
+	 * EnumFacing.SOUTH is used as null (the gate is not vertically faced)
+	 */
+	public static final PropertyDirection FACING_VERTICAL = PropertyDirection.create("facing_vertical", Arrays.asList(EnumFacing.SOUTH, EnumFacing.UP, EnumFacing.DOWN));
 
 	/**
 	 * Holds rotation(something like extended facing)

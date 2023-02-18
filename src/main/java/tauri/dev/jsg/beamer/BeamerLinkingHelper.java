@@ -7,7 +7,7 @@ import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.stargate.StargateClassicBaseBlock;
 import tauri.dev.jsg.tileentity.BeamerTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
-import tauri.dev.jsg.util.FacingToRotation;
+import tauri.dev.jsg.util.FacingHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
@@ -31,7 +31,7 @@ public class BeamerLinkingHelper {
 			
 			if (state.getBlock() instanceof StargateClassicBaseBlock && state.getValue(JSGProps.FACING_HORIZONTAL) == blockFacing.getOpposite()) {
 				EnumFacing baseFacing = state.getValue(JSGProps.FACING_HORIZONTAL);
-				Rotation rotation = FacingToRotation.get(baseFacing);
+				Rotation rotation = FacingHelper.getRotation(baseFacing);
 				
 				if (rotation == Rotation.CLOCKWISE_90 || rotation == Rotation.COUNTERCLOCKWISE_90)
 					rotation = rotation.add(Rotation.CLOCKWISE_180);
@@ -64,7 +64,7 @@ public class BeamerLinkingHelper {
 			
 			if (state.getBlock() == JSGBlocks.BEAMER_BLOCK && state.getValue(JSGProps.FACING_HORIZONTAL) == blockFacing.getOpposite()) {
 				EnumFacing beamerFacing = state.getValue(JSGProps.FACING_HORIZONTAL);
-				Rotation rotation = FacingToRotation.get(beamerFacing);
+				Rotation rotation = FacingHelper.getRotation(beamerFacing);
 				
 				if (rotation == Rotation.CLOCKWISE_90 || rotation == Rotation.COUNTERCLOCKWISE_90)
 					rotation = rotation.add(Rotation.CLOCKWISE_180);
