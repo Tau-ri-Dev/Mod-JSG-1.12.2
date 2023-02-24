@@ -1,17 +1,5 @@
 package tauri.dev.jsg.block.stargate;
 
-import net.minecraft.init.Items;
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.util.FacingHelper;
-import tauri.dev.jsg.util.main.JSGProps;
-import tauri.dev.jsg.block.JSGBlocks;
-import tauri.dev.jsg.block.dialhomedevice.DHDAbstractBlock;
-import tauri.dev.jsg.gui.GuiIdEnum;
-import tauri.dev.jsg.stargate.CamoPropertiesHelper;
-import tauri.dev.jsg.stargate.EnumMemberVariant;
-import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicMemberTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.SoundType;
@@ -24,6 +12,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -38,10 +27,21 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.block.dialhomedevice.DHDAbstractBlock;
+import tauri.dev.jsg.gui.GuiIdEnum;
+import tauri.dev.jsg.stargate.CamoPropertiesHelper;
+import tauri.dev.jsg.stargate.EnumMemberVariant;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicMemberTile;
+import tauri.dev.jsg.util.FacingHelper;
+import tauri.dev.jsg.util.main.JSGProps;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
-
-import static net.minecraft.init.Items.BUCKET;
+import java.util.Objects;
 
 public abstract class StargateClassicMemberBlock extends StargateAbstractMemberBlock {
 
@@ -93,6 +93,7 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     @SuppressWarnings("rawtypes")
     private static final IUnlistedProperty[] UNLISTED_PROPS = new IUnlistedProperty[]{JSGProps.CAMO_BLOCKSTATE};
 
+    @Nonnull
     @Override
     protected BlockStateContainer createBlockState() {
         return new ExtendedBlockState(this, LISTED_PROPS, UNLISTED_PROPS);
@@ -100,18 +101,30 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return (state.getValue(JSGProps.MEMBER_VARIANT).id << 3) | (state.getValue(JSGProps.RENDER_BLOCK) ? 0x04 : 0) | state.getValue(JSGProps.FACING_HORIZONTAL).getHorizontalIndex() | (state.getValue(JSGProps.FACING_VERTICAL).getIndex() == 0 ? 0x05 : state.getValue(JSGProps.FACING_VERTICAL).getIndex() == 1 ? 0x06 : 0);
+        return (state.getValue(JSGProps.MEMBER_VARIANT).id << 3) | (state.getValue(JSGProps.RENDER_BLOCK) ? 0x04 : 0) | state.getValue(JSGProps.FACING_HORIZONTAL).getHorizontalIndex();// | (state.getValue(JSGProps.FACING_VERTICAL).getIndex() == 0 ? 0x05 : state.getValue(JSGProps.FACING_VERTICAL).getIndex() == 1 ? 0x06 : 0);
     }
 
+    @Nonnull
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.byId((meta >> 3) & 0x01)).withProperty(JSGProps.RENDER_BLOCK, (meta & 0x04) != 0).withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.getHorizontal(meta & 0x03)).withProperty(JSGProps.FACING_VERTICAL, (((meta & 0x05) != 0) ? EnumFacing.DOWN : ((meta & 0x06) != 0) ? EnumFacing.UP : EnumFacing.SOUTH));
+        return getDefaultState().withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.byId((meta >> 3) & 0x01)).withProperty(JSGProps.RENDER_BLOCK, (meta & 0x04) != 0).withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.getHorizontal(meta & 0x03));//.withProperty(JSGProps.FACING_VERTICAL, (((meta & 0x05) != 0) ? EnumFacing.DOWN : ((meta & 0x06) != 0) ? EnumFacing.UP : EnumFacing.SOUTH));
+    }
+
+    @Nonnull
+    @Deprecated
+    public IBlockState getActualState(@Nonnull IBlockState state, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
+        if (worldIn.getBlockState(pos).getBlock() != this) return state;
+        StargateClassicMemberTile sg = (StargateClassicMemberTile) worldIn.getTileEntity(pos);
+        if(sg != null)
+            return state.withProperty(JSGProps.FACING_VERTICAL, sg.getFacingVertical());
+        return state;
     }
 
 
     // ------------------------------------------------------------------------
+    @Nonnull
     @Override
-    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public IBlockState getExtendedState(@Nonnull IBlockState state, IBlockAccess world, @Nonnull BlockPos pos) {
         // Optifine shit
         if (world.getBlockState(pos).getBlock() != this) return state;
 
@@ -176,7 +189,7 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack heldItemStack = player.getHeldItem(EnumHand.MAIN_HAND);
 
-        if(JSGBlocks.isInBlocksArray(Block.getBlockFromItem(heldItemStack.getItem()), JSGBlocks.CAMO_BLOCKS_BLACKLIST)){
+        if (JSGBlocks.isInBlocksArray(Block.getBlockFromItem(heldItemStack.getItem()), JSGBlocks.CAMO_BLOCKS_BLACKLIST)) {
             heldItemStack = ItemStack.EMPTY;
         }
 
@@ -191,9 +204,9 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
                 return false;
             if (!(heldItem instanceof ItemBlock) && heldItem != Items.WATER_BUCKET && camoBlockState == null) {
                 BlockPos basePos = memberTile.getBasePos();
-                if(basePos == null || world.getTileEntity(basePos) == null || !(world.getTileEntity(basePos) instanceof StargateClassicBaseTile)){
+                if (basePos == null || world.getTileEntity(basePos) == null || !(world.getTileEntity(basePos) instanceof StargateClassicBaseTile)) {
                     StargateAbstractBaseTile gateTile = getMergeHelper().findBaseTile(memberTile.getWorld(), memberTile.getPos(), blockState.getBaseState().getValue(JSGProps.FACING_HORIZONTAL), blockState.getBaseState().getValue(JSGProps.FACING_VERTICAL));
-                    if(gateTile == null)
+                    if (gateTile == null)
                         return false;
                     memberTile.setBasePos(gateTile.getPos());
                     basePos = memberTile.getBasePos();
@@ -270,7 +283,7 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
                     else if (blockSlab == Blocks.WOODEN_SLAB) block = Blocks.DOUBLE_WOODEN_SLAB;
 
                     else if (blockSlab == Blocks.PURPUR_SLAB) block = Blocks.PURPUR_DOUBLE_SLAB;
-                    if(block == null) return false;
+                    if (block == null) return false;
                 } else {
                     if (camoBlockState != null && !player.capabilities.isCreativeMode) {
                         InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(camoBlockState.getBlock(), 1, camoBlockState.getBlock().getMetaFromState(camoBlockState)));
@@ -299,9 +312,11 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        EnumFacing verticalFacing = FacingHelper.getVerticalFacingFromPitch(placer.rotationPitch);
+        ((StargateClassicMemberTile) Objects.requireNonNull(world.getTileEntity(pos))).setVerticalFacing(verticalFacing);
+
         if (!world.isRemote) {
             EnumFacing facing = placer.getHorizontalFacing().getOpposite();
-            EnumFacing verticalFacing = FacingHelper.getVerticalFacingFromPitch(placer.rotationPitch);
 
             state = state.withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.byId((stack.getMetadata() >> 3) & 0x01)).withProperty(JSGProps.RENDER_BLOCK, true).withProperty(JSGProps.FACING_HORIZONTAL, facing).withProperty(JSGProps.FACING_VERTICAL, verticalFacing);
 
@@ -348,5 +363,6 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     }
 
     public abstract ItemBlock getItemBlock();
+
     public abstract Map<Integer, String> getAllMetaTypes();
 }

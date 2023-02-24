@@ -5,41 +5,6 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.*;
-import net.minecraft.util.math.Vec3i;
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.api.event.*;
-import tauri.dev.jsg.block.JSGBlocks;
-import tauri.dev.jsg.block.dialhomedevice.DHDBlock;
-import tauri.dev.jsg.chunkloader.ChunkManager;
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.config.JSGConfigUtil;
-import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
-import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.packet.StateUpdatePacketToClient;
-import tauri.dev.jsg.packet.StateUpdateRequestToServer;
-import tauri.dev.jsg.particle.ParticleWhiteSmoke;
-import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
-import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
-import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState.StargateAbstractRendererStateBuilder;
-import tauri.dev.jsg.sound.*;
-import tauri.dev.jsg.stargate.*;
-import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
-import tauri.dev.jsg.stargate.network.*;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
-import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
-import tauri.dev.jsg.stargate.teleportation.EventHorizon;
-import tauri.dev.jsg.state.State;
-import tauri.dev.jsg.state.StateProviderInterface;
-import tauri.dev.jsg.state.StateTypeEnum;
-import tauri.dev.jsg.state.stargate.StargateFlashState;
-import tauri.dev.jsg.state.stargate.StargateRendererActionState;
-import tauri.dev.jsg.state.stargate.StargateVaporizeBlockParticlesRequest;
-import tauri.dev.jsg.tileentity.util.PreparableInterface;
-import tauri.dev.jsg.tileentity.util.ScheduledTask;
-import tauri.dev.jsg.tileentity.util.ScheduledTaskExecutorInterface;
-import tauri.dev.jsg.util.JSGAdvancementsUtil;
-import tauri.dev.jsg.util.JSGAxisAlignedBB;
-import tauri.dev.jsg.util.main.JSGProps;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
@@ -55,6 +20,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -66,7 +32,41 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.api.event.*;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.block.dialhomedevice.DHDBlock;
+import tauri.dev.jsg.chunkloader.ChunkManager;
+import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.JSGConfigUtil;
+import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.config.stargate.StargateTimeLimitModeEnum;
+import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.packet.StateUpdatePacketToClient;
+import tauri.dev.jsg.packet.StateUpdateRequestToServer;
+import tauri.dev.jsg.particle.ParticleWhiteSmoke;
+import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
+import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
+import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
+import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState.StargateAbstractRendererStateBuilder;
+import tauri.dev.jsg.sound.*;
+import tauri.dev.jsg.stargate.*;
+import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
+import tauri.dev.jsg.stargate.network.*;
+import tauri.dev.jsg.stargate.teleportation.EventHorizon;
+import tauri.dev.jsg.state.State;
+import tauri.dev.jsg.state.StateProviderInterface;
+import tauri.dev.jsg.state.StateTypeEnum;
+import tauri.dev.jsg.state.stargate.StargateFlashState;
+import tauri.dev.jsg.state.stargate.StargateRendererActionState;
+import tauri.dev.jsg.state.stargate.StargateVaporizeBlockParticlesRequest;
+import tauri.dev.jsg.tileentity.util.PreparableInterface;
+import tauri.dev.jsg.tileentity.util.ScheduledTask;
+import tauri.dev.jsg.tileentity.util.ScheduledTaskExecutorInterface;
+import tauri.dev.jsg.util.JSGAdvancementsUtil;
+import tauri.dev.jsg.util.JSGAxisAlignedBB;
+import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nullable;
 import javax.vecmath.Vector2f;
@@ -80,7 +80,7 @@ import static tauri.dev.jsg.util.JSGAdvancementsUtil.tryTriggerRangedAdvancement
 public abstract class StargateAbstractBaseTile extends TileEntity implements StateProviderInterface, ITickable, ICapabilityProvider, ScheduledTaskExecutorInterface, Environment, WirelessEndpoint, PreparableInterface {
 
     public StargateNetwork getNetwork() {
-        if(network == null) network = StargateNetwork.get(world);
+        if (network == null) network = StargateNetwork.get(world);
         return network;
     }
 
@@ -366,11 +366,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         StargatePos targetGatePos = getNetwork().getStargate(address);
 
-        if(targetGatePos == null) return StargateOpenResult.ADDRESS_MALFORMED;
+        if (targetGatePos == null) return StargateOpenResult.ADDRESS_MALFORMED;
         if (!hasEnergyToDial(targetGatePos)) return StargateOpenResult.NOT_ENOUGH_POWER;
 
         StargateAbstractBaseTile targetTile = targetGatePos.getTileEntity();
-        if(targetTile instanceof StargateClassicBaseTile) {
+        if (targetTile instanceof StargateClassicBaseTile) {
             StargateClassicBaseTile classicTile = (StargateClassicBaseTile) targetTile;
             if (classicTile.isGateBurried())
                 return StargateOpenResult.GATE_BURRIED;
@@ -500,6 +500,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         return false;
     }
+
     protected boolean stargateWillLock(SymbolInterface symbol) {
         return stargateWillLock(symbol, false);
     }
@@ -827,7 +828,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     protected EnumFacing facingVertical = EnumFacing.SOUTH;
 
-    public EnumFacing getFacingVertical(){
+    public EnumFacing getFacingVertical() {
         return facingVertical;
     }
 
@@ -881,7 +882,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     public void generateIncoming(int entities, int addressSize, int delay) {
-        if(!isMerged) return;
+        if (!isMerged) return;
         if (this instanceof StargateUniverseBaseTile && !((stargateState.idle() || (stargateState.dialing() && !stargateState.dialingComputer())) && !randomIncomingIsActive))
             return;
         else if (!((stargateState.idle() || stargateState.dialing()) && !randomIncomingIsActive)) return;
@@ -1077,7 +1078,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     public abstract EnumSet<BiomeOverlayEnum> getSupportedOverlays();
 
-    public BiomeOverlayEnum getBiomeOverlayWithOverride(boolean override){
+    public BiomeOverlayEnum getBiomeOverlayWithOverride(boolean override) {
         return BiomeOverlayEnum.updateBiomeOverlay(world, getMergeHelper().getTopBlock().add(pos), getSupportedOverlays());
     }
 
@@ -1101,7 +1102,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         markDirty();
     }
 
-    public void clearDHDSymbols(){}
+    public void clearDHDSymbols() {
+    }
 
     protected int doTimeLimitFunc() {
         int morePower = 0;
@@ -1110,7 +1112,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         int maxSeconds = JSGConfig.Stargate.openLimit.maxOpenedSeconds;
         StargateTimeLimitModeEnum limitMode = JSGConfig.Stargate.openLimit.maxOpenedWhat;
 
-        if(this instanceof StargateClassicBaseTile){
+        if (this instanceof StargateClassicBaseTile) {
             StargateClassicBaseTile casted = ((StargateClassicBaseTile) this);
             limitMode = StargateTimeLimitModeEnum.byId(casted.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.TIME_LIMIT_MODE.id).getEnumValue().getIntValue());
             configPower = casted.getConfig().getOption(StargateClassicBaseTile.ConfigOptions.TIME_LIMIT_POWER.id).getIntValue();
@@ -1123,14 +1125,14 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
                 clearDHDSymbols();
             } else
-                morePower = (int) (((double) getOpenedSeconds()/maxSeconds) * configPower);
+                morePower = (int) (((double) getOpenedSeconds() / maxSeconds) * configPower);
         }
         return morePower;
     }
 
     public long getOpenedSeconds() {
-        if(openedSince < 0) return -1;
-        return (world.getTotalWorldTime() - openedSince)/20;
+        if (openedSince < 0) return -1;
+        return (world.getTotalWorldTime() - openedSince) / 20;
     }
 
     public String getOpenedSecondsToDisplayAsMinutes() {
@@ -1373,9 +1375,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     // This prevents to kill entity on destination by "Wrong Side Kill" method
     public final HashMap<Integer, Entity> entitiesPassedLast = new HashMap<>();
 
-    public void updatePassedEntities(){
-        if(!stargateState.engaged()){
-            if(entitiesPassedLast.size() > 0)
+    public void updatePassedEntities() {
+        if (!stargateState.engaged()) {
+            if (entitiesPassedLast.size() > 0)
                 entitiesPassedLast.clear();
             markDirty();
             return;
@@ -1383,22 +1385,22 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         AxisAlignedBB scanBox = new AxisAlignedBB(getGateCenterPos().add(new Vec3i(-5, -5, -5)), getGateCenterPos().add(new Vec3i(5, 5, 5)));
         List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, scanBox);
-        List<Integer> ids = new ArrayList<Integer>(){{
-            for(Entity e : entities)
+        List<Integer> ids = new ArrayList<Integer>() {{
+            for (Entity e : entities)
                 add(e.getEntityId());
         }};
-        HashMap<Integer, Entity> clonedEntitiesLast = new HashMap<Integer, Entity>(){{
+        HashMap<Integer, Entity> clonedEntitiesLast = new HashMap<Integer, Entity>() {{
             putAll(entitiesPassedLast);
         }};
-        for(int i : clonedEntitiesLast.keySet()){
-            if(!ids.contains(i))
+        for (int i : clonedEntitiesLast.keySet()) {
+            if (!ids.contains(i))
                 entitiesPassedLast.remove(i);
         }
         markDirty();
     }
 
     public final void entityPassing(Entity entity, boolean inbound) {
-        if(inbound)
+        if (inbound)
             entitiesPassedLast.put(entity.getEntityId(), entity);
 
         boolean isPlayer = entity instanceof EntityPlayerMP;
@@ -1703,9 +1705,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         StargateEnergyRequired energyRequired = new StargateEnergyRequired(JSGConfig.Stargate.power.openingBlockToEnergyRatio, JSGConfig.Stargate.power.keepAliveBlockToEnergyRatioPerTick);
         energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(world.provider.getDimensionType(), targetDim));
 
-        if(dialedAddress.size() == 9)
+        if (dialedAddress.size() == 9)
             energyRequired.mul(JSGConfig.Stargate.power.nineSymbolAddressMul);
-        if(dialedAddress.size() == 8)
+        if (dialedAddress.size() == 8)
             energyRequired.mul(JSGConfig.Stargate.power.eightSymbolAddressMul);
 
         //JSG.logger.info(String.format("Energy required to dial [distance=%,d, from=%s, to=%s] = %,d / keepAlive: %,d/t, stored=%,d", Math.round(distance), sourceDim, targetDim, energyRequired.energyToOpen, energyRequired.keepAlive, getEnergyStorage().getEnergyStored()));
@@ -1779,6 +1781,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         compound.setBoolean("horizonKilling", horizonKilling);
         compound.setInteger("horizonSegments", horizonSegments);
         compound.setLong("openedSince", openedSince);
+        compound.setInteger("facingVertical", (facingVertical == EnumFacing.UP ? 2 : facingVertical == EnumFacing.DOWN ? 1 : 0));
 
         return super.writeToNBT(compound);
     }
@@ -1822,6 +1825,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         horizonKilling = compound.getBoolean("horizonKilling");
         horizonSegments = compound.getInteger("horizonSegments");
         openedSince = compound.getLong("openedSince");
+
+        if (compound.hasKey("facingVertical")) {
+            int fVertIndex = compound.getInteger("facingVertical");
+            facingVertical = (fVertIndex == 2 ? EnumFacing.UP : fVertIndex == 1 ? EnumFacing.DOWN : EnumFacing.SOUTH);
+        }
 
         super.readFromNBT(compound);
     }

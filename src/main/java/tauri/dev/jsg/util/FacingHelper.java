@@ -31,6 +31,41 @@ public class FacingHelper {
         }
     }
 
+    public static int toInt(EnumFacing f){
+        switch(f){
+            case NORTH:
+                return 1;
+            case WEST:
+                return 2;
+            case EAST:
+                return 3;
+            case UP:
+                return 4;
+            case DOWN:
+                return 5;
+            default: break;
+        }
+        return 0;
+    }
+
+    public static EnumFacing fromInt(int i){
+        switch(i){
+            case 1:
+                return EnumFacing.NORTH;
+            case 2:
+                return EnumFacing.WEST;
+            case 3:
+                return EnumFacing.EAST;
+            case 4:
+                return EnumFacing.UP;
+            case 5:
+                return EnumFacing.DOWN;
+            default: break;
+        }
+        return EnumFacing.SOUTH;
+
+    }
+
     public static Rotation getRotation(EnumFacing facing) {
         return ROTATION_MAP.get(facing);
     }

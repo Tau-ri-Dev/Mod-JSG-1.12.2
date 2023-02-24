@@ -23,7 +23,6 @@ import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentString;
@@ -55,6 +54,9 @@ import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.item.stargate.UpgradeIris;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
+import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRenderer;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRendererState;
@@ -68,9 +70,6 @@ import tauri.dev.jsg.stargate.codesender.CodeSender;
 import tauri.dev.jsg.stargate.codesender.CodeSenderType;
 import tauri.dev.jsg.stargate.codesender.ComputerCodeSender;
 import tauri.dev.jsg.stargate.network.*;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
-import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
-import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.stargate.StargateBiomeOverrideState;
@@ -656,7 +655,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void update() {
         if (world.isRemote) {
             // Client -> request to update client config
-            if(getConfig().getOptions().size() < 1) {
+            if (getConfig().getOptions().size() < 1) {
                 JSGPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.GUI_STATE));
             }
         }
@@ -1127,6 +1126,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         compound.setBoolean("fastDialing", isFastDialing);
 
+        compound.setInteger("facingVertical", FacingHelper.toInt(facingVertical));
+
         return super.writeToNBT(compound);
     }
 
@@ -1173,6 +1174,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         this.lastGateHeat = compound.getDouble("lastGateHeat");
 
         this.isFastDialing = compound.getBoolean("fastDialing");
+
+        facingVertical = FacingHelper.fromInt(compound.getInteger("facingVertical"));
 
         super.readFromNBT(compound);
     }
@@ -1378,7 +1381,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         markDirty();
     }
 
-    public void setConfigAndUpdate(JSGTileEntityConfig config){
+    public void setConfigAndUpdate(JSGTileEntityConfig config) {
         setConfig(config);
         JSGPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.GUI_STATE));
     }
@@ -2594,7 +2597,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             if (args.isInteger(0)) {
                 time = args.checkInteger(0);
                 boolean changeState = true;
-                if(args.isBoolean(1))
+                if (args.isBoolean(1))
                     changeState = args.checkBoolean(1);
                 if (time != 0) {
                     spinRing(1, changeState, true, time);
@@ -2704,9 +2707,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Callback(doc = "function(spinSpeed:int) -- Sets speed of gate ring (in percentage)")
     public Object[] setGateSpeed(Context context, Arguments args) {
         if (!isMerged()) return new Object[]{null, false, "gate_not_merged", "Gate is not merged!"};
-        if(!args.isInteger(0)) return new Object[]{null, false, "wrong_argument", "First parameter should be a number!"};
+        if (!args.isInteger(0))
+            return new Object[]{null, false, "wrong_argument", "First parameter should be a number!"};
         int speed = args.checkInteger(0);
-        if(speed < 1 || speed > 200) return new Object[]{null, false, "wrong_argument", "Speed should be between 1 and 300!"};
+        if (speed < 1 || speed > 200)
+            return new Object[]{null, false, "wrong_argument", "Speed should be between 1 and 300!"};
 
         JSGTileEntityConfig cfg = getConfig();
         cfg.getOption(STARGATE_SPIN_SPEED.id).setValue(speed + "");

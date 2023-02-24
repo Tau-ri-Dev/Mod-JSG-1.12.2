@@ -91,13 +91,11 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                     te.getRenderBoundingBoxForDisplay().render();
                 }
 
-
-                GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
-                GlStateManager.rotate(rendererState.verticalRotation, 1, 0, 0);
-
                 applyTransformations(rendererState);
                 GlStateManager.disableRescaleNormal();
                 applyLightMap(rendererState, partialTicks);
+
+                GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
 
                 renderGate(te, rendererState, partialTicks);
                 renderIris(partialTicks, getWorld(), rendererState, true);

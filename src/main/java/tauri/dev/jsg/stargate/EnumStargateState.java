@@ -14,9 +14,9 @@ public enum EnumStargateState {
 	INCOMING(7);
 
 	
-	public int id;
+	public final int id;
 	
-	private EnumStargateState(int id) {
+	EnumStargateState(int id) {
 		this.id = id;
 	}
 	
@@ -60,7 +60,7 @@ public enum EnumStargateState {
 		return this == UNSTABLE;
 	}
 	
-	private static Map<Integer, EnumStargateState> idMap = new HashMap<>();
+	private static final Map<Integer, EnumStargateState> idMap = new HashMap<>();
 	static {
 		for (EnumStargateState state : values())
 			idMap.put(state.id, state);
