@@ -74,6 +74,7 @@ public class ZPMRenderer extends TileEntitySpecialRenderer<ZPMTile> {
         if (powerLevel < 0) return;
         if(type == null) type = ZPMModelType.NORMAL;
         if(type == ZPMModelType.CREATIVE) powerLevel = 5;
+        if(powerLevel > 5) powerLevel = 5;
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
         JSGTextureLightningHelper.lightUpTexture(1f);
