@@ -140,6 +140,8 @@ public class TeleportHelper {
 			
 			else {			
 				entity = entity.changeDimension(targetGatePos.dimensionID, teleporter);
+				if(entity == null) // Entity has been probably despawned
+					return;
 			}
 		}
 		
@@ -203,13 +205,15 @@ public class TeleportHelper {
 		return (float) Math.toDegrees(MathHelper.atan2(lookVec2f.x, lookVec2f.y));		
 	}
 	
-	public static void setMotion(Entity player, float rotation, Vector2f motionVec2f) {		
+	public static void setMotion(Entity entity, float rotation, Vector2f motionVec2f) {
 		if (motionVec2f != null) {		
 			rotateAround00(motionVec2f, rotation, 0);
-					
-			if(motionVec2f != null) player.motionX = motionVec2f.x;
-			if(motionVec2f != null) player.motionZ = motionVec2f.y;
-			player.velocityChanged = true;
+
+			if(entity != null) {
+				entity.motionX = motionVec2f.x;
+				entity.motionZ = motionVec2f.y;
+				entity.velocityChanged = true;
+			}
 		}
 	}
 	
