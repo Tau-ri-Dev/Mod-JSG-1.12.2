@@ -51,7 +51,7 @@ import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.energy.CapacitorItemBlock;
 import tauri.dev.jsg.item.linkable.gdo.GDOMessages;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
-import tauri.dev.jsg.item.stargate.UpgradeIris;
+import tauri.dev.jsg.item.stargate.IrisItem;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
 import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
@@ -863,7 +863,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                                 }
                                 tryTriggerRangedAdvancement(this, JSGAdvancementsUtil.EnumAdvancementType.IRIS_IMPACT);
                                 ItemStack irisItem = getItemHandler().getStackInSlot(11);
-                                if (irisItem.getItem() instanceof UpgradeIris) {
+                                if (irisItem.getItem() instanceof IrisItem) {
                                     // different damages per source
                                     int chance = EnchantmentHelper.getEnchantments(irisItem).containsKey(Enchantments.UNBREAKING) ? (JSGConfig.Stargate.iris.unbreakingChance * EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, irisItem)) : 0;
                                     int random = rand.nextInt(100);

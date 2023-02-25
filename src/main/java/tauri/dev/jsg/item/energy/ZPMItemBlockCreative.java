@@ -34,9 +34,7 @@ public class ZPMItemBlockCreative extends ZPMItemBlock {
     }
 
     @Override
-    public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(JSG.getInProgress());
-    }
+    public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {}
 
     @Override
     public boolean showDurabilityBar(@Nonnull ItemStack stack) {

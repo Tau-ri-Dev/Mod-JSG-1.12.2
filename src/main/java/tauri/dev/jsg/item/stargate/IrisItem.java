@@ -1,5 +1,6 @@
 package tauri.dev.jsg.item.stargate;
 
+import net.minecraft.client.resources.I18n;
 import tauri.dev.jsg.JSG;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -20,10 +21,10 @@ import java.util.List;
 /**
  * @author matousss
  */
-public class UpgradeIris extends Item {
+public class IrisItem extends Item {
     public final int MAX_DAMAGE;
 
-    public UpgradeIris(String name, int durability) {
+    public IrisItem(String name, int durability) {
         MAX_DAMAGE = durability;
         setRegistryName(JSG.MOD_ID + ":" + name);
         setUnlocalizedName(JSG.MOD_ID + "." + name);
@@ -89,13 +90,14 @@ public class UpgradeIris extends Item {
     @Nonnull
     @Override
     public Item setMaxDamage(int maxDamageIn) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Tried to set durability of IRIS. Use config for that!");
     }
 
     @Override
     public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
         float percent = ((float) (MAX_DAMAGE - getDamage(stack))/MAX_DAMAGE) * 100f;
-        tooltip.add(String.format("%.2f", percent) + " %");
+        tooltip.add(I18n.format("item.jsg.iris.tooltip.integrity") + String.format(" %.2f", percent) + " %");
+        tooltip.add(I18n.format("item.jsg.iris.tooltip.durability") + String.format(" %,d / %,d", (MAX_DAMAGE - getDamage(stack)), MAX_DAMAGE));
     }
 
     @Override

@@ -29,9 +29,7 @@ public class CapacitorItemBlockCreative extends CapacitorItemBlock {
     }
 
     @Override
-    public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(JSG.getInProgress());
-    }
+    public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {}
 
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {

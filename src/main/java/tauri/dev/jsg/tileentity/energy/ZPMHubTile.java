@@ -28,6 +28,7 @@ import tauri.dev.jsg.gui.container.zpmhub.ZPMHubContainerGuiUpdate;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
+import tauri.dev.jsg.power.zpm.IEnergyStorageZPM;
 import tauri.dev.jsg.power.zpm.ZPMHubEnergyStorage;
 import tauri.dev.jsg.renderer.zpm.ZPMRenderer;
 import tauri.dev.jsg.state.State;
@@ -39,6 +40,7 @@ import tauri.dev.jsg.util.JSGItemStackHandler;
 import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static tauri.dev.jsg.util.JSGAdvancementsUtil.tryTriggerRangedAdvancement;
@@ -300,19 +302,25 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     public State getState(StateTypeEnum stateType) {
         switch (stateType) {
             case RENDERER_UPDATE:
-                ItemStack stack1 = getContainerSize() > 0 ? itemStackHandler.getStackInSlot(0) : ItemStack.EMPTY;
-                ItemStack stack2 = getContainerSize() > 1 ? itemStackHandler.getStackInSlot(1) : ItemStack.EMPTY;
-                ItemStack stack3 = getContainerSize() > 2 ? itemStackHandler.getStackInSlot(2) : ItemStack.EMPTY;
 
-                int zpm1Level = stack1.isEmpty() ? -1 : getZPMPowerLevel(Objects.requireNonNull(stack1.getCapability(CapabilityEnergyZPM.ENERGY, null)).getEnergyStored(), Objects.requireNonNull(stack1.getCapability(CapabilityEnergyZPM.ENERGY, null)).getMaxEnergyStored());
-                int zpm2Level = stack2.isEmpty() ? -1 : getZPMPowerLevel(Objects.requireNonNull(stack2.getCapability(CapabilityEnergyZPM.ENERGY, null)).getEnergyStored(), Objects.requireNonNull(stack2.getCapability(CapabilityEnergyZPM.ENERGY, null)).getMaxEnergyStored());
-                int zpm3Level = stack3.isEmpty() ? -1 : getZPMPowerLevel(Objects.requireNonNull(stack3.getCapability(CapabilityEnergyZPM.ENERGY, null)).getEnergyStored(), Objects.requireNonNull(stack3.getCapability(CapabilityEnergyZPM.ENERGY, null)).getMaxEnergyStored());
+                final ArrayList<Integer> levels = new ArrayList<>(3);
+                final ArrayList<ZPMRenderer.ZPMModelType> types = new ArrayList<>(3);
 
-                ZPMRenderer.ZPMModelType zpm1Type = ZPMRenderer.ZPMModelType.byStack(stack1);
-                ZPMRenderer.ZPMModelType zpm2Type = ZPMRenderer.ZPMModelType.byStack(stack2);
-                ZPMRenderer.ZPMModelType zpm3Type = ZPMRenderer.ZPMModelType.byStack(stack3);
+                for(int i = 0; i < 3; i++){
+                    if(getContainerSize() > i){
+                        ItemStack stack = itemStackHandler.getStackInSlot(i);
+                        IEnergyStorageZPM zpmStorage = stack.getCapability(CapabilityEnergyZPM.ENERGY, null);
+                        if(zpmStorage != null) {
+                            levels.add(getZPMPowerLevel(zpmStorage.getEnergyStored(), zpmStorage.getMaxEnergyStored()));
+                            types.add(ZPMRenderer.ZPMModelType.byStack(stack));
+                            continue;
+                        }
+                    }
+                    levels.add(-1);
+                    types.add(ZPMRenderer.ZPMModelType.NORMAL);
+                }
 
-                return new ZPMHubRendererUpdate(animationStart, isAnimating, isSlidingUp, zpm1Level, zpm2Level, zpm3Level, zpm1Type, zpm2Type, zpm3Type, (facing.getHorizontalIndex() - 2) * 90);
+                return new ZPMHubRendererUpdate(animationStart, isAnimating, isSlidingUp, levels.get(0), levels.get(1), levels.get(2), types.get(0), types.get(1), types.get(2), (facing.getHorizontalIndex() - 2) * 90);
 
             case GUI_UPDATE:
                 return new ZPMHubContainerGuiUpdate(getEnergyStorage().getEnergyStoredInternally(), energyTransferedLastTick);

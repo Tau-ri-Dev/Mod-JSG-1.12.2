@@ -161,6 +161,8 @@ item.jsg.quad_iris_blade.name=Lame d'iris fois quatre (Titanium)
 item.jsg.quad_iris_blade_trinium.name=Lame d'iris fois quatre (Trinium)
 item.jsg.upgrade_iris.name=Mise à niveau d'Iris (Titane)
 item.jsg.upgrade_iris_trinium.name=Amélioration d'Iris (Trinium)
+item.jsg.iris.tooltip.integrity=Integrity:
+item.jsg.iris.tooltip.durability=Durability:
 item.jsg.shield_emitter.name=Émetteur de bouclier
 item.jsg.upgrade_shield.name=Mise à niveau du bouclier
 

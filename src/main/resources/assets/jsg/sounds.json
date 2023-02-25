@@ -353,16 +353,36 @@
   "mainmenu_music": {
     "category": "ambient",
     "sounds": [
-      "jsg:gui/mainmenu/pegasus_theme",
-      "jsg:gui/mainmenu/destiny_theme",
-      "jsg:gui/mainmenu/origin_theme",
-      "jsg:gui/mainmenu/stargate_theme_1"
+      {
+        "name": "jsg:gui/mainmenu/pegasus_theme",
+        "stream": true,
+        "preload": true
+      },
+      {
+        "name": "jsg:gui/mainmenu/destiny_theme",
+        "stream": true,
+        "preload": true
+      },
+      {
+        "name": "jsg:gui/mainmenu/origin_theme",
+        "stream": true,
+        "preload": true
+      },
+      {
+        "name": "jsg:gui/mainmenu/stargate_theme_1",
+        "stream": true,
+        "preload": true
+      }
     ]
   },
   "loading_music": {
     "category": "ambient",
     "sounds": [
-      "jsg:gui/mainmenu/loading_music"
+      {
+        "name": "jsg:gui/mainmenu/loading_music",
+        "stream": true,
+        "preload": true
+      }
     ]
   },
   "gui_send_code_button_press": {
@@ -466,31 +486,51 @@
   "record_destiny": {
     "category": "record",
     "sounds": [
-      "jsg:gui/mainmenu/destiny_theme"
+      {
+        "name": "jsg:gui/mainmenu/destiny_theme",
+        "stream": true,
+        "preload": true
+      }
     ]
   },
   "record_atlantis": {
     "category": "record",
     "sounds": [
-      "jsg:gui/mainmenu/pegasus_theme"
+      {
+        "name": "jsg:gui/mainmenu/pegasus_theme",
+        "stream": true,
+        "preload": true
+      }
     ]
   },
   "record_origins": {
     "category": "record",
     "sounds": [
-      "jsg:gui/mainmenu/origin_theme"
+      {
+        "name": "jsg:gui/mainmenu/origin_theme",
+        "stream": true,
+        "preload": true
+      }
     ]
   },
   "record_sgc": {
     "category": "record",
     "sounds": [
-      "jsg:gui/mainmenu/stargate_theme_1"
+      {
+        "name": "jsg:gui/mainmenu/stargate_theme_1",
+        "stream": true,
+        "preload": true
+      }
     ]
   },
   "record_elevator": {
     "category": "record",
     "sounds": [
-      "jsg:gui/mainmenu/loading_music"
+      {
+        "name": "jsg:gui/mainmenu/loading_music",
+        "stream": true,
+        "preload": true
+      }
     ]
   }
 }
