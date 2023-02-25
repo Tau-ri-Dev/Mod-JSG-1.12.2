@@ -64,16 +64,20 @@ public class AssemblerRenderer extends TileEntitySpecialRenderer<AssemblerTile> 
             GlStateManager.scale(0.03, 0.03, 0.03);
 
             GlStateManager.pushMatrix();
-            GlStateManager.color(color, color, color, 1f);
             if (isMachineOn || workingTime < ANIMATION_TIME)
                 TextureLoader.getTexture(TextureLoader.getTextureResource("machine/assembler/assembler_on.png")).bindTexture();
             else
                 TextureLoader.getTexture(TextureLoader.getTextureResource("machine/assembler/assembler_off.png")).bindTexture();
+            GlStateManager.color(color, color, color, 1f);
             ElementEnum.ASSEMBLER_MACHINE.render();
             GlStateManager.popMatrix();
+
+            GlStateManager.pushMatrix();
             GlStateManager.color(1, 1, 1);
 
             ElementEnum.ASSEMBLER_MACHINE.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
+
+            GlStateManager.popMatrix();
 
             GlStateManager.popMatrix();
         }

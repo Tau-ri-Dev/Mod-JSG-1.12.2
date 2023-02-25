@@ -32,6 +32,7 @@ public class FacingHelper {
     }
 
     public static int toInt(EnumFacing f){
+        if(f == null) return 0;
         switch(f){
             case NORTH:
                 return 1;
