@@ -24,7 +24,8 @@
 		},
 
 		"Y": {
-			"item": "jsg:gear_titanium"
+			"type" : "forge:ore_dict",
+			"ore": "gearTitanium"
 		}
 	},
 
