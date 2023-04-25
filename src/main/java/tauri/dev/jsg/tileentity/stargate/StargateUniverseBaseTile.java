@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
@@ -338,6 +339,10 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     }
 
     private void activateSymbolServer(SymbolInterface symbol) {
+        if(!(symbol instanceof SymbolUniverseEnum)){
+            JSG.error("Error while engaging symbol " + symbol.getEnglishName() + " for clients.", new ClassCastException());
+            return;
+        }
         JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.STARGATE_UNIVERSE_ACTIVATE_SYMBOL, new StargateUniverseSymbolState((SymbolUniverseEnum) symbol, false)), targetPoint);
     }
 
