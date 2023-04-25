@@ -18,10 +18,7 @@ import tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator;
 import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class StargateNetwork extends WorldSavedData {
@@ -47,7 +44,7 @@ public class StargateNetwork extends WorldSavedData {
 
     public static StargateNetwork get(World world) {
         MapStorage storage = world.getMapStorage();
-        StargateNetwork instance = (StargateNetwork) storage.getOrLoadData(StargateNetwork.class, DATA_NAME);
+        StargateNetwork instance = (StargateNetwork) Objects.requireNonNull(storage).getOrLoadData(StargateNetwork.class, DATA_NAME);
 
         if (instance == null) {
             instance = new StargateNetwork();
@@ -82,7 +79,9 @@ public class StargateNetwork extends WorldSavedData {
         if (address.getSize() < 7)
             return null;
 
-        return getMapFromAddress(address).get(address);
+        StargatePos pos = getMapFromAddress(address).get(address);
+        if(pos.getWorld() == null) return null;
+        return pos;
     }
 
     public void addStargate(StargateAddress gateAddress, StargatePos stargatePos) {

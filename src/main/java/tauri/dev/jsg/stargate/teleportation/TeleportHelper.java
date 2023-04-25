@@ -235,8 +235,10 @@ public class TeleportHelper {
 		
 		if (dimension == 0)
 			return world;
+
+		if(!DimensionManager.isDimensionRegistered(dimension)) return null;
 		
-		return world.getMinecraftServer().getWorld(dimension);
+		return Objects.requireNonNull(world.getMinecraftServer()).getWorld(dimension);
 	}
 
 	public static boolean frontSide(EnumFacing sourceFacing, Vector2f motionVec) {
