@@ -1005,8 +1005,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         for (BlockPos newRingsPos : BlockPos.getAllInBoxMutable(new BlockPos(x - radius, y - vertical, z - radius), new BlockPos(x + radius, y + vertical, z + radius))) {
             if (JSGBlocks.isInBlocksArray(world.getBlockState(newRingsPos).getBlock(), JSGBlocks.RINGS_BLOCKS) && !pos.equals(newRingsPos)) {
-                TransportRingsAbstractTile newRingsTile = (TransportRingsAbstractTile) world.getTileEntity(newRingsPos);
-                ringsTilesInRange.add(newRingsTile);
+                TileEntity tile = world.getTileEntity(newRingsPos);
+                if(tile instanceof TransportRingsAbstractTile) {
+                    TransportRingsAbstractTile newRingsTile = (TransportRingsAbstractTile) tile;
+                    ringsTilesInRange.add(newRingsTile);
+                }
             }
         }
 
