@@ -2702,22 +2702,4 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return new Object[]{null, true, "success", map};
     }
 
-    @SuppressWarnings("unused")
-    @Optional.Method(modid = "opencomputers")
-    @Callback(doc = "function(spinSpeed:int) -- Sets speed of gate ring (in percentage)")
-    public Object[] setGateSpeed(Context context, Arguments args) {
-        if (!isMerged()) return new Object[]{null, false, "gate_not_merged", "Gate is not merged!"};
-        if (!args.isInteger(0))
-            return new Object[]{null, false, "wrong_argument", "First parameter should be a number!"};
-        int speed = args.checkInteger(0);
-        if (speed < 1 || speed > 200)
-            return new Object[]{null, false, "wrong_argument", "Speed should be between 1 and 300!"};
-
-        JSGTileEntityConfig cfg = getConfig();
-        cfg.getOption(STARGATE_SPIN_SPEED.id).setValue(speed + "");
-        setConfigAndUpdate(cfg);
-
-        return new Object[]{null, true, "gate_speed_set", "Speed of gate set to: " + speed + "%"};
-    }
-
 }

@@ -1384,6 +1384,17 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return renderBoundingBox;
     }
 
+    /**
+     *
+     *
+     * @param flag - how many blocks is player pass the block (tileEntity)
+     * @return If the tile should be rendered (should be true, because when rendering ceiling rings, minecraft can't handle the pass thing...)
+     */
+    @Override
+    public boolean shouldRenderInPass(int flag){
+        return true;
+    }
+
     @Override
     public void onChunkUnload() {
         if (node != null) node.remove();

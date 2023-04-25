@@ -418,7 +418,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
             try {
                 int distance = Integer.parseInt(settingsTab.distanceTextField.getText());
 
-                if (distance >= -40 && distance <= 40) {
+                if (distance >= -15 && distance <= 15) {
                     JSGPacketHandler.INSTANCE.sendToServer(new SaveRingsParametersToServer(pos, name, distance));
                     container.trTile.setRingsParams(name, distance);
                 } else {
