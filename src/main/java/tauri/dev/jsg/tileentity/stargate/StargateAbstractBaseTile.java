@@ -212,7 +212,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         sendState(StateTypeEnum.RENDERER_UPDATE, new StargateRendererActionState(gateAction, chevronCount, modifyFinal));
     }
 
-    // TODO Convert to using sendState
     protected void sendState(StateTypeEnum type, State state) {
         if (world.isRemote) return;
 

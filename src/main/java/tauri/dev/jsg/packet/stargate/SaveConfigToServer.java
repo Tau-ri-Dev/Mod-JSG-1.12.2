@@ -50,7 +50,7 @@ public class SaveConfigToServer extends PositionedPacket {
                 if (world.getTileEntity(message.pos) instanceof ITileConfig) {
                     te = (ITileConfig) world.getTileEntity(message.pos);
                     if(te != null) {
-                        te.setConfig(message.config);
+                        te.setConfigAndUpdate(message.config);
                         JSGPacketHandler.INSTANCE.sendTo(new StateUpdatePacketToClient(message.pos, StateTypeEnum.GUI_STATE, te.getState(StateTypeEnum.GUI_STATE)), player);
                     }
                 }

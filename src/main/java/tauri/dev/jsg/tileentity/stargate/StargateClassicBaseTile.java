@@ -53,6 +53,7 @@ import tauri.dev.jsg.item.linkable.gdo.GDOMessages;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.item.stargate.IrisItem;
 import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
 import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
@@ -1381,9 +1382,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         markDirty();
     }
 
+    @Override
     public void setConfigAndUpdate(JSGTileEntityConfig config) {
         setConfig(config);
-        JSGPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.GUI_STATE));
+        sendState(StateTypeEnum.GUI_STATE, getState(StateTypeEnum.GUI_STATE));
     }
 
     @Override

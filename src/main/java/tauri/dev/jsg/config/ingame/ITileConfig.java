@@ -10,5 +10,8 @@ public interface ITileConfig {
     JSGTileEntityConfig getConfig();
     void initConfig();
     void setConfig(JSGTileEntityConfig config);
+    default void setConfigAndUpdate(JSGTileEntityConfig config){
+        setConfig(config);
+    }
     State getState(StateTypeEnum stateType);
 }
