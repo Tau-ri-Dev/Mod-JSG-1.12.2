@@ -49,13 +49,13 @@ import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
 import tauri.dev.jsg.packet.transportrings.StartPlayerFadeOutToClient;
+import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
 import tauri.dev.jsg.renderer.transportrings.TransportRingsAbstractRenderer;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.stargate.EnumScheduledTask;
 import tauri.dev.jsg.stargate.network.SymbolInterface;
-import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
-import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateProviderInterface;
 import tauri.dev.jsg.state.StateTypeEnum;
@@ -1006,7 +1006,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         for (BlockPos newRingsPos : BlockPos.getAllInBoxMutable(new BlockPos(x - radius, y - vertical, z - radius), new BlockPos(x + radius, y + vertical, z + radius))) {
             if (JSGBlocks.isInBlocksArray(world.getBlockState(newRingsPos).getBlock(), JSGBlocks.RINGS_BLOCKS) && !pos.equals(newRingsPos)) {
                 TileEntity tile = world.getTileEntity(newRingsPos);
-                if(tile instanceof TransportRingsAbstractTile) {
+                if (tile instanceof TransportRingsAbstractTile) {
                     TransportRingsAbstractTile newRingsTile = (TransportRingsAbstractTile) tile;
                     ringsTilesInRange.add(newRingsTile);
                 }
