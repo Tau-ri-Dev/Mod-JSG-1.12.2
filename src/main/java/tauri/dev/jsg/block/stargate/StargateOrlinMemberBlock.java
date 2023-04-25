@@ -34,6 +34,7 @@ public final class StargateOrlinMemberBlock extends StargateAbstractMemberBlock 
 
 		setDefaultState(blockState.getBaseState()
 				.withProperty(JSGProps.RENDER_BLOCK, true)
+				.withProperty(JSGProps.FACING_VERTICAL, EnumFacing.SOUTH)
 				.withProperty(JSGProps.ORLIN_VARIANT, EnumFacing.DOWN)
 				.withProperty(JSGProps.ORLIN_BROKEN, false));
 		
@@ -79,7 +80,7 @@ public final class StargateOrlinMemberBlock extends StargateAbstractMemberBlock 
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, JSGProps.RENDER_BLOCK, JSGProps.ORLIN_VARIANT, JSGProps.ORLIN_BROKEN);
+		return new BlockStateContainer(this, JSGProps.RENDER_BLOCK, JSGProps.FACING_VERTICAL, JSGProps.ORLIN_VARIANT, JSGProps.ORLIN_BROKEN);
 	}
 	
 	@Override

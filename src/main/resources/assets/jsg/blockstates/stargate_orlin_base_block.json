@@ -6,6 +6,11 @@
 	"variants": {
 		"normal": [{}],
 		"inventory": [{}],
+		"facing_vertical": {
+			"south": {},
+			"top": {},
+			"down": {}
+		},
 
 		"facing": {
 			"south": { "y": 180 },

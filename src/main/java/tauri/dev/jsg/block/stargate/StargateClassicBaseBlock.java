@@ -42,7 +42,8 @@ public abstract class StargateClassicBaseBlock extends StargateAbstractBaseBlock
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		StargateClassicBaseTile gateTile = (StargateClassicBaseTile) world.getTileEntity(pos);
 		EnumFacing facing = placer.getHorizontalFacing().getOpposite();
-		EnumFacing verticalFacing = getVerticalFacingFromPitch(placer.rotationPitch);
+		EnumFacing verticalFacing;// = getVerticalFacingFromPitch(placer.rotationPitch);
+		verticalFacing = EnumFacing.SOUTH;
 		
 		if (!world.isRemote) {			
 			state = state.withProperty(JSGProps.FACING_HORIZONTAL, facing)

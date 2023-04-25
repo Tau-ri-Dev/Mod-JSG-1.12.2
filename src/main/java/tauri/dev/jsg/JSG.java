@@ -25,6 +25,7 @@ import tauri.dev.jsg.util.main.loader.JSGPreInit;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 @Mod(modid = JSG.MOD_ID, name = JSG.MOD_NAME, version = JSG.MOD_VERSION, acceptedMinecraftVersions = JSG.MC_VERSION, dependencies = "after:cofhcore@[4.6.0,);after:opencomputers;after:thermalexpansion;after:tconstruct")
 @Mod.EventBusSubscriber
@@ -67,6 +68,30 @@ public class JSG {
 
     @Instance(MOD_ID)
     public static JSG instance;
+
+    // messages
+    public static final String[] WELCOME_MESS = {
+            "=======================================",
+            "   $$$$$\\  $$$$$$\\   $$$$$$\\",
+            "   \\__$$ |$$  __$$\\ $$  __$$\\",
+            "      $$ |$$ /  \\__|$$ /  \\__|",
+            "      $$ |\\$$$$$$\\  $$ |$$$$\\",
+            "$$\\   $$ | \\____$$\\ $$ |\\_$$ |",
+            "$$ |  $$ |$$\\   $$ |$$ |  $$ |",
+            "\\$$$$$$  |\\$$$$$$  |\\$$$$$$  |",
+            " \\______/  \\______/  \\______/",
+            "",
+            " Authors: MineDragonCZ_, matousss, Fredyman_95, MrJake222",
+            " Wiki: https://justsgmod.eu/wiki",
+            " Version: " + MOD_VERSION,
+            "======================================="
+    };
+
+    public static void displayWelcomeMessage(){
+        for(String s: WELCOME_MESS){
+            info(s);
+        }
+    }
 
     // --------------------------------------------
     // Enable forge buckets

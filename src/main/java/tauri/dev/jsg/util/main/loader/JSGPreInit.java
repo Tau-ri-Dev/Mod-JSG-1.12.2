@@ -34,6 +34,8 @@ public class JSGPreInit {
         JSG.info("Mods directory: " + JSG.modsDirectory.getAbsolutePath());
         JSG.info("Loading JSG version " + JSG.MOD_VERSION);
 
+        JSG.displayWelcomeMessage();
+
         CapabilityEnergyZPM.register();
         JSG.info("Successfully registered Capabilities (phase 1)!");
 

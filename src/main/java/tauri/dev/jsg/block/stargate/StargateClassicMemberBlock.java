@@ -312,7 +312,8 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        EnumFacing verticalFacing = FacingHelper.getVerticalFacingFromPitch(placer.rotationPitch);
+        EnumFacing verticalFacing;// = FacingHelper.getVerticalFacingFromPitch(placer.rotationPitch);
+        verticalFacing = EnumFacing.SOUTH;
         ((StargateClassicMemberTile) Objects.requireNonNull(world.getTileEntity(pos))).setVerticalFacing(verticalFacing);
 
         if (!world.isRemote) {

@@ -40,7 +40,7 @@ public abstract class StargateAbstractBaseBlock extends JSGBlock {
         setSoundType(SoundType.METAL);
         setCreativeTab(JSGCreativeTabsHandler.JSG_GATES_CREATIVE_TAB);
 
-        setDefaultState(blockState.getBaseState().withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.NORTH).withProperty(JSGProps.RENDER_BLOCK, true));
+        setDefaultState(blockState.getBaseState().withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.NORTH).withProperty(JSGProps.FACING_VERTICAL, EnumFacing.SOUTH).withProperty(JSGProps.RENDER_BLOCK, true));
 
         setLightOpacity(0);
         setHardness(3.0f);
@@ -62,7 +62,7 @@ public abstract class StargateAbstractBaseBlock extends JSGBlock {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, JSGProps.FACING_HORIZONTAL, JSGProps.RENDER_BLOCK);
+        return new BlockStateContainer(this, JSGProps.FACING_HORIZONTAL, JSGProps.FACING_VERTICAL, JSGProps.RENDER_BLOCK);
     }
 
     @Override

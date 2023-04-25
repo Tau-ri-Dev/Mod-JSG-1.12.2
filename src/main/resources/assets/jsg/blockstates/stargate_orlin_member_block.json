@@ -6,6 +6,11 @@
 	"variants": {
 		"normal": [{}],
 		"inventory": [{}],
+		"facing_vertical": {
+			"south": {},
+			"top": {},
+			"down": {}
+		},
 		
 		"orlin_variant": {
 			"south": { "y": 180 },

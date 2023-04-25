@@ -101,7 +101,7 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 
 	@Override
 	protected IBlockState createMemberState(IBlockState memberState, EnumFacing facing, EnumFacing facingVertical, int meta) {
-		return memberState.withProperty(JSGProps.RENDER_BLOCK, true).withProperty(JSGProps.ORLIN_VARIANT, facing);
+		return memberState.withProperty(JSGProps.RENDER_BLOCK, true).withProperty(JSGProps.ORLIN_VARIANT, facing).withProperty(JSGProps.FACING_VERTICAL, EnumFacing.SOUTH);
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 		EnumFacing facing = placer.getHorizontalFacing().getOpposite();
 
 		if (!world.isRemote) {
-			state = state.withProperty(JSGProps.FACING_HORIZONTAL, facing).withProperty(JSGProps.RENDER_BLOCK, true);
+			state = state.withProperty(JSGProps.FACING_HORIZONTAL, facing).withProperty(JSGProps.FACING_VERTICAL, EnumFacing.SOUTH).withProperty(JSGProps.RENDER_BLOCK, true);
 		
 			world.setBlockState(pos, state);
 			gateTile.initializeFromItemStack(stack);
