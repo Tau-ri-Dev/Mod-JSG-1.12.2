@@ -8,6 +8,7 @@ itemGroup.jsg_tools=JSG: Nástroje
 itemGroup.jsg_props=JSG: Dekorace
 itemGroup.jsg_machines=JSG: Stroje
 itemGroup.jsg_weapons=JSG: Zbraně
+itemGroup.jsg_records=JSG: CéDéčka
 
 # config file
 config.jsg.general=General Config

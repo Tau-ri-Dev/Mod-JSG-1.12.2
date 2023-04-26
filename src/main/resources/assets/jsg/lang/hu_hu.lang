@@ -8,6 +8,7 @@ itemGroup.jsg_tools=JSG: Eszközök
 itemGroup.jsg_props=JSG: Kellékek
 itemGroup.jsg_machines=JSG: Gépek
 itemGroup.jsg_weapons=JSG: Fegyverek
+itemGroup.jsg_records=JSG: Records
 
 # config file
 config.jsg.general=General Config

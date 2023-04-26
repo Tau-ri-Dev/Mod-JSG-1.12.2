@@ -1,12 +1,9 @@
 package tauri.dev.jsg.config;
 
-import cofh.core.util.ConfigHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -61,6 +58,7 @@ public class JSGConfigUtil {
 
     // Kawoosh blocks
     private static Map<IBlockState, Boolean> cachedInvincibleBlocks = null;
+
     public static boolean canKawooshDestroyBlock(IBlockState state) {
         if (state.getBlock() == JSGBlocks.IRIS_BLOCK) return false;
         if (state.getBlock() == JSGBlocks.INVISIBLE_BLOCK) return false;
@@ -76,6 +74,7 @@ public class JSGConfigUtil {
 
     // Biome overlays
     private static Map<Biome, BiomeOverlayEnum> cachedBiomeMatchesReverse = null;
+
     public static Map<Biome, BiomeOverlayEnum> getBiomeOverrideBiomes() {
         if (cachedBiomeMatchesReverse == null) {
             cachedBiomeMatchesReverse = new HashMap<>();
@@ -92,6 +91,7 @@ public class JSGConfigUtil {
 
         return cachedBiomeMatchesReverse;
     }
+
     private static Map<BiomeOverlayEnum, List<ItemMetaPair>> cachedBiomeOverrideBlocks = null;
     private static Map<ItemMetaPair, BiomeOverlayEnum> cachedBiomeOverrideBlocksReverse = null;
 

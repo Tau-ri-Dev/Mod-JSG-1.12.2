@@ -8,6 +8,7 @@ itemGroup.jsg_tools=JSG: Tools
 itemGroup.jsg_props=JSG: Props
 itemGroup.jsg_machines=JSG: Machines
 itemGroup.jsg_weapons=JSG: Weapons
+itemGroup.jsg_records=JSG: Records
 
 # config file
 config.jsg.general=General Config

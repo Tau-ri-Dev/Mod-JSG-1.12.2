@@ -8,6 +8,7 @@ itemGroup.jsg_tools=JSG : Outils
 itemGroup.jsg_props=JSG : Accessoires
 itemGroup.jsg_machines=JSG : Machines
 itemGroup.jsg_weapons=JSG : Armes
+itemGroup.jsg_records=JSG : Records
 
 # fichier de configuration
 config.jsg.general=Configuration générale

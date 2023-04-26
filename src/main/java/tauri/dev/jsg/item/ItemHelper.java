@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.creativetabs.JSGCreativeTabs;
+import tauri.dev.jsg.creativetabs.JSGCreativeTab;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ItemHelper {
 
-    public static Item createGenericItem(String name, JSGCreativeTabs tab) {
+    public static Item createGenericItem(String name, JSGCreativeTab tab) {
         Item item = new Item();
 
         item.setRegistryName(JSG.MOD_ID + ":" + name);
@@ -30,7 +30,7 @@ public class ItemHelper {
         return item;
     }
 
-    public static Item createDurabilityItem(String name, JSGCreativeTabs tab, int maxDamage, boolean shouldStayInCrafting) {
+    public static Item createDurabilityItem(String name, JSGCreativeTab tab, int maxDamage, boolean shouldStayInCrafting) {
         Item item = new Item() {
             @Override
             public void setDamage(@Nonnull ItemStack stack, int damage) {
