@@ -120,6 +120,12 @@ public class JSGConfig {
             })
             public boolean renderEmissive = true;
 
+            @Config.Name("Change title to w/ JSG")
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
+            public boolean changeTitle = true;
+
             @Config.Name("Temperature unit")
             @Config.Comment({
                     "Specifies what unit will be used to display temperatures",
@@ -203,6 +209,14 @@ public class JSGConfig {
                     "SIDE: SERVER/CLIENT"
             })
             public boolean tExpansionIntegration = true;
+
+            @Config.RequiresMcRestart
+            @Config.Name("Enable Fluid Logged API integration")
+            @Config.Comment({
+                    "WARNING! - Requires reloading!",
+                    "SIDE: SERVER/CLIENT"
+            })
+            public boolean flapiIntegration = true;
         }
 
         public static class AdvancementsConfig {
@@ -270,6 +284,14 @@ public class JSGConfig {
                     "SIDE: CLIENT"
             })
             public boolean disableJSGMainMenu = false;
+
+            @Config.RequiresMcRestart
+            @Config.Name("Enable Tau'ri logo on startup")
+            @Config.Comment({
+                    "WARNING! - Requires reloading!",
+                    "SIDE: CLIENT"
+            })
+            public boolean enableLogo = true;
 
             @Config.Name("Enable debug mode")
             @Config.Comment({

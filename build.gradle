@@ -97,6 +97,11 @@ repositories {
         name = "ic2"
         url = "https://maven.ic2.player.to/"
     }
+
+    maven {
+        name = "fluidlogged-api"
+        url = 'https://jitpack.io'
+    }
     jcenter()
 }
 
@@ -111,6 +116,8 @@ dependencies {
 
     compile "li.cil.oc:OpenComputers:MC1.12.2-1.7.5.213:api"
     compile 'net.industrial-craft:industrialcraft-2:2.1.470-experimental:api'
+
+    compile 'com.github.jbredwards:fluidlogged-api:2573e41f3e'
 }
 
 processResources {

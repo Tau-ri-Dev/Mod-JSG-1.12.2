@@ -25,9 +25,8 @@ import tauri.dev.jsg.util.main.loader.JSGPreInit;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
-@Mod(modid = JSG.MOD_ID, name = JSG.MOD_NAME, version = JSG.MOD_VERSION, acceptedMinecraftVersions = JSG.MC_VERSION, dependencies = "after:cofhcore@[4.6.0,);after:opencomputers;after:thermalexpansion;after:tconstruct")
+@Mod(modid = JSG.MOD_ID, name = JSG.MOD_NAME, version = JSG.MOD_VERSION, acceptedMinecraftVersions = JSG.MC_VERSION, dependencies = "after:cofhcore@[4.6.0,);after:opencomputers;after:thermalexpansion;after:tconstruct;after:fluidlogged_api")
 @Mod.EventBusSubscriber
 public class JSG {
 
@@ -37,7 +36,7 @@ public class JSG {
     public static final String MOD_ID = "jsg";
     public static final String MOD_NAME = "Just Stargate Mod";
     public static final String MOD_VERSION = "@VERSION@";
-    public static final int DATA_VERSION = 23;
+    public static final int DATA_VERSION = 24;
     public static final String CONFIG_GENERAL_VERSION = "3.1";
     public static final String CONFIG_CRAFTINGS_VERSION = "1.1";
     public static final String CONFIG_STRUCTURES_VERSION = "1.0";
@@ -87,8 +86,8 @@ public class JSG {
             "======================================="
     };
 
-    public static void displayWelcomeMessage(){
-        for(String s: WELCOME_MESS){
+    public static void displayWelcomeMessage() {
+        for (String s : WELCOME_MESS) {
             info(s);
         }
     }
@@ -147,19 +146,19 @@ public class JSG {
 
     public static void debug(String string) {
         logger.debug(string);
-        if(JSGConfig.General.debug.logDebugAsInfo)
+        if (JSGConfig.General.debug.logDebugAsInfo)
             info("[DEBUG] " + string);
     }
 
     public static void debug(Object... o) {
         logger.debug(o);
-        if(JSGConfig.General.debug.logDebugAsInfo)
+        if (JSGConfig.General.debug.logDebugAsInfo)
             info("[DEBUG] ", o);
     }
 
     public static void debug(String string, Exception e) {
         logger.debug(string, e);
-        if(JSGConfig.General.debug.logDebugAsInfo)
+        if (JSGConfig.General.debug.logDebugAsInfo)
             info("[DEBUG] " + string, e);
     }
 
@@ -222,7 +221,7 @@ public class JSG {
 
     /**
      * Contains las pos of player (client side) - helps to debug sound in main menu.
-     *
+     * <p>
      * Updated in {@link EventTickClient}
      */
     public static BlockPos lastPlayerPosInWorld = new BlockPos(0, 0, 0);

@@ -104,6 +104,10 @@ public class GuiCustomMainMenu extends GuiScreen {
 
     public static long menuDisplayed = -1;
 
+    public static boolean menuWasDisplayed = false;
+    public static double firstTransitionStart = 0;
+    public static final long FIRST_TRANSITION_LENGTH = 7 * 20; // in relative ticks
+
     public static final int PADDING = 10;
 
     public static final MainMenuNotifications NOTIFIER = MainMenuNotifications.getManager();
@@ -116,7 +120,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         if ((tick - menuDisplayed) <= 20 * 7 || (Minecraft.getDebugFPS() < 28 && (tick - menuDisplayed) <= 20 * 30))
             return; // wait some seconds before first play
 
-        if((tick - menuDisplayed) > 20*30)
+        if ((tick - menuDisplayed) > 20 * 30)
             isMusicPlaying = JSGSoundHelperClient.getRecord(SoundPositionedEnum.MAINMENU_MUSIC, JSG.lastPlayerPosInWorld).isPlaying();
 
         if (!isMusicPlaying && JSGConfig.General.mainMenuConfig.playMusic) {
@@ -178,6 +182,8 @@ public class GuiCustomMainMenu extends GuiScreen {
             UPDATER_RESULT = new GetUpdate.UpdateResult((JSGConfig.General.devConfig.t1 ? GetUpdate.EnumUpdateResult.ERROR : GetUpdate.EnumUpdateResult.NEWER_AVAILABLE), (JSGConfig.General.devConfig.t1 ? "Test error" : UPDATER_RESULT.response));
             updaterNotification = -1;
         }
+        if (JSGConfig.General.mainMenuConfig.debugMode)
+            menuWasDisplayed = false;
         super.initGui();
         createFadeIn();
         buttonList.clear();
@@ -226,7 +232,7 @@ public class GuiCustomMainMenu extends GuiScreen {
     private long lastGateChange = 0;
 
     public void updateGateType() {
-        if((tick - lastGateChange) < 30 * 20) return;
+        if ((tick - lastGateChange) < 30 * 20) return;
         lastGateChange = (long) tick;
         // Every 30 seconds
 
@@ -250,6 +256,74 @@ public class GuiCustomMainMenu extends GuiScreen {
         drawButtons(mouseX, mouseY);
         drawTitles();
         drawFg(mouseX, mouseY);
+        if (!menuWasDisplayed) {
+            firstTransitionStart = tick;
+            if (Minecraft.getDebugFPS() >= 25)
+                menuWasDisplayed = true;
+        }
+        drawFirstAnimation();
+    }
+
+    public void drawFirstAnimation() {
+        if (!JSGConfig.General.mainMenuConfig.enableLogo) return;
+        double current = (tick - firstTransitionStart);
+        if (current > FIRST_TRANSITION_LENGTH) return;
+
+        double step = FIRST_TRANSITION_LENGTH / 5D;
+
+        double alpha = 1 - Math.min(1, (Math.max(0, current - (4.5D * step)) / (step / 2)));
+        double alpha2 = 1 - Math.min(1, (Math.max(0, current - step) / step));
+        double coef = Math.min(1, (Math.max(0, current - (4 * step)) / (step / 2)));
+
+        final float sizeCoefEnd = 10f;
+
+        float sizeCoef = (float) Math.max(coef * sizeCoefEnd, 3D);
+
+        int sizeXJSG = (int) (width / sizeCoef);
+        int sizeYJSG = (230 * sizeXJSG) / 411;
+
+        int sizeXMojang = (int) (width / sizeCoef);
+        int sizeYMojang = (52 * sizeXMojang) / 300;
+
+        int[] center = getCenterPos(sizeXJSG, sizeYJSG);
+        int xEnd = PADDING;
+        int yEnd = (height - PADDING - sizeYJSG - sizeYMojang - 8);
+
+        int xStart = center[0];
+        int yStart = center[1];
+
+        double xSum = (xStart - xEnd);
+        double ySum = (yStart - yEnd);
+
+        int x = (int) (xEnd + (1f - coef) * xSum);
+        int y = (int) (yEnd + (1f - coef) * ySum);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0, 0, 52);
+        GlStateManager.pushMatrix();
+        drawRect(0, 0, width, height, new Color(0, 0, 0, (int) (255 * alpha)).getRGB());
+        GlStateManager.popMatrix();
+
+        GlStateManager.pushMatrix();
+        GlStateManager.color(1, 1, 1, 1);
+
+        GlStateManager.enableBlend();
+        // Tauri dev logo
+        Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_TAURI);
+        drawScaledCustomSizeModalRect(x, y, 0, 0, 411, 230, sizeXJSG, sizeYJSG, 410, 229);
+
+        center = getCenterPos(0, 0);
+        if(alpha > 0.75)
+            drawCenteredString(fontRenderer, "We are not associated with Mojang.", center[0], height - PADDING - 10, 0xFFFFFF, true);
+
+        GlStateManager.disableBlend();
+
+        GlStateManager.popMatrix();
+
+        GlStateManager.pushMatrix();
+        drawRect(0, 0, width, height, new Color(0, 0, 0, (int) (255 * alpha2)).getRGB());
+        GlStateManager.popMatrix();
+        GlStateManager.popMatrix();
     }
 
     @Override

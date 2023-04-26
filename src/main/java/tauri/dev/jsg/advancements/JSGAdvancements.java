@@ -61,6 +61,6 @@ public class JSGAdvancements {
         for (int i = 0; i < JSGAdvancements.TRIGGER_ARRAY.length; i++) {
             CriteriaTriggers.register(JSGAdvancements.TRIGGER_ARRAY[i]);
         }
-        JSG.info("Advancements successfully loaded!");
+        JSG.info("Successfully registered Advancement Triggers!");
     }
 }

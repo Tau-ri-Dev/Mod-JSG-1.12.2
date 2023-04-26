@@ -2,6 +2,7 @@ package tauri.dev.jsg.util.main.loader;
 
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.common.util.ModFixs;
@@ -12,7 +13,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.advancements.JSGAdvancements;
-import tauri.dev.jsg.capability.CapabilityEnergyZPM;
 import tauri.dev.jsg.capability.endpoint.ItemEndpointCapability;
 import tauri.dev.jsg.chunkloader.ChunkLoadingCallback;
 import tauri.dev.jsg.config.JSGConfig;
@@ -27,6 +27,7 @@ import tauri.dev.jsg.machine.assembler.AssemblerRecipes;
 import tauri.dev.jsg.machine.chamber.CrystalChamberRecipes;
 import tauri.dev.jsg.machine.orewashing.OreWashingRecipes;
 import tauri.dev.jsg.machine.pcbfabricator.PCBFabricatorRecipes;
+import tauri.dev.jsg.waterlog.FluidLoggedAPIHandler;
 import tauri.dev.jsg.worldgen.JSGOresGenerator;
 import tauri.dev.jsg.worldgen.structures.EnumStructures;
 import tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator;
@@ -58,6 +59,9 @@ public class JSGInit {
 
         // OpenComputers
         registerOC();
+
+        // FluidLogger
+        registerFluidLogger();
 
         // Data fixers
         fixData();
@@ -108,6 +112,14 @@ public class JSGInit {
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             JSG.error("Exception loading OpenComputers wrapper");
             e.printStackTrace();
+        }
+    }
+
+    public static void registerFluidLogger() {
+        if (Loader.isModLoaded("fluidlogged_api") && JSGConfig.General.integration.flapiIntegration) {
+            JSG.info("FluidLogged-API found and connection is enabled... Connecting...");
+            MinecraftForge.EVENT_BUS.register(new FluidLoggedAPIHandler());
+            JSG.info("Successfully connected into FluidLogged-API!");
         }
     }
 }

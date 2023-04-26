@@ -8,7 +8,7 @@
 		"inventory": [{}],
 		"facing_vertical": {
 			"south": {},
-			"top": {},
+			"up": {},
 			"down": {}
 		},
 		

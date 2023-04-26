@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.sound.JSGPositionedSound;
 
 
 @SideOnly(Side.CLIENT)

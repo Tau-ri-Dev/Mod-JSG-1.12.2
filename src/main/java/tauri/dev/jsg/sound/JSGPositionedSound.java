@@ -9,7 +9,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 @SideOnly(Side.CLIENT)
 public class JSGPositionedSound extends PositionedSoundRecord {
@@ -21,7 +25,7 @@ public class JSGPositionedSound extends PositionedSoundRecord {
         super(soundId, categoryIn, volumeIn, pitchIn, repeatIn, repeatDelayIn, attenuationTypeIn, xIn, yIn, zIn);
     }
 
-    private SoundHandler getHandler() {
+    private static SoundHandler getHandler() {
         return FMLClientHandler.instance().getClient().getSoundHandler();
     }
 
@@ -29,14 +33,12 @@ public class JSGPositionedSound extends PositionedSoundRecord {
         getHandler().stopSound(this);
     }
 
-    public boolean isPlaying(){
+    public boolean isPlaying() {
         return getHandler().isSoundPlaying(this);
     }
 
     public void play() {
-        if (!isPlaying()) {
+        if(!isPlaying())
             getHandler().playSound(this);
-        }
     }
-
 }
