@@ -80,7 +80,7 @@ public class StargateNetwork extends WorldSavedData {
             return null;
 
         StargatePos pos = getMapFromAddress(address).get(address);
-        if(pos.getWorld() == null) return null;
+        if(pos != null && pos.getWorld() == null) return null;
         return pos;
     }
 
