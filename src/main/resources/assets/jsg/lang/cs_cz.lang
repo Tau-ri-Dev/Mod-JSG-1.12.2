@@ -417,7 +417,7 @@ tile.jsg.transportrings_ori_block.name=Transportní kruhy (Orijské)
 tile.jsg.transportrings_ancient_block.name=Transportní kruhy (Antické)
 
 tile.jsg.transportrings_block.non_existing_address=Nedosáhnu na kruhy s touto adresou
-tile.jsg.transportrings_block.wrong_distance=Neplatná vzdálenost (měla by být mezi -40 a 40)
+tile.jsg.transportrings_block.wrong_distance=Neplatná vzdálenost (měla by být mezi -15 a 15)
 tile.jsg.transportrings_block.obstructed=Kruhy jsou zasypány (vykliďte okruh 5x5 okolo kruhů)
 tile.jsg.transportrings_block.obstructed_target=Příchozí kruhy jsou zasypány (vykliďte okruh 5x5 okolo příchozích kruhů)
 tile.jsg.transportrings_block.busy=Kruhy jsou zaneprány

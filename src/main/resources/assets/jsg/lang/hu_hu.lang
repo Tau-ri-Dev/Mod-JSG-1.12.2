@@ -419,7 +419,7 @@ tile.jsg.transportrings_ori_block.name=Transzportgyűrű (Ori)
 tile.jsg.transportrings_ancient_block.name=Transzportgyűrű (Ős)
 
 tile.jsg.transportrings_block.non_existing_address=Cím nem elérhető
-tile.jsg.transportrings_block.wrong_distance=Helytelen távolság, -40 és 40 között kell lennie
+tile.jsg.transportrings_block.wrong_distance=Helytelen távolság, -15 és 15 között kell lennie
 tile.jsg.transportrings_block.obstructed=Gyűrűk eltorlaszolva, legyen 5x5 blokknyi hely a gyűrűk számára
 tile.jsg.transportrings_block.obstructed_target=Cél gyűrűk eltorlaszolva, legyen 5x5 blokknyi hely a gyűrűk számára
 tile.jsg.transportrings_block.busy=Gyűrűk használatban

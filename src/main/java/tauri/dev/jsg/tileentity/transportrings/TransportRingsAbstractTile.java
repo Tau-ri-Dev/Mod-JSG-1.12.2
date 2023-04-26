@@ -121,7 +121,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     // Scheduled task
     TransportRingsRendererState rendererState = new TransportRingsRendererState();
     private List<BlockPos> invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, 2, 2), new BlockPos(1, 2, 2), new BlockPos(2, 2, 1));
-    private AxisAlignedBB renderBoundingBox = TileEntity.INFINITE_EXTENT_AABB;
     /**
      * True if there is an active transport.
      */
@@ -476,7 +475,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         LOCAL_TELEPORT_BOX = new JSGAxisAlignedBB(-1, ringsDistance, -1, 2, ringsDistance + 2.5, 2);
         invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, ringsDistance, 2), new BlockPos(1, ringsDistance, 2), new BlockPos(2, ringsDistance, 1));
         globalTeleportBox = LOCAL_TELEPORT_BOX.offset(pos);
-        renderBoundingBox = new JSGAxisAlignedBB(-3, -40, -3, 3, 40, 3).offset(pos);
         rendererState.ringsDistance = ringsDistance;
         rendererState.ringsConfig = config;
         NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
@@ -1381,7 +1379,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     @Nonnull
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        return renderBoundingBox;
+        return new JSGAxisAlignedBB(this.pos.add(new BlockPos(-5, -30, -5)), this.pos.add(new BlockPos(5, 30, 5)));
     }
 
     /**

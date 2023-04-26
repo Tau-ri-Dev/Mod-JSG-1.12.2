@@ -427,7 +427,7 @@ tile.jsg.transportrings_ori_block.name=Anneaux de transport (Ori)
 tile.jsg.transportrings_ancient_block.name=Anneaux de transport (Anciens)
 
 tile.jsg.transportrings_block.non_existing_address=Incapable d'atteindre cette adresse
-tile.jsg.transportrings_block.wrong_distance=Mauvaise distance, devrait être de -40 à 40
+tile.jsg.transportrings_block.wrong_distance=Mauvaise distance, devrait être de -15 à 15
 tile.jsg.transportrings_block.obstructed=Anneaux obstrués, dégager une zone de 5x5 autour des anneaux
 tile.jsg.transportrings_block.obstructed_target=Anneaux cibles obstrués, dégagez la zone de 5x5 autour des anneaux cibles
 tile.jsg.transportrings_block.busy=Ringles occupées

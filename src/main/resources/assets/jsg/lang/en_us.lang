@@ -427,7 +427,7 @@ tile.jsg.transportrings_ori_block.name=Transport Rings (Ori)
 tile.jsg.transportrings_ancient_block.name=Transport Rings (Ancient)
 
 tile.jsg.transportrings_block.non_existing_address=Unable to reach this address
-tile.jsg.transportrings_block.wrong_distance=Wrong distance, should be from -40 to 40
+tile.jsg.transportrings_block.wrong_distance=Wrong distance, should be from -15 to 15
 tile.jsg.transportrings_block.obstructed=Rings obstructed, clear 5x5 area around rings
 tile.jsg.transportrings_block.obstructed_target=Target rings obstructed, clear 5x5 area around target rings
 tile.jsg.transportrings_block.busy=Rings busy

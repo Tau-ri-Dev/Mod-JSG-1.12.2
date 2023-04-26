@@ -419,7 +419,7 @@ tile.jsg.transportrings_ori_block.name=Транспортные Кольца (Or
 tile.jsg.transportrings_ancient_block.name=Транспортные Кольца (Ancient)
 
 tile.jsg.transportrings_block.non_existing_address=Невозможно достигнуть адрес
-tile.jsg.transportrings_block.wrong_distance=Неверное расстояние, должно быть от -40 до 40
+tile.jsg.transportrings_block.wrong_distance=Неверное расстояние, должно быть от -15 до 15
 tile.jsg.transportrings_block.obstructed=Кольца заблокированы, очистите зону 5х5 вокруг Колец
 tile.jsg.transportrings_block.obstructed_target=Заданные Кольца заблокированы, очистите зону 5х5 вокруг заданных Колец
 tile.jsg.transportrings_block.busy=Кольца активны

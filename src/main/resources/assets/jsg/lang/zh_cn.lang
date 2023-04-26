@@ -419,7 +419,7 @@ tile.jsg.transportrings_ori_block.name=传送环 (Ori)
 tile.jsg.transportrings_ancient_block.name=传送环 (Ancient)
 
 tile.jsg.transportrings_block.non_existing_address=无法到达此地址
-tile.jsg.transportrings_block.wrong_distance=Wrong distance, should be from -40 to 40
+tile.jsg.transportrings_block.wrong_distance=Wrong distance, should be from -15 to 15
 tile.jsg.transportrings_block.obstructed=此传送环受阻，请清除此传送环周围的5x5区域
 tile.jsg.transportrings_block.obstructed_target=目标传送环被阻塞，清除目标传送环周围的5x5区域
 tile.jsg.transportrings_block.busy=此传送环正在使用

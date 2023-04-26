@@ -1,5 +1,12 @@
 package tauri.dev.jsg.renderer.transportrings;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import tauri.dev.jsg.block.props.TRPlatformBlock;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.ElementEnum;
@@ -9,13 +16,8 @@ import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.transportrings.TransportRingsRendererState;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import tauri.dev.jsg.transportrings.RingsPlatform;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
 
 public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRenderer<TransportRingsAbstractTile> {
 
@@ -30,6 +32,11 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
     public static final float PLATFORM_MAX_X = 5.0f;
 
     public abstract void renderRings(TransportRingsRendererState state, float partialTicks, int distance, float addToYMax);
+
+    @Override
+    public boolean isGlobalRenderer(@Nonnull TransportRingsAbstractTile te) {
+        return true;
+    }
 
     @Override
     public void render(TransportRingsAbstractTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
