@@ -22,7 +22,7 @@ public class JSGPreInit {
     public static void preInit(FMLPreInitializationEvent event) {
         JSG.logger = event.getModLog();
         JSG.modConfigDir = event.getModConfigurationDirectory();
-        JSG.memoryTotal = Runtime.getRuntime().totalMemory();
+        JSG.memoryTotal = Runtime.getRuntime().maxMemory();
 
         // mod file path - used in updater
         JSG.clientModPath = event.getSourceFile();

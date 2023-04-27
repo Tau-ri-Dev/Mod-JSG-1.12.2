@@ -874,6 +874,7 @@ chat.orlins.energyStored=Energia eltárolva: %s RF (Szükséges: %s RF, %s s)
 menu.about=A JSG-ról
 menu.updater.download=Letöltés
 menu.updater.close=Bezár
+menu.ram.help=Help
 
 # tips
 menu.nether_gate=TIP: If you go into Nether, do not forget to save Nether's gate address!

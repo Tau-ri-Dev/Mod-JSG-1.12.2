@@ -872,6 +872,7 @@ chat.orlins.energyStored=Uchovaná energie: %s RF (Potřebná: %s RF, %s s)
 menu.about=O Just Stargate Módu
 menu.updater.download=Stáhnout
 menu.updater.close=Zavřít
+menu.ram.help=Pomoc
 
 # tips
 menu.nether_gate=TIP: Když půjdeš do Netheru, nezapoměň si uložit adresu Nether brány!

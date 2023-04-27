@@ -882,6 +882,7 @@ chat.orlins.energyStored=Energy stored: %s RF (Required: %s RF, %s s)
 menu.about=About JSG Mod
 menu.updater.download=Download
 menu.updater.close=Close
+menu.ram.help=Help
 
 # tips
 menu.nether_gate=TIP: If you go into Nether, do not forget to save Nether's gate address!

@@ -874,6 +874,7 @@ chat.orlins.energyStored=Энергии накоплено: %s RF (Необхо�
 menu.about=О JSG
 menu.updater.download=Скачать
 menu.updater.close=Закрыт
+menu.ram.help=Help
 
 # tips
 menu.nether_gate=TIP: If you go into Nether, do not forget to save Nether's gate address!

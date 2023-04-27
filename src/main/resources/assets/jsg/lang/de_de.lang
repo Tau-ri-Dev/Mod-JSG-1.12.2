@@ -857,6 +857,7 @@ chat.orlins.energyStored=Energie gespeichert: %s RF (Benötigt: %s RF, %s s)
 menu.about=Über Just Stargate Mod
 menu.updater.download=Download
 menu.updater.close=Schließen
+menu.ram.help=Help
 
 # tips
 menu.nether_gate=TIP: If you go into Nether, do not forget to save Nether's gate address!

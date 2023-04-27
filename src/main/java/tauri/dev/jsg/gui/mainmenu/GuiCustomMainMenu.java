@@ -35,35 +35,11 @@ import static tauri.dev.jsg.util.updater.GetUpdate.openWebsiteToClient;
 public class GuiCustomMainMenu extends GuiScreen {
 
     public static final String WEBSITE = "https://justsgmod.eu/";
+
+    public static final String WIKI_RAM_ALLOCATION_URL = "https://justsgmod.eu/wiki/?category=general&topic=start#Allocating%20more%20RAM";
     public static final String GITHUB = "https://github.com/Tau-ri-Dev";
     public static final String MINECRAFT_SITES = "https://minecraft.net/en-us";
     public static final String JSG_RUNNING_TEXT = "Just Stargate Mod v" + JSG.MOD_VERSION.replaceAll(JSG.MC_VERSION + "-", "");
-
-    public double tick;
-
-    // Stores the larges number of FPS
-    private static int bestFPS = 0;
-
-    public void tick() {
-        // If sync is enabled then sync local ticks with mc ticks
-        if (JSGConfig.General.mainMenuConfig.syncEnabled) {
-            tick = JSGMinecraftHelper.getClientTickPrecise();
-        } else {
-            int currentFPS = Minecraft.getDebugFPS();
-            if (currentFPS > bestFPS) bestFPS = Math.min(currentFPS, 30);
-            tick += (bestFPS > 0 ? ((30D / (double) bestFPS) * (20D / (double) bestFPS)) : 1D);
-        }
-    }
-
-    public void createFadeIn() {
-        backgroundChangeStart = (long) (tick - (BACKGROUND_CHANGE_ANIMATION_LENGTH / 3));
-    }
-
-    public GuiCustomMainMenu() {
-        tick = JSGMinecraftHelper.getClientTickPrecise();
-        createFadeIn();
-    }
-
     public static final ArrayList<ResourceLocation> BACKGROUNDS = new ArrayList<ResourceLocation>() {{
         add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background0.jpg"));
         add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background1.jpg"));
@@ -73,72 +49,23 @@ public class GuiCustomMainMenu extends GuiScreen {
         add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background5.jpg"));
         add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background6.jpg"));
     }};
-
     public static final ResourceLocation LOGO_TAURI = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/tauri_dev_logo.png");
     public static final ResourceLocation LOGO_MOJANG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/mojang_logo.png");
     public static final ResourceLocation LOGO_JSG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/jsg_logo.png");
-
-    public ResourceLocation getIconsTexture() {
-        switch (gateType) {
-            case MILKYWAY:
-            default:
-                return new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/icons_mw.png");
-            case PEGASUS:
-                return new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/icons_pg.png");
-            case UNIVERSE:
-                return new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/icons_uni.png");
-        }
-    }
-
-    private static int currentButton = 0;
-
+    public static final int BACKGROUNDS_COUNT = BACKGROUNDS.size();
+    public static final long FIRST_TRANSITION_LENGTH = 7 * 20; // in relative ticks
+    public static final int PADDING = 10;
+    public static final MainMenuNotifications NOTIFIER = MainMenuNotifications.getManager();
     private static final int BACKGROUND_CHANGE_ANIMATION_LENGTH = 60; //ticks
     private static final int BACKGROUND_STAY_TIME = 400; //ticks
-    private long backgroundChangeStart = 0;
-
     public static GetUpdate.UpdateResult UPDATER_RESULT = GetUpdate.checkForUpdate();
-
-    public static final int BACKGROUNDS_COUNT = BACKGROUNDS.size();
-
-    public boolean isMusicPlaying = false;
-
     public static long menuDisplayed = -1;
-
     public static boolean menuWasDisplayed = false;
     public static double firstTransitionStart = 0;
-    public static final long FIRST_TRANSITION_LENGTH = 7 * 20; // in relative ticks
-
-    public static final int PADDING = 10;
-
-    public static final MainMenuNotifications NOTIFIER = MainMenuNotifications.getManager();
-
-    public static void playMusic(boolean play) {
-        JSGSoundHelperClient.playPositionedSoundClientSide(JSG.lastPlayerPosInWorld, SoundPositionedEnum.MAINMENU_MUSIC, play);
-    }
-
-    public void updateMusic() {
-        if ((tick - menuDisplayed) <= 20 * 7 || (Minecraft.getDebugFPS() < 28 && (tick - menuDisplayed) <= 20 * 30))
-            return; // wait some seconds before first play
-
-        if ((tick - menuDisplayed) > 20 * 30)
-            isMusicPlaying = JSGSoundHelperClient.getRecord(SoundPositionedEnum.MAINMENU_MUSIC, JSG.lastPlayerPosInWorld).isPlaying();
-
-        if (!isMusicPlaying && JSGConfig.General.mainMenuConfig.playMusic) {
-            isMusicPlaying = true;
-            playMusic(true);
-        }
-        if (!JSGConfig.General.mainMenuConfig.playMusic && isMusicPlaying)
-            playMusic(false);
-    }
-
-    public int[] getCenterPos(int rectWidth, int rectHeight) {
-        return getCenterPos(rectWidth, rectHeight, width, height);
-    }
-
-    public static int[] getCenterPos(int rectWidth, int rectHeight, int winWidth, int winHeight) {
-        return new int[]{((winWidth - rectWidth) / 2), ((winHeight - rectHeight) / 2)};
-    }
-
+    // Stores the larges number of FPS
+    private static int bestFPS = 0;
+    private static int currentButton = 0;
+    private static boolean menuWasDisplayedIgnoredFPS = false;
     private static int updaterNotification = -1;
 
     static {
@@ -174,6 +101,77 @@ public class GuiCustomMainMenu extends GuiScreen {
                 }
             });
         }
+    }
+
+    public double tick;
+    public boolean isMusicPlaying = false;
+    public EnumMainMenuGateType gateType = EnumMainMenuGateType.random(null);
+    private long backgroundChangeStart = 0;
+    private long lastGateChange = 0;
+    /**
+     * Used to draw background texture (panorama)
+     */
+    private double backgroundScale = 1;
+    private int currentBackground = 0;
+    private EnumMainMenuTips tipEnum = EnumMainMenuTips.random(null);
+
+    public GuiCustomMainMenu() {
+        tick = JSGMinecraftHelper.getClientTickPrecise();
+        createFadeIn();
+    }
+
+    public static void playMusic(boolean play) {
+        JSGSoundHelperClient.playPositionedSoundClientSide(JSG.lastPlayerPosInWorld, SoundPositionedEnum.MAINMENU_MUSIC, play);
+    }
+
+    public static int[] getCenterPos(int rectWidth, int rectHeight, int winWidth, int winHeight) {
+        return new int[]{((winWidth - rectWidth) / 2), ((winHeight - rectHeight) / 2)};
+    }
+
+    public void tick() {
+        // If sync is enabled then sync local ticks with mc ticks
+        if (JSGConfig.General.mainMenuConfig.syncEnabled) {
+            tick = JSGMinecraftHelper.getClientTickPrecise();
+        } else {
+            int currentFPS = Minecraft.getDebugFPS();
+            if (currentFPS > bestFPS) bestFPS = Math.min(currentFPS, 30);
+            tick += (bestFPS > 0 ? ((30D / (double) bestFPS) * (20D / (double) bestFPS)) : 1D);
+        }
+    }
+
+    public void createFadeIn() {
+        backgroundChangeStart = (long) (tick - (BACKGROUND_CHANGE_ANIMATION_LENGTH / 3));
+    }
+
+    public ResourceLocation getIconsTexture() {
+        switch (gateType) {
+            case MILKYWAY:
+            default:
+                return new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/icons_mw.png");
+            case PEGASUS:
+                return new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/icons_pg.png");
+            case UNIVERSE:
+                return new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/icons_uni.png");
+        }
+    }
+
+    public void updateMusic() {
+        if ((tick - menuDisplayed) <= 20 * 7 || (Minecraft.getDebugFPS() < 28 && (tick - menuDisplayed) <= 20 * 30))
+            return; // wait some seconds before first play
+
+        if ((tick - menuDisplayed) > 20 * 30)
+            isMusicPlaying = JSGSoundHelperClient.getRecord(SoundPositionedEnum.MAINMENU_MUSIC, JSG.lastPlayerPosInWorld).isPlaying();
+
+        if (!isMusicPlaying && JSGConfig.General.mainMenuConfig.playMusic) {
+            isMusicPlaying = true;
+            playMusic(true);
+        }
+        if (!JSGConfig.General.mainMenuConfig.playMusic && isMusicPlaying)
+            playMusic(false);
+    }
+
+    public int[] getCenterPos(int rectWidth, int rectHeight) {
+        return getCenterPos(rectWidth, rectHeight, width, height);
     }
 
     @Override
@@ -227,10 +225,6 @@ public class GuiCustomMainMenu extends GuiScreen {
         return id;
     }
 
-    public EnumMainMenuGateType gateType = EnumMainMenuGateType.random(null);
-
-    private long lastGateChange = 0;
-
     public void updateGateType() {
         if ((tick - lastGateChange) < 30 * 20) return;
         lastGateChange = (long) tick;
@@ -262,6 +256,10 @@ public class GuiCustomMainMenu extends GuiScreen {
                 menuWasDisplayed = true;
         }
         drawFirstAnimation();
+        if (!menuWasDisplayedIgnoredFPS) {
+            firstInit();
+            menuWasDisplayedIgnoredFPS = true;
+        }
     }
 
     public void drawFirstAnimation() {
@@ -313,7 +311,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         drawScaledCustomSizeModalRect(x, y, 0, 0, 411, 230, sizeXJSG, sizeYJSG, 410, 229);
 
         center = getCenterPos(0, 0);
-        if(alpha > 0.75)
+        if (alpha > 0.75)
             drawCenteredString(fontRenderer, "We are not associated with Mojang.", center[0], height - PADDING - 10, 0xFFFFFF, true);
 
         GlStateManager.disableBlend();
@@ -441,12 +439,6 @@ public class GuiCustomMainMenu extends GuiScreen {
         }
     }
 
-    /**
-     * Used to draw background texture (panorama)
-     */
-    private double backgroundScale = 1;
-    private int currentBackground = 0;
-
     public void drawBackground() {
 
         currentBackground = (int) (Math.floor(tick / BACKGROUND_STAY_TIME) % BACKGROUNDS_COUNT);
@@ -482,8 +474,6 @@ public class GuiCustomMainMenu extends GuiScreen {
 
         gateType.renderGate(width + 20, getCenterPos(0, 0)[1], 45, tick);
     }
-
-    private EnumMainMenuTips tipEnum = EnumMainMenuTips.random(null);
 
     /**
      * Used to draw texts on the screen
@@ -675,6 +665,57 @@ public class GuiCustomMainMenu extends GuiScreen {
                     });
                 }
             }
+        }
+    }
+
+    public void firstInit() {
+
+        if (JSG.memoryTotal < 6L * 1024 * 1024 * 1024) {
+            // Insert notification about low RAM
+            NOTIFIER.add(new MainMenuNotifications.Notification(new ArrayList<GuiButton>() {{
+                // Wiki
+                String update = I18n.format("menu.ram.help");
+                int width = fontRenderer.getStringWidth(update) + 20;
+                add(new GuiButton(BUTTONS_ID_START + 10, -width - (PADDING / 2), 0, width, 20, update));
+
+                // Close
+                update = I18n.format("menu.updater.close");
+                width = fontRenderer.getStringWidth(update) + 20;
+                add(new GuiButton(BUTTONS_ID_START + 11, (PADDING / 2), 0, width, 20, update));
+            }}, "Allocate more RAM!",
+                    "",
+                    "Recommended RAM for JSG mod is 6GB!",
+                    "By ignoring this fact, you can",
+                    "run into troubles with this mod."
+            ) {
+                @Override
+                public void render(int mouseX, int mouseY, int width, int height, int rectX, int rectY, GuiScreen parentScreen) {
+                    super.renderText(mouseX, mouseY, width, height, rectX, rectY, parentScreen);
+                    int xCenter = getCenterPos(0, 0)[0];
+
+                    buttons.get(0).y = rectY + BACKGROUND_HEIGHT - 30;
+                    buttons.get(0).x = xCenter - buttons.get(0).width - (PADDING / 2);
+                    buttons.get(0).drawButton(mc, mouseX, mouseY, 0);
+                    buttons.get(1).x = xCenter + (PADDING / 2);
+                    buttons.get(1).y = buttons.get(0).y;
+                    buttons.get(1).drawButton(mc, mouseX, mouseY, 0);
+                }
+
+                @Override
+                public void actionPerformed(@Nonnull GuiButton button) {
+                    switch (button.id) {
+                        case BUTTONS_ID_START + 10:
+                            openWebsiteToClient(WIKI_RAM_ALLOCATION_URL);
+                            break;
+                        case BUTTONS_ID_START + 11:
+                            dismiss();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
+            NOTIFIER.update();
         }
     }
 }
