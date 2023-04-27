@@ -17,6 +17,7 @@ import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.LoaderException;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -44,11 +45,18 @@ import tauri.dev.jsg.renderer.stargate.StargateOrlinRenderer;
 import tauri.dev.jsg.sound.JSGSoundHelperClient;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
 
+import static tauri.dev.jsg.JSG.memoryTotal;
+import static tauri.dev.jsg.JSG.neededMemory;
 import static tauri.dev.jsg.block.JSGBlocks.BLOCKS;
 
 @SuppressWarnings({"rawtypes", "unused", "unchecked"})
 public class ProxyClient implements IProxy {
     public void preInit(FMLPreInitializationEvent event) {
+        neededMemory = JSGConfig.General.debug.neededRAM * 1024 * 1024 * 1024;
+        if (memoryTotal < neededMemory) {
+            throw new LoaderException("JSG mod requires " + String.format("%.2f", neededMemory / 1024 / 1024) + "MB of allocated RAM as minimum! (got " + String.format("%.2f", (double) memoryTotal / 1024 / 1024) + "MB)");
+        }
+
         if (JSGConfig.General.visual.changeTitle)
             Display.setTitle(Display.getTitle() + " w/" + JSG.MOD_NAME + " " + JSG.MOD_VERSION.replaceAll(JSG.MC_VERSION + "-", ""));
 

@@ -56,6 +56,9 @@ public class JSG {
     public static File clientModPath;
     public static File modsDirectory;
 
+    public static long memoryTotal = 0;
+    public static double neededMemory = 4D * 1024 * 1024 * 1024; // 4GB
+
     // --------------------------------------------
     // PROXY
 

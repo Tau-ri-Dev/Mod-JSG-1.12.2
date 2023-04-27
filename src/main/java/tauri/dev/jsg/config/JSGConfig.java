@@ -175,6 +175,12 @@ public class JSGConfig {
                     "SIDE: SERVER/CLIENT"
             })
             public boolean logDebugAsInfo = false;
+
+            @Config.Name("Memory needed to run mod/modpack (GB)")
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
+            public float neededRAM = 4.0f;
         }
 
         public static class Integration {
