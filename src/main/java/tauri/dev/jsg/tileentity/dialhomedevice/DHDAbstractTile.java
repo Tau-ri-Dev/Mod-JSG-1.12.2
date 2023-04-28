@@ -653,7 +653,7 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
             return new Object[]{null, "dhd_engage_failed", "Not enough power to open gate"};
         else if (result == StargateOpenResult.ADDRESS_MALFORMED)
             return new Object[]{null, "dhd_engage_failed", "Wrong address"};
-        return new Object[]{null, "dhd_engage_failed_unknown", "Unknown error! This is a bug!"};
+        return new Object[]{null, "dhd_engage_failed", "Unknown error! (" + result.name() + ")"};
     }
 
     @Nonnull
