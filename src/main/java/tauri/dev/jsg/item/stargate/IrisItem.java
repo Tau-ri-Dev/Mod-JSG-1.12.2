@@ -16,6 +16,7 @@ import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 /**
@@ -23,9 +24,11 @@ import java.util.List;
  */
 public class IrisItem extends Item {
     public final int MAX_DAMAGE;
+    public Item itemToRepair;
 
-    public IrisItem(String name, int durability) {
+    public IrisItem(String name, int durability, Item itemToRepair) {
         MAX_DAMAGE = durability;
+        this.itemToRepair = itemToRepair;
         setRegistryName(JSG.MOD_ID + ":" + name);
         setUnlocalizedName(JSG.MOD_ID + "." + name);
 
@@ -85,6 +88,19 @@ public class IrisItem extends Item {
     @Override
     public double getDurabilityForDisplay(@Nonnull ItemStack stack) {
         return getDamage(stack) / (double) MAX_DAMAGE;
+    }
+
+    @Override
+    public boolean isRepairable(){
+        return true;
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public boolean getIsRepairable(ItemStack stack, ItemStack repairWithStack){
+        ItemStack mat = new ItemStack(itemToRepair);
+        if (!mat.isEmpty() && net.minecraftforge.oredict.OreDictionary.itemMatches(mat, repairWithStack, false)) return true;
+        return super.getIsRepairable(stack, repairWithStack);
     }
 
     @Nonnull

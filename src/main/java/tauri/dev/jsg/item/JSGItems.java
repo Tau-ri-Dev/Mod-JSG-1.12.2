@@ -8,6 +8,7 @@ import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.item.armor.AncientShield;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerItem;
 import tauri.dev.jsg.item.linkable.gdo.GDOItem;
 import tauri.dev.jsg.item.mysterious.PegasusPageMysteriousItem;
@@ -39,14 +40,15 @@ public class JSGItems {
      */
     public static final Item IRIS_BLADE = ItemHelper.createGenericItem("iris_blade", JSG_ITEMS_CREATIVE_TAB);
     public static final Item QUAD_IRIS_BLADE = ItemHelper.createGenericItem("quad_iris_blade", JSG_ITEMS_CREATIVE_TAB);
-    public static final Item UPGRADE_IRIS = new IrisItem("upgrade_iris", JSGConfig.Stargate.iris.titaniumIrisDurability);
+    public static final Item UPGRADE_IRIS = new IrisItem("upgrade_iris", JSGConfig.Stargate.iris.titaniumIrisDurability, JSGItems.TITANIUM_INGOT);
 
     public static final Item IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("iris_blade_trinium", JSG_ITEMS_CREATIVE_TAB);
     public static final Item QUAD_IRIS_BLADE_TRINIUM = ItemHelper.createGenericItem("quad_iris_blade_trinium", JSG_ITEMS_CREATIVE_TAB);
-    public static final Item UPGRADE_IRIS_TRINIUM = new IrisItem("upgrade_iris_trinium", JSGConfig.Stargate.iris.triniumIrisDurability);
+    public static final Item UPGRADE_IRIS_TRINIUM = new IrisItem("upgrade_iris_trinium", JSGConfig.Stargate.iris.triniumIrisDurability, JSGItems.TRINIUM_INGOT);
 
     public static final Item UPGRADE_SHIELD = ItemHelper.createGenericItem("upgrade_shield", JSG_ITEMS_CREATIVE_TAB);
-    public static final Item SHIELD_EMITTER = ItemHelper.createGenericItem("shield_emitter", JSG_ITEMS_CREATIVE_TAB);
+    //public static final Item SHIELD_EMITTER = ItemHelper.createGenericItem("shield_emitter", JSG_ITEMS_CREATIVE_TAB);
+    public static final Item SHIELD_EMITTER = new AncientShield();
 
     /**
      * These allow for dialing 8th glyph(cross dimension travel) and show different address spaces

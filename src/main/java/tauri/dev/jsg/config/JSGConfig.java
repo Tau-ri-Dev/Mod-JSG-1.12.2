@@ -1255,6 +1255,37 @@ public class JSGConfig {
         }
     }
 
+    @Config(modid = JSG.MOD_ID, name = CONFIG_FILE_NAME + "items", category = "items")
+    @Config.LangKey("config.jsg.items")
+    public static class Items {
+        @Config.Name("Ancient Shield")
+        @Config.Comment({
+                "Ancient Shield settings"
+        })
+        public static Shield shield = new Shield();
+
+        public static class Shield {
+            @Config.Name("Time after apply hungry")
+            @Config.RangeInt(min = 2, max = 20)
+            @Config.SlidingOption
+            @Config.Comment({
+                    "Time in minutes after hungry should be applied to player",
+                    "SIDE: SERVER"
+            })
+            public int hungryAfter = 8;
+
+            @Config.Name("Hungry length")
+            @Config.RangeDouble(min = 0.25, max = 2)
+            @Config.SlidingOption
+            @Config.Comment({
+                    "How many minutes should be hungry applied for?",
+                    "SIDE: SERVER"
+            })
+            public double hungryLength = 0.5;
+        }
+
+    }
+
     @Config(modid = JSG.MOD_ID, name = CONFIG_FILE_NAME + "worldgen", category = "worldgen")
     @Config.LangKey("config.jsg.worldgen")
     public static class WorldGen {

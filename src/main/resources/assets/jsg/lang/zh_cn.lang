@@ -32,6 +32,9 @@ config.jsg.beamers.tooltip=Configuration of Beamers
 config.jsg.worldgen=World Generation Config
 config.jsg.worldgen.tooltip=Configuration of World Gen and Mysterious Pages
 
+config.jsg.items=Items Config
+config.jsg.items.tooltip=Configuration of Items, Armor and Weapons
+
 # Sound category
 soundCategory.jsg=Just Stargate Mod
 
