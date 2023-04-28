@@ -41,6 +41,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 
 import java.util.*;
 
@@ -138,12 +139,18 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 		return super.canAcceptConnectionFrom(targetGatePos) && targetGatePos.dimensionID == DimensionType.NETHER.getId() && !isBroken();
 	}
 
+	public boolean canNotGenerate = false;
+
 	public void updateNetherAddress() {
 		dialedAddress.clear();
 		if(!network.hasNetherGate() || !network.isStargateInNetwork(network.getNetherGate()) || network.getStargate(network.getNetherGate()) == null){
 			if(!world.isRemote && world.provider.getDimensionType() == DimensionType.OVERWORLD) {
 				JSG.info("Orlin gate requested building of new nether gate... Build started...");
-				StargateNetwork.generateNetherGate(network, world, pos);
+				GeneratedStargate stargate = StargateNetwork.generateNetherGate(network, world, pos);
+				if(stargate == null){
+					canNotGenerate = true;
+					markDirty();
+				}
 			}
 		}
 		if(network.hasNetherGate()) {
@@ -456,6 +463,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setBoolean("isPowered", isPowered);
 		compound.setInteger("openCount", openCount);
+		compound.setBoolean("canNotGenerate", canNotGenerate);
 
 		return super.writeToNBT(compound);
 	}
@@ -464,6 +472,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 	public void readFromNBT(NBTTagCompound compound) {
 		isPowered = compound.getBoolean("isPowered");
 		openCount = compound.getInteger("openCount");
+		canNotGenerate = compound.getBoolean("canNotGenerate");
 
 		super.readFromNBT(compound);
 	}
