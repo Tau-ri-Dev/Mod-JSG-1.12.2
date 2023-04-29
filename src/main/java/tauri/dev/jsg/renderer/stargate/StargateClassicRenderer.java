@@ -148,7 +148,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             GlStateManager.disableBlend();
             GlStateManager.popMatrix();
         }
-        if ((irisType == EnumIrisType.IRIS_TITANIUM || irisType == EnumIrisType.IRIS_TRINIUM) && backOnly) {
+        if ((irisType == EnumIrisType.IRIS_TITANIUM || irisType == EnumIrisType.IRIS_TRINIUM || irisType == EnumIrisType.IRIS_CREATIVE) && backOnly) {
             setIrisHeatColor(rendererState);
             irisAnimationStage *= 1.7f / PHYSICAL_IRIS_ANIMATION_LENGTH;
             if (irisAnimationStage > 1.7f) irisAnimationStage = 1.7f;
@@ -178,6 +178,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             return;
         }
         float red = (float) (rendererState.irisHeat / (rendererState.irisType == EnumIrisType.IRIS_TITANIUM ? StargateClassicBaseTile.IRIS_MAX_HEAT_TITANIUM : StargateClassicBaseTile.IRIS_MAX_HEAT_TRINIUM));
+        if(rendererState.irisType == EnumIrisType.IRIS_CREATIVE) red = 0;
         setIrisHeatColor(rendererState, red);
         //.if(red > 0)
         //    JSGTextureLightningHelper.lightUpTexture(getWorld(), rendererState.pos, red);

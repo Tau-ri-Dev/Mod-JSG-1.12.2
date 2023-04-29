@@ -675,11 +675,13 @@ gui.stargate.iris.opened=Offen
 gui.stargate.iris.closed=Geschlossen
 gui.stargate.iris.auto=Automatisch
 gui.stargate.iris.oc=OC
+gui.stargate.iris.dialer=Dialer
 gui.stargate.iris.opened_help=Iris ist dauerhaft offen
 gui.stargate.iris.closed_help=Iris ist dauerhaft geschlossen
 gui.stargate.iris.auto_help=Iris schließt bei eingehendem Wurmloch automatisch,
 gui.stargate.iris.auto1_help=Kann durch einen Code des GDO geöffnet werden
 gui.stargate.iris.oc_help=Iris wird von OpenComputers kontrolliert
+gui.stargate.iris.dialer_help=Iris wird von Universe dialer kontrolliert
 
 gui.stargate.biome_overlay=Biom overlay
 gui.stargate.biome_overlay.help=Lege Block zum überschreiben ein

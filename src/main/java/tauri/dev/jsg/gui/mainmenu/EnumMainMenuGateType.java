@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.model.ModelLoader;
 import tauri.dev.jsg.loader.texture.TextureLoader;
@@ -48,7 +49,9 @@ public enum EnumMainMenuGateType {
         return newType;
     }
 
+    public static double coefficient = 1.0;
     public void renderGate(int x, int y, float size, double tick) {
+        coefficient = JSGConfig.General.mainMenuConfig.ringRotationCoefficient;
         GlStateManager.pushMatrix();
 
         GlStateManager.disableLighting();
@@ -85,7 +88,7 @@ public enum EnumMainMenuGateType {
         // Ring
         GlStateManager.pushMatrix();
         GlStateManager.translate(StargateMilkyWayRenderer.RING_LOC.x, StargateMilkyWayRenderer.RING_LOC.z, StargateMilkyWayRenderer.RING_LOC.y);
-        GlStateManager.rotate((float) (-(tick * (A_ANGLE_PER_TICK / 2)) % 360), 0, 0, 1);
+        GlStateManager.rotate((float) (-(tick * (A_ANGLE_PER_TICK*coefficient / 2)) % 360), 0, 0, 1);
         GlStateManager.translate(-StargateMilkyWayRenderer.RING_LOC.x, -StargateMilkyWayRenderer.RING_LOC.z, -StargateMilkyWayRenderer.RING_LOC.y);
 
         ElementEnum.MILKYWAY_RING.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
@@ -130,7 +133,7 @@ public enum EnumMainMenuGateType {
         GlStateManager.pushMatrix();
         GlStateManager.scale(1.14f, 1.14f, 1.14f);
         GlStateManager.pushMatrix();
-        GlStateManager.rotate((float) (-(tick * (A_ANGLE_PER_TICK / 2)) % 360), 0, 0, 1);
+        GlStateManager.rotate((float) (-(tick * (A_ANGLE_PER_TICK*coefficient / 2)) % 360), 0, 0, 1);
 
         // Gate
         GlStateManager.pushMatrix();
@@ -203,7 +206,7 @@ public enum EnumMainMenuGateType {
         GlStateManager.popMatrix();
 
         GlStateManager.pushMatrix();
-        int glyphsCount = (int) ((tick / 2) % (37 * 3));
+        int glyphsCount = (int) ((tick*coefficient / 2) % (37 * 3));
         if (glyphsCount > 36) glyphsCount = 36;
 
         int chevronsCount = glyphsCount / 4;

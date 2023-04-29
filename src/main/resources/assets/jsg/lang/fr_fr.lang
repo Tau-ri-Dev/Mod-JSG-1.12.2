@@ -700,11 +700,13 @@ gui.stargate.iris.opened=Ouvrir
 gui.stargate.iris.closed=Fermé
 gui.stargate.iris.auto=Automatique
 gui.stargate.iris.oc=OC
+gui.stargate.iris.dialer=Dialer
 gui.stargate.iris.opened_help=L'ris est ouvert en permanence
 gui.stargate.iris.closed_help=L'iris est fermé en permanence
 gui.stargate.iris.auto_help=L'iris se ferme automatiquement sur un trou de ver entrant,
 gui.stargate.iris.auto1_help=L'iris peut être ouvert avec GDO en envoyant le code défini dans le champ.
 gui.stargate.iris.oc_help=L'iris peut être contrôlée par des ordinateurs ouverts
+gui.stargate.iris.dialer_help=Iris can be controlled by universe dialer
 
 gui.stargate.biome_overlay=Couvrement du biome
 gui.stargate.biome_overlay.help=Insérer les blocs pour les remplacer

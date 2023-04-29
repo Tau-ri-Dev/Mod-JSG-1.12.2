@@ -692,11 +692,13 @@ gui.stargate.iris.opened=Abierto
 gui.stargate.iris.closed=Cerrado
 gui.stargate.iris.auto=Automático
 gui.stargate.iris.oc=OC
+gui.stargate.iris.dialer=Control Antiguo
 gui.stargate.iris.opened_help=El Iris está permanentemente abierto
 gui.stargate.iris.closed_help=El Iris está permanentemente cerrado
 gui.stargate.iris.auto_help=El Iris se cerrará automáticamenente con un agujero entrante,
 gui.stargate.iris.auto1_help=se puede abrir con el GDO enviando el código establecido en el campo
 gui.stargate.iris.oc_help=El Iris puede ser controlado por OpenComputers
+gui.stargate.iris.dialer_help=El Iris puede ser controlado por Control Antiguo
 
 gui.stargate.biome_overlay=Superposición de bioma
 gui.stargate.biome_overlay.help=Insertar bloque para cambiar

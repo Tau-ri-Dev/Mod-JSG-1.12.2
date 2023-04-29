@@ -692,11 +692,13 @@ gui.stargate.iris.opened=Открыто
 gui.stargate.iris.closed=Закрыто
 gui.stargate.iris.auto=Автоматически
 gui.stargate.iris.oc=OC
+gui.stargate.iris.dialer=Портативное Устройство Древних
 gui.stargate.iris.opened_help=Диафрагма всегда открыта
 gui.stargate.iris.closed_help=Диафрагма всегда закрыта
 gui.stargate.iris.auto_help=Диафрагма автоматически закрывается при входящем соединении,
 gui.stargate.iris.auto1_help=но может быть открыта с помощью GDO при введении указанного здесь кода
 gui.stargate.iris.oc_help=Диафрагма управляется с помощью Open Computers
+gui.stargate.iris.dialer_help=Диафрагма управляется с помощью Портативное Устройство Древних
 
 gui.stargate.biome_overlay=Биомовое Наложение
 gui.stargate.biome_overlay.help=Вставьте блок для изменения вручную

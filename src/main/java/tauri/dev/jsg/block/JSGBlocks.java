@@ -48,6 +48,7 @@ import tauri.dev.jsg.block.transportrings.TransportRingsAncientBlock;
 import tauri.dev.jsg.block.transportrings.TransportRingsGoauldBlock;
 import tauri.dev.jsg.block.transportrings.TransportRingsOriBlock;
 import tauri.dev.jsg.block.transportrings.controller.TRControllerGoauldBlock;
+import tauri.dev.jsg.block.transportrings.controller.TRControllerOriBlock;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode;
 import tauri.dev.jsg.item.linkable.gdo.GDOItem;

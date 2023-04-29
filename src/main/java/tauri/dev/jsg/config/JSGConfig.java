@@ -328,6 +328,15 @@ public class JSGConfig {
                     "SIDE: CLIENT"
             })
             public boolean loadingMusic = true;
+
+
+            @Config.Name("Gate ring rotation coefficient")
+            @Config.RangeDouble(min = 0.1, max = 3.0)
+            @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
+            public double ringRotationCoefficient = 1.0;
         }
     }
 

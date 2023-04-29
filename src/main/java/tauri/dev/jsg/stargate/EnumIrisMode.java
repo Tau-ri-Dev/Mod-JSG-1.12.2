@@ -4,7 +4,11 @@ package tauri.dev.jsg.stargate;
  * @author matousss
  */
 public enum EnumIrisMode {
-    OPENED((byte) 0), CLOSED((byte) 1), AUTO((byte) 2), OC((byte) 3);
+    OPENED((byte) 0),
+    CLOSED((byte) 1),
+    AUTO((byte) 2),
+    OC((byte) 3),
+    DIALER((byte) 4);
 
     public final byte id;
 

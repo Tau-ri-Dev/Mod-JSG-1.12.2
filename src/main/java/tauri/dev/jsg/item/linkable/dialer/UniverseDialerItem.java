@@ -40,6 +40,7 @@ import tauri.dev.jsg.item.renderer.CustomModel;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
+import tauri.dev.jsg.stargate.EnumIrisMode;
 import tauri.dev.jsg.stargate.EnumStargateState;
 import tauri.dev.jsg.stargate.NearbyGate;
 import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
@@ -369,6 +370,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         if (!world.isRemote && player.getHeldItem(hand).getItemDamage() == UniverseDialerVariants.NORMAL.meta) {
+            boolean shift = player.isSneaking();
             checkNBT(player.getHeldItem(hand));
             NBTTagCompound compound = player.getHeldItem(hand).getTagCompound();
             UniverseDialerMode mode = UniverseDialerMode.valueOf(compound.getByte("mode"));
@@ -390,6 +392,10 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                 case NEARBY:
                     StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
                     if (gateTile == null) break;
+                    if(shift && gateTile.hasIris() && gateTile.getIrisMode() == EnumIrisMode.DIALER){
+                        gateTile.toggleIris();
+                        break;
+                    }
                     switch (gateTile.getStargateState()) {
                         case IDLE:
                             int maxSymbols = SymbolUniverseEnum.getMaxSymbolsDisplay(selectedCompound.getBoolean("hasUpgrade"));
@@ -433,6 +439,10 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                 case GATE_INFO:
                     StargateUniverseBaseTile tile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
                     if (tile == null) break;
+                    if(shift && tile.hasIris() && tile.getIrisMode() == EnumIrisMode.DIALER){
+                        tile.toggleIris();
+                        break;
+                    }
                     switch (tile.getStargateState()) {
                         case IDLE:
                             break;

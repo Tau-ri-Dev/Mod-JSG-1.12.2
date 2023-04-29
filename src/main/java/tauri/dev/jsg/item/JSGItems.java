@@ -50,6 +50,8 @@ public class JSGItems {
     //public static final Item SHIELD_EMITTER = ItemHelper.createGenericItem("shield_emitter", JSG_ITEMS_CREATIVE_TAB);
     public static final Item SHIELD_EMITTER = new AncientShield();
 
+    public static final Item UPGRADE_IRIS_CREATIVE = new IrisItem("upgrade_iris_creative", -1);
+
     /**
      * These allow for dialing 8th glyph(cross dimension travel) and show different address spaces
      */
@@ -209,6 +211,8 @@ public class JSGItems {
             UPGRADE_IRIS_TRINIUM,
             UPGRADE_SHIELD,
             SHIELD_EMITTER,
+
+            UPGRADE_IRIS_CREATIVE,
 
             CRYSTAL_GLYPH_DHD,
             CRYSTAL_GLYPH_STARGATE,

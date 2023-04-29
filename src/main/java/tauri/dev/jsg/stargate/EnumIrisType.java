@@ -13,7 +13,9 @@ public enum EnumIrisType {
     IRIS_TITANIUM((byte) 1, JSGItems.UPGRADE_IRIS),
     IRIS_TRINIUM((byte) 2, JSGItems.UPGRADE_IRIS_TRINIUM),
 
-    SHIELD((byte) 3, JSGItems.UPGRADE_SHIELD);
+    SHIELD((byte) 3, JSGItems.UPGRADE_SHIELD),
+
+    IRIS_CREATIVE((byte) 4, JSGItems.UPGRADE_IRIS_CREATIVE);
 
     public final byte id;
     public final Item item;

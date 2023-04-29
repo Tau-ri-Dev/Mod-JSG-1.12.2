@@ -26,6 +26,9 @@ public class IrisItem extends Item {
     public final int MAX_DAMAGE;
     public Item itemToRepair;
 
+    public IrisItem(String name, int durability) {
+        this(name, durability, null);
+    }
     public IrisItem(String name, int durability, Item itemToRepair) {
         MAX_DAMAGE = durability;
         this.itemToRepair = itemToRepair;
@@ -37,6 +40,7 @@ public class IrisItem extends Item {
 
     @Override
     public void setDamage(@Nonnull ItemStack stack, int damage) {
+        if(MAX_DAMAGE == -1) return;
         if (damage >= MAX_DAMAGE) {
             stack.setCount(0);
             return;
@@ -54,7 +58,7 @@ public class IrisItem extends Item {
 
     @Override
     public boolean isDamageable() {
-        return true;
+        return MAX_DAMAGE != -1;
     }
 
     @Override
@@ -63,7 +67,8 @@ public class IrisItem extends Item {
     }
 
     @Override
-    public int getDamage(ItemStack stack) {
+    public int getDamage(@Nonnull ItemStack stack) {
+        if(MAX_DAMAGE == -1) return 0;
         if (stack.hasTagCompound()) {
             NBTTagCompound nbt = stack.getTagCompound();
             if(nbt != null) {
@@ -92,12 +97,13 @@ public class IrisItem extends Item {
 
     @Override
     public boolean isRepairable(){
-        return true;
+        return itemToRepair != null;
     }
 
     @Override
     @ParametersAreNonnullByDefault
     public boolean getIsRepairable(ItemStack stack, ItemStack repairWithStack){
+        if(itemToRepair == null) return false;
         ItemStack mat = new ItemStack(itemToRepair);
         if (!mat.isEmpty() && net.minecraftforge.oredict.OreDictionary.itemMatches(mat, repairWithStack, false)) return true;
         return super.getIsRepairable(stack, repairWithStack);

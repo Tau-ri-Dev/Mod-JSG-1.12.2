@@ -171,6 +171,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 
         irisTab = (TabIris) TabIris.builder()
                 .setCode(container.gateTile.getIrisCode())
+                .setIsUniverse(container.gateTile.getSymbolType() == SymbolTypeEnum.UNIVERSE)
                 .setIrisMode(container.gateTile.getIrisMode())
                 .setGuiSize(xSize, ySize)
                 .setGuiPosition(guiLeft, guiTop)
@@ -254,7 +255,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 
             infoTab.addString(new TabInfo.InfoString(I18n.format("gui.stargate.state.gate_temp") + " " + format + JSGConfig.General.visual.temperatureUnit.getTemperatureToDisplay(TemperatureHelper.asKelvins(TemperatureHelper.asCelsius(gateTemperature).toKelvins()), 0), 4, y));
             y += 9;
-            if (container.gateTile.isPhysicalIris()) {
+            if (container.gateTile.hasPhysicalIris()) {
                 //irisTemperature = gateTemperature;
 
                 double maxHeat = container.gateTile.getMaxIrisHeat();

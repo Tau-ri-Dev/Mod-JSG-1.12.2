@@ -176,11 +176,11 @@ public class EventHorizon {
 
 
                 StargateClassicBaseTile classicTargetGate = ((StargateClassicBaseTile) targetGatePos.getTileEntity());
-                if (classicTargetGate.isPhysicalIris()) {
+                if (classicTargetGate.hasPhysicalIris()) {
                     JSGSoundHelper.playSoundEvent(packet.getTargetGatePos().getWorld(),
                             classicTargetGate.getGateCenterPos(),
                             SoundEventEnum.IRIS_HIT);
-                } else if (classicTargetGate.isShieldIris()) {
+                } else if (classicTargetGate.hasShieldIris()) {
                     JSGSoundHelper.playSoundEvent(packet.getTargetGatePos().getWorld(),
                             classicTargetGate.getGateCenterPos(),
                             SoundEventEnum.SHIELD_HIT);
@@ -199,7 +199,7 @@ public class EventHorizon {
                         classicTargetGate.updateIrisType();
                     }
                     classicTargetGate.tryHeatUp(true, 2);
-                } else {
+                } else if(!classicTargetGate.hasCreativeIris()){
                     IEnergyStorage energyStorage = classicTargetGate.getCapability(CapabilityEnergy.ENERGY, null);
                     if (energyStorage != null) {
                         energyStorage.extractEnergy(500, false);

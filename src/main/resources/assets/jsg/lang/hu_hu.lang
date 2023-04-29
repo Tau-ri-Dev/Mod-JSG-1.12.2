@@ -692,11 +692,13 @@ gui.stargate.iris.opened=Nyitva
 gui.stargate.iris.closed=Zárva
 gui.stargate.iris.auto=Automata
 gui.stargate.iris.oc=OC
+gui.stargate.iris.dialer=Univerzum Tárcsázó
 gui.stargate.iris.opened_help=Az írisz nyitva marad
 gui.stargate.iris.closed_help=Az írisz zárva marad
 gui.stargate.iris.auto_help=Az írisz automatikusan bezárul bejövő féregjáratnál,
 gui.stargate.iris.auto1_help=ki lehet nyitni a GDO-val a megadott kód küldésével
 gui.stargate.iris.oc_help=Az íriszt OpenComputers-szel lehet irányítani
+gui.stargate.iris.dialer_help=Az íriszt az Univerzum Tárcsazó irányíthatja
 
 gui.stargate.biome_overlay=Biomok
 gui.stargate.biome_overlay.help=Helyezzen be egy blokkot, hogy felülírja

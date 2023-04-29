@@ -57,7 +57,6 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
         }
 
 
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 15 * 16, 15 * 16);
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
 
@@ -75,7 +74,7 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
 
         long tick = world.getTotalWorldTime() - state.animationStart;
         renderPlatform(state, tick, te);
-
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 15 * 16, 15 * 16);
         GlStateManager.translate(0, relativeY, 0);
         renderRings(state, partialTicks, ringsDistance, -relativeY * coef);
         GlStateManager.popMatrix();

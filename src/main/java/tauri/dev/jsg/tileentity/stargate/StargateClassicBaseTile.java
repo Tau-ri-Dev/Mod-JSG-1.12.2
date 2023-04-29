@@ -53,7 +53,6 @@ import tauri.dev.jsg.item.linkable.gdo.GDOMessages;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.item.stargate.IrisItem;
 import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
 import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
@@ -86,6 +85,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static tauri.dev.jsg.stargate.EnumIrisType.IRIS_CREATIVE;
 import static tauri.dev.jsg.stargate.EnumIrisType.IRIS_TITANIUM;
 import static tauri.dev.jsg.stargate.EnumSpinDirection.CLOCKWISE;
 import static tauri.dev.jsg.stargate.EnumSpinDirection.COUNTER_CLOCKWISE;
@@ -141,7 +141,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public double getMaxIrisHeat() {
-        if (isShieldIris()) return Double.MAX_VALUE;
+        if (hasShieldIris() || hasCreativeIris()) return Double.MAX_VALUE;
         return (getIrisType() == EnumIrisType.IRIS_TRINIUM ? IRIS_MAX_HEAT_TRINIUM : IRIS_MAX_HEAT_TITANIUM);
     }
 
@@ -169,7 +169,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             int heatCoefficient = (int) Math.round(Math.abs(irisHeat - maxHeat));
             if (JSGConfig.Stargate.iris.enableIrisOverHeatCollapse) {
                 if (world.getTotalWorldTime() % (((int) (Math.random() * 70)) + 1) == 0) {
-                    if (isPhysicalIris() && irisItem.isItemStackDamageable()) {
+                    if (hasPhysicalIris() && irisItem.isItemStackDamageable()) {
                         irisItem.getItem().setDamage(irisItem, irisItem.getItem().getDamage(irisItem) + (new Random().nextInt(heatCoefficient) + 1));
                         if (irisItem.getCount() == 0)
                             updateIrisType();
@@ -853,11 +853,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                             } else {
                                 // do iris shit
 
-                                if (isPhysicalIris()) {
+                                if (hasPhysicalIris()) {
                                     JSGSoundHelper.playSoundEvent(world,
                                             getGateCenterPos(),
                                             SoundEventEnum.IRIS_HIT);
-                                } else if (isShieldIris()) {
+                                } else if (hasShieldIris()) {
                                     JSGSoundHelper.playSoundEvent(world,
                                             getGateCenterPos(),
                                             SoundEventEnum.SHIELD_HIT);
@@ -908,7 +908,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
          * Draw power (shield)
          */
         extractEnergyByShield(0);
-        if (!world.isRemote && isShieldIris()) {
+        if (!world.isRemote && hasShieldIris()) {
             shieldKeepAlive = JSGConfig.Stargate.iris.shieldPowerDraw;
             shieldKeepAlive += irisHeat * (irisHeat / IRIS_MAX_HEAT_TRINIUM);
             if (isIrisClosed()) extractEnergyByShield(shieldKeepAlive);
@@ -977,7 +977,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 }
             }
 
-            if (!(isIrisClosed() || isIrisOpened()) && (world.getTotalWorldTime() - irisAnimation) > (isPhysicalIris() ? StargateClassicRenderer.PHYSICAL_IRIS_ANIMATION_LENGTH : StargateClassicRenderer.SHIELD_IRIS_ANIMATION_LENGTH)) {
+            if (!(isIrisClosed() || isIrisOpened()) && (world.getTotalWorldTime() - irisAnimation) > (hasPhysicalIris() ? StargateClassicRenderer.PHYSICAL_IRIS_ANIMATION_LENGTH : StargateClassicRenderer.SHIELD_IRIS_ANIMATION_LENGTH)) {
                 switch (irisState) {
                     case OPENING:
                         irisState = EnumIrisState.OPENED;
@@ -1973,14 +1973,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // ----------------------------------------------------------
     // IRISES
 
-    public static enum StargateIrisUpgradeEnum implements EnumKeyInterface<Item> {
+    public enum StargateIrisUpgradeEnum implements EnumKeyInterface<Item> {
         IRIS_UPGRADE_CLASSIC(JSGItems.UPGRADE_IRIS),
         IRIS_UPGRADE_TRINIUM(JSGItems.UPGRADE_IRIS_TRINIUM),
+        IRIS_UPGRADE_CREATIVE(JSGItems.UPGRADE_IRIS_CREATIVE),
         IRIS_UPGRADE_SHIELD(JSGItems.UPGRADE_SHIELD);
 
         public final Item item;
 
-        private StargateIrisUpgradeEnum(Item item) {
+        StargateIrisUpgradeEnum(Item item) {
             this.item = item;
         }
 
@@ -2026,7 +2027,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void updateIrisDurability() {
         irisDurability = 0;
         irisMaxDurability = 0;
-        if (isPhysicalIris()) {
+        if (hasPhysicalIris()) {
             irisMaxDurability = (irisType == IRIS_TITANIUM ? JSGConfig.Stargate.iris.titaniumIrisDurability : JSGConfig.Stargate.iris.triniumIrisDurability);
             irisDurability = irisMaxDurability - itemStackHandler.getStackInSlot(11).getItem().getDamage(itemStackHandler.getStackInSlot(11));
         }
@@ -2048,10 +2049,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return irisState == EnumIrisState.OPENED;
     }
 
-    public boolean isPhysicalIris() {
+    public boolean hasCreativeIris(){
+        return (irisType == IRIS_CREATIVE);
+    }
+
+    public boolean hasPhysicalIris() {
         switch (irisType) {
             case IRIS_TITANIUM:
             case IRIS_TRINIUM:
+            case IRIS_CREATIVE:
                 return true;
             default:
                 return false;
@@ -2062,7 +2068,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return irisType != EnumIrisType.NULL;
     }
 
-    public boolean isShieldIris() {
+    public boolean hasShieldIris() {
         return irisType == EnumIrisType.SHIELD;
     }
 
@@ -2072,7 +2078,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             irisAnimation = getWorld().getTotalWorldTime();
         SoundEventEnum openSound;
         SoundEventEnum closeSound;
-        if (isPhysicalIris()) {
+        if (hasPhysicalIris()) {
             openSound = SoundEventEnum.IRIS_OPENING;
             closeSound = SoundEventEnum.IRIS_CLOSING;
         } else {
@@ -2081,7 +2087,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
         switch (irisState) {
             case OPENED:
-                if (isShieldIris() && getEnergyStorage().getEnergyStored() < shieldKeepAlive * 3)
+                if (hasShieldIris() && getEnergyStorage().getEnergyStored() < shieldKeepAlive * 3)
                     return false;
 
                 irisState = EnumIrisState.CLOSING;
@@ -2156,7 +2162,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     irisModeAction(irisMode);
                     break;
                 case AUTO:
-                    if (getStargateState().engaged()) {
+                    if (getStargateState().notInitiating() || getStargateState().incoming()) {
                         if (irisState == EnumIrisState.OPENED) toggleIris();
                     } else {
                         if (isIrisClosed()) toggleIris();
@@ -2439,7 +2445,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             return new Object[]{false, "stargate_iris_error_mode", "Iris mode must be set to OC"};
         boolean result = toggleIris();
         markDirty();
-        if (!result && (isShieldIris() && isIrisOpened() && getEnergyStorage().getEnergyStored() < shieldKeepAlive * 3))
+        if (!result && (hasShieldIris() && isIrisOpened() && getEnergyStorage().getEnergyStored() < shieldKeepAlive * 3))
             return new Object[]{false, "stargate_iris_not_power", "Not enough power to close shield"};
         else if (!result)
             return new Object[]{false, "stargate_iris_busy", "Iris is busy"};

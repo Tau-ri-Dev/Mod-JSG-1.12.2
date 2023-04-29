@@ -33,12 +33,15 @@ public class TabIris extends Tab {
     public EnumIrisMode irisMode;
     protected ModeButton buttonChangeMode = new ModeButton(
             1, inputField.x + inputField.width + 5, guiTop + defaultY + 25, 16, MODES_ICONS,
-            64, 32, 4);
+            80, 32, 5);
+
+    protected boolean isUniverse;
 
 
     protected TabIris(TabIrisBuilder builder) {
         super(builder);
         this.irisMode = builder.irisMode;
+        this.isUniverse = builder.isUniverse;
         code = builder.code;
         buttonChangeMode.setCurrentState(irisMode.id);
         inputField.setMaxStringLength(JSGConfig.Stargate.iris.irisCodeLength);
@@ -95,10 +98,16 @@ public class TabIris extends Tab {
         private EnumIrisMode irisMode = EnumIrisMode.OPENED;
 
         private int code = -1;
+        private boolean isUniverse = false;
 
 
         public TabIris.TabIrisBuilder setCode(int code) {
             this.code = code;
+            return this;
+        }
+
+        public TabIrisBuilder setIsUniverse(boolean is){
+            isUniverse = is;
             return this;
         }
 
@@ -127,13 +136,19 @@ public class TabIris extends Tab {
             switch (mouseButton) {
                 case 0:
                     buttonChangeMode.nextState();
-                    if (!JSG.ocWrapper.isModLoaded() && buttonChangeMode.getCurrentState() == 4) {
+                    if (!JSG.ocWrapper.isModLoaded() && buttonChangeMode.getCurrentState() == 3) {
+                        buttonChangeMode.nextState();
+                    }
+                    if (!isUniverse && buttonChangeMode.getCurrentState() == 4) {
                         buttonChangeMode.nextState();
                     }
                     break;
                 case 1:
                     buttonChangeMode.previousState();
-                    if (!JSG.ocWrapper.isModLoaded() && buttonChangeMode.getCurrentState() == 4) {
+                    if (!isUniverse && buttonChangeMode.getCurrentState() == 4) {
+                        buttonChangeMode.previousState();
+                    }
+                    if (!JSG.ocWrapper.isModLoaded() && buttonChangeMode.getCurrentState() == 3) {
                         buttonChangeMode.previousState();
                     }
                     break;
