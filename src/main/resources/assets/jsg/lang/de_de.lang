@@ -8,7 +8,7 @@ itemGroup.jsg_tools=JSG: Werkzeuge
 itemGroup.jsg_props=JSG: Props
 itemGroup.jsg_machines=JSG: Maschinen
 itemGroup.jsg_weapons=JSG: Waffen
-itemGroup.jsg_records=JSG: Records
+itemGroup.jsg_records=JSG: Musik
 
 # config file
 config.jsg.general=General Config
@@ -156,7 +156,7 @@ item.jsg.record_sgc.name=SG-1 Theme
 item.jsg.record_atlantis.name=Atlantis Theme
 item.jsg.record_destiny.name=Destiny Theme
 item.jsg.record_origins.name=Origins Theme
-item.jsg.record_elevator.name=Loading Music
+item.jsg.record_elevator.name=Wartemusik
 
 # iris
 item.jsg.iris_blade.name=Irisscheibe (Titanium)
@@ -166,47 +166,47 @@ item.jsg.quad_iris_blade_trinium.name=4er Irisscheibe (Trinium)
 item.jsg.upgrade_iris.name=Iris Upgrade (Titanium)
 item.jsg.upgrade_iris_trinium.name=Iris Upgrade (Trinium)
 item.jsg.upgrade_iris_creative.name=Iris Upgrade (Creative)
-item.jsg.iris.tooltip.integrity=Integrity:
-item.jsg.iris.tooltip.durability=Durability:
+item.jsg.iris.tooltip.integrity=Integrität:
+item.jsg.iris.tooltip.durability=Haltbarkeit:
 item.jsg.shield_emitter.name=Schild Emitter
 item.jsg.upgrade_shield.name=Schild Upgrade
 
 # ingots
-item.jsg.trinium_impure.name=Impure Trinium Ore
-item.jsg.trinium_purified.name=Purified Trinium Ore
-item.jsg.trinium_raw.name=Raw Trinium Ore
-item.jsg.trinium_ingot.name=Trinium Ingot
-item.jsg.trinium_dust.name=Trinium Dust
-item.jsg.trinium_nugget.name=Trinium Nugget
+item.jsg.trinium_impure.name=Unreines Triniumerz
+item.jsg.trinium_purified.name=Gereinigtes Triniumerz
+item.jsg.trinium_raw.name=Rohes Triniumerz
+item.jsg.trinium_ingot.name=Triniumbarren
+item.jsg.trinium_dust.name=Triniumstaub
+item.jsg.trinium_nugget.name=Trinium-Nugget
 
-item.jsg.titanium_impure.name=Impure Titanium Ore
-item.jsg.titanium_purified.name=Purified Titanium Ore
-item.jsg.titanium_raw.name=Raw Titanium Ore
-item.jsg.titanium_ingot.name=Titanium Ingot
-item.jsg.titanium_dust.name=Titanium Dust
-item.jsg.titanium_nugget.name=Titanium Nugget
+item.jsg.titanium_impure.name=Unreines Titanerz
+item.jsg.titanium_purified.name=Gereinigtes Titanerz
+item.jsg.titanium_raw.name=Rohes Titanerz
+item.jsg.titanium_ingot.name=Titanbarren
+item.jsg.titanium_dust.name=Titanstaub
+item.jsg.titanium_nugget.name=Titan-Nugget
 
-item.jsg.naquadah_impure.name=Impure Naquadah Ore
-item.jsg.naquadah_purified.name=Purified Naquadah Ore
-item.jsg.naquadah_raw.name=Raw Naquadah Ore
-item.jsg.naquadah_alloy_raw.name=Raw Naquadah Alloy Ingot
-item.jsg.naquadah_raw_dust.name=Raw Naquadah Dust
-item.jsg.naquadah_raw_nugget.name=Raw Naquadah Nugget
+item.jsg.naquadah_impure.name=Unreines Naquadaherz
+item.jsg.naquadah_purified.name=Gereinigtes Naquadaherz
+item.jsg.naquadah_raw.name=Rohes Naquadaherz
+item.jsg.naquadah_alloy_raw.name=Roher Naquadahlegierungsbarren
+item.jsg.naquadah_raw_dust.name=Roher Naquadahstaub
+item.jsg.naquadah_raw_nugget.name=Naquadahnugget (roh)
 
-item.jsg.naquadah_alloy.name=Naquadah Alloy Ingot
-item.jsg.naquadah_dust.name=Naquadah Dust
-item.jsg.naquadah_nugget.name=Naquadah Nugget
+item.jsg.naquadah_alloy.name=Naquadahlegierungsbarren
+item.jsg.naquadah_dust.name=Naquadahstaub
+item.jsg.naquadah_nugget.name=Naquadahnugget
 
 # crystals
 item.jsg.crystal_fragment.name=Kristallkeim
 
 item.jsg.crystal_blue.name=Teleportationskristall
-item.jsg.crystal_red.name=Energie Kristall
-item.jsg.crystal_ender.name=Ender Kristall
-item.jsg.crystal_yellow.name=Licht Kristall
-item.jsg.crystal_white.name=Weißer Kristall
-item.jsg.crystal_blue_pegasus.name=Pegasus Kristall
-item.jsg.crystal_tokra.name=Tokra's Crystal
+item.jsg.crystal_red.name=Energiekristall
+item.jsg.crystal_ender.name=Enderkristall
+item.jsg.crystal_yellow.name=Lichtkristall
+item.jsg.crystal_white.name=Weißerkristall
+item.jsg.crystal_blue_pegasus.name=Pegasuskristall
+item.jsg.crystal_tokra.name=Tokra Kristall
 
 item.jsg.circuit_control_base.name=Basiskontrollschaltkreis
 item.jsg.circuit_control_naquadah.name=Naquadah Kontrollschaltkreis
@@ -224,8 +224,8 @@ item.jsg.crystal_glyph_goauld.name=Goa'uld Ring Glyphenkristall
 item.jsg.crystal_glyph_ori.name=Ori Ring Glyphenkristall
 item.jsg.crystal_glyph_ancient.name=Antiker Ring Glyphenkristall
 
-item.jsg.crystal_upgrade_capacity.name=Capacity Upgrade Crystal
-item.jsg.crystal_upgrade_efficiency.name=Efficiency Upgrade Crystal
+item.jsg.crystal_upgrade_capacity.name=Kapazitäts-Upgrade-Kristall
+item.jsg.crystal_upgrade_efficiency.name=Effizienz-Upgrade-Kristall
 
 
 # dhd
@@ -261,8 +261,8 @@ item.jsg.page_mysterious.generation.failed=Sternentor generierung FEHLGESCHLAGEN
 # beamer
 item.jsg.beamer_crystal_power.name=Transporter Energiekristall
 item.jsg.beamer_crystal_fluid.name=Transporter Flüssigkeitskristall
-item.jsg.beamer_crystal_items.name=Transporter Item-Kristall
-item.jsg.beamer_crystal_laser.name=Transporter Laser-Kristall
+item.jsg.beamer_crystal_items.name=Transporter Itemkristall
+item.jsg.beamer_crystal_laser.name=Transporter Laserkristall
 
 # universe dialer
 item.jsg.universe_dialer.name=Universe Dialer
@@ -276,8 +276,8 @@ item.jsg.universe_dialer.mode_rings=Ringe
 item.jsg.universe_dialer.mode_oc=OpnCom
 item.jsg.universe_dialer.mode_info=Status
 item.jsg.universe_dialer.mode_countdown=Timer
-item.jsg.universe_dialer.countdown_not_sync=Not synchronized!
-item.jsg.universe_dialer.countdown_not_active=Countdown not active!
+item.jsg.universe_dialer.countdown_not_sync=Nicht synchronisiert!
+item.jsg.universe_dialer.countdown_not_active=Countdown nicht aktiv!
 item.jsg.universe_dialer.aborting=Anwahl abbrechen
 item.jsg.universe_dialer.abort=Abbruch
 item.jsg.universe_dialer.dial_start=Wähle das Gate...
@@ -365,7 +365,7 @@ tile.jsg.dhd_block.computer_dial=Computeranwahl findet gerade statt
 tile.jsg.dhd_block.not_enough_power=Unzureichende Energie
 
 tile.jsg.dhd_pegasus_block.name=Pegasus Dial Home Device (DHD)
-tile.jsg.dhd_pegasus_block.unknown_buttons=Dieser Knopf funktioniert nicht
+tile.jsg.dhd_pegasus_block.unknown_buttons=Dieser Knopf ist nur deko
 
 # stargate - MW
 tile.jsg.stargate_milkyway_base_block.name=Stargate Basis (Milchstraße)
@@ -392,9 +392,9 @@ tile.jsg.capacitor_block.name=Kondensator
 tile.jsg.capacitor_block_empty.name=Kondensator (Leer)
 
 # zpm
-tile.jsg.zpm.name=Zero Point Module (ZPM)
-tile.jsg.zpm_hub_block.name=ZPM Hub (Ancient)
-tile.jsg.zpm_slot_block.name=ZPM Slot (Tau'ri)
+tile.jsg.zpm.name=Zero Point Modul (ZPM)
+tile.jsg.zpm_hub_block.name=ZPM Hub (Antiker)
+tile.jsg.zpm_slot_block.name=ZPM-Steckplatz (Tau'ri)
 
 # rings controller
 tile.jsg.transportrings_controller_goauld_block.name=Transporterring Steuerung
@@ -425,7 +425,7 @@ tile.jsg.pcb_fabricator_block.name=Leiterplattenhersteller
 tile.jsg.ore_washing_machine_block.name=Erz Waschmaschine
 
 # ancient sign
-tile.jsg.ancient_sign.name=Ancient Sign
+tile.jsg.ancient_sign.name=Antikes Schild
 
 # -------------------
 
@@ -447,7 +447,7 @@ fluid.silicon_molten_red=Energiemischung
 fluid.silicon_molten_blue=Teleportierende Mischung
 fluid.silicon_molten_ender=Endermischung
 fluid.silicon_molten_yellow=Leuchtende Mischung
-fluid.silicon_molten_pegasus=Pegasus Mischung
+fluid.silicon_molten_pegasus=Pegasusmischung
 
 # naquadah
 fluid.naquadah_molten_raw=Flüssiges Naquadah
@@ -463,7 +463,7 @@ fluid.titanium_molten=Flüssiges Titanium
 # -------------------
 # COMMANDS
 
-commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim
+commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim]
 commands.sgquery.number_expected=Nummer erwartet
 commands.sgquery.no_map=Karte nicht vorhanden
 commands.sgquery.stargates=Stargates %s
@@ -694,16 +694,16 @@ gui.stargate.energyBuffer=Energiespeicher
 
 gui.stargate.state.closed=Stargate geschlossen!
 gui.stargate.state.opened=Offene Zeit:
-gui.stargate.state.gate_temp=Gate temp:
-gui.stargate.state.iris_temp=Iris temp:
+gui.stargate.state.gate_temp=Stargatetemperatur:
+gui.stargate.state.iris_temp=Iristemperatur:
 
 gui.stargate.info=Gate-Informationen
 
 # zpmhub
-gui.zpmhub.inProgress=ZPMs are moving!
+gui.zpmhub.inProgress=ZPMs in Bewegung!
 gui.zpmhub.slideDown=Aktiviere ZPMs
 gui.zpmhub.slideUp=Deaktiviere ZPMs
-gui.zpmhub.alert=Slots for ZPMs are locked!
+gui.zpmhub.alert=Slots für ZPMs sind gesperrt!
 
 # capacitor
 gui.capacitor.name=Kondensatorbatterie
@@ -864,9 +864,9 @@ menu.updater.close=Schließen
 menu.ram.help=Help
 
 # tips
-menu.nether_gate=TIP: If you go into Nether, do not forget to save Nether's gate address!
-menu.energy=TIP: If you plug cables for gate into multiple gate's blocks, the gate will charge faster!
-menu.dhd=TIP: Do not forget that DHDs can be upgraded with Capacity and Efficiency upgrades!
-menu.gdo=TIP: If you install iris on your gate, do not forget to sometimes check it's durability!
+menu.nether_gate=TIP: Wenn Sie in den Nether gehen, vergessen Sie nicht, die Gate-Adresse des Nethers zu speichern!
+menu.energy=TIP: Wenn Sie Kabel für das Gate in mehrere Gate-Blöcke stecken, wird das Gate schneller aufgeladen!
+menu.dhd=TIP: Vergiss nicht, dass DHDs mit Kapazitäts- und Effizienz-Upgrades aufgerüstet werden können! 
+menu.gdo=TIP: Wenn du eine Iris installiert hast, vergiss nicht die Haltbarkeit zu prüfen!
 
 # -------------------
