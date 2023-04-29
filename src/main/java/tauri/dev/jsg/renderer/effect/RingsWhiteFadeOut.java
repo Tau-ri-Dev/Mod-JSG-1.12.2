@@ -20,6 +20,8 @@ public class RingsWhiteFadeOut {
 	
 	public static double calcFog(World world, long tickStart, double partialTicks) {
 		double effTick = world.getTotalWorldTime() - tickStart + partialTicks;
+
+		if(TransportRingsAbstractTile.FADE_OUT_TOTAL_TIME < effTick) return -1;
 				
 		return -(effTick * (effTick- TransportRingsAbstractTile.FADE_OUT_TOTAL_TIME)) / (20*20);
 	}
