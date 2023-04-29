@@ -1291,6 +1291,30 @@ public class JSGConfig {
                     "SIDE: SERVER"
             })
             public double hungryLength = 0.5;
+
+
+            @Config.Name("Energy capacity")
+            @Config.RangeInt(min = 1000, max = 2000000)
+            @Config.Comment({
+                    "SIDE: SERVER/CLIENT"
+            })
+            public int energy = 24000;
+
+
+            @Config.Name("Energy per tick when using")
+            @Config.RangeInt(min = 0, max = 20000)
+            @Config.Comment({
+                    "SIDE: SERVER/CLIENT"
+            })
+            public int energyPerTick = 40;
+
+
+            @Config.Name("Energy on damage")
+            @Config.RangeInt(min = 0, max = 20000)
+            @Config.Comment({
+                    "SIDE: SERVER/CLIENT"
+            })
+            public int energyDamage = 400;
         }
 
     }

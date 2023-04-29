@@ -1,6 +1,6 @@
 package tauri.dev.jsg.capability;
 
-import tauri.dev.jsg.power.stargate.StargateItemEnergyStorage;
+import tauri.dev.jsg.power.stargate.ItemEnergyStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -14,13 +14,13 @@ import javax.annotation.Nullable;
 
 public class ItemCapabilityProvider implements ICapabilityProvider {
 
-	protected StargateItemEnergyStorage energyStorage;
+	protected ItemEnergyStorage energyStorage;
 
 	public ItemCapabilityProvider(final ItemStack stack, @Nullable NBTTagCompound nbt, int maxEnergy) {
 		this(stack, nbt, maxEnergy, false);
 	}
 	public ItemCapabilityProvider(final ItemStack stack, @Nullable NBTTagCompound nbt, int maxEnergy, boolean creative) {
-		energyStorage = new StargateItemEnergyStorage(stack, maxEnergy){
+		energyStorage = new ItemEnergyStorage(stack, maxEnergy){
 			@Override
 			public void setEnergyStored(int energy){
 				super.setEnergyStored(creative? maxEnergyStored : energy);

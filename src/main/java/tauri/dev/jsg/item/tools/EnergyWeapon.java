@@ -7,7 +7,7 @@ import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.entity.JSGEnergyProjectile;
 import tauri.dev.jsg.item.renderer.CustomModel;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
-import tauri.dev.jsg.power.stargate.StargateItemEnergyStorage;
+import tauri.dev.jsg.power.stargate.ItemEnergyStorage;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -62,7 +62,7 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
             items.add(new ItemStack(this));
 
             ItemStack stack = new ItemStack(this);
-            StargateItemEnergyStorage energyStorage = (StargateItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null);
+            ItemEnergyStorage energyStorage = (ItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null);
             if (energyStorage == null) return;
             energyStorage.setEnergyStored(energyStorage.getMaxEnergyStored());
             items.add(stack);
@@ -78,7 +78,7 @@ public abstract class EnergyWeapon extends Item implements CustomModelItemInterf
             NBTTagCompound compound = stack.getTagCompound();
 
             if (!player.isSneaking()) {
-                StargateItemEnergyStorage energyStorage = (StargateItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null);
+                ItemEnergyStorage energyStorage = (ItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null);
                 if (energyStorage != null && energyStorage.extractEnergy(energyPerShot, true) >= energyPerShot) {
                     playShootSound(world, player);
                     player.getCooldownTracker().setCooldown(this, getWeaponCoolDown());

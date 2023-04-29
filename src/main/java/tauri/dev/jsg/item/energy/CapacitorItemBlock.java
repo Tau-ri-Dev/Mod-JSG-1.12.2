@@ -4,7 +4,7 @@ import tauri.dev.jsg.block.energy.capacitor.CapacitorBlock;
 import tauri.dev.jsg.block.energy.capacitor.CapacitorBlockCreative;
 import tauri.dev.jsg.capability.ItemCapabilityProvider;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.power.stargate.StargateItemEnergyStorage;
+import tauri.dev.jsg.power.stargate.ItemEnergyStorage;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -36,7 +36,7 @@ public class CapacitorItemBlock extends ItemBlock {
 			items.add(new ItemStack(this));
 			
 			ItemStack stack = new ItemStack(this);
-			StargateItemEnergyStorage energyStorage = (StargateItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null);
+			ItemEnergyStorage energyStorage = (ItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null);
 			energyStorage.setEnergyStored(energyStorage.getMaxEnergyStored());
 			items.add(stack);
 		}

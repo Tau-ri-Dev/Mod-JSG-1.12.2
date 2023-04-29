@@ -5,11 +5,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.energy.IEnergyStorage;
 import tauri.dev.jsg.config.JSGConfig;
 
-public class StargateItemEnergyStorage implements IEnergyStorage {
+public class ItemEnergyStorage implements IEnergyStorage {
     protected final ItemStack stack;
     protected final int maxEnergyStored;
 
-    public StargateItemEnergyStorage(ItemStack stack, int maxEnergyStored) {
+    public ItemEnergyStorage(ItemStack stack, int maxEnergyStored) {
         this.stack = stack;
         this.maxEnergyStored = maxEnergyStored;
     }

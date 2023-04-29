@@ -9,7 +9,7 @@ import tauri.dev.jsg.block.JSGAbstractCustomItemBlock;
 import tauri.dev.jsg.gui.GuiIdEnum;
 import tauri.dev.jsg.item.energy.CapacitorItemBlock;
 import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
-import tauri.dev.jsg.power.stargate.StargateItemEnergyStorage;
+import tauri.dev.jsg.power.stargate.ItemEnergyStorage;
 import tauri.dev.jsg.tileentity.energy.CapacitorTile;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -114,7 +114,7 @@ public class CapacitorBlock extends JSGAbstractCustomItemBlock {
 		StargateAbstractEnergyStorage capacitorEnergyStorage = (StargateAbstractEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
 
 		ItemStack stack = new ItemStack(this);
-		((StargateItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null)).setEnergyStored(capacitorEnergyStorage.getEnergyStored());
+		((ItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null)).setEnergyStored(capacitorEnergyStorage.getEnergyStored());
 
 		return Arrays.asList(stack);
 	}
