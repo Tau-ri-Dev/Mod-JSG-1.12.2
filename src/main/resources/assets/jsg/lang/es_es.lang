@@ -165,6 +165,7 @@ item.jsg.quad_iris_blade.name=Hoja cuádruple de iris (Titanio)
 item.jsg.quad_iris_blade_trinium.name=Hoja cuádruple de iris (Trinium)
 item.jsg.upgrade_iris.name=Mejora de Iris (Titanio)
 item.jsg.upgrade_iris_trinium.name=Mejora de Iris (Trinium)
+item.jsg.upgrade_iris_creative.name=Iris Upgrade (Creative)
 item.jsg.iris.tooltip.integrity=Integrity:
 item.jsg.iris.tooltip.durability=Durability:
 item.jsg.shield_emitter.name=Emisor de Escudo

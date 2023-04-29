@@ -165,6 +165,7 @@ item.jsg.quad_iris_blade.name=Négyszeres Írisz Penge (Titánium)
 item.jsg.quad_iris_blade_trinium.name=Négyszeres Írisz Penge (Trínium)
 item.jsg.upgrade_iris.name=Írisz Fejlesztés (Titánium)
 item.jsg.upgrade_iris_trinium.name=Írisz Fejlesztés (Trínium)
+item.jsg.upgrade_iris_creative.name=Iris Upgrade (Creative)
 item.jsg.iris.tooltip.integrity=Integrity:
 item.jsg.iris.tooltip.durability=Durability:
 item.jsg.shield_emitter.name=Pajzs Kibocsátó

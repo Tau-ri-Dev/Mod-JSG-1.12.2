@@ -165,6 +165,7 @@ item.jsg.quad_iris_blade.name=Счетверённое Лезвие Диафра
 item.jsg.quad_iris_blade_trinium.name=Счетверённое Лезвие Диафрагмы (Триниум)
 item.jsg.upgrade_iris.name=Улучшение "Диафрагма" (Титан)
 item.jsg.upgrade_iris_trinium.name=Улучшение "Диафрагма" (Триниум)
+item.jsg.upgrade_iris_creative.name=Iris Upgrade (Creative)
 item.jsg.iris.tooltip.integrity=Integrity:
 item.jsg.iris.tooltip.durability=Durability:
 item.jsg.shield_emitter.name=Излучатель Щита

@@ -165,6 +165,7 @@ item.jsg.quad_iris_blade.name=4er Irisscheibe (Titanium)
 item.jsg.quad_iris_blade_trinium.name=4er Irisscheibe (Trinium)
 item.jsg.upgrade_iris.name=Iris Upgrade (Titanium)
 item.jsg.upgrade_iris_trinium.name=Iris Upgrade (Trinium)
+item.jsg.upgrade_iris_creative.name=Iris Upgrade (Creative)
 item.jsg.iris.tooltip.integrity=Integrity:
 item.jsg.iris.tooltip.durability=Durability:
 item.jsg.shield_emitter.name=Schild Emitter
