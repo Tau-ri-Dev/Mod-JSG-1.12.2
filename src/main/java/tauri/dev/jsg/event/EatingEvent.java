@@ -18,10 +18,10 @@ public class EatingEvent {
      * Disable eating when using shield
      */
     @SubscribeEvent
-    public static void onEatingFinished(LivingEntityUseItemEvent.Tick event) {
+    public static void onEatingFinished(LivingEntityUseItemEvent.Start event) {
         ItemStack itemStack = event.getItem();
         if (itemStack.getItem() instanceof ItemFood) {
-            if (event.getDuration() < (itemStack.getMaxItemUseDuration() - 2)) return;
+            //if (event.getDuration() < (itemStack.getMaxItemUseDuration() - 2)) return;
             EntityLivingBase entity = event.getEntityLiving();
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) entity;
