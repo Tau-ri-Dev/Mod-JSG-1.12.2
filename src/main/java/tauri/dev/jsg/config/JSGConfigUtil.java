@@ -23,12 +23,16 @@ import java.util.Map;
 public class JSGConfigUtil {
 
     @SubscribeEvent
-    public void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
+    public static void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.getModID().equals(JSG.MOD_ID)) {
-            ConfigManager.sync(JSG.MOD_ID, Config.Type.INSTANCE);
-            JSG.info("Should be saved");
-            JSGConfigUtil.resetCache();
+            reloadConfig();
         }
+    }
+
+    public static void reloadConfig(){
+        ConfigManager.sync(JSG.MOD_ID, Config.Type.INSTANCE);
+        JSG.info("Main config reloaded!");
+        JSGConfigUtil.resetCache();
     }
 
     @SuppressWarnings("unused")

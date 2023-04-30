@@ -4,12 +4,14 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.worldgen.structures.EnumStructures;
-import tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator;
 import tauri.dev.jsg.worldgen.util.JSGWorldTopBlock;
 
 import javax.annotation.Nonnull;
@@ -43,10 +45,14 @@ public class CommandStructureSpawn extends CommandBase {
 
         int dimId = world.provider.getDimension();
         BlockPos pos = sender.getPosition();
+        Rotation rotation = null;
+        if (sender instanceof EntityPlayer) {
+            rotation = FacingHelper.getRotation(((EntityPlayer) sender).getHorizontalFacing());
+        }
         try {
             EnumStructures structure = EnumStructures.getStructureByName(args[0]);
             if (structure == null)
-                throw new WrongUsageException("Structure whit that name not found!");
+                throw new WrongUsageException("Structure with that name not found!");
 
             if (args.length >= 45)
                 dimId = Integer.parseInt(args[3]);
@@ -59,12 +65,12 @@ public class CommandStructureSpawn extends CommandBase {
 
             JSGWorldTopBlock topBlock = getTopBlock(server.getWorld(dimId), (int) Math.round(x), (int) Math.round(z), structure.getActualStructure(dimId).airUp, dimId);
 
-            if(topBlock == null)
+            if (topBlock == null)
                 throw new CommandException("Can not get top block!");
-            structure.getActualStructure(dimId).generateStructure(world, new BlockPos(x, topBlock.y, z), new Random(), server.getWorld(dimId));
+            structure.getActualStructure(dimId).generateStructure(world, new BlockPos(x, topBlock.y, z), new Random(), server.getWorld(dimId), rotation);
 
         } catch (Exception e) {
-            throw new WrongUsageException("Use: " + getUsage(sender));
+            throw new WrongUsageException("Can not place structure here!");
         }
     }
 

@@ -103,7 +103,7 @@ public class TokraEntity extends JSGTradeableEntity implements IRangedAttackMob,
     }
 
     public void moveFromRingsPlatform(){
-        BlockPos pos = new BlockPos(Math.random()*25, this.posY, Math.random()*25);
+        BlockPos pos = new BlockPos(this.posX + Math.random()*15, this.posY, this.posZ + Math.random()*15);
 
         this.getLookHelper().setLookPosition(pos.getX(), (pos.getY() + 3), pos.getZ(), 10.0F, this.getVerticalFaceSpeed());
         this.getNavigator().tryMoveToXYZ(pos.getX(), (pos.getY() + 2), pos.getZ(), MOVEMENT_SPEED*1.2f);

@@ -17,6 +17,7 @@ public class JSGTokraLookForRingsAI extends EntityAIBase {
 
     private final TokraEntity entity;
     private BlockPos nearestRingsPos;
+    public long lastRingsActivated;
 
     public JSGTokraLookForRingsAI(TokraEntity tokra) {
         this.entity = tokra;
@@ -27,7 +28,7 @@ public class JSGTokraLookForRingsAI extends EntityAIBase {
         World world = entity.getWorld();
         BlockPos entityPos = entity.getPos();
 
-        EntityPlayer nearestPlayer = (EntityPlayer) world.findNearestEntityWithinAABB(EntityPlayer.class, new JSGAxisAlignedBB(new BlockPos(-40, -3, -40).add(entityPos), new BlockPos(40, 70, 40).add(entityPos)), entity);
+        EntityPlayer nearestPlayer = (EntityPlayer) world.findNearestEntityWithinAABB(EntityPlayer.class, new JSGAxisAlignedBB(new BlockPos(-40, -25, -40).add(entityPos), new BlockPos(40, 70, 40).add(entityPos)), entity);
 
         BlockPos nearestRings;
         ArrayList<BlockPos> blacklist = new ArrayList<>();
@@ -79,12 +80,13 @@ public class JSGTokraLookForRingsAI extends EntityAIBase {
         BlockPos entityPos = entity.getPos();
         BlockPos nearestRings;
         nearestRings = LinkingHelper.findClosestPos(world, entityPos, new BlockPos(1, 3, 1), JSGBlocks.RINGS_BLOCKS, new ArrayList<>());
-        if (nearestRings != null && (world.getTotalWorldTime() % 60 == 0)) {
+        if (((world.getTotalWorldTime() - lastRingsActivated) > 15 * 20) && nearestRings != null && (world.getTotalWorldTime() % 60 == 0)) {
             TileEntity tile = world.getTileEntity(nearestRings);
             if (tile instanceof TransportRingsAbstractTile) {
                 TransportRingsAbstractTile tRings = (TransportRingsAbstractTile) tile;
                 if (tRings.isBusy()) return;
                 tRings.dialNearestRings(true);
+                lastRingsActivated = world.getTotalWorldTime();
             }
         }
     }

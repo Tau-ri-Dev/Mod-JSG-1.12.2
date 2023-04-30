@@ -4,6 +4,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import tauri.dev.jsg.config.JSGConfigUtil;
 import tauri.dev.jsg.config.craftings.CraftingConfig;
 import tauri.dev.jsg.config.structures.StructureConfig;
 
@@ -31,7 +32,8 @@ public class CommandReloadConfigs extends CommandBase {
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         CraftingConfig.reload();
         StructureConfig.reload();
-        notifyCommandListener(sender, this, "Custom configs reloaded!");
+        JSGConfigUtil.reloadConfig();
+        notifyCommandListener(sender, this, "Configs reloaded!");
     }
 
 }

@@ -65,7 +65,7 @@ public class ProxyClient implements IProxy {
 
         InputHandlerClient.registerKeybindings();
 
-        MinecraftForge.EVENT_BUS.register(new JSGConfigUtil());
+        MinecraftForge.EVENT_BUS.register(JSGConfigUtil.class);
     }
 
     public void init(FMLInitializationEvent event) {
