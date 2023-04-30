@@ -380,7 +380,6 @@
     "sounds": [
       {
         "name": "jsg:gui/mainmenu/loading_music",
-        "stream": true,
         "preload": true
       }
     ]
