@@ -51,6 +51,7 @@ public class JSGConfigUtil {
 
     public static void resetCache() {
         cachedInvincibleBlocks = null;
+        cachedCamoBlacklistBlocks = null;
         cachedBiomeMatchesReverse = null;
         cachedBiomeOverrideBlocks = null;
         cachedBiomeOverrideBlocksReverse = null;
@@ -71,6 +72,22 @@ public class JSGConfigUtil {
         }
         return cachedInvincibleBlocks.get(state) == null;
     }
+
+    // Camo blacklist
+    private static Map<IBlockState, Boolean> cachedCamoBlacklistBlocks = null;
+
+    public static boolean canBeUsedAsCamoBlock(IBlockState state) {
+        if(JSGBlocks.isInBlocksArray(state.getBlock(), JSGBlocks.CAMO_BLOCKS_BLACKLIST)) return false;
+
+        if (cachedCamoBlacklistBlocks == null) {
+            cachedCamoBlacklistBlocks = BlockMetaParser.parseConfig(JSGConfig.Stargate.visual.camoBlacklist);
+        }
+        if (cachedCamoBlacklistBlocks.get(state.getBlock().getDefaultState()) != null && cachedCamoBlacklistBlocks.get(state.getBlock().getDefaultState())) {
+            return false;
+        }
+        return cachedCamoBlacklistBlocks.get(state) == null;
+    }
+
 
     // Biome overlays
     private static Map<Biome, BiomeOverlayEnum> cachedBiomeMatchesReverse = null;

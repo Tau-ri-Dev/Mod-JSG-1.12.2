@@ -30,6 +30,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.dialhomedevice.DHDAbstractBlock;
+import tauri.dev.jsg.config.JSGConfigUtil;
 import tauri.dev.jsg.gui.GuiIdEnum;
 import tauri.dev.jsg.stargate.CamoPropertiesHelper;
 import tauri.dev.jsg.stargate.EnumMemberVariant;
@@ -189,7 +190,7 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack heldItemStack = player.getHeldItem(EnumHand.MAIN_HAND);
 
-        if (JSGBlocks.isInBlocksArray(Block.getBlockFromItem(heldItemStack.getItem()), JSGBlocks.CAMO_BLOCKS_BLACKLIST)) {
+        if(!JSGConfigUtil.canBeUsedAsCamoBlock(Block.getBlockFromItem(heldItemStack.getItem()).getBlockState().getBaseState())){
             heldItemStack = ItemStack.EMPTY;
         }
 

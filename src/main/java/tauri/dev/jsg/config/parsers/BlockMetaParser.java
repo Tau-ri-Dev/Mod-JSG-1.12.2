@@ -22,6 +22,7 @@ public class BlockMetaParser {
 
 		for (String line : config) {
 			String[] parts = line.trim().split(":", 3);
+			if(parts.length < 2) continue;
 			Block block = Block.getBlockFromName(parts[0] + ":" + parts[1]);
 
 			if (block != null && block != Blocks.AIR) {

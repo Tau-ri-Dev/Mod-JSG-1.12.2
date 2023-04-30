@@ -702,6 +702,19 @@ public class JSGConfig {
             @Config.SlidingOption
             public float frostyTemperatureThreshold = 0.1f;
 
+            @Config.Name("Camo blocks blacklist")
+            @Config.Comment({
+                    "Specify what blocks can not be used as camo for gates.",
+                    "These blocks are only additional. There are also blocks that are internally coded",
+                    "and can not be deleted from the blacklist!",
+                    "Format: \"modid:block[:meta/*]\", for example: ",
+                    "\"minecraft:stone:2\"",
+                    "\"minecraft:cobblestone\"",
+                    "\"minecraft:concrete:*\"",
+                    "SIDE: SERVER/CLIENT"
+            })
+            public String[] camoBlacklist = new String[] {};
+
             @Config.Name("Biome overlay biome matches")
             @Config.Comment({
                     "This check comes last (after block is directly under sky (except Nether) and temperature is high enough).",
