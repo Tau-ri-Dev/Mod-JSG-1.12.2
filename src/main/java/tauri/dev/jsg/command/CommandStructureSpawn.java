@@ -1,6 +1,5 @@
-package tauri.dev.jsg.command.stargate;
+package tauri.dev.jsg.command;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -21,25 +20,39 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import static net.minecraft.command.CommandBase.*;
 import static tauri.dev.jsg.worldgen.util.JSGWorldTopBlock.getTopBlock;
 
-public class CommandStructureSpawn extends CommandBase {
+public class CommandStructureSpawn implements IJSGCommand {
     @Nonnull
     @Override
     public String getName() {
-        return "jsggeneratestructure";
+        return "structurespawn";
     }
 
     @Nonnull
     @Override
-    public String getUsage(@Nonnull ICommandSender sender) {
-        return "/jsggeneratestructure <structure name> <x> <z> [dimId]";
+    public String getDescription() {
+        return "Spawns a JSG structure";
+    }
+
+    @Nonnull
+    @Override
+    public String getUsage() {
+        return "structurespawn <structure name> <x> <z> [dimId]";
+    }
+
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 2;
     }
 
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
-        if (args.length < 3)
-            throw new WrongUsageException("Use: " + getUsage(sender));
+        if (args.length < 3) {
+            JSGCommand.sendUsageMess(sender, this);
+            return;
+        }
 
         World world = sender.getEntityWorld();
 
@@ -51,26 +64,33 @@ public class CommandStructureSpawn extends CommandBase {
         }
         try {
             EnumStructures structure = EnumStructures.getStructureByName(args[0]);
-            if (structure == null)
-                throw new WrongUsageException("Structure with that name not found!");
+            if (structure == null) {
+                JSGCommand.sendErrorMess(sender, "Structure with that name not found!");
+                return;
+            }
 
             if (args.length >= 45)
                 dimId = Integer.parseInt(args[3]);
 
-            if (!DimensionManager.isDimensionRegistered(dimId))
-                throw new WrongUsageException("Dimension not found!");
+            if (!DimensionManager.isDimensionRegistered(dimId)){
+                JSGCommand.sendErrorMess(sender, "Dimension not found");
+                return;
+            }
 
             double x = parseCoordinate(pos.getX(), args[1], false).getResult();
             double z = parseCoordinate(pos.getZ(), args[2], false).getResult();
 
             JSGWorldTopBlock topBlock = getTopBlock(server.getWorld(dimId), (int) Math.round(x), (int) Math.round(z), structure.getActualStructure(dimId).airUp, dimId);
 
-            if (topBlock == null)
-                throw new CommandException("Can not get top block!");
+            if (topBlock == null){
+                JSGCommand.sendErrorMess(sender, "Can not get top block!");
+                return;
+            }
             structure.getActualStructure(dimId).generateStructure(world, new BlockPos(x, topBlock.y, z), new Random(), server.getWorld(dimId), rotation);
+            JSGCommand.sendSuccessMess(sender, "Successfully spawned!");
 
         } catch (Exception e) {
-            throw new WrongUsageException("Can not place structure here!");
+            JSGCommand.sendErrorMess(sender, "Can not place structure here!");
         }
     }
 

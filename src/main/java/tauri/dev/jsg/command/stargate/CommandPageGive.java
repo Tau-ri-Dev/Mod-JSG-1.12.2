@@ -1,6 +1,5 @@
 package tauri.dev.jsg.command.stargate;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -8,22 +7,37 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import tauri.dev.jsg.command.IJSGCommand;
+import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.stargate.network.StargateAddressDynamic;
 import tauri.dev.jsg.stargate.network.SymbolInterface;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 
-public class CommandPageGive extends CommandBase {
+import javax.annotation.Nonnull;
 
+import static net.minecraft.command.CommandBase.getPlayer;
+import static net.minecraft.command.CommandBase.notifyCommandListener;
+
+public class CommandPageGive implements IJSGCommand {
+
+    @Nonnull
     @Override
     public String getName() {
         return "sggivepage";
     }
 
+    @Nonnull
     @Override
-    public String getUsage(ICommandSender sender) {
-        return "/sggivepage";
+    public String getDescription() {
+        return "Gives page with specified address";
+    }
+
+    @Nonnull
+    @Override
+    public String getUsage() {
+        return "sggivepage";
     }
 
     @Override
@@ -32,11 +46,13 @@ public class CommandPageGive extends CommandBase {
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, String[] args) throws CommandException {
         boolean hasUpgrade = true;
 
         if (args.length < 8) {
-            throw new WrongUsageException("commands.sggivepage.usage");
+            //throw new WrongUsageException("commands.sggivepage.usage");
+            JSGCommand.sendUsageMess(sender, this);
+            return;
         }
 
         if (args.length < 10)
@@ -49,7 +65,7 @@ public class CommandPageGive extends CommandBase {
             if (args[i].startsWith("map=")) {
                 try {
                     symbolType = SymbolTypeEnum.valueOf(args[i].substring(4).toUpperCase());
-                } catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException ignored) {
                 }
             } else if (args[i].startsWith("biome=")) {
                 biome = args[i].substring(4);
@@ -57,11 +73,13 @@ public class CommandPageGive extends CommandBase {
         }
 
         if (symbolType == null) {
-            throw new WrongUsageException("commands.sggivepage.no_map");
+            JSGCommand.sendUsageMess(sender, this);
+            return;
+            //throw new WrongUsageException("commands.sggivepage.no_map");
         }
 
         EntityPlayer player = getPlayer(server, sender, args[0]);
-        notifyCommandListener(sender, this, "commands.sggivepage.give_page", player.getName());
+        //notifyCommandListener(sender, this, "commands.sggivepage.give_page", player.getName());
 
         StargateAddressDynamic stargateAddress = new StargateAddressDynamic(symbolType);
         int index = 1;
@@ -70,7 +88,9 @@ public class CommandPageGive extends CommandBase {
             SymbolInterface symbol = symbolType.fromEnglishName(args[i].replace("-", " "));
 
             if (symbol == null) {
-                throw new WrongUsageException("commands.sgsetaddress.wrongsymbol", index);
+                JSGCommand.sendErrorMess(sender, "Wrong symbol name at position " + index + "!");
+                return;
+                //throw new WrongUsageException("commands.sgsetaddress.wrongsymbol", index);
             }
 
             stargateAddress.addSymbol(symbol);
@@ -81,11 +101,12 @@ public class CommandPageGive extends CommandBase {
                 stargateAddress,
                 hasUpgrade,
                 biome,
-				-1);
+                -1);
 
         ItemStack stack = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 1, 1);
         stack.setTagCompound(compound);
         player.addItemStackToInventory(stack);
+        JSGCommand.sendSuccessMess(sender, "Successfully executed!");
     }
 
 }

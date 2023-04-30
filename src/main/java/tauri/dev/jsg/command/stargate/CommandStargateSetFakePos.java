@@ -1,6 +1,5 @@
 package tauri.dev.jsg.command.stargate;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -8,14 +7,17 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
+import tauri.dev.jsg.command.IJSGCommand;
+import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.command.JSGCommands;
 import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-public class CommandStargateSetFakePos extends CommandBase {
+import static net.minecraft.command.CommandBase.parseCoordinate;
+
+public class CommandStargateSetFakePos implements IJSGCommand {
 
     @Nonnull
     @Override
@@ -25,8 +27,14 @@ public class CommandStargateSetFakePos extends CommandBase {
 
     @Nonnull
     @Override
-    public String getUsage(@Nonnull ICommandSender sender) {
-        return "/sgsetfakepos <x> <y> <z> <dimId> [tileX] [tileY] [tileZ]";
+    public String getUsage() {
+        return "sgsetfakepos <x> <y> <z> <dimId> [tileX] [tileY] [tileZ]";
+    }
+
+    @Nonnull
+    @Override
+    public String getDescription() {
+        return "Sets fake position of universe stargate";
     }
 
     @Override
@@ -41,7 +49,8 @@ public class CommandStargateSetFakePos extends CommandBase {
         TileEntity tileEntity = null;
 
         if (args.length < 4) {
-            notifyCommandListener(sender, this, "Please, insert x y z and dimId!");
+            //notifyCommandListener(sender, this, "Please, insert x y z and dimId!");
+            JSGCommand.sendUsageMess(sender, this);
             return;
         }
         try {
@@ -63,11 +72,11 @@ public class CommandStargateSetFakePos extends CommandBase {
             if (tileEntity instanceof StargateUniverseBaseTile) {
                 ((StargateUniverseBaseTile) tileEntity).setFakePos(new BlockPos(newX, newY, newZ));
                 ((StargateUniverseBaseTile) tileEntity).setFakeWorld(Objects.requireNonNull(sender.getEntityWorld().getMinecraftServer()).getWorld(newDim));
-                notifyCommandListener(sender, this, "StargateUniverseBaseTile fake pos set!");
+                JSGCommand.sendSuccessMess(sender, "Successfully set!");
             } else
-                notifyCommandListener(sender, this, "TileEntity is not a StargateUniverseBaseTile.");
+                JSGCommand.sendErrorMess(sender, "Target block is not a Universe gate base block!");
         } catch (NumberFormatException e) {
-            notifyCommandListener(sender, this, "Wrong format!");
+            JSGCommand.sendUsageMess(sender, this);
         }
     }
 }

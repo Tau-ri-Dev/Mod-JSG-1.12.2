@@ -1,6 +1,5 @@
 package tauri.dev.jsg.command;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -10,17 +9,23 @@ import tauri.dev.jsg.config.structures.StructureConfig;
 
 import javax.annotation.Nonnull;
 
-public class CommandReloadConfigs extends CommandBase {
+public class CommandReloadConfigs implements IJSGCommand {
     @Nonnull
     @Override
     public String getName() {
-        return "jsgconfigsreload";
+        return "reloadconfig";
     }
 
     @Nonnull
     @Override
-    public String getUsage(@Nonnull ICommandSender sender) {
-        return "/jsgconfigsreload";
+    public String getDescription() {
+        return "Reloads configs";
+    }
+
+    @Nonnull
+    @Override
+    public String getUsage() {
+        return "reloadconfig";
     }
 
     @Override
@@ -33,7 +38,7 @@ public class CommandReloadConfigs extends CommandBase {
         CraftingConfig.reload();
         StructureConfig.reload();
         JSGConfigUtil.reloadConfig();
-        notifyCommandListener(sender, this, "Configs reloaded!");
+        JSGCommand.sendSuccessMess(sender, "Configs reloaded!");
     }
 
 }

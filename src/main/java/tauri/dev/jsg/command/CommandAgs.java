@@ -1,6 +1,5 @@
 package tauri.dev.jsg.command;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -12,17 +11,23 @@ import tauri.dev.jsg.config.JSGConfig;
 
 import javax.annotation.Nonnull;
 
-public class CommandAgs extends CommandBase {
+public class CommandAgs implements IJSGCommand {
     @Nonnull
     @Override
     public String getName() {
         return "ags";
     }
 
+    @Override
+    @Nonnull
+    public String getDescription() {
+        return "Sends you the AGS pastebin";
+    }
+
     @Nonnull
     @Override
-    public String getUsage(@Nonnull ICommandSender sender) {
-        return "/ags";
+    public String getUsage() {
+        return "ags";
     }
 
     @Override

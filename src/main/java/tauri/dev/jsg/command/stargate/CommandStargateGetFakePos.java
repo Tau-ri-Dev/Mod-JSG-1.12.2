@@ -1,6 +1,5 @@
 package tauri.dev.jsg.command.stargate;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -8,13 +7,16 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
+import tauri.dev.jsg.command.IJSGCommand;
+import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.command.JSGCommands;
 import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
 
 import javax.annotation.Nonnull;
 
-public class CommandStargateGetFakePos extends CommandBase {
+import static net.minecraft.command.CommandBase.parseCoordinate;
+
+public class CommandStargateGetFakePos implements IJSGCommand {
 
     @Nonnull
     @Override
@@ -24,8 +26,14 @@ public class CommandStargateGetFakePos extends CommandBase {
 
     @Nonnull
     @Override
-    public String getUsage(@Nonnull ICommandSender sender) {
-        return "/sggetfakepos [tileX] [tileY] [tileZ]";
+    public String getDescription() {
+        return "Gets fake position of universe stargate";
+    }
+
+    @Nonnull
+    @Override
+    public String getUsage() {
+        return "sggetfakepos [tileX] [tileY] [tileZ]";
     }
 
     @Override
@@ -50,13 +58,15 @@ public class CommandStargateGetFakePos extends CommandBase {
                 tileEntity = JSGCommands.rayTraceTileEntity((EntityPlayerMP) sender);
 
             if (tileEntity instanceof StargateUniverseBaseTile) {
-                notifyCommandListener(sender, this, "StargateUniverseBaseTile's fake pos:");
-                notifyCommandListener(sender, this, "Dim: " + ((StargateUniverseBaseTile) tileEntity).getFakeWorld().provider.getDimension());
-                notifyCommandListener(sender, this, "Pos: " + ((StargateUniverseBaseTile) tileEntity).getFakePos());
+                JSGCommand.sendSuccessMess(sender, "Successfully set!");
+                JSGCommand.sendInfoMess(sender, "New DIM: " + ((StargateUniverseBaseTile) tileEntity).getFakeWorld().provider.getDimension());
+                JSGCommand.sendInfoMess(sender, "New Pos: " + ((StargateUniverseBaseTile) tileEntity).getFakePos());
             } else
-                notifyCommandListener(sender, this, "TileEntity is not a StargateUniverseBaseTile.");
+                JSGCommand.sendErrorMess(sender, "TileEntity is not a StargateUniverseBaseTile!");
+            //notifyCommandListener(sender, this, "TileEntity is not a StargateUniverseBaseTile.");
         } catch (NumberFormatException e) {
-            notifyCommandListener(sender, this, "Wrong format!");
+            JSGCommand.sendUsageMess(sender, this);
+            //notifyCommandListener(sender, this, "Wrong format!");
         }
     }
 }

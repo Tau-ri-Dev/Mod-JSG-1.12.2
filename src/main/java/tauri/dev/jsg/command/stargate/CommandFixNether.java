@@ -1,23 +1,33 @@
 package tauri.dev.jsg.command.stargate;
 
-import net.minecraft.util.text.TextComponentString;
-import tauri.dev.jsg.stargate.network.StargateNetwork;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import tauri.dev.jsg.command.IJSGCommand;
+import tauri.dev.jsg.command.JSGCommand;
+import tauri.dev.jsg.stargate.network.StargateNetwork;
 
-public class CommandFixNether extends CommandBase {
+import javax.annotation.Nonnull;
 
+public class CommandFixNether implements IJSGCommand {
+
+  @Nonnull
   @Override
   public String getName() {
-    return "sgfixnether";
+    return "fixnether";
   }
 
+  @Nonnull
   @Override
-  public String getUsage(ICommandSender sender) {
-    return "/sgfixnether";
+  public String getDescription() {
+    return "Delete nether gate to fix orlin gate";
+  }
+
+  @Nonnull
+  @Override
+  public String getUsage() {
+    return "fixnether";
   }
 
   @Override
@@ -26,10 +36,10 @@ public class CommandFixNether extends CommandBase {
   }
 
   @Override
-  public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+  public void execute(@Nonnull MinecraftServer server, ICommandSender sender, @Nonnull String[] args) throws CommandException {
     World world = sender.getEntityWorld();
     StargateNetwork.get(world).deleteNetherGate();
-    sender.sendMessage(new TextComponentString("Nether gate deleted!"));
+    JSGCommand.sendSuccessMess(sender, "Nether gate deleted from network!");
   }
 
 }
