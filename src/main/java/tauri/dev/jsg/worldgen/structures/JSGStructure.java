@@ -65,7 +65,7 @@ public class JSGStructure extends WorldGenerator {
     boolean isStargateStructure;
     boolean isRingsStructure;
     SymbolTypeEnum symbolType;
-    boolean findOptimalRotation;
+    public boolean findOptimalRotation;
 
     boolean isMilkyWayGate;
     boolean isPegasusGate;

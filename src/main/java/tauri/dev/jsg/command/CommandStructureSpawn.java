@@ -86,6 +86,9 @@ public class CommandStructureSpawn implements IJSGCommand {
                 JSGCommand.sendErrorMess(sender, "Can not get top block!");
                 return;
             }
+
+            if(!structure.getActualStructure(dimId).findOptimalRotation) rotation = null;
+
             structure.getActualStructure(dimId).generateStructure(world, new BlockPos(x, topBlock.y, z), new Random(), server.getWorld(dimId), rotation);
             JSGCommand.sendSuccessMess(sender, "Successfully spawned!");
 
