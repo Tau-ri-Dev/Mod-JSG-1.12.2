@@ -24,7 +24,7 @@ public class CommandCountdownSet implements IJSGCommand {
     @Nonnull
     @Override
     public String getDescription() {
-        return "Sets destiny timer to the value";
+        return "Sets Destiny timer to the value";
     }
 
     @Nonnull

@@ -27,7 +27,7 @@ public class CommandDestinyFTL implements IJSGCommand {
     @Nonnull
     @Override
     public String getDescription() {
-        return "Executes destiny's FTL effect";
+        return "Executes Destiny's FTL effect";
     }
 
     @Nonnull

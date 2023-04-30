@@ -684,7 +684,7 @@ public class GuiCustomMainMenu extends GuiScreen {
                 add(new GuiButton(BUTTONS_ID_START + 11, (PADDING / 2), 0, width, 20, update));
             }}, "Allocate more RAM!",
                     "",
-                    "Recommended RAM for JSG mod is 6GB!",
+                    "Recommended minimum RAM for JSG mod is 6GB!",
                     "By ignoring this fact, you can",
                     "run into troubles with this mod."
             ) {
