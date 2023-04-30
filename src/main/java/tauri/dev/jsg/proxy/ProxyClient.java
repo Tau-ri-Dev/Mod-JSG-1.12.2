@@ -69,9 +69,9 @@ public class ProxyClient implements IProxy {
     }
 
     public void init(FMLInitializationEvent event) {
-
-        if (JSGConfig.General.mainMenuConfig.loadingMusic)
-            playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.LOADING_MUSIC, true);
+//
+//        if (JSGConfig.General.mainMenuConfig.loadingMusic)
+//            playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.LOADING_MUSIC, true);
 
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new PageNotebookItemColor(), JSGItems.PAGE_NOTEBOOK_ITEM);
 
