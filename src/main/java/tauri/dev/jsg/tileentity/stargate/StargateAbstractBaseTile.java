@@ -930,6 +930,13 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
             }
 
+            if (stargateState.engaged() && lastPos != pos) {
+                lastPos = pos;
+                markDirty();
+                //JSG.error("A stargateState indicates the Gate should be open, but targetGatePos is null. This is a bug. Closing gate...");
+                attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
+            }
+
             updatePassedEntities();
 
             // Event horizon teleportation
