@@ -935,6 +935,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 markDirty();
                 //JSG.error("A stargateState indicates the Gate should be open, but targetGatePos is null. This is a bug. Closing gate...");
                 attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
+                refresh();
             }
 
             updatePassedEntities();
