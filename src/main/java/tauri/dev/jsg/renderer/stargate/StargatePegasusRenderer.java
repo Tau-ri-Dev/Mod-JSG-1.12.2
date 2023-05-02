@@ -7,11 +7,13 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.texture.Texture;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.stargate.network.SymbolPegasusEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
+import tauri.dev.jsg.util.JSGMinecraftHelper;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
 import tauri.dev.jsg.util.math.NumberUtils;
 
@@ -49,7 +51,8 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         JSGTextureLightningHelper.lightUpTexture(1f);
 
         if (rendererState.spinHelper.getIsSpinning()) {
-            int index = Math.round(rendererState.spinHelper.apply(getWorld().getTotalWorldTime() + partialTicks));
+            double tick = (getWorld().getTotalWorldTime() + partialTicks);
+            int index = (int) Math.floor(rendererState.spinHelper.apply(tick));
             if (!rendererState.slotToGlyphMap.containsKey(index)) {
                 renderGlyph(rendererState.spinHelper.getTargetSymbol().getId(), index, false);
             }

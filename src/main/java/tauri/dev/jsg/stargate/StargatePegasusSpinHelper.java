@@ -76,12 +76,12 @@ public class StargatePegasusSpinHelper implements ISpinHelper {
             return 0;
         }
 
-        return (tick) % 36;
+        return (tick) % 36f;
     }
 
     public float apply(double tick) {
         float slot = calculate((float) tick - spinStartTime);
-        return (float) ((direction.mul == -1 ? Math.ceil(36 - slot) : Math.floor(slot)) + startOffset) % 36;
+        return (float) (((direction.mul == -1 ? Math.ceil(36f - slot) : Math.floor(slot)) + startOffset) % 36f);
     }
 
     public void toBytes(ByteBuf buf) {
