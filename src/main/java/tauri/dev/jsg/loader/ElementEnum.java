@@ -87,6 +87,11 @@ public enum ElementEnum {
 
     ASSEMBLER_MACHINE("machine/assembler/assembler.obj", "machine/assembler/assembler_base.png", false),
 
+    // Lab
+    LAB_MACHINE("machine/lab/machine.obj", "machine/lab/machine.jpg", false),
+    LAB_TUBES("machine/lab/tubes.obj", "machine/lab/tubes.png", false),
+    LAB_INTERFACE("", "machine/lab/interface.jpg", false),
+
     // --------------------------------------------------------------------------------------------
     // ZPM
 
@@ -115,6 +120,10 @@ public enum ElementEnum {
                 String[] split = texture.split("\\.");
                 biomeTextureResourceMap.put(biomeOverlay, TextureLoader.getTextureResource(split[0] + biomeOverlay.suffix + "." + split[1]));
             }
+    }
+
+    public static void renderModel(String path){
+        ModelLoader.getModel(ModelLoader.getModelResource(path)).render();
     }
 
     public void render() {
