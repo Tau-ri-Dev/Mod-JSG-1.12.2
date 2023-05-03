@@ -16,7 +16,8 @@ public enum GuiIdEnum {
 	GUI_ORE_WASHING(9),
 	GUI_ZPM_HUB(10),
 	GUI_ZPM_SLOT(11),
-	GUI_COUNTDOWN(12)
+	GUI_COUNTDOWN(12),
+	GUI_LAB(13),
 	;
     public final int id;
 	
@@ -24,7 +25,7 @@ public enum GuiIdEnum {
 		this.id = id;
 	}
 	
-	private static Map<Integer, GuiIdEnum> idMap = new HashMap<>();
+	private static final Map<Integer, GuiIdEnum> idMap = new HashMap<>();
 	static {
 		for (GuiIdEnum guidEnum : values())
 			idMap.put(guidEnum.id, guidEnum);

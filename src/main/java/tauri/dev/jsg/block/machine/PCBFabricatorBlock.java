@@ -20,7 +20,7 @@ import tauri.dev.jsg.tileentity.machine.PCBFabricatorTile;
 
 import javax.annotation.Nonnull;
 
-public class PCBFabricatorBlock extends JSGMachineBlock {
+public class PCBFabricatorBlock extends AbstractMachineBlock {
     public static final String BLOCK_NAME = "pcb_fabricator_block";
     public static final int MAX_ENERGY = 9_000_000;
     public static final int MAX_ENERGY_TRANSFER = 20_000;

@@ -21,8 +21,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGAbstractCustomItemBlock;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.power.stargate.ItemEnergyStorage;
+import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.util.ItemHandlerHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 
@@ -31,8 +31,8 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class JSGMachineBlock extends JSGAbstractCustomItemBlock {
-    public JSGMachineBlock(String blockName) {
+public abstract class AbstractMachineBlock extends JSGAbstractCustomItemBlock {
+    public AbstractMachineBlock(String blockName) {
         super(Material.IRON);
 
         setRegistryName(JSG.MOD_ID + ":" + blockName);
@@ -46,7 +46,7 @@ public abstract class JSGMachineBlock extends JSGAbstractCustomItemBlock {
         setLightOpacity(0);
         setHardness(2.5f);
         setResistance(35.0f);
-        setHarvestLevel("pickaxe", 3);
+        setHarvestLevel("pickaxe", 2);
     }
 
 

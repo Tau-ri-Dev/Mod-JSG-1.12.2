@@ -20,7 +20,7 @@ import tauri.dev.jsg.tileentity.machine.CrystalChamberTile;
 
 import javax.annotation.Nonnull;
 
-public class CrystalChamberBlock extends JSGMachineBlock {
+public class CrystalChamberBlock extends AbstractMachineBlock {
     public static final String BLOCK_NAME = "crystal_chamber_block";
     public static final int MAX_ENERGY = 9_000_000;
     public static final int MAX_ENERGY_TRANSFER = 20_000;
