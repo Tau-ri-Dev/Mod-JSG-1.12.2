@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
@@ -213,11 +212,11 @@ public class AncientSignBlock extends JSGBlock {
 
     @Override
     public void onBlockPlacedBy(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EntityLivingBase placer, @Nonnull ItemStack stack) {
-        if(stack.hasTagCompound()){
+        if (stack.hasTagCompound()) {
             NBTTagCompound compound = stack.getTagCompound();
-            if(compound != null && compound.hasKey("BlockEntityTag")){
+            if (compound != null && compound.hasKey("BlockEntityTag")) {
                 TileEntity tile = world.getTileEntity(pos);
-                if(tile instanceof AncientSignTile){
+                if (tile instanceof AncientSignTile) {
                     AncientSignTile casted = (AncientSignTile) tile;
                     NBTTagCompound c = compound.getCompoundTag("BlockEntityTag");
                     casted.fromItemStack(c);
@@ -243,5 +242,10 @@ public class AncientSignBlock extends JSGBlock {
 
     protected boolean isInvalidNeighbor(World worldIn, BlockPos pos, EnumFacing facing) {
         return worldIn.getBlockState(pos.offset(facing)).getMaterial() == Material.CACTUS;
+    }
+
+    @Override
+    public boolean isPassable(@Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
+        return true;
     }
 }
