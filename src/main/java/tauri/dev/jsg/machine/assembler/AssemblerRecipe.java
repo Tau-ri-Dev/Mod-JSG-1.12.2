@@ -31,7 +31,7 @@ public abstract class AssemblerRecipe extends AbstractMachineRecipe {
     public boolean isOk(int energyStored, Item schematic, ArrayList<ItemStack> stacks, ItemStack subStack) {
         if(isDisabled()) return false;
 
-        if (energyStored < getEnergyPerTick()) return false;
+        if (energyStored < (getEnergyPerTick() * (getWorkingTime() / 2))) return false;
         if (getSchematic() != schematic) return false;
         int i = 0;
         for (ItemStack s : getPattern()) {
