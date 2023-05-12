@@ -5,6 +5,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import tauri.dev.jsg.config.JSGConfigUtil;
 import tauri.dev.jsg.config.craftings.CraftingConfig;
+import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.config.structures.StructureConfig;
 
 import javax.annotation.Nonnull;
@@ -35,9 +36,14 @@ public class CommandReloadConfigs implements IJSGCommand {
 
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
-        CraftingConfig.reload();
-        StructureConfig.reload();
-        JSGConfigUtil.reloadConfig();
+        try {
+            CraftingConfig.reload();
+            StructureConfig.reload();
+            JSGConfigUtil.reloadConfig();
+            StargateDimensionConfig.update();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         JSGCommand.sendSuccessMess(sender, "Configs reloaded!");
     }
 
