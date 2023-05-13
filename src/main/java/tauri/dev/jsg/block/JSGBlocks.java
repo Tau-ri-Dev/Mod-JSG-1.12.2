@@ -37,8 +37,6 @@ import tauri.dev.jsg.block.machine.AssemblerBlock;
 import tauri.dev.jsg.block.machine.CrystalChamberBlock;
 import tauri.dev.jsg.block.machine.OreWashingBlock;
 import tauri.dev.jsg.block.machine.PCBFabricatorBlock;
-import tauri.dev.jsg.block.machine.lab.ChemLabConstructBlock;
-import tauri.dev.jsg.block.machine.lab.ChemLabControlBlock;
 import tauri.dev.jsg.block.ore.NaquadahOreBlock;
 import tauri.dev.jsg.block.ore.TitaniumOreBlock;
 import tauri.dev.jsg.block.ore.TriniumOreBlock;
@@ -139,8 +137,8 @@ public class JSGBlocks {
     public static final CrystalChamberBlock MACHINE_CHAMBER = new CrystalChamberBlock();
     public static final PCBFabricatorBlock MACHINE_PCB_FABRICATOR = new PCBFabricatorBlock();
     public static final OreWashingBlock MACHINE_ORE_WASHING = new OreWashingBlock();
-    public static final ChemLabControlBlock MACHINE_LAB = new ChemLabControlBlock();
-    public static final ChemLabConstructBlock MACHINE_CONSTRUCT = new ChemLabConstructBlock();
+    //public static final ChemLabControlBlock MACHINE_LAB = new ChemLabControlBlock();
+    //public static final ChemLabConstructBlock MACHINE_CONSTRUCT = new ChemLabConstructBlock();
 
     // -----------------------------------------------------------------------------
     // ZPM stuff
@@ -204,8 +202,8 @@ public class JSGBlocks {
             BEAMER_BLOCK,
             MACHINE_ASSEMBLER,
             MACHINE_CHAMBER,
-            MACHINE_LAB,
-            MACHINE_CONSTRUCT,
+            //MACHINE_LAB,
+            //MACHINE_CONSTRUCT,
             ZPM,
             ZPM_HUB,
             ZPM_SLOT,
@@ -281,8 +279,8 @@ public class JSGBlocks {
             MACHINE_CHAMBER,
             MACHINE_PCB_FABRICATOR,
             MACHINE_ORE_WASHING,
-            MACHINE_LAB,
-            MACHINE_CONSTRUCT,
+            //MACHINE_LAB,
+            //MACHINE_CONSTRUCT,
 
             ZPM,
             ZPM_HUB,
