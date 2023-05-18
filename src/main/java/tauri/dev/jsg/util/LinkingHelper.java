@@ -116,7 +116,7 @@ public class LinkingHelper {
     StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(gatePos);
     DHDAbstractTile dhdTile = (DHDAbstractTile) world.getTileEntity(dhdPos);
 
-    if (dhdTile != null) {
+    if (dhdTile != null && gateTile != null) {
       int linkId = getLinkId();
       dhdTile.setLinkedGate(gatePos, linkId);
       gateTile.setLinkedDHD(dhdPos, linkId);
