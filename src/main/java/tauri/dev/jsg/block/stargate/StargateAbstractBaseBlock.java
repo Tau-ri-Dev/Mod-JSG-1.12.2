@@ -159,7 +159,8 @@ public abstract class StargateAbstractBaseBlock extends JSGBlock {
     @Override
     public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
         StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(pos);
-        gateTile.refresh();
+        if(gateTile != null)
+            gateTile.refresh();
     }
 
     // --------------------------------------------------------------------------------------

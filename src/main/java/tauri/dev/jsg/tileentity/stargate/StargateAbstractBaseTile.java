@@ -480,7 +480,12 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     public void refresh() {
-        this.setGateAddress(this.getSymbolType(), this.getStargateAddress(this.getSymbolType()));
+        StargateAddress address = this.getStargateAddress(this.getSymbolType());
+        if(address == null){
+            generateAddresses(true);
+            address = this.getStargateAddress(this.getSymbolType());
+        }
+        this.setGateAddress(this.getSymbolType(), address);
         updateFacing(this.world.getBlockState(this.pos).getValue(JSGProps.FACING_HORIZONTAL), this.world.getBlockState(this.pos).getValue(JSGProps.FACING_VERTICAL), true);
     }
 
@@ -851,7 +856,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     public void generateAddresses(boolean reset) {
-        Random random = new Random(pos.hashCode() * 31 + world.provider.getDimension());
+        Random random = new Random(pos.hashCode() * 31L + world.provider.getDimension());
 
         for (SymbolTypeEnum symbolType : SymbolTypeEnum.values()) {
             StargateAddress address = getStargateAddress(symbolType);
