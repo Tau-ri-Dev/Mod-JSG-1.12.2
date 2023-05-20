@@ -134,8 +134,8 @@ public class GuiCustomMainMenu extends GuiScreen {
             tick = JSGMinecraftHelper.getClientTickPrecise();
         } else {
             int currentFPS = Minecraft.getDebugFPS();
-            if (currentFPS > bestFPS) bestFPS = Math.min(currentFPS, 30);
-            tick += (bestFPS > 0 ? ((30D / (double) bestFPS) * (20D / (double) bestFPS)) : 1D);
+            if (currentFPS > bestFPS || bestFPS > 30) bestFPS = currentFPS;
+            tick += (bestFPS > 0 ? ((30D / (double) bestFPS) * (20D / 30D)) : 1D);
         }
     }
 
