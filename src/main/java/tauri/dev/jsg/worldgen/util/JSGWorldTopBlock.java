@@ -1,6 +1,7 @@
 package tauri.dev.jsg.worldgen.util;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -48,6 +49,10 @@ public class JSGWorldTopBlock {
         if(block == Blocks.LEAVES2) return false;
         if(block == Blocks.LOG) return false;
         if(block == Blocks.LOG2) return false;
+        if(block.getDefaultState().getMaterial() == Material.LEAVES) return false;
+        if(block.getDefaultState().getMaterial() == Material.WOOD) return false;
+        if(block.getDefaultState().getMaterial() == Material.AIR) return false;
+        if(block.getDefaultState().getMaterial() == Material.BARRIER) return false;
         return block != Blocks.BEDROCK;
     }
 }
