@@ -84,8 +84,9 @@ repositories {
 
     maven {
         // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
+        name = "JEI maven"
+        //url = "https://maven.blamejared.com/mezz/jei"
+        url = "https://modmaven.dev"
     }
 
     maven {
