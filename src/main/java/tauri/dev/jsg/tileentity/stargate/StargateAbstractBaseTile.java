@@ -987,8 +987,12 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
              * 	False: Update the source gate about consumed energy each second
              */
             if (stargateState.initiating()) {
-                if (targetGatePos == null)
+                //if (targetGatePos == null)
+                //   targetGatePos = getNetwork().getStargate(this.getStargateAddress(SymbolTypeEnum.MILKYWAY));
+                if(targetGatePos == null){
                     targetGatePos = getNetwork().getStargate(this.getStargateAddress(SymbolTypeEnum.MILKYWAY));
+                    attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
+                }
                 int energyStored = getEnergyStorage().getEnergyStored();
 
                 // Max Open Time

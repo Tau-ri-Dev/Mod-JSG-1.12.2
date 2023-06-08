@@ -290,6 +290,11 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 
             beamerStatus = updateBeamerStatus();
 
+            if(targetGatePos == null){
+                beamerStatus = BeamerStatusEnum.NOT_LINKED;
+                markDirty();
+            }
+
             if ((beamerStatus == BeamerStatusEnum.OK || beamerStatus == BeamerStatusEnum.OBSTRUCTED) && beamerMode != BeamerModeEnum.NONE && beamerRole != BeamerRoleEnum.DISABLED) {
                 BeamerBeam.isSomethingInBeam(this, true, true);
             }
