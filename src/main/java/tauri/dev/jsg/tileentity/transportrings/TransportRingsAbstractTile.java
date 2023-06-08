@@ -92,50 +92,12 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             markDirty();
         }
     };
-    // ---------------------------------------------------------------------------------
-    // Ticking and loading
-    public Map<Map<SymbolTypeTransportRingsEnum, TransportRingsAddress>, TransportRings> ringsMap = new HashMap<>();
-    public JSGAxisAlignedBB LOCAL_TELEPORT_BOX = new JSGAxisAlignedBB(-1, 2, -1, 2, 4.5, 2);
-    protected JSGAxisAlignedBB globalTeleportBox;
-    protected List<Entity> teleportList = new ArrayList<>();
-    protected BlockPos lastPos = BlockPos.ORIGIN;
-    private boolean addedToNetwork;
-    // ---------------------------------------------------------------------------------
-    // Teleportation
-    protected BlockPos targetRingsPos = new BlockPos(0, 0, 0);
-    protected List<Entity> excludedEntities = new ArrayList<>();
-    protected Object ocContext;
-    // ---------------------------------------------------------------------------------
-    // Address system
-    protected boolean initiating;
-    // ---------------------------------------------------------------------------------
-    // Adjustable distance
-    // ---------------------------------------------------------------------------------
-    // Rings network
-    protected TransportRings rings;
-    protected int energyTransferedLastTick = 0;
-    List<ScheduledTask> scheduledTasks = new ArrayList<>();
-    protected int ringsDistance = 2;
-    protected String ringsName = "";
-    // ---------------------------------------------------------------------------------
-    // Scheduled task
-    TransportRingsRendererState rendererState = new TransportRingsRendererState();
-    private List<BlockPos> invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, 2, 2), new BlockPos(1, 2, 2), new BlockPos(2, 2, 1));
-    /**
-     * True if there is an active transport.
-     */
-    private boolean busy = false;
-    // ---------------------------------------------------------------------------------
-    // Controller
-    private BlockPos linkedController;
-    public TransportRingsAddress dialedAddress = new TransportRingsAddress(getSymbolType());
-    private int linkId = -1;
     // ------------------------------------------------------------
     // Node-related work
     private final Node node = JSG.ocWrapper.createNode(this, "transportrings");
-    private int currentPowerTier = 1;
-    public int itemStackHandlerSlotsCount = 10;
-    private final JSGItemStackHandler itemStackHandler = new JSGItemStackHandler(10) {
+    // ---------------------------------------------------------------------------------
+    // Ticking and loading
+    public Map<Map<SymbolTypeTransportRingsEnum, TransportRingsAddress>, TransportRings> ringsMap = new HashMap<>();    private final JSGItemStackHandler itemStackHandler = new JSGItemStackHandler(10) {
 
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
@@ -186,6 +148,46 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             markDirty();
         }
     };
+    public JSGAxisAlignedBB LOCAL_TELEPORT_BOX = new JSGAxisAlignedBB(-1, 2, -1, 2, 4.5, 2);
+    public int itemStackHandlerSlotsCount = 10;
+    public boolean isPlatformBuild = false;
+    public IBlockState platformOverlayBlockState = Blocks.CONCRETE.getStateFromMeta(10);
+    protected JSGAxisAlignedBB globalTeleportBox;
+    protected List<Entity> teleportList = new ArrayList<>();
+    protected BlockPos lastPos = BlockPos.ORIGIN;
+    // ---------------------------------------------------------------------------------
+    // Teleportation
+    protected BlockPos targetRingsPos = new BlockPos(0, 0, 0);
+    protected List<Entity> excludedEntities = new ArrayList<>();
+    protected Object ocContext;
+    // ---------------------------------------------------------------------------------
+    // Address system
+    protected boolean initiating;
+    // ---------------------------------------------------------------------------------
+    // Adjustable distance
+    // ---------------------------------------------------------------------------------
+    // Rings network
+    protected TransportRings rings;
+    protected int energyTransferedLastTick = 0;
+    protected int ringsDistance = 2;
+    protected String ringsName = "";
+    protected JSGTileEntityConfig config = new JSGTileEntityConfig();
+    List<ScheduledTask> scheduledTasks = new ArrayList<>();
+    // ---------------------------------------------------------------------------------
+    // Scheduled task
+    TransportRingsRendererState rendererState = new TransportRingsRendererState();
+    private boolean addedToNetwork;
+    private List<BlockPos> invisibleBlocksTemplate = Arrays.asList(new BlockPos(0, 2, 2), new BlockPos(1, 2, 2), new BlockPos(2, 2, 1));
+    /**
+     * True if there is an active transport.
+     */
+    private boolean busy = false;
+    // ---------------------------------------------------------------------------------
+    // Controller
+    private BlockPos linkedController;
+    public TransportRingsAddress dialedAddress = new TransportRingsAddress(getSymbolType());
+    private int linkId = -1;
+    private int currentPowerTier = 1;
     // ------------------------------------------------------------
     // Page progress
     private short pageProgress = 0;
@@ -202,16 +204,13 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return pageProgress;
     }
 
-    public void setPageProgress(int pageProgress) {
-        this.pageProgress = (short) pageProgress;
-    }
-
 
     // ----------------------------------------------------------
     // PLATFORMS
 
-    public boolean isPlatformBuild = false;
-    public IBlockState platformOverlayBlockState = Blocks.CONCRETE.getStateFromMeta(10);
+    public void setPageProgress(int pageProgress) {
+        this.pageProgress = (short) pageProgress;
+    }
 
     public IBlockState getPlatformOverlayBlockState() {
         return platformOverlayBlockState;
@@ -313,8 +312,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             return; // platform is not rendering!
         JSGSoundHelper.playSoundEvent(world, getPosWithDistance(ringsDistance), getPlatform().platformBlock.getPlatformSound(closing));
     }
-
-    // ----------------------------------------------------------
 
     @Override
     public void update() {
@@ -421,6 +418,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         }
     }
+
+    // ----------------------------------------------------------
 
     public int getSlotsCount() {
         return itemStackHandlerSlotsCount;
@@ -638,6 +637,12 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return ringsName;
     }
 
+    public void setRingsName(String name) {
+        getRings().setName(name);
+        ringsName = name;
+        markDirty();
+    }
+
     public List<Entity> startAnimationAndTeleport(BlockPos targetRingsPos, List<Entity> excludedEntities, int waitTime, boolean initiating) {
         this.targetRingsPos = targetRingsPos;
         this.excludedEntities = excludedEntities;
@@ -850,15 +855,25 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     private boolean checkIfObstructed() {
         if (JSGConfig.Rings.mechanics.ignoreObstructionCheck) return false;
 
-        for (int y = 0; y < 3; y++) {
-            for (Rotation rotation : Rotation.values()) {
-                for (BlockPos invPos : invisibleBlocksTemplate) {
+        for (Rotation rotation : Rotation.values()) {
+            for (BlockPos invPos : invisibleBlocksTemplate) {
+                for (int y = 0; y < 3; y++) {
 
                     BlockPos newPos = new BlockPos(this.pos).add(invPos.rotate(rotation)).add(0, y, 0);
                     IBlockState newState = world.getBlockState(newPos);
                     Block newBlock = newState.getBlock();
 
                     if (!newBlock.isAir(newState, world, newPos) && !newBlock.isReplaceable(world, newPos)) {
+                        return true;
+                    }
+                }
+
+                BlockPos invPosNoY = new BlockPos(invPos.getX(), this.pos.getY(), invPos.getZ());
+                int curY = Math.min(invPos.getY(), invPosNoY.getY());
+                int maxY = Math.max(invPos.getY(), invPosNoY.getY());
+                while (curY < maxY) {
+                    curY++;
+                    if (world.getBlockState(new BlockPos(invPosNoY.getX(), curY, invPosNoY.getZ())).getBlock() == Blocks.BEDROCK) {
                         return true;
                     }
                 }
@@ -990,7 +1005,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         setRingsParams(address, null, symbolType, name);
     }
 
-    public ParamsSetResult setRingsParams(TransportRingsAddress address, Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> addressMap, SymbolTypeTransportRingsEnum symbolType, String name) {
+    public ParamsSetResult setRingsParams(TransportRingsAddress
+                                                  address, Map<SymbolTypeTransportRingsEnum, TransportRingsAddress> addressMap, SymbolTypeTransportRingsEnum
+                                                  symbolType, String name) {
         int x = pos.getX();
         int z = pos.getZ();
 
@@ -1031,12 +1048,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
         markDirty();
         return ParamsSetResult.OK;
-    }
-
-    public void setRingsName(String name) {
-        getRings().setName(name);
-        ringsName = name;
-        markDirty();
     }
 
     @Override
@@ -1240,106 +1251,14 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         }
     }
 
-
-    // -----------------------------------------------------------------
-    // Tile entity config
-
-    protected JSGTileEntityConfig config = new JSGTileEntityConfig();
-
-    public enum ConfigOptions implements ITileConfigEntry {
-        RENDER_PLATFORM_MOVING(
-                0, "platformMoving", JSGConfigOptionTypeEnum.BOOLEAN, "true",
-                "Render platform moving part"
-        ),
-        RENDER_PLATFORM_BASE(
-                1, "platformBase", JSGConfigOptionTypeEnum.BOOLEAN, "true",
-                "Render platform base part"
-        ),
-        ENABLE_OC_PRESS_SOUND(
-                2, "ocPressSound", JSGConfigOptionTypeEnum.BOOLEAN, "false",
-                "Play press sound when dialing with OC"
-        ),
-        CAPACITORS_COUNT(
-                3, "maxCapacitors", JSGConfigOptionTypeEnum.NUMBER, "2", 0, 3,
-                "Specifies how many",
-                "capacitors can be installed",
-                "into rings"
-        ),
-        ENABLE_NONACTIVE_RENDER(
-                4, "nonactiveRender", JSGConfigOptionTypeEnum.BOOLEAN, "false",
-                "Render ring under ground if rings are not active"
-        ),
-        ;
-
-        public final int id;
-        public final String label;
-        public final String[] comment;
-        public final JSGConfigOptionTypeEnum type;
-        public final String defaultValue;
-        public List<JSGConfigEnumEntry> possibleValues;
-
-        public final int minInt;
-        public final int maxInt;
-
-        ConfigOptions(int optionId, String label, JSGConfigOptionTypeEnum type, String defaultValue, String... comment) {
-            this(optionId, label, type, defaultValue, -1, -1, comment);
-        }
-
-        ConfigOptions(int optionId, String label, JSGConfigOptionTypeEnum type, String defaultValue, int minInt, int maxInt, String... comment) {
-            this.id = optionId;
-            this.label = label;
-            this.type = type;
-            this.defaultValue = defaultValue;
-            this.minInt = minInt;
-            this.maxInt = maxInt;
-            this.comment = comment;
-        }
-
-        @Override
-        public int getId() {
-            return id;
-        }
-
-        @Override
-        public String getLabel() {
-            return label;
-        }
-
-        @Override
-        public String[] getComment() {
-            return comment;
-        }
-
-        @Override
-        public JSGConfigOptionTypeEnum getType() {
-            return type;
-        }
-
-        @Override
-        public String getDefaultValue() {
-            return defaultValue;
-        }
-
-        @Override
-        public List<JSGConfigEnumEntry> getPossibleValues() {
-            return possibleValues;
-        }
-
-        @Override
-        public int getMin() {
-            return minInt;
-        }
-
-        @Override
-        public int getMax() {
-            return maxInt;
-        }
-    }
-
     @Override
     public JSGTileEntityConfig getConfig() {
         return this.config;
     }
+
+
+    // -----------------------------------------------------------------
+    // Tile entity config
 
     @Override
     public void setConfig(JSGTileEntityConfig config) {
@@ -1383,13 +1302,11 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     /**
-     *
-     *
      * @param flag - how many blocks is player pass the block (tileEntity)
      * @return If the tile should be rendered (should be true, because when rendering ceiling rings, minecraft can't handle the pass thing...)
      */
     @Override
-    public boolean shouldRenderInPass(int flag){
+    public boolean shouldRenderInPass(int flag) {
         return true;
     }
 
@@ -1397,9 +1314,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     public void onChunkUnload() {
         if (node != null) node.remove();
     }
-
-    // ------------------------------------------------------------------------
-    // OpenComputers
 
     @Override
     public void invalidate() {
@@ -1419,13 +1333,13 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     public void onConnect(Node node) {
     }
 
+    // ------------------------------------------------------------------------
+    // OpenComputers
+
     @Override
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     public void onDisconnect(Node node) {
     }
-
-    // -----------------------------------------------------------------------------
-    // Capabilities
 
     @Override
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
@@ -1436,15 +1350,15 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         JSG.ocWrapper.sendSignalToReachable(node, (Context) context, name, params);
     }
 
-    // ------------------------------------------------------------
-    // Methods
-
     @SuppressWarnings("unused")
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
     @Callback
     public Object[] getJSGVersion(Context context, Arguments args) {
         return new Object[]{JSG.MOD_VERSION};
     }
+
+    // -----------------------------------------------------------------------------
+    // Capabilities
 
     @SuppressWarnings("unused")
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
@@ -1465,6 +1379,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     public Object[] getAvailableRingsAddresses(Context context, Arguments args) {
         return new Object[]{ringsMap.keySet()};
     }
+
+    // ------------------------------------------------------------
+    // Methods
 
     @SuppressWarnings("unused")
     @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
@@ -1547,9 +1464,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return super.getCapability(capability, facing);
     }
 
-    // -----------------------------------------------------------------------------
-    // Power system
-
     public int getEnergyTransferedLastTick() {
         return energyTransferedLastTick;
     }
@@ -1559,6 +1473,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     }
 
     public abstract int getDefaultCapacitors();
+
+    // -----------------------------------------------------------------------------
+    // Power system
 
     protected StargateClassicEnergyStorage getEnergyStorage() {
         return energyStorage;
@@ -1609,6 +1526,95 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return true;
     }
 
+    public enum ConfigOptions implements ITileConfigEntry {
+        RENDER_PLATFORM_MOVING(
+                0, "platformMoving", JSGConfigOptionTypeEnum.BOOLEAN, "true",
+                "Render platform moving part"
+        ),
+        RENDER_PLATFORM_BASE(
+                1, "platformBase", JSGConfigOptionTypeEnum.BOOLEAN, "true",
+                "Render platform base part"
+        ),
+        ENABLE_OC_PRESS_SOUND(
+                2, "ocPressSound", JSGConfigOptionTypeEnum.BOOLEAN, "false",
+                "Play press sound when dialing with OC"
+        ),
+        CAPACITORS_COUNT(
+                3, "maxCapacitors", JSGConfigOptionTypeEnum.NUMBER, "2", 0, 3,
+                "Specifies how many",
+                "capacitors can be installed",
+                "into rings"
+        ),
+        ENABLE_NONACTIVE_RENDER(
+                4, "nonactiveRender", JSGConfigOptionTypeEnum.BOOLEAN, "false",
+                "Render ring under ground if rings are not active"
+        ),
+        ;
+
+        public final int id;
+        public final String label;
+        public final String[] comment;
+        public final JSGConfigOptionTypeEnum type;
+        public final String defaultValue;
+        public final int minInt;
+        public final int maxInt;
+        public List<JSGConfigEnumEntry> possibleValues;
+
+        ConfigOptions(int optionId, String label, JSGConfigOptionTypeEnum type, String defaultValue, String... comment) {
+            this(optionId, label, type, defaultValue, -1, -1, comment);
+        }
+
+        ConfigOptions(int optionId, String label, JSGConfigOptionTypeEnum type, String defaultValue, int minInt, int maxInt, String... comment) {
+            this.id = optionId;
+            this.label = label;
+            this.type = type;
+            this.defaultValue = defaultValue;
+            this.minInt = minInt;
+            this.maxInt = maxInt;
+            this.comment = comment;
+        }
+
+        @Override
+        public int getId() {
+            return id;
+        }
+
+        @Override
+        public String getLabel() {
+            return label;
+        }
+
+        @Override
+        public String[] getComment() {
+            return comment;
+        }
+
+        @Override
+        public JSGConfigOptionTypeEnum getType() {
+            return type;
+        }
+
+        @Override
+        public String getDefaultValue() {
+            return defaultValue;
+        }
+
+        @Override
+        public List<JSGConfigEnumEntry> getPossibleValues() {
+            return possibleValues;
+        }
+
+        @Override
+        public int getMin() {
+            return minInt;
+        }
+
+        @Override
+        public int getMax() {
+            return maxInt;
+        }
+    }
+
     public enum TransportRingsUpgradeEnum implements EnumKeyInterface<Item> {
         GOAULD_UPGRADE(JSGItems.CRYSTAL_GLYPH_GOAULD, 0),
         ORI_UPGRADE(JSGItems.CRYSTAL_GLYPH_ORI, 1),
@@ -1637,4 +1643,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             return item;
         }
     }
+
+
+
+
 }
