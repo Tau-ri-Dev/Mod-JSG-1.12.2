@@ -42,6 +42,7 @@ import tauri.dev.jsg.block.ore.TitaniumOreBlock;
 import tauri.dev.jsg.block.ore.TriniumOreBlock;
 import tauri.dev.jsg.block.props.AncientSignBlock;
 import tauri.dev.jsg.block.props.DestinyCountDownBlock;
+import tauri.dev.jsg.block.props.JSGDecorPropBlock;
 import tauri.dev.jsg.block.props.TRPlatformBlock;
 import tauri.dev.jsg.block.stargate.*;
 import tauri.dev.jsg.block.transportrings.TransportRingsAncientBlock;
@@ -154,6 +155,8 @@ public class JSGBlocks {
     public static final DestinyCountDownBlock DESTINY_COUNTDOWN_BLOCK = new DestinyCountDownBlock();
     public static final AncientSignBlock ANCIENT_SIGN_BLOCK = new AncientSignBlock();
 
+    public static final JSGDecorPropBlock DECOR_PROP_BLOCK = new JSGDecorPropBlock();
+
     // -----------------------------------------------------------------------------
     // CREATIVE ITEMS/BLOCKS
 
@@ -208,7 +211,8 @@ public class JSGBlocks {
             ZPM_HUB,
             ZPM_SLOT,
             CAPACITOR_BLOCK_CREATIVE,
-            ZPM_CREATIVE
+            ZPM_CREATIVE,
+            DECOR_PROP_BLOCK
     };
     /**
      * Used in {@link tauri.dev.jsg.beamer.BeamerBeam}
@@ -291,8 +295,9 @@ public class JSGBlocks {
             ANCIENT_SIGN_BLOCK,
 
             CAPACITOR_BLOCK_CREATIVE,
-            ZPM_CREATIVE
+            ZPM_CREATIVE,
 
+            DECOR_PROP_BLOCK
     };
 
     public static boolean isInBlocksArray(Block block, Block[] array) {

@@ -103,7 +103,12 @@ public enum ElementEnum {
     // --------------------------------------------------------------------------------------------
     // DESTINY PROPS
 
-    DESTINY_COUNTDOWN("props/destiny/countdown.obj", "props/destiny/countdown.png", false);
+    DESTINY_COUNTDOWN("props/destiny/countdown.obj", "props/destiny/countdown.png", false),
+
+    // --------------------------------------------------------------------------------------------
+    // DECOR PROPS
+
+    DECOR_ABYDOS_POT("props/decor/a_pot.obj", "props/decor/a_pot.png", false);
 
     // --------------------------------------------------------------------------------------------
 

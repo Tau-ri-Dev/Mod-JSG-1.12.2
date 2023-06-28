@@ -1,0 +1,6 @@
+{
+	"parent": "block/cube_all",
+	"textures": {
+		"all": "jsg:blocks/props/decor_prop_block"
+	}
+}
