@@ -6,6 +6,7 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -54,6 +55,13 @@ public class JSGDecorPropBlock extends JSGAbstractCustomMetaItemBlock {
         setHarvestLevel("pickaxe", 3);
     }
 
+    @Override
+    public void getSubBlocks(@Nonnull CreativeTabs creativeTabs, @Nonnull NonNullList<ItemStack> items) {
+        for (DecorPropItem.PropVariants variant : DecorPropItem.PropVariants.values()) {
+            items.add(new ItemStack(this, 1, getMetaFromState(getDefaultState().withProperty(JSGProps.PROP_VARIANT, variant.id))));
+        }
+    }
+
     @Nonnull
     @Override
     public ItemStack getPickBlock(IBlockState state, @Nonnull RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player) {
@@ -79,9 +87,16 @@ public class JSGDecorPropBlock extends JSGAbstractCustomMetaItemBlock {
     @Override
     public void onBlockPlacedBy(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EntityLivingBase placer, @Nonnull ItemStack stack) {
         if (!world.isRemote) {
-            state = state.withProperty(JSGProps.PROP_VARIANT, stack.getMetadata());
+            DecorPropItem.PropVariants variant = DecorPropItem.PropVariants.byId(stack.getMetadata());
+            state = state.withProperty(JSGProps.PROP_VARIANT, variant.id);
             world.setBlockState(pos, state);
         }
+    }
+
+    @Override
+    public int getLightValue(@Nonnull IBlockState state) {
+        DecorPropItem.PropVariants variant = DecorPropItem.PropVariants.byId(state.getValue(JSGProps.PROP_VARIANT));
+        return (int) (variant.light * 15.0F);
     }
 
     @Nonnull

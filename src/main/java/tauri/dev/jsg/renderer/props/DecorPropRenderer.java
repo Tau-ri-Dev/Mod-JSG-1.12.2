@@ -33,6 +33,11 @@ public class DecorPropRenderer extends TileEntitySpecialRenderer<DecorPropTile> 
         JSGConfigUtil.rescaleToConfig();
         GlStateManager.translate(0.5, 0, 0.5);
 
+        DecorPropItem.PropModelRenderFunction r = propVariant.runnableWhileRendering;
+        if (r != null) {
+            r.runOnRender(te.getWorld(), propVariant, te);
+        }
+
         for (DecorPropItem.PropModel model : models) {
             GlStateManager.pushMatrix();
             Vector3f t = model.translation;

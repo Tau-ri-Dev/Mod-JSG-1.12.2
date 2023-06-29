@@ -108,7 +108,8 @@ public enum ElementEnum {
     // --------------------------------------------------------------------------------------------
     // DECOR PROPS
 
-    DECOR_ABYDOS_POT("props/decor/a_pot.obj", "props/decor/a_pot.png", false);
+    DECOR_ABYDOS_POT("props/decor/a_pot.obj", "props/decor/a_pot.png", false),
+    DECOR_ABYDOS_LAMP("props/decor/a_lamp.obj", "props/decor/a_lamp.png", false);
 
     // --------------------------------------------------------------------------------------------
 

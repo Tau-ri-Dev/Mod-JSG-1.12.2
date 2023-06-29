@@ -2,12 +2,16 @@ package tauri.dev.jsg.item.props;
 
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.world.World;
 import tauri.dev.jsg.block.props.JSGDecorPropBlock;
 import tauri.dev.jsg.loader.ElementEnum;
+import tauri.dev.jsg.tileentity.props.DecorPropTile;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.vector.Vector3f;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
@@ -38,22 +42,62 @@ public class DecorPropItem extends ItemBlock {
         }
     }
 
+    @SuppressWarnings("unused")
+    public static abstract class PropModelRenderFunction {
+        public void runOnServer(World world, PropVariants propVariant, DecorPropTile te) {
+        }
+
+        public void runOnClient(World world, PropVariants propVariant, DecorPropTile te) {
+        }
+
+        public void runOnRender(World world, PropVariants propVariant, DecorPropTile te) {
+        }
+    }
+
     public enum PropVariants {
         ABYDOS_POT(
                 0,
                 "abydos_pot",
-                new PropModel(ElementEnum.DECOR_ABYDOS_POT, new Vector3f(0, 0, 0), 1)
+                null,
+                new PropModel(ElementEnum.DECOR_ABYDOS_POT, new Vector3f(-0.5f, 0, -0.5f), 1)
+        ),
+        ABYDOS_LAMP_OFF(
+                1,
+                "abydos_lamp_off",
+                null,
+                new PropModel(ElementEnum.DECOR_ABYDOS_LAMP, new Vector3f(-0.5f, 0, -0.5f), 1)
+        ),
+        ABYDOS_LAMP_ON(
+                2,
+                "abydos_lamp_on",
+                new PropModelRenderFunction() {
+                    @Override
+                    public void runOnRender(World world, PropVariants propVariant, DecorPropTile te) {
+                        if (world.getTotalWorldTime() % 5 == 0) {
+                            world.spawnParticle(EnumParticleTypes.FLAME, te.getPos().getX() + 0.35 + Math.random() * 0.3, te.getPos().getY() + 1.8, te.getPos().getZ() + 0.35 + Math.random() * 0.3, 0, 0.01, 0);
+                        }
+                    }
+                },
+                0.7f,
+                new PropModel(ElementEnum.DECOR_ABYDOS_LAMP, new Vector3f(-0.5f, 0, -0.5f), 1)
         );
 
         public final int id;
+        public final float light;
         public final String name;
         public final PropModel[] models;
+        public final PropModelRenderFunction runnableWhileRendering;
 
         @ParametersAreNonnullByDefault
-        PropVariants(int id, String name, PropModel... models) {
+        PropVariants(int id, String name, @Nullable PropModelRenderFunction runnableWhileRendering, PropModel... models) {
+            this(id, name, runnableWhileRendering, 0, models);
+        }
+        PropVariants(int id, String name, @Nullable PropModelRenderFunction runnableWhileRendering, float light, PropModel... models) {
             this.id = id;
+            this.light = light;
             this.name = name;
             this.models = models;
+            this.runnableWhileRendering = runnableWhileRendering;
         }
 
         public static PropVariants byId(int id) {
