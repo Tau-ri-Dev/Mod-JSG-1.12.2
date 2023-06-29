@@ -1,16 +1,5 @@
 package tauri.dev.jsg.tileentity.energy;
 
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.gui.container.capacitor.CapacitorContainerGuiUpdate;
-import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.packet.StateUpdatePacketToClient;
-import tauri.dev.jsg.packet.StateUpdateRequestToServer;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
-import tauri.dev.jsg.state.energy.CapacitorPowerLevelUpdate;
-import tauri.dev.jsg.state.State;
-import tauri.dev.jsg.state.StateProviderInterface;
-import tauri.dev.jsg.state.StateTypeEnum;
-import tauri.dev.jsg.util.JSGItemStackHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -23,6 +12,17 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.gui.container.capacitor.CapacitorContainerGuiUpdate;
+import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.packet.StateUpdatePacketToClient;
+import tauri.dev.jsg.packet.StateUpdateRequestToServer;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
+import tauri.dev.jsg.state.State;
+import tauri.dev.jsg.state.StateProviderInterface;
+import tauri.dev.jsg.state.StateTypeEnum;
+import tauri.dev.jsg.state.energy.CapacitorPowerLevelUpdate;
+import tauri.dev.jsg.util.JSGItemStackHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -53,7 +53,7 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
             markDirty();
         }
     };
-    private final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage() {
+    private final SmallEnergyStorage energyStorage = new SmallEnergyStorage() {
 
         @Override
         protected void onEnergyChanged() {
@@ -78,7 +78,7 @@ public class CapacitorTile extends TileEntity implements ITickable, ICapabilityP
     // ------------------------------------------------------------------------
     // NBT
 
-    public StargateAbstractEnergyStorage getEnergyStorage() {
+    public SmallEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
 

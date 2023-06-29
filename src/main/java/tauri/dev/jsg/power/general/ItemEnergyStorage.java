@@ -1,4 +1,4 @@
-package tauri.dev.jsg.power.stargate;
+package tauri.dev.jsg.power.general;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

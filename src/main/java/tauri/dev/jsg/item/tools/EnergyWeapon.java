@@ -1,13 +1,5 @@
 package tauri.dev.jsg.item.tools;
 
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.capability.WeaponCapabilityProvider;
-import tauri.dev.jsg.capability.endpoint.ItemEndpointCapability;
-import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
-import tauri.dev.jsg.entity.JSGEnergyProjectile;
-import tauri.dev.jsg.item.renderer.CustomModel;
-import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
-import tauri.dev.jsg.power.stargate.ItemEnergyStorage;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -21,6 +13,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.capability.WeaponCapabilityProvider;
+import tauri.dev.jsg.capability.endpoint.ItemEndpointCapability;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
+import tauri.dev.jsg.entity.JSGEnergyProjectile;
+import tauri.dev.jsg.item.renderer.CustomModel;
+import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
+import tauri.dev.jsg.power.general.ItemEnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

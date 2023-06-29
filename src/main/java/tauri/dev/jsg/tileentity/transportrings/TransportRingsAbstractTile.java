@@ -49,8 +49,8 @@ import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
 import tauri.dev.jsg.packet.transportrings.StartPlayerFadeOutToClient;
-import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
-import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
+import tauri.dev.jsg.power.general.EnergyRequiredToOperate;
+import tauri.dev.jsg.power.general.LargeEnergyStorage;
 import tauri.dev.jsg.renderer.transportrings.TransportRingsAbstractRenderer;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
@@ -85,7 +85,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     public static final int TIMEOUT_TELEPORT = FADE_OUT_TOTAL_TIME / 2;
     public static final int TIMEOUT_FADE_OUT = (int) (30 + TransportRingsAbstractRenderer.INTERVAL_UPRISING * TransportRingsAbstractRenderer.RING_COUNT + TransportRingsAbstractRenderer.ANIMATION_SPEED_DIVISOR * Math.PI);
     public static final int RINGS_CLEAR_OUT = (int) (15 + TransportRingsAbstractRenderer.INTERVAL_FALLING * TransportRingsAbstractRenderer.RING_COUNT + TransportRingsAbstractRenderer.ANIMATION_SPEED_DIVISOR * Math.PI);
-    private final StargateClassicEnergyStorage energyStorage = new StargateClassicEnergyStorage() {
+    private final LargeEnergyStorage energyStorage = new LargeEnergyStorage() {
 
         @Override
         protected void onEnergyChanged() {
@@ -499,7 +499,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         markDirty();
     }
 
-    protected StargateEnergyRequired getEnergyRequiredToDial(TransportRings targetRings) {
+    protected EnergyRequiredToOperate getEnergyRequiredToDial(TransportRings targetRings) {
         BlockPos sPos = pos;
         BlockPos tPos = targetRings.getPos();
 
@@ -509,7 +509,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         else distance = 200 * Math.log10(distance) / Math.log10(200);
 
         int energyBase = JSGConfig.Rings.power.ringsKeepAliveBlockToEnergyRatioPerTick;
-        StargateEnergyRequired energyRequired = new StargateEnergyRequired(energyBase, energyBase);
+        EnergyRequiredToOperate energyRequired = new EnergyRequiredToOperate(energyBase, energyBase);
         energyRequired = energyRequired.mul(distance);
 
         return energyRequired;
@@ -700,7 +700,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             }
 
             // power
-            StargateEnergyRequired energyRequired = getEnergyRequiredToDial(rings);
+            EnergyRequiredToOperate energyRequired = getEnergyRequiredToDial(rings);
             int extracted = getEnergyStorage().extractEnergy((energyRequired.keepAlive * 20), true);
             if (extracted < (energyRequired.keepAlive * 20)) // *20 because rings should be active more than 1 second
                 return TransportResult.NOT_ENOUGH_POWER;
@@ -836,7 +836,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 }
 
                 // power
-                StargateEnergyRequired energyRequired = getEnergyRequiredToDial(rings);
+                EnergyRequiredToOperate energyRequired = getEnergyRequiredToDial(rings);
                 int extracted = getEnergyStorage().extractEnergy((energyRequired.keepAlive * 20), true);
                 if (extracted < (energyRequired.keepAlive * 20)) // *20 because rings should be active more than 1 second
                     return TransportResult.NOT_ENOUGH_POWER;
@@ -1501,7 +1501,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     // -----------------------------------------------------------------------------
     // Power system
 
-    protected StargateClassicEnergyStorage getEnergyStorage() {
+    protected LargeEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
 

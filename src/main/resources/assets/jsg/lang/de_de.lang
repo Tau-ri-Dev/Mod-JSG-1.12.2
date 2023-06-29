@@ -498,6 +498,7 @@ commands.sggenincoming.notstargate=Angepeilter Block ist kein Stargate
 death.attack.eventHorizon=%s wurde durch das Kawoosh ausgelöscht
 death.attack.irisDeath=%s warf sich gegen eine Iris
 death.attack.wrongSide=%s hat das Gate auf der falschen Seite betreten
+death.attack.unstableEventHorizon=%s didn't make it to the other side
 
 death.attack.zatHit=%s wurde elektrisiert
 death.attack.staffHit=%s ist geschmolzen durch eine Goa'uld Stabwaffe

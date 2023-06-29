@@ -12,6 +12,7 @@ import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
+import tauri.dev.jsg.power.general.EnergyRequiredToOperate;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateUniverseRendererState;
@@ -20,7 +21,6 @@ import tauri.dev.jsg.stargate.*;
 import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import tauri.dev.jsg.stargate.merging.StargateUniverseMergeHelper;
 import tauri.dev.jsg.stargate.network.*;
-import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.stargate.StargateRendererActionState;
@@ -290,7 +290,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
      * @return energy
      */
     @Override
-    protected StargateEnergyRequired getEnergyRequiredToDial(StargatePos targetGatePos) {
+    protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos) {
         BlockPos sPos = getFakePos();
         BlockPos tPos = targetGatePos.gatePos;
         DimensionType sourceDim = getFakeWorld().provider.getDimensionType();
@@ -312,7 +312,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         if (distance < 5000) distance *= 0.8;
         else distance = 5000 * Math.log10(distance) / Math.log10(5000);
 
-        StargateEnergyRequired energyRequired = new StargateEnergyRequired(JSGConfig.Stargate.power.openingBlockToEnergyRatio, JSGConfig.Stargate.power.keepAliveBlockToEnergyRatioPerTick);
+        EnergyRequiredToOperate energyRequired = new EnergyRequiredToOperate(JSGConfig.Stargate.power.openingBlockToEnergyRatio, JSGConfig.Stargate.power.keepAliveBlockToEnergyRatioPerTick);
         energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(sourceDim, targetDim));
 
         if (dialedAddress.size() == 9)

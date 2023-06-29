@@ -1,15 +1,15 @@
-package tauri.dev.jsg.power.stargate;
+package tauri.dev.jsg.power.general;
 
 import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StargateClassicEnergyStorage extends StargateAbstractEnergyStorage {
+public class LargeEnergyStorage extends SmallEnergyStorage {
 	
 	private final List<IEnergyStorage> storages = new ArrayList<>();
 	
-	public StargateClassicEnergyStorage() {
+	public LargeEnergyStorage() {
 		super();
 	}
 

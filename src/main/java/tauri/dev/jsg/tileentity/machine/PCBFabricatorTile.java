@@ -12,12 +12,12 @@ import tauri.dev.jsg.gui.container.machine.pcbfabricator.PCBFabricatorContainerG
 import tauri.dev.jsg.machine.AbstractMachineRecipe;
 import tauri.dev.jsg.machine.pcbfabricator.PCBFabricatorRecipe;
 import tauri.dev.jsg.machine.pcbfabricator.PCBFabricatorRecipes;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.renderer.machine.AbstractMachineRendererState;
 import tauri.dev.jsg.renderer.machine.PCBFabricatorRendererState;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.util.JSGItemStackHandler;
@@ -43,7 +43,7 @@ public class PCBFabricatorTile extends AbstractMachineTile {
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
-    protected final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(PCBFabricatorBlock.MAX_ENERGY, PCBFabricatorBlock.MAX_ENERGY_TRANSFER) {
+    protected final SmallEnergyStorage energyStorage = new SmallEnergyStorage(PCBFabricatorBlock.MAX_ENERGY, PCBFabricatorBlock.MAX_ENERGY_TRANSFER) {
         @Override
         protected void onEnergyChanged() {
             markDirty();
@@ -110,7 +110,7 @@ public class PCBFabricatorTile extends AbstractMachineTile {
     }
 
     @Override
-    public StargateAbstractEnergyStorage getEnergyStorage() {
+    public SmallEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
 

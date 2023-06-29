@@ -1,15 +1,5 @@
 package tauri.dev.jsg.gui.container.beamer;
 
-import tauri.dev.jsg.beamer.BeamerModeEnum;
-import tauri.dev.jsg.beamer.BeamerRoleEnum;
-import tauri.dev.jsg.gui.util.ContainerHelper;
-import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.packet.StateUpdatePacketToClient;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
-import tauri.dev.jsg.state.StateTypeEnum;
-import tauri.dev.jsg.tileentity.BeamerTile;
-import tauri.dev.jsg.tileentity.util.RedstoneModeEnum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
@@ -26,6 +16,16 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.beamer.BeamerModeEnum;
+import tauri.dev.jsg.beamer.BeamerRoleEnum;
+import tauri.dev.jsg.gui.util.ContainerHelper;
+import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.packet.StateUpdatePacketToClient;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
+import tauri.dev.jsg.state.StateTypeEnum;
+import tauri.dev.jsg.tileentity.BeamerTile;
+import tauri.dev.jsg.tileentity.util.RedstoneModeEnum;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -113,7 +113,7 @@ public class BeamerContainer extends Container {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		
-		StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) beamerTile.getCapability(CapabilityEnergy.ENERGY, null);
+		SmallEnergyStorage energyStorage = (SmallEnergyStorage) beamerTile.getCapability(CapabilityEnergy.ENERGY, null);
 
 		if (lastEnergyStored != Objects.requireNonNull(energyStorage).getEnergyStored() || energyTransferedLastTick != beamerTile.getEnergyTransferredLastTick() || lastFluidStored != tank.getFluidAmount() || lastLinked != beamerTile.isLinked() || lastRole != beamerTile.getRole() || lastRedstoneMode != beamerTile.getRedstoneMode() || lastStart != beamerTile.getStart() || lastStop != beamerTile.getStop() || lastIn != beamerTile.getInactivity()) {
 			for (IContainerListener listener : listeners) {

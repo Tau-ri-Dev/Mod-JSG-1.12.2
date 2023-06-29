@@ -45,8 +45,8 @@ import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
 import tauri.dev.jsg.particle.ParticleWhiteSmoke;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
-import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
+import tauri.dev.jsg.power.general.EnergyRequiredToOperate;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState.StargateAbstractRendererStateBuilder;
@@ -455,7 +455,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected Map<SymbolTypeEnum, StargateAddress> gateAddressMap = new HashMap<>(3);
     protected Map<SymbolTypeEnum, StargatePos> gatePosMap = new HashMap<>(3);
     protected StargateAddressDynamic dialedAddress = new StargateAddressDynamic(getSymbolType());
-    protected StargatePos targetGatePos;
+    public StargatePos targetGatePos;
     public boolean connectedToGate = false;
     protected boolean connectingToGate = false;
     protected StargatePos connectedToGatePos;
@@ -679,7 +679,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ENGAGE));
 
         if (isInitiating) {
-            StargateEnergyRequired energyRequired = getEnergyRequiredToDial(targetGatePos);
+            EnergyRequiredToOperate energyRequired = getEnergyRequiredToDial(targetGatePos);
             getEnergyStorage().extractEnergy(energyRequired.energyToOpen, false);
             keepAliveEnergyPerTick = energyRequired.keepAlive;
         }
@@ -1710,9 +1710,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         return energySecondsToClose;
     }
 
-    protected abstract StargateAbstractEnergyStorage getEnergyStorage();
+    protected abstract SmallEnergyStorage getEnergyStorage();
 
-    protected StargateEnergyRequired getEnergyRequiredToDial(StargatePos targetGatePos) {
+    protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos) {
         BlockPos sPos = pos;
         BlockPos tPos = targetGatePos.gatePos;
 
@@ -1729,7 +1729,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         if (distance < 5000) distance *= 0.8;
         else distance = 5000 * Math.log10(distance) / Math.log10(5000);
 
-        StargateEnergyRequired energyRequired = new StargateEnergyRequired(JSGConfig.Stargate.power.openingBlockToEnergyRatio, JSGConfig.Stargate.power.keepAliveBlockToEnergyRatioPerTick);
+        EnergyRequiredToOperate energyRequired = new EnergyRequiredToOperate(JSGConfig.Stargate.power.openingBlockToEnergyRatio, JSGConfig.Stargate.power.keepAliveBlockToEnergyRatioPerTick);
         energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(world.provider.getDimensionType(), targetDim));
 
         if (dialedAddress.size() == 9)
@@ -1747,7 +1747,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * It also sets energy draw for (possibly) outgoing wormhole
      */
     public boolean hasEnergyToDial(StargatePos targetGatePos) {
-        StargateEnergyRequired energyRequired = getEnergyRequiredToDial(targetGatePos);
+        EnergyRequiredToOperate energyRequired = getEnergyRequiredToDial(targetGatePos);
 
         if (getEnergyStorage().getEnergyStored() >= energyRequired.energyToOpen) {
             return true;

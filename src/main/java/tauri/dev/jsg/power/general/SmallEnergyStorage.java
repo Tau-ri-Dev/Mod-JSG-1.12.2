@@ -1,21 +1,21 @@
-package tauri.dev.jsg.power.stargate;
+package tauri.dev.jsg.power.general;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.EnergyStorage;
 import tauri.dev.jsg.config.JSGConfig;
 
-public class StargateAbstractEnergyStorage extends EnergyStorage implements INBTSerializable<NBTTagCompound> {
+public class SmallEnergyStorage extends EnergyStorage implements INBTSerializable<NBTTagCompound> {
 
-	public StargateAbstractEnergyStorage() {
+	public SmallEnergyStorage() {
 		super(JSGConfig.Stargate.power.stargateEnergyStorage/4, tauri.dev.jsg.config.JSGConfig.Stargate.power.stargateMaxEnergyTransfer, 0);
 	}
 	
-	public StargateAbstractEnergyStorage(int capacity, int maxTransfer) {
+	public SmallEnergyStorage(int capacity, int maxTransfer) {
 		super(capacity, maxTransfer);
 	}
 
-	public StargateAbstractEnergyStorage(int capacity) {
+	public SmallEnergyStorage(int capacity) {
 		super(capacity, tauri.dev.jsg.config.JSGConfig.Stargate.power.stargateMaxEnergyTransfer);
 	}
 	

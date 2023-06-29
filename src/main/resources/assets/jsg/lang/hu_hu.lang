@@ -515,6 +515,7 @@ commands.sggenincoming.notstargate=Célblokk nem egy Csillagkapu Alap
 death.attack.eventHorizon=%s-t elért egy kawoosh
 death.attack.irisDeath=%s-t elhamvaszott egy írisz
 death.attack.wrongSide=%s a kapu rossz oldalába lépett
+death.attack.unstableEventHorizon=%s didn't make it to the other side
 
 death.attack.zatHit=%s elektrolizálva lett
 death.attack.staffHit=%s-t elégette egy Goa'uld Botfegyver

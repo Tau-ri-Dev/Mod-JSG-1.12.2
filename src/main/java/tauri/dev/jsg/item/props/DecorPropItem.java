@@ -91,13 +91,13 @@ public class DecorPropItem extends ItemBlock {
                         return false;
                     }
                 },
-                new PropModel(ElementEnum.DECOR_ABYDOS_POT, new Vector3f(-0.5f, 0, -0.5f), 1)
+                new PropModel(ElementEnum.DECOR_ABYDOS_POT, new Vector3f(0, 0, 0), 1)
         ),
         ABYDOS_LAMP_OFF(
                 1,
                 "abydos_lamp_off",
                 null,
-                ((JSGBlock) new PropAbstractBlock() {
+                new PropAbstractBlock() {
                     @Nonnull
                     @Override
                     public AxisAlignedBB getBoundingBox(@Nonnull IBlockState state, @Nonnull IBlockAccess source, @Nonnull BlockPos pos) {
@@ -109,8 +109,8 @@ public class DecorPropItem extends ItemBlock {
                     public AxisAlignedBB getCollisionBoundingBox(@Nonnull IBlockState state, @Nonnull IBlockAccess source, @Nonnull BlockPos pos) {
                         return new AxisAlignedBB(0.3, 0, 0.3, 0.7, 2, 0.7);
                     }
-                }.setLightLevel(0.7f)),
-                new PropModel(ElementEnum.DECOR_ABYDOS_LAMP, new Vector3f(-0.5f, 0, -0.5f), 1)
+                },
+                new PropModel(ElementEnum.DECOR_ABYDOS_LAMP, new Vector3f(0, 0, 0), 1)
         ),
         ABYDOS_LAMP_ON(
                 2,
@@ -119,7 +119,8 @@ public class DecorPropItem extends ItemBlock {
                     @Override
                     public void runOnRender(World world, PropVariants propVariant, DecorPropTile te) {
                         if (world.getTotalWorldTime() % 5 == 0) {
-                            world.spawnParticle(EnumParticleTypes.FLAME, te.getPos().getX() + 0.35 + Math.random() * 0.3, te.getPos().getY() + 1.8, te.getPos().getZ() + 0.35 + Math.random() * 0.3, 0, 0.01, 0);
+                            if(Math.random() < 0.05f)
+                                world.spawnParticle(EnumParticleTypes.FLAME, te.getPos().getX() + 0.35 + Math.random() * 0.3, te.getPos().getY() + 1.82, te.getPos().getZ() + 0.35 + Math.random() * 0.3, 0, 0, 0);
                         }
                     }
 
@@ -143,7 +144,7 @@ public class DecorPropItem extends ItemBlock {
                         return new AxisAlignedBB(0.3, 0, 0.3, 0.7, 2, 0.7);
                     }
                 }.setLightLevel(0.7f)),
-                new PropModel(ElementEnum.DECOR_ABYDOS_LAMP, new Vector3f(-0.5f, 0, -0.5f), 1)
+                new PropModel(ElementEnum.DECOR_ABYDOS_LAMP, new Vector3f(0, 0, 0), 1)
         );
 
         public final int id;

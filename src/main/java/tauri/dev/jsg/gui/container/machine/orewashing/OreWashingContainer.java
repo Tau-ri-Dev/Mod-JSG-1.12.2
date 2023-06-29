@@ -18,7 +18,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import tauri.dev.jsg.gui.util.ContainerHelper;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.tileentity.machine.OreWashingTile;
 
@@ -98,7 +98,7 @@ public class OreWashingContainer extends Container {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) tile.getCapability(CapabilityEnergy.ENERGY, null);
+        SmallEnergyStorage energyStorage = (SmallEnergyStorage) tile.getCapability(CapabilityEnergy.ENERGY, null);
 
         if (machineStart != tile.getMachineStart()
                 || machineEnd != tile.getMachineEnd()

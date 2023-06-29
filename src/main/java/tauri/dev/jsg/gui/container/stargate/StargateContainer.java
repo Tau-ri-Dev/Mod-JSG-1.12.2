@@ -1,15 +1,5 @@
 package tauri.dev.jsg.gui.container.stargate;
 
-import tauri.dev.jsg.gui.container.OpenTabHolderInterface;
-import tauri.dev.jsg.gui.util.ContainerHelper;
-import tauri.dev.jsg.item.energy.CapacitorItemBlock;
-import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.packet.StateUpdatePacketToClient;
-import tauri.dev.jsg.stargate.EnumIrisMode;
-import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
-import tauri.dev.jsg.state.StateTypeEnum;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.StargateUpgradeEnum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
@@ -23,6 +13,16 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.gui.container.OpenTabHolderInterface;
+import tauri.dev.jsg.gui.util.ContainerHelper;
+import tauri.dev.jsg.item.energy.CapacitorItemBlock;
+import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.packet.StateUpdatePacketToClient;
+import tauri.dev.jsg.power.general.LargeEnergyStorage;
+import tauri.dev.jsg.stargate.EnumIrisMode;
+import tauri.dev.jsg.state.StateTypeEnum;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.StargateUpgradeEnum;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -191,7 +191,7 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        StargateClassicEnergyStorage energyStorage = (StargateClassicEnergyStorage) gateTile.getCapability(CapabilityEnergy.ENERGY, null);
+        LargeEnergyStorage energyStorage = (LargeEnergyStorage) gateTile.getCapability(CapabilityEnergy.ENERGY, null);
 
         if (lastEnergyStored != Objects.requireNonNull(energyStorage).getEnergyStoredInternally()
                 || lastEnergySecondsToClose != gateTile.getEnergySecondsToClose()

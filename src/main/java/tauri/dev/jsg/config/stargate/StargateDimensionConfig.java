@@ -5,8 +5,9 @@ import com.google.gson.reflect.TypeToken;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.power.general.EnergyRequiredToOperate;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
-import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
 
 import javax.annotation.Nullable;
 import java.io.*;
@@ -21,32 +22,32 @@ public class StargateDimensionConfig {
     private static final Map<String, StargateDimensionConfigEntry> DEFAULTS_MAP = new HashMap<>();
 
     static {
-        DEFAULTS_MAP.put("overworld", new StargateDimensionConfigEntry(0, 0, new ArrayList<String>(){{
+        DEFAULTS_MAP.put("overworld", new StargateDimensionConfigEntry("overworld", 0, new ArrayList<String>(){{
             add("netherOv");
         }}));
-        DEFAULTS_MAP.put("the_nether", new StargateDimensionConfigEntry(3686400, 1600, new ArrayList<String>(){{
+        DEFAULTS_MAP.put("the_nether", new StargateDimensionConfigEntry("the_nether", 5, new ArrayList<String>(){{
             add("netherOv");
         }}, new HashMap<BiomeOverlayEnum, Integer>(){{
             put(BiomeOverlayEnum.NORMAL, 2);
         }}));
-        DEFAULTS_MAP.put("the_end", new StargateDimensionConfigEntry(5529600, 2400, new ArrayList<>(), new HashMap<BiomeOverlayEnum, Integer>(){{
+        DEFAULTS_MAP.put("the_end", new StargateDimensionConfigEntry("the_end", 10, new ArrayList<>(), new HashMap<BiomeOverlayEnum, Integer>(){{
             put(BiomeOverlayEnum.NORMAL, 1);
         }}));
-        DEFAULTS_MAP.put("moon.moon", new StargateDimensionConfigEntry(7372800, 3200, new ArrayList<>()));
-        DEFAULTS_MAP.put("planet.mars", new StargateDimensionConfigEntry(11059200, 4800, new ArrayList<>(), new HashMap<BiomeOverlayEnum, Integer>(){{
+        DEFAULTS_MAP.put("moon.moon", new StargateDimensionConfigEntry("moon.moon", 15, new ArrayList<>()));
+        DEFAULTS_MAP.put("planet.mars", new StargateDimensionConfigEntry("planet.mars", 40, new ArrayList<>(), new HashMap<BiomeOverlayEnum, Integer>(){{
             put(BiomeOverlayEnum.NORMAL, 4);
         }}));
-        DEFAULTS_MAP.put("planet.venus", new StargateDimensionConfigEntry(12288000, 5334, new ArrayList<>(), new HashMap<BiomeOverlayEnum, Integer>(){{
+        DEFAULTS_MAP.put("planet.venus", new StargateDimensionConfigEntry("planet.venus", 37, new ArrayList<>(), new HashMap<BiomeOverlayEnum, Integer>(){{
             put(BiomeOverlayEnum.NORMAL, 4);
         }}));
-        DEFAULTS_MAP.put("planet.asteroids", new StargateDimensionConfigEntry(14745600, 6400, new ArrayList<>()));
+        DEFAULTS_MAP.put("planet.asteroids", new StargateDimensionConfigEntry("planet.asteroids", 63, new ArrayList<>()));
     }
 
     private static File dimensionConfigFile;
-    private static Map<String, StargateDimensionConfigEntry> dimensionStringMap;
+    private static Map<Integer, StargateDimensionConfigEntry> dimensionIntMap;
     private static Map<DimensionType, StargateDimensionConfigEntry> dimensionMap;
 
-    public static StargateEnergyRequired getCost(DimensionType from, DimensionType to) {
+    public static EnergyRequiredToOperate getCost(DimensionType from, DimensionType to) {
         StargateDimensionConfigEntry reqFrom = dimensionMap.get(fixDimType(from));
         StargateDimensionConfigEntry reqTo = dimensionMap.get(fixDimType(to));
 
@@ -57,13 +58,11 @@ public class StargateDimensionConfig {
                     .map(en -> en.getKey().getName() + " | " + en.getValue().toString())
                     .collect(Collectors.joining(System.lineSeparator()))
             );
-            return new StargateEnergyRequired(0, 0);
+            return new EnergyRequiredToOperate(0, 0);
         }
 
-        int energyToOpen = Math.abs(reqFrom.energyToOpen - reqTo.energyToOpen);
-        int keepAlive = Math.abs(reqFrom.keepAlive - reqTo.keepAlive);
-
-        return new StargateEnergyRequired(energyToOpen, keepAlive);
+        EnergyRequiredToOperate energyRequired = new EnergyRequiredToOperate(JSGConfig.Stargate.power.openingBlockToEnergyRatio, JSGConfig.Stargate.power.keepAliveBlockToEnergyRatioPerTick);
+        return energyRequired.mul(Math.abs(reqFrom.distance - reqTo.distance));
     }
 
     public static boolean isGroupEqual(DimensionType from, DimensionType to) {
@@ -89,10 +88,13 @@ public class StargateDimensionConfig {
         if(dim == null) return -1;
         if(dimensionMap == null){
             try{
-                update();
-            }catch (Exception ignored){}
-            return -1;
+                reload();
+            }catch (Exception ignored){
+                return -1;
+            }
         }
+        if(dimensionMap == null)
+            return -1;
         StargateDimensionConfigEntry entry = dimensionMap.get(dim);
         if(entry == null) return -1;
         if(!entry.milkyWayOrigins.containsKey(overlay)) return -1;
@@ -107,16 +109,22 @@ public class StargateDimensionConfig {
         return !isGroupEqual(DimensionType.OVERWORLD, DimensionType.NETHER);
     }
 
+    public static void reload() throws IOException{
+        load(null);
+        update();
+    }
+
     public static void load(File modConfigDir) {
         dimensionMap = null;
-        dimensionConfigFile = new File(modConfigDir, "jsg/jsgDimensions_" + JSG.CONFIG_DIMENSIONS_VERSION + ".json");
+        if(modConfigDir != null)
+            dimensionConfigFile = new File(modConfigDir, "jsg/jsgDimensions_" + JSG.CONFIG_DIMENSIONS_VERSION + ".json");
 
         try {
-            Type typeOfHashMap = new TypeToken<Map<String, StargateDimensionConfigEntry>>() {
+            Type typeOfHashMap = new TypeToken<Map<Integer, StargateDimensionConfigEntry>>() {
             }.getType();
-            dimensionStringMap = new GsonBuilder().create().fromJson(new FileReader(dimensionConfigFile), typeOfHashMap);
+            dimensionIntMap = new GsonBuilder().create().fromJson(new FileReader(dimensionConfigFile), typeOfHashMap);
         } catch (FileNotFoundException exception) {
-            dimensionStringMap = new HashMap<>();
+            dimensionIntMap = new HashMap<>();
         }
     }
 
@@ -124,12 +132,12 @@ public class StargateDimensionConfig {
         if (dimensionMap == null) {
             dimensionMap = new HashMap<>();
 
-            for (String dimName : dimensionStringMap.keySet()) {
+            for (Integer dimId : dimensionIntMap.keySet()) {
                 try {
-                    dimensionMap.put(DimensionType.byName(dimName), dimensionStringMap.get(dimName));
+                    dimensionMap.put(DimensionType.getById(dimId), dimensionIntMap.get(dimId));
                 } catch (IllegalArgumentException ex) {
                     // Probably removed a mod
-                    JSG.debug("DimensionType not found: " + dimName);
+                    JSG.debug("DimensionType not found: " + dimId);
                 }
             }
         }
@@ -145,19 +153,19 @@ public class StargateDimensionConfig {
                 if (DEFAULTS_MAP.containsKey(dimType.getName()))
                     dimensionMap.put(dimType, DEFAULTS_MAP.get(dimType.getName()));
                 else
-                    dimensionMap.put(dimType, new StargateDimensionConfigEntry(0, 0, null));
+                    dimensionMap.put(dimType, new StargateDimensionConfigEntry(dimType.getName(), 0, null));
             }
         }
 
         if (originalSize != dimensionMap.size()) {
             FileWriter writer = new FileWriter(dimensionConfigFile);
 
-            dimensionStringMap.clear();
+            dimensionIntMap.clear();
             for (DimensionType dimType : dimensionMap.keySet()) {
-                dimensionStringMap.put(dimType.getName(), dimensionMap.get(dimType));
+                dimensionIntMap.put(dimType.getId(), dimensionMap.get(dimType));
             }
 
-            writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(dimensionStringMap));
+            writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(dimensionIntMap));
             writer.close();
         }
     }

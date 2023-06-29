@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tauri.dev.jsg.config.JSGConfigUtil;
 import tauri.dev.jsg.item.props.DecorPropItem;
 import tauri.dev.jsg.tileentity.props.DecorPropTile;
 import tauri.dev.jsg.util.main.JSGProps;
@@ -30,7 +29,6 @@ public class DecorPropRenderer extends TileEntitySpecialRenderer<DecorPropTile> 
         if (propVariant == null) return;
         DecorPropItem.PropModel[] models = propVariant.models;
 
-        JSGConfigUtil.rescaleToConfig();
         GlStateManager.translate(0.5, 0, 0.5);
 
         DecorPropItem.PropModelRenderFunction r = propVariant.runnableWhileRendering;

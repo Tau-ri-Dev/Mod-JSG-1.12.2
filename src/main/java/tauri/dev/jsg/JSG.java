@@ -39,8 +39,8 @@ public class JSG {
     public static final int DATA_VERSION = 26;
     public static final String CONFIG_GENERAL_VERSION = "3.1";
     public static final String CONFIG_CRAFTINGS_VERSION = "1.1";
-    public static final String CONFIG_STRUCTURES_VERSION = "1.0";
-    public static final String CONFIG_DIMENSIONS_VERSION = "1.1";
+    public static final String CONFIG_STRUCTURES_VERSION = "2.0";
+    public static final String CONFIG_DIMENSIONS_VERSION = "2.0";
     public static final String MC_VERSION = "@MCVERSION@";
     public static final String CLIENT = "tauri.dev.jsg.proxy.ProxyClient";
     public static final String SERVER = "tauri.dev.jsg.proxy.ProxyServer";
@@ -214,7 +214,7 @@ public class JSG {
 
     @EventHandler
     public void serverStarted(FMLServerStartedEvent event) throws IOException {
-        StargateDimensionConfig.update();
+        StargateDimensionConfig.reload();
         JSG.info("Server started!");
     }
 

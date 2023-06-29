@@ -20,7 +20,7 @@ import tauri.dev.jsg.gui.element.tabs.TabSideEnum;
 import tauri.dev.jsg.gui.element.tabs.TabbedContainerInterface;
 import tauri.dev.jsg.packet.BeamerChangeRoleToServer;
 import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -276,7 +276,7 @@ public class BeamerContainerGui extends GuiContainer implements TabbedContainerI
         GlStateManager.enableBlend();
         drawModalRectWithCustomSizedTexture(guiLeft, guiTop, 0, 0, xSize, ySize, 512, 512);
 
-        StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.beamerTile.getCapability(CapabilityEnergy.ENERGY, null);
+        SmallEnergyStorage energyStorage = (SmallEnergyStorage) container.beamerTile.getCapability(CapabilityEnergy.ENERGY, null);
         int width = energyStorage != null ? Math.round((energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored() * 156)) : 0;
         switch (container.beamerTile.getMode()) {
             case POWER:
@@ -348,7 +348,7 @@ public class BeamerContainerGui extends GuiContainer implements TabbedContainerI
         switch (container.beamerTile.getMode()) {
             case POWER:
             case LASER:
-                StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.beamerTile.getCapability(CapabilityEnergy.ENERGY, null);
+                SmallEnergyStorage energyStorage = (SmallEnergyStorage) container.beamerTile.getCapability(CapabilityEnergy.ENERGY, null);
 
                 int energyStored = Objects.requireNonNull(energyStorage).getEnergyStored();
                 int maxEnergyStored = energyStorage.getMaxEnergyStored();

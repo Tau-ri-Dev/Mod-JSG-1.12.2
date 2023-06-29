@@ -254,6 +254,8 @@ public class JSGConfig {
             public int dialStartDelay = 5;
         }
 
+        @SuppressWarnings("unused")
+
         public static class DevConfig {
             @Config.Name("Dev mode")
             public boolean enableDevMode = false;
@@ -358,7 +360,6 @@ public class JSGConfig {
 
             @Config.Name("ZPMHub's max power throughput")
             @Config.RangeInt(min = 1, max = 1043600)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -443,7 +444,6 @@ public class JSGConfig {
 
             @Config.Name("Orlin's gate max open count")
             @Config.RangeInt(min = 0, max = 15000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -451,7 +451,6 @@ public class JSGConfig {
 
             @Config.Name("Universe dialer nearby radius")
             @Config.RangeInt(min = 5)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -468,7 +467,6 @@ public class JSGConfig {
             @Config.RequiresMcRestart
             @Config.Name("Max stargate heat")
             @Config.RangeDouble(min = 0)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -481,6 +479,12 @@ public class JSGConfig {
                     "SIDE: SERVER"
             })
             public float lightingBoldChance = 0.0005f;
+
+            @Config.Name("DIM IDs where lighting strike should not charge gates")
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
+            public int[] lightingStrikeDisabledDims = new int[]{1, -1};
 
             @Config.Name("Connect to dialing gate")
             @Config.Comment({
@@ -523,7 +527,6 @@ public class JSGConfig {
                     "SIDE: SERVER/CLIENT"
             })
             @Config.RangeInt(min = 0, max = 50000)
-            @Config.SlidingOption
             public int titaniumIrisDurability = 500;
 
             @Config.Name("Trinium iris durability")
@@ -533,7 +536,6 @@ public class JSGConfig {
                     "SIDE: SERVER/CLIENT"
             })
             @Config.RangeInt(min = 0, max = 50000)
-            @Config.SlidingOption
             public int triniumIrisDurability = 1000;
 
             @Config.Name("Shield power draw")
@@ -542,7 +544,6 @@ public class JSGConfig {
                     "SIDE: SERVER"
             })
             @Config.RangeInt(min = 0, max = 500000)
-            @Config.SlidingOption
             public int shieldPowerDraw = 500;
 
             @Config.Name("Allow creative bypass")
@@ -587,7 +588,6 @@ public class JSGConfig {
             @Config.RequiresMcRestart
             @Config.Name("Max titanium iris heat")
             @Config.RangeDouble(min = 0)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -596,7 +596,6 @@ public class JSGConfig {
             @Config.RequiresMcRestart
             @Config.Name("Max trinium iris heat")
             @Config.RangeDouble(min = 0)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -606,7 +605,6 @@ public class JSGConfig {
         public static class Power {
             @Config.Name("Stargate's internal buffer size")
             @Config.RangeInt(min = 4608)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -614,7 +612,6 @@ public class JSGConfig {
 
             @Config.Name("Stargate's max power throughput")
             @Config.RangeInt(min = 1, max = 500000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -622,7 +619,6 @@ public class JSGConfig {
 
             @Config.Name("Stargate wormhole open power draw")
             @Config.RangeInt(min = 0, max = 500000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -885,7 +881,6 @@ public class JSGConfig {
                     "SIDE: SERVER"
             })
             @Config.RangeInt(min = 5, max = 3000)
-            @Config.SlidingOption
             public int maxOpenedSeconds = 240;
 
             @Config.Name("Gate open time limit mode")
@@ -897,7 +892,6 @@ public class JSGConfig {
 
             @Config.Name("Power draw after opened time limit")
             @Config.RangeInt(min = 0, max = 50000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -991,7 +985,6 @@ public class JSGConfig {
                     "SIDE: SERVER"
             })
             @Config.RangeInt(min = 0, max = 25600)
-            @Config.SlidingOption
             public int ringsTeleportPowerDraw = 640;
         }
     }
@@ -1050,7 +1043,6 @@ public class JSGConfig {
 
             @Config.Name("DHD's max fluid capacity")
             @Config.RangeInt(min = 1, max = 128000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -1070,7 +1062,6 @@ public class JSGConfig {
 
             @Config.Name("Energy per 1mB Naquadah")
             @Config.RangeInt(min = 1, max = 50000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -1219,7 +1210,6 @@ public class JSGConfig {
         public static class Container {
             @Config.Name("Fluid buffer capacity")
             @Config.RangeInt(min = 3000, max = 600000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -1227,7 +1217,6 @@ public class JSGConfig {
 
             @Config.Name("Energy buffer capacity")
             @Config.RangeInt(min = 3000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -1235,7 +1224,6 @@ public class JSGConfig {
 
             @Config.Name("Energy buffer max transfer")
             @Config.RangeInt(min = 1)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -1243,7 +1231,6 @@ public class JSGConfig {
 
             @Config.Name("Fluid max transfer")
             @Config.RangeInt(min = 1, max = 5000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -1269,7 +1256,6 @@ public class JSGConfig {
         public static class Power {
             @Config.Name("Energy/tick needed to keep laser alive")
             @Config.RangeInt(min = 10000, max = 500000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -1356,7 +1342,6 @@ public class JSGConfig {
         public static class MystPage {
             @Config.Name("Max XZ-coords generation")
             @Config.RangeInt(min = 1000, max = 30000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -1364,7 +1349,6 @@ public class JSGConfig {
 
             @Config.Name("Min XZ-coords generation")
             @Config.RangeInt(min = 1000, max = 30000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })

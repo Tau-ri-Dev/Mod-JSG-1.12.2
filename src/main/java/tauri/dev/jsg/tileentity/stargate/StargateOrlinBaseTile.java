@@ -3,14 +3,24 @@ package tauri.dev.jsg.tileentity.stargate;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.util.JSGAxisAlignedBB;
-import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
+import tauri.dev.jsg.power.general.EnergyRequiredToOperate;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateOrlinRendererState;
@@ -25,25 +35,18 @@ import tauri.dev.jsg.stargate.network.StargateNetwork;
 import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
-import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
-import tauri.dev.jsg.state.stargate.StargateOrlinSparkState;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
+import tauri.dev.jsg.state.stargate.StargateOrlinSparkState;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import tauri.dev.jsg.util.JSGAxisAlignedBB;
+import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Random;
 
 public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 
@@ -162,7 +165,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 		JSG.debug("Orlin's dialed address: " + dialedAddress);
 	}
 
-	public StargateEnergyRequired getEnergyRequiredToDial() {
+	public EnergyRequiredToOperate getEnergyRequiredToDial() {
 		return getEnergyRequiredToDial(network.getStargate(dialedAddress));
 	}
 
@@ -427,15 +430,15 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
 	// ------------------------------------------------------------------------
 	// Power
 
-	private final StargateAbstractEnergyStorage energyStorate = new StargateAbstractEnergyStorage();
+	private final SmallEnergyStorage energyStorate = new SmallEnergyStorage();
 
 	@Override
-	protected StargateAbstractEnergyStorage getEnergyStorage() {
+	protected SmallEnergyStorage getEnergyStorage() {
 		return energyStorate;
 	}
 
 	@Override
-	protected StargateEnergyRequired getEnergyRequiredToDial(StargatePos targetGatePos) {
+	protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos) {
 		return super.getEnergyRequiredToDial(targetGatePos).mul(JSGConfig.Stargate.power.stargateOrlinEnergyMul).cap(JSGConfig.Stargate.power.stargateEnergyStorage/4 - 1000000);
 	}
 

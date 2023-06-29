@@ -7,9 +7,9 @@ import net.minecraft.world.gen.structure.template.ITemplateProcessor;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.structures.StructureConfig;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
-import tauri.dev.jsg.worldgen.structures.stargate.nether.JSGNetherStructure;
 import tauri.dev.jsg.worldgen.structures.processor.NetherProcessor;
 import tauri.dev.jsg.worldgen.structures.processor.OverworldProcessor;
+import tauri.dev.jsg.worldgen.structures.stargate.nether.JSGNetherStructure;
 import tauri.dev.jsg.worldgen.util.EnumGenerationHeight;
 
 import javax.annotation.Nonnull;
@@ -172,11 +172,11 @@ public enum EnumStructures {
         StructureConfig configOther = new StructureConfig("otherStructures");
         for(EnumStructures s : EnumStructures.values()){
             if(s.name.startsWith("sg_"))
-                configStargates.addKey(s.name, s.randomGenEnableDefault, s.chance);
+                configStargates.addKey(s.name, s.randomGenEnableDefault, 1f);
             else if(s.name.startsWith("tr_"))
-                configRings.addKey(s.name, s.randomGenEnableDefault, s.chance);
+                configRings.addKey(s.name, s.randomGenEnableDefault, 1f);
             else
-                configOther.addKey(s.name, s.randomGenEnableDefault, s.chance);
+                configOther.addKey(s.name, s.randomGenEnableDefault, 1f);
         }
         StructureConfig.addConfig(configStargates);
         StructureConfig.addConfig(configRings);
@@ -193,10 +193,10 @@ public enum EnumStructures {
 
     public float getChance() {
         if(name.startsWith("sg_"))
-            return StructureConfig.getChance("stargateStructures", name);
+            return chance * StructureConfig.getChance("stargateStructures", name);
         if(name.startsWith("tr_"))
-            return StructureConfig.getChance("ringsStructures", name);
-        return StructureConfig.getChance("otherStructures", name);
+            return chance * StructureConfig.getChance("ringsStructures", name);
+        return chance * StructureConfig.getChance("otherStructures", name);
     }
 
     @Nullable

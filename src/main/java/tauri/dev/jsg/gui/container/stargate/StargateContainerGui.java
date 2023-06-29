@@ -21,12 +21,12 @@ import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.SetOpenTabToServer;
 import tauri.dev.jsg.packet.stargate.SaveConfigToServer;
 import tauri.dev.jsg.packet.stargate.SaveIrisCodeToServer;
+import tauri.dev.jsg.power.general.LargeEnergyStorage;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
 import tauri.dev.jsg.stargate.network.SymbolPegasusEnum;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.stargate.network.SymbolUniverseEnum;
-import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.StargateUpgradeEnum;
 import tauri.dev.jsg.util.math.TemperatureHelper;
@@ -316,7 +316,7 @@ public class StargateContainerGui extends GuiContainer implements TabbedContaine
 
         Tab.updatePositions(tabs);
 
-        StargateClassicEnergyStorage energyStorageInternal = (StargateClassicEnergyStorage) container.gateTile.getCapability(CapabilityEnergy.ENERGY, null);
+        LargeEnergyStorage energyStorageInternal = (LargeEnergyStorage) container.gateTile.getCapability(CapabilityEnergy.ENERGY, null);
         if (energyStorageInternal != null) {
             energyStored = energyStorageInternal.getEnergyStoredInternally();
             maxEnergyStored = energyStorageInternal.getMaxEnergyStoredInternally();

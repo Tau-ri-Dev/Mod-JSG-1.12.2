@@ -523,6 +523,7 @@ commands.sggenincoming.notstargate=Targeted block is not a Stargate Base
 death.attack.eventHorizon=%s was given a kawoosh cremation
 death.attack.irisDeath=%s was given a iris cremation
 death.attack.wrongSide=%s entered wrong side of gate
+death.attack.unstableEventHorizon=%s didn't make it to the other side
 
 death.attack.zatHit=%s was electrolyzed
 death.attack.staffHit=%s was melted using Goa'uld Staff Weapon

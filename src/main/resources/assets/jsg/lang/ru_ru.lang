@@ -515,6 +515,7 @@ commands.sggenincoming.notstargate=Указанный блок не Основа
 death.attack.eventHorizon=%s был кремирован кавушем
 death.attack.irisDeath=%s расплющился об диафрагму
 death.attack.wrongSide=%s вошел в врата не с той стороны
+death.attack.unstableEventHorizon=%s didn't make it to the other side
 
 death.attack.zatHit=%s был подвергнут электролизу
 death.attack.staffHit=%s был расплавлен с помощью посоха Гоа'улдов

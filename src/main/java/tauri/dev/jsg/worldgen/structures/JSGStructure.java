@@ -32,7 +32,7 @@ import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
+import tauri.dev.jsg.power.general.LargeEnergyStorage;
 import tauri.dev.jsg.power.zpm.IEnergyStorageZPM;
 import tauri.dev.jsg.power.zpm.ZPMItemEnergyStorage;
 import tauri.dev.jsg.stargate.network.StargateAddress;
@@ -187,7 +187,7 @@ public class JSGStructure extends WorldGenerator {
                     // insert power to the gate itself
                     IEnergyStorage gateEnergy = gateTile.getCapability(CapabilityEnergy.ENERGY, null);
                     if (gateEnergy != null)
-                        gateEnergy.receiveEnergy(((int) (((StargateClassicEnergyStorage) gateEnergy).getMaxEnergyStoredInternally() * 0.75)), false);
+                        gateEnergy.receiveEnergy(((int) (((LargeEnergyStorage) gateEnergy).getMaxEnergyStoredInternally() * 0.75)), false);
                     gateTile.getMergeHelper().updateMembersBasePos(worldToSpawn, gatePos, facing, EnumFacing.SOUTH);
                     break;
                 case "dhd":
@@ -246,7 +246,7 @@ public class JSGStructure extends WorldGenerator {
                     if (ringsTile == null) break;
                     IEnergyStorage ringsEnergy = ringsTile.getCapability(CapabilityEnergy.ENERGY, null);
                     if (ringsEnergy != null)
-                        ringsEnergy.receiveEnergy(((int) (((StargateClassicEnergyStorage) ringsEnergy).getMaxEnergyStoredInternally() * 0.75)), false);
+                        ringsEnergy.receiveEnergy(((int) (((LargeEnergyStorage) ringsEnergy).getMaxEnergyStoredInternally() * 0.75)), false);
 
                     ringsTiles.add(ringsTile);
                     break;

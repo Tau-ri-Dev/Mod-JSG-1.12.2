@@ -45,6 +45,7 @@ import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.JSGSoundHelperClient;
 import tauri.dev.jsg.sound.SoundEventEnum;
@@ -53,7 +54,6 @@ import tauri.dev.jsg.stargate.EnumScheduledTask;
 import tauri.dev.jsg.stargate.EnumStargateState;
 import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateProviderInterface;
 import tauri.dev.jsg.state.StateTypeEnum;
@@ -944,7 +944,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
     // -----------------------------------------------------------------------------
     // Power system
 
-    private final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(tauri.dev.jsg.config.JSGConfig.Beamer.container.energyCapacity, JSGConfig.Beamer.container.energyTransfer) {
+    private final SmallEnergyStorage energyStorage = new SmallEnergyStorage(tauri.dev.jsg.config.JSGConfig.Beamer.container.energyCapacity, JSGConfig.Beamer.container.energyTransfer) {
 
         @Override
         protected void onEnergyChanged() {

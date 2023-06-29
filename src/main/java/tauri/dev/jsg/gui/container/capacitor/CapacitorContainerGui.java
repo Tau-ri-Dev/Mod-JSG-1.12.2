@@ -7,7 +7,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.energy.CapabilityEnergy;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +40,7 @@ public class CapacitorContainerGui extends GuiContainer {
         mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-        StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.capTile.getCapability(CapabilityEnergy.ENERGY, null);
+        SmallEnergyStorage energyStorage = (SmallEnergyStorage) container.capTile.getCapability(CapabilityEnergy.ENERGY, null);
 
         int width = Math.round((Objects.requireNonNull(energyStorage).getEnergyStored() / ((float) JSGConfig.Stargate.power.stargateEnergyStorage / 4) * 156));
         drawGradientRect(guiLeft + 10, guiTop + 59, guiLeft + 10 + width, guiTop + 59 + 6, 0xffcc2828, 0xff731616);
@@ -51,7 +51,7 @@ public class CapacitorContainerGui extends GuiContainer {
         fontRenderer.drawString(I18n.format("gui.capacitor.name"), 8, 16, 4210752);
         fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 
-        StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.capTile.getCapability(CapabilityEnergy.ENERGY, null);
+        SmallEnergyStorage energyStorage = (SmallEnergyStorage) container.capTile.getCapability(CapabilityEnergy.ENERGY, null);
 
         int energyStored = Objects.requireNonNull(energyStorage).getEnergyStored();
         int maxEnergyStored = energyStorage.getMaxEnergyStored();

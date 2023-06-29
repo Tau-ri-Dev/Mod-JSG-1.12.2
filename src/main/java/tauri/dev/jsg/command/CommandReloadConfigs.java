@@ -40,7 +40,7 @@ public class CommandReloadConfigs implements IJSGCommand {
             CraftingConfig.reload();
             StructureConfig.reload();
             JSGConfigUtil.reloadConfig();
-            StargateDimensionConfig.update();
+            StargateDimensionConfig.reload();
         } catch (Exception e){
             e.printStackTrace();
         }

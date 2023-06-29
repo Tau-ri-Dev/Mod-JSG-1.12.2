@@ -523,6 +523,7 @@ commands.sggenincoming.notstargate=Le bloc ciblé n'est pas une base de porte de
 death.attack.eventHorizon=%s a reçu une crémation kawoosh
 death.attack.irisDeath=%s a reçu une crémation d'iris.
 death.attack.wrongSide=%s est entré du mauvais côté de la porte
+death.attack.unstableEventHorizon=%s didn't make it to the other side
 
 death.attack.zatHit=%s a été électrolysé
 death.attack.staffHit=%s a été fondu en utilisant l'arme du bâton Goa'uld

@@ -18,7 +18,7 @@ import tauri.dev.jsg.gui.util.ContainerHelper;
 import tauri.dev.jsg.item.energy.CapacitorItemBlock;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
-import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
+import tauri.dev.jsg.power.general.LargeEnergyStorage;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 
@@ -152,7 +152,7 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        StargateClassicEnergyStorage energyStorage = (StargateClassicEnergyStorage) trTile.getCapability(CapabilityEnergy.ENERGY, null);
+        LargeEnergyStorage energyStorage = (LargeEnergyStorage) trTile.getCapability(CapabilityEnergy.ENERGY, null);
 
         if (lastEnergyStored != Objects.requireNonNull(energyStorage).getEnergyStoredInternally()
                 || energyTransferedLastTick != trTile.getEnergyTransferedLastTick()

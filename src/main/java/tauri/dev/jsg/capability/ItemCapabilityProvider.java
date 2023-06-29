@@ -1,6 +1,5 @@
 package tauri.dev.jsg.capability;
 
-import tauri.dev.jsg.power.stargate.ItemEnergyStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -8,6 +7,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.energy.CapabilityEnergy;
+import tauri.dev.jsg.power.general.ItemEnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

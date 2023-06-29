@@ -54,9 +54,9 @@ import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.item.stargate.IrisItem;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
-import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
-import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
+import tauri.dev.jsg.power.general.EnergyRequiredToOperate;
+import tauri.dev.jsg.power.general.LargeEnergyStorage;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRenderer;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRendererState;
@@ -681,11 +681,21 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 Random rand = new Random();
                 float chance = rand.nextFloat();
                 if (chance < JSGConfig.Stargate.mechanics.lightingBoldChance) {
-                    int max = JSGConfig.Stargate.power.stargateEnergyStorage / 17;
-                    int min = max / 6;
-                    int energy = (int) ((rand.nextFloat() * (max - min)) + min);
-                    getEnergyStorage().receiveEnergy(energy, false);
-                    world.addWeatherEffect(new EntityLightningBolt(world, topBlockPos.getX(), topBlockPos.getY(), topBlockPos.getZ(), false));
+                    boolean canStrike = true;
+                    int dim = this.world.provider.getDimension();
+                    for(int i : JSGConfig.Stargate.mechanics.lightingStrikeDisabledDims){
+                        if(dim == i){
+                            canStrike = false;
+                            break;
+                        }
+                    }
+                    if(canStrike){
+                        int max = JSGConfig.Stargate.power.stargateEnergyStorage / 17;
+                        int min = max / 6;
+                        int energy = (int) ((rand.nextFloat() * (max - min)) + min);
+                        getEnergyStorage().receiveEnergy(energy, false);
+                        world.addWeatherEffect(new EntityLightningBolt(world, topBlockPos.getX(), topBlockPos.getY(), topBlockPos.getZ(), false));
+                    }
                 }
             }
         }
@@ -2252,7 +2262,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // -----------------------------------------------------------------------------
     // Power system
 
-    private final StargateClassicEnergyStorage energyStorage = new StargateClassicEnergyStorage() {
+    private final LargeEnergyStorage energyStorage = new LargeEnergyStorage() {
 
         @Override
         protected void onEnergyChanged() {
@@ -2261,7 +2271,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     };
 
     @Override
-    protected StargateAbstractEnergyStorage getEnergyStorage() {
+    protected SmallEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
 
@@ -2689,7 +2699,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         if (!canDialAddress(stargateAddress)) return new Object[]{"address_malformed"};
 
-        StargateEnergyRequired energyRequired = getEnergyRequiredToDial(Objects.requireNonNull(network.getStargate(stargateAddress)));
+        EnergyRequiredToOperate energyRequired = getEnergyRequiredToDial(Objects.requireNonNull(network.getStargate(stargateAddress)));
         Map<String, Object> energyMap = new HashMap<>(2);
 
         energyMap.put("open", energyRequired.energyToOpen);
