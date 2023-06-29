@@ -387,7 +387,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                 if (rendererState.vortexState == EnumVortexState.CLOSING)
                     renderEventHorizon(partialTicks, true, rendererState.whiteOverlayAlpha, false, 1.7f);
                 else
-                    renderEventHorizon(partialTicks, false, null, false, rendererState.horizonUnstable ? 1.2f : 1);
+                    renderEventHorizon(partialTicks, false, rendererState.horizonUnstable ? 0.3f : null, false, rendererState.horizonUnstable ? 1.2f : 1);
 
                 GlStateManager.popMatrix();
                 GlStateManager.enableLighting();

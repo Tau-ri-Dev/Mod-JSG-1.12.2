@@ -911,6 +911,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public void activateDHDSymbolBRB() {
     }
 
+    public boolean getForceUnstable(){
+        return false;
+    }
+
     @Override
     public void update() {
         // Scheduled tasks
@@ -1007,17 +1011,21 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                      *
                      * 2020-04-25: changed the below to check if the gate is being sufficiently externally powered and, if so,
                      * do not start flickering even if the internal power isn't enough.
+                     *
+                     * 2023-06-29: added tile config bypass for this
                      */
 
+                    boolean forceUnstable = getForceUnstable();
+
                     // Horizon becomes unstable
-                    if (horizonFlashTask == null && energySecondsToClose < JSGConfig.Stargate.power.instabilitySeconds && energyTransferedLastTick < 0) {
+                    if (horizonFlashTask == null && (forceUnstable || (energySecondsToClose < JSGConfig.Stargate.power.instabilitySeconds && energyTransferedLastTick < 0))) {
                         resetFlashingSequence();
 
                         setHorizonFlashTask(new ScheduledTask(EnumScheduledTask.HORIZON_FLASH, (int) (Math.random() * 40) + 5));
                     }
 
                     // Horizon becomes stable
-                    if (horizonFlashTask != null && (energySecondsToClose > JSGConfig.Stargate.power.instabilitySeconds || energyTransferedLastTick >= 0)) {
+                    if (horizonFlashTask != null && (!forceUnstable && (energySecondsToClose > JSGConfig.Stargate.power.instabilitySeconds || energyTransferedLastTick >= 0))) {
                         horizonFlashTask = null;
                         isCurrentlyUnstable = false;
 
@@ -1662,6 +1670,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                     else {
                         // Schedule next flash sequence
                         float mul = energySecondsToClose / (float) JSGConfig.Stargate.power.instabilitySeconds;
+                        if(getForceUnstable()){
+                            mul = 0.5f;
+                        }
                         int min = (int) (15 * mul);
                         int off = (int) (20 * mul);
                         setHorizonFlashTask(new ScheduledTask(EnumScheduledTask.HORIZON_FLASH, min + (int) (Math.random() * off)));

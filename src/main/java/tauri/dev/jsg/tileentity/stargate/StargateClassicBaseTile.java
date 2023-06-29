@@ -653,6 +653,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     @Override
+    public boolean getForceUnstable(){
+        return (getConfig().getOption(FORCE_UNSTABLE_EH.id).getBooleanValue() || (targetGatePos != null && (targetGatePos.getTileEntity() instanceof StargateClassicBaseTile) && ((StargateClassicBaseTile) targetGatePos.getTileEntity()).getConfig().getOption(FORCE_UNSTABLE_EH.id).getBooleanValue()));
+    }
+
+    @Override
     public void update() {
         if (world.isRemote) {
             // Client -> request to update client config
@@ -1297,6 +1302,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 1, 300,
                 "Speed factor of the gate",
                 " - ONLY FOR MW AND UNI GATES - "
+        ),
+        FORCE_UNSTABLE_EH(
+                14, "forceUnstable", JSGConfigOptionTypeEnum.BOOLEAN, "false",
+                "Force unstable state on this gate?"
         );
 
         public final int id;
