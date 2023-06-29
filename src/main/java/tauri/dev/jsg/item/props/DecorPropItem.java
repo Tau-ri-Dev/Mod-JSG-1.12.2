@@ -5,10 +5,13 @@ import net.minecraft.item.ItemStack;
 import tauri.dev.jsg.block.props.JSGDecorPropBlock;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.util.main.JSGProps;
+import tauri.dev.vector.Vector3f;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
+@SuppressWarnings("deprecation")
 public class DecorPropItem extends ItemBlock {
     public DecorPropItem(JSGDecorPropBlock block) {
         super(block);
@@ -22,18 +25,32 @@ public class DecorPropItem extends ItemBlock {
         return "prop.jsg." + JSGDecorPropBlock.BASE + PropVariants.byId(block.getStateFromMeta(stack.getMetadata()).getValue(JSGProps.PROP_VARIANT)).name + JSGDecorPropBlock.END;
     }
 
+    public static class PropModel {
+        public final ElementEnum element;
+        public final Vector3f translation;
+        public final float size;
+
+        @ParametersAreNonnullByDefault
+        public PropModel(ElementEnum element, Vector3f translation, float size) {
+            this.element = element;
+            this.translation = translation;
+            this.size = size;
+        }
+    }
+
     public enum PropVariants {
         ABYDOS_POT(
                 0,
                 "abydos_pot",
-                ElementEnum.DECOR_ABYDOS_POT
+                new PropModel(ElementEnum.DECOR_ABYDOS_POT, new Vector3f(0, 0, 0), 1)
         );
 
         public final int id;
         public final String name;
-        public final ElementEnum[] models;
+        public final PropModel[] models;
 
-        PropVariants(int id, String name, ElementEnum... models) {
+        @ParametersAreNonnullByDefault
+        PropVariants(int id, String name, PropModel... models) {
             this.id = id;
             this.name = name;
             this.models = models;

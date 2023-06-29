@@ -91,7 +91,7 @@ public class JSGDecorPropBlock extends JSGAbstractCustomMetaItemBlock {
     }
 
     @Override
-    public boolean hasTileEntity() {
+    public boolean hasTileEntity(@Nonnull IBlockState state) {
         return true;
     }
 

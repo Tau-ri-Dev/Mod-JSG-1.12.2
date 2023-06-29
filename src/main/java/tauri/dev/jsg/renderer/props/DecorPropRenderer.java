@@ -5,12 +5,11 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfigUtil;
 import tauri.dev.jsg.item.props.DecorPropItem;
-import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.tileentity.props.DecorPropTile;
 import tauri.dev.jsg.util.main.JSGProps;
+import tauri.dev.vector.Vector3f;
 
 import javax.annotation.Nonnull;
 
@@ -22,22 +21,28 @@ public class DecorPropRenderer extends TileEntitySpecialRenderer<DecorPropTile> 
         IBlockState bs = te.getWorld().getBlockState(te.getPos());
 
         GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, z);
+        GlStateManager.pushMatrix();
 
         int meta = bs.getValue(JSGProps.PROP_VARIANT);
         DecorPropItem.PropVariants propVariant = DecorPropItem.PropVariants.byId(meta);
-        JSG.info("render1!");
 
         if (propVariant == null) return;
-        ElementEnum[] models = propVariant.models;
+        DecorPropItem.PropModel[] models = propVariant.models;
 
         JSGConfigUtil.rescaleToConfig();
-        JSG.info("render0!");
+        GlStateManager.translate(0.5, 0, 0.5);
 
-        for (ElementEnum model : models) {
-            model.bindTextureAndRender();
-            JSG.info("render!");
+        for (DecorPropItem.PropModel model : models) {
+            GlStateManager.pushMatrix();
+            Vector3f t = model.translation;
+            GlStateManager.translate(t.x, t.y, t.z);
+            GlStateManager.scale(model.size, model.size, model.size);
+            model.element.bindTextureAndRender();
+            GlStateManager.popMatrix();
         }
 
+        GlStateManager.popMatrix();
         GlStateManager.popMatrix();
     }
 }
