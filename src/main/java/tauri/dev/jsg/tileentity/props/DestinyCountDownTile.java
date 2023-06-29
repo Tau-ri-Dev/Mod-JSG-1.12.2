@@ -485,6 +485,12 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
     }
 
     @Override
+    public void setConfigAndUpdate(JSGTileEntityConfig config) {
+        setConfig(config);
+        sendState(StateTypeEnum.GUI_STATE, getState(StateTypeEnum.GUI_STATE));
+    }
+
+    @Override
     public void initConfig() {
         JSGTileEntityConfig.initConfig(getConfig(), ConfigOptions.values());
     }

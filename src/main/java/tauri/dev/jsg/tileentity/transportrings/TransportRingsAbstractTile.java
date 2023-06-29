@@ -313,9 +313,16 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         JSGSoundHelper.playSoundEvent(world, getPosWithDistance(ringsDistance), getPlatform().platformBlock.getPlatformSound(closing));
     }
 
+    protected NetworkRegistry.TargetPoint targetPoint;
+
     @Override
     public void update() {
         if (!world.isRemote) {
+            if (targetPoint == null) {
+                targetPoint = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
+                markDirty();
+            }
+
             // This cannot be done in onLoad because it makes
             // Rings invisible to the network sometimes (same as gates)
             if (!addedToNetwork) {
@@ -435,6 +442,8 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             setBarrierBlocks(false, false);
             generateAddress(false);
             globalTeleportBox = LOCAL_TELEPORT_BOX.offset(pos);
+
+            targetPoint = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
 
             updatePowerTier();
         }
@@ -1250,10 +1259,14 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 break;
         }
     }
+    protected void sendState(StateTypeEnum type, State state) {
+        if (world.isRemote) return;
 
-    @Override
-    public JSGTileEntityConfig getConfig() {
-        return this.config;
+        if (targetPoint != null) {
+            JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, type, state), targetPoint);
+        } else {
+            JSG.debug("targetPoint was null trying to send " + type + " from " + this.getClass().getCanonicalName());
+        }
     }
 
 
@@ -1261,11 +1274,22 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     // Tile entity config
 
     @Override
+    public JSGTileEntityConfig getConfig() {
+        return this.config;
+    }
+
+    @Override
     public void setConfig(JSGTileEntityConfig config) {
         for (JSGConfigOption o : config.getOptions()) {
             this.config.getOption(o.id).setValue(o.getStringValue());
         }
         markDirty();
+    }
+
+    @Override
+    public void setConfigAndUpdate(JSGTileEntityConfig config) {
+        setConfig(config);
+        sendState(StateTypeEnum.GUI_STATE, getState(StateTypeEnum.GUI_STATE));
     }
 
     @Override

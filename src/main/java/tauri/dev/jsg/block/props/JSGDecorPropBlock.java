@@ -1,5 +1,6 @@
 package tauri.dev.jsg.block.props;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
@@ -15,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -30,6 +32,7 @@ import tauri.dev.jsg.tileentity.props.DecorPropTile;
 import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,17 +89,50 @@ public class JSGDecorPropBlock extends JSGAbstractCustomMetaItemBlock {
 
     @Override
     public void onBlockPlacedBy(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EntityLivingBase placer, @Nonnull ItemStack stack) {
+        DecorPropItem.PropVariants variant = DecorPropItem.PropVariants.byId(stack.getMetadata());
         if (!world.isRemote) {
-            DecorPropItem.PropVariants variant = DecorPropItem.PropVariants.byId(stack.getMetadata());
             state = state.withProperty(JSGProps.PROP_VARIANT, variant.id);
             world.setBlockState(pos, state);
         }
+        variant.abstractBlock.onBlockPlacedBy(world, pos, state, placer, stack);
+    }
+
+    @Override
+    public void breakBlock(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+        DecorPropItem.PropVariants variant = DecorPropItem.PropVariants.byId(state.getValue(JSGProps.PROP_VARIANT));
+        variant.abstractBlock.breakBlock(world, pos, state);
     }
 
     @Override
     public int getLightValue(@Nonnull IBlockState state) {
         DecorPropItem.PropVariants variant = DecorPropItem.PropVariants.byId(state.getValue(JSGProps.PROP_VARIANT));
-        return (int) (variant.light * 15.0F);
+        return variant.abstractBlock.getLightValue(state);
+    }
+
+    @Override
+    public void neighborChanged(IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Block block, @Nonnull BlockPos fromPos) {
+        DecorPropItem.PropVariants variant = DecorPropItem.PropVariants.byId(state.getValue(JSGProps.PROP_VARIANT));
+        variant.abstractBlock.neighborChanged(state, world, pos, block, fromPos);
+    }
+
+    @Nonnull
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
+        DecorPropItem.PropVariants variant = DecorPropItem.PropVariants.byId(state.getValue(JSGProps.PROP_VARIANT));
+        return variant.abstractBlock.getBoundingBox(state, worldIn, pos);
+    }
+
+    @Nullable
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
+        DecorPropItem.PropVariants variant = DecorPropItem.PropVariants.byId(state.getValue(JSGProps.PROP_VARIANT));
+        return variant.abstractBlock.getCollisionBoundingBox(state, worldIn, pos);
+    }
+
+    @Override
+    public boolean renderHighlight(IBlockState state) {
+        DecorPropItem.PropVariants variant = DecorPropItem.PropVariants.byId(state.getValue(JSGProps.PROP_VARIANT));
+        return variant.abstractBlock.renderHighlight(state);
     }
 
     @Nonnull
@@ -169,11 +205,6 @@ public class JSGDecorPropBlock extends JSGAbstractCustomMetaItemBlock {
 
     @Override
     public boolean isFullBlock(@Nonnull IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean renderHighlight(IBlockState state) {
         return false;
     }
 
