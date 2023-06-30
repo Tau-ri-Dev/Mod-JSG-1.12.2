@@ -62,7 +62,7 @@ public class StargateDimensionConfig {
         }
 
         EnergyRequiredToOperate energyRequired = new EnergyRequiredToOperate(JSGConfig.Stargate.power.openingBlockToEnergyRatio, JSGConfig.Stargate.power.keepAliveBlockToEnergyRatioPerTick);
-        return energyRequired.mul(Math.abs(reqFrom.distance - reqTo.distance));
+        return energyRequired.mul(Math.abs(reqFrom.distance - reqTo.distance)/100f);
     }
 
     public static boolean isGroupEqual(DimensionType from, DimensionType to) {

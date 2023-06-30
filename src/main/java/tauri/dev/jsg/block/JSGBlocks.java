@@ -40,10 +40,7 @@ import tauri.dev.jsg.block.machine.PCBFabricatorBlock;
 import tauri.dev.jsg.block.ore.NaquadahOreBlock;
 import tauri.dev.jsg.block.ore.TitaniumOreBlock;
 import tauri.dev.jsg.block.ore.TriniumOreBlock;
-import tauri.dev.jsg.block.props.AncientSignBlock;
-import tauri.dev.jsg.block.props.DestinyCountDownBlock;
-import tauri.dev.jsg.block.props.JSGDecorPropBlock;
-import tauri.dev.jsg.block.props.TRPlatformBlock;
+import tauri.dev.jsg.block.props.*;
 import tauri.dev.jsg.block.stargate.*;
 import tauri.dev.jsg.block.transportrings.TransportRingsAncientBlock;
 import tauri.dev.jsg.block.transportrings.TransportRingsGoauldBlock;
@@ -157,6 +154,8 @@ public class JSGBlocks {
 
     public static final JSGDecorPropBlock DECOR_PROP_BLOCK = new JSGDecorPropBlock();
 
+    public static final DestinyBearingBlock DESTINY_BEARING_BLOCK = new DestinyBearingBlock();
+
     // -----------------------------------------------------------------------------
     // CREATIVE ITEMS/BLOCKS
 
@@ -212,7 +211,8 @@ public class JSGBlocks {
             ZPM_SLOT,
             CAPACITOR_BLOCK_CREATIVE,
             ZPM_CREATIVE,
-            DECOR_PROP_BLOCK
+            DECOR_PROP_BLOCK,
+            DESTINY_BEARING_BLOCK
     };
     /**
      * Used in {@link tauri.dev.jsg.beamer.BeamerBeam}
@@ -297,7 +297,8 @@ public class JSGBlocks {
             CAPACITOR_BLOCK_CREATIVE,
             ZPM_CREATIVE,
 
-            DECOR_PROP_BLOCK
+            DECOR_PROP_BLOCK,
+            DESTINY_BEARING_BLOCK
     };
 
     public static boolean isInBlocksArray(Block block, Block[] array) {

@@ -1,10 +1,9 @@
 package tauri.dev.jsg.tileentity.stargate;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
@@ -12,7 +11,6 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
-import tauri.dev.jsg.item.props.DecorPropItem;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.power.general.EnergyRequiredToOperate;
@@ -29,11 +27,11 @@ import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.stargate.StargateRendererActionState;
 import tauri.dev.jsg.state.stargate.StargateSpinState;
 import tauri.dev.jsg.state.stargate.StargateUniverseSymbolState;
+import tauri.dev.jsg.tileentity.props.DestinyBearingTile;
 import tauri.dev.jsg.tileentity.props.DestinyCountDownTile;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
 import tauri.dev.jsg.util.ILinkable;
 import tauri.dev.jsg.util.LinkingHelper;
-import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -247,12 +245,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         super.dialingFailed(reason);
     }
 
-    @Override
-    public void closeGate(StargateClosedReasonEnum reason) {
-        updateBearing(false);
-        super.closeGate(reason);
-    }
-
     /**
      * disconnect gate
      */
@@ -362,14 +354,10 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         BlockPos p = getMergeHelper().getTopBlockAboveBase();
         if (p == null) return;
         BlockPos bearingPos = p.up().add(pos);
-        IBlockState s = world.getBlockState(bearingPos);
-        if (s.getBlock() == Blocks.AIR) return;
-        if (s.getBlock() != JSGBlocks.DECOR_PROP_BLOCK) return;
-        DecorPropItem.PropVariants variant = DecorPropItem.PropVariants.byId(s.getValue(JSGProps.PROP_VARIANT));
-        if (variant != DecorPropItem.PropVariants.DESTINY_BEARING_OFF && variant != DecorPropItem.PropVariants.DESTINY_BEARING_ON)
-            return;
-        DecorPropItem.PropVariants variantNew = (activate ? DecorPropItem.PropVariants.DESTINY_BEARING_ON : DecorPropItem.PropVariants.DESTINY_BEARING_OFF);
-        world.setBlockState(bearingPos, variantNew.getBlockState(), 3);
+        TileEntity te = world.getTileEntity(bearingPos);
+        if (te instanceof DestinyBearingTile) {
+            ((DestinyBearingTile) te).updateState(activate);
+        }
     }
 
     @Override
