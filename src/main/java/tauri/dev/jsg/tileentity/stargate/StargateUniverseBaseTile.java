@@ -256,6 +256,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         markDirty();
         super.disconnectGate();
         addressToDial = null;
+        updateBearing(false);
         if (!abortingDialing)
             addSymbolToAddressManual(TOP_CHEVRON, null);
     }

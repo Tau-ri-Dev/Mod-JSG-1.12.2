@@ -50,26 +50,49 @@ public class CommandCountdownSet implements IJSGCommand {
             return;
         }
 
-        if (args.length > 3) {
-            int x1 = (int) parseCoordinate(pos.getX(), args[1], false).getResult();
-            int y1 = (int) parseCoordinate(pos.getY(), args[2], 0, 255, false).getResult();
-            int z1 = (int) parseCoordinate(pos.getZ(), args[3], false).getResult();
-            BlockPos foundPos = new BlockPos(x1, y1, z1);
-            tileEntity = world.getTileEntity(foundPos);
+        if(args[0].equalsIgnoreCase("set")){
+            if (args.length > 4) {
+                int x1 = (int) parseCoordinate(pos.getX(), args[2], false).getResult();
+                int y1 = (int) parseCoordinate(pos.getY(), args[3], 0, 255, false).getResult();
+                int z1 = (int) parseCoordinate(pos.getZ(), args[4], false).getResult();
+                BlockPos foundPos = new BlockPos(x1, y1, z1);
+                tileEntity = world.getTileEntity(foundPos);
+            }
+            if (tileEntity == null)
+                tileEntity = JSGCommands.rayTraceTileEntity((EntityPlayerMP) sender);
+
+            try {
+                long ticks = Long.parseLong(args[1]);
+
+                if (tileEntity instanceof DestinyCountDownTile) {
+                    ((DestinyCountDownTile) tileEntity).setCountDown(sender.getEntityWorld().getTotalWorldTime() + ticks);
+                    JSGCommand.sendSuccessMess(sender, "Countdown set to " + ticks + " ticks!");
+                } else
+                    JSGCommand.sendErrorMess(sender, "Target block is not a countdown!");
+            } catch (NumberFormatException e) {
+                JSGCommand.sendUsageMess(sender, this);
+            }
         }
-        if (tileEntity == null)
-            tileEntity = JSGCommands.rayTraceTileEntity((EntityPlayerMP) sender);
+        else if(args[0].equalsIgnoreCase("reset")){
+            if (args.length > 3) {
+                int x1 = (int) parseCoordinate(pos.getX(), args[1], false).getResult();
+                int y1 = (int) parseCoordinate(pos.getY(), args[2], 0, 255, false).getResult();
+                int z1 = (int) parseCoordinate(pos.getZ(), args[3], false).getResult();
+                BlockPos foundPos = new BlockPos(x1, y1, z1);
+                tileEntity = world.getTileEntity(foundPos);
+            }
+            if (tileEntity == null)
+                tileEntity = JSGCommands.rayTraceTileEntity((EntityPlayerMP) sender);
 
-        try {
-            long ticks = Long.parseLong(args[0]);
-
-            if (tileEntity instanceof DestinyCountDownTile) {
-                ((DestinyCountDownTile) tileEntity).setCountDown(sender.getEntityWorld().getTotalWorldTime() + ticks);
-                JSGCommand.sendSuccessMess(sender, "Countdown set to " + ticks + " ticks!");
-            } else
-                JSGCommand.sendErrorMess(sender, "Target block is not a countdown!");
-        } catch (NumberFormatException e) {
-            JSGCommand.sendUsageMess(sender, this);
+            try {
+                if (tileEntity instanceof DestinyCountDownTile) {
+                    ((DestinyCountDownTile) tileEntity).setCountDown(sender.getEntityWorld().getTotalWorldTime());
+                    JSGCommand.sendSuccessMess(sender, "Countdown reset!");
+                } else
+                    JSGCommand.sendErrorMess(sender, "Target block is not a countdown!");
+            } catch (NumberFormatException e) {
+                JSGCommand.sendUsageMess(sender, this);
+            }
         }
     }
 }

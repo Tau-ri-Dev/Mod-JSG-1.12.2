@@ -1,10 +1,5 @@
 package tauri.dev.jsg.stargate.teleportation;
 
-import tauri.dev.jsg.stargate.network.StargatePos;
-import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateOrlinBaseTile;
-import tauri.dev.vector.Matrix2f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumFacing;
@@ -17,6 +12,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.ITeleporter;
+import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.packet.transportrings.StartPlayerFadeOutToClient;
+import tauri.dev.jsg.stargate.network.StargatePos;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
+import tauri.dev.jsg.tileentity.stargate.StargateOrlinBaseTile;
+import tauri.dev.vector.Matrix2f;
 
 import javax.vecmath.Vector2f;
 import java.util.List;
@@ -56,12 +57,6 @@ public class TeleportHelper {
 		
 		if ( EnumFlipAxis.masked(EnumFlipAxis.Z, flip) )
 			v.y *= -1;
-		/*if (flip != null) {
-			if ( flip == Axis.X )
-				v.x *= -1;
-			else
-				v.y *= -1;
-		}*/
 		
 		m.m00 = cos;	m.m10 = -sin;
 		m.m01 = sin;	m.m11 =  cos;
@@ -116,14 +111,16 @@ public class TeleportHelper {
 			pos = new Vec3d(tPos.getX() + 0.5, tPos.getY() + 0.5, tPos.getZ() + 0.5);
 		else
 			pos = getPosition(entity, sourceTile.getGateCenterPos(), targetTile.getGateCenterPos(), rotation, targetTile.getFacing().getAxis()==Axis.Z ? ~flipAxis : flipAxis);
-
-		//pos = plusOneBlock(targetTile.getFacing() ,pos);
 		
 		final float yawRotated = getRotation(entity.isBeingRidden() ? Objects.requireNonNull(entity.getControllingPassenger()) : entity, rotation, flipAxis);
 		boolean isPlayer = entity instanceof EntityPlayerMP;
 				
 		if (sourceDim == targetGatePos.dimensionID) {
 			setRotationAndPosition(entity, yawRotated, pos);
+			if(isPlayer){
+				// Do white flash for the traveller
+				JSGPacketHandler.INSTANCE.sendTo(new StartPlayerFadeOutToClient(StartPlayerFadeOutToClient.EnumFadeOutEffectType.STARGATE), (EntityPlayerMP) entity);
+			}
 		}
 		
 		else {
