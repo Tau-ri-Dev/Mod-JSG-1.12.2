@@ -45,7 +45,6 @@ public class CommandCountdownSet implements IJSGCommand {
         TileEntity tileEntity = null;
 
         if (args.length < 1) {
-            //notifyCommandListener(sender, this, "Please, insert time in ticks!");
             JSGCommand.sendUsageMess(sender, this);
             return;
         }
@@ -69,7 +68,7 @@ public class CommandCountdownSet implements IJSGCommand {
                     JSGCommand.sendSuccessMess(sender, "Countdown set to " + ticks + " ticks!");
                 } else
                     JSGCommand.sendErrorMess(sender, "Target block is not a countdown!");
-            } catch (NumberFormatException e) {
+            } catch (Exception e) {
                 JSGCommand.sendUsageMess(sender, this);
             }
         }
@@ -86,11 +85,11 @@ public class CommandCountdownSet implements IJSGCommand {
 
             try {
                 if (tileEntity instanceof DestinyCountDownTile) {
-                    ((DestinyCountDownTile) tileEntity).setCountDown(sender.getEntityWorld().getTotalWorldTime());
+                    ((DestinyCountDownTile) tileEntity).setCountDown(sender.getEntityWorld().getTotalWorldTime() + 5);
                     JSGCommand.sendSuccessMess(sender, "Countdown reset!");
                 } else
                     JSGCommand.sendErrorMess(sender, "Target block is not a countdown!");
-            } catch (NumberFormatException e) {
+            } catch (Exception e) {
                 JSGCommand.sendUsageMess(sender, this);
             }
         }

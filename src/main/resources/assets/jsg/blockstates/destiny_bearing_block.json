@@ -6,6 +6,12 @@
 	"variants": {
 		"normal": [{}],
 		"inventory": [{}],
+		"facing": {
+			"south": {},
+			"west": {},
+			"north": {},
+			"east": {}
+		},
 		"prop_variant": {
 			"0": {},
 			"1": {},
