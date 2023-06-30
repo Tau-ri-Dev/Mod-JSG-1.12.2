@@ -12,6 +12,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tauri.dev.jsg.block.JSGBlock;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.block.props.AncientSignBlock;
 import tauri.dev.jsg.block.props.JSGDecorPropBlock;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.tileentity.props.DecorPropTile;
@@ -145,6 +147,20 @@ public class DecorPropItem extends ItemBlock {
                     }
                 }.setLightLevel(0.7f)),
                 new PropModel(ElementEnum.DECOR_ABYDOS_LAMP, new Vector3f(0, 0, 0), 1)
+        ),
+        DESTINY_BEARING_OFF(
+                3,
+                "destiny_bearing_off",
+                null,
+                new AncientSignBlock(),
+                new PropModel(ElementEnum.DESTINY_BEARING_OFF, new Vector3f(0, 0, 0), 1)
+        ),
+        DESTINY_BEARING_ON(
+                4,
+                "destiny_bearing_on",
+                null,
+                new PropAbstractBlock(),
+                new PropModel(ElementEnum.DESTINY_BEARING_ON, new Vector3f(0, 0, 0), 1)
         );
 
         public final int id;
@@ -159,6 +175,10 @@ public class DecorPropItem extends ItemBlock {
             this.name = name;
             this.models = models;
             this.runnableWhileRendering = runnableWhileRendering;
+        }
+
+        public IBlockState getBlockState(){
+            return JSGBlocks.DECOR_PROP_BLOCK.getDefaultState().withProperty(JSGProps.PROP_VARIANT, this.id);
         }
 
         public static PropVariants byId(int id) {

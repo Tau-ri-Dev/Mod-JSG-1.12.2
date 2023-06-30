@@ -1,7 +1,9 @@
 package tauri.dev.jsg.tileentity.stargate;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
@@ -10,6 +12,7 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
+import tauri.dev.jsg.item.props.DecorPropItem;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.power.general.EnergyRequiredToOperate;
@@ -30,6 +33,7 @@ import tauri.dev.jsg.tileentity.props.DestinyCountDownTile;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
 import tauri.dev.jsg.util.ILinkable;
 import tauri.dev.jsg.util.LinkingHelper;
+import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -178,7 +182,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         int pos = addressPosition;
         if (!addOne) addressPosition--;
         markDirty();
-        if(addressToDial == null) return null;
+        if (addressToDial == null) return null;
         if (pos >= (addressToDial.getSize() + 1)) return getSymbolType().getTopSymbol();
         if (pos >= symbolsToDialCount && addOne)
             return getSymbolType().getOrigin(); // return origin when symbols is last one
@@ -232,6 +236,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         }
         super.failGate();
         addressToDial = null;
+        updateBearing(false);
         if (!abortingDialing && targetRingSymbol != TOP_CHEVRON)
             addSymbolToAddressManual(TOP_CHEVRON, null);
     }
@@ -240,6 +245,12 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     public void dialingFailed(StargateOpenResult reason) {
         playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
         super.dialingFailed(reason);
+    }
+
+    @Override
+    public void closeGate(StargateClosedReasonEnum reason) {
+        updateBearing(false);
+        super.closeGate(reason);
     }
 
     /**
@@ -339,18 +350,32 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     }
 
     private void activateSymbolServer(SymbolInterface symbol) {
-        if(!(symbol instanceof SymbolUniverseEnum)){
+        if (!(symbol instanceof SymbolUniverseEnum)) {
             JSG.error("Error while engaging symbol " + symbol.getEnglishName() + " for clients.", new ClassCastException());
             return;
         }
         JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.STARGATE_UNIVERSE_ACTIVATE_SYMBOL, new StargateUniverseSymbolState((SymbolUniverseEnum) symbol, false)), targetPoint);
     }
 
+    public void updateBearing(boolean activate) {
+        if (world.isRemote) return;
+        BlockPos p = getMergeHelper().getTopBlockAboveBase();
+        if (p == null) return;
+        BlockPos bearingPos = p.up().add(pos);
+        IBlockState s = world.getBlockState(bearingPos);
+        if (s.getBlock() == Blocks.AIR) return;
+        if (s.getBlock() != JSGBlocks.DECOR_PROP_BLOCK) return;
+        DecorPropItem.PropVariants variant = DecorPropItem.PropVariants.byId(s.getValue(JSGProps.PROP_VARIANT));
+        if (variant != DecorPropItem.PropVariants.DESTINY_BEARING_OFF && variant != DecorPropItem.PropVariants.DESTINY_BEARING_ON)
+            return;
+        DecorPropItem.PropVariants variantNew = (activate ? DecorPropItem.PropVariants.DESTINY_BEARING_ON : DecorPropItem.PropVariants.DESTINY_BEARING_OFF);
+        world.setBlockState(bearingPos, variantNew.getBlockState(), 3);
+    }
+
     @Override
     protected void addSymbolToAddress(SymbolInterface symbol) {
+        updateBearing(true);
         activateSymbolServer(symbol);
-        //if (isFastDialing)
-        //    playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
         super.addSymbolToAddress(symbol);
     }
 
@@ -367,6 +392,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
                 sendRenderingUpdate(StargateRendererActionState.EnumGateAction.LIGHT_UP_CHEVRONS, 9, true);
                 break;
             case STARGATE_DIAL_NEXT:
+                updateBearing(false);
                 if (stargateState.incoming()) break;
                 if (abortingDialing || stargateState.failing()) break;
                 if (isFastDialing && stargateState.dialingDHD()) {
@@ -398,6 +424,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
                 }
                 break;
             case STARGATE_RESET:
+                updateBearing(false);
                 if (stargateState.incoming()) break;
                 addSymbolToAddressManual(getSymbolType().getTopSymbol(), null);
                 abortingDialing = false;
@@ -419,6 +446,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
                     playSoundEvent(StargateSoundEventEnum.CHEVRON_SHUT);
                     addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_FINISHED, 10));
                 } else {
+                    updateBearing(false);
                     dialingFailed(StargateOpenResult.ABORTED);
                     stargateState = EnumStargateState.IDLE;
                     abortingDialing = false;
@@ -439,7 +467,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
                 break;
 
             case STARGATE_DIAL_FINISHED:
-                if(abortingDialing) return;
+                if (abortingDialing) return;
                 if (canAddSymbol(targetRingSymbol)) {
                     addSymbolToAddress(targetRingSymbol);
                     if (stargateState.dialingComputer()) {

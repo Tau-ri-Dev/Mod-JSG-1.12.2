@@ -11,12 +11,18 @@ import javax.annotation.Nullable;
 
 public class JSGWorldTopBlock {
     public int y;
+    public BlockPos pos;
     public Block topBlock;
     public IBlockState topBlockState;
-    public JSGWorldTopBlock(int y, Block topBlock, IBlockState state){
-        this.y = y;
+    private JSGWorldTopBlock(BlockPos pos, Block topBlock, IBlockState state){
+        this.y = pos.getY();
+        this.pos = pos;
         this.topBlock = topBlock;
         this.topBlockState = state;
+    }
+
+    public static JSGWorldTopBlock getTopBlock(World world, BlockPos pos, int airCountUp) {
+        return getTopBlock(world, pos.getX(), pos.getZ(), airCountUp, world.provider.getDimension());
     }
 
     @Nullable
@@ -35,7 +41,7 @@ public class JSGWorldTopBlock {
                     }
                 }
                 if (!block.isReplaceable(world, pos) && isAirUp && canBeTopBlock(block))
-                    return new JSGWorldTopBlock(y, block, world.getBlockState(pos));
+                    return new JSGWorldTopBlock(pos, block, world.getBlockState(pos));
             }
             y += (dimensionId == -1 ? 1 : -1);
         }

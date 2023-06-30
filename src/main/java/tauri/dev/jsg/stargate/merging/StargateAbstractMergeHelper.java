@@ -56,6 +56,17 @@ public abstract class StargateAbstractMergeHelper {
         return topBlock;
     }
 
+    private BlockPos topBlockAboveBase = null;
+    public BlockPos getTopBlockAboveBase() {
+        // null - not initialized
+        if (topBlockAboveBase == null) topBlockAboveBase = BlockHelpers.getHighestWithXZCords(getChevronBlocks(), 0, 0);
+
+        // Still null - chevron list empty (Orlin's gate)
+        if (topBlockAboveBase == null) topBlockAboveBase = BlockHelpers.getHighestWithXZCords(getRingBlocks(), 0, 0);
+
+        return topBlockAboveBase;
+    }
+
     /**
      * @return {@link List} of {@link BlockPos} pointing to absent blocks of variant given. Positions are absolute.
      */
