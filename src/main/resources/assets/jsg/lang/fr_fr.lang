@@ -378,6 +378,10 @@ tile.jsg.destiny_countdown_block.name=Bloc compte à rebours du destin
 # accessoires
 prop.jsg.platform_ships_block.name=Plate-forme d'anneaux (Vaisseaux)
 
+prop.jsg.decor_abydos_pot_block.name=Abydos Pot
+prop.jsg.decor_abydos_lamp_off_block.name=Abydos Lamp (Off)
+prop.jsg.decor_abydos_lamp_on_block.name=Abydos Lamp (On)
+
 # dhd
 tile.jsg.dhd_block.name=Dial Home Device (DHD de la Voie lactée)
 tile.jsg.dhd_block.incoming_wormhole_warn=Incapable de fermer la porte à cette extrémité

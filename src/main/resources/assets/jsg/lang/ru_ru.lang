@@ -370,6 +370,10 @@ tile.jsg.destiny_countdown_block.name=Блок обратного отсчета
 # props
 prop.jsg.platform_ships_block.name=Кольцевая платформа (Корабли)
 
+prop.jsg.decor_abydos_pot_block.name=Abydos Pot
+prop.jsg.decor_abydos_lamp_off_block.name=Abydos Lamp (Off)
+prop.jsg.decor_abydos_lamp_on_block.name=Abydos Lamp (On)
+
 # dhd
 tile.jsg.dhd_block.name=Наборное Устройство (DHD)
 tile.jsg.dhd_block.incoming_wormhole_warn=Невозможно закрыть с этой стороны
