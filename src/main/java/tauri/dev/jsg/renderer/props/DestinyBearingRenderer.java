@@ -32,10 +32,14 @@ public class DestinyBearingRenderer extends TileEntitySpecialRenderer<DestinyBea
         GlStateManager.rotate(rot, 0, 1, 0);
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(0, -0.2f, 0);
+        GlStateManager.translate(0, 1.2f, 0);
         GlStateManager.scale(4.2f, 4.2f, 4.2f);
-
+        GlStateManager.color(1, 1, 1);
+        ElementEnum.DESTINY_BEARING_BODY.bindTextureAndRender();
+        GlStateManager.pushMatrix();
+        GlStateManager.color(1, 1, 1);
         if (isActive) {
+            GlStateManager.disableLighting();
             JSGTextureLightningHelper.lightUpTexture(1f);
             ElementEnum.DESTINY_BEARING_ON.bindTexture(BiomeOverlayEnum.NORMAL);
         } else
@@ -43,6 +47,8 @@ public class DestinyBearingRenderer extends TileEntitySpecialRenderer<DestinyBea
 
         ElementEnum.DESTINY_BEARING_ON.render();
 
+        GlStateManager.popMatrix();
+        GlStateManager.enableLighting();
         GlStateManager.popMatrix();
 
         GlStateManager.popMatrix();

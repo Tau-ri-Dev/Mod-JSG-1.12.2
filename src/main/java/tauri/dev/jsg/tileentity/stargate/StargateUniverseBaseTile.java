@@ -167,6 +167,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         spinDirection = EnumSpinDirection.CLOCKWISE;
         setCoolDown();
         markDirty();
+        if(isFastDialing)
+            updateBearing(true);
         return true;
     }
 
@@ -412,8 +414,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
                 }
                 break;
             case STARGATE_RESET:
-                updateBearing(false);
                 if (stargateState.incoming()) break;
+                updateBearing(false);
                 addSymbolToAddressManual(getSymbolType().getTopSymbol(), null);
                 abortingDialing = false;
                 break;
@@ -550,6 +552,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         if (stargateState.dialing())
             abortDialingSequence();
         markDirty();
+        updateBearing(true);
         this.lightUpChevronByIncoming(!config.getOption(ConfigOptions.ALLOW_INCOMING.id).getBooleanValue());
     }
 

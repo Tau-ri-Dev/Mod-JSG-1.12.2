@@ -104,14 +104,15 @@ public enum ElementEnum {
     // DESTINY PROPS
 
     DESTINY_COUNTDOWN("props/destiny/countdown.obj", "props/destiny/countdown.png", false),
+    DESTINY_BEARING_OFF("props/destiny/bearing_light.obj", "props/destiny/bearing_light_off.png", false),
+    DESTINY_BEARING_ON("props/destiny/bearing_light.obj", "props/destiny/bearing_light_on.png", false),
+    DESTINY_BEARING_BODY("props/destiny/bearing_body.obj", "props/destiny/bearing_body.png", false),
 
     // --------------------------------------------------------------------------------------------
     // DECOR PROPS
 
     DECOR_ABYDOS_POT("props/decor/a_pot.obj", "props/decor/a_pot.png", false),
-    DECOR_ABYDOS_LAMP("props/decor/a_lamp.obj", "props/decor/a_lamp.png", false),
-    DESTINY_BEARING_OFF("props/decor/bearing.obj", "props/decor/bearing_off.png", false),
-    DESTINY_BEARING_ON("props/decor/bearing.obj", "props/decor/bearing_on.png", false);
+    DECOR_ABYDOS_LAMP("props/decor/a_lamp.obj", "props/decor/a_lamp.png", false);
 
     // --------------------------------------------------------------------------------------------
 
