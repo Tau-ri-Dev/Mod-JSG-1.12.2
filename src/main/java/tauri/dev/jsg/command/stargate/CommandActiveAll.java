@@ -19,7 +19,7 @@ import java.util.Map;
 
 import static java.lang.Integer.parseInt;
 
-public class CommandActiveAll implements IJSGCommand {
+public class CommandActiveAll extends IJSGCommand {
     @Override
     @Nonnull
     public String getName() {
@@ -44,7 +44,7 @@ public class CommandActiveAll implements IJSGCommand {
     }
 
     @Override
-    public void execute(@Nonnull MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         StargateNetwork network = StargateNetwork.get(sender.getEntityWorld());
         Map<StargateAddress, StargatePos> map = network.getMap().get(SymbolTypeEnum.MILKYWAY);
 

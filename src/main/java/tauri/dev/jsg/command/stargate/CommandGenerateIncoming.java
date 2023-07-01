@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 import static java.lang.Integer.parseInt;
 import static net.minecraft.command.CommandBase.parseCoordinate;
 
-public class CommandGenerateIncoming implements IJSGCommand {
+public class CommandGenerateIncoming extends IJSGCommand {
     @Nonnull
     @Override
     public String getName() {
@@ -42,7 +42,7 @@ public class CommandGenerateIncoming implements IJSGCommand {
     }
 
     @Override
-    public void execute(@Nonnull MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         World world = sender.getEntityWorld();
         BlockPos pos = sender.getPosition();
         int x1;

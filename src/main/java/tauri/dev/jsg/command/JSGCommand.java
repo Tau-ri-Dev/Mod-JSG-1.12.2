@@ -22,7 +22,7 @@ public class JSGCommand extends CommandBase {
 
     public static final JSGCommand INSTANCE = new JSGCommand();
 
-    public static class CommandHelp implements IJSGCommand {
+    public static class CommandHelp extends IJSGCommand {
 
         @Nonnull
         @Override

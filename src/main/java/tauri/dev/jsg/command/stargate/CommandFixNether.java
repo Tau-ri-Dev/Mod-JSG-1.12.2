@@ -10,7 +10,7 @@ import tauri.dev.jsg.stargate.network.StargateNetwork;
 
 import javax.annotation.Nonnull;
 
-public class CommandFixNether implements IJSGCommand {
+public class CommandFixNether extends IJSGCommand {
 
   @Nonnull
   @Override
@@ -36,7 +36,7 @@ public class CommandFixNether implements IJSGCommand {
   }
 
   @Override
-  public void execute(@Nonnull MinecraftServer server, ICommandSender sender, @Nonnull String[] args) throws CommandException {
+  public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
     World world = sender.getEntityWorld();
     StargateNetwork.get(world).deleteNetherGate();
     JSGCommand.sendSuccessMess(sender, "Nether gate deleted from network!");

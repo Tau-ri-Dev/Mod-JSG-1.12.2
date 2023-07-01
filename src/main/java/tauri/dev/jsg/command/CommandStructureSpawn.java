@@ -2,7 +2,6 @@ package tauri.dev.jsg.command;
 
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Rotation;
@@ -23,7 +22,7 @@ import java.util.Random;
 import static net.minecraft.command.CommandBase.*;
 import static tauri.dev.jsg.worldgen.util.JSGWorldTopBlock.getTopBlock;
 
-public class CommandStructureSpawn implements IJSGCommand {
+public class CommandStructureSpawn extends IJSGCommand {
     @Nonnull
     @Override
     public String getName() {
@@ -99,7 +98,7 @@ public class CommandStructureSpawn implements IJSGCommand {
 
     @Nonnull
     @Override
-    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, EnumStructures.getAllStructureNames());
         }

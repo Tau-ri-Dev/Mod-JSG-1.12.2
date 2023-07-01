@@ -10,7 +10,7 @@ import tauri.dev.jsg.tileentity.util.PreparableInterface;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-public class CommandPrepare implements IJSGCommand {
+public class CommandPrepare extends IJSGCommand {
 
     @Override
     @Nonnull

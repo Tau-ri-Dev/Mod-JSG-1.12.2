@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 
 import static net.minecraft.command.CommandBase.parseCoordinate;
 
-public class CommandFix implements IJSGCommand {
+public class CommandFix extends IJSGCommand {
 
     @Nonnull
     @Override
@@ -40,7 +40,7 @@ public class CommandFix implements IJSGCommand {
     }
 
     @Override
-    public void execute(@Nonnull MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         World world = sender.getEntityWorld();
 
         if (args.length < 3) {

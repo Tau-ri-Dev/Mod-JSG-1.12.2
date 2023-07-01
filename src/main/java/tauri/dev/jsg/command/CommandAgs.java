@@ -11,7 +11,7 @@ import tauri.dev.jsg.config.JSGConfig;
 
 import javax.annotation.Nonnull;
 
-public class CommandAgs implements IJSGCommand {
+public class CommandAgs extends IJSGCommand {
     @Nonnull
     @Override
     public String getName() {
@@ -36,7 +36,7 @@ public class CommandAgs implements IJSGCommand {
     }
 
     @Override
-    public void execute(@Nonnull MinecraftServer server, ICommandSender sender, @Nonnull String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         sender.sendMessage(new TextComponentString("Pastebin of AGS: " + TextFormatting.ITALIC + TextFormatting.BOLD + JSGConfig.General.agsPath + TextFormatting.GRAY + " [CLICK ME]").setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, JSGConfig.General.agsPath))));
     }
 }

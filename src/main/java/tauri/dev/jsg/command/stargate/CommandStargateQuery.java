@@ -25,7 +25,7 @@ import java.util.Map;
 
 import static net.minecraft.command.CommandBase.parseCoordinate;
 
-public class CommandStargateQuery implements IJSGCommand {
+public class CommandStargateQuery extends IJSGCommand {
 
     @Nonnull
     @Override
@@ -51,7 +51,7 @@ public class CommandStargateQuery implements IJSGCommand {
     }
 
     @Override
-    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         AxisAlignedBB queryBox = null;
         SymbolTypeEnum symbolType = null;
 

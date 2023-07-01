@@ -23,7 +23,7 @@ import java.util.Map;
 
 import static net.minecraft.command.CommandBase.parseCoordinate;
 
-public class CommandStargateCloseAll implements IJSGCommand {
+public class CommandStargateCloseAll extends IJSGCommand {
 
     @Nonnull
     @Override
@@ -50,7 +50,7 @@ public class CommandStargateCloseAll implements IJSGCommand {
 
 
     @Override
-    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         AxisAlignedBB queryBox = null;
 
         if (args.length >= 1 && args[0].equals("help")) {

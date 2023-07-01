@@ -10,7 +10,7 @@ import tauri.dev.jsg.config.structures.StructureConfig;
 
 import javax.annotation.Nonnull;
 
-public class CommandReloadConfigs implements IJSGCommand {
+public class CommandReloadConfigs extends IJSGCommand {
     @Nonnull
     @Override
     public String getName() {

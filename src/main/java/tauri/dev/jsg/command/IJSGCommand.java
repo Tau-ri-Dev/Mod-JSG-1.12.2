@@ -12,46 +12,51 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public interface IJSGCommand extends ICommand {
+public abstract class IJSGCommand implements ICommand {
     @Nonnull
-    default List<String> getAliases() {
-        return Collections.<String>emptyList();
+    @Override
+    public List<String> getAliases() {
+        return Collections.emptyList();
     }
 
-    default boolean checkPermission(@Nonnull MinecraftServer server, ICommandSender sender) {
+    @Override
+    public boolean checkPermission(@Nonnull MinecraftServer server, ICommandSender sender) {
         return sender.canUseCommand(this.getRequiredPermissionLevel(), this.getName());
     }
 
-    default boolean isUsernameIndex(@Nonnull String[] args, int index)
-    {
+    @Override
+    public boolean isUsernameIndex(@Nonnull String[] args, int index) {
         return false;
     }
 
-    default int compareTo(ICommand p_compareTo_1_)
-    {
+    @Override
+    public int compareTo(ICommand p_compareTo_1_) {
         return this.getName().compareTo(p_compareTo_1_.getName());
     }
 
+    @Override
     @Nonnull
-    String getName();
+    public abstract String getName();
 
     @Nonnull
-    String getDescription();
+    public abstract String getDescription();
 
+    @Override
     @Nonnull
-    default String getUsage(@Nonnull ICommandSender sender){
+    public String getUsage(@Nonnull ICommandSender sender) {
         return getUsage();
     }
 
     @Nonnull
-    String getUsage();
+    public abstract String getUsage();
 
-    int getRequiredPermissionLevel();
+    public abstract int getRequiredPermissionLevel();
 
-    void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException;
+    @Override
+    public abstract void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException;
 
     @Nonnull
-    default List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
+    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
         return new ArrayList<>();
     }
 }

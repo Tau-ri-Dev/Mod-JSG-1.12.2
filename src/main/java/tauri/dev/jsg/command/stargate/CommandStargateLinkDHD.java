@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 
 import static java.lang.Integer.parseInt;
 
-public final class CommandStargateLinkDHD implements IJSGCommand {
+public final class CommandStargateLinkDHD extends IJSGCommand {
     @Nonnull
     @Override
     public String getName() {
@@ -39,7 +39,7 @@ public final class CommandStargateLinkDHD implements IJSGCommand {
     }
 
     @Override
-    public void execute(@Nonnull MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         final int radius = args.length > 0 ? parseInt(args[0]) : JSGConfig.DialHomeDevice.mechanics.rangeFlat;
         final int verticalRadius = args.length > 1 ? parseInt(args[1]) : tauri.dev.jsg.config.JSGConfig.DialHomeDevice.mechanics.rangeVertical;
 

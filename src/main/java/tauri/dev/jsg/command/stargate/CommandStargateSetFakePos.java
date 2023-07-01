@@ -17,7 +17,7 @@ import java.util.Objects;
 
 import static net.minecraft.command.CommandBase.parseCoordinate;
 
-public class CommandStargateSetFakePos implements IJSGCommand {
+public class CommandStargateSetFakePos extends IJSGCommand {
 
     @Nonnull
     @Override
@@ -43,7 +43,7 @@ public class CommandStargateSetFakePos implements IJSGCommand {
     }
 
     @Override
-    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         BlockPos pos = sender.getPosition();
         World world = sender.getEntityWorld();
         TileEntity tileEntity = null;

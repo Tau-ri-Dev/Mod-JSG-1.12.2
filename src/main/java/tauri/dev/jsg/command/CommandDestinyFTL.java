@@ -17,7 +17,7 @@ import java.util.List;
 
 import static net.minecraft.command.CommandBase.parseCoordinate;
 
-public class CommandDestinyFTL implements IJSGCommand {
+public class CommandDestinyFTL extends IJSGCommand {
     @Nonnull
     @Override
     public String getName() {

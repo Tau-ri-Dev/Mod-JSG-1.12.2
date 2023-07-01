@@ -2,7 +2,6 @@ package tauri.dev.jsg.command.stargate;
 
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,9 +17,8 @@ import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import javax.annotation.Nonnull;
 
 import static net.minecraft.command.CommandBase.getPlayer;
-import static net.minecraft.command.CommandBase.notifyCommandListener;
 
-public class CommandPageGive implements IJSGCommand {
+public class CommandPageGive extends IJSGCommand {
 
     @Nonnull
     @Override
@@ -46,7 +44,7 @@ public class CommandPageGive implements IJSGCommand {
     }
 
     @Override
-    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         boolean hasUpgrade = true;
 
         if (args.length < 8) {
