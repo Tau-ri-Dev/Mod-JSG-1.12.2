@@ -32,11 +32,28 @@ public final class JSGCommands {
             new CommandDestinyFTL(),
             new CommandStargateSetFakePos(),
             new CommandStargateGetFakePos(),
-            new CommandStructureSpawn(),
+            new CommandStructureSpawn()
 
             // Should be last
-            new JSGCommand.CommandHelp()
+            // Is added when server is started
+            //new JSGCommand.CommandHelp()
     );
+    /**
+     * Used as API
+     *
+     * Register your sub commands to /jsg command.
+     *
+     * ! REGISTER YOUR COMMANDS WHEN SERVER IS STARTING !
+     * Call this when FMLServerStartingEvent event is fired
+     *
+     * @param commandInstance - instance of IJSGCommand from your mod
+     */
+    @SuppressWarnings("unused")
+    public static void registerSubCommand(IJSGCommand commandInstance){
+        COMMANDS.add(commandInstance);
+    }
+
+    public static void load(){}
 
     public static void registerCommands(FMLServerStartingEvent event) {
         event.registerServerCommand(JSGCommand.INSTANCE);

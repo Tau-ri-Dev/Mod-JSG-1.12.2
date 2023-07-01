@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import org.apache.logging.log4j.Logger;
 import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.command.JSGCommands;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
@@ -203,6 +204,7 @@ public class JSG {
     @EventHandler
     public void loadComplete(FMLLoadCompleteEvent event) {
         JSG.info("Just Stargate Mod loading completed!");
+        JSGCommands.load();
         proxy.loadCompleted();
     }
 
@@ -216,6 +218,9 @@ public class JSG {
     public void serverStarted(FMLServerStartedEvent event) throws IOException {
         StargateDimensionConfig.reload();
         JSG.info("Server started!");
+
+        // register sub command - help
+        JSGCommands.registerSubCommand(new JSGCommand.CommandHelp());
     }
 
     @EventHandler
