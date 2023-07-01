@@ -7,13 +7,11 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
-import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.texture.Texture;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.stargate.network.SymbolPegasusEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
-import tauri.dev.jsg.util.JSGMinecraftHelper;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
 import tauri.dev.jsg.util.math.NumberUtils;
 
@@ -52,7 +50,11 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
 
         if (rendererState.spinHelper.getIsSpinning()) {
             double tick = (getWorld().getTotalWorldTime() + partialTicks);
+            //JSG.info("--------------------------------------");
+            //JSG.info("Tick: " + String.format("%.2f", tick));
             int index = (int) Math.floor(rendererState.spinHelper.apply(tick));
+            //JSG.info("Index: " + index);
+            //JSG.info("--------------------------------------");
             if (!rendererState.slotToGlyphMap.containsKey(index)) {
                 renderGlyph(rendererState.spinHelper.getTargetSymbol().getId(), index, false);
             }
@@ -79,6 +81,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
     // ----------------------------------------------------------------------------------------
     // Ring
 
+    @SuppressWarnings("all")
     private void renderRing(StargatePegasusRendererState rendererState, double partialTicks) {
         GlStateManager.pushMatrix();
 
@@ -113,8 +116,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         if (onlyLight) {
             float color = rendererState.chevronTextureList.getColor(chevron);
             GlStateManager.color(color, color, color);
-        }
-        else
+        } else
             setGateHeatColor(rendererState);
 
         Texture chevronTexture = TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron, onlyLight));
