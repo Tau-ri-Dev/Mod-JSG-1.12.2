@@ -1,8 +1,8 @@
 package tauri.dev.jsg.gui.container.capacitor;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -13,6 +13,8 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.gui.container.JSGContainer;
 import tauri.dev.jsg.gui.util.ContainerHelper;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
@@ -23,7 +25,7 @@ import tauri.dev.jsg.tileentity.energy.CapacitorTile;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-public class CapacitorContainer extends Container {
+public class CapacitorContainer extends JSGContainer {
 
     public CapacitorTile capTile;
     public Slot slot;
@@ -33,6 +35,7 @@ public class CapacitorContainer extends Container {
 
     public CapacitorContainer(IInventory playerInventory, World world, int x, int y, int z) {
         pos = new BlockPos(x, y, z);
+        this.world = world;
         capTile = (CapacitorTile) world.getTileEntity(pos);
         IItemHandler itemHandler = Objects.requireNonNull(capTile).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
@@ -43,9 +46,21 @@ public class CapacitorContainer extends Container {
             addSlotToContainer(slot);
     }
 
+    private final World world;
+
     @Override
-    public boolean canInteractWith(@Nonnull EntityPlayer player) {
-        return true;
+    public World getWorld() {
+        return world;
+    }
+
+    @Override
+    public BlockPos getPos() {
+        return pos;
+    }
+
+    @Override
+    public Block[] getAllowedBlocks() {
+        return new Block[]{JSGBlocks.CAPACITOR_BLOCK};
     }
 
     @Nonnull
@@ -68,7 +83,7 @@ public class CapacitorContainer extends Container {
                 if (!slot.getHasStack()) {
                     ItemStack stack1 = stack.copy();
                     stack1.setCount(1);
-					slot.putStack(stack1);
+                    slot.putStack(stack1);
 
                     stack.shrink(1);
 

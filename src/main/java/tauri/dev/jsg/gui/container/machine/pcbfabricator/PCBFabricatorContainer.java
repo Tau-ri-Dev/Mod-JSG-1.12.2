@@ -1,8 +1,8 @@
 package tauri.dev.jsg.gui.container.machine.pcbfabricator;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -15,6 +15,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.gui.container.JSGContainer;
 import tauri.dev.jsg.gui.util.ContainerHelper;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.packet.JSGPacketHandler;
@@ -29,7 +31,7 @@ import java.util.ArrayList;
 import static tauri.dev.jsg.tileentity.machine.PCBFabricatorTile.CONTAINER_SIZE;
 
 
-public class PCBFabricatorContainer extends Container {
+public class PCBFabricatorContainer extends JSGContainer {
 
     public PCBFabricatorTile tile;
     public FluidTank tank;
@@ -43,13 +45,26 @@ public class PCBFabricatorContainer extends Container {
     private long machineStart = 0;
     private long machineEnd = 0;
 
+    private final World world;
+
     @Override
-    public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
-        return true;
+    public World getWorld() {
+        return world;
+    }
+
+    @Override
+    public BlockPos getPos() {
+        return pos;
+    }
+
+    @Override
+    public Block[] getAllowedBlocks() {
+        return new Block[]{JSGBlocks.MACHINE_PCB_FABRICATOR};
     }
 
     public PCBFabricatorContainer(IInventory playerInventory, World world, int x, int y, int z) {
         pos = new BlockPos(x, y, z);
+        this.world = world;
         tile = (PCBFabricatorTile) world.getTileEntity(pos);
         if (tile != null) {
             IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
@@ -57,9 +72,9 @@ public class PCBFabricatorContainer extends Container {
             tank = (FluidTank) tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 
             int i = 0;
-            for(int y1 = 0; y1 < 3; y1++){
-                for(int x1 = 0; x1 < 3; x1++){
-                    slots.add(new SlotItemHandler(itemHandler, i, 16 + (18*x1), 16 + (18*y1)));
+            for (int y1 = 0; y1 < 3; y1++) {
+                for (int x1 = 0; x1 < 3; x1++) {
+                    slots.add(new SlotItemHandler(itemHandler, i, 16 + (18 * x1), 16 + (18 * y1)));
                     i++;
                 }
             }
@@ -123,7 +138,7 @@ public class PCBFabricatorContainer extends Container {
                 }
             }
 
-            if(energyStorage == null) return;
+            if (energyStorage == null) return;
             lastEnergyStored = energyStorage.getEnergyStored();
             energyTransferedLastTick = tile.getEnergyTransferedLastTick();
             machineStart = tile.getMachineStart();

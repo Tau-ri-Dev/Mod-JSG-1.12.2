@@ -187,6 +187,14 @@ public class JSGBlocks {
             STARGATE_MILKY_WAY_BASE_BLOCK,
             STARGATE_UNIVERSE_BASE_BLOCK
     };
+    public static final JSGBlock[] STARGATE_CLASSIC_ALL_BLOCKS = {
+            STARGATE_PEGASUS_BASE_BLOCK,
+            STARGATE_MILKY_WAY_BASE_BLOCK,
+            STARGATE_UNIVERSE_BASE_BLOCK,
+            STARGATE_PEGASUS_MEMBER_BLOCK,
+            STARGATE_MILKY_WAY_MEMBER_BLOCK,
+            STARGATE_UNIVERSE_MEMBER_BLOCK
+    };
     /**
      * Used in {@link StargateClassicMemberBlock}
      */

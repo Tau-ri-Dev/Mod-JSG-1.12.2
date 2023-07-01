@@ -1,8 +1,8 @@
 package tauri.dev.jsg.gui.container.stargate;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -13,6 +13,8 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.gui.container.JSGContainer;
 import tauri.dev.jsg.gui.container.OpenTabHolderInterface;
 import tauri.dev.jsg.gui.util.ContainerHelper;
 import tauri.dev.jsg.item.energy.CapacitorItemBlock;
@@ -27,7 +29,7 @@ import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.StargateUpgrade
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-public class StargateContainer extends Container implements OpenTabHolderInterface {
+public class StargateContainer extends JSGContainer implements OpenTabHolderInterface {
 
     public StargateClassicBaseTile gateTile;
     public boolean isOperator;
@@ -43,9 +45,26 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
     private double gateTemp;
     private double irisTemp;
 
+    private final World world;
+
+    @Override
+    public World getWorld() {
+        return world;
+    }
+
+    @Override
+    public BlockPos getPos() {
+        return pos;
+    }
+
+    @Override
+    public Block[] getAllowedBlocks() {
+        return JSGBlocks.STARGATE_CLASSIC_ALL_BLOCKS;
+    }
+
     public StargateContainer(IInventory playerInventory, World world, int x, int y, int z, boolean isOperator) {
         this.isOperator = isOperator;
-
+        this.world = world;
         pos = new BlockPos(x, y, z);
         gateTile = (StargateClassicBaseTile) world.getTileEntity(pos);
         IItemHandler itemHandler = Objects.requireNonNull(gateTile).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
@@ -91,11 +110,6 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
     @Override
     public void setOpenTabId(int tabId) {
         openTabId = tabId;
-    }
-
-    @Override
-    public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
-        return true;
     }
 
     @Override

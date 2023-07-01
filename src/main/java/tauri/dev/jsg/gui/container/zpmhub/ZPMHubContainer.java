@@ -1,8 +1,8 @@
 package tauri.dev.jsg.gui.container.zpmhub;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -12,7 +12,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.capability.CapabilityEnergyZPM;
+import tauri.dev.jsg.gui.container.JSGContainer;
 import tauri.dev.jsg.gui.util.ContainerHelper;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
@@ -23,7 +25,7 @@ import tauri.dev.jsg.tileentity.energy.ZPMHubTile;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-public class ZPMHubContainer extends Container {
+public class ZPMHubContainer extends JSGContainer {
 
     public ZPMHubTile hubTile;
     public ArrayList<Slot> slots;
@@ -42,6 +44,7 @@ public class ZPMHubContainer extends Container {
 
     public ZPMHubContainer(IInventory playerInventory, World world, int x, int y, int z) {
         pos = new BlockPos(x, y, z);
+        this.world = world;
         hubTile = (ZPMHubTile) world.getTileEntity(pos);
         IItemHandler itemHandler = null;
         if (hubTile != null) {
@@ -61,9 +64,21 @@ public class ZPMHubContainer extends Container {
         return 97;
     }
 
+    private final World world;
+
     @Override
-    public boolean canInteractWith(@Nonnull EntityPlayer player) {
-        return true;
+    public World getWorld() {
+        return world;
+    }
+
+    @Override
+    public BlockPos getPos() {
+        return pos;
+    }
+
+    @Override
+    public Block[] getAllowedBlocks() {
+        return new Block[]{JSGBlocks.ZPM_HUB};
     }
 
     @Nonnull

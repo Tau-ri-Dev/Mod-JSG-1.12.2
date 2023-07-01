@@ -1,8 +1,8 @@
 package tauri.dev.jsg.gui.container.transportrings;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -13,6 +13,8 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.gui.container.JSGContainer;
 import tauri.dev.jsg.gui.container.OpenTabHolderInterface;
 import tauri.dev.jsg.gui.util.ContainerHelper;
 import tauri.dev.jsg.item.energy.CapacitorItemBlock;
@@ -25,7 +27,7 @@ import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-public class TRContainer extends Container implements OpenTabHolderInterface {
+public class TRContainer extends JSGContainer implements OpenTabHolderInterface {
 
     public TransportRingsAbstractTile trTile;
     public boolean isOperator;
@@ -51,6 +53,7 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
     public TRContainer(IInventory playerInventory, World world, int x, int y, int z, boolean isOperator) {
         this.isOperator = isOperator;
         pos = new BlockPos(x, y, z);
+        this.world = world;
         trTile = (TransportRingsAbstractTile) world.getTileEntity(pos);
         IItemHandler itemHandler = Objects.requireNonNull(trTile).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
@@ -80,9 +83,21 @@ public class TRContainer extends Container implements OpenTabHolderInterface {
             addSlotToContainer(slot);
     }
 
+    private final World world;
+
     @Override
-    public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
-        return true;
+    public World getWorld() {
+        return world;
+    }
+
+    @Override
+    public BlockPos getPos() {
+        return pos;
+    }
+
+    @Override
+    public Block[] getAllowedBlocks() {
+        return JSGBlocks.RINGS_BLOCKS;
     }
 
     @Override
