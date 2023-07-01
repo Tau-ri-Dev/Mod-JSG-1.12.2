@@ -58,15 +58,13 @@ public class CommandStargateGetFakePos implements IJSGCommand {
                 tileEntity = JSGCommands.rayTraceTileEntity((EntityPlayerMP) sender);
 
             if (tileEntity instanceof StargateUniverseBaseTile) {
-                JSGCommand.sendSuccessMess(sender, "Successfully set!");
-                JSGCommand.sendInfoMess(sender, "New DIM: " + ((StargateUniverseBaseTile) tileEntity).getFakeWorld().provider.getDimension());
-                JSGCommand.sendInfoMess(sender, "New Pos: " + ((StargateUniverseBaseTile) tileEntity).getFakePos());
+                JSGCommand.sendSuccessMess(sender, "Fake position of this gate is:");
+                JSGCommand.sendInfoMess(sender, "DIM: " + ((StargateUniverseBaseTile) tileEntity).getFakeWorld().provider.getDimension());
+                JSGCommand.sendInfoMess(sender, "Pos: " + ((StargateUniverseBaseTile) tileEntity).getFakePos());
             } else
                 JSGCommand.sendErrorMess(sender, "TileEntity is not a StargateUniverseBaseTile!");
-            //notifyCommandListener(sender, this, "TileEntity is not a StargateUniverseBaseTile.");
         } catch (NumberFormatException e) {
             JSGCommand.sendUsageMess(sender, this);
-            //notifyCommandListener(sender, this, "Wrong format!");
         }
     }
 }

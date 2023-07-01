@@ -12,9 +12,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 
-import javax.annotation.Nullable;
-import java.util.*;
-
 @SideOnly(Side.CLIENT)
 public class JSGPositionedSound extends PositionedSoundRecord {
     public static JSGPositionedSound getSoundRecord(SoundPositionedEnum soundEnum, BlockPos pos) {
@@ -38,7 +35,11 @@ public class JSGPositionedSound extends PositionedSoundRecord {
     }
 
     public void play() {
-        if(!isPlaying())
-            getHandler().playSound(this);
+        try {
+            if (!isPlaying())
+                getHandler().playSound(this);
+        } catch (Exception e) {
+            JSG.error(e);
+        }
     }
 }

@@ -283,10 +283,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         if (!resultTarget.result.ok()) {
             dialingFailed(resultTarget.result);
-
-            /* TODO Find a test case for resultTarget.targetVaild
-
-             */
             if (resultTarget.targetVaild && getNetwork().getStargate(dialedAddress) != null && getNetwork().getStargate(dialedAddress).getTileEntity() != null) {
                 // We can call dialing failed on the target gate
                 getNetwork().getStargate(dialedAddress).getTileEntity().dialingFailed(StargateOpenResult.CALLER_HUNG_UP);
