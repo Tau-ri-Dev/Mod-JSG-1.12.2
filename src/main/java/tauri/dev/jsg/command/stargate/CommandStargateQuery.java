@@ -9,7 +9,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
-import tauri.dev.jsg.command.IJSGCommand;
+import tauri.dev.jsg.command.AbstractJSGCommand;
 import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
@@ -25,7 +25,11 @@ import java.util.Map;
 
 import static net.minecraft.command.CommandBase.parseCoordinate;
 
-public class CommandStargateQuery extends IJSGCommand {
+public class CommandStargateQuery extends AbstractJSGCommand {
+
+    public CommandStargateQuery() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
 
     @Nonnull
     @Override
@@ -41,7 +45,7 @@ public class CommandStargateQuery extends IJSGCommand {
 
     @Nonnull
     @Override
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "sgquery [x1 y1 z1 x2 y2 z2] [dim=id] [map=UNIVERSE|MILKYWAY|PEGASUS] [givepage=true|false]";
     }
 
@@ -57,7 +61,7 @@ public class CommandStargateQuery extends IJSGCommand {
 
         if (args.length >= 1 && args[0].equals("help")) {
             //throw new WrongUsageException("commands.sgquery.usage");
-            JSGCommand.sendUsageMess(sender, this);
+            baseCommand.sendUsageMess(sender, this);
             return;
         }
 
@@ -99,7 +103,7 @@ public class CommandStargateQuery extends IJSGCommand {
                             givePageCount = Integer.parseInt(arg.substring(9));
                         } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
                             //throw new WrongUsageException("commands.sgquery.wrong_quantity");
-                            JSGCommand.sendErrorMess(sender, "Wrong quantity!");
+                            baseCommand.sendErrorMess(sender, "Wrong quantity!");
                             return;
                         }
                     }
@@ -109,10 +113,10 @@ public class CommandStargateQuery extends IJSGCommand {
             }
 
         } catch (NumberFormatException e) {
-            JSGCommand.sendErrorMess(sender, "Number expected!");
+            baseCommand.sendErrorMess(sender, "Number expected!");
             return;
         } catch (IllegalArgumentException e) {
-            JSGCommand.sendErrorMess(sender, "No map!");
+            baseCommand.sendErrorMess(sender, "No map!");
             return;
         }
 
@@ -122,8 +126,8 @@ public class CommandStargateQuery extends IJSGCommand {
         infoString += "box=" + (queryBox != null ? queryBox.toString() : "any") + "]:";
 
         //notifyCommandListener(sender, this, "commands.sgquery.stargates", TextFormatting.AQUA + infoString);
-        JSGCommand.sendSuccessMess(sender, "Successfully executed!");
-        JSGCommand.sendRunningMess(sender, "Searching in: " + infoString);
+        baseCommand.sendSuccessMess(sender, "Successfully executed!");
+        baseCommand.sendRunningMess(sender, "Searching in: " + infoString);
 
         StargateNetwork network = StargateNetwork.get(sender.getEntityWorld());
         Map<StargateAddress, StargatePos> map = network.getMap().get(symbolType != null ? symbolType : SymbolTypeEnum.MILKYWAY);
@@ -169,10 +173,10 @@ public class CommandStargateQuery extends IJSGCommand {
                 }
 
                 //notifyCommandListener(sender, this, gateString.toString());
-                JSGCommand.sendInfoMess(sender, gateString.toString());
+                baseCommand.sendInfoMess(sender, gateString.toString());
 
                 if (symbolType != null)
-                    JSGCommand.sendInfoMess(sender, "");
+                    baseCommand.sendInfoMess(sender, "");
                 //notifyCommandListener(sender, this,"");
             }
 
@@ -182,17 +186,17 @@ public class CommandStargateQuery extends IJSGCommand {
         if (givePage) {
             if (idCheck == -1 || selectedAddress == null || selectedStargatePos == null) {
                 //throw new WrongUsageException("commands.sgquery.wrong_id");
-                JSGCommand.sendErrorMess(sender, "Wrong ID!");
+                baseCommand.sendErrorMess(sender, "Wrong ID!");
                 return;
             }
 
             if (symbolType == null) {
-                JSGCommand.sendErrorMess(sender, "Wrong map!");
+                baseCommand.sendErrorMess(sender, "Wrong map!");
                 return;
             }
 
             if (!(sender instanceof EntityPlayer)) {
-                JSGCommand.sendErrorMess(sender, "Can not be executed through console!");
+                baseCommand.sendErrorMess(sender, "Can not be executed through console!");
                 return;
             }
 
@@ -204,7 +208,7 @@ public class CommandStargateQuery extends IJSGCommand {
             stack.setTagCompound(PageNotebookItem.getCompoundFromAddress(selectedAddress, true, PageNotebookItem.getRegistryPathFromWorld(selectedStargatePos.getWorld(), selectedStargatePos.gatePos), originId));
             ((EntityPlayer) sender).addItemStackToInventory(stack);
 
-            JSGCommand.sendSuccessMess(sender, "Giving page...");
+            baseCommand.sendSuccessMess(sender, "Giving page...");
             //notifyCommandListener(sender, this, "commands.sgquery.giving_page", sender.getName());
         }
     }

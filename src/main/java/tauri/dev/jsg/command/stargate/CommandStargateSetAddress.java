@@ -6,7 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import tauri.dev.jsg.command.IJSGCommand;
+import tauri.dev.jsg.command.AbstractJSGCommand;
 import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.stargate.network.StargateAddressDynamic;
 import tauri.dev.jsg.stargate.network.StargateNetwork;
@@ -18,7 +18,11 @@ import javax.annotation.Nonnull;
 
 import static net.minecraft.command.CommandBase.parseCoordinate;
 
-public class CommandStargateSetAddress extends IJSGCommand {
+public class CommandStargateSetAddress extends AbstractJSGCommand {
+
+    public CommandStargateSetAddress() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
 
     @Nonnull
     @Override
@@ -34,7 +38,7 @@ public class CommandStargateSetAddress extends IJSGCommand {
 
     @Nonnull
     @Override
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "sgsetaddress <x y z> <map=UNIVERSE|MILKYWAY|PEGASUS> <8x symbol>";
     }
 
@@ -49,7 +53,7 @@ public class CommandStargateSetAddress extends IJSGCommand {
 
         if (args.length < 12) {
             //throw new WrongUsageException("commands.sgsetaddress.usage");
-            JSGCommand.sendUsageMess(sender, this);
+            baseCommand.sendUsageMess(sender, this);
             return;
         }
 
@@ -64,7 +68,7 @@ public class CommandStargateSetAddress extends IJSGCommand {
 
         if (symbolType == null) {
             //throw new WrongUsageException("commands.sgsetaddress.noaddressspace");
-            JSGCommand.sendErrorMess(sender, "Wrong map!");
+            baseCommand.sendErrorMess(sender, "Wrong map!");
             return;
         }
 
@@ -76,13 +80,13 @@ public class CommandStargateSetAddress extends IJSGCommand {
 
             if (symbol == null) {
                 //throw new WrongUsageException("commands.sgsetaddress.wrongsymbol", index);
-                JSGCommand.sendErrorMess(sender, "Wrong symbol at position " + index + "!");
+                baseCommand.sendErrorMess(sender, "Wrong symbol at position " + index + "!");
                 return;
             }
 
             if (stargateAddress.contains(symbol)) {
                 //throw new WrongUsageException("commands.sgsetaddress.duplicatesymbol", index);
-                JSGCommand.sendErrorMess(sender, "Duplicated symbol at position " + index + "!");
+                baseCommand.sendErrorMess(sender, "Duplicated symbol at position " + index + "!");
                 return;
             }
 
@@ -92,7 +96,7 @@ public class CommandStargateSetAddress extends IJSGCommand {
 
         if (StargateNetwork.get(world).isStargateInNetwork(stargateAddress)) {
             //throw new WrongUsageException("commands.sgsetaddress.exists");
-            JSGCommand.sendErrorMess(sender, "Gate with that address already exists!");
+            baseCommand.sendErrorMess(sender, "Gate with that address already exists!");
             return;
         }
 
@@ -109,10 +113,10 @@ public class CommandStargateSetAddress extends IJSGCommand {
 
             gateTile.setGateAddress(symbolType, stargateAddress.toImmutable());
             //notifyCommandListener(sender, this, "commands.sgsetaddress.success", gateTile.getPos().toString(), stargateAddress.toString());
-            JSGCommand.sendSuccessMess(sender, "Address successfully changed!");
+            baseCommand.sendSuccessMess(sender, "Address successfully changed!");
         } else
             //throw new WrongUsageException("commands.sgsetaddress.notstargate");
-            JSGCommand.sendErrorMess(sender, "Target block is not a stargate base block!");
+            baseCommand.sendErrorMess(sender, "Target block is not a stargate base block!");
     }
 
 }

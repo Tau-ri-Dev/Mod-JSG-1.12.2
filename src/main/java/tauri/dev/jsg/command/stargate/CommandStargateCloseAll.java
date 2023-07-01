@@ -7,7 +7,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.command.IJSGCommand;
+import tauri.dev.jsg.command.AbstractJSGCommand;
 import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
 import tauri.dev.jsg.stargate.network.StargateAddress;
@@ -23,7 +23,11 @@ import java.util.Map;
 
 import static net.minecraft.command.CommandBase.parseCoordinate;
 
-public class CommandStargateCloseAll extends IJSGCommand {
+public class CommandStargateCloseAll extends AbstractJSGCommand {
+
+    public CommandStargateCloseAll() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
 
     @Nonnull
     @Override
@@ -39,7 +43,7 @@ public class CommandStargateCloseAll extends IJSGCommand {
 
     @Nonnull
     @Override
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "sgcloseall [x1 y1 z1 x2 y2 z2] [dim=id|current] [force=false|true]";
     }
 
@@ -55,7 +59,7 @@ public class CommandStargateCloseAll extends IJSGCommand {
 
         if (args.length >= 1 && args[0].equals("help")) {
             //throw new WrongUsageException("commands.sgcloseall.usage");
-            JSGCommand.sendUsageMess(sender, this);
+            baseCommand.sendUsageMess(sender, this);
             return;
         }
 
@@ -100,11 +104,11 @@ public class CommandStargateCloseAll extends IJSGCommand {
 
         } catch (NumberFormatException e) {
             //throw new WrongUsageException("commands.sgquery.number_expected");
-            JSGCommand.sendErrorMess(sender, "Number expected!");
+            baseCommand.sendErrorMess(sender, "Number expected!");
             return;
         }
 
-        JSGCommand.sendRunningMess(sender, "Closing gates with parameters [dimId=" + (checkDim ? dimId : "any") + ", box=" + (queryBox != null ? queryBox.toString() : "infinite") + "]...");
+        baseCommand.sendRunningMess(sender, "Closing gates with parameters [dimId=" + (checkDim ? dimId : "any") + ", box=" + (queryBox != null ? queryBox.toString() : "infinite") + "]...");
         //notifyCommandListener(sender, this, "commands.sgcloseall.closing", checkDim ? dimId : "any", (queryBox != null ? queryBox.toString() : "box=infinite"));
 
         StargateNetwork network = StargateNetwork.get(sender.getEntityWorld());
@@ -140,7 +144,7 @@ public class CommandStargateCloseAll extends IJSGCommand {
             JSG.warn("Removing address " + address);
         }
 
-        JSGCommand.sendSuccessMess(sender, "Closed " + closed + " gates!");
+        baseCommand.sendSuccessMess(sender, "Closed " + closed + " gates!");
 
         //notifyCommandListener(sender, this, "commands.sgcloseall.closed", closed);
     }

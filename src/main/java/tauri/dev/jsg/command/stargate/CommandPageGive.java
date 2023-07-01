@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import tauri.dev.jsg.command.IJSGCommand;
+import tauri.dev.jsg.command.AbstractJSGCommand;
 import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
@@ -18,7 +18,11 @@ import javax.annotation.Nonnull;
 
 import static net.minecraft.command.CommandBase.getPlayer;
 
-public class CommandPageGive extends IJSGCommand {
+public class CommandPageGive extends AbstractJSGCommand {
+
+    public CommandPageGive() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
 
     @Nonnull
     @Override
@@ -34,7 +38,7 @@ public class CommandPageGive extends IJSGCommand {
 
     @Nonnull
     @Override
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "sggivepage";
     }
 
@@ -49,7 +53,7 @@ public class CommandPageGive extends IJSGCommand {
 
         if (args.length < 8) {
             //throw new WrongUsageException("commands.sggivepage.usage");
-            JSGCommand.sendUsageMess(sender, this);
+            baseCommand.sendUsageMess(sender, this);
             return;
         }
 
@@ -71,7 +75,7 @@ public class CommandPageGive extends IJSGCommand {
         }
 
         if (symbolType == null) {
-            JSGCommand.sendUsageMess(sender, this);
+            baseCommand.sendUsageMess(sender, this);
             return;
             //throw new WrongUsageException("commands.sggivepage.no_map");
         }
@@ -86,7 +90,7 @@ public class CommandPageGive extends IJSGCommand {
             SymbolInterface symbol = symbolType.fromEnglishName(args[i].replace("-", " "));
 
             if (symbol == null) {
-                JSGCommand.sendErrorMess(sender, "Wrong symbol name at position " + index + "!");
+                baseCommand.sendErrorMess(sender, "Wrong symbol name at position " + index + "!");
                 return;
                 //throw new WrongUsageException("commands.sgsetaddress.wrongsymbol", index);
             }
@@ -104,7 +108,7 @@ public class CommandPageGive extends IJSGCommand {
         ItemStack stack = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 1, 1);
         stack.setTagCompound(compound);
         player.addItemStackToInventory(stack);
-        JSGCommand.sendSuccessMess(sender, "Successfully executed!");
+        baseCommand.sendSuccessMess(sender, "Successfully executed!");
     }
 
 }

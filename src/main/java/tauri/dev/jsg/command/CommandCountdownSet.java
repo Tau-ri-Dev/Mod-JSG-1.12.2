@@ -13,7 +13,11 @@ import javax.annotation.Nonnull;
 
 import static net.minecraft.command.CommandBase.parseCoordinate;
 
-public class CommandCountdownSet extends IJSGCommand {
+public class CommandCountdownSet extends AbstractJSGCommand {
+
+    public CommandCountdownSet() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
 
     @Nonnull
     @Override
@@ -29,7 +33,7 @@ public class CommandCountdownSet extends IJSGCommand {
 
     @Nonnull
     @Override
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "countdown [set|reset] <ticks> [x y z]";
     }
 
@@ -45,7 +49,7 @@ public class CommandCountdownSet extends IJSGCommand {
         TileEntity tileEntity = null;
 
         if (args.length < 1) {
-            JSGCommand.sendUsageMess(sender, this);
+            baseCommand.sendUsageMess(sender, this);
             return;
         }
 
@@ -65,11 +69,11 @@ public class CommandCountdownSet extends IJSGCommand {
 
                 if (tileEntity instanceof DestinyCountDownTile) {
                     ((DestinyCountDownTile) tileEntity).setCountDown(sender.getEntityWorld().getTotalWorldTime() + ticks);
-                    JSGCommand.sendSuccessMess(sender, "Countdown set to " + ticks + " ticks!");
+                    baseCommand.sendSuccessMess(sender, "Countdown set to " + ticks + " ticks!");
                 } else
-                    JSGCommand.sendErrorMess(sender, "Target block is not a countdown!");
+                    baseCommand.sendErrorMess(sender, "Target block is not a countdown!");
             } catch (Exception e) {
-                JSGCommand.sendUsageMess(sender, this);
+                baseCommand.sendUsageMess(sender, this);
             }
         }
         else if(args[0].equalsIgnoreCase("reset")){
@@ -86,11 +90,11 @@ public class CommandCountdownSet extends IJSGCommand {
             try {
                 if (tileEntity instanceof DestinyCountDownTile) {
                     ((DestinyCountDownTile) tileEntity).setCountDown(sender.getEntityWorld().getTotalWorldTime() + 5);
-                    JSGCommand.sendSuccessMess(sender, "Countdown reset!");
+                    baseCommand.sendSuccessMess(sender, "Countdown reset!");
                 } else
-                    JSGCommand.sendErrorMess(sender, "Target block is not a countdown!");
+                    baseCommand.sendErrorMess(sender, "Target block is not a countdown!");
             } catch (Exception e) {
-                JSGCommand.sendUsageMess(sender, this);
+                baseCommand.sendUsageMess(sender, this);
             }
         }
     }

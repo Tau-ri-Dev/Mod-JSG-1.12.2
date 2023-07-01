@@ -7,7 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import tauri.dev.jsg.command.IJSGCommand;
+import tauri.dev.jsg.command.AbstractJSGCommand;
 import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.command.JSGCommands;
 import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
@@ -16,7 +16,11 @@ import javax.annotation.Nonnull;
 
 import static net.minecraft.command.CommandBase.parseCoordinate;
 
-public class CommandStargateGetFakePos extends IJSGCommand {
+public class CommandStargateGetFakePos extends AbstractJSGCommand {
+
+    public CommandStargateGetFakePos() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
 
     @Nonnull
     @Override
@@ -32,7 +36,7 @@ public class CommandStargateGetFakePos extends IJSGCommand {
 
     @Nonnull
     @Override
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "sggetfakepos [tileX] [tileY] [tileZ]";
     }
 
@@ -58,13 +62,13 @@ public class CommandStargateGetFakePos extends IJSGCommand {
                 tileEntity = JSGCommands.rayTraceTileEntity((EntityPlayerMP) sender);
 
             if (tileEntity instanceof StargateUniverseBaseTile) {
-                JSGCommand.sendSuccessMess(sender, "Fake position of this gate is:");
-                JSGCommand.sendInfoMess(sender, "DIM: " + ((StargateUniverseBaseTile) tileEntity).getFakeWorld().provider.getDimension());
-                JSGCommand.sendInfoMess(sender, "Pos: " + ((StargateUniverseBaseTile) tileEntity).getFakePos());
+                baseCommand.sendSuccessMess(sender, "Fake position of this gate is:");
+                baseCommand.sendInfoMess(sender, "DIM: " + ((StargateUniverseBaseTile) tileEntity).getFakeWorld().provider.getDimension());
+                baseCommand.sendInfoMess(sender, "Pos: " + ((StargateUniverseBaseTile) tileEntity).getFakePos());
             } else
-                JSGCommand.sendErrorMess(sender, "TileEntity is not a StargateUniverseBaseTile!");
+                baseCommand.sendErrorMess(sender, "TileEntity is not a StargateUniverseBaseTile!");
         } catch (NumberFormatException e) {
-            JSGCommand.sendUsageMess(sender, this);
+            baseCommand.sendUsageMess(sender, this);
         }
     }
 }

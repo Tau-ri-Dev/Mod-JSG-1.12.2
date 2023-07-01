@@ -11,7 +11,11 @@ import tauri.dev.jsg.config.JSGConfig;
 
 import javax.annotation.Nonnull;
 
-public class CommandAgs extends IJSGCommand {
+public class CommandAgs extends AbstractJSGCommand {
+    public CommandAgs() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
+
     @Nonnull
     @Override
     public String getName() {
@@ -26,7 +30,7 @@ public class CommandAgs extends IJSGCommand {
 
     @Nonnull
     @Override
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "ags";
     }
 

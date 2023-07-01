@@ -1,6 +1,5 @@
 package tauri.dev.jsg.command;
 
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -12,7 +11,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class IJSGCommand implements ICommand {
+public abstract class AbstractJSGCommand implements ICommand {
+
+    public final JSGCommand baseCommand;
+    public AbstractJSGCommand(JSGCommand baseCommand){
+        this.baseCommand = baseCommand;
+        baseCommand.addSubCommand(this);
+    }
+
     @Nonnull
     @Override
     public List<String> getAliases() {
@@ -34,26 +40,19 @@ public abstract class IJSGCommand implements ICommand {
         return this.getName().compareTo(p_compareTo_1_.getName());
     }
 
-    @Override
-    @Nonnull
-    public abstract String getName();
-
     @Nonnull
     public abstract String getDescription();
 
     @Override
     @Nonnull
     public String getUsage(@Nonnull ICommandSender sender) {
-        return getUsage();
+        return getGeneralUsage();
     }
 
     @Nonnull
-    public abstract String getUsage();
+    public abstract String getGeneralUsage();
 
     public abstract int getRequiredPermissionLevel();
-
-    @Override
-    public abstract void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException;
 
     @Nonnull
     public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {

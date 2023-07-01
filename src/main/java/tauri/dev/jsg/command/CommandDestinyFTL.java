@@ -17,7 +17,11 @@ import java.util.List;
 
 import static net.minecraft.command.CommandBase.parseCoordinate;
 
-public class CommandDestinyFTL extends IJSGCommand {
+public class CommandDestinyFTL extends AbstractJSGCommand {
+    public CommandDestinyFTL() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
+
     @Nonnull
     @Override
     public String getName() {
@@ -32,7 +36,7 @@ public class CommandDestinyFTL extends IJSGCommand {
 
     @Nonnull
     @Override
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "destinyftl [<x> <y> <z>] <range> [from ftl?]";
     }
 
@@ -73,9 +77,9 @@ public class CommandDestinyFTL extends IJSGCommand {
                 JSGPacketHandler.INSTANCE.sendTo(new StartPlayerFadeOutToClient(type), e);
                 JSGSoundHelper.playSoundToPlayer(e, sound, e.getPosition());
             }
-            JSGCommand.sendSuccessMess(sender, "Successfully executed!");
+            baseCommand.sendSuccessMess(sender, "Successfully executed!");
         } catch (Exception e) {
-            JSGCommand.sendUsageMess(sender, this);
+            baseCommand.sendUsageMess(sender, this);
         }
     }
 }

@@ -22,7 +22,11 @@ import java.util.Random;
 import static net.minecraft.command.CommandBase.*;
 import static tauri.dev.jsg.worldgen.util.JSGWorldTopBlock.getTopBlock;
 
-public class CommandStructureSpawn extends IJSGCommand {
+public class CommandStructureSpawn extends AbstractJSGCommand {
+
+    public CommandStructureSpawn() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
     @Nonnull
     @Override
     public String getName() {
@@ -37,7 +41,7 @@ public class CommandStructureSpawn extends IJSGCommand {
 
     @Nonnull
     @Override
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "structurespawn <structure name> <x> <z> [dimId]";
     }
 
@@ -49,7 +53,7 @@ public class CommandStructureSpawn extends IJSGCommand {
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         if (args.length < 3) {
-            JSGCommand.sendUsageMess(sender, this);
+            baseCommand.sendUsageMess(sender, this);
             return;
         }
 
@@ -64,7 +68,7 @@ public class CommandStructureSpawn extends IJSGCommand {
         try {
             EnumStructures structure = EnumStructures.getStructureByName(args[0]);
             if (structure == null) {
-                JSGCommand.sendErrorMess(sender, "Structure with that name not found!");
+                baseCommand.sendErrorMess(sender, "Structure with that name not found!");
                 return;
             }
 
@@ -72,7 +76,7 @@ public class CommandStructureSpawn extends IJSGCommand {
                 dimId = Integer.parseInt(args[3]);
 
             if (!DimensionManager.isDimensionRegistered(dimId)){
-                JSGCommand.sendErrorMess(sender, "Dimension not found");
+                baseCommand.sendErrorMess(sender, "Dimension not found");
                 return;
             }
 
@@ -82,17 +86,17 @@ public class CommandStructureSpawn extends IJSGCommand {
             JSGWorldTopBlock topBlock = getTopBlock(server.getWorld(dimId), (int) Math.round(x), (int) Math.round(z), structure.getActualStructure(dimId).airUp, dimId);
 
             if (topBlock == null){
-                JSGCommand.sendErrorMess(sender, "Can not get top block!");
+                baseCommand.sendErrorMess(sender, "Can not get top block!");
                 return;
             }
 
             if(!structure.getActualStructure(dimId).findOptimalRotation) rotation = null;
 
             structure.getActualStructure(dimId).generateStructure(world, new BlockPos(x, topBlock.y, z), new Random(), server.getWorld(dimId), rotation);
-            JSGCommand.sendSuccessMess(sender, "Successfully spawned!");
+            baseCommand.sendSuccessMess(sender, "Successfully spawned!");
 
         } catch (Exception e) {
-            JSGCommand.sendErrorMess(sender, "Can not place structure here!");
+            baseCommand.sendErrorMess(sender, "Can not place structure here!");
         }
     }
 

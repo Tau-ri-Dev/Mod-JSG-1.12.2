@@ -5,7 +5,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import tauri.dev.jsg.block.JSGBlocks;
-import tauri.dev.jsg.command.IJSGCommand;
+import tauri.dev.jsg.command.AbstractJSGCommand;
 import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.util.LinkingHelper;
@@ -14,7 +14,11 @@ import javax.annotation.Nonnull;
 
 import static java.lang.Integer.parseInt;
 
-public final class CommandStargateLinkDHD extends IJSGCommand {
+public final class CommandStargateLinkDHD extends AbstractJSGCommand {
+    public CommandStargateLinkDHD() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
+
     @Nonnull
     @Override
     public String getName() {
@@ -29,7 +33,7 @@ public final class CommandStargateLinkDHD extends IJSGCommand {
 
     @Nonnull
     @Override
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "sglinkdhd [radius] [vertical radius]";
     }
 
@@ -50,9 +54,9 @@ public final class CommandStargateLinkDHD extends IJSGCommand {
 
         if (gatePos != null && dhdPos != null) {
             LinkingHelper.updateLinkedGate(sender.getEntityWorld(), gatePos, dhdPos);
-            JSGCommand.sendSuccessMess(sender, "Successfully executed!");
+            baseCommand.sendSuccessMess(sender, "Successfully executed!");
         } else {
-            JSGCommand.sendErrorMess(sender, String.format("Unable to link to nearest gate: No gates found in radius %s from pos %s", radiusPos, sender.getPosition()));
+            baseCommand.sendErrorMess(sender, String.format("Unable to link to nearest gate: No gates found in radius %s from pos %s", radiusPos, sender.getPosition()));
             //notifyCommandListener(sender, this, TextFormatting.RED + "Unable to link to nearest gate: no gates found in radius %s from pos %s", radiusPos.toString(), sender.getPosition().toString());
         }
     }

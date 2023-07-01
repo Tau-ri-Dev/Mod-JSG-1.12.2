@@ -10,7 +10,11 @@ import tauri.dev.jsg.tileentity.util.PreparableInterface;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-public class CommandPrepare extends IJSGCommand {
+public class CommandPrepare extends AbstractJSGCommand {
+
+    public CommandPrepare() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
 
     @Override
     @Nonnull
@@ -26,7 +30,7 @@ public class CommandPrepare extends IJSGCommand {
 
     @Override
     @Nonnull
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "sgprepare";
     }
 
@@ -42,11 +46,11 @@ public class CommandPrepare extends IJSGCommand {
 
         if (tileEntity instanceof PreparableInterface) {
             if (((PreparableInterface) tileEntity).prepare(sender, this)) {
-                JSGCommand.sendSuccessMess(sender, "Preparing " + tileEntity.getClass().getSimpleName());
+                baseCommand.sendSuccessMess(sender, "Preparing " + tileEntity.getClass().getSimpleName());
             } else {
-                JSGCommand.sendErrorMess(sender, "Failed to prepare " + tileEntity.getClass().getSimpleName() + ".");
+                baseCommand.sendErrorMess(sender, "Failed to prepare " + tileEntity.getClass().getSimpleName() + ".");
             }
         } else
-            JSGCommand.sendErrorMess(sender, "Can't prepare this block. TileEntity not a instance of PreparableInterface.");
+            baseCommand.sendErrorMess(sender, "Can't prepare this block. TileEntity not a instance of PreparableInterface.");
     }
 }

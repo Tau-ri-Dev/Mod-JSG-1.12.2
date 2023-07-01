@@ -10,7 +10,11 @@ import tauri.dev.jsg.config.structures.StructureConfig;
 
 import javax.annotation.Nonnull;
 
-public class CommandReloadConfigs extends IJSGCommand {
+public class CommandReloadConfigs extends AbstractJSGCommand {
+    public CommandReloadConfigs() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
+
     @Nonnull
     @Override
     public String getName() {
@@ -25,7 +29,7 @@ public class CommandReloadConfigs extends IJSGCommand {
 
     @Nonnull
     @Override
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "reloadconfig";
     }
 
@@ -44,7 +48,7 @@ public class CommandReloadConfigs extends IJSGCommand {
         } catch (Exception e){
             e.printStackTrace();
         }
-        JSGCommand.sendSuccessMess(sender, "Configs reloaded!");
+        baseCommand.sendSuccessMess(sender, "Configs reloaded!");
     }
 
 }

@@ -7,7 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import tauri.dev.jsg.command.IJSGCommand;
+import tauri.dev.jsg.command.AbstractJSGCommand;
 import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.command.JSGCommands;
 import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
@@ -17,7 +17,11 @@ import java.util.Objects;
 
 import static net.minecraft.command.CommandBase.parseCoordinate;
 
-public class CommandStargateSetFakePos extends IJSGCommand {
+public class CommandStargateSetFakePos extends AbstractJSGCommand {
+
+    public CommandStargateSetFakePos() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
 
     @Nonnull
     @Override
@@ -27,7 +31,7 @@ public class CommandStargateSetFakePos extends IJSGCommand {
 
     @Nonnull
     @Override
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "sgsetfakepos <x> <y> <z> <dimId> [tileX] [tileY] [tileZ]";
     }
 
@@ -50,7 +54,7 @@ public class CommandStargateSetFakePos extends IJSGCommand {
 
         if (args.length < 4) {
             //notifyCommandListener(sender, this, "Please, insert x y z and dimId!");
-            JSGCommand.sendUsageMess(sender, this);
+            baseCommand.sendUsageMess(sender, this);
             return;
         }
         try {
@@ -72,11 +76,11 @@ public class CommandStargateSetFakePos extends IJSGCommand {
             if (tileEntity instanceof StargateUniverseBaseTile) {
                 ((StargateUniverseBaseTile) tileEntity).setFakePos(new BlockPos(newX, newY, newZ));
                 ((StargateUniverseBaseTile) tileEntity).setFakeWorld(Objects.requireNonNull(sender.getEntityWorld().getMinecraftServer()).getWorld(newDim));
-                JSGCommand.sendSuccessMess(sender, "Successfully set!");
+                baseCommand.sendSuccessMess(sender, "Successfully set!");
             } else
-                JSGCommand.sendErrorMess(sender, "Target block is not a Universe gate base block!");
+                baseCommand.sendErrorMess(sender, "Target block is not a Universe gate base block!");
         } catch (NumberFormatException e) {
-            JSGCommand.sendUsageMess(sender, this);
+            baseCommand.sendUsageMess(sender, this);
         }
     }
 }

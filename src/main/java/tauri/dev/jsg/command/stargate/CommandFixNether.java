@@ -4,13 +4,17 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import tauri.dev.jsg.command.IJSGCommand;
+import tauri.dev.jsg.command.AbstractJSGCommand;
 import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.stargate.network.StargateNetwork;
 
 import javax.annotation.Nonnull;
 
-public class CommandFixNether extends IJSGCommand {
+public class CommandFixNether extends AbstractJSGCommand {
+
+  public CommandFixNether() {
+    super(JSGCommand.JSG_BASE_COMMAND);
+  }
 
   @Nonnull
   @Override
@@ -26,7 +30,7 @@ public class CommandFixNether extends IJSGCommand {
 
   @Nonnull
   @Override
-  public String getUsage() {
+  public String getGeneralUsage() {
     return "fixnether";
   }
 
@@ -39,7 +43,7 @@ public class CommandFixNether extends IJSGCommand {
   public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
     World world = sender.getEntityWorld();
     StargateNetwork.get(world).deleteNetherGate();
-    JSGCommand.sendSuccessMess(sender, "Nether gate deleted from network!");
+    baseCommand.sendSuccessMess(sender, "Nether gate deleted from network!");
   }
 
 }

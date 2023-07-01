@@ -10,12 +10,13 @@ import tauri.dev.jsg.command.stargate.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public final class JSGCommands {
 
-    public static final List<IJSGCommand> COMMANDS = Arrays.asList(
+    @SuppressWarnings("unused")
+    public static final ArrayList<AbstractJSGCommand> COMMANDS = new ArrayList<>(Arrays.asList(
             new CommandStargateQuery(),
             new CommandPrepare(),
             new CommandStargateCloseAll(),
@@ -33,30 +34,28 @@ public final class JSGCommands {
             new CommandStargateSetFakePos(),
             new CommandStargateGetFakePos(),
             new CommandStructureSpawn()
+    ));
 
-            // Should be last
-            // Is added when server is started
-            //new JSGCommand.CommandHelp()
-    );
     /**
      * Used as API
-     *
+     * <p>
      * Register your sub commands to /jsg command.
-     *
+     * <p>
      * ! REGISTER YOUR COMMANDS WHEN SERVER IS STARTING !
      * Call this when FMLServerStartingEvent event is fired
      *
      * @param commandInstance - instance of IJSGCommand from your mod
      */
     @SuppressWarnings("unused")
-    public static void registerSubCommand(IJSGCommand commandInstance){
-        COMMANDS.add(commandInstance);
+    public static void registerSubCommand(JSGCommand baseCommand, AbstractJSGCommand commandInstance) {
+        baseCommand.subCommands.add(commandInstance);
     }
 
-    public static void load(){}
+    public static void load() {
+    }
 
     public static void registerCommands(FMLServerStartingEvent event) {
-        event.registerServerCommand(JSGCommand.INSTANCE);
+        event.registerServerCommand(JSGCommand.JSG_BASE_COMMAND);
     }
 
     public static RayTraceResult rayTraceEntity(Entity e, double blockReachDistance, float partialTicks) {

@@ -6,7 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import tauri.dev.jsg.command.IJSGCommand;
+import tauri.dev.jsg.command.AbstractJSGCommand;
 import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.stargate.network.StargateAddress;
 import tauri.dev.jsg.stargate.network.StargateNetwork;
@@ -19,7 +19,11 @@ import java.util.Map;
 
 import static java.lang.Integer.parseInt;
 
-public class CommandActiveAll extends IJSGCommand {
+public class CommandActiveAll extends AbstractJSGCommand {
+
+    public CommandActiveAll() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
     @Override
     @Nonnull
     public String getName() {
@@ -34,7 +38,7 @@ public class CommandActiveAll extends IJSGCommand {
 
     @Override
     @Nonnull
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "sgactiveall [entities] [addressLength]";
     }
 
@@ -73,6 +77,6 @@ public class CommandActiveAll extends IJSGCommand {
                 i++;
             }
         }
-        JSGCommand.sendSuccessMess(sender, "Successfully opened " + i + " gates!");
+        baseCommand.sendSuccessMess(sender, "Successfully opened " + i + " gates!");
     }
 }

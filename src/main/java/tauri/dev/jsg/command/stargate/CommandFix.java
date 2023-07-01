@@ -6,7 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import tauri.dev.jsg.command.IJSGCommand;
+import tauri.dev.jsg.command.AbstractJSGCommand;
 import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 
@@ -14,7 +14,11 @@ import javax.annotation.Nonnull;
 
 import static net.minecraft.command.CommandBase.parseCoordinate;
 
-public class CommandFix extends IJSGCommand {
+public class CommandFix extends AbstractJSGCommand {
+
+    public CommandFix() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
 
     @Nonnull
     @Override
@@ -30,7 +34,7 @@ public class CommandFix extends IJSGCommand {
 
     @Nonnull
     @Override
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "sgfix <x y z>";
     }
 
@@ -44,7 +48,7 @@ public class CommandFix extends IJSGCommand {
         World world = sender.getEntityWorld();
 
         if (args.length < 3) {
-            JSGCommand.sendUsageMess(sender, this);
+            baseCommand.sendUsageMess(sender, this);
             return;
             //throw new WrongUsageException("commands.sgsetaddress.usage");
         }
@@ -60,9 +64,9 @@ public class CommandFix extends IJSGCommand {
         if (tileEntity instanceof StargateAbstractBaseTile) {
             StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) tileEntity;
             gateTile.refresh();
-            JSGCommand.sendSuccessMess(sender, "Successfully executed!");
+            baseCommand.sendSuccessMess(sender, "Successfully executed!");
         } else
-            JSGCommand.sendErrorMess(sender, "Target block is not a stargate base block!");
+            baseCommand.sendErrorMess(sender, "Target block is not a stargate base block!");
         //throw new WrongUsageException("commands.sgsetaddress.notstargate");
     }
 

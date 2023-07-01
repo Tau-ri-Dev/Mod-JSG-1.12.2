@@ -7,7 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import tauri.dev.jsg.command.IJSGCommand;
+import tauri.dev.jsg.command.AbstractJSGCommand;
 import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.command.JSGCommands;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
@@ -17,7 +17,11 @@ import javax.annotation.Nonnull;
 import static java.lang.Integer.parseInt;
 import static net.minecraft.command.CommandBase.parseCoordinate;
 
-public class CommandGenerateIncoming extends IJSGCommand {
+public class CommandGenerateIncoming extends AbstractJSGCommand {
+
+    public CommandGenerateIncoming() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
     @Nonnull
     @Override
     public String getName() {
@@ -32,7 +36,7 @@ public class CommandGenerateIncoming extends IJSGCommand {
 
     @Nonnull
     @Override
-    public String getUsage() {
+    public String getGeneralUsage() {
         return "sgincoming <x> <y> <z> <entities> <addressLength>";
     }
 
@@ -66,12 +70,12 @@ public class CommandGenerateIncoming extends IJSGCommand {
             tileEntity = JSGCommands.rayTraceTileEntity((EntityPlayerMP) sender);
             if (tileEntity == null) {
                 //throw new WrongUsageException("commands.sggenincoming.usage");
-                JSGCommand.sendUsageMess(sender, this);
+                baseCommand.sendUsageMess(sender, this);
                 return;
             }
         } else {
             //throw new WrongUsageException("commands.sggenincoming.usage");
-            JSGCommand.sendUsageMess(sender, this);
+            baseCommand.sendUsageMess(sender, this);
             return;
         }
 
@@ -85,9 +89,9 @@ public class CommandGenerateIncoming extends IJSGCommand {
             // is classic gate tile
             StargateClassicBaseTile gateTile = (StargateClassicBaseTile) tileEntity;
             gateTile.generateIncoming(entities, addressLength);
-            JSGCommand.sendSuccessMess(sender, "Successfully executed!");
+            baseCommand.sendSuccessMess(sender, "Successfully executed!");
         } else
             //throw new WrongUsageException("commands.sggenincoming.notstargate");
-            JSGCommand.sendErrorMess(sender, "Target block is not a stargate base block!");
+            baseCommand.sendErrorMess(sender, "Target block is not a stargate base block!");
     }
 }

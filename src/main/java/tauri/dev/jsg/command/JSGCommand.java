@@ -16,13 +16,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static tauri.dev.jsg.command.JSGCommands.COMMANDS;
-
 public class JSGCommand extends CommandBase {
 
-    public static final JSGCommand INSTANCE = new JSGCommand();
+    private final String name;
+    protected final CommandHelp helpCommand;
+    public final ArrayList<AbstractJSGCommand> subCommands = new ArrayList<>();
 
-    public static class CommandHelp extends IJSGCommand {
+    public JSGCommand(String baseCommandName) {
+        this.name = baseCommandName;
+        helpCommand = new CommandHelp(this);
+    }
+
+    public void addSubCommand(AbstractJSGCommand commands) {
+        this.subCommands.add(commands);
+    }
+
+    public static final JSGCommand JSG_BASE_COMMAND = new JSGCommand("jsg");
+
+    public static class CommandHelp extends AbstractJSGCommand {
+
+        public CommandHelp(JSGCommand baseCommand) {
+            super(baseCommand);
+        }
 
         @Nonnull
         @Override
@@ -38,7 +53,7 @@ public class JSGCommand extends CommandBase {
 
         @Nonnull
         @Override
-        public String getUsage() {
+        public String getGeneralUsage() {
             return "help";
         }
 
@@ -56,14 +71,18 @@ public class JSGCommand extends CommandBase {
                 } catch (Exception ignored) {
                 }
             }
-            showHelp(sender, page);
+            baseCommand.showHelp(sender, page);
         }
     }
 
     @Override
     @Nonnull
     public String getName() {
-        return "jsg";
+        return name;
+    }
+
+    public String getTitle(){
+        return "Just Stargate Mod";
     }
 
     @Override
@@ -80,30 +99,30 @@ public class JSGCommand extends CommandBase {
     @Nonnull
     @ParametersAreNonnullByDefault
     public String getUsage(ICommandSender sender) {
-        return "Use /jsg help for help";
+        return "Use /" + getName() + " help for help";
     }
 
-    public static void sendNoPerms(ICommandSender sender) {
+    public void sendNoPerms(ICommandSender sender) {
         sendErrorMess(sender, "You don't have permissions to do that!");
     }
 
-    public static void sendErrorMess(ICommandSender sender, String mess) {
+    public void sendErrorMess(ICommandSender sender, String mess) {
         sender.sendMessage(new TextComponentString(" \u00a7c\u00a7lOps! \u00a77" + mess));
     }
 
-    public static void sendSuccessMess(ICommandSender sender, String mess) {
+    public void sendSuccessMess(ICommandSender sender, String mess) {
         sender.sendMessage(new TextComponentString(" \u00a7a\u00a7lDone! \u00a77" + mess));
     }
 
-    public static void sendInfoMess(ICommandSender sender, String mess) {
+    public void sendInfoMess(ICommandSender sender, String mess) {
         sender.sendMessage(new TextComponentString(" \u00a73\u00a7l\u2502 \u00a77" + mess));
     }
 
-    public static void sendUsageMess(ICommandSender sender, IJSGCommand cmd) {
-        sender.sendMessage(new TextComponentString(" \u00a73\u00a7lUsage: \u00a77/" + INSTANCE.getName() + " " + cmd.getUsage(sender)));
+    public void sendUsageMess(ICommandSender sender, AbstractJSGCommand cmd) {
+        sender.sendMessage(new TextComponentString(" \u00a73\u00a7lUsage: \u00a77/" + getName() + " " + cmd.getUsage(sender)));
     }
 
-    public static void sendRunningMess(ICommandSender sender, String mess) {
+    public void sendRunningMess(ICommandSender sender, String mess) {
         sender.sendMessage(new TextComponentString(" \u00a76\u00a7lRunning: \u00a77" + mess));
     }
 
@@ -117,15 +136,15 @@ public class JSGCommand extends CommandBase {
         }
 
         // Get subcommand
-        IJSGCommand command = null;
-        for (IJSGCommand c : COMMANDS) {
+        AbstractJSGCommand command = null;
+        for (AbstractJSGCommand c : subCommands) {
             if (c.getName().equalsIgnoreCase(args[0])) {
                 command = c;
                 break;
             }
         }
         if (command == null) {
-            JSGCommand.sendErrorMess(sender, "Unknown subcommand! Type /jsg help for help");
+            sendErrorMess(sender, "Unknown subcommand! Type /" + getName() + " help for help");
             return;
         }
 
@@ -146,27 +165,27 @@ public class JSGCommand extends CommandBase {
         command.execute(server, sender, a.toArray(new String[0]));
     }
 
-    public static boolean canUseCommand(ICommandSender sender, int requiredPerms) {
+    public boolean canUseCommand(ICommandSender sender, int requiredPerms) {
         if (requiredPerms <= 0) return true;
-        return sender.canUseCommand(requiredPerms, INSTANCE.getName());
+        return sender.canUseCommand(requiredPerms, getName());
     }
 
-    public static ITextComponent getCommandTextComponentForHelp(IJSGCommand cmd) {
-        TextComponentBase text = new TextComponentString(TextFormatting.DARK_AQUA + " /" + INSTANCE.getName() + " " + cmd.getName());
+    public ITextComponent getCommandTextComponentForHelp(AbstractJSGCommand cmd) {
+        TextComponentBase text = new TextComponentString(TextFormatting.DARK_AQUA + " /" + getName() + " " + cmd.getName());
         Style style = new Style();
-        HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(TextFormatting.WHITE + "" + TextFormatting.BOLD + "/" + INSTANCE.getName() + " " + cmd.getUsage() + "\n" + TextFormatting.GRAY + cmd.getDescription()));
+        HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(TextFormatting.WHITE + "" + TextFormatting.BOLD + "/" + getName() + " " + cmd.getGeneralUsage() + "\n" + TextFormatting.GRAY + cmd.getDescription()));
         style.setHoverEvent(he);
-        ClickEvent ce = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + INSTANCE.getName() + " " + cmd.getName());
+        ClickEvent ce = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + getName() + " " + cmd.getName());
         style.setClickEvent(ce);
         text.setStyle(style);
         return text;
     }
 
-    public static void showHelp(ICommandSender sender, int page) {
-        sender.sendMessage(new TextComponentString(TextFormatting.STRIKETHROUGH + "------" + TextFormatting.RESET + " " + TextFormatting.AQUA + TextFormatting.BOLD + "Just Stargate Mod " + TextFormatting.RESET + TextFormatting.STRIKETHROUGH + "------"));
+    public void showHelp(ICommandSender sender, int page) {
+        sender.sendMessage(new TextComponentString(TextFormatting.STRIKETHROUGH + "------" + TextFormatting.RESET + " " + TextFormatting.AQUA + TextFormatting.BOLD + getTitle() + " " + TextFormatting.RESET + TextFormatting.STRIKETHROUGH + "------"));
 
-        ArrayList<IJSGCommand> commands = new ArrayList<>();
-        for (IJSGCommand c : COMMANDS) {
+        ArrayList<AbstractJSGCommand> commands = new ArrayList<>();
+        for (AbstractJSGCommand c : subCommands) {
             if (canUseCommand(sender, c.getRequiredPermissionLevel())) {
                 commands.add(c);
             }
@@ -174,29 +193,29 @@ public class JSGCommand extends CommandBase {
 
         int count = commands.size();
         final int perPage = 10;
-        final int maxPage = (int) Math.ceil((double) count/perPage);
+        final int maxPage = (int) Math.ceil((double) count / perPage);
         page = Math.max(1, Math.min(maxPage, page));
 
         int start = perPage * (page - 1);
         int end = perPage * page;
 
         int i = 0;
-        for(IJSGCommand c : commands){
+        for (AbstractJSGCommand c : commands) {
             i++;
-            if(i <= start) continue;
-            if(i > end) break;
+            if (i <= start) continue;
+            if (i > end) break;
             sender.sendMessage(getCommandTextComponentForHelp(c));
         }
 
-        TextComponentString back = (TextComponentString) new TextComponentString("\u00a73\u00a7l\u00a7m<--\u00a7r").setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + INSTANCE.getName() + " help " + (page - 1))).setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Previous page"))));
-        TextComponentString next = (TextComponentString) new TextComponentString("\u00a73\u00a7l\u00a7m-->\u00a7r").setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + INSTANCE.getName() + " help " + (page + 1))).setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Next page"))));
+        TextComponentString back = (TextComponentString) new TextComponentString("\u00a73\u00a7l\u00a7m<--\u00a7r").setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + getName() + " help " + (page - 1))).setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Previous page"))));
+        TextComponentString next = (TextComponentString) new TextComponentString("\u00a73\u00a7l\u00a7m-->\u00a7r").setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + getName() + " help " + (page + 1))).setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Next page"))));
         TextComponentString arrows = new TextComponentString("       ");
-        if(page - 1 > 0)
+        if (page - 1 > 0)
             arrows.appendSibling(back);
         else
             arrows.appendSibling(new TextComponentString("\u00a78\u00a7l\u00a7m<--\u00a7r"));
         arrows.appendSibling(new TextComponentString(" \u00a77(" + page + ")\u00a7r "));
-        if(page + 1 <= maxPage)
+        if (page + 1 <= maxPage)
             arrows.appendSibling(next);
         else
             arrows.appendSibling(new TextComponentString("\u00a78\u00a7l\u00a7m-->\u00a7r"));
@@ -213,7 +232,7 @@ public class JSGCommand extends CommandBase {
         if (argsLength <= 0) return list;
         if (argsLength == 1) {
             List<String> names = new ArrayList<>();
-            for (IJSGCommand c : COMMANDS) {
+            for (AbstractJSGCommand c : subCommands) {
                 if (canUseCommand(sender, c.getRequiredPermissionLevel())) {
                     names.add(c.getName());
                 }
@@ -222,8 +241,8 @@ public class JSGCommand extends CommandBase {
         }
 
         // Get subcommand
-        IJSGCommand command = null;
-        for (IJSGCommand c : COMMANDS) {
+        AbstractJSGCommand command = null;
+        for (AbstractJSGCommand c : subCommands) {
             if (c.getName().equalsIgnoreCase(args[0])) {
                 command = c;
                 break;
