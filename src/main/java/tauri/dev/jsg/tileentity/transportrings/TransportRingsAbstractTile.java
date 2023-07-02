@@ -877,6 +877,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                     }
                 }
 
+                /*
+                -- MAKE RINGS CHECK IF THERE IS NO BEDROCK OVER THEM --
+
                 BlockPos invPosNoY = new BlockPos(invPos.getX(), this.pos.getY(), invPos.getZ());
                 int curY = Math.min(invPos.getY(), invPosNoY.getY());
                 int maxY = Math.max(invPos.getY(), invPosNoY.getY());
@@ -885,7 +888,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                     if (world.getBlockState(new BlockPos(invPosNoY.getX(), curY, invPosNoY.getZ())).getBlock() == Blocks.BEDROCK) {
                         return true;
                     }
-                }
+                }*/
             }
         }
 
