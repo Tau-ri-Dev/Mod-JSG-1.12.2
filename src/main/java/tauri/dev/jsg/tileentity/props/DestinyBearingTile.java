@@ -17,10 +17,21 @@ import javax.annotation.Nonnull;
 
 public class DestinyBearingTile extends TileEntity implements ITickable, StateProviderInterface {
 
+    protected DestinyBearingRenderState rendererState = new DestinyBearingRenderState(false);
+
+    public DestinyBearingRenderState getRendererState() {
+        return rendererState;
+    }
+
     public static class DestinyBearingRenderState extends State {
 
-        public DestinyBearingRenderState(boolean isActive){
+        public DestinyBearingRenderState(boolean isActive) {
             this.isActive = isActive;
+        }
+
+        public DestinyBearingRenderState setActive(boolean isActive) {
+            this.isActive = isActive;
+            return this;
         }
 
         public boolean isActive;
@@ -36,8 +47,8 @@ public class DestinyBearingTile extends TileEntity implements ITickable, StatePr
         }
     }
 
-    public void updateState(boolean activate){
-        if(isActive != activate){
+    public void updateState(boolean activate) {
+        if (isActive != activate) {
             this.isActive = activate;
             markDirty();
             sendState(StateTypeEnum.RENDERER_STATE, getState(StateTypeEnum.RENDERER_STATE));
@@ -48,20 +59,20 @@ public class DestinyBearingTile extends TileEntity implements ITickable, StatePr
 
 
     @Override
-    public void onLoad(){
-        if(!world.isRemote){
+    public void onLoad() {
+        if (!world.isRemote) {
             targetPoint = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
             markDirty();
             sendState(StateTypeEnum.RENDERER_STATE, getState(StateTypeEnum.RENDERER_STATE));
-        }
-        else{
+        } else {
             JSGPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
         }
     }
+
     @Override
     public void update() {
-        if(!world.isRemote){
-            if(targetPoint == null){
+        if (!world.isRemote) {
+            if (targetPoint == null) {
                 targetPoint = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
                 markDirty();
                 sendState(StateTypeEnum.RENDERER_STATE, getState(StateTypeEnum.RENDERER_STATE));
@@ -70,6 +81,7 @@ public class DestinyBearingTile extends TileEntity implements ITickable, StatePr
     }
 
     protected NetworkRegistry.TargetPoint targetPoint;
+
     public void sendState(StateTypeEnum type, State state) {
         if (world.isRemote) return;
         if (targetPoint != null) {
@@ -82,8 +94,8 @@ public class DestinyBearingTile extends TileEntity implements ITickable, StatePr
     // Server
     @Override
     public State getState(StateTypeEnum stateType) {
-        if(stateType == StateTypeEnum.RENDERER_STATE){
-            return new DestinyBearingRenderState(isActive);
+        if (stateType == StateTypeEnum.RENDERER_STATE) {
+            return getRendererState().setActive(isActive);
         }
         return null;
     }
@@ -91,8 +103,8 @@ public class DestinyBearingTile extends TileEntity implements ITickable, StatePr
     // Server
     @Override
     public State createState(StateTypeEnum stateType) {
-        if(stateType == StateTypeEnum.RENDERER_STATE){
-            return new DestinyBearingRenderState(isActive);
+        if (stateType == StateTypeEnum.RENDERER_STATE) {
+            return getRendererState().setActive(isActive);
         }
         return null;
     }
@@ -100,7 +112,7 @@ public class DestinyBearingTile extends TileEntity implements ITickable, StatePr
     // Client
     @Override
     public void setState(StateTypeEnum stateType, State state) {
-        if(stateType == StateTypeEnum.RENDERER_STATE){
+        if (stateType == StateTypeEnum.RENDERER_STATE) {
             this.isActive = ((DestinyBearingRenderState) state).isActive;
         }
     }

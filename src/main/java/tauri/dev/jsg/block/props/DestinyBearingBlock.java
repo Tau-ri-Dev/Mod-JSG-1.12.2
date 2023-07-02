@@ -45,7 +45,6 @@ public class DestinyBearingBlock extends JSGBlock {
         setHarvestLevel("pickaxe", 2);
     }
 
-
     // --------------------------------------------------------------------------------------
     // Block states
 

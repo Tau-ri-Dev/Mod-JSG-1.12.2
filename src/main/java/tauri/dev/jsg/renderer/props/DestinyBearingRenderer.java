@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import tauri.dev.jsg.loader.ElementEnum;
-import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.tileentity.props.DestinyBearingTile;
 import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
@@ -37,18 +36,19 @@ public class DestinyBearingRenderer extends TileEntitySpecialRenderer<DestinyBea
         GlStateManager.color(1, 1, 1);
         ElementEnum.DESTINY_BEARING_BODY.bindTextureAndRender();
         GlStateManager.pushMatrix();
-        GlStateManager.color(1, 1, 1);
         if (isActive) {
+            GlStateManager.pushMatrix();
             GlStateManager.disableLighting();
+            GlStateManager.disableBlend();
             JSGTextureLightningHelper.lightUpTexture(1f);
-            ElementEnum.DESTINY_BEARING_ON.bindTexture(BiomeOverlayEnum.NORMAL);
+            GlStateManager.color(1, 1, 1);
+            ElementEnum.DESTINY_BEARING_ON.bindTextureAndRender();
+            GlStateManager.popMatrix();
+            GlStateManager.enableLighting();
         } else
-            ElementEnum.DESTINY_BEARING_OFF.bindTexture(BiomeOverlayEnum.NORMAL);
-
-        ElementEnum.DESTINY_BEARING_ON.render();
+            ElementEnum.DESTINY_BEARING_OFF.bindTextureAndRender();
 
         GlStateManager.popMatrix();
-        GlStateManager.enableLighting();
         GlStateManager.popMatrix();
 
         GlStateManager.popMatrix();
