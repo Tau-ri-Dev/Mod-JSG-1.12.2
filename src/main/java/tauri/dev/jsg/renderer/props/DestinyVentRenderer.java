@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import tauri.dev.jsg.loader.ElementEnum;
-import tauri.dev.jsg.particle.ParticleBlenderSmoke;
+import tauri.dev.jsg.particle.ParticleBlenderCOBlast;
 import tauri.dev.jsg.tileentity.props.DestinyVentTile;
 import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.main.JSGProps;
@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 
 public class DestinyVentRenderer extends TileEntitySpecialRenderer<DestinyVentTile> {
 
-    public static final int ANIMATION_DELAY_BEFORE = 40;
+    public static final int ANIMATION_DELAY_BEFORE = 20;
     public static final int OPEN_ANIMATION_LENGTH = 40;
     public static final int ANIMATION_DELAY_BETWEEN = 120;
 
@@ -45,12 +45,9 @@ public class DestinyVentRenderer extends TileEntitySpecialRenderer<DestinyVentTi
         GlStateManager.pushMatrix();
         GlStateManager.rotate((45f * animationStage), 1, 0, 0);
         ElementEnum.DESTINY_VENT_MOVING.bindTextureAndRender();
-        if (fireParticles){
-            if (getWorld().getTotalWorldTime() % 3 == 0) {
-                new ParticleBlenderSmoke((float) (-0.5f + (Math.random() * 0.5f)), 0, 0, 2, 2, 0, 0.2f, false, (motion) -> {
-                    motion.x = 0;
-                    motion.z = 0.2;
-                }).spawn(te.getWorld(), te.getPos(), rot, false);
+        if (fireParticles) {
+            for(int i = 0; i < 50; i++) {
+                new ParticleBlenderCOBlast((float) (-0.5f + Math.random()), 0, (float) (-0.3f + Math.random() * 0.6f), 2, 2, 0, 0.4f, -0.3f, (motion) -> {}).spawn(te.getWorld(), te.getPos(), rot, false);
             }
         }
         GlStateManager.popMatrix();
