@@ -137,6 +137,8 @@ public class JSGConfigUtil {
             genBiomeOverrideCache();
         }
 
+        if(cachedBiomeOverrideBlocks == null) return new HashMap<>();
+
         return cachedBiomeOverrideBlocks;
     }
 

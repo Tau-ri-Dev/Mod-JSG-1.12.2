@@ -1,14 +1,11 @@
 package tauri.dev.jsg.renderer.stargate;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.model.ModelLoader;
 import tauri.dev.jsg.loader.texture.TextureLoader;
-import tauri.dev.jsg.stargate.EnumIrisType;
 import tauri.dev.jsg.stargate.network.SymbolUniverseEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
@@ -18,12 +15,12 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
     private static final float GATE_DIAMETER = 8.67415f;
 
     @Override
-    public float getGateDiameter(){
+    public float getGateDiameter() {
         return GATE_DIAMETER;
     }
 
     @Override
-    public double getScaleMultiplier(){
+    public double getScaleMultiplier() {
         return 1.14;
     }
 
@@ -102,11 +99,10 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
         GlStateManager.pushMatrix();
         GlStateManager.rotate(chevron.rotation, 0, 0, 1);
 
-        if(onlyLight){
+        if (onlyLight) {
             float color = rendererState.chevronTextureList.getColor(chevron);
             GlStateManager.color(color, color, color);
-        }
-        else
+        } else
             setGateHeatColor(rendererState);
 
         TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron, onlyLight)).bindTexture();

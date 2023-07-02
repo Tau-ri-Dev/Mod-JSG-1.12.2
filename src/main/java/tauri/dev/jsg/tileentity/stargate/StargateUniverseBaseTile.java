@@ -1,5 +1,6 @@
 package tauri.dev.jsg.tileentity.stargate;
 
+import net.minecraft.block.Block;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,6 +16,7 @@ import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.power.general.EnergyRequiredToOperate;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
+import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRendererState;
 import tauri.dev.jsg.renderer.stargate.StargateUniverseRendererState;
 import tauri.dev.jsg.sound.*;
@@ -28,6 +30,7 @@ import tauri.dev.jsg.state.stargate.StargateRendererActionState;
 import tauri.dev.jsg.state.stargate.StargateSpinState;
 import tauri.dev.jsg.state.stargate.StargateUniverseSymbolState;
 import tauri.dev.jsg.tileentity.props.DestinyBearingTile;
+import tauri.dev.jsg.tileentity.props.DestinyChevronTile;
 import tauri.dev.jsg.tileentity.props.DestinyCountDownTile;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
 import tauri.dev.jsg.util.ILinkable;
@@ -120,6 +123,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     public void update() {
         super.update();
         updateCoolDown();
+        updateFloorChevron();
 
         if (!world.isRemote) {
             if (!lastPos.equals(pos)) {
@@ -167,7 +171,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         spinDirection = EnumSpinDirection.CLOCKWISE;
         setCoolDown();
         markDirty();
-        if(isFastDialing)
+        if (isFastDialing)
             updateBearing(true);
         return true;
     }
@@ -360,6 +364,37 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         TileEntity te = world.getTileEntity(bearingPos);
         if (te instanceof DestinyBearingTile) {
             ((DestinyBearingTile) te).updateState(activate);
+        }
+    }
+
+    public boolean isFloorChevronActivated = false;
+    public void updateFloorChevron() {
+        if (!world.isRemote) {
+            // Server
+            // - update active state
+
+            boolean shouldBeActivated = (getStargateState().engaged() || getStargateState().unstable());
+            if (shouldBeActivated == isFloorChevronActivated) return;
+
+            isFloorChevronActivated = shouldBeActivated;
+            markDirty();
+
+            BlockPos pos = LinkingHelper.findClosestPos(world, this.pos, new BlockPos(10, 3, 10), new Block[]{JSGBlocks.DESTINY_CHEVRON_BLOCK}, new ArrayList<>());
+            if (pos == null) return;
+            TileEntity te = world.getTileEntity(pos);
+            if (!(te instanceof DestinyChevronTile)) return;
+            ((DestinyChevronTile) te).updateState(isFloorChevronActivated);
+        }
+        else{
+            // Client
+            // - update overlay
+            BlockPos pos = LinkingHelper.findClosestPos(world, this.pos, new BlockPos(10, 3, 10), new Block[]{JSGBlocks.DESTINY_CHEVRON_BLOCK}, new ArrayList<>());
+            if (pos == null) return;
+            TileEntity te = world.getTileEntity(pos);
+            if (!(te instanceof DestinyChevronTile)) return;
+            StargateAbstractRendererState rs = getRendererStateClient();
+            if(rs == null) return;
+            ((DestinyChevronTile) te).updateOverlay(rs.getBiomeOverlay());
         }
     }
 

@@ -37,6 +37,8 @@ import tauri.dev.jsg.block.machine.AssemblerBlock;
 import tauri.dev.jsg.block.machine.CrystalChamberBlock;
 import tauri.dev.jsg.block.machine.OreWashingBlock;
 import tauri.dev.jsg.block.machine.PCBFabricatorBlock;
+import tauri.dev.jsg.block.machine.lab.ChemLabConstructBlock;
+import tauri.dev.jsg.block.machine.lab.ChemLabControlBlock;
 import tauri.dev.jsg.block.ore.NaquadahOreBlock;
 import tauri.dev.jsg.block.ore.TitaniumOreBlock;
 import tauri.dev.jsg.block.ore.TriniumOreBlock;
@@ -135,8 +137,8 @@ public class JSGBlocks {
     public static final CrystalChamberBlock MACHINE_CHAMBER = new CrystalChamberBlock();
     public static final PCBFabricatorBlock MACHINE_PCB_FABRICATOR = new PCBFabricatorBlock();
     public static final OreWashingBlock MACHINE_ORE_WASHING = new OreWashingBlock();
-    //public static final ChemLabControlBlock MACHINE_LAB = new ChemLabControlBlock();
-    //public static final ChemLabConstructBlock MACHINE_CONSTRUCT = new ChemLabConstructBlock();
+    public static final ChemLabControlBlock MACHINE_LAB = new ChemLabControlBlock();
+    public static final ChemLabConstructBlock MACHINE_CONSTRUCT = new ChemLabConstructBlock();
 
     // -----------------------------------------------------------------------------
     // ZPM stuff
@@ -155,6 +157,7 @@ public class JSGBlocks {
     public static final JSGDecorPropBlock DECOR_PROP_BLOCK = new JSGDecorPropBlock();
 
     public static final DestinyBearingBlock DESTINY_BEARING_BLOCK = new DestinyBearingBlock();
+    public static final DestinyChevronBlock DESTINY_CHEVRON_BLOCK = new DestinyChevronBlock();
 
     // -----------------------------------------------------------------------------
     // CREATIVE ITEMS/BLOCKS
@@ -212,15 +215,16 @@ public class JSGBlocks {
             BEAMER_BLOCK,
             MACHINE_ASSEMBLER,
             MACHINE_CHAMBER,
-            //MACHINE_LAB,
-            //MACHINE_CONSTRUCT,
+            MACHINE_LAB,
+            MACHINE_CONSTRUCT,
             ZPM,
             ZPM_HUB,
             ZPM_SLOT,
             CAPACITOR_BLOCK_CREATIVE,
             ZPM_CREATIVE,
             DECOR_PROP_BLOCK,
-            DESTINY_BEARING_BLOCK
+            DESTINY_BEARING_BLOCK,
+            DESTINY_CHEVRON_BLOCK
     };
     /**
      * Used in {@link tauri.dev.jsg.beamer.BeamerBeam}
@@ -291,8 +295,8 @@ public class JSGBlocks {
             MACHINE_CHAMBER,
             MACHINE_PCB_FABRICATOR,
             MACHINE_ORE_WASHING,
-            //MACHINE_LAB,
-            //MACHINE_CONSTRUCT,
+            MACHINE_LAB,
+            MACHINE_CONSTRUCT,
 
             ZPM,
             ZPM_HUB,
@@ -306,7 +310,8 @@ public class JSGBlocks {
             ZPM_CREATIVE,
 
             DECOR_PROP_BLOCK,
-            DESTINY_BEARING_BLOCK
+            DESTINY_BEARING_BLOCK,
+            DESTINY_CHEVRON_BLOCK
     };
 
     public static boolean isInBlocksArray(Block block, Block[] array) {

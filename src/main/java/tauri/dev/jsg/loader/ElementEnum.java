@@ -110,6 +110,8 @@ public enum ElementEnum {
     DESTINY_BEARING_ON("props/destiny/bearing_light.obj", "props/destiny/bearing_light_on.png", false),
     DESTINY_BEARING_BODY("props/destiny/bearing_body.obj", "props/destiny/bearing_body.png", false),
 
+    DESTINY_CHEVRON("props/destiny/floor_chevron.obj", "universe/universe_chevron.png", false),
+
     // --------------------------------------------------------------------------------------------
     // DECOR PROPS
 

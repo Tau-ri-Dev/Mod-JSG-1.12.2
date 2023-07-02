@@ -61,6 +61,26 @@ public class AncientSignBlock extends JSGBlock {
         setHarvestLevel("pickaxe", 2);
     }
 
+    // --------------------------------------------------------------------------------------
+    // Block states
+
+    @Nonnull
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, JSGProps.FACING_HORIZONTAL);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(JSGProps.FACING_HORIZONTAL).getHorizontalIndex();
+    }
+
+    @Nonnull
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.getHorizontal(meta));
+    }
+
     @Override
     public boolean hasTileEntity(@Nonnull IBlockState state) {
         return true;
@@ -110,23 +130,6 @@ public class AncientSignBlock extends JSGBlock {
     @Override
     public IBlockState getStateForPlacement(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @Nonnull EntityLivingBase placer, @Nonnull EnumHand hand) {
         return getDefaultState().withProperty(JSGProps.FACING_HORIZONTAL, facing);
-    }
-
-    @Nonnull
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, JSGProps.FACING_HORIZONTAL);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(JSGProps.FACING_HORIZONTAL).getHorizontalIndex();
-    }
-
-    @Nonnull
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.getHorizontal(meta));
     }
 
     @Nonnull
