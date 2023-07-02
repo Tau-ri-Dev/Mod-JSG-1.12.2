@@ -2702,7 +2702,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         StargatePos pos = network.getStargate(stargateAddress);
         if(pos == null) return new Object[]{"gate_not_found"};
 
-        int symbols = getSymbolType().getMinimalSymbolCountTo(pos.getTileEntity().getSymbolType(), pos.dimensionID == this.getFakeWorld().provider.getDimension());
+        int symbols = getSymbolType().getMinimalSymbolCountTo(pos.getTileEntity().getSymbolType(), pos.dimensionID == world.provider.getDimension());
 
         return new Object[]{true, symbols};
     }
