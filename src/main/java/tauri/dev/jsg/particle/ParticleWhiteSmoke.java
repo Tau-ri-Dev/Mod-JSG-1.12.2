@@ -5,7 +5,7 @@ import net.minecraft.world.World;
 
 public class ParticleWhiteSmoke extends ParticleExplosion {
 
-	private boolean falling;
+	private final boolean falling;
 
 	public ParticleWhiteSmoke(World world, double x, double y, double z, double motionX, double motionZ, boolean falling) {
 		super(world, x, y, z, 0, 0, 0);

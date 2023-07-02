@@ -158,6 +158,7 @@ public class JSGBlocks {
 
     public static final DestinyBearingBlock DESTINY_BEARING_BLOCK = new DestinyBearingBlock();
     public static final DestinyChevronBlock DESTINY_CHEVRON_BLOCK = new DestinyChevronBlock();
+    public static final DestinyVentBlock DESTINY_VENT_BLOCK = new DestinyVentBlock();
 
     // -----------------------------------------------------------------------------
     // CREATIVE ITEMS/BLOCKS
@@ -224,7 +225,8 @@ public class JSGBlocks {
             ZPM_CREATIVE,
             DECOR_PROP_BLOCK,
             DESTINY_BEARING_BLOCK,
-            DESTINY_CHEVRON_BLOCK
+            DESTINY_CHEVRON_BLOCK,
+            DESTINY_VENT_BLOCK
     };
     /**
      * Used in {@link tauri.dev.jsg.beamer.BeamerBeam}
@@ -311,7 +313,8 @@ public class JSGBlocks {
 
             DECOR_PROP_BLOCK,
             DESTINY_BEARING_BLOCK,
-            DESTINY_CHEVRON_BLOCK
+            DESTINY_CHEVRON_BLOCK,
+            DESTINY_VENT_BLOCK
     };
 
     public static boolean isInBlocksArray(Block block, Block[] array) {

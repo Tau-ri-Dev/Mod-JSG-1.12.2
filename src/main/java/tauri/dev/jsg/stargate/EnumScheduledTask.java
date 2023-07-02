@@ -7,7 +7,7 @@ import java.util.Map;
 
 public enum EnumScheduledTask {
   STARGATE_OPEN_SOUND(0, 1, false),
-  STARGATE_ENGAGE(1, 40),
+  STARGATE_ENGAGE(1, 60),
   STARGATE_CLOSE(2, -1),
   STARGATE_SPIN_FINISHED(3, -1),
   STARGATE_CHEVRON_OPEN(4, 19, false),
@@ -76,7 +76,7 @@ public enum EnumScheduledTask {
     return this.name() + "[time=" + this.waitTicks + "]";
   }
 
-  private static Map<Integer, EnumScheduledTask> idMap = new HashMap<>();
+  private static final Map<Integer, EnumScheduledTask> idMap = new HashMap<>();
 
   static {
     for (EnumScheduledTask task : EnumScheduledTask.values())

@@ -32,6 +32,7 @@ import tauri.dev.jsg.state.stargate.StargateUniverseSymbolState;
 import tauri.dev.jsg.tileentity.props.DestinyBearingTile;
 import tauri.dev.jsg.tileentity.props.DestinyChevronTile;
 import tauri.dev.jsg.tileentity.props.DestinyCountDownTile;
+import tauri.dev.jsg.tileentity.props.DestinyVentTile;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
 import tauri.dev.jsg.util.ILinkable;
 import tauri.dev.jsg.util.LinkingHelper;
@@ -368,6 +369,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     }
 
     public boolean isFloorChevronActivated = false;
+
     public void updateFloorChevron() {
         if (!world.isRemote) {
             // Server
@@ -384,8 +386,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
             TileEntity te = world.getTileEntity(pos);
             if (!(te instanceof DestinyChevronTile)) return;
             ((DestinyChevronTile) te).updateState(isFloorChevronActivated);
-        }
-        else{
+        } else {
             // Client
             // - update overlay
             BlockPos pos = LinkingHelper.findClosestPos(world, this.pos, new BlockPos(10, 3, 10), new Block[]{JSGBlocks.DESTINY_CHEVRON_BLOCK}, new ArrayList<>());
@@ -393,9 +394,25 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
             TileEntity te = world.getTileEntity(pos);
             if (!(te instanceof DestinyChevronTile)) return;
             StargateAbstractRendererState rs = getRendererStateClient();
-            if(rs == null) return;
+            if (rs == null) return;
             ((DestinyChevronTile) te).updateOverlay(rs.getBiomeOverlay());
         }
+    }
+
+    public void animateVents() {
+        if (world.isRemote) return;
+        ArrayList<BlockPos> alreadyDone = new ArrayList<>();
+        BlockPos nearest;
+        do {
+            nearest = LinkingHelper.findClosestPos(world, this.pos, new BlockPos(10, 3, 10), new Block[]{JSGBlocks.DESTINY_VENT_BLOCK}, alreadyDone);
+            alreadyDone.add(nearest);
+            if (nearest != null) {
+                TileEntity te = world.getTileEntity(nearest);
+                if (te instanceof DestinyVentTile) {
+                    ((DestinyVentTile) te).startAnimation();
+                }
+            }
+        } while (nearest != null);
     }
 
     @Override
@@ -473,6 +490,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
                     addTask(new ScheduledTask(EnumScheduledTask.STARGATE_DIAL_FINISHED, 10));
                 } else {
                     updateBearing(false);
+                    animateVents();
                     dialingFailed(StargateOpenResult.ABORTED);
                     stargateState = EnumStargateState.IDLE;
                     abortingDialing = false;
