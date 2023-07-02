@@ -147,6 +147,78 @@ public class DecorPropItem extends ItemBlock {
                     }
                 }.setLightLevel(0.7f)),
                 new PropModel(ElementEnum.DECOR_ABYDOS_LAMP, new Vector3f(0, 0, 0), 1)
+        ),
+        DRONE_WEAPON_OFF(
+                3,
+                "drone_weapon_off",
+                null,
+                new PropAbstractBlock() {
+                    @Nonnull
+                    @Override
+                    public AxisAlignedBB getBoundingBox(@Nonnull IBlockState state, @Nonnull IBlockAccess source, @Nonnull BlockPos pos) {
+                        return new AxisAlignedBB(0.3, 0, 0.3, 0.7, 0.7, 0.7);
+                    }
+
+                    @Nonnull
+                    @Override
+                    public AxisAlignedBB getCollisionBoundingBox(@Nonnull IBlockState state, @Nonnull IBlockAccess source, @Nonnull BlockPos pos) {
+                        return new AxisAlignedBB(0.3, 0, 0.3, 0.7, 0.7, 0.7);
+                    }
+
+                    @Override
+                    public boolean renderHighlight(IBlockState state) {
+                        return false;
+                    }
+                },
+                new PropModel(ElementEnum.DECOR_DRONE_WEAPON_OFF, new Vector3f(0, 0, 0), 1)
+        ),
+        DRONE_WEAPON_ON(
+                4,
+                "drone_weapon_on",
+                null,
+                new PropAbstractBlock() {
+                    @Nonnull
+                    @Override
+                    public AxisAlignedBB getBoundingBox(@Nonnull IBlockState state, @Nonnull IBlockAccess source, @Nonnull BlockPos pos) {
+                        return new AxisAlignedBB(0.3, 0, 0.3, 0.7, 0.7, 0.7);
+                    }
+
+                    @Nonnull
+                    @Override
+                    public AxisAlignedBB getCollisionBoundingBox(@Nonnull IBlockState state, @Nonnull IBlockAccess source, @Nonnull BlockPos pos) {
+                        return new AxisAlignedBB(0.3, 0, 0.3, 0.7, 0.7, 0.7);
+                    }
+
+                    @Override
+                    public boolean renderHighlight(IBlockState state) {
+                        return false;
+                    }
+                },
+                new PropModel(ElementEnum.DECOR_DRONE_WEAPON_ON, new Vector3f(0, 0, 0), 1)
+        ),
+        ANCIENT_OBELISK(
+                5,
+                "ancient_obelisk",
+                null,
+                new PropAbstractBlock() {
+                    @Nonnull
+                    @Override
+                    public AxisAlignedBB getBoundingBox(@Nonnull IBlockState state, @Nonnull IBlockAccess source, @Nonnull BlockPos pos) {
+                        return new AxisAlignedBB(0.3, 0, 0.3, 0.7, 0.7, 0.7);
+                    }
+
+                    @Nonnull
+                    @Override
+                    public AxisAlignedBB getCollisionBoundingBox(@Nonnull IBlockState state, @Nonnull IBlockAccess source, @Nonnull BlockPos pos) {
+                        return new AxisAlignedBB(0.3, 0, 0.3, 0.7, 0.7, 0.7);
+                    }
+
+                    @Override
+                    public boolean renderHighlight(IBlockState state) {
+                        return false;
+                    }
+                },
+                new PropModel(ElementEnum.DECOR_ANCIENT_OBELISK, new Vector3f(0, 0, 0), 1)
         );
 
         public final int id;

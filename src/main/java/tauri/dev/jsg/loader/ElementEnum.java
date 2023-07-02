@@ -99,6 +99,8 @@ public enum ElementEnum {
     ZPM_HUB("zpm/pg_zpm_hub.obj", "zpm/hub/pg_zpm_hub.jpg", false),
     ZPM_HUB_LIGHTS("zpm/pg_lights.obj", "zpm/hub/pg_lights0.jpg", false),
     ZPM_SLOT("zpm/slot.obj", "zpm/slot.png", false),
+    //ZPM_ASURAN_SLOT("zpm/asuran_zpm_slot.obj", "zpm/asuran_zpm_slot_texture.png", false), => light overlay: asuran_zpm_light.png
+    //this model is same size as ZPM hub, but different position
 
     // --------------------------------------------------------------------------------------------
     // DESTINY PROPS
@@ -111,8 +113,18 @@ public enum ElementEnum {
     // --------------------------------------------------------------------------------------------
     // DECOR PROPS
 
-    DECOR_ABYDOS_POT("props/decor/a_pot.obj", "props/decor/a_pot.png", false),
-    DECOR_ABYDOS_LAMP("props/decor/a_lamp.obj", "props/decor/a_lamp.png", false);
+    DECOR_ABYDOS_POT("props/decor/abydos_pot.obj", "props/decor/abydos_pot.png", false),
+    DECOR_DRONE_WEAPON_OFF("props/decor/drone_weapon.obj", "props/decor/drone_weapon_off.png", false),
+    DECOR_DRONE_WEAPON_ON("props/decor/drone_weapon.obj", "props/decor/drone_weapon_on.png", false),
+    DECOR_ANCIENT_OBELISK("props/decor/ancient_obelisk.obj", "props/decor/ancient_obelisk.png", false),
+
+
+    // --------------------------------------------------------------------------------------------
+    // DECOR PROPS - BRAZIERS
+
+    DECOR_ABYDOS_LAMP("props/decor/braziers/brazier_type_1.obj", "props/decor/braziers/abydos_brazier.png", false);
+    // Message for Minedragon :D => model: brazier_type_1.obj , textures: abydos_brazier.png; hatak_brazier.png
+    //                              model: brazier_type_2.obj , textures: goauld_brazier.png; anubis_brazier.png
 
     // --------------------------------------------------------------------------------------------
 
