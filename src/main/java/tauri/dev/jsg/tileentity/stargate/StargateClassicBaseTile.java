@@ -2665,6 +2665,50 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @SuppressWarnings({"unused", "unchecked"})
     @Optional.Method(modid = "opencomputers")
+    @Callback(doc = "function(address:table|address:string...) -- Returns symbols needed to dial an address")
+    public Object[] getSymbolsNeeded(Context context, Arguments args) {
+        if (!isMerged()) return new Object[]{"not_merged"};
+
+        StargateAddressDynamic stargateAddress = new StargateAddressDynamic(getSymbolType());
+        Iterator<Object> iterator;
+
+        if (args.isTable(0)) {
+            iterator = args.checkTable(0).values().iterator();
+        } else {
+            iterator = args.iterator();
+        }
+
+        while (iterator.hasNext()) {
+            Object symbolObj = iterator.next();
+
+            if (stargateAddress.size() == 9) {
+                throw new IllegalArgumentException("Too much glyphs");
+            }
+
+            SymbolInterface symbol = getSymbolFromNameIndex(symbolObj);
+            if (stargateAddress.contains(symbol)) {
+                throw new IllegalArgumentException("Duplicate glyph");
+            }
+
+            stargateAddress.addSymbol(symbol);
+        }
+
+        if (!stargateAddress.getLast().origin() && stargateAddress.size() < 9) stargateAddress.addOrigin();
+
+        if (!stargateAddress.validate()) return new Object[]{"address_malformed"};
+
+        if (!canDialAddress(stargateAddress)) return new Object[]{"address_malformed"};
+
+        StargatePos pos = network.getStargate(stargateAddress);
+        if(pos == null) return new Object[]{"gate_not_found"};
+
+        int symbols = getSymbolType().getMinimalSymbolCountTo(pos.getTileEntity().getSymbolType(), pos.dimensionID == this.getFakeWorld().provider.getDimension());
+
+        return new Object[]{true, symbols};
+    }
+
+    @SuppressWarnings({"unused", "unchecked"})
+    @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(address:table|address:string...) -- Returns energy needed to dial an address")
     public Object[] getEnergyRequiredToDial(Context context, Arguments args) {
         if (!isMerged()) return new Object[]{"not_merged"};
