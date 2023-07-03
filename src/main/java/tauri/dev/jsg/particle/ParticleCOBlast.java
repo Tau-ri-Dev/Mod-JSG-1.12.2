@@ -4,8 +4,20 @@ import net.minecraft.world.World;
 
 public class ParticleCOBlast extends ParticleWhiteSmoke {
 
-    public ParticleCOBlast(World world, double x, double y, double z, double motionX, double motionY, double motionZ) {
+    public ParticleCOBlast(World world, double x, double y, double z, double motionX, double motionY, double motionZ, boolean orange) {
         super(world, x, y, z, motionX, motionZ, false);
+
+        float f = this.rand.nextFloat() * 0.3F + 0.35F;
+        this.particleRed = f;
+        this.particleGreen = f;
+        this.particleBlue = f;
+
+        if (orange) {
+            this.particleRed = Math.min(1, f * 2f);
+            this.particleGreen = Math.min(1, f * 1.4f);
+            this.particleBlue = Math.min(1, f * 1.1f);
+        }
+
         this.motionY = motionY;
     }
 

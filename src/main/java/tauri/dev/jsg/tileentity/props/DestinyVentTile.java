@@ -22,7 +22,7 @@ public class DestinyVentTile extends DestinyBearingTile {
 
     public static final int ANIMATION_DELAY_BEFORE = 10;
     public static final int OPEN_ANIMATION_LENGTH = 80;
-    public static final int ANIMATION_DELAY_BETWEEN = 350;
+    public static final int ANIMATION_DELAY_BETWEEN = 240;
 
     public DestinyVentRenderState rendererState = new DestinyVentRenderState(false, -1);
 

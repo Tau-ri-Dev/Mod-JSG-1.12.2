@@ -399,8 +399,20 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         }
     }
 
+    @Override
+    public void openGate(StargatePos targetGatePos, boolean isInitiating) {
+        super.openGate(targetGatePos, isInitiating);
+        wasStargateActivated = true;
+        markDirty();
+    }
+
+    private boolean wasStargateActivated = false;
+
     public void animateVents() {
+        if(!wasStargateActivated) return;
         if (world.isRemote) return;
+        wasStargateActivated = false;
+        markDirty();
         ArrayList<BlockPos> alreadyDone = new ArrayList<>();
         BlockPos nearest;
         do {
@@ -751,6 +763,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         compound.setInteger("addressPosition", addressPosition);
         compound.setInteger("coolDown", coolDown);
         compound.setBoolean("abortingDialing", abortingDialing);
+        compound.setBoolean("wasStargateActivated", wasStargateActivated);
 
         if (isLinked()) {
             compound.setLong("countDownPos", countDownPos.toLong());
@@ -777,6 +790,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         symbolsToDialCount = compound.getInteger("symbolsToDialCount");
         coolDown = compound.getInteger("coolDown");
         abortingDialing = compound.getBoolean("abortingDialing");
+        wasStargateActivated = compound.getBoolean("wasStargateActivated");
 
         if (compound.hasKey("countDownPos")) this.countDownPos = BlockPos.fromLong(compound.getLong("countDownPos"));
         if (compound.hasKey("linkId")) this.linkId = compound.getInteger("linkId");
