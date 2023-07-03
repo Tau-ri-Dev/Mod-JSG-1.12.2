@@ -368,9 +368,19 @@ tile.jsg.titanium_block.name=Block Titania
 # decor blocks
 tile.jsg.tokra_crystal_block.name=Block Tokerského Krystalu
 tile.jsg.destiny_countdown_block.name=Časovač Destiny
+tile.jsg.destiny_bearing_block.name=Destiny Bearing
+tile.jsg.destiny_chevron_block.name=Destiny Floor Chevron
+tile.jsg.destiny_vent_block.name=Destiny CO2 Blaster
 
 # props
 prop.jsg.platform_ships_block.name=Platforma pro kruhy (Z Vesmírných Lodí)
+
+prop.jsg.decor_abydos_pot_block.name=Abydos Pot
+prop.jsg.decor_abydos_lamp_off_block.name=Abydos Lamp (Off)
+prop.jsg.decor_abydos_lamp_on_block.name=Abydos Lamp (On)
+prop.jsg.decor_drone_weapon_off_block.name=Ancient Drone (Off)
+prop.jsg.decor_drone_weapon_on_block.name=Ancient Drone (On)
+prop.jsg.decor_ancient_obelisk_block.name=Ancient Obelisk
 
 # dhd
 tile.jsg.dhd_block.name=Ovladač brány (Milky Way DHD)
