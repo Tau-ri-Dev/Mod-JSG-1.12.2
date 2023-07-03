@@ -116,6 +116,10 @@ public class JSGStructure extends WorldGenerator {
         return generateStructure(executedInWorld, pos, random, worldToSpawn, null);
     }
 
+    public boolean canDHDDespawn(){
+        return true;
+    }
+
     public GeneratedStargate generateStructure(World executedInWorld, BlockPos pos, Random random, @Nullable WorldServer worldToSpawn, @Nullable Rotation rotationOverride) {
         pos = pos.down(yNegativeOffset);
         MinecraftServer mcServer = executedInWorld.getMinecraftServer();
@@ -203,7 +207,7 @@ public class JSGStructure extends WorldGenerator {
                         worldToSpawn.setBlockState(dhdPos, dhd, 3);
                     }
 
-                    if (random.nextFloat() < JSGConfig.WorldGen.mystPage.despawnDhdChance) {
+                    if (canDHDDespawn() && random.nextFloat() < JSGConfig.WorldGen.mystPage.despawnDhdChance) {
                         worldToSpawn.setBlockToAir(dhdPos);
                         break;
                     }
