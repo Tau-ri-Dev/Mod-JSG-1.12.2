@@ -644,7 +644,8 @@ public class GuiCustomMainMenu extends GuiScreen {
                             UPDATER_RESULT.response,
                             "",
                             "Can not get response from the server!",
-                            "Please check your internet connection."
+                            "Please check your internet connection.",
+                            "Problem can also be on our side."
                     ) {
                         @Override
                         public void render(int mouseX, int mouseY, int width, int height, int rectX, int rectY, GuiScreen parentScreen) {

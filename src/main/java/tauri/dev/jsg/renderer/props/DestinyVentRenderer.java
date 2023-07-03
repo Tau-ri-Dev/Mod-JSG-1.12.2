@@ -47,7 +47,7 @@ public class DestinyVentRenderer extends TileEntitySpecialRenderer<DestinyVentTi
         ElementEnum.DESTINY_VENT_MOVING.bindTextureAndRender();
         if (fireParticles) {
             for(int i = 0; i < 50; i++) {
-                new ParticleBlenderCOBlast((float) (-0.5f + Math.random()), 0, (float) (-0.3f + Math.random() * 0.6f), 2, 2, 0, 0.4f, -0.3f, (motion) -> {}).spawn(te.getWorld(), te.getPos(), rot, false);
+                new ParticleBlenderCOBlast((float) (-0.5f + Math.random()), 0, (float) (-0.3f + Math.random() * 0.6f) - 0.5f, 2, 2, 0, 0.4f + (-0.1f + (float) (Math.random() * 0.2f)), -(0.3f + (-0.1f + (float) (Math.random() * 0.2f))), (motion) -> {}).spawn(te.getWorld(), te.getPos(), rot, false);
             }
         }
         GlStateManager.popMatrix();
