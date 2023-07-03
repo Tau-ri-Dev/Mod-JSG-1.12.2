@@ -48,4 +48,12 @@ public class DecorPropRenderer extends TileEntitySpecialRenderer<DecorPropTile> 
         GlStateManager.popMatrix();
         GlStateManager.popMatrix();
     }
+
+    @Override
+    public boolean isGlobalRenderer(DecorPropTile te){
+        IBlockState bs = te.getWorld().getBlockState(te.getPos());
+        int meta = bs.getValue(JSGProps.PROP_VARIANT);
+        DecorPropItem.PropVariants propVariant = DecorPropItem.PropVariants.byId(meta);
+        return (propVariant != null && propVariant.globalRender);
+    }
 }

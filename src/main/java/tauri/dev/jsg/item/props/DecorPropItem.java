@@ -218,6 +218,7 @@ public class DecorPropItem extends ItemBlock {
                         return false;
                     }
                 },
+                true,
                 new PropModel(ElementEnum.DECOR_ANCIENT_OBELISK, new Vector3f(0, 0, 0), 1)
         );
 
@@ -225,7 +226,13 @@ public class DecorPropItem extends ItemBlock {
         public final JSGBlock abstractBlock;
         public final String name;
         public final PropModel[] models;
+        public boolean globalRender = false;
         public final PropModelRenderFunction runnableWhileRendering;
+
+        PropVariants(int id, String name, @Nullable PropModelRenderFunction runnableWhileRendering, PropAbstractBlock abstractBlock, boolean globalRender, PropModel... models) {
+            this(id, name, runnableWhileRendering, abstractBlock, models);
+            this.globalRender = globalRender;
+        }
 
         PropVariants(int id, String name, @Nullable PropModelRenderFunction runnableWhileRendering, PropAbstractBlock abstractBlock, PropModel... models) {
             this.id = id;
