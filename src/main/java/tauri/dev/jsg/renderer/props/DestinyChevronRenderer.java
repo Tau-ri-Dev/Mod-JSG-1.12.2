@@ -30,7 +30,7 @@ public class DestinyChevronRenderer extends TileEntitySpecialRenderer<DestinyChe
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
-        GlStateManager.translate(0.5, 0.08f, 0.5);
+        GlStateManager.translate(0.5, 0.008f, 0.5);
 
         IBlockState blockState = te.getWorld().getBlockState(te.getPos());
         EnumFacing facing = blockState.getValue(JSGProps.FACING_HORIZONTAL);
