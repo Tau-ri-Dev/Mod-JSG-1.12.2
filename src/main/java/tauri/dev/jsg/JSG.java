@@ -38,7 +38,7 @@ public class JSG {
     public static final String MOD_VERSION = "@VERSION@";
     public static final int DATA_VERSION = 26;
     public static final String CONFIG_GENERAL_VERSION = "3.2";
-    public static final String CONFIG_CRAFTINGS_VERSION = "1.1";
+    public static final String CONFIG_CRAFTINGS_VERSION = "1.2";
     public static final String CONFIG_STRUCTURES_VERSION = "2.0";
     public static final String CONFIG_DIMENSIONS_VERSION = "2.0";
     public static final String MC_VERSION = "@MCVERSION@";
