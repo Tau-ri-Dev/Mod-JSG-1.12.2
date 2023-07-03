@@ -385,6 +385,13 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                 return super.onItemRightClick(world, player, hand);
 
             BlockPos linkedPos = BlockPos.fromLong(compound.getLong(mode.tagPosName));
+            StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
+
+            if(shift && gateTile != null && gateTile.hasIris() && gateTile.getIrisMode() == EnumIrisMode.DIALER){
+                gateTile.toggleIris();
+                return super.onItemRightClick(world, player, hand);
+            }
+
             NBTTagList tagList = compound.getTagList(mode.tagListName, NBT.TAG_COMPOUND);
 
             if (selected >= tagList.tagCount())
@@ -395,12 +402,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
             switch (mode) {
                 case MEMORY:
                 case NEARBY:
-                    StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
                     if (gateTile == null) break;
-                    if(shift && gateTile.hasIris() && gateTile.getIrisMode() == EnumIrisMode.DIALER){
-                        gateTile.toggleIris();
-                        break;
-                    }
                     switch (gateTile.getStargateState()) {
                         case IDLE:
                             int maxSymbols = SymbolUniverseEnum.getMaxSymbolsDisplay(selectedCompound.getBoolean("hasUpgrade"));
