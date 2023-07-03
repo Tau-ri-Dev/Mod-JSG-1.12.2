@@ -468,6 +468,13 @@
       "jsg:misc/destiny/countdown_one_minute"
     ]
   },
+  "destiny_vent": {
+    "category": "ambient",
+    "subtitle": "jsg.subtitle.destiny_vent",
+    "sounds": [
+      "jsg:misc/destiny/vent"
+    ]
+  },
   "destiny_ftl_in": {
     "category": "ambient",
     "subtitle": "jsg.subtitle.destiny_ftl_in",

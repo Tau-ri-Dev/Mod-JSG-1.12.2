@@ -1,13 +1,13 @@
 package tauri.dev.jsg.sound;
 
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.util.EnumKeyInterface;
-import tauri.dev.jsg.util.EnumKeyMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.util.EnumKeyInterface;
+import tauri.dev.jsg.util.EnumKeyMap;
 
 import javax.annotation.Nullable;
 
@@ -94,6 +94,8 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     DESTINY_COUNTDOWN_ONE_MINUTE(127, "destiny_countdown_one_minute", 0.2f),
     DESTINY_FTL_JUMP_IN(128, "destiny_ftl_in", 1f),
     DESTINY_FTL_JUMP_OUT(129, "destiny_ftl_out", 1f),
+
+    DESTINY_BLASTER(130, "destiny_vent", 1f),
 
     //UNIVERSE_DIALER_ERROR(130, "universe_dialer_error", 0.1f),
 
