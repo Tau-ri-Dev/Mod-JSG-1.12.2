@@ -1,11 +1,15 @@
 package tauri.dev.jsg.renderer.props;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import tauri.dev.jsg.loader.ElementEnum;
+import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.particle.ParticleBlenderCOBlast;
+import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.tileentity.props.DestinyVentTile;
 import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.main.JSGProps;
@@ -19,6 +23,8 @@ public class DestinyVentRenderer extends TileEntitySpecialRenderer<DestinyVentTi
         double tick = getWorld().getTotalWorldTime() + partialTicks;
         float animationStage = te.getAnimationStage(tick);
         boolean fireParticles = (animationStage == 1f);
+
+        IBlockState camoBlockState = te.getCamoState();
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
@@ -35,7 +41,16 @@ public class DestinyVentRenderer extends TileEntitySpecialRenderer<DestinyVentTi
         ElementEnum.DESTINY_VENT_HOLE.bindTextureAndRender();
         GlStateManager.pushMatrix();
         GlStateManager.rotate((70f * animationStage), 1, 0, 0);
-        ElementEnum.DESTINY_VENT_MOVING.bindTextureAndRender();
+
+        if(camoBlockState == null){
+            ElementEnum.DESTINY_VENT_MOVING.bindTexture(BiomeOverlayEnum.NORMAL);
+        }
+        else{
+            ResourceLocation overlayResource = TextureLoader.getBlockTexture(camoBlockState);
+            Minecraft.getMinecraft().getTextureManager().bindTexture(overlayResource);
+        }
+
+        ElementEnum.DESTINY_VENT_MOVING.render();
         if (fireParticles) {
             for (int i = 0; i < 50; i++) {
                 boolean orange = (i < 25);
