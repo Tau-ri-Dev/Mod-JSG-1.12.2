@@ -31,10 +31,8 @@ import tauri.dev.jsg.state.stargate.StargateSpinState;
 import tauri.dev.jsg.state.stargate.StargateUniverseSymbolState;
 import tauri.dev.jsg.tileentity.props.DestinyBearingTile;
 import tauri.dev.jsg.tileentity.props.DestinyChevronTile;
-import tauri.dev.jsg.tileentity.props.DestinyCountDownTile;
 import tauri.dev.jsg.tileentity.props.DestinyVentTile;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
-import tauri.dev.jsg.util.ILinkable;
 import tauri.dev.jsg.util.LinkingHelper;
 
 import javax.annotation.Nullable;
@@ -46,7 +44,7 @@ import static tauri.dev.jsg.stargate.EnumStargateState.FAILING;
 import static tauri.dev.jsg.stargate.network.SymbolUniverseEnum.G1;
 import static tauri.dev.jsg.stargate.network.SymbolUniverseEnum.TOP_CHEVRON;
 
-public class StargateUniverseBaseTile extends StargateClassicBaseTile implements ILinkable {
+public class StargateUniverseBaseTile extends StargateClassicBaseTile {
 
     protected World fakeWorld;
     protected BlockPos fakePos;
@@ -68,6 +66,12 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
 
     public void setFakePos(BlockPos pos) {
         fakePos = pos;
+        markDirty();
+    }
+
+    public void resetFakePos(){
+        this.fakePos = this.pos;
+        this.fakeWorld = this.world;
         markDirty();
     }
 
@@ -137,7 +141,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     @Override
     protected void onGateMerged() {
         super.onGateMerged();
-        this.updateLinkStatus();
     }
 
     // --------------------------------------------------------------------------------
@@ -409,7 +412,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     private boolean wasStargateActivated = false;
 
     public void animateVents() {
-        if(!wasStargateActivated) return;
+        if (!wasStargateActivated) return;
         if (world.isRemote) return;
         wasStargateActivated = false;
         markDirty();
@@ -765,11 +768,6 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         compound.setBoolean("abortingDialing", abortingDialing);
         compound.setBoolean("wasStargateActivated", wasStargateActivated);
 
-        if (isLinked()) {
-            compound.setLong("countDownPos", countDownPos.toLong());
-            compound.setInteger("linkId", linkId);
-        }
-
         if (fakePos != null) {
             compound.setInteger("fakeX", fakePos.getX());
             compound.setInteger("fakeY", fakePos.getY());
@@ -792,49 +790,10 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
         abortingDialing = compound.getBoolean("abortingDialing");
         wasStargateActivated = compound.getBoolean("wasStargateActivated");
 
-        if (compound.hasKey("countDownPos")) this.countDownPos = BlockPos.fromLong(compound.getLong("countDownPos"));
-        if (compound.hasKey("linkId")) this.linkId = compound.getInteger("linkId");
-
         if (compound.hasKey("fakeX"))
             this.fakePos = new BlockPos(compound.getInteger("fakeX"), compound.getInteger("fakeY"), compound.getInteger("fakeZ"));
         if (compound.hasKey("fakeWorld") && world.getMinecraftServer() != null)
             this.fakeWorld = this.world.getMinecraftServer().getWorld(compound.getInteger("fakeWorld"));
-    }
-
-    // linking
-
-    @Override
-    public boolean canLinkTo() {
-        return isMerged() && !isLinked();
-    }
-
-    private BlockPos countDownPos;
-    private int linkId = -1;
-
-    public boolean isLinked() {
-        return countDownPos != null && world.getTileEntity(countDownPos) instanceof DestinyCountDownTile;
-    }
-
-    public void setLinkedCountdown(BlockPos dhdPos, int linkId) {
-        this.countDownPos = dhdPos;
-        this.linkId = linkId;
-
-        markDirty();
-    }
-
-    public void updateLinkStatus() {
-        if (!isMerged()) return;
-        BlockPos closestUnlinked = LinkingHelper.findClosestUnlinked(world, pos, LinkingHelper.getDhdRange(), JSGBlocks.DESTINY_COUNTDOWN_BLOCK, this.getLinkId());
-        int linkId = LinkingHelper.getLinkId();
-
-        if (closestUnlinked != null) {
-            DestinyCountDownTile destinyCountDownTile = (DestinyCountDownTile) world.getTileEntity(closestUnlinked);
-            if (destinyCountDownTile != null) {
-                destinyCountDownTile.setLinkedGate(pos, linkId);
-                setLinkedCountdown(closestUnlinked, linkId);
-                markDirty();
-            }
-        }
     }
 
     public NearbyGate getRandomNearbyGate() {
@@ -848,13 +807,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile implements
     @Override
     public boolean prepare(ICommandSender sender, ICommand command) {
         setLinkedDHD(null, -1);
-        setLinkedCountdown(null, -1);
 
         return super.prepare(sender, command);
-    }
-
-    @Override
-    public int getLinkId() {
-        return linkId;
     }
 }

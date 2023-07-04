@@ -1151,7 +1151,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     public long getOpenedSeconds() {
-        if (openedSince < 0) return -1;
+        if (openedSince <= 0) return -1;
         return (world.getTotalWorldTime() - openedSince) / 20;
     }
 

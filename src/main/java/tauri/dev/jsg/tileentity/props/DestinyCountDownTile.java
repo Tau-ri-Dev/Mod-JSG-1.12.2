@@ -6,13 +6,13 @@ import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.Environment;
 import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
+import net.minecraft.block.Block;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -37,19 +37,19 @@ import tauri.dev.jsg.state.StateProviderInterface;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
 import tauri.dev.jsg.tileentity.util.PreparableInterface;
-import tauri.dev.jsg.util.ILinkable;
 import tauri.dev.jsg.util.LinkingHelper;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 import static tauri.dev.jsg.sound.JSGSoundHelper.playSoundEvent;
 import static tauri.dev.jsg.state.StateTypeEnum.RENDERER_UPDATE;
-import static tauri.dev.jsg.tileentity.props.DestinyCountDownTile.ConfigOptions.*;
+import static tauri.dev.jsg.tileentity.props.DestinyCountDownTile.ConfigOptions.ENABLE_GATE_CLOSING;
+import static tauri.dev.jsg.tileentity.props.DestinyCountDownTile.ConfigOptions.ENABLE_GATE_OPENING;
 
 @Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers")
-public class DestinyCountDownTile extends TileEntity implements ICapabilityProvider, ITickable, Environment, StateProviderInterface, ILinkable, PreparableInterface, ITileConfig {
+public class DestinyCountDownTile extends TileEntity implements ICapabilityProvider, ITickable, Environment, StateProviderInterface, PreparableInterface, ITileConfig {
 
     public long countdownTo = -1; // in ticks!
 
@@ -86,7 +86,6 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
         if (!world.isRemote) {
             targetPoint = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
             markDirty();
-            updateLinkStatus();
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         } else {
             isClientUpdated = false;
@@ -119,20 +118,18 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
             }
 
             if (getConfig().getOption(ENABLE_GATE_OPENING.id).getBooleanValue() && !gateOpenedThisRound && i > 1300 && (world.getTotalWorldTime() - countStart) > (20L * JSGConfig.General.countdownConfig.dialStartDelay) && (world.getTotalWorldTime() % 40 == 0)) {
-                if (isLinked()) {
-                    StargateUniverseBaseTile gate = getLinkedGate(world);
-                    if (gate != null) {
-                        EnumStargateState state = gate.getStargateState();
-                        if (state.idle() && gate.isMerged()) {
-                            NearbyGate found = gate.getRandomNearbyGate();
-                            if (found != null) {
-                                StargateAddress foundAddress = found.address;
-                                int symbols = (found.symbolsNeeded - 1);
-                                if (foundAddress != null) {
-                                    gate.dialAddress(foundAddress, symbols);
-                                    gateOpenedThisRound = true;
-                                    markDirty();
-                                }
+                StargateUniverseBaseTile gate = getNearestGate();
+                if (gate != null) {
+                    EnumStargateState state = gate.getStargateState();
+                    if (state.idle() && gate.isMerged()) {
+                        NearbyGate found = gate.getRandomNearbyGate();
+                        if (found != null) {
+                            StargateAddress foundAddress = found.address;
+                            int symbols = (found.symbolsNeeded - 1);
+                            if (foundAddress != null) {
+                                gate.dialAddress(foundAddress, symbols);
+                                gateOpenedThisRound = true;
+                                markDirty();
                             }
                         }
                     }
@@ -147,8 +144,8 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                     gateOpenedThisRound = false;
                     markDirty();
 
-                    if (getConfig().getOption(ENABLE_GATE_CLOSING.id).getBooleanValue() && isLinked()) {
-                        StargateUniverseBaseTile gate = getLinkedGate(world);
+                    if (getConfig().getOption(ENABLE_GATE_CLOSING.id).getBooleanValue()) {
+                        StargateUniverseBaseTile gate = getNearestGate();
                         if (gate != null) {
                             EnumStargateState state = gate.getStargateState();
                             if (state.unstable() || state.incoming() || state.engaged())
@@ -177,6 +174,24 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                 JSGPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, RENDERER_UPDATE));
             }
         }
+    }
+
+    public StargateUniverseBaseTile getNearestGate(){
+        ArrayList<BlockPos> blacklist = new ArrayList<>();
+        BlockPos nearest;
+        do {
+            nearest = LinkingHelper.findClosestPos(world, pos, LinkingHelper.getDhdRange(), new Block[]{JSGBlocks.STARGATE_UNIVERSE_BASE_BLOCK}, blacklist);
+            blacklist.add(nearest);
+            if (nearest != null) {
+                TileEntity te = world.getTileEntity(nearest);
+                if (te instanceof StargateUniverseBaseTile) {
+                    StargateUniverseBaseTile uniTile = ((StargateUniverseBaseTile) te);
+                    if(uniTile.isMerged())
+                        return uniTile;
+                }
+            }
+        } while (nearest != null);
+        return null;
     }
 
     public enum EnumCountDownEventType {
@@ -288,11 +303,6 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
         compound.setLong("countdown", countdownTo);
         compound.setBoolean("gateOpenedThisRound", gateOpenedThisRound);
 
-        if (isLinked()) {
-            compound.setLong("linkedGate", gatePos.toLong());
-            compound.setInteger("linkId", linkId);
-        }
-
         if (node != null) {
             NBTTagCompound nodeCompound = new NBTTagCompound();
             node.save(nodeCompound);
@@ -308,75 +318,15 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
         countdownTo = compound.getLong("countdown");
         gateOpenedThisRound = compound.getBoolean("gateOpenedThisRound");
 
-        if (compound.hasKey("linkedGate")) this.gatePos = BlockPos.fromLong(compound.getLong("linkedGate"));
-        if (compound.hasKey("linkId")) this.linkId = compound.getInteger("linkId");
-
         if (node != null && compound.hasKey("node")) node.load(compound.getCompoundTag("node"));
         config.deserializeNBT(compound.getCompoundTag("config"));
         markDirty();
         super.readFromNBT(compound);
     }
 
-    // Linking
-
-    @Override
-    public boolean canLinkTo() {
-        return !isLinked() && getConfig().getOption(ENABLE_GATE_LINK.id).getBooleanValue();
-    }
-
-    private BlockPos gatePos;
-    private int linkId = -1;
-
-    @Nullable
-    public StargateUniverseBaseTile getLinkedGate(World world) {
-        if (gatePos == null) return null;
-
-        return (StargateUniverseBaseTile) world.getTileEntity(gatePos);
-    }
-
-    public boolean isLinked() {
-        return gatePos != null && getConfig().getOption(ENABLE_GATE_LINK.id).getBooleanValue() && world.getTileEntity(gatePos) instanceof StargateUniverseBaseTile;
-    }
-
-    public void setLinkedGate(BlockPos dhdPos, int linkId) {
-        if (dhdPos != null && !getConfig().getOption(ENABLE_GATE_LINK.id).getBooleanValue()) return;
-        this.gatePos = dhdPos;
-        this.linkId = linkId;
-
-        markDirty();
-    }
-
-    public void updateLinkStatus() {
-        BlockPos closestUnlinked = LinkingHelper.findClosestUnlinked(world, pos, LinkingHelper.getDhdRange(), JSGBlocks.STARGATE_UNIVERSE_BASE_BLOCK, this.getLinkId());
-        int linkId = LinkingHelper.getLinkId();
-
-        if (closestUnlinked != null) {
-            StargateUniverseBaseTile stargateUniverseBaseTile = (StargateUniverseBaseTile) world.getTileEntity(closestUnlinked);
-            if (stargateUniverseBaseTile != null) {
-                if (!getConfig().getOption(ENABLE_GATE_LINK.id).getBooleanValue()) {
-                    setLinkedGate(null, -1);
-                    stargateUniverseBaseTile.setLinkedCountdown(null, -1);
-                    return;
-                }
-                stargateUniverseBaseTile.setLinkedCountdown(pos, linkId);
-                setLinkedGate(closestUnlinked, linkId);
-                markDirty();
-            }
-        }
-        if (!getConfig().getOption(ENABLE_GATE_LINK.id).getBooleanValue()) {
-            setLinkedGate(null, -1);
-        }
-    }
-
     @Override
     public boolean prepare(ICommandSender sender, ICommand command) {
-        setLinkedGate(null, -1);
         return true;
-    }
-
-    @Override
-    public int getLinkId() {
-        return linkId;
     }
 
 
@@ -481,7 +431,6 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
             this.config.getOption(o.id).setValue(o.getStringValue());
         }
         markDirty();
-        updateLinkStatus();
     }
 
     @Override
