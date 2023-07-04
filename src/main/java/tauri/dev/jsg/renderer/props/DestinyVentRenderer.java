@@ -47,7 +47,10 @@ public class DestinyVentRenderer extends TileEntitySpecialRenderer<DestinyVentTi
         }
         else{
             ResourceLocation overlayResource = TextureLoader.getBlockTexture(camoBlockState);
-            Minecraft.getMinecraft().getTextureManager().bindTexture(overlayResource);
+            if(overlayResource != null)
+                Minecraft.getMinecraft().getTextureManager().bindTexture(overlayResource);
+            else
+                ElementEnum.DESTINY_VENT_MOVING.bindTexture(BiomeOverlayEnum.NORMAL);
         }
 
         ElementEnum.DESTINY_VENT_MOVING.render();

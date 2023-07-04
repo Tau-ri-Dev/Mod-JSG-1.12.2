@@ -3,6 +3,7 @@ package tauri.dev.jsg.loader.texture;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
@@ -17,6 +18,7 @@ import tauri.dev.jsg.config.origins.OriginsLoader;
 import tauri.dev.jsg.loader.FolderLoader;
 import tauri.dev.jsg.loader.ReloadListener;
 
+import javax.annotation.Nullable;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -179,11 +181,14 @@ public class TextureLoader {
         return new ResourceLocation(JSG.MOD_ID, "textures/tesr/" + texture);
     }
 
+    @Nullable
     public static ResourceLocation getBlockTexture(IBlockState blockState) {
-
+        if(blockState == null) return null;
         Minecraft minecraft = Minecraft.getMinecraft();
         BlockRendererDispatcher ren = minecraft.getBlockRendererDispatcher();
-        String blockTexture = ren.getModelForState(blockState).getQuads(blockState, EnumFacing.NORTH, 0).get(0).getSprite().getIconName();
+        List<BakedQuad> a = ren.getModelForState(blockState).getQuads(blockState, EnumFacing.NORTH, 0);
+        if(a.size() < 1) return null;
+        String blockTexture = a.get(0).getSprite().getIconName();
         String domain = "minecraft";
         String path = blockTexture;
         int domainSeparator = blockTexture.indexOf(':');
