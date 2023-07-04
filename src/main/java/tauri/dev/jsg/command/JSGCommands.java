@@ -33,6 +33,7 @@ public final class JSGCommands {
             new CommandDestinyFTL(),
             new CommandStargateSetFakePos(),
             new CommandStargateGetFakePos(),
+            new CommandStargateResetFakePos(),
             new CommandStructureSpawn()
     ));
 
