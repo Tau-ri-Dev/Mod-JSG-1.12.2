@@ -385,14 +385,18 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                 return super.onItemRightClick(world, player, hand);
 
             BlockPos linkedPos = BlockPos.fromLong(compound.getLong(mode.tagPosName));
-            StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
-
-            if(shift && gateTile != null && gateTile.hasIris() && gateTile.getIrisMode() == EnumIrisMode.DIALER){
-                gateTile.toggleIris();
-                return super.onItemRightClick(world, player, hand);
-            }
-
             NBTTagList tagList = compound.getTagList(mode.tagListName, NBT.TAG_COMPOUND);
+
+            TileEntity linkedTe = world.getTileEntity(linkedPos);
+            if(shift){
+                if(linkedTe instanceof StargateUniverseBaseTile){ // Can be also rings - make this check
+                    StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) linkedTe;
+                    if(gateTile.hasIris() && gateTile.getIrisMode() == EnumIrisMode.DIALER){
+                        gateTile.toggleIris();
+                        return super.onItemRightClick(world, player, hand);
+                    }
+                }
+            }
 
             if (selected >= tagList.tagCount())
                 return super.onItemRightClick(world, player, hand);
@@ -402,6 +406,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
             switch (mode) {
                 case MEMORY:
                 case NEARBY:
+                    StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) linkedTe;
                     if (gateTile == null) break;
                     switch (gateTile.getStargateState()) {
                         case IDLE:
@@ -452,12 +457,8 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                     break;
 
                 case GATE_INFO:
-                    StargateUniverseBaseTile tile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
-                    if (tile == null) break;
-                    if(shift && tile.hasIris() && tile.getIrisMode() == EnumIrisMode.DIALER){
-                        tile.toggleIris();
-                        break;
-                    }
+                    if(!(linkedTe instanceof StargateUniverseBaseTile)) break;
+                    StargateUniverseBaseTile tile = (StargateUniverseBaseTile) linkedTe;
                     switch (tile.getStargateState()) {
                         case IDLE:
                             break;
@@ -483,8 +484,8 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                     break;
 
                 case RINGS:
-                    TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(linkedPos);
-                    if (ringsTile == null) break;
+                    if(!(linkedTe instanceof TransportRingsAbstractTile)) break;
+                    TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) linkedTe;
                     ringsTile.attemptTransportTo(new TransportRings(selectedCompound).getAddress(SymbolTypeTransportRingsEnum.GOAULD), 5).sendMessageIfFailed(player);
 
                     break;
