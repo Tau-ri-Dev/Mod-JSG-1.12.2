@@ -40,19 +40,19 @@ public class GuiCustomMainMenu extends GuiScreen {
     public static final String GITHUB = "https://github.com/Tau-ri-Dev";
     public static final String MINECRAFT_SITES = "https://minecraft.net/en-us";
     public static final String JSG_RUNNING_TEXT = "Just Stargate Mod v" + JSG.MOD_VERSION.replaceAll(JSG.MC_VERSION + "-", "");
-    public static final ArrayList<ResourceLocation> BACKGROUNDS = new ArrayList<ResourceLocation>() {{
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background0.jpg"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background1.jpg"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background2.jpg"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background3.jpg"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background4.jpg"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background5.jpg"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background6.jpg"));
-    }};
+
+    public static class MainMenuBackground {
+        protected static final String PATH = "textures/gui/mainmenu/background";
+        protected static final String END = ".jpg";
+
+        public static ResourceLocation get(int id){
+            return new ResourceLocation(JSG.MOD_ID, PATH + id + END);
+        }
+    }
     public static final ResourceLocation LOGO_TAURI = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/tauri_dev_logo.png");
     public static final ResourceLocation LOGO_MOJANG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/mojang_logo.png");
     public static final ResourceLocation LOGO_JSG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/jsg_logo.png");
-    public static final int BACKGROUNDS_COUNT = BACKGROUNDS.size();
+    public static final int BACKGROUNDS_COUNT = JSGConfig.General.mainMenuConfig.backgroundImagesCount;
     public static final long FIRST_TRANSITION_LENGTH = 7 * 20; // in relative ticks
     public static final int PADDING = 10;
     public static final MainMenuNotifications NOTIFIER = MainMenuNotifications.getManager();
@@ -466,7 +466,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         GlStateManager.translate(center[0], center[1], 0);
         GlStateManager.scale(scale, scale, 1);
         backgroundScale = scale;
-        Minecraft.getMinecraft().getTextureManager().bindTexture(BACKGROUNDS.get(currentBackground));
+        Minecraft.getMinecraft().getTextureManager().bindTexture(MainMenuBackground.get(currentBackground));
         drawScaledCustomSizeModalRect(-(width / 2), -(height / 2), 0, 0, 1921, 1018, width, height, 1920, 1017);
         GlStateManager.popMatrix();
 

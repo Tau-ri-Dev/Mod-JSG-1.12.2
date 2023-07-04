@@ -294,6 +294,16 @@ public class JSGConfig {
             public boolean disableJSGMainMenu = false;
 
             @Config.RequiresMcRestart
+            @Config.Name("Background images count")
+            @Config.Comment({
+                    "Specifies how many images can be used as background of mainmenu. (starts from 0)",
+                    "DO NOT CHANGE THIS IF YOU DO NOT KNOW WHAT ARE YOU DOING!",
+                    "WARNING! - Requires reloading!",
+                    "SIDE: CLIENT"
+            })
+            public int backgroundImagesCount = 7;
+
+            @Config.RequiresMcRestart
             @Config.Name("Enable Tau'ri logo on startup")
             @Config.Comment({
                     "WARNING! - Requires reloading!",
