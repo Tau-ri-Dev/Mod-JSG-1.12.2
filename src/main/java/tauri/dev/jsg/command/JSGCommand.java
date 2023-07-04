@@ -214,7 +214,7 @@ public class JSGCommand extends CommandBase {
             arrows.appendSibling(back);
         else
             arrows.appendSibling(new TextComponentString("\u00a78\u00a7l\u00a7m<--\u00a7r"));
-        arrows.appendSibling(new TextComponentString(" \u00a77(" + page + ")\u00a7r "));
+        arrows.appendSibling(new TextComponentString(" \u00a77(" + page + "/" + maxPage + ")\u00a7r "));
         if (page + 1 <= maxPage)
             arrows.appendSibling(next);
         else
