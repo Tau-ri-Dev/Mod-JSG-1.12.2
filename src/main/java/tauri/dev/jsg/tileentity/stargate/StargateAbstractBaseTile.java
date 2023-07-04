@@ -95,7 +95,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     private boolean isInitiating;
 
-    private BlockPos lastPos = BlockPos.ORIGIN;
+    private BlockPos lastPos = pos;
 
     protected void engageGate() {
         stargateState = isInitiating ? EnumStargateState.ENGAGED_INITIATING : EnumStargateState.ENGAGED;
@@ -483,6 +483,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         }
         this.setGateAddress(this.getSymbolType(), address);
         updateFacing(this.world.getBlockState(this.pos).getValue(JSGProps.FACING_HORIZONTAL), this.world.getBlockState(this.pos).getValue(JSGProps.FACING_VERTICAL), true);
+        lastPos = this.pos;
+        markDirty();
     }
 
     public StargateAddressDynamic getDialedAddress() {
@@ -758,7 +760,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * @return True if the connecion is valid.
      */
     protected boolean verifyConnection() {
-        if ((targetGatePos == null || !(targetGatePos.getTileEntity() instanceof StargateAbstractBaseTile)) && !randomIncomingIsActive) {
+        if ((targetGatePos == null || targetGatePos.getTileEntity() == null) && !randomIncomingIsActive) {
             closeGate(StargateClosedReasonEnum.CONNECTION_LOST);
             return false;
         }
@@ -836,6 +838,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public void onLoad() {
         if (!world.isRemote) {
             lastPos = pos;
+            markDirty();
             updateFacing(world.getBlockState(pos).getValue(JSGProps.FACING_HORIZONTAL), world.getBlockState(pos).getValue(JSGProps.FACING_VERTICAL), true);
             network = StargateNetwork.get(world);
 
@@ -938,7 +941,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             if (stargateState.engaged() && lastPos != pos) {
                 lastPos = pos;
                 markDirty();
-                //JSG.error("A stargateState indicates the Gate should be open, but targetGatePos is null. This is a bug. Closing gate...");
+                JSG.error("A stargateState indicates the Gate should be open, but last pos is not matching current pos! Closing gate...");
                 attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
                 refresh();
             }
@@ -1806,6 +1809,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         compound.setLong("openedSince", openedSince);
         compound.setInteger("facingVertical", (facingVertical == EnumFacing.UP ? 2 : facingVertical == EnumFacing.DOWN ? 1 : 0));
 
+        compound.setLong("lastPos", (lastPos != null ? lastPos.toLong() : pos.toLong()));
+
         return super.writeToNBT(compound);
     }
 
@@ -1853,6 +1858,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             int fVertIndex = compound.getInteger("facingVertical");
             facingVertical = (fVertIndex == 2 ? EnumFacing.UP : fVertIndex == 1 ? EnumFacing.DOWN : EnumFacing.SOUTH);
         }
+
+        if(compound.hasKey("lastPos"))
+            lastPos = BlockPos.fromLong(compound.getLong("lastPos"));
+        else
+            lastPos = pos;
 
         super.readFromNBT(compound);
     }
