@@ -29,6 +29,7 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.capability.CapabilityEnergyZPM;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.item.JSGItems;
@@ -280,6 +281,13 @@ public class JSGStructure extends WorldGenerator {
             gateTile.refresh();
             gateTile.getMergeHelper().updateMembersMergeStatus(worldToSpawn, gateTile.getPos(), gateTile.getFacing(), gateTile.getFacingVertical(), true);
             gateTile.markDirty();
+
+            double unstableChance = JSGConfig.WorldGen.mystPage.forcedUnstableGateChance;
+            if(unstableChance > 0 && (random.nextFloat() < unstableChance)){
+                JSGTileEntityConfig config = gateTile.getConfig();
+                config.getOption(StargateClassicBaseTile.ConfigOptions.FORCE_UNSTABLE_EH.id).setBooleanValue(true);
+                gateTile.setConfigAndUpdate(config);
+            }
 
             StargateAddress address = gateTile.getStargateAddress(symbolType);
 

@@ -1372,6 +1372,14 @@ public class JSGConfig {
             })
             public double despawnDhdChance = 0.05;
 
+            @Config.Name("Chance of force unstable gate")
+            @Config.RangeDouble(min = 0, max = 1)
+            @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
+            public double forcedUnstableGateChance = 0.05;
+
             @Config.Name("Mysterious page cooldown")
             @Config.RangeInt(min = 0, max = 400)
             @Config.SlidingOption

@@ -121,6 +121,9 @@ public class JSGConfigOption {
         return this;
     }
 
+    public JSGConfigOption setBooleanValue(boolean value) {
+        return this.setValue(value ? "true" : "false");
+    }
     public JSGConfigOption setValue(String value) {
         if (this.type == JSGConfigOptionTypeEnum.NUMBER || this.type == JSGConfigOptionTypeEnum.SWITCH)
             return this.setIntValue(value);
