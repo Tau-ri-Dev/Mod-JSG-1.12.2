@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.particle.ParticleBlenderCOBlast;
@@ -55,8 +56,9 @@ public class DestinyVentRenderer extends TileEntitySpecialRenderer<DestinyVentTi
 
         ElementEnum.DESTINY_VENT_MOVING.render();
         if (fireParticles) {
-            for (int i = 0; i < 50; i++) {
-                boolean orange = (i < 25);
+            int particleCount = JSGConfig.General.visual.destinyVentParticlesCount;
+            for (int i = 0; i < particleCount; i++) {
+                boolean orange = (i < (particleCount/2));
                 float coef = orange ? (float) (0.5f * Math.random()) : 1;
                 new ParticleBlenderCOBlast((float) (-0.5f + Math.random()), 0, (float) (-0.3f + Math.random() * 0.6f), 2, 2, (-0.1f + (float) (Math.random() * 0.2f)) * (orange ? 0.25f : 1), (0.4f + (-0.1f + (float) (Math.random() * 0.2f))) * coef, (-(0.2f + (-0.1f + (float) (Math.random() * 0.2f)))) * coef, orange, (motion) -> {
                 }).spawn(te.getWorld(), te.getPos(), rot, false);

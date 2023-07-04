@@ -132,6 +132,13 @@ public class JSGConfig {
                     "SIDE: CLIENT"
             })
             public TemperatureHelper.EnumTemperatureUnit temperatureUnit = TemperatureHelper.EnumTemperatureUnit.CELSIUS;
+
+            @Config.Name("Destiny CO2 blaster particles count/tick")
+            @Config.RangeInt(min = 0, max = 100)
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
+            public int destinyVentParticlesCount = 5;
         }
 
         public static class Debug {
