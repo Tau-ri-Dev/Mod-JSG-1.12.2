@@ -1,10 +1,11 @@
-package tauri.dev.jsg.raycaster.better;
+package tauri.dev.jsg.raycaster;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import tauri.dev.jsg.raycaster.util.RayCastedButton;
 import tauri.dev.vector.Vector2f;
 import tauri.dev.vector.Vector3f;
 

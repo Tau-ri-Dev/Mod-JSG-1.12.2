@@ -1,8 +1,7 @@
-package tauri.dev.jsg.raycaster.better;
+package tauri.dev.jsg.raycaster.util;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import tauri.dev.jsg.raycaster.util.RaycasterVertex;
 import tauri.dev.vector.Vector2f;
 import tauri.dev.vector.Vector3f;
 

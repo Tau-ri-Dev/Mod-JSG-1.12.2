@@ -8,8 +8,8 @@ import net.minecraft.world.World;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.stargate.DHDButtonClickedToServer;
 import tauri.dev.jsg.packet.stargate.DHDPegasusButtonClickedToServer;
-import tauri.dev.jsg.raycaster.better.BetterRaycaster;
-import tauri.dev.jsg.raycaster.better.RayCastedButton;
+import tauri.dev.jsg.raycaster.Raycaster;
+import tauri.dev.jsg.raycaster.util.RayCastedButton;
 import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
 import tauri.dev.jsg.stargate.network.SymbolPegasusEnum;
 import tauri.dev.jsg.tileentity.dialhomedevice.DHDPegasusTile;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RaycasterDHD extends BetterRaycaster {
+public class RaycasterDHD extends Raycaster {
     public static final RaycasterDHD INSTANCE = new RaycasterDHD();
     private static final ArrayList<RayCastedButton> BUTTONS = new ArrayList<RayCastedButton>() {{
 
