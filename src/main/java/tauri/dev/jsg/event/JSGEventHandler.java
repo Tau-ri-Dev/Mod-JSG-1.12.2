@@ -1,8 +1,5 @@
 package tauri.dev.jsg.event;
 
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.block.JSGBlocks;
-import tauri.dev.jsg.raycaster.RaycasterDHD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
@@ -22,6 +19,9 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.raycaster.dhd.RaycasterDHD;
 
 import static tauri.dev.jsg.block.JSGBlocks.INVISIBLE_BLOCK;
 import static tauri.dev.jsg.block.JSGBlocks.IRIS_BLOCK;

@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+import tauri.dev.vector.Vector3f;
 
 public class JSGAxisAlignedBB extends AxisAlignedBB {
 	public JSGAxisAlignedBB(double x1, double y1, double z1, double x2, double y2, double z2) {
@@ -15,8 +16,12 @@ public class JSGAxisAlignedBB extends AxisAlignedBB {
     }
 	
 	public JSGAxisAlignedBB(BlockPos pos1, BlockPos pos2) {
-        this((double)pos1.getX(), (double)pos1.getY(), (double)pos1.getZ(), (double)pos2.getX(), (double)pos2.getY(), (double)pos2.getZ());
+        this(pos1.getX(), pos1.getY(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ());
     }
+
+	public JSGAxisAlignedBB(Vector3f pos1, Vector3f pos2) {
+		this(pos1.getX(), pos1.getY(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ());
+	}
 
     public BlockPos getCenterBlockPos(){
 		return new BlockPos(getCenter().x, getCenter().y, getCenter().z);
