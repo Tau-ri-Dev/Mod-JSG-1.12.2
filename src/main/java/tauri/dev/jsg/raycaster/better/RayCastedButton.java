@@ -2,7 +2,6 @@ package tauri.dev.jsg.raycaster.better;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import tauri.dev.jsg.raycaster.util.RaycasterPolygon;
 import tauri.dev.jsg.raycaster.util.RaycasterVertex;
 import tauri.dev.vector.Vector2f;
 import tauri.dev.vector.Vector3f;
@@ -28,9 +27,18 @@ public class RayCastedButton {
         List<Vector2f> vectors = new ArrayList<>();
 
         for (Vector3f v : this.vectors) {
-            vectors.add(getTransposedVector(v, rotation, pos, player, translation));
+            vectors.add(getTransposedVector(new Vector3f(v.x, v.y, v.z), rotation, pos, player, translation));
         }
 
-        return RaycasterPolygon.checkInside(vectors, point);
+        int i, j, n = vectors.size();
+        int count = 0;
+
+        for (i = 0, j = n - 1; i < n; j = i++) {
+            if ((vectors.get(i).y > point.y) != (vectors.get(j).y > point.y) && (point.x < (vectors.get(j).x - vectors.get(i).x) * (point.y - vectors.get(i).y) / (vectors.get(j).y - vectors.get(i).y) + vectors.get(i).x)) {
+                count++;
+            }
+        }
+
+        return (count % 2 > 0);
     }
 }
