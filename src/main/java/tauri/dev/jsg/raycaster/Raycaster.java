@@ -1,19 +1,20 @@
 package tauri.dev.jsg.raycaster;
 
-import tauri.dev.jsg.raycaster.util.Box;
-import tauri.dev.jsg.raycaster.util.DHDVertex;
-import tauri.dev.jsg.raycaster.util.Ray;
-import tauri.dev.vector.Vector2f;
-import tauri.dev.vector.Vector3f;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import tauri.dev.jsg.raycaster.util.Box;
+import tauri.dev.jsg.raycaster.util.DHDVertex;
+import tauri.dev.jsg.raycaster.util.Ray;
+import tauri.dev.vector.Vector2f;
+import tauri.dev.vector.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("all")
 public abstract class Raycaster {
 	protected abstract List<Vector3f> getVertices();
 	protected abstract int getRayGroupCount();
@@ -33,7 +34,6 @@ public abstract class Raycaster {
 		boolean found = false;
 		
 		for (int x=1; x<=getVertices().size()/getRayGroupCount(); x++) {
-		//for (int x=1; x<=1; x++) {
 			Ray currentRay;
 			
 			// Last run, current ray should be the first one
@@ -44,8 +44,7 @@ public abstract class Raycaster {
 			
 			// First run, we need to calculate the first right limiter function
 			if (lastRay == null) {
-				lastRay = firstRay = new Ray( getTransposedRay(0, rotation, world, pos, player) );	
-				//brbRayList.add(firstRay);
+				lastRay = firstRay = new Ray( getTransposedRay(0, rotation, world, pos, player) );
 			}
 			
 			List<Ray> transverseRays = new ArrayList<Ray>();

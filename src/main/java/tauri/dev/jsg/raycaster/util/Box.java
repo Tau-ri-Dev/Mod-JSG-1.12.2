@@ -6,16 +6,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Box {
-	private List<Ray> rays;
-	private int verticalIndex;
+	private final List<Ray> rays;
+	private final int verticalIndex;
 	
 	public Box(Ray ray, Ray ray2, Ray ray3, Ray ray4, int index) {
 		this.rays = Arrays.asList(ray, ray2, ray3, ray4);
 		this.verticalIndex = index;
-		
-//		for (Ray ray5 : rays) {
-//			JSG.info(ray5.toString());
-//		}
 	}
 	
 	public Box(List<Ray> rays) {

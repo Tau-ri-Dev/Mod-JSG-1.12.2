@@ -419,9 +419,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Override
     public void onLoad() {
         super.onLoad();
-
-        lastPos = pos;
-
         if (!world.isRemote) {
 
             updateBeamers();
@@ -432,6 +429,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             if (isMerged()) {
                 setIrisBlocks(set && irisState == EnumIrisState.CLOSED);
             }
+
+            this.lastFakeWorld = getFakeWorld();
+            this.lastFakePos = getFakePos();
+            markDirty();
         }
     }
 
@@ -663,6 +664,25 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             // Client -> request to update client config
             if (getConfig().getOptions().size() < 1) {
                 JSGPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.GUI_STATE));
+            }
+        }
+
+        // Checking lastFakePos and lastFakeWorld (if changed, close the gate if its open (gate was probably warped))
+        if(!world.isRemote){
+            if ((lastFakePos != getFakePos() || lastFakeWorld != getFakeWorld())) {
+                if (!getStargateState().idle() && (connectedToGate || connectingToGate)) {
+                    abortDialingSequence();
+                    lastFakePos = getFakePos();
+                    lastFakeWorld = getFakeWorld();
+                    markDirty();
+                }
+                else if (getStargateState().engaged() || getStargateState().unstable()) {
+                    JSG.info("A stargateState indicates the Gate should be open, but gate was warped! Closing gate...");
+                    attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
+                    lastFakePos = getFakePos();
+                    lastFakeWorld = getFakeWorld();
+                    markDirty();
+                }
             }
         }
 
@@ -1144,6 +1164,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         compound.setInteger("facingVertical", FacingHelper.toInt(facingVertical));
 
+        if (lastFakePos != null)
+            compound.setLong("lastFakePos", lastFakePos.toLong());
+        if (lastFakeWorld != null)
+            compound.setInteger("lastFakeWorld", lastFakeWorld.provider.getDimension());
+
         return super.writeToNBT(compound);
     }
 
@@ -1192,6 +1217,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         this.isFastDialing = compound.getBoolean("fastDialing");
 
         facingVertical = FacingHelper.fromInt(compound.getInteger("facingVertical"));
+
+        if (compound.hasKey("lastFakePos"))
+            this.lastFakePos = BlockPos.fromLong(compound.getLong("lastFakePos"));
+        if (compound.hasKey("lastFakeWorld") && world.getMinecraftServer() != null)
+            this.lastFakeWorld = this.world.getMinecraftServer().getWorld(compound.getInteger("lastFakeWorld"));
 
         super.readFromNBT(compound);
     }
@@ -2352,6 +2382,17 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             }
         }
     }
+
+    @Override
+    public void refresh() {
+        super.refresh();
+        this.lastFakeWorld = getFakeWorld();
+        this.lastFakePos = getFakePos();
+        markDirty();
+    }
+
+    protected World lastFakeWorld = getFakeWorld();
+    protected BlockPos lastFakePos = getFakePos();
 
     public World getFakeWorld() {
         return world;

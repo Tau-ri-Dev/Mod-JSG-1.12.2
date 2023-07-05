@@ -15,7 +15,7 @@ import java.util.List;
 public class RaycasterRingsGoauldController extends RaycasterRingsAbstractController {
     public static final RaycasterRingsGoauldController INSTANCE = new RaycasterRingsGoauldController();
 
-    private static final List<Vector3f> vertices = Arrays.asList(
+    private static final List<Vector3f> VERTICES = Arrays.asList(
             new Vector3f(0.314399f, -0.96172f, 0.201255f),
             new Vector3f(0.3144f, -0.961707f, 0.283443f),
             new Vector3f(0.315226f, -0.961707f, 0.382972f),
@@ -39,7 +39,7 @@ public class RaycasterRingsGoauldController extends RaycasterRingsAbstractContro
 
     @Override
     protected List<Vector3f> getVertices() {
-        return vertices;
+        return VERTICES;
     }
 
     @Override

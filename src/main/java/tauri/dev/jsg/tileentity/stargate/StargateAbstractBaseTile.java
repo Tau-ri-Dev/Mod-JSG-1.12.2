@@ -453,7 +453,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected StargateAddressDynamic dialedAddress = new StargateAddressDynamic(getSymbolType());
     public StargatePos targetGatePos;
     public boolean connectedToGate = false;
-    protected boolean connectingToGate = false;
+    public boolean connectingToGate = false;
     protected StargatePos connectedToGatePos;
     protected boolean isIncoming = false;
 

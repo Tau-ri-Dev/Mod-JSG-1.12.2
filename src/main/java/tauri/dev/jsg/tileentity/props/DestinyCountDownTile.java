@@ -176,9 +176,9 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                         if (gate != null) {
                             EnumStargateState state = gate.getStargateState();
                             if(state != null){
-                                if (state.unstable() || state.incoming() || state.engaged())
+                                if (state.incoming() || state.engaged())
                                     gate.attemptClose(StargateClosedReasonEnum.AUTOCLOSE);
-                                else if (!state.idle())
+                                else if (!state.idle() && (gate.connectedToGate || gate.connectingToGate))
                                     gate.abortDialingSequence();
                             }
                         }

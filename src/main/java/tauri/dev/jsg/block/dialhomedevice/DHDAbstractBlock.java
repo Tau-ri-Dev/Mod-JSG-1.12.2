@@ -31,6 +31,7 @@ import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 public abstract class DHDAbstractBlock extends JSGBlock {
 
@@ -102,6 +103,7 @@ public abstract class DHDAbstractBlock extends JSGBlock {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         EnumFacing dhdFacingOpposite = EnumFacing.getHorizontal(Math.round(state.getValue(JSGProps.ROTATION_HORIZONTAL) / 4.0f));
         boolean backActivation = (facing == dhdFacingOpposite);
@@ -115,7 +117,7 @@ public abstract class DHDAbstractBlock extends JSGBlock {
 
                 if (!FluidUtil.interactWithFluidHandler(player, hand, world, pos, null)) {
                     DHDAbstractTile tile = (DHDAbstractTile) world.getTileEntity(pos);
-                    if (!tile.tryInsertUpgrade(player, hand)) {
+                    if (tile != null && !tile.tryInsertUpgrade(player, hand)) {
                         player.openGui(JSG.instance, getGui().id, world, pos.getX(), pos.getY(), pos.getZ());
                     }
                 }
