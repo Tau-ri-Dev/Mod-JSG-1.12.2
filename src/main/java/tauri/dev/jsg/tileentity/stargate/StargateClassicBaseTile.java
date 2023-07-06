@@ -670,7 +670,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         // Checking lastFakePos and lastFakeWorld (if changed, close the gate if its open (gate was probably warped))
         if(!world.isRemote){
             if ((lastFakePos != getFakePos() || lastFakeWorld != getFakeWorld())) {
-                if (!getStargateState().idle() && (connectedToGate || connectingToGate)) {
+                if (!getStargateState().engaged() && !getStargateState().unstable() && !getStargateState().idle() && (connectedToGate || connectingToGate)) {
                     abortDialingSequence();
                     lastFakePos = getFakePos();
                     lastFakeWorld = getFakeWorld();
@@ -679,6 +679,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 else if (getStargateState().engaged() || getStargateState().unstable()) {
                     JSG.info("A stargateState indicates the Gate should be open, but gate was warped! Closing gate...");
                     attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
+                    lastFakePos = getFakePos();
+                    lastFakeWorld = getFakeWorld();
+                    markDirty();
+                }
+                else{
                     lastFakePos = getFakePos();
                     lastFakeWorld = getFakeWorld();
                     markDirty();
