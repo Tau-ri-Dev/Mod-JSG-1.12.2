@@ -22,8 +22,8 @@ public class JSGOresGenerator implements IWorldGenerator {
 	
 	@Override
 	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		switch(world.provider.getDimensionType()) {
-			case NETHER:
+		switch(world.provider.getDimension()) {
+			case -1:
 				if (JSGConfig.WorldGen.ores.naquadahEnable) {
 					runGenerator(JSGBlocks.ORE_NAQUADAH_BLOCK.getDefaultState(),
 							tauri.dev.jsg.config.JSGConfig.WorldGen.ores.naquadahVeinSize,
@@ -31,7 +31,7 @@ public class JSGOresGenerator implements IWorldGenerator {
 							BlockMatcher.forBlock(Blocks.NETHERRACK), world, rand, chunkX, chunkZ);
 				}
 				break;
-			case OVERWORLD:
+			case 0:
 				if (JSGConfig.WorldGen.ores.titaniumEnable) {
 					runGenerator(JSGBlocks.ORE_TITANIUM_BLOCK.getDefaultState(),
 							tauri.dev.jsg.config.JSGConfig.WorldGen.ores.titaniumVeinSize,
@@ -39,7 +39,7 @@ public class JSGOresGenerator implements IWorldGenerator {
 							BlockMatcher.forBlock(Blocks.STONE), world, rand, chunkX, chunkZ);
 				}
 				break;
-			case THE_END:
+			case 1:
 				if (tauri.dev.jsg.config.JSGConfig.WorldGen.ores.triniumEnabled) {
 					runGenerator(JSGBlocks.ORE_TRINIUM_BLOCK.getDefaultState(),
 							tauri.dev.jsg.config.JSGConfig.WorldGen.ores.triniumVeinSize,
