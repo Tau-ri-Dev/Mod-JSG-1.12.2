@@ -16,7 +16,7 @@ public class Rect {
         this.lines = lines;
     }
 
-    public boolean checkForPointInBox(Vector2f p) {
+    public boolean checkForPointInRect(Vector2f p) {
         int intersects = 0;
 
         float a = 0.3f;

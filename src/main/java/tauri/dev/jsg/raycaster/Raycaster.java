@@ -44,12 +44,12 @@ public abstract class Raycaster {
 
             // Create rect as surface of the button
             Rect rect = new Rect(lines);
-            if(lines.size() == 4){
+            if (lines.size() == 4) {
                 // Probably normal square button
                 // try this for better mapping
                 rect = new Rect(lines.get(0), lines.get(2), lines.get(1), lines.get(3));
             }
-            if (rect.checkForPointInBox(lookVec2f)) {
+            if (rect.checkForPointInRect(lookVec2f)) {
                 buttonClicked(world, player, btn.buttonId, pos, hand);
                 return true;
             }

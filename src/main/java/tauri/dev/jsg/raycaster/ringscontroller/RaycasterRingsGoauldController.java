@@ -20,63 +20,40 @@ public class RaycasterRingsGoauldController extends RaycasterRingsAbstractContro
         add(new RayCastedButton(0, Arrays.asList(
                 new Vector3f(0.566581f, -0.961707f, 0.387802f),
                 new Vector3f(0.565342f, -0.961707f, 0.468747f),
-                new Vector3f(0.683045f, -0.96172f, 0.387804f),
-                new Vector3f(0.684695f, -0.961707f, 0.468747f)
+                new Vector3f(0.684695f, -0.961707f, 0.468747f),
+                new Vector3f(0.683045f, -0.96172f, 0.387804f)
         )));
         add(new RayCastedButton(1, Arrays.asList(
                 new Vector3f(0.315226f, -0.961707f, 0.382972f),
                 new Vector3f(0.315226f, -0.961707f, 0.468873f),
-                new Vector3f(0.432101f, -0.961707f, 0.386276f),
-                new Vector3f(0.431275f, -0.961707f, 0.46846f)
+                new Vector3f(0.431275f, -0.961707f, 0.46846f),
+                new Vector3f(0.432101f, -0.961707f, 0.386276f)
         )));
         add(new RayCastedButton(2, Arrays.asList(
                 new Vector3f(0.3144f, -0.961707f, 0.283443f),
                 new Vector3f(0.315226f, -0.961707f, 0.382972f),
-                new Vector3f(0.430864f, -0.96172f, 0.282202f),
-                new Vector3f(0.432101f, -0.961707f, 0.386276f)
+                new Vector3f(0.432101f, -0.961707f, 0.386276f),
+                new Vector3f(0.430864f, -0.96172f, 0.282202f)
         )));
         add(new RayCastedButton(3, Arrays.asList(
                 new Vector3f(0.564515f, -0.96172f, 0.28662f),
                 new Vector3f(0.566581f, -0.961707f, 0.387802f),
-                new Vector3f(0.682219f, -0.96172f, 0.285381f),
-                new Vector3f(0.683045f, -0.96172f, 0.387804f)
+                new Vector3f(0.683045f, -0.96172f, 0.387804f),
+                new Vector3f(0.682219f, -0.96172f, 0.285381f)
         )));
         add(new RayCastedButton(4, Arrays.asList(
                 new Vector3f(0.566167f, -0.96172f, 0.199477f),
                 new Vector3f(0.564515f, -0.96172f, 0.28662f),
-                new Vector3f(0.682219f, -0.96172f, 0.201129f),
-                new Vector3f(0.682219f, -0.96172f, 0.285381f)
+                new Vector3f(0.682219f, -0.96172f, 0.285381f),
+                new Vector3f(0.682219f, -0.96172f, 0.201129f)
         )));
         add(new RayCastedButton(5, Arrays.asList(
                 new Vector3f(0.314399f, -0.96172f, 0.201255f),
                 new Vector3f(0.3144f, -0.961707f, 0.283443f),
-                new Vector3f(0.431277f, -0.96172f, 0.200429f),
-                new Vector3f(0.430864f, -0.96172f, 0.282202f)
+                new Vector3f(0.430864f, -0.96172f, 0.282202f),
+                new Vector3f(0.431277f, -0.96172f, 0.200429f)
         )));
     }};
-
-
-    private static final List<Vector3f> VERTICES = Arrays.asList(
-            new Vector3f(0.314399f, -0.96172f, 0.201255f),
-            new Vector3f(0.3144f, -0.961707f, 0.283443f),
-            new Vector3f(0.315226f, -0.961707f, 0.382972f),
-            new Vector3f(0.315226f, -0.961707f, 0.468873f),
-
-            new Vector3f(0.431277f, -0.96172f, 0.200429f),
-            new Vector3f(0.430864f, -0.96172f, 0.282202f),
-            new Vector3f(0.432101f, -0.961707f, 0.386276f),
-            new Vector3f(0.431275f, -0.961707f, 0.46846f),
-
-            new Vector3f(0.566167f, -0.96172f, 0.199477f),
-            new Vector3f(0.564515f, -0.96172f, 0.28662f),
-            new Vector3f(0.566581f, -0.961707f, 0.387802f),
-            new Vector3f(0.565342f, -0.961707f, 0.468747f),
-
-            new Vector3f(0.682219f, -0.96172f, 0.201129f),
-            new Vector3f(0.682219f, -0.96172f, 0.285381f),
-            new Vector3f(0.683045f, -0.96172f, 0.387804f),
-            new Vector3f(0.684695f, -0.961707f, 0.468747f)
-    );
 
     @Override
     protected List<RayCastedButton> getButtons() {
