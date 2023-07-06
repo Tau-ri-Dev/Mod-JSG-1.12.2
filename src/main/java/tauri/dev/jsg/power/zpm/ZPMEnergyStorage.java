@@ -2,7 +2,6 @@ package tauri.dev.jsg.power.zpm;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
-import tauri.dev.jsg.config.JSGConfig;
 
 public class ZPMEnergyStorage implements IEnergyStorageZPM, INBTSerializable<NBTTagCompound> {
 
@@ -46,17 +45,7 @@ public class ZPMEnergyStorage implements IEnergyStorageZPM, INBTSerializable<NBT
 
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
-		if (!canReceive())
-			return 0;
-
-		int energyReceived = (int) Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive));
-		if (!simulate)
-			energy += energyReceived;
-
-        if (energyReceived > 0)
-            onEnergyChanged();
-
-        return energyReceived;
+		return 0;
     }
 
     @Override

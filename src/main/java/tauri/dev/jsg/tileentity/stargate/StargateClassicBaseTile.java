@@ -851,18 +851,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
                         // Load entities
                         String[] entityListString = JSGConfig.Stargate.rig.entitiesToSpawn;
-                        List<Entity> entityList = new ArrayList<Entity>();
+                        List<Entity> entityList = new ArrayList<>();
                         for (String entityString : entityListString) {
-                            String[] entityTemporallyList = entityString.split(":");
-                            if (entityTemporallyList.length < 2)
-                                continue; // prevents from Ticking block entity null pointer
-                            String entityStringNew =
-                                    (
-                                            (entityTemporallyList[0].equals("minecraft"))
-                                                    ? entityTemporallyList[1]
-                                                    : entityTemporallyList[0] + ":" + entityTemporallyList[1]
-                                    );
-                            ResourceLocation rlString = new ResourceLocation(entityStringNew);
+                            ResourceLocation rlString = new ResourceLocation(entityString);
                             entityList.add(EntityList.createEntityByIDFromName(rlString, world));
                         }
 

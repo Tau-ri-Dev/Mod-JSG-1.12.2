@@ -41,17 +41,7 @@ public class ZPMHubEnergyStorage extends ZPMEnergyStorage {
 
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
-        int toReceive = maxReceive;
-        toReceive -= super.receiveEnergy(maxReceive, simulate);
-
-        for (IEnergyStorageZPM storage : storages) {
-            if (toReceive == 0)
-                return maxReceive;
-
-            toReceive -= storage.receiveEnergy(toReceive, simulate);
-        }
-
-        return maxReceive - toReceive;
+        return 0;
     }
 
     @Override
@@ -77,7 +67,8 @@ public class ZPMHubEnergyStorage extends ZPMEnergyStorage {
         return this.energy;
     }
 
-    public long getMaxEnergyStoredInternally() {
-        return this.capacity;
+    @Override
+    public boolean canReceive() {
+        return false;
     }
 }
