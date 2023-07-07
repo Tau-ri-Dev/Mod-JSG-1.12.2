@@ -278,6 +278,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     @Override
     public void addSymbolToAddressManual(SymbolInterface targetSymbol, Object context) {
         if (stargateState.incoming()) return;
+        updateBearing(false);
         if (targetSymbol != getSymbolType().getTopSymbol()) {
             if (context != null) stargateState = EnumStargateState.DIALING_COMPUTER;
             else stargateState = DIALING;

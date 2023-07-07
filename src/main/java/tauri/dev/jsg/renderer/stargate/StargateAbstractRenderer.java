@@ -64,9 +64,12 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         EH_RENDERED.put(new ResourceLocation(JSG.MOD_ID, EV_HORIZON_DESATURATED_TEXTURE), false);
     }
 
+    protected StargateAbstractBaseTile gateTile;
+
     @Override
     public void render(StargateAbstractBaseTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         @SuppressWarnings("unchecked") S rendererState = (S) te.getRendererStateClient();
+        this.gateTile = te;
 
         if (rendererState != null) {
             GlStateManager.pushMatrix();

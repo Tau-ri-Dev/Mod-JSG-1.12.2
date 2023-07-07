@@ -3,7 +3,6 @@ package tauri.dev.jsg.renderer.stargate;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.loader.ElementEnum;
 
 import java.util.*;
 
@@ -96,6 +95,9 @@ public class StargateRendererStatic {
         }
 
         public void render(float tick, boolean white, Float alpha, float mul, byte animationOverride) {
+            render(tick, white, alpha, mul, animationOverride, new float[]{1, 1, 1});
+        }
+        public void render(float tick, boolean white, Float alpha, float mul, byte animationOverride, float[] color) {
             boolean animated = !JSGConfig.Stargate.eventHorizon.disableAnimatedEventHorizon && isEhAnimatedLoaded();
             if (animationOverride == -1) animated = false;
             if (animationOverride == 1) animated = true;
@@ -122,7 +124,7 @@ public class StargateRendererStatic {
                 yTex += yTexOffset;
             } else yTex *= -1;
 
-            if (alpha != null) glColor4f(1.0f, 1.0f, 1.0f, alpha.floatValue());
+            if (alpha != null) glColor4f(color[0], color[1], color[2], alpha);
             if (!white) glTexCoord2f(xTex, yTex);
 
             glVertex3f(0, 0, 0);
@@ -211,14 +213,21 @@ public class StargateRendererStatic {
         }
 
         public void render(float tick, boolean white, Float alpha, float mul, byte animationOverride) {
-            render(tick, null, null, white, alpha, mul, false, false, animationOverride);
+            render(tick, null, null, white, alpha, mul, false, animationOverride);
+        }
+
+        public void render(float tick, boolean white, Float alpha, float mul, byte animationOverride, float[] color) {
+            render(tick, null, null, white, alpha, mul, false, animationOverride, color);
         }
 
         public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul) {
-            render(tick, outerZ, innerZ, white, alpha, mul, false, false, (byte) 0);
+            render(tick, outerZ, innerZ, white, alpha, mul, false, (byte) 0);
         }
 
-        public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul, boolean reversed, boolean red, byte animationOverride) {
+        public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul, boolean reversed, byte animationOverride) {
+            render(tick, outerZ, innerZ, white, alpha, mul, reversed, animationOverride, new float[]{1, 1, 1});
+        }
+        public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul, boolean reversed, byte animationOverride, float[] color) {
             boolean animate = !tauri.dev.jsg.config.JSGConfig.Stargate.eventHorizon.disableAnimatedEventHorizon && isEhAnimatedLoaded();
             if (animationOverride == -1) animate = false;
             if (animationOverride == 1) animate = true;
@@ -228,8 +237,8 @@ public class StargateRendererStatic {
                 if (alpha > 0.5f)
                     alpha = 1.0f - alpha;
             }
-//			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
-            if (alpha != null) glColor4d(1, red ? 0 : 1, red ? 0 : 1, alpha.floatValue());
+
+            if (alpha != null) glColor4d(color[0], color[1], color[2], alpha);
 
             glBegin(GL_QUAD_STRIP);
 
@@ -247,7 +256,7 @@ public class StargateRendererStatic {
 
                 float z;
 
-                if (outerZ != null) z = outerZ.floatValue();
+                if (outerZ != null) z = outerZ;
                 else z = getOffset(index + sections * quadStripIndex, tick * mul, mul, quadStripIndex);
 
                 float xTex = tx.get(index);
@@ -277,7 +286,7 @@ public class StargateRendererStatic {
                     yTex += yTexOffset;
                 } else yTex *= -1;
 
-                if (innerZ != null) z = innerZ.floatValue();
+                if (innerZ != null) z = innerZ;
                 else z = getOffset(index + sections * quadStripIndex, tick * mul, mul, quadStripIndex + 1);
 
                 if (!white) glTexCoord2f(xTex, yTex);

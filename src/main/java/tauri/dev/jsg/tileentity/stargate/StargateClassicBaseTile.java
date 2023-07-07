@@ -1342,6 +1342,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         FORCE_UNSTABLE_EH(
                 14, "forceUnstable", JSGConfigOptionTypeEnum.BOOLEAN, "false",
                 "Force unstable state on this gate?"
+        ),
+        UNIVERSE_ORANGE_SHIELD(
+                15, "universeOrangeShield", JSGConfigOptionTypeEnum.BOOLEAN, "true",
+                "Should be universe gate's shield orange?"
         );
 
         public final int id;

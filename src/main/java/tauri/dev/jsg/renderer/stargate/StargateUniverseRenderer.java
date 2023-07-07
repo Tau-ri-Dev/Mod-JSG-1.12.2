@@ -8,6 +8,7 @@ import tauri.dev.jsg.loader.model.ModelLoader;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.stargate.network.SymbolUniverseEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
 
 public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUniverseRendererState> {
@@ -115,5 +116,13 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
     @Override
     public void setIrisHeatColor(StargateClassicRendererState rendererState, float red) {
         GlStateManager.color(IRIS_DARK_COLOR + (red * 2F), IRIS_DARK_COLOR, IRIS_DARK_COLOR);
+    }
+
+    @Override
+    public float[] getShieldColor(StargateClassicRendererState rendererState) {
+        if(gateTile instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) gateTile).getConfig().getOption(StargateClassicBaseTile.ConfigOptions.UNIVERSE_ORANGE_SHIELD.id).getBooleanValue()){
+            return new float[]{1, 0.65f, 0.3f};
+        }
+        return super.getShieldColor(rendererState);
     }
 }
