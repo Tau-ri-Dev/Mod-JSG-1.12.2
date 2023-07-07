@@ -132,6 +132,7 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             GlStateManager.disableLighting();
             GlStateManager.translate(0, 0, 0.13);
             GlStateManager.pushMatrix();
+            JSGTextureLightningHelper.lightUpTexture(1f);
             for (int k = (backOnly ? 1 : 0); k < 2; k++) {
                 if (k == 1) {
                     GlStateManager.rotate(180, 0, 1, 0);

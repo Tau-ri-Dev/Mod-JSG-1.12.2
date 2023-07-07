@@ -121,7 +121,7 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
     @Override
     public float[] getShieldColor(StargateClassicRendererState rendererState) {
         if(gateTile instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) gateTile).getConfig().getOption(StargateClassicBaseTile.ConfigOptions.UNIVERSE_ORANGE_SHIELD.id).getBooleanValue()){
-            return new float[]{1, 0.65f, 0.3f};
+            return new float[]{1, 0.65f, 0.35f};
         }
         return super.getShieldColor(rendererState);
     }
