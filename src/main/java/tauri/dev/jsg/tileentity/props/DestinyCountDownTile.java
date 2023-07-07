@@ -518,14 +518,16 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
     // ------------------------------------------------------------
     // Methods
 
-    @net.minecraftforge.fml.common.Optional.Method(modid = "opencomputers")
+    @Optional.Method(modid = "opencomputers")
     @Callback
+    @SuppressWarnings("unused")
     public Object[] getJSGVersion(Context context, Arguments args) {
         return new Object[]{JSG.MOD_VERSION};
     }
 
     @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(long) -- set countdown to a time in ticks")
+    @SuppressWarnings("unused")
     public Object[] setCountdown(Context context, Arguments args) {
         if (!args.isInteger(0)) return new Object[]{false, "Please, insert a number as first argument!"};
         long time = args.checkInteger(0);
@@ -535,6 +537,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
 
     @Optional.Method(modid = "opencomputers")
     @Callback(getter = true)
+    @SuppressWarnings("unused")
     public Object[] remainingTicks(Context context, Arguments args) {
         return new Object[]{getCountdownTicks()};
     }
