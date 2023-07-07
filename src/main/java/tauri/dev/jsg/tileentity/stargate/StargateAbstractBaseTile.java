@@ -1019,6 +1019,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                     // Horizon becomes unstable
                     if (horizonFlashTask == null && (forceUnstable || (energySecondsToClose < JSGConfig.Stargate.power.instabilitySeconds && energyTransferedLastTick < 0))) {
                         resetFlashingSequence();
+                        shouldBeUnstable = true;
 
                         setHorizonFlashTask(new ScheduledTask(EnumScheduledTask.HORIZON_FLASH, (int) (Math.random() * 40) + 5));
                     }
@@ -1027,6 +1028,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                     if (horizonFlashTask != null && (!forceUnstable && (energySecondsToClose > JSGConfig.Stargate.power.instabilitySeconds || energyTransferedLastTick >= 0))) {
                         horizonFlashTask = null;
                         isCurrentlyUnstable = false;
+                        shouldBeUnstable = false;
 
                         updateFlashState(false);
                     }
@@ -1450,6 +1452,12 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     private int flashIndex = 0;
     public boolean isCurrentlyUnstable = false;
+
+    /**
+     * Defines if gate should be unstable
+     * - this variable is used for OC methods
+     */
+    public boolean shouldBeUnstable = false;
 
     private void resetFlashingSequence() {
         flashIndex = 0;
@@ -1981,6 +1989,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     @Optional.Method(modid = "opencomputers")
     @Callback(getter = true)
+    @SuppressWarnings("unused")
     public Object[] stargateAddress(Context context, Arguments args) {
         if (!isMerged()) return new Object[]{null};
 
@@ -1995,19 +2004,29 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     @Optional.Method(modid = "opencomputers")
     @Callback(getter = true)
+    @SuppressWarnings("unused")
     public Object[] dialedAddress(Context context, Arguments args) {
         return (isMerged && !stargateState.incoming() && !stargateState.unstable() && !stargateState.notInitiating()) ? new Object[]{dialedAddress} : new Object[]{null};
     }
 
     @Optional.Method(modid = "opencomputers")
     @Callback
+    @SuppressWarnings("unused")
     public Object[] getEnergyStored(Context context, Arguments args) {
 
         return new Object[]{isMerged ? getEnergyStorage().getEnergyStored() : null};
     }
 
     @Optional.Method(modid = "opencomputers")
+    @Callback(getter = true)
+    @SuppressWarnings("unused")
+    public Object[] isUnstable(Context context, Arguments args) {
+        return new Object[]{shouldBeUnstable};
+    }
+
+    @Optional.Method(modid = "opencomputers")
     @Callback
+    @SuppressWarnings("unused")
     public Object[] getMaxEnergyStored(Context context, Arguments args) {
         return new Object[]{isMerged ? getEnergyStorage().getMaxEnergyStored() : null};
     }
