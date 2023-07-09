@@ -1,5 +1,6 @@
 package tauri.dev.jsg;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
@@ -22,9 +23,11 @@ import tauri.dev.jsg.loader.ReloadListener;
 import tauri.dev.jsg.proxy.IProxy;
 import tauri.dev.jsg.util.main.loader.JSGInit;
 import tauri.dev.jsg.util.main.loader.JSGPreInit;
+import tauri.dev.jsg.worldgen.StargateDimensionGenerator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 @Mod(modid = JSG.MOD_ID, name = JSG.MOD_NAME, version = JSG.MOD_VERSION, acceptedMinecraftVersions = JSG.MC_VERSION, dependencies = "after:cofhcore@[4.6.0,);after:opencomputers;after:thermalexpansion;after:tconstruct;after:fluidlogged_api")
 @Mod.EventBusSubscriber
@@ -217,6 +220,8 @@ public class JSG {
     public void serverStarted(FMLServerStartedEvent event) throws IOException {
         StargateDimensionConfig.reload();
         JSG.info("Server started!");
+
+        StargateDimensionGenerator.tryGenerate(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(Minecraft.getMinecraft().getIntegratedServer()).getServer()).getWorld(0)));
     }
 
     @EventHandler

@@ -561,8 +561,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected void addSymbolToAddress(SymbolInterface symbol) {
         if (tryDialInternal(this, symbol))
             addSymbolToAddress(symbol, 0);
-        else
+        else {
+            if((dialedAddress.getSize() + 1) >= 5)
+                network.checkAndGenerateStargate(dialedAddress);
             addSymbolToAddress(symbol, 1);
+        }
     }
 
     protected void resetTargetIncomingAnimation() {

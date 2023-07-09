@@ -117,7 +117,7 @@ public class JSGStructure extends WorldGenerator {
         return generateStructure(executedInWorld, pos, random, worldToSpawn, null);
     }
 
-    public boolean canDHDDespawn(){
+    public boolean canDHDDespawn() {
         return true;
     }
 
@@ -153,7 +153,7 @@ public class JSGStructure extends WorldGenerator {
 
         boolean hasUpgrade = (dimensionToSpawn != executedInWorld.provider.getDimension());
 
-        JSG.info("Structure " + structureName + " generated at " + pos + " in world " + worldToSpawn);
+        JSG.info("Structure " + structureName + " generated at " + pos + " in world " + worldToSpawn.provider.getDimension() + " (" + worldToSpawn.provider.getDimensionType().getName() + ")");
 
         for (BlockPos dataPos : dataBlocks.keySet()) {
             String name = dataBlocks.get(dataPos);
@@ -283,7 +283,7 @@ public class JSGStructure extends WorldGenerator {
             gateTile.markDirty();
 
             double unstableChance = JSGConfig.WorldGen.mystPage.forcedUnstableGateChance;
-            if(unstableChance > 0 && (random.nextFloat() < unstableChance)){
+            if (unstableChance > 0 && (random.nextFloat() < unstableChance)) {
                 JSGTileEntityConfig config = gateTile.getConfig();
                 config.getOption(StargateClassicBaseTile.ConfigOptions.FORCE_UNSTABLE_EH.id).setBooleanValue(true);
                 gateTile.setConfigAndUpdate(config);

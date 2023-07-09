@@ -9,6 +9,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.DimensionManager;
 import tauri.dev.jsg.command.AbstractJSGCommand;
 import tauri.dev.jsg.command.JSGCommand;
 import tauri.dev.jsg.item.JSGItems;
@@ -21,6 +22,7 @@ import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
 import java.util.Map;
 
 import static net.minecraft.command.CommandBase.parseCoordinate;
@@ -60,7 +62,6 @@ public class CommandStargateQuery extends AbstractJSGCommand {
         SymbolTypeEnum symbolType = null;
 
         if (args.length >= 1 && args[0].equals("help")) {
-            //throw new WrongUsageException("commands.sgquery.usage");
             baseCommand.sendUsageMess(sender, this);
             return;
         }
@@ -125,12 +126,17 @@ public class CommandStargateQuery extends AbstractJSGCommand {
         infoString += "id=" + (idCheck != -1 ? idCheck : "any") + ", ";
         infoString += "box=" + (queryBox != null ? queryBox.toString() : "any") + "]:";
 
-        //notifyCommandListener(sender, this, "commands.sgquery.stargates", TextFormatting.AQUA + infoString);
         baseCommand.sendSuccessMess(sender, "Successfully executed!");
         baseCommand.sendRunningMess(sender, "Searching in: " + infoString);
 
         StargateNetwork network = StargateNetwork.get(sender.getEntityWorld());
-        Map<StargateAddress, StargatePos> map = network.getMap().get(symbolType != null ? symbolType : SymbolTypeEnum.MILKYWAY);
+        Map<StargateAddress, StargatePos> map = new HashMap<>(network.getMap().get(symbolType != null ? symbolType : SymbolTypeEnum.MILKYWAY));
+
+        Map<StargatePos, Map<SymbolTypeEnum, StargateAddress>> map2 = network.getMapNotGenerated();
+
+        for(StargatePos p : map2.keySet()){
+            map.put(map2.get(p).get((symbolType != null ? symbolType : SymbolTypeEnum.MILKYWAY)), p);
+        }
 
         int id = 1;
         StargateAddress selectedAddress = null;
@@ -148,12 +154,17 @@ public class CommandStargateQuery extends AbstractJSGCommand {
             if (idCheck == -1 || id == idCheck) {
                 selectedStargatePos = map.get(address);
                 selectedAddress = address;
+                if(selectedStargatePos == null) continue;
+                if(selectedAddress == null) continue;
+
+                boolean isThere = network.isStargateInNetwork(address);
 
                 StringBuilder gateString = new StringBuilder(" " + id + ". [");
-                gateString.append("x=").append(pos.getX()).append(", ");
-                gateString.append("y=").append(pos.getY()).append(", ");
-                gateString.append("z=").append(pos.getZ()).append(", ");
-                gateString.append("dim=").append(selectedStargatePos.getWorld().provider.getDimension()).append(" (").append(selectedStargatePos.getWorld().provider.getDimensionType().getName()).append(")]");
+                gateString.append("x=").append(isThere ? pos.getX() : "§k1").append(", ");
+                gateString.append("y=").append(isThere ? pos.getY() : "§k1").append(", ");
+                gateString.append("z=").append(isThere ? pos.getZ() : "§k1").append(", ");
+                gateString.append("dim=").append(selectedStargatePos.dimensionID).append(" (").append(DimensionManager.getProviderType(selectedStargatePos.dimensionID).getName()).append(")").append(", ");
+                gateString.append("isThere=").append(isThere ? "true" : "false").append("]");
 
                 if (symbolType != null) {
                     gateString.append(": \n").append(TextFormatting.DARK_GRAY);
@@ -172,12 +183,10 @@ public class CommandStargateQuery extends AbstractJSGCommand {
                     }
                 }
 
-                //notifyCommandListener(sender, this, gateString.toString());
                 baseCommand.sendInfoMess(sender, gateString.toString());
 
                 if (symbolType != null)
                     baseCommand.sendInfoMess(sender, "");
-                //notifyCommandListener(sender, this,"");
             }
 
             id++;
@@ -185,7 +194,6 @@ public class CommandStargateQuery extends AbstractJSGCommand {
 
         if (givePage) {
             if (idCheck == -1 || selectedAddress == null || selectedStargatePos == null) {
-                //throw new WrongUsageException("commands.sgquery.wrong_id");
                 baseCommand.sendErrorMess(sender, "Wrong ID!");
                 return;
             }
@@ -209,7 +217,6 @@ public class CommandStargateQuery extends AbstractJSGCommand {
             ((EntityPlayer) sender).addItemStackToInventory(stack);
 
             baseCommand.sendSuccessMess(sender, "Giving page...");
-            //notifyCommandListener(sender, this, "commands.sgquery.giving_page", sender.getName());
         }
     }
 

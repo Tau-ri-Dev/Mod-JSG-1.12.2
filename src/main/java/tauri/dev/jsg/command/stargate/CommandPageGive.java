@@ -39,7 +39,7 @@ public class CommandPageGive extends AbstractJSGCommand {
     @Nonnull
     @Override
     public String getGeneralUsage() {
-        return "sggivepage";
+        return "sggivepage <player> <map=MILKYWAY|PEGASUS|UNIVERSE> <8x symbol>";
     }
 
     @Override
@@ -52,7 +52,6 @@ public class CommandPageGive extends AbstractJSGCommand {
         boolean hasUpgrade = true;
 
         if (args.length < 8) {
-            //throw new WrongUsageException("commands.sggivepage.usage");
             baseCommand.sendUsageMess(sender, this);
             return;
         }
@@ -77,11 +76,9 @@ public class CommandPageGive extends AbstractJSGCommand {
         if (symbolType == null) {
             baseCommand.sendUsageMess(sender, this);
             return;
-            //throw new WrongUsageException("commands.sggivepage.no_map");
         }
 
         EntityPlayer player = getPlayer(server, sender, args[0]);
-        //notifyCommandListener(sender, this, "commands.sggivepage.give_page", player.getName());
 
         StargateAddressDynamic stargateAddress = new StargateAddressDynamic(symbolType);
         int index = 1;
@@ -92,7 +89,6 @@ public class CommandPageGive extends AbstractJSGCommand {
             if (symbol == null) {
                 baseCommand.sendErrorMess(sender, "Wrong symbol name at position " + index + "!");
                 return;
-                //throw new WrongUsageException("commands.sgsetaddress.wrongsymbol", index);
             }
 
             stargateAddress.addSymbol(symbol);

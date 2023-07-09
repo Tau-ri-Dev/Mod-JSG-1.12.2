@@ -16,6 +16,7 @@ import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.util.ItemMetaPair;
 import tauri.dev.jsg.util.JSGAxisAlignedBB;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,7 @@ public class JSGConfigUtil {
         cachedBiomeMatchesReverse = null;
         cachedBiomeOverrideBlocks = null;
         cachedBiomeOverrideBlocksReverse = null;
+        cachedBlacklistedDimsForDimsSgGen = null;
     }
 
     // Kawoosh blocks
@@ -148,5 +150,17 @@ public class JSGConfigUtil {
         }
 
         return cachedBiomeOverrideBlocksReverse;
+    }
+
+    // Blacklisted DIM for Other DIMS stargate generator
+    private static List<Integer> cachedBlacklistedDimsForDimsSgGen = null;
+    public static boolean isDimBlacklistedForSGSpawn(int idmId){
+        if(cachedBlacklistedDimsForDimsSgGen == null){
+            cachedBlacklistedDimsForDimsSgGen = new ArrayList<>();
+            for(int i : JSGConfig.WorldGen.otherDimGenerator.blacklistDims)
+                cachedBlacklistedDimsForDimsSgGen.add(i);
+        }
+
+        return cachedBlacklistedDimsForDimsSgGen.contains(idmId);
     }
 }

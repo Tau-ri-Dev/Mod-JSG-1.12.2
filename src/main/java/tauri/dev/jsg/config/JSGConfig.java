@@ -726,7 +726,7 @@ public class JSGConfig {
                     "\"minecraft:concrete:*\"",
                     "SIDE: SERVER/CLIENT"
             })
-            public String[] camoBlacklist = new String[] {};
+            public String[] camoBlacklist = new String[]{};
 
             @Config.Name("Biome overlay biome matches")
             @Config.Comment({
@@ -1356,6 +1356,12 @@ public class JSGConfig {
         })
         public static Structures structures = new Structures();
 
+        @Config.Name("Other DIM Stargate Generator")
+        @Config.Comment({
+                "Stargates generated in other dimensions"
+        })
+        public static OtherDimGenerator otherDimGenerator = new OtherDimGenerator();
+
         public static class MystPage {
             @Config.Name("Max XZ-coords generation")
             @Config.RangeInt(min = 1000, max = 30000)
@@ -1507,6 +1513,24 @@ public class JSGConfig {
                     "SIDE: SERVER"
             })
             public float stargateRGChanceTheEnd = 0.00007f;
+        }
+
+        public static class OtherDimGenerator {
+            @Config.Name("Enable other DIM stargate generator")
+            @Config.RequiresMcRestart
+            @Config.Comment({
+                    "Generate stargate in other dimensions (other than END, NETHER, OVERWORLD).",
+                    "SIDE: SERVER"
+            })
+            public boolean generatorEnabled = true;
+
+            @Config.Name("Blacklisted Dimensions")
+            @Config.RequiresMcRestart
+            @Config.Comment({
+                    "List of disabled dimensions",
+                    "SIDE: SERVER"
+            })
+            public int[] blacklistDims = new int[]{};
         }
     }
 }

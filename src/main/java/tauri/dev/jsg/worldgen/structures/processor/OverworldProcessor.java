@@ -11,9 +11,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.ITemplateProcessor;
 import net.minecraft.world.gen.structure.template.Template.BlockInfo;
 import tauri.dev.jsg.block.JSGBlock;
-import tauri.dev.jsg.block.dialhomedevice.DHDAbstractBlock;
-import tauri.dev.jsg.block.stargate.StargateAbstractBaseBlock;
-import tauri.dev.jsg.block.stargate.StargateAbstractMemberBlock;
 
 import javax.annotation.Nonnull;
 
@@ -23,10 +20,7 @@ public class OverworldProcessor implements ITemplateProcessor {
     public BlockInfo processBlock(@Nonnull World world, @Nonnull BlockPos pos, BlockInfo blockInfoIn) {
         Block blockToPlace = blockInfoIn.blockState.getBlock();
         IBlockState blockInWorldState = world.getBlockState(pos);
-        if (blockToPlace instanceof StargateAbstractBaseBlock
-                || blockToPlace instanceof StargateAbstractMemberBlock
-                || blockToPlace instanceof DHDAbstractBlock
-                || blockToPlace instanceof BlockChest
+        if (blockToPlace instanceof BlockChest
                 || blockToPlace instanceof BlockStructure
                 || blockToPlace instanceof JSGBlock
         )
