@@ -22,7 +22,7 @@ public class CommandImportOrigins extends AbstractJSGCommand {
     @Nonnull
     @Override
     public String getGeneralUsage() {
-        return "originsimport";
+        return "originsimport [rewrite]";
     }
 
     @Override
@@ -39,7 +39,14 @@ public class CommandImportOrigins extends AbstractJSGCommand {
     @Override
     @ParametersAreNonnullByDefault
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if(OriginsLoader.loadOriginsToConfig())
+        boolean rewrite = false;
+        for(String a : args){
+            if(a.equalsIgnoreCase("rewrite")){
+                rewrite = true;
+                break;
+            }
+        }
+        if(OriginsLoader.loadOriginsToConfig(rewrite))
             baseCommand.sendSuccessMess(sender, "Origins imported!");
         else {
             baseCommand.sendErrorMess(sender, "Error occurred while attempting to import origins!");

@@ -37,9 +37,17 @@ public class DestinyBearingRenderer extends TileEntitySpecialRenderer<DestinyBea
                 GlStateManager.translate(0, 1.2f, 0);
                 GlStateManager.scale(4.2f, 4.2f, 4.2f);
                 break;
+            case SMALL:
+                GlStateManager.translate(0, 0.08f, 0);
+                GlStateManager.scale(3.2f, 3.2f, 3.2f);
+                break;
             case LARGE:
-                GlStateManager.translate(0, -1f, 0);
-                GlStateManager.scale(4.2f, 4.2f, 4.2f);
+                GlStateManager.translate(0, 1.2f, 0);
+                GlStateManager.scale(5.2f, 5.2f, 5.2f);
+                break;
+            case EXTRA_LARGE:
+                GlStateManager.translate(0, 1.4f, 0);
+                GlStateManager.scale(9.2f, 9.2f, 9.2f);
                 break;
         }
         GlStateManager.color(1, 1, 1);

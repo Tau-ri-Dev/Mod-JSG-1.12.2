@@ -132,7 +132,7 @@ public class OriginsLoader {
         return new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/milkyway/origin_" + originId + ".png");
     }
 
-    public static boolean loadOriginsToConfig() {
+    public static boolean loadOriginsToConfig(boolean rewrite) {
         checkDirectory();
         File loaderFile = new File(JSG.modConfigDir, "jsg/" + LOADER_PATH + "origins.json");
         try {
@@ -140,7 +140,15 @@ public class OriginsLoader {
             }.getType();
             Map<String, List<String>> map = new GsonBuilder().create().fromJson(new FileReader(loaderFile), typeOfHashMap);
             List<String> list = map.get("list");
-            String[] toConfig = new String[list.size()];
+            int size = list.size();
+            if(!rewrite){
+                size += JSGConfig.Stargate.pointOfOrigins.additionalOrigins.length;
+                for(String s : JSGConfig.Stargate.pointOfOrigins.additionalOrigins){
+                    if(!list.contains(s))
+                        list.add(s);
+                }
+            }
+            String[] toConfig = new String[size];
             int i = 0;
             for (String s : list) {
                 toConfig[i] = s;
