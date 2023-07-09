@@ -1,12 +1,12 @@
 package tauri.dev.jsg.stargate.network;
 
-import tauri.dev.jsg.stargate.teleportation.TeleportHelper;
-import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
+import tauri.dev.jsg.stargate.teleportation.TeleportHelper;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
 			return (StargateAbstractBaseTile) getWorld().getTileEntity(gatePos);
 		}
 		
-		catch (NullPointerException e) {
+		catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
