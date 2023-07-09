@@ -153,6 +153,23 @@ public enum SymbolTypeEnum implements EnumKeyInterface<Integer> {
     return null;
   }
 
+  public SymbolInterface[] getValues() {
+    switch (this) {
+      case MILKYWAY:
+        return SymbolMilkyWayEnum.values();
+
+      case PEGASUS:
+        return SymbolPegasusEnum.values();
+
+      case UNIVERSE:
+        return SymbolUniverseEnum.values();
+      default:
+        break;
+    }
+
+    return new SymbolInterface[]{};
+  }
+
   public int getMaxSymbolsDisplay(boolean hasUpgrade) {
     switch (this) {
       case MILKYWAY:

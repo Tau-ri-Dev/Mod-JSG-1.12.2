@@ -160,9 +160,9 @@ public class CommandStargateQuery extends AbstractJSGCommand {
                 boolean isThere = network.isStargateInNetwork(address);
 
                 StringBuilder gateString = new StringBuilder(" " + id + ". [");
-                gateString.append("x=").append(isThere ? pos.getX() : "§k1").append(", ");
-                gateString.append("y=").append(isThere ? pos.getY() : "§k1").append(", ");
-                gateString.append("z=").append(isThere ? pos.getZ() : "§k1").append(", ");
+                gateString.append("x=").append(isThere ? pos.getX() : "#").append(", ");
+                gateString.append("y=").append(isThere ? pos.getY() : "#").append(", ");
+                gateString.append("z=").append(isThere ? pos.getZ() : "#").append(", ");
                 gateString.append("dim=").append(selectedStargatePos.dimensionID).append(" (").append(DimensionManager.getProviderType(selectedStargatePos.dimensionID).getName()).append(")").append(", ");
                 gateString.append("isThere=").append(isThere ? "true" : "false").append("]");
 

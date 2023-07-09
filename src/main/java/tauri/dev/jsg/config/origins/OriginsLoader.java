@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class OriginsLoader {
@@ -49,6 +50,18 @@ public class OriginsLoader {
     public static final ArrayList<Integer> NOT_LOADED_ORIGINS = new ArrayList<>();
     public static final int DEFAULT_ORIGIN_ID = 5;
     public static final int MOD_POINT_OF_ORIGINS_COUNT = 6;
+
+    public static List<Integer> getAllOrigins(){
+        ArrayList<Integer> list = new ArrayList<>();
+        for(int i = 0; i < MOD_POINT_OF_ORIGINS_COUNT; i++){
+            list.add(i);
+        }
+        for(String s : JSGConfig.Stargate.pointOfOrigins.additionalOrigins) {
+            int id = Integer.parseInt(s.split(":")[0]);
+            list.add(id);
+        }
+        return list;
+    }
 
     private static void checkDirectory(){
         try {
