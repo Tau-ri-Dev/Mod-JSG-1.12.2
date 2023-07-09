@@ -45,6 +45,7 @@ public class StargateDimensionGenerator {
             } catch (Exception e) {
                 continue;
             }
+            if (DimensionManager.getWorld(id) == null || DimensionManager.getProvider(id) == null) continue;
             if (!DimensionManager.getProvider(id).isSurfaceWorld()) continue;
 
             GeneratedStargate gs = generateAndPutAddresses(sgn, id);

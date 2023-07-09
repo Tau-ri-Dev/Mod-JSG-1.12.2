@@ -34,6 +34,7 @@ public final class JSGCommands {
             new CommandStargateSetFakePos(),
             new CommandStargateGetFakePos(),
             new CommandStargateResetFakePos(),
+            new CommandImportOrigins(),
             new CommandStructureSpawn()
     ));
 

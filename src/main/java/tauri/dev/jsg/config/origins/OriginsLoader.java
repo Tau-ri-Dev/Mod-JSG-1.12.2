@@ -1,16 +1,21 @@
 package tauri.dev.jsg.config.origins;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ProgressManager;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.config.JSGConfigUtil;
 import tauri.dev.jsg.loader.model.OBJLoader;
 import tauri.dev.jsg.loader.model.OBJModel;
 import tauri.dev.jsg.loader.texture.Texture;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +24,7 @@ import java.util.Map;
 public class OriginsLoader {
     public static final String MODELS_PATH = "assets/models/origins/";
     public static final String TEXTURES_PATH = "assets/textures/origins/";
+    public static final String LOADER_PATH = "assets/loader/";
 
     public static final String RING_END = "_ring.obj";
     public static final String DHD_END = "_dhd.obj";
@@ -51,41 +57,43 @@ public class OriginsLoader {
     public static final int DEFAULT_ORIGIN_ID = 5;
     public static final int MOD_POINT_OF_ORIGINS_COUNT = 6;
 
-    public static List<Integer> getAllOrigins(){
+    public static List<Integer> getAllOrigins() {
         ArrayList<Integer> list = new ArrayList<>();
-        for(int i = 0; i < MOD_POINT_OF_ORIGINS_COUNT; i++){
+        for (int i = 0; i < MOD_POINT_OF_ORIGINS_COUNT; i++) {
             list.add(i);
         }
-        for(String s : JSGConfig.Stargate.pointOfOrigins.additionalOrigins) {
+        for (String s : JSGConfig.Stargate.pointOfOrigins.additionalOrigins) {
             int id = Integer.parseInt(s.split(":")[0]);
             list.add(id);
         }
         return list;
     }
 
-    private static void checkDirectory(){
+    private static void checkDirectory() {
         try {
             File models = new File(JSG.modConfigDir, "jsg/" + MODELS_PATH);
             File textures = new File(JSG.modConfigDir, "jsg/" + TEXTURES_PATH);
+            File loader = new File(JSG.modConfigDir, "jsg/" + LOADER_PATH);
             if (!models.exists())
                 Files.createDirectories(models.toPath());
             if (!textures.exists())
                 Files.createDirectories(textures.toPath());
-        }
-        catch (Exception e){
+            if (!loader.exists())
+                Files.createDirectories(loader.toPath());
+        } catch (Exception e) {
             JSG.error("Error while creating folders for custom resources!", e);
         }
     }
 
     public static void registerTextures(Map<ResourceLocation, Texture> texturesArray) throws IOException {
         checkDirectory();
-        if(JSGConfig.Stargate.pointOfOrigins.additionalOrigins.length < 1) return;
+        if (JSGConfig.Stargate.pointOfOrigins.additionalOrigins.length < 1) return;
 
         ProgressManager.ProgressBar progressBar = ProgressManager.push("JSG - Custom PoO models", JSGConfig.Stargate.pointOfOrigins.additionalOrigins.length);
-        for(String s : JSGConfig.Stargate.pointOfOrigins.additionalOrigins){
+        for (String s : JSGConfig.Stargate.pointOfOrigins.additionalOrigins) {
             int id = Integer.parseInt(s.split(":")[0]);
             progressBar.step("Origin " + id);
-            if(!getOriginFile(EnumOriginFileType.TEXTURE, id).exists()){
+            if (!getOriginFile(EnumOriginFileType.TEXTURE, id).exists()) {
                 NOT_LOADED_ORIGINS.add(id);
                 JSG.error("Origin texture not found! [" + id + "]");
                 continue;
@@ -97,13 +105,13 @@ public class OriginsLoader {
 
     public static void loadModels(Map<ResourceLocation, OBJModel> modelsArray) throws IOException {
         checkDirectory();
-        if(JSGConfig.Stargate.pointOfOrigins.additionalOrigins.length < 1) return;
+        if (JSGConfig.Stargate.pointOfOrigins.additionalOrigins.length < 1) return;
 
         ProgressManager.ProgressBar progressBar = ProgressManager.push("JSG - Custom PoO models", JSGConfig.Stargate.pointOfOrigins.additionalOrigins.length);
-        for(String s : JSGConfig.Stargate.pointOfOrigins.additionalOrigins){
+        for (String s : JSGConfig.Stargate.pointOfOrigins.additionalOrigins) {
             int id = Integer.parseInt(s.split(":")[0]);
             progressBar.step("Origin " + id);
-            if(!getOriginFile(EnumOriginFileType.MODEL_DHD, id).exists() || !getOriginFile(EnumOriginFileType.MODEL_RING, id).exists() || !getOriginFile(EnumOriginFileType.MODEL_DHD_LIGHT, id).exists()){
+            if (!getOriginFile(EnumOriginFileType.MODEL_DHD, id).exists() || !getOriginFile(EnumOriginFileType.MODEL_RING, id).exists() || !getOriginFile(EnumOriginFileType.MODEL_DHD_LIGHT, id).exists()) {
                 NOT_LOADED_ORIGINS.add(id);
                 JSG.error("Origin model not found! [" + id + "]");
                 continue;
@@ -115,12 +123,34 @@ public class OriginsLoader {
         ProgressManager.pop(progressBar);
     }
 
-    public static ResourceLocation getResource(EnumOriginFileType fileType, int originId){
-        if(NOT_LOADED_ORIGINS.contains(originId))
+    public static ResourceLocation getResource(EnumOriginFileType fileType, int originId) {
+        if (NOT_LOADED_ORIGINS.contains(originId))
             originId = DEFAULT_ORIGIN_ID;
 
-        if(fileType != EnumOriginFileType.TEXTURE)
+        if (fileType != EnumOriginFileType.TEXTURE)
             return new ResourceLocation(JSG.MOD_ID, "models/tesr/milkyway/" + (fileType == EnumOriginFileType.MODEL_RING ? "ring/" : "") + "origin_" + originId + (fileType == EnumOriginFileType.MODEL_DHD_LIGHT ? "_light" : "") + ".obj");
         return new ResourceLocation(JSG.MOD_ID, "textures/gui/symbol/milkyway/origin_" + originId + ".png");
+    }
+
+    public static boolean loadOriginsToConfig() {
+        checkDirectory();
+        File loaderFile = new File(JSG.modConfigDir, "jsg/" + LOADER_PATH + "origins.json");
+        try {
+            Type typeOfHashMap = new TypeToken<Map<String, List<String>>>() {
+            }.getType();
+            Map<String, List<String>> map = new GsonBuilder().create().fromJson(new FileReader(loaderFile), typeOfHashMap);
+            List<String> list = map.get("list");
+            String[] toConfig = new String[list.size()];
+            int i = 0;
+            for (String s : list) {
+                toConfig[i] = s;
+                i++;
+            }
+            JSGConfig.Stargate.pointOfOrigins.additionalOrigins = toConfig;
+            JSGConfigUtil.reloadConfig();
+            return true;
+        } catch (Exception ignored) {
+        }
+        return false;
     }
 }

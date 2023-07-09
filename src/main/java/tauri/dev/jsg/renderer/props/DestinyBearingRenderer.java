@@ -4,6 +4,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.ElementEnum;
 import tauri.dev.jsg.tileentity.props.DestinyBearingTile;
 import tauri.dev.jsg.util.FacingHelper;
@@ -31,8 +32,16 @@ public class DestinyBearingRenderer extends TileEntitySpecialRenderer<DestinyBea
         GlStateManager.rotate(rot, 0, 1, 0);
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(0, 1.2f, 0);
-        GlStateManager.scale(4.2f, 4.2f, 4.2f);
+        switch (JSGConfig.Stargate.stargateSize) {
+            default:
+                GlStateManager.translate(0, 1.2f, 0);
+                GlStateManager.scale(4.2f, 4.2f, 4.2f);
+                break;
+            case LARGE:
+                GlStateManager.translate(0, -1f, 0);
+                GlStateManager.scale(4.2f, 4.2f, 4.2f);
+                break;
+        }
         GlStateManager.color(1, 1, 1);
         ElementEnum.DESTINY_BEARING_BODY.bindTextureAndRender();
         GlStateManager.pushMatrix();
