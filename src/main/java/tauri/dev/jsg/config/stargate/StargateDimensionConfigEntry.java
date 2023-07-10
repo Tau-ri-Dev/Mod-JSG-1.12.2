@@ -34,7 +34,11 @@ public class StargateDimensionConfigEntry {
             int i = 0;
             for (BiomeOverlayEnum k : milkyWayOrigins.keySet()) {
                 i++;
-                originIdsString.append(k.toString()).append(": ").append(milkyWayOrigins.get(k));
+                if(k == null){
+                    originIdsString.append("[null]").append(": ").append(milkyWayOrigins.get(k));
+                }
+                else
+                    originIdsString.append(k).append(": ").append(milkyWayOrigins.get(k));
                 if (i < milkyWayOrigins.size()) originIdsString.append(", ");
             }
             originIdsString.append("]");
