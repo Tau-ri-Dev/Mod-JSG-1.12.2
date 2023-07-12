@@ -37,7 +37,6 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
         GlStateManager.scale(scale, scale, scale);
     }
 
-
     @Override
     protected void applyLightMap(StargateClassicRendererState rendererState, double partialTicks) {
         final int chevronCount = 6;

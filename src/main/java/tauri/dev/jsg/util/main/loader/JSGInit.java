@@ -1,6 +1,5 @@
 package tauri.dev.jsg.util.main.loader;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -21,7 +20,6 @@ import tauri.dev.jsg.config.craftings.CraftingConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.config.structures.StructureConfig;
 import tauri.dev.jsg.datafixer.TileNamesFixer;
-import tauri.dev.jsg.event.EatingEvent;
 import tauri.dev.jsg.gui.JSGGuiHandler;
 import tauri.dev.jsg.integration.OCWrapperInterface;
 import tauri.dev.jsg.integration.ThermalIntegration;
@@ -45,7 +43,7 @@ public class JSGInit {
         GameRegistry.registerWorldGenerator(new JSGStructuresGenerator(), 0);
         JSG.info("Successfully registered World Generation!");
 
-        NetworkRegistry.INSTANCE.registerGuiHandler(JSG.instance, new JSGGuiHandler());
+        NetworkRegistry.INSTANCE.registerGuiHandler(JSG.instance, JSGGuiHandler.INSTANCE);
         ForgeChunkManager.setForcedChunkLoadingCallback(JSG.instance, ChunkLoadingCallback.INSTANCE);
         JSGOreDictionary.registerOreDictionary();
         JSG.info("Successfully registered OreDictionary!");

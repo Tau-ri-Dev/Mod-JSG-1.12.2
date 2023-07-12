@@ -1,9 +1,9 @@
 package tauri.dev.jsg.stargate.network;
 
+import net.minecraft.util.ResourceLocation;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.loader.model.ModelLoader;
-import net.minecraft.util.ResourceLocation;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 
 import java.util.HashMap;
@@ -181,7 +181,7 @@ public enum SymbolUniverseEnum implements SymbolInterface {
 	}
 	
 	public static boolean validateDialedAddress(StargateAddressDynamic stargateAddress) {		
-		if (stargateAddress.size() != 7 && stargateAddress.size() != 9)
+		if (stargateAddress.size() < 7)
 			return false;
 
 		return stargateAddress.get(stargateAddress.size() - 1).origin();

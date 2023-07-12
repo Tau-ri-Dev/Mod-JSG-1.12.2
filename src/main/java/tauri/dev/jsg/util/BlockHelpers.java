@@ -88,4 +88,8 @@ public class BlockHelpers {
 		block.setCreativeTab(tab);
 		return block;
 	}
+
+	public static String blockPosToBetterString(BlockPos pos){
+		return pos.getX() + " " + pos.getY() + " " + pos.getZ();
+	}
 }

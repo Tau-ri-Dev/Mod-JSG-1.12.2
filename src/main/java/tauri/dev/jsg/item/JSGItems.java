@@ -11,12 +11,12 @@ import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.item.armor.AncientShield;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerItem;
 import tauri.dev.jsg.item.linkable.gdo.GDOItem;
+import tauri.dev.jsg.item.mysterious.MilkyWayPageMysteriousItem;
 import tauri.dev.jsg.item.mysterious.PegasusPageMysteriousItem;
 import tauri.dev.jsg.item.mysterious.UniversePageMysteriousItem;
 import tauri.dev.jsg.item.notebook.NotebookItem;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
-import tauri.dev.jsg.item.mysterious.MilkyWayPageMysteriousItem;
 import tauri.dev.jsg.item.stargate.IrisItem;
 import tauri.dev.jsg.item.tools.staff.StaffItem;
 import tauri.dev.jsg.item.tools.zat.ZatItem;
@@ -151,6 +151,8 @@ public class JSGItems {
     public static final Item JSG_WRENCH = ItemHelper.createDurabilityItem("wrench", JSG_TOOLS_CREATIVE_TAB, 225, true).setMaxStackSize(1);
 
     public static final Item TAURI_ANCIENT_ADAPTER = ItemHelper.createGenericItem("tauri_ancient_adapter", JSG_ITEMS_CREATIVE_TAB);
+
+    public static final ItemAdminController ADMIN_CONTROLLER = new ItemAdminController();
 
     /**
      * FRAGMENTS
@@ -293,6 +295,8 @@ public class JSGItems {
             JSG_HAMMER,
             JSG_SCREWDRIVER,
             JSG_WRENCH,
+            TAURI_ANCIENT_ADAPTER,
+            ADMIN_CONTROLLER,
 
             GEAR_TITANIUM,
             GEAR_TRINIUM,

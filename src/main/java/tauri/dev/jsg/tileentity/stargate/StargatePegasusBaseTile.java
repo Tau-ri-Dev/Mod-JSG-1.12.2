@@ -28,10 +28,7 @@ import tauri.dev.jsg.sound.StargateSoundPositionedEnum;
 import tauri.dev.jsg.stargate.*;
 import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import tauri.dev.jsg.stargate.merging.StargatePegasusMergeHelper;
-import tauri.dev.jsg.stargate.network.StargatePos;
-import tauri.dev.jsg.stargate.network.SymbolInterface;
-import tauri.dev.jsg.stargate.network.SymbolPegasusEnum;
-import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.stargate.network.*;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.dialhomedevice.DHDActivateButtonState;
@@ -601,6 +598,17 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         return super.canAddSymbol(symbol);
     }
 
+
+    public boolean dialAddress(StargateAddress address, int symbolCount) {
+        if (!getStargateState().idle()) return false;
+        for (int i = 0; i < symbolCount; i++) {
+            addSymbolToAddressDHD(address.get(i));
+        }
+        addSymbolToAddressDHD(getSymbolType().getOrigin());
+        addSymbolToAddressDHD(SymbolPegasusEnum.BBB);
+        return true;
+    }
+
     public void addSymbolToAddressDHD(SymbolInterface targetSymbol, EntityPlayer sender) {
         lastSender = sender;
         addSymbolToAddressDHD(targetSymbol);
@@ -638,7 +646,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         targetRingSymbol = targetSymbol;
         spinDirection = spinDirection.opposite();
 
-        if(fastDial){
+        if (fastDial) {
             continueDialing = false;
             markDirty();
 
@@ -678,7 +686,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
 
         int toDialSize = toDialSymbols.size();
-        if(toDialSymbols.contains(SymbolPegasusEnum.BBB))
+        if (toDialSymbols.contains(SymbolPegasusEnum.BBB))
             toDialSize--;
         continueDialing = (canContinueByConfig && (toDialSize >= 2) && (targetChevron != ChevronEnum.getFinal()));
         markDirty();

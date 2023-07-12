@@ -1,8 +1,8 @@
 package tauri.dev.jsg.stargate.network;
 
 import io.netty.buffer.ByteBuf;
-import tauri.dev.jsg.JSG;
 import net.minecraft.nbt.NBTTagCompound;
+import tauri.dev.jsg.JSG;
 
 import java.util.List;
 
@@ -15,6 +15,11 @@ public class StargateAddressDynamic extends StargateAddress {
 	public StargateAddressDynamic(NBTTagCompound compound) {
 		super(compound);
 	}
+
+	public StargateAddressDynamic(ByteBuf buf) {
+		super(buf);
+	}
+
 
 	public StargateAddressDynamic(StargateAddress address) {
 		super(address.symbolType);

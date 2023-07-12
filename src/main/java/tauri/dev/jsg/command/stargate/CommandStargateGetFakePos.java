@@ -9,8 +9,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import tauri.dev.jsg.command.AbstractJSGCommand;
 import tauri.dev.jsg.command.JSGCommand;
-import tauri.dev.jsg.command.JSGCommands;
 import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
+import tauri.dev.jsg.util.RayTraceHelper;
 
 import javax.annotation.Nonnull;
 
@@ -59,7 +59,7 @@ public class CommandStargateGetFakePos extends AbstractJSGCommand {
                 tileEntity = world.getTileEntity(foundPos);
             }
             if (tileEntity == null)
-                tileEntity = JSGCommands.rayTraceTileEntity((EntityPlayerMP) sender);
+                tileEntity = RayTraceHelper.rayTraceTileEntity((EntityPlayerMP) sender);
 
             if (tileEntity instanceof StargateUniverseBaseTile) {
                 baseCommand.sendSuccessMess(sender, "Fake position of this gate is:");

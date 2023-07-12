@@ -66,6 +66,23 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
     protected StargateAbstractBaseTile gateTile;
 
+    public void renderWholeGate(StargateAbstractBaseTile te, float partialTicks, S rendererState) {
+        renderGate(te, rendererState, partialTicks);
+        renderIris(partialTicks, getWorld(), rendererState, true);
+
+        if (rendererState.doEventHorizonRender) {
+            GlStateManager.pushMatrix();
+            renderKawoosh(rendererState, partialTicks);
+            GlStateManager.popMatrix();
+        } else if (JSGConfig.Stargate.eventHorizon.renderEHifTheyNot) {
+            GlStateManager.pushMatrix();
+            preRenderKawoosh(rendererState, partialTicks);
+            GlStateManager.popMatrix();
+        }
+
+        renderIris(partialTicks, getWorld(), rendererState, false);
+    }
+
     @Override
     public void render(StargateAbstractBaseTile te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         @SuppressWarnings("unchecked") S rendererState = (S) te.getRendererStateClient();
@@ -100,20 +117,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
                 GlStateManager.rotate(rendererState.horizontalRotation, 0, 1, 0);
 
-                renderGate(te, rendererState, partialTicks);
-                renderIris(partialTicks, getWorld(), rendererState, true);
-
-                if (rendererState.doEventHorizonRender) {
-                    GlStateManager.pushMatrix();
-                    renderKawoosh(rendererState, partialTicks);
-                    GlStateManager.popMatrix();
-                } else if (JSGConfig.Stargate.eventHorizon.renderEHifTheyNot) {
-                    GlStateManager.pushMatrix();
-                    preRenderKawoosh(rendererState, partialTicks);
-                    GlStateManager.popMatrix();
-                }
-
-                renderIris(partialTicks, getWorld(), rendererState, false);
+                renderWholeGate(te, partialTicks, rendererState);
 
             } else if (JSGConfig.Stargate.visual.renderStargateNotPlaced) {
                 GlStateManager.enableBlend();
@@ -324,8 +328,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                                     TextureLoader.getTexture(ehTextureRes).bindTexture();
                                 }
                             }
-                        }
-                        else {
+                        } else {
                             // if user have disabled new kawoosh...
                             float prevZ = 0;
                             float prevRad = 0;
@@ -423,6 +426,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
      * @param backOnly Render only the back face?(Used in kawoosh)
      * @param mul      Multiplier of the horizon waving speed
      */
+    @SuppressWarnings("unused")
     protected void renderEventHorizon(double partialTicks, boolean white, Float alpha, boolean backOnly, float mul) {
         float tick = (float) JSGMinecraftHelper.getClientTick();
 

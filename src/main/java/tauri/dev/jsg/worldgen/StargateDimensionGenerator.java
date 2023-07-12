@@ -66,7 +66,7 @@ public class StargateDimensionGenerator {
                 address.generate(random);
             } while (sgn.isStargateInNetwork(address));
 
-            StargatePos gatePos = new StargatePos(dim, new BlockPos(0, 0, 0), address);
+            StargatePos gatePos = new StargatePos(dim, new BlockPos(0, 0, 0), address, SymbolTypeEnum.MILKYWAY);
 
             sgn.addNotGeneratedStargate(address, gatePos);
             if (gs == null)

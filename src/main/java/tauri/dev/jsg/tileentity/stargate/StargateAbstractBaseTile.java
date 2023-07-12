@@ -411,8 +411,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         if (targetGatePosition == null) return false;
         boolean localDial = world.provider.getDimension() == targetGatePosition.dimensionID || StargateDimensionConfig.isGroupEqual(world.provider.getDimensionType(), DimensionManager.getProviderType(targetGatePosition.dimensionID));
 
-        // TODO Optimize this, prevent dimension from loading only to check the SymbolType...
-        return address.size() < getSymbolType().getMinimalSymbolCountTo(targetGatePosition.getTileEntity().getSymbolType(), localDial);
+        return address.size() < getSymbolType().getMinimalSymbolCountTo(targetGatePosition.getGateSymbolType(), localDial);
     }
 
     public void attemptClose(StargateClosedReasonEnum reason) {
@@ -467,12 +466,20 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public void setGateAddress(SymbolTypeEnum symbolType, StargateAddress stargateAddress) {
         getNetwork().removeStargate(gateAddressMap.get(symbolType));
 
-        StargatePos gatePos = new StargatePos(world.provider.getDimension(), pos, stargateAddress);
+        StargatePos gatePos = new StargatePos(world.provider.getDimension(), pos, stargateAddress, getSymbolType());
         gateAddressMap.put(symbolType, stargateAddress);
         gatePosMap.put(symbolType, gatePos);
         getNetwork().addStargate(stargateAddress, gatePos);
 
         markDirty();
+    }
+
+    public void renameStargatePos(String newName){
+        for(SymbolTypeEnum s : SymbolTypeEnum.values()){
+            Objects.requireNonNull(getNetwork().getStargate(gateAddressMap.get(s))).name = newName;
+            getNetwork().markDirty();
+            markDirty();
+        }
     }
 
     public void refresh() {
@@ -596,35 +603,37 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             dialedAddress.addOrigin();
 
             StargatePos targetGatePos = getNetwork().getStargate(dialedAddress);
-            if (targetGatePos == null) return;
-            StargateAbstractBaseTile targetGateTile = targetGatePos.getTileEntity();
-            if (targetGateTile == null) return;
-            if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate) {
-                int size = dialedAddress.size();
+            if (targetGatePos != null) {
+                StargateAbstractBaseTile targetGateTile = targetGatePos.getTileEntity();
+                if (targetGateTile != null) {
+                    if (checkAddressAndEnergy(dialedAddress).ok() && !connectedToGate) {
+                        int size = dialedAddress.size();
 
-                connectedToGate = true;
-                connectedToGatePos = targetGatePos;
-                markDirty();
-                int period = 400;
-                if (byComputer) {
-                    time += 20; // add 20 ticks to time
-                    period = ((time / 20) * 1000) / size;
+                        connectedToGate = true;
+                        connectedToGatePos = targetGatePos;
+                        markDirty();
+                        int period = 400;
+                        if (byComputer) {
+                            time += 20; // add 20 ticks to time
+                            period = ((time / 20) * 1000) / size;
+                        }
+                        targetGateTile.isIncoming = true;
+                        targetGateTile.markDirty();
+                        if (targetGateTile instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) targetGateTile).config.getOption(ALLOW_INCOMING.id).getBooleanValue())
+                            targetGateTile.incomingWormhole(size, period);
+                        else targetGateTile.incomingWormhole(size);
+                        targetGateTile.sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
+                        targetGateTile.stargateState = EnumStargateState.INCOMING;
+                        targetGateTile.markDirty();
+                        targetGateTile.failGate();
+                    } else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
+                        targetGateTile.disconnectGate(true);
+                        targetGateTile.stargateState = EnumStargateState.IDLE;
+                        targetGateTile.markDirty();
+                        connectedToGatePos = null;
+                        markDirty();
+                    }
                 }
-                targetGateTile.isIncoming = true;
-                targetGateTile.markDirty();
-                if (targetGateTile instanceof StargateClassicBaseTile && ((StargateClassicBaseTile) targetGateTile).config.getOption(ALLOW_INCOMING.id).getBooleanValue())
-                    targetGateTile.incomingWormhole(size, period);
-                else targetGateTile.incomingWormhole(size);
-                targetGateTile.sendSignal(null, "stargate_incoming_wormhole", new Object[]{size});
-                targetGateTile.stargateState = EnumStargateState.INCOMING;
-                targetGateTile.markDirty();
-                targetGateTile.failGate();
-            } else if (!checkAddressAndEnergy(dialedAddress).ok() && connectedToGate) {
-                targetGateTile.disconnectGate(true);
-                targetGateTile.stargateState = EnumStargateState.IDLE;
-                targetGateTile.markDirty();
-                connectedToGatePos = null;
-                markDirty();
             }
 
             dialedAddress.clear();
@@ -632,7 +641,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         }
     }
 
-    protected boolean isConnected() {
+    public boolean isConnected() {
         return connectedToGate;
     }
 

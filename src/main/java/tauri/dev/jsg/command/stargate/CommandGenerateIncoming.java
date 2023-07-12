@@ -9,8 +9,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import tauri.dev.jsg.command.AbstractJSGCommand;
 import tauri.dev.jsg.command.JSGCommand;
-import tauri.dev.jsg.command.JSGCommands;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
+import tauri.dev.jsg.util.RayTraceHelper;
 
 import javax.annotation.Nonnull;
 
@@ -22,6 +22,7 @@ public class CommandGenerateIncoming extends AbstractJSGCommand {
     public CommandGenerateIncoming() {
         super(JSGCommand.JSG_BASE_COMMAND);
     }
+
     @Nonnull
     @Override
     public String getName() {
@@ -67,7 +68,7 @@ public class CommandGenerateIncoming extends AbstractJSGCommand {
             entities = ((args[0] != null) ? parseInt(args[0]) : 5);
             addressLength = ((args[1] != null) ? parseInt(args[1]) : 7);
 
-            tileEntity = JSGCommands.rayTraceTileEntity((EntityPlayerMP) sender);
+            tileEntity = RayTraceHelper.rayTraceTileEntity((EntityPlayerMP) sender);
             if (tileEntity == null) {
                 //throw new WrongUsageException("commands.sggenincoming.usage");
                 baseCommand.sendUsageMess(sender, this);

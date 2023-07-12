@@ -1,15 +1,8 @@
 package tauri.dev.jsg.command;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import tauri.dev.jsg.command.stargate.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -58,24 +51,5 @@ public final class JSGCommands {
 
     public static void registerCommands(FMLServerStartingEvent event) {
         event.registerServerCommand(JSGCommand.JSG_BASE_COMMAND);
-    }
-
-    public static RayTraceResult rayTraceEntity(Entity e, double blockReachDistance, float partialTicks) {
-        Vec3d vec3d = e.getPositionEyes(partialTicks);
-        Vec3d vec3d1 = e.getLook(partialTicks);
-        Vec3d vec3d2 = vec3d.addVector(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance, vec3d1.z * blockReachDistance);
-        return e.world.rayTraceBlocks(vec3d, vec3d2, false, false, true);
-    }
-
-    @Nullable
-    public static TileEntity rayTraceTileEntity(@Nonnull EntityPlayerMP player) {
-        try {
-            RayTraceResult rayTraceResult = rayTraceEntity(player, 8, 0);
-            if (rayTraceResult != null && rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
-                return player.getEntityWorld().getTileEntity(rayTraceResult.getBlockPos());
-            }
-        } catch (Exception ignored) {
-        }
-        return null;
     }
 }

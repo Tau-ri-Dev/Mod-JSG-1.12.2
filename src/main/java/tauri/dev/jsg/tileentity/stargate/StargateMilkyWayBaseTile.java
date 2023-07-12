@@ -21,12 +21,10 @@ import tauri.dev.jsg.sound.StargateSoundEventEnum;
 import tauri.dev.jsg.sound.StargateSoundPositionedEnum;
 import tauri.dev.jsg.stargate.EnumScheduledTask;
 import tauri.dev.jsg.stargate.EnumStargateState;
+import tauri.dev.jsg.stargate.StargateOpenResult;
 import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import tauri.dev.jsg.stargate.merging.StargateMilkyWayMergeHelper;
-import tauri.dev.jsg.stargate.network.StargatePos;
-import tauri.dev.jsg.stargate.network.SymbolInterface;
-import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
-import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.stargate.network.*;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.stargate.StargateRendererActionState;
@@ -35,16 +33,13 @@ import tauri.dev.jsg.tileentity.dialhomedevice.DHDAbstractTile.DHDUpgradeEnum;
 import tauri.dev.jsg.tileentity.dialhomedevice.DHDMilkyWayTile;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
 import tauri.dev.jsg.util.ILinkable;
-import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.LinkingHelper;
 
 import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
-import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.*;
+import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.DHD_TOP_LOCK;
+import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.SPIN_GATE_INCOMING;
 
 
 public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements ILinkable {
@@ -55,6 +50,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     @Override
     protected void disconnectGate() {
         super.disconnectGate();
+        resetToDialSymbols();
 
         if (isLinkedAndDHDOperational()) Objects.requireNonNull(getLinkedDHD(world)).clearSymbols();
     }
@@ -62,8 +58,15 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     @Override
     protected void failGate() {
         super.failGate();
+        resetToDialSymbols();
 
         if (isLinkedAndDHDOperational()) Objects.requireNonNull(getLinkedDHD(world)).clearSymbols();
+    }
+
+    @Override
+    protected void dialingFailed(StargateOpenResult reason) {
+        resetToDialSymbols();
+        super.dialingFailed(reason);
     }
 
     @Override
@@ -79,6 +82,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     @Override
     public void openGate(StargatePos targetGatePos, boolean isInitiating) {
         super.openGate(targetGatePos, isInitiating);
+        resetToDialSymbols();
 
         if (isLinkedAndDHDOperational()) {
             Objects.requireNonNull(getLinkedDHD(world)).activateSymbol(SymbolMilkyWayEnum.BRB);
@@ -120,6 +124,11 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     public void addSymbolToAddressDHD(SymbolInterface symbol) {
         stargateState = EnumStargateState.DIALING;
         markDirty();
+        if (((SymbolMilkyWayEnum) symbol).brb()) {
+            attemptOpenAndFail();
+            markDirty();
+            return;
+        }
         addSymbolToAddress(symbol);
         doIncomingAnimation(10, false);
         int plusTime = new Random().nextInt(5);
@@ -143,6 +152,45 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         return isLinkedAndDHDOperational() && stargateState != EnumStargateState.DIALING_COMPUTER && !getLinkedDHD(world).hasUpgrade(DHDUpgradeEnum.CHEVRON_UPGRADE) ? 7 : 9;
     }
 
+    public boolean dialAddress(StargateAddress address, int symbolCount) {
+        if (!getStargateState().idle()) return false;
+        for (int i = 0; i < symbolCount; i++) {
+            addSymbolToAddressUsingList(address.get(i));
+        }
+        addSymbolToAddressUsingList(getSymbolType().getOrigin());
+        addSymbolToAddressUsingList(SymbolMilkyWayEnum.BRB);
+        return true;
+    }
+
+    protected List<SymbolMilkyWayEnum> toDialSymbols = new ArrayList<>();
+
+    public void resetToDialSymbols() {
+        toDialSymbols.clear();
+    }
+
+    public boolean canAddSymbolToList(SymbolInterface symbol) {
+        int size = toDialSymbols.size();
+        for (SymbolMilkyWayEnum s : toDialSymbols) {
+            if (s.brb()) size--;
+        }
+        if (dialedAddress.size() + size + (this.stargateState.dialing() ? 1 : 0) >= getMaxChevrons()) return false;
+        if (toDialSymbols.contains((SymbolMilkyWayEnum) symbol)) return false;
+
+        return super.canAddSymbol(symbol);
+    }
+
+    public void addSymbolToAddressUsingList(SymbolInterface targetSymbol) {
+        if (targetSymbol != SymbolMilkyWayEnum.BRB && !canAddSymbolToList(targetSymbol)) return;
+        if (!(targetSymbol instanceof SymbolMilkyWayEnum)) return;
+        if (toDialSymbols.contains(targetSymbol)) return;
+        /*if (isLinkedAndDHDOperational() && (targetSymbol != SymbolMilkyWayEnum.BRB || toDialSymbols.size() > 0)) {
+            DHDAbstractTile dhd = getLinkedDHD(world);
+            if (dhd != null)
+                dhd.activateSymbol(targetSymbol);
+        }*/
+        toDialSymbols.add((SymbolMilkyWayEnum) targetSymbol);
+    }
+
 
     @Override
     public void addSymbolToAddress(SymbolInterface symbol) {
@@ -150,7 +198,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
         DHDAbstractTile dhd = getLinkedDHD(world);
         if (isLinkedAndDHDOperational() && dhd != null) {
-            dhd.activateSymbol((SymbolMilkyWayEnum) symbol);
+            dhd.activateSymbol(symbol);
         }
     }
 
@@ -399,8 +447,16 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     @Override
     public void update() {
         super.update();
-
         if (!world.isRemote) {
+
+            if ((toDialSymbols.size() > 0) && ((world.getTotalWorldTime() - lastSpinFinishedIn) > 5) && stargateState.idle()) {
+                if (toDialSymbols.get(0) == SymbolMilkyWayEnum.BRB || canAddSymbolInternal(toDialSymbols.get(0)))
+                    addSymbolToAddressDHD(toDialSymbols.get(0));
+                if (toDialSymbols.size() > 0)
+                    toDialSymbols.remove(0);
+                markDirty();
+            }
+
             if (!lastPos.equals(pos)) {
                 lastPos = pos;
 

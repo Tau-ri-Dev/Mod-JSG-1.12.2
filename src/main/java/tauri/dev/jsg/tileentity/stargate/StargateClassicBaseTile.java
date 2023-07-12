@@ -309,10 +309,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     protected ResultTargetValid attemptOpenDialed() {
         StargateOpenResult result = checkAddressAndEnergy(dialedAddress);
         boolean targetValid = result.ok();
-        if (connectedToGatePos == null)
+        if (connectedToGatePos == null) {
+            return new ResultTargetValid(StargateOpenResult.ADDRESS_MALFORMED, targetValid);
+        }
+        if (!(connectedToGatePos.getTileEntity().stargateState.incoming())) {
             return new ResultTargetValid(StargateOpenResult.CALLER_HUNG_UP, targetValid);
-        if (!(connectedToGatePos.getTileEntity().stargateState.incoming()))
-            return new ResultTargetValid(StargateOpenResult.CALLER_HUNG_UP, targetValid);
+        }
         if (this.isGateBurried())
             return new ResultTargetValid(StargateOpenResult.GATE_BURRIED, targetValid);
         return super.attemptOpenDialed();
@@ -354,6 +356,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (this.isGateBurried()) return;
         super.generateIncoming(entities, addressSize, delay);
     }
+
+    public abstract boolean dialAddress(StargateAddress address, int maxSymbols);
 
     public abstract void addSymbolToAddressDHD(SymbolInterface symbol);
 
@@ -2461,7 +2465,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             if (stargatePos.gatePos.equals(pos) && stargatePos.dimensionID == world.provider.getDimension())
                 continue;
 
-            int symbolsNeeded = getSymbolType().getMinimalSymbolCountTo(gateType, StargateDimensionConfig.isGroupEqual(DimensionManager.getProviderType(stargatePos.dimensionID), world.provider.getDimensionType()));
+            int symbolsNeeded = getMinimalSymbolsToDial(gateType, stargatePos);
 
             if (checkAddressAndEnergy) {
                 StargateAddressDynamic addr3 = new StargateAddressDynamic(gateType);
@@ -2473,6 +2477,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 addresses.add(new NearbyGate(entry.getKey(), symbolsNeeded, targetGateTile.getSymbolType()));
         }
         return addresses;
+    }
+
+    public int getMinimalSymbolsToDial(SymbolTypeEnum symbolType, StargatePos targetGatePos){
+        return getSymbolType().getMinimalSymbolCountTo(symbolType, StargateDimensionConfig.isGroupEqual(DimensionManager.getProviderType(targetGatePos.dimensionID), world.provider.getDimensionType()));
     }
 
 
@@ -2743,7 +2751,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         StargatePos pos = network.getStargate(stargateAddress);
         if(pos == null) return new Object[]{"gate_not_found"};
 
-        int symbols = getSymbolType().getMinimalSymbolCountTo(pos.getTileEntity().getSymbolType(), pos.dimensionID == world.provider.getDimension());
+        int symbols = getMinimalSymbolsToDial(pos.getGateSymbolType(), pos);
 
         return new Object[]{true, symbols};
     }

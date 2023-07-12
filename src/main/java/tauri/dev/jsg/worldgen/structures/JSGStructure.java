@@ -292,7 +292,7 @@ public class JSGStructure extends WorldGenerator {
             StargateAddress address = gateTile.getStargateAddress(symbolType);
 
             if (address != null && !gateTile.getNetwork().isStargateInNetwork(address))
-                gateTile.getNetwork().addStargate(address, new StargatePos(worldToSpawn.provider.getDimensionType().getId(), gatePos, address));
+                gateTile.getNetwork().addStargate(address, new StargatePos(worldToSpawn.provider.getDimensionType().getId(), gatePos, address, gateTile.getSymbolType()));
 
             ResourceLocation biomePath = biome.getRegistryName();
             return new GeneratedStargate(address, (biomePath == null ? null : biomePath.getResourcePath()), hasUpgrade, gateTile.getOriginId());

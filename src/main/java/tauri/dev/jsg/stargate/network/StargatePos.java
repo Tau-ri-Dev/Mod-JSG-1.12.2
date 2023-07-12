@@ -16,11 +16,15 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
 	public int dimensionID;
 	public BlockPos gatePos;
 	public SymbolTypeEnum symbolType;
+	public SymbolTypeEnum gateSymbolType;
 	public List<SymbolInterface> additionalSymbols;
+
+	public String name = null;
 	
-	public StargatePos(int dimensionID, BlockPos gatePos, StargateAddress stargateAddress) {
+	public StargatePos(int dimensionID, BlockPos gatePos, StargateAddress stargateAddress, SymbolTypeEnum gateSymbolType) {
 		this.dimensionID = dimensionID;
 		this.gatePos = gatePos;
+		this.gateSymbolType = gateSymbolType;
 		
 		this.symbolType = stargateAddress.getSymbolType();
 		this.additionalSymbols = new ArrayList<>(2);
@@ -32,6 +36,12 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
 		this.additionalSymbols = new ArrayList<>(2);
 		
 		deserializeNBT(compound);
+	}
+
+	public SymbolTypeEnum getGateSymbolType(){
+		if(gateSymbolType != null) return gateSymbolType;
+		gateSymbolType = getTileEntity().getSymbolType();
+		return gateSymbolType;
 	}
 	
 	public World getWorld() {
@@ -61,6 +71,10 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
 		compound.setLong("pos", gatePos.toLong());
 		compound.setInteger("last0", additionalSymbols.get(0).getId());
 		compound.setInteger("last1", additionalSymbols.get(1).getId());
+		if(name != null)
+			compound.setString("name", name);
+		if(gateSymbolType != null)
+			compound.setByte("gateSymbolType", (byte) gateSymbolType.id);
 		
 		return compound;
 	}
@@ -71,6 +85,10 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
 		gatePos = BlockPos.fromLong(compound.getLong("pos"));
 		additionalSymbols.add(symbolType.valueOfSymbol(compound.getInteger("last0")));
 		additionalSymbols.add(symbolType.valueOfSymbol(compound.getInteger("last1")));
+		if(compound.hasKey("name"))
+			name = compound.getString("name");
+		if(compound.hasKey("gateSymbolType"))
+			gateSymbolType = SymbolTypeEnum.valueOf(compound.getByte("gateSymbolType"));
 	}
 	
 	
@@ -114,8 +132,6 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
 				return false;
 		} else if (!gatePos.equals(other.gatePos))
 			return false;
-		if (symbolType != other.symbolType)
-			return false;
-		return true;
+		return symbolType == other.symbolType;
 	}
 }

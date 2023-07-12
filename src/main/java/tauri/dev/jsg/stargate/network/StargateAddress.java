@@ -1,9 +1,9 @@
 package tauri.dev.jsg.stargate.network;
 
 import io.netty.buffer.ByteBuf;
-import tauri.dev.jsg.JSG;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
+import tauri.dev.jsg.JSG;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,10 @@ public class StargateAddress implements INBTSerializable<NBTTagCompound> {
 
     public StargateAddress(SymbolTypeEnum symbolType) {
 		this.symbolType = symbolType;
+	}
+
+	public StargateAddress(ByteBuf byteBuf) {
+		fromBytes(byteBuf);
 	}
 	
 	public StargateAddress(NBTTagCompound compound) {

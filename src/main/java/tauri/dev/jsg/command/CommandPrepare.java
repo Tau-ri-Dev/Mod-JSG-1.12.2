@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import tauri.dev.jsg.tileentity.util.PreparableInterface;
+import tauri.dev.jsg.util.RayTraceHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -42,7 +43,7 @@ public class CommandPrepare extends AbstractJSGCommand {
     @Override
     @ParametersAreNonnullByDefault
     public void execute(MinecraftServer server, @Nonnull ICommandSender sender, String[] args) throws CommandException {
-        TileEntity tileEntity = JSGCommands.rayTraceTileEntity((EntityPlayerMP) sender);
+        TileEntity tileEntity = RayTraceHelper.rayTraceTileEntity((EntityPlayerMP) sender);
 
         if (tileEntity instanceof PreparableInterface) {
             if (((PreparableInterface) tileEntity).prepare(sender, this)) {

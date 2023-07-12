@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import tauri.dev.jsg.gui.admincontroller.GuiAdminController;
 import tauri.dev.jsg.gui.container.beamer.BeamerContainer;
 import tauri.dev.jsg.gui.container.beamer.BeamerContainerGui;
 import tauri.dev.jsg.gui.container.capacitor.CapacitorContainer;
@@ -32,6 +33,8 @@ import tauri.dev.jsg.gui.container.zpmslot.ZPMSlotContainer;
 import tauri.dev.jsg.gui.container.zpmslot.ZPMSlotContainerGui;
 
 public class JSGGuiHandler implements IGuiHandler {
+
+    public static JSGGuiHandler INSTANCE = new JSGGuiHandler();
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -122,6 +125,9 @@ public class JSGGuiHandler implements IGuiHandler {
 
             case GUI_COUNTDOWN:
                 return new CountDownContainerGui(new BlockPos(x, y, z), new CountDownContainer(player.inventory, world, x, y, z, isOp));
+
+            case GUI_ADMIN_CONTROLLER:
+                return new GuiAdminController(player, world, x, y, z);
 
         }
 

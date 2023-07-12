@@ -8,6 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import tauri.dev.jsg.tileentity.props.DestinyCountDownTile;
+import tauri.dev.jsg.util.RayTraceHelper;
 
 import javax.annotation.Nonnull;
 
@@ -53,7 +54,7 @@ public class CommandCountdownSet extends AbstractJSGCommand {
             return;
         }
 
-        if(args[0].equalsIgnoreCase("set")){
+        if (args[0].equalsIgnoreCase("set")) {
             if (args.length > 4) {
                 int x1 = (int) parseCoordinate(pos.getX(), args[2], false).getResult();
                 int y1 = (int) parseCoordinate(pos.getY(), args[3], 0, 255, false).getResult();
@@ -62,7 +63,7 @@ public class CommandCountdownSet extends AbstractJSGCommand {
                 tileEntity = world.getTileEntity(foundPos);
             }
             if (tileEntity == null)
-                tileEntity = JSGCommands.rayTraceTileEntity((EntityPlayerMP) sender);
+                tileEntity = RayTraceHelper.rayTraceTileEntity((EntityPlayerMP) sender);
 
             try {
                 long ticks = Long.parseLong(args[1]);
@@ -75,8 +76,7 @@ public class CommandCountdownSet extends AbstractJSGCommand {
             } catch (Exception e) {
                 baseCommand.sendUsageMess(sender, this);
             }
-        }
-        else if(args[0].equalsIgnoreCase("reset")){
+        } else if (args[0].equalsIgnoreCase("reset")) {
             if (args.length > 3) {
                 int x1 = (int) parseCoordinate(pos.getX(), args[1], false).getResult();
                 int y1 = (int) parseCoordinate(pos.getY(), args[2], 0, 255, false).getResult();
@@ -85,7 +85,7 @@ public class CommandCountdownSet extends AbstractJSGCommand {
                 tileEntity = world.getTileEntity(foundPos);
             }
             if (tileEntity == null)
-                tileEntity = JSGCommands.rayTraceTileEntity((EntityPlayerMP) sender);
+                tileEntity = RayTraceHelper.rayTraceTileEntity((EntityPlayerMP) sender);
 
             try {
                 if (tileEntity instanceof DestinyCountDownTile) {
