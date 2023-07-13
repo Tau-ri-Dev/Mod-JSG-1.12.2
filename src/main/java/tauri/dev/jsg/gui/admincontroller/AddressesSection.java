@@ -1,10 +1,8 @@
 package tauri.dev.jsg.gui.admincontroller;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.client.config.GuiUtils;
@@ -12,7 +10,6 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.gui.base.JSGTextField;
 import tauri.dev.jsg.gui.element.ArrowButton;
 import tauri.dev.jsg.gui.element.GuiHelper;
-import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.gui.entry.EntryActionToServer;
 import tauri.dev.jsg.stargate.network.StargateAddress;
@@ -21,14 +18,11 @@ import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.util.BlockHelpers;
 
-import javax.annotation.Nonnull;
 import java.util.*;
-
-import static tauri.dev.jsg.gui.admincontroller.GuiAdminController.lastStargateNetwork;
 
 public class AddressesSection {
 
-    public ArrayList<StargateEntry> ENTRIES = new ArrayList<>();
+    public ArrayList<StargateEntry> entries = new ArrayList<>();
 
     public int guiTop;
     public int height;
@@ -45,31 +39,39 @@ public class AddressesSection {
     }
 
     public void generateAddressEntries() {
-        ENTRIES.clear();
-        if (lastStargateNetwork == null) return;
+        if (guiBase.stargateNetwork == null) {
+            entries.clear();
+            return;
+        }
+        if (entries.size() > 0) return;
 
-        Map<StargateAddress, StargatePos> m = lastStargateNetwork.getMap().get(Objects.requireNonNull(guiBase.gateTile).getSymbolType());
+        Map<StargateAddress, StargatePos> m = guiBase.stargateNetwork.getMap().get(Objects.requireNonNull(guiBase.gateTile).getSymbolType());
         for (StargateAddress a : m.keySet()) {
             StargateEntry e = new StargateEntry();
             e.pos = m.get(a);
             e.address = a;
-            ENTRIES.add(e);
+            entries.add(e);
         }
+        sortEntries();
     }
 
     public ArrayList<ArrowButton> dialButtons = new ArrayList<>();
     public ArrayList<GuiTextField> entriesTextFields = new ArrayList<>();
 
-    public void generateAddressEntriesBoxes() {
+    public void generateAddressEntriesBoxes(boolean reset) {
         int index = -1;
+        if (!reset && dialButtons.size() > 0) return;
+        if (!reset && entriesTextFields.size() > 0) return;
         dialButtons.clear();
         entriesTextFields.clear();
-        for (StargateEntry e : ENTRIES) {
+        if (entries.size() < 1) return;
+        for (StargateEntry e : entries) {
             index++;
             StargatePos p = e.pos;
-            String name = (p.name != null && !Objects.equals(p.name, "") ? p.name : BlockHelpers.blockPosToBetterString(p.gatePos));
+            String name = (p.name != null && !p.name.equalsIgnoreCase("") ? p.name : BlockHelpers.blockPosToBetterString(p.gatePos));
             final int finalIndex = index;
             GuiTextField field = new JSGTextField(index, Minecraft.getMinecraft().fontRenderer, guiLeft, 0, 120, 20, name).setActionCallback(() -> renameEntry(finalIndex));
+            field.setText(name);
             ArrowButton btn = (ArrowButton) new ArrowButton(index, guiLeft + 120 + 5, 0, ArrowButton.ArrowType.RIGHT).setFgColor(GuiUtils.getColorCode('a', true)).setActionCallback(() -> dialGate(finalIndex));
             if (e.pos.gatePos.equals(Objects.requireNonNull(guiBase.gateTile).getPos()) && e.pos.dimensionID == guiBase.gateTile.world().provider.getDimension()) {
                 btn.setEnabled(false);
@@ -82,25 +84,27 @@ public class AddressesSection {
         }
     }
 
-    @Nonnull
-    public EnumHand getHand() {
-        EnumHand hand = EnumHand.MAIN_HAND;
-        ItemStack stack = guiBase.player.getHeldItem(hand);
-        if (stack.getItem() != JSGItems.ADMIN_CONTROLLER) {
-            hand = EnumHand.OFF_HAND;
-            stack = guiBase.player.getHeldItem(hand);
-            if (stack.getItem() != JSGItems.ADMIN_CONTROLLER) return EnumHand.MAIN_HAND;
+    public void sortEntries() {
+        ArrayList<StargateEntry> newList = new ArrayList<>();
+        for (StargateEntry e : entries) {
+            if (e.pos.name != null && !e.pos.name.equals(""))
+                newList.add(e);
         }
-        return hand;
+        for (StargateEntry e : entries) {
+            if (e.pos.name != null && !e.pos.name.equals(""))
+                continue;
+            newList.add(e);
+        }
+        entries = newList;
     }
 
     public void dialGate(int index) {
         try {
-            EnumHand hand = getHand();
-            StargateEntry entry = ENTRIES.get(index);
+            EnumHand hand = guiBase.getHand();
+            StargateEntry entry = entries.get(index);
             StargatePos pos = entry.pos;
             StargateAbstractBaseTile tile = pos.getTileEntity();
-            if (!tile.getStargateState().idle()) return;
+            if (!tile.getStargateState().idle() && !tile.getStargateState().engaged()) return;
 
             int symbolsCount = Objects.requireNonNull(guiBase.gateTile).getMinimalSymbolsToDial(pos.getGateSymbolType(), pos);
 
@@ -112,9 +116,10 @@ public class AddressesSection {
 
     public void renameEntry(int index) {
         try {
-            EnumHand hand = getHand();
+            EnumHand hand = guiBase.getHand();
             GuiTextField field = entriesTextFields.get(index);
-            JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(hand, field.getText(), Objects.requireNonNull(guiBase.gateTile).getPos()));
+            JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(hand, field.getText(), entries.get(index).pos));
+            //entries.get(index).pos.getTileEntity().renameStargatePos(field.getText());
         } catch (Exception e) {
             JSG.error(e);
         }
@@ -132,7 +137,6 @@ public class AddressesSection {
     public void renderEntries() {
         updateY();
 
-        Gui.drawRect(guiLeft, guiTop, width, height, 0x7C7C7C);
         GlStateManager.color(1, 1, 1, 1);
 
         GlStateManager.pushMatrix();
@@ -150,7 +154,7 @@ public class AddressesSection {
     public void renderFg() {
         // Render tooltips
         for (GuiTextField f : entriesTextFields) {
-            StargateEntry e = ENTRIES.get(f.getId());
+            StargateEntry e = entries.get(f.getId());
             if (!canNotRenderEntry(f.y) && GuiHelper.isPointInRegion(f.x, f.y, f.width, f.height, guiBase.mouseX, guiBase.mouseY)) {
                 guiBase.drawHoveringText(Arrays.asList(
                         "Type: " + e.pos.getGateSymbolType().toString(),

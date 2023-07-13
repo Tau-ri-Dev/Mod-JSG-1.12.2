@@ -1,5 +1,6 @@
 package tauri.dev.jsg.stargate.network;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -8,6 +9,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import tauri.dev.jsg.stargate.teleportation.TeleportHelper;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +38,13 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
 		this.additionalSymbols = new ArrayList<>(2);
 		
 		deserializeNBT(compound);
+	}
+
+	public StargatePos(SymbolTypeEnum symbolType, ByteBuf buf) {
+		this.symbolType = symbolType;
+		this.additionalSymbols = new ArrayList<>(2);
+
+		fromBytes(buf);
 	}
 
 	public SymbolTypeEnum getGateSymbolType(){
@@ -72,7 +81,7 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
 		compound.setInteger("last0", additionalSymbols.get(0).getId());
 		compound.setInteger("last1", additionalSymbols.get(1).getId());
 		if(name != null)
-			compound.setString("name", name);
+			compound.setString("gateName", name);
 		if(gateSymbolType != null)
 			compound.setByte("gateSymbolType", (byte) gateSymbolType.id);
 		
@@ -85,10 +94,42 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
 		gatePos = BlockPos.fromLong(compound.getLong("pos"));
 		additionalSymbols.add(symbolType.valueOfSymbol(compound.getInteger("last0")));
 		additionalSymbols.add(symbolType.valueOfSymbol(compound.getInteger("last1")));
-		if(compound.hasKey("name"))
-			name = compound.getString("name");
+		if(compound.hasKey("gateName"))
+			name = compound.getString("gateName");
 		if(compound.hasKey("gateSymbolType"))
 			gateSymbolType = SymbolTypeEnum.valueOf(compound.getByte("gateSymbolType"));
+	}
+
+	public void toBytes(ByteBuf buf){
+		buf.writeInt(dimensionID);
+		buf.writeLong(gatePos.toLong());
+		buf.writeInt(additionalSymbols.get(0).getId());
+		buf.writeInt(additionalSymbols.get(1).getId());
+		if(name != null){
+			buf.writeBoolean(true);
+			buf.writeInt(name.length());
+			buf.writeCharSequence(name, StandardCharsets.UTF_8);
+		}else
+			buf.writeBoolean(false);
+		if(gateSymbolType != null){
+			buf.writeBoolean(true);
+			buf.writeInt(gateSymbolType.id);
+		}else
+			buf.writeBoolean(false);
+	}
+
+	public void fromBytes(ByteBuf buf){
+		dimensionID = buf.readInt();
+		gatePos = BlockPos.fromLong(buf.readLong());
+		additionalSymbols.add(symbolType.valueOfSymbol(buf.readInt()));
+		additionalSymbols.add(symbolType.valueOfSymbol(buf.readInt()));
+		if(buf.readBoolean()){
+			int nameSize = buf.readInt();
+			name = buf.readCharSequence(nameSize, StandardCharsets.UTF_8).toString();
+		}
+		if(buf.readBoolean()){
+			gateSymbolType = SymbolTypeEnum.valueOf(buf.readInt());
+		}
 	}
 	
 	

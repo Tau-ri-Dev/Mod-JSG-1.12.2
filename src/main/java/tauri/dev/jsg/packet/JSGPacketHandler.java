@@ -59,6 +59,6 @@ public class JSGPacketHandler {
 		INSTANCE.registerMessage(StartPlayerFadeOutToClient.StartPlayerFadeOutToClientHandler.class, StartPlayerFadeOutToClient.class, id, Side.CLIENT); id++;
 		INSTANCE.registerMessage(StateUpdatePacketToClient.StateUpdateClientHandler.class, StateUpdatePacketToClient.class, id, Side.CLIENT); id++;
 		INSTANCE.registerMessage(SoundPositionedPlayToClient.PlayPositionedSoundClientHandler.class, SoundPositionedPlayToClient.class, id, Side.CLIENT); id++;
-		INSTANCE.registerMessage(GuiOpenToClient.GuiOpenToClientHandler.class, GuiOpenToClient.class, id, Side.CLIENT); id++;
+		INSTANCE.registerMessage(AdminControllerGuiOpenToClient.AdminControllerGuiOpenToClientHandler.class, AdminControllerGuiOpenToClient.class, id, Side.CLIENT); id++;
 	}
 }

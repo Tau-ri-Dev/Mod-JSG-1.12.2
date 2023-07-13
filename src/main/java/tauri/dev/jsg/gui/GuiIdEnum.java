@@ -18,8 +18,6 @@ public enum GuiIdEnum {
 	GUI_ZPM_SLOT(11),
 	GUI_COUNTDOWN(12),
 	GUI_LAB(13),
-
-	GUI_ADMIN_CONTROLLER(14)
 	;
     public final int id;
 	

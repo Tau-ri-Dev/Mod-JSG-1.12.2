@@ -18,9 +18,8 @@ import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerItem;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode;
 import tauri.dev.jsg.item.notebook.NotebookItem;
-import tauri.dev.jsg.stargate.network.StargateAddress;
-import tauri.dev.jsg.stargate.network.StargateAddressDynamic;
-import tauri.dev.jsg.stargate.network.SymbolUniverseEnum;
+import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
+import tauri.dev.jsg.stargate.network.*;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
 
@@ -36,9 +35,10 @@ public class EntryActionToServer implements IMessage {
     private int index;
     private String name;
 
-    private int maxSymbols = 0;
-    private StargateAddressDynamic addressToDial = null;
-    private BlockPos linkedGate = null;
+    private int maxSymbols;
+    private StargateAddressDynamic addressToDial;
+    private BlockPos linkedGate;
+    private StargatePos targetGatePos;
 
     public EntryActionToServer(EnumHand hand, StargateAddressDynamic addressToDial, int maxSymbols, BlockPos linkedGate) {
         this.hand = hand;
@@ -49,15 +49,18 @@ public class EntryActionToServer implements IMessage {
         this.addressToDial = addressToDial;
         this.maxSymbols = maxSymbols;
         this.linkedGate = linkedGate;
+        this.targetGatePos = null;
     }
 
-    public EntryActionToServer(EnumHand hand, String name, BlockPos linkedGate) {
+    public EntryActionToServer(EnumHand hand, String name, StargatePos targetGate) {
         this.hand = hand;
         this.dataType = EntryDataTypeEnum.ADMIN_CONTROLLER;
         this.action = EntryActionEnum.RENAME;
-        this.index = -1;
+        this.index = targetGate.symbolType.id;
         this.name = name;
-        this.linkedGate = linkedGate;
+        this.targetGatePos = targetGate;
+        this.addressToDial = null;
+        this.linkedGate = null;
     }
 
 
@@ -67,6 +70,9 @@ public class EntryActionToServer implements IMessage {
         this.action = action;
         this.index = index;
         this.name = name;
+        this.addressToDial = null;
+        this.targetGatePos = null;
+        this.linkedGate = null;
     }
 
     @Override
@@ -82,11 +88,14 @@ public class EntryActionToServer implements IMessage {
         if (addressToDial != null) {
             buf.writeBoolean(true);
             addressToDial.toBytes(buf);
-        }
-        else buf.writeBoolean(false);
+        } else buf.writeBoolean(false);
         if (linkedGate != null) {
             buf.writeBoolean(true);
             buf.writeLong(linkedGate.toLong());
+        } else buf.writeBoolean(false);
+        if(targetGatePos != null){
+            buf.writeBoolean(true);
+            targetGatePos.toBytes(buf);
         }
         else buf.writeBoolean(false);
     }
@@ -106,6 +115,9 @@ public class EntryActionToServer implements IMessage {
         }
         if (buf.readBoolean()) {
             linkedGate = BlockPos.fromLong(buf.readLong());
+        }
+        if(buf.readBoolean()){
+            targetGatePos = new StargatePos(SymbolTypeEnum.valueOf(index), buf);
         }
     }
 
@@ -217,13 +229,17 @@ public class EntryActionToServer implements IMessage {
                 } else if (message.dataType.admin()) {
                     switch (message.action) {
                         case RENAME:
-                            StargateClassicBaseTile gateTile = (StargateClassicBaseTile) world.getTileEntity(message.linkedGate);
+                            StargateClassicBaseTile gateTile = (StargateClassicBaseTile) message.targetGatePos.getTileEntity();
                             if (gateTile == null) return;
                             gateTile.renameStargatePos(message.name);
                             break;
                         case DIAL:
                             StargateClassicBaseTile gateTile1 = (StargateClassicBaseTile) world.getTileEntity(message.linkedGate);
                             if (gateTile1 == null) return;
+                            if (gateTile1.getStargateState().engaged()){
+                                gateTile1.attemptClose(StargateClosedReasonEnum.REQUESTED);
+                                break;
+                            }
                             if (gateTile1.dialAddress(message.addressToDial, message.maxSymbols - 1))
                                 player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.dial_start"), true);
                             else

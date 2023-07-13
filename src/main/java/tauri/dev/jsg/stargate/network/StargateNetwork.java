@@ -1,5 +1,6 @@
 package tauri.dev.jsg.stargate.network;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -70,7 +71,7 @@ public class StargateNetwork extends WorldSavedData {
     }
 
     private Map<StargateAddress, StargatePos> getMapFromAddress(StargateAddress address) {
-        if(address == null) return new HashMap<>();
+        if (address == null) return new HashMap<>();
         return stargateNetworkMap.get(address.getSymbolType());
     }
 
@@ -79,7 +80,7 @@ public class StargateNetwork extends WorldSavedData {
     }
 
     public Map<StargatePos, Map<SymbolTypeEnum, StargateAddress>> getMapNotGenerated() {
-        if(!JSGConfig.WorldGen.otherDimGenerator.generatorEnabled){
+        if (!JSGConfig.WorldGen.otherDimGenerator.generatorEnabled) {
             return new HashMap<>();
         }
         return notGeneratedStargates;
@@ -100,7 +101,7 @@ public class StargateNetwork extends WorldSavedData {
     }
 
     public boolean isStargateInNetwork(StargateAddress gateAddress) {
-        if(getMapFromAddress(gateAddress) == null) return false;
+        if (getMapFromAddress(gateAddress) == null) return false;
         return getMapFromAddress(gateAddress).containsKey(gateAddress);
     }
 
@@ -127,7 +128,6 @@ public class StargateNetwork extends WorldSavedData {
         int id = pos.dimensionID;
         BlockPos bp = pos.gatePos;
         EnumStructures structure = EnumStructures.INTERNAL_MW;
-        //GeneratedStargate gs = JSGStructuresGenerator.generateStructure(structure, pos.getWorld(), pos.getWorld().rand, bp.getX()/16, bp.getZ()/16, true, true, id);
         GeneratedStargate gs = StargateGenerator.mystPageGeneration(pos.getWorld(), structure, id, bp);
         if (gs == null) return;
         Objects.requireNonNull(this.getStargate(gs.address)).getTileEntity().setGateAddress(address.symbolType, notGeneratedStargates.get(pos).get(address.symbolType));
@@ -222,13 +222,13 @@ public class StargateNetwork extends WorldSavedData {
 
         NBTTagList notGeneratedStargates = compound.getTagList("notGeneratedStargates", NBT.TAG_COMPOUND);
         for (NBTBase baseTag : notGeneratedStargates) {
-            if(!JSGConfig.WorldGen.otherDimGenerator.generatorEnabled) break;
+            if (!JSGConfig.WorldGen.otherDimGenerator.generatorEnabled) break;
             NBTTagCompound stargateCompound = (NBTTagCompound) baseTag;
 
             StargateAddress stargateAddress = new StargateAddress(stargateCompound.getCompoundTag("address"));
             StargatePos stargatePos = new StargatePos(stargateAddress.getSymbolType(), stargateCompound.getCompoundTag("pos"));
 
-            if(JSGConfigUtil.isDimBlacklistedForSGSpawn(stargatePos.dimensionID)) continue;
+            if (JSGConfigUtil.isDimBlacklistedForSGSpawn(stargatePos.dimensionID)) continue;
 
             addNotGeneratedStargate(stargateAddress, stargatePos);
         }
@@ -280,5 +280,85 @@ public class StargateNetwork extends WorldSavedData {
         compound.setTag("internalGates", INTERNAL_GATES.serializeNBT());
 
         return compound;
+    }
+
+
+    public void toBytes(ByteBuf buf) {
+
+        // Write addresses
+        int networkSize = 0;
+        for (Map<StargateAddress, StargatePos> stargateMap : stargateNetworkMap.values()) {
+            for (Map.Entry<StargateAddress, StargatePos> ignored : stargateMap.entrySet()) {
+                networkSize++;
+            }
+        }
+        buf.writeInt(networkSize);
+        for (Map<StargateAddress, StargatePos> stargateMap : stargateNetworkMap.values()) {
+            for (Map.Entry<StargateAddress, StargatePos> stargateEntry : stargateMap.entrySet()) {
+                stargateEntry.getKey().toBytes(buf);
+                stargateEntry.getValue().toBytes(buf);
+            }
+        }
+        // ---------------
+
+        // Write not generated gates
+        int notGeneratedSize = 0;
+        for (StargatePos pos : notGeneratedStargates.keySet()) {
+            for (Map.Entry<SymbolTypeEnum, StargateAddress> ignored : notGeneratedStargates.get(pos).entrySet()) {
+                notGeneratedSize++;
+            }
+        }
+        buf.writeInt(notGeneratedSize);
+        for (StargatePos pos : notGeneratedStargates.keySet()) {
+            for (Map.Entry<SymbolTypeEnum, StargateAddress> entry : notGeneratedStargates.get(pos).entrySet()) {
+                entry.getValue().toBytes(buf);
+                pos.toBytes(buf);
+            }
+        }
+        // ---------------
+
+        // Write nether gate
+        if (netherGateAddress != null) {
+            buf.writeBoolean(true);
+            netherGateAddress.toBytes(buf);
+        } else
+            buf.writeBoolean(false);
+        // ---------------
+
+        // Write internal gates
+        INTERNAL_GATES.toBytes(buf);
+        // ---------------
+    }
+
+    public void fromBytes(ByteBuf buf) {
+        // Read addresses
+        int size = buf.readInt();
+        for (int i = 0; i < size; i++) {
+            StargateAddress stargateAddress = new StargateAddress(buf);
+            StargatePos stargatePos = new StargatePos(stargateAddress.getSymbolType(), buf);
+
+            getMapFromAddress(stargateAddress).put(stargateAddress, stargatePos);
+        }
+        // ---------------
+
+        // Read not generated gates
+        size = buf.readInt();
+        for (int i = 0; i < size; i++) {
+            StargateAddress stargateAddress = new StargateAddress(buf);
+            StargatePos stargatePos = new StargatePos(stargateAddress.getSymbolType(), buf);
+
+            addNotGeneratedStargate(stargateAddress, stargatePos);
+        }
+        // ---------------
+
+        // Read nether gate
+        if (buf.readBoolean()) {
+            netherGateAddress = new StargateAddress(buf);
+        }
+        // ---------------
+
+        // Read internal gates
+        INTERNAL_GATES.fromBytes(buf);
+        // ---------------
     }
 }

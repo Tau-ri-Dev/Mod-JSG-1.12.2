@@ -1727,7 +1727,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 super.executeTask(scheduledTask, customData);
         }
     }
-
     public static int getOriginId(BiomeOverlayEnum overlay, int dimId, int configOrigin) {
         if (configOrigin >= 0) return configOrigin;
 

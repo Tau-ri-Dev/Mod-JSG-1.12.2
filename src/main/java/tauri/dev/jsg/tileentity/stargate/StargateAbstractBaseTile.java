@@ -476,8 +476,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     public void renameStargatePos(String newName){
         for(SymbolTypeEnum s : SymbolTypeEnum.values()){
-            Objects.requireNonNull(getNetwork().getStargate(gateAddressMap.get(s))).name = newName;
-            getNetwork().markDirty();
+            StargatePos p = new StargatePos(world.provider.getDimension(), pos, gateAddressMap.get(s), getSymbolType());
+            p.name = newName;
+            getNetwork().addStargate(gateAddressMap.get(s), p);
             markDirty();
         }
     }

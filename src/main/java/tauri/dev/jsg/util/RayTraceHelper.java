@@ -20,8 +20,12 @@ public class RayTraceHelper {
 
     @Nullable
     public static TileEntity rayTraceTileEntity(@Nonnull EntityPlayer player) {
+        return rayTraceTileEntity(player, 8);
+    }
+    @Nullable
+    public static TileEntity rayTraceTileEntity(@Nonnull EntityPlayer player, int distance) {
         try {
-            RayTraceResult rayTraceResult = rayTraceEntity(player, 8, 0);
+            RayTraceResult rayTraceResult = rayTraceEntity(player, distance, 0);
             if (rayTraceResult != null && rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
                 return player.getEntityWorld().getTileEntity(rayTraceResult.getBlockPos());
             }

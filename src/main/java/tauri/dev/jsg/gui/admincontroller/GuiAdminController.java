@@ -1,34 +1,48 @@
 package tauri.dev.jsg.gui.admincontroller;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.gui.JSGTexturedGui;
 import tauri.dev.jsg.gui.element.ArrowButton;
 import tauri.dev.jsg.gui.element.GuiHelper;
 import tauri.dev.jsg.gui.mainmenu.GuiCustomMainMenu;
+import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.loader.texture.TextureLoader;
 import tauri.dev.jsg.renderer.stargate.StargateAbstractRenderer;
 import tauri.dev.jsg.renderer.stargate.StargateAbstractRendererState;
+import tauri.dev.jsg.stargate.network.StargateAddressDynamic;
 import tauri.dev.jsg.stargate.network.StargateNetwork;
+import tauri.dev.jsg.stargate.network.SymbolInterface;
+import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.Objects;
 
-public class GuiAdminController extends GuiScreen {
+public class GuiAdminController extends JSGTexturedGui {
 
     public final StargateClassicBaseTile gateTile;
     public final World world;
+    public final BlockPos pos;
     public final EntityPlayer player;
 
-    public static StargateNetwork lastStargateNetwork = null;
+    public final StargateNetwork stargateNetwork;
 
     public final AddressesSection addressesSection;
 
@@ -38,21 +52,39 @@ public class GuiAdminController extends GuiScreen {
     public int[] center = new int[]{0, 0};
     public int[] gateCenter = center;
     public float[] gateRotation = new float[]{0, 0};
-
-    public int guiLeft;
-    public int guiTop;
     public int guiRight;
     public int guiBottom;
 
-    public GuiAdminController(EntityPlayer player, World world, int x, int y, int z) {
+    public GuiAdminController(EntityPlayer player, World world, BlockPos pos, StargateNetwork stargateNetwork) {
+        super(512, 256, 512, 256);
         this.world = world;
         this.player = player;
-        TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
+        this.pos = pos;
+        TileEntity te = world.getTileEntity(pos);
         if (te instanceof StargateClassicBaseTile) {
             gateTile = (StargateClassicBaseTile) te;
         } else gateTile = null;
-        addressesSection = new AddressesSection(this);
-        addressesSection.generateAddressEntries();
+        this.addressesSection = new AddressesSection(this);
+        this.stargateNetwork = stargateNetwork;
+
+        regenerateStargate();
+    }
+
+    public void regenerateStargate() {
+        try {
+            imaginaryGateTile = Objects.requireNonNull(gateTile).getClass().newInstance();
+            imaginaryGateTile.setWorld(world);
+            imaginaryGateTile.setPos(pos);
+
+            ItemStack stack = Minecraft.getMinecraft().player.getHeldItem(getHand());
+            if (stack.getItem() != JSGItems.ADMIN_CONTROLLER) return;
+            NBTTagCompound compound = stack.getTagCompound();
+            if (compound == null) return;
+            if (!compound.hasKey("gateNBT")) return;
+            imaginaryGateTile.readFromNBT(compound.getCompoundTag("gateNBT"));
+        } catch (Exception e) {
+            JSG.error(e);
+        }
     }
 
     @Override
@@ -61,7 +93,7 @@ public class GuiAdminController extends GuiScreen {
     }
 
     public int[] getCenterPos(int rectWidth, int rectHeight) {
-        return GuiCustomMainMenu.getCenterPos(rectWidth, rectHeight, width, height);
+        return GuiCustomMainMenu.getCenterPos(rectWidth, rectHeight, xSize, ySize);
     }
 
     @SuppressWarnings("all")
@@ -86,12 +118,11 @@ public class GuiAdminController extends GuiScreen {
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
         GlStateManager.disableBlend();
-        GlStateManager.enableDepth();
         GlStateManager.enableAlpha();
         GlStateManager.color(1, 1, 1);
 
-        GlStateManager.translate(gateCenter[0], gateCenter[1], 60);
-        GlStateManager.scale(-20, -20, -20);
+        GlStateManager.translate(gateCenter[0], gateCenter[1], 10);
+        GlStateManager.scale(-17, -17, -17);
 
         GlStateManager.pushMatrix();
         GlStateManager.rotate(180, 0, 1, 0);
@@ -116,55 +147,50 @@ public class GuiAdminController extends GuiScreen {
     }
 
     @Override
+    public ResourceLocation getBackground() {
+        return new ResourceLocation(JSG.MOD_ID, "textures/gui/gui_admin_controller.png");
+    }
+
+    @Override
     public void initGui() {
         super.initGui();
         center = getCenterPos(0, 0);
-        gateCenter = center; //new int[]{(int) (center[0] / 2 * 2.5f), (int) (center[1] / 2 * 1.5f)};
+        gateCenter = center;
 
-        guiLeft = OFFSET; //(int) (center[0] / 2 * 0.5);
-        guiTop = OFFSET; //(int) (center[1] / 2 * 0.5);
-        guiRight = width - OFFSET; //(int) (center[0] / 2 * 3.5);
-        guiBottom = height - OFFSET; //(int) (center[1] / 2 * 3.5);
+        guiRight = xSize;
+        guiBottom = ySize;
 
-        addressesSection.guiLeft = guiLeft + OFFSET;
-        addressesSection.guiTop = guiTop + OFFSET;
+        addressesSection.guiLeft = OFFSET;
+        addressesSection.guiTop = OFFSET;
         addressesSection.width = 145 + (AddressesSection.OFFSET * 2);
-        addressesSection.height = guiBottom - OFFSET - addressesSection.guiTop - 30; // -30 because of abort, iris, and close buttons
-        addressesSection.generateAddressEntriesBoxes();
+        addressesSection.height = ySize - OFFSET * 2;
+        addressesSection.generateAddressEntriesBoxes(true);
     }
 
     public static final int OFFSET = 15;
 
-    public void calculateGateRotation() {
-        /*..float difX = (float) (gateCenter[0] - mouseX) / (gateCenter[0] != 0 ? gateCenter[0] : 1);
-        float difY = (float) (gateCenter[1] - mouseY) / (gateCenter[1] != 0 ? gateCenter[1] : 1);
-        gateRotation[0] = -difX * 30;
-        gateRotation[1] = -difY * 30;*/
-    }
-
     @Override
-    public void drawBackground(int tint) {
-        drawGradientRect(0, 0, this.width, this.height, -1072689136, -804253680);
-        drawGradientRect(guiLeft, guiTop, guiRight - guiLeft, guiBottom - guiTop, 0x8B8B8B, 0x8B8B8B);
-    }
-
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void drawForeground(int mouseX, int mouseY, float partialTicks) {
         if (gateTile == null) return;
-        this.mouseX = mouseX;
-        this.mouseY = mouseY;
+        this.mouseX = mouseX - guiLeft;
+        this.mouseY = mouseY - guiTop;
         this.partialTicks = partialTicks;
-        drawBackground(0);
-        calculateGateRotation();
 
+        // render background
+        addressesSection.generateAddressEntries();
+        addressesSection.generateAddressEntriesBoxes(false);
         addressesSection.renderEntries();
 
-        GlStateManager.pushMatrix();
-        GlStateManager.enableDepth();
-        GlStateManager.translate(0, 0, 90);
-        addressesSection.renderFg();
-        GlStateManager.popMatrix();
+        renderControlButtons();
+        renderGateInfo();
 
+        // Render foreground
+        GlStateManager.enableDepth();
+        GlStateManager.translate(0, 0, 180);
+        addressesSection.renderFg();
+        GlStateManager.translate(0, 0, -180);
+
+        // render gate model
         // Should be last
         renderStargate();
     }
@@ -180,10 +206,10 @@ public class GuiAdminController extends GuiScreen {
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         for (GuiTextField field : addressesSection.entriesTextFields) {
-            field.mouseClicked(mouseX, mouseY, mouseButton);
+            field.mouseClicked(this.mouseX, this.mouseY, mouseButton);
         }
         for (ArrowButton button : addressesSection.dialButtons) {
-            if (GuiHelper.isPointInRegion(button.x, button.y, button.width, button.height, mouseX, mouseY)) {
+            if (GuiHelper.isPointInRegion(button.x, button.y, button.width, button.height, this.mouseX, this.mouseY)) {
                 button.performAction();
                 button.playPressSound(Minecraft.getMinecraft().getSoundHandler());
             }
@@ -206,7 +232,61 @@ public class GuiAdminController extends GuiScreen {
         super.drawGradientRect(left, top, right, bottom, starColor, endColor);
     }
 
-    public void renderControlButtons(){
+    public void renderControlButtons() {
 
+    }
+
+    @Nonnull
+    public EnumHand getHand() {
+        EnumHand hand = EnumHand.MAIN_HAND;
+        ItemStack stack = player.getHeldItem(hand);
+        if (stack.getItem() != JSGItems.ADMIN_CONTROLLER) {
+            hand = EnumHand.OFF_HAND;
+            stack = player.getHeldItem(hand);
+            if (stack.getItem() != JSGItems.ADMIN_CONTROLLER) return EnumHand.MAIN_HAND;
+        }
+        return hand;
+    }
+
+    public StargateClassicBaseTile imaginaryGateTile = null;
+
+    public void renderGateInfo() {
+        regenerateStargate();
+        if (imaginaryGateTile == null) return;
+
+        // Render dialed address
+        StargateAddressDynamic dialedAddress = imaginaryGateTile.getDialedAddress();
+        int originId = imaginaryGateTile.getOriginId();
+        boolean isUniverse = dialedAddress.getSymbolType() == SymbolTypeEnum.UNIVERSE;
+        int height = (ySize - 2 * OFFSET - 8 * 3) / 9;
+        int width = (isUniverse ? height / 2 : height);
+        int x = guiRight - height - OFFSET;
+        if (isUniverse)
+            x += width / 2;
+        for (int i = 0; i < dialedAddress.size(); i++) {
+            int y = OFFSET + (i * (height + 3));
+            SymbolInterface symbol = dialedAddress.get(i);
+            renderSymbol(x, y, width, height, symbol, originId);
+        }
+        // ----------------------
+    }
+
+    public static void renderSymbol(int x, int y, int w, int h, SymbolInterface symbol, int originId) {
+        GlStateManager.pushMatrix();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
+
+        GlStateManager.color(0f, 0f, 0f, 1);
+
+        if (symbol.renderIconByMinecraft(originId))
+            Minecraft.getMinecraft().getTextureManager().bindTexture(symbol.getIconResource(originId));
+        else
+            TextureLoader.getTexture(symbol.getIconResource(originId)).bindTexture();
+        drawScaledCustomSizeModalRect(x, y, 0, 0, 256, 256, w, h, 256, 256);
+
+        GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
+
+        GlStateManager.popMatrix();
     }
 }

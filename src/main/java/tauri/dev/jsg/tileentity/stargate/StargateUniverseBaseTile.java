@@ -638,7 +638,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
             NBTTagCompound compound = new NBTTagCompound();
             int time = incomingPeriod - (8 + 7);
             compound.setInteger("period", time);
-            if (spin)
+            if (spin && time > 25)
                 addTask(new ScheduledTask(EnumScheduledTask.BEGIN_SPIN, 8 + 7, compound));
             addTask(new ScheduledTask(EnumScheduledTask.LIGHT_UP_CHEVRONS, 8));
             sendSignal(null, "stargate_incoming_wormhole", new Object[]{incomingAddressSize});
