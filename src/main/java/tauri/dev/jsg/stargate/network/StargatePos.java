@@ -80,8 +80,7 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
 		compound.setLong("pos", gatePos.toLong());
 		compound.setInteger("last0", additionalSymbols.get(0).getId());
 		compound.setInteger("last1", additionalSymbols.get(1).getId());
-		if(name != null)
-			compound.setString("gateName", name);
+		compound.setString("gateName", (name == null ? "" : name));
 		if(gateSymbolType != null)
 			compound.setByte("gateSymbolType", (byte) gateSymbolType.id);
 		
@@ -94,8 +93,7 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
 		gatePos = BlockPos.fromLong(compound.getLong("pos"));
 		additionalSymbols.add(symbolType.valueOfSymbol(compound.getInteger("last0")));
 		additionalSymbols.add(symbolType.valueOfSymbol(compound.getInteger("last1")));
-		if(compound.hasKey("gateName"))
-			name = compound.getString("gateName");
+		name = compound.getString("gateName");
 		if(compound.hasKey("gateSymbolType"))
 			gateSymbolType = SymbolTypeEnum.valueOf(compound.getByte("gateSymbolType"));
 	}

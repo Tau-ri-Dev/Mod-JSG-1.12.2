@@ -16,7 +16,7 @@ public class AdminControllerGuiOpenToClient extends PositionedPacket {
     }
 
     protected BlockPos pos;
-    protected StargateNetwork network = null;
+    protected StargateNetwork network = new StargateNetwork();
 
     public AdminControllerGuiOpenToClient(BlockPos pos, StargateNetwork network) {
         super(pos);
@@ -39,7 +39,6 @@ public class AdminControllerGuiOpenToClient extends PositionedPacket {
         super.fromBytes(buf);
         pos = BlockPos.fromLong(buf.readLong());
         if (buf.readBoolean()) {
-            network = new StargateNetwork();
             network.fromBytes(buf);
         }
     }

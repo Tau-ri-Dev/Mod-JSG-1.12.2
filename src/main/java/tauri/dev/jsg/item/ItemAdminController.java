@@ -39,7 +39,7 @@ public class ItemAdminController extends Item {
     @Override
     public void onUpdate(@Nonnull ItemStack stack, @Nonnull World world, @Nonnull Entity entity, int itemSlot, boolean isSelected) {
         if (!world.isRemote) {
-            if(world.getTotalWorldTime() % 15 != 0) return;
+            if(world.getTotalWorldTime() % 5 != 0) return;
             if(!(entity instanceof EntityPlayerMP)) return;
 
             TileEntity te = RayTraceHelper.rayTraceTileEntity((EntityPlayerMP) entity, 20);

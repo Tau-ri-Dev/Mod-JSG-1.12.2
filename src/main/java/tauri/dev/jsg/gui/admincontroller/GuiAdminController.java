@@ -121,7 +121,7 @@ public class GuiAdminController extends JSGTexturedGui {
         GlStateManager.enableAlpha();
         GlStateManager.color(1, 1, 1);
 
-        GlStateManager.translate(gateCenter[0], gateCenter[1], 10);
+        GlStateManager.translate(gateCenter[0], gateCenter[1], 0);
         GlStateManager.scale(-17, -17, -17);
 
         GlStateManager.pushMatrix();
