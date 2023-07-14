@@ -709,7 +709,6 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * Called either on pressing BRB on open gate or close command from a computer.
      */
     protected void closeGate(StargateClosedReasonEnum reason) {
-        JSG.error("Test ", new Exception("Test"));
         stargateState = EnumStargateState.UNSTABLE;
         energySecondsToClose = 0;
         resetOpenedSince();
