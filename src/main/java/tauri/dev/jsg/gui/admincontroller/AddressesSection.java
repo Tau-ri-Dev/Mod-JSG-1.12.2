@@ -68,7 +68,7 @@ public class AddressesSection {
         for (StargateEntry e : entries) {
             index++;
             StargatePos p = e.pos;
-            String name = (p.name != null && !p.name.equalsIgnoreCase("") ? p.name : BlockHelpers.blockPosToBetterString(p.gatePos));
+            String name = (p.getName() != null && !p.getName().equalsIgnoreCase("") ? p.getName() : BlockHelpers.blockPosToBetterString(p.gatePos));
             final int finalIndex = index;
             GuiTextField field = new JSGTextField(index, Minecraft.getMinecraft().fontRenderer, guiLeft, 0, 120, 20, name).setActionCallback(() -> renameEntry(finalIndex));
             field.setText(name);
@@ -87,11 +87,11 @@ public class AddressesSection {
     public void sortEntries() {
         ArrayList<StargateEntry> newList = new ArrayList<>();
         for (StargateEntry e : entries) {
-            if (e.pos.name != null && !e.pos.name.equals(""))
+            if (e.pos.getName() != null && !e.pos.getName().equals(""))
                 newList.add(e);
         }
         for (StargateEntry e : entries) {
-            if (e.pos.name != null && !e.pos.name.equals(""))
+            if (e.pos.getName() != null && !e.pos.getName().equals(""))
                 continue;
             newList.add(e);
         }

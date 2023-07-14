@@ -217,7 +217,7 @@ public class StargateNetwork extends WorldSavedData {
             StargateAddress stargateAddress = new StargateAddress(stargateCompound.getCompoundTag("address"));
             StargatePos stargatePos = new StargatePos(stargateAddress.getSymbolType(), stargateCompound.getCompoundTag("pos"));
 
-            getMapFromAddress(stargateAddress).put(stargateAddress, stargatePos);
+            addStargate(stargateAddress, stargatePos);
         }
 
         NBTTagList notGeneratedStargates = compound.getTagList("notGeneratedStargates", NBT.TAG_COMPOUND);
@@ -227,6 +227,7 @@ public class StargateNetwork extends WorldSavedData {
 
             StargateAddress stargateAddress = new StargateAddress(stargateCompound.getCompoundTag("address"));
             StargatePos stargatePos = new StargatePos(stargateAddress.getSymbolType(), stargateCompound.getCompoundTag("pos"));
+            stargatePos.setName(stargateCompound.getString("stargateName"));
 
             if (JSGConfigUtil.isDimBlacklistedForSGSpawn(stargatePos.dimensionID)) continue;
 
@@ -258,6 +259,8 @@ public class StargateNetwork extends WorldSavedData {
                 NBTTagCompound stargateCompound = new NBTTagCompound();
                 stargateCompound.setTag("address", stargateEntry.getKey().serializeNBT());
                 stargateCompound.setTag("pos", stargateEntry.getValue().serializeNBT());
+                stargateCompound.setString("stargateName", stargateEntry.getValue().getName());
+                JSG.info("Saving " + stargateEntry.getValue().toString());
                 stargateTagList.appendTag(stargateCompound);
             }
         }

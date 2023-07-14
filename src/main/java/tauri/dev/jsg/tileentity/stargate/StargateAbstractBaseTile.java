@@ -464,9 +464,12 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     public void setGateAddress(SymbolTypeEnum symbolType, StargateAddress stargateAddress) {
+        StargatePos oldPos = gatePosMap.get(symbolType);
         getNetwork().removeStargate(gateAddressMap.get(symbolType));
 
         StargatePos gatePos = new StargatePos(world.provider.getDimension(), pos, stargateAddress, getSymbolType());
+        if(oldPos != null)
+            gatePos.setName(oldPos.getName());
         gateAddressMap.put(symbolType, stargateAddress);
         gatePosMap.put(symbolType, gatePos);
         getNetwork().addStargate(stargateAddress, gatePos);
@@ -476,11 +479,12 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     public void renameStargatePos(String newName){
         for(SymbolTypeEnum s : SymbolTypeEnum.values()){
-            StargatePos p = new StargatePos(world.provider.getDimension(), pos, gateAddressMap.get(s), getSymbolType());
-            p.name = newName;
+            StargatePos p = gatePosMap.get(s);
+            p.setName(newName);
             getNetwork().addStargate(gateAddressMap.get(s), p);
-            markDirty();
+            gatePosMap.put(s, p);
         }
+        markDirty();
     }
 
     public void refresh() {
@@ -1797,6 +1801,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         for (StargateAddress stargateAddress : gateAddressMap.values()) {
             compound.setTag("address_" + stargateAddress.getSymbolType(), stargateAddress.serializeNBT());
+            compound.setTag("gatePos_" + stargateAddress.getSymbolType(), gatePosMap.get(stargateAddress.getSymbolType()).serializeNBT());
         }
 
         compound.setTag("dialedAddress", dialedAddress.serializeNBT());
@@ -1840,6 +1845,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         for (SymbolTypeEnum symbolType : SymbolTypeEnum.values()) {
             if (compound.hasKey("address_" + symbolType))
                 gateAddressMap.put(symbolType, new StargateAddress(compound.getCompoundTag("address_" + symbolType)));
+            if (compound.hasKey("gatePos_" + symbolType))
+                gatePosMap.put(symbolType, new StargatePos(symbolType, compound.getCompoundTag("gatePos_" + symbolType)));
         }
 
         dialedAddress.deserializeNBT(compound.getCompoundTag("dialedAddress"));

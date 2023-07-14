@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.stargate.teleportation.TeleportHelper;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 
@@ -18,10 +19,19 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
 	public int dimensionID;
 	public BlockPos gatePos;
 	public SymbolTypeEnum symbolType;
-	public SymbolTypeEnum gateSymbolType;
+	private SymbolTypeEnum gateSymbolType;
 	public List<SymbolInterface> additionalSymbols;
 
-	public String name = null;
+	private String name;
+
+	public void setName(String name){
+		this.name = name;
+		JSG.info("Changed name: " + name);
+	}
+
+	public String getName(){
+		return (name == null ? "" : name);
+	}
 	
 	public StargatePos(int dimensionID, BlockPos gatePos, StargateAddress stargateAddress, SymbolTypeEnum gateSymbolType) {
 		this.dimensionID = dimensionID;
@@ -80,7 +90,7 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
 		compound.setLong("pos", gatePos.toLong());
 		compound.setInteger("last0", additionalSymbols.get(0).getId());
 		compound.setInteger("last1", additionalSymbols.get(1).getId());
-		compound.setString("gateName", (name == null ? "" : name));
+		compound.setString("stargatePosName", (name == null ? "" : name));
 		if(gateSymbolType != null)
 			compound.setByte("gateSymbolType", (byte) gateSymbolType.id);
 		
@@ -93,9 +103,10 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
 		gatePos = BlockPos.fromLong(compound.getLong("pos"));
 		additionalSymbols.add(symbolType.valueOfSymbol(compound.getInteger("last0")));
 		additionalSymbols.add(symbolType.valueOfSymbol(compound.getInteger("last1")));
-		name = compound.getString("gateName");
+		name = compound.getString("stargatePosName");
 		if(compound.hasKey("gateSymbolType"))
 			gateSymbolType = SymbolTypeEnum.valueOf(compound.getByte("gateSymbolType"));
+		else gateSymbolType = symbolType;
 	}
 
 	public void toBytes(ByteBuf buf){
@@ -136,7 +147,7 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
 	
 	@Override
 	public String toString() {
-		return String.format("[dim=%d, pos=%s, add=%s]", dimensionID, gatePos.toString(), additionalSymbols.toString());
+		return String.format("[dim=%d, pos=%s, add=%s, name=%s]", dimensionID, gatePos.toString(), additionalSymbols.toString(), getName());
 	}
 
 	@Override
