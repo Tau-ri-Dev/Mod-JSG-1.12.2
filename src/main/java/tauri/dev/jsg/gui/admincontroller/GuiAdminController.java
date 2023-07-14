@@ -55,6 +55,8 @@ public class GuiAdminController extends JSGTexturedGui {
     public int guiRight;
     public int guiBottom;
 
+    public Notifier notifer = new Notifier();
+
     public GuiAdminController(EntityPlayer player, World world, BlockPos pos, StargateNetwork stargateNetwork) {
         super(512, 256, 512, 256);
         this.world = world;
@@ -121,7 +123,7 @@ public class GuiAdminController extends JSGTexturedGui {
         GlStateManager.enableAlpha();
         GlStateManager.color(1, 1, 1);
 
-        GlStateManager.translate(gateCenter[0], gateCenter[1], 0);
+        GlStateManager.translate(gateCenter[0], gateCenter[1], 1);
         GlStateManager.scale(-17, -17, -17);
 
         GlStateManager.pushMatrix();
@@ -184,15 +186,21 @@ public class GuiAdminController extends JSGTexturedGui {
         renderControlButtons();
         renderGateInfo();
 
+        notifer.render(this, 117, 4);
+
         // Render foreground
+        GlStateManager.pushMatrix();
         GlStateManager.enableDepth();
+        GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, 180);
         addressesSection.renderFg();
-        GlStateManager.translate(0, 0, -180);
+        GlStateManager.popMatrix();
 
         // render gate model
         // Should be last
         renderStargate();
+        GlStateManager.disableDepth();
+        GlStateManager.popMatrix();
     }
 
     @Override

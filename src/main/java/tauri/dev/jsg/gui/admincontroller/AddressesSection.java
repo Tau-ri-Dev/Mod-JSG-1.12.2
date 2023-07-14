@@ -15,7 +15,7 @@ import tauri.dev.jsg.packet.gui.entry.EntryActionToServer;
 import tauri.dev.jsg.stargate.network.StargateAddress;
 import tauri.dev.jsg.stargate.network.StargateAddressDynamic;
 import tauri.dev.jsg.stargate.network.StargatePos;
-import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
+import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.util.BlockHelpers;
 
 import java.util.*;
@@ -52,6 +52,16 @@ public class AddressesSection {
             e.address = a;
             entries.add(e);
         }
+
+        Map<StargatePos, Map<SymbolTypeEnum, StargateAddress>> notGeneratedMap = guiBase.stargateNetwork.getMapNotGenerated();
+        for (StargatePos pos : notGeneratedMap.keySet()) {
+            StargateEntry e = new StargateEntry();
+            e.pos = pos;
+            e.address = notGeneratedMap.get(pos).get(Objects.requireNonNull(guiBase.gateTile).getSymbolType());
+            e.notGenerated = true;
+            e.defaultName = "[NOT GENERATED GATE] ";
+            entries.add(e);
+        }
         sortEntries();
     }
 
@@ -70,8 +80,13 @@ public class AddressesSection {
             StargatePos p = e.pos;
             String name = (p.getName() != null && !p.getName().equalsIgnoreCase("") ? p.getName() : BlockHelpers.blockPosToBetterString(p.gatePos));
             final int finalIndex = index;
-            GuiTextField field = new JSGTextField(index, Minecraft.getMinecraft().fontRenderer, guiLeft, 0, 120, 20, name).setActionCallback(() -> renameEntry(finalIndex));
-            field.setText(name);
+            JSGTextField field = new JSGTextField(index, Minecraft.getMinecraft().fontRenderer, guiLeft, 0, 120, 20, e.defaultName + name);
+            field.setText(e.defaultName + name);
+            if (!e.notGenerated) {
+                field.setActionCallback(() -> renameEntry(finalIndex));
+            } else {
+                field.setEnabled(false);
+            }
             ArrowButton btn = (ArrowButton) new ArrowButton(index, guiLeft + 120 + 5, 0, ArrowButton.ArrowType.RIGHT).setFgColor(GuiUtils.getColorCode('a', true)).setActionCallback(() -> dialGate(finalIndex));
             if (e.pos.gatePos.equals(Objects.requireNonNull(guiBase.gateTile).getPos()) && e.pos.dimensionID == guiBase.gateTile.world().provider.getDimension()) {
                 btn.setEnabled(false);
@@ -87,13 +102,12 @@ public class AddressesSection {
     public void sortEntries() {
         ArrayList<StargateEntry> newList = new ArrayList<>();
         for (StargateEntry e : entries) {
-            if (e.pos.getName() != null && !e.pos.getName().equals(""))
+            if (!e.pos.getName().equals(""))
                 newList.add(e);
         }
         for (StargateEntry e : entries) {
-            if (e.pos.getName() != null && !e.pos.getName().equals(""))
-                continue;
-            newList.add(e);
+            if (e.pos.getName().equals(""))
+                newList.add(e);
         }
         entries = newList;
     }
@@ -103,14 +117,27 @@ public class AddressesSection {
             EnumHand hand = guiBase.getHand();
             StargateEntry entry = entries.get(index);
             StargatePos pos = entry.pos;
-            StargateAbstractBaseTile tile = pos.getTileEntity();
-            if (!tile.getStargateState().idle() && !tile.getStargateState().engaged()) return;
+            if (guiBase.gateTile == null || guiBase.imaginaryGateTile == null){
+                guiBase.notifer.setText("Linked gate is NULL!", Notifier.EnumAlertType.ERROR, 5);
+                return;
+            }
+            if (!guiBase.imaginaryGateTile.getStargateState().idle() && !guiBase.imaginaryGateTile.getStargateState().engaged()){
+                guiBase.notifer.setText("Stargate is busy!", Notifier.EnumAlertType.WARNING, 5);
+                return;
+            }
+
+            if(!guiBase.imaginaryGateTile.getStargateState().engaged())
+                guiBase.notifer.setText("Dialing gate " + (pos.getName().equals("") ? DimensionManager.getProviderType(pos.dimensionID).getName() : pos.getName()), Notifier.EnumAlertType.INFO, 5);
+            else
+                guiBase.notifer.setText("Closing gate...", Notifier.EnumAlertType.INFO, 5);
 
             int symbolsCount = Objects.requireNonNull(guiBase.gateTile).getMinimalSymbolsToDial(pos.getGateSymbolType(), pos);
 
             JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(hand, new StargateAddressDynamic(entry.address), symbolsCount, guiBase.gateTile.getPos()));
-        } catch (Exception e) {
-            JSG.error(e);
+        }
+        catch (Exception e){
+            JSG.error("Error ", e);
+            guiBase.notifer.setText("Unknown error! (" + e.getMessage() + ")", Notifier.EnumAlertType.ERROR, 5);
         }
     }
 
@@ -119,9 +146,10 @@ public class AddressesSection {
             EnumHand hand = guiBase.getHand();
             GuiTextField field = entriesTextFields.get(index);
             JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(hand, field.getText(), entries.get(index).pos));
-            //entries.get(index).pos.getTileEntity().renameStargatePos(field.getText());
+            guiBase.notifer.setText("Gate renamed to " + field.getText(), Notifier.EnumAlertType.INFO, 5);
         } catch (Exception e) {
             JSG.error(e);
+            guiBase.notifer.setText("Unknown error! (" + e.getMessage() + ")", Notifier.EnumAlertType.ERROR, 5);
         }
     }
 
@@ -156,16 +184,16 @@ public class AddressesSection {
         for (GuiTextField f : entriesTextFields) {
             StargateEntry e = entries.get(f.getId());
             if (!canNotRenderEntry(f.y) && GuiHelper.isPointInRegion(f.x, f.y, f.width, f.height, guiBase.mouseX, guiBase.mouseY)) {
-                guiBase.drawHoveringText(Arrays.asList(
+                Util.drawHoveringText(Arrays.asList(
                         "Type: " + e.pos.getGateSymbolType().toString(),
                         "Pos: " + e.pos.gatePos.toString(),
                         "Dim: " + e.pos.dimensionID + " (" + DimensionManager.getProviderType(e.pos.dimensionID).getName() + ")"
-                ), guiBase.mouseX, guiBase.mouseY);
+                ), guiBase.mouseX, guiBase.mouseY, guiBase.width, guiBase.height, -1, guiBase.mc.fontRenderer);
             }
         }
         for (ArrowButton f : dialButtons) {
             if (!canNotRenderEntry(f.y) && f.enabled && GuiHelper.isPointInRegion(f.x, f.y, f.width, f.height, guiBase.mouseX, guiBase.mouseY)) {
-                guiBase.drawHoveringText(Collections.singletonList("Dial this address"), guiBase.mouseX, guiBase.mouseY);
+                Util.drawHoveringText(Collections.singletonList("Dial this address"), guiBase.mouseX, guiBase.mouseY, guiBase.width, guiBase.height, -1, guiBase.mc.fontRenderer);
             }
         }
     }

@@ -265,6 +265,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             if (world.getTileEntity(beamerPos) != null)
                 ((BeamerTile) Objects.requireNonNull(world.getTileEntity(beamerPos))).gateClosed();
         }
+        dialingWithoutEnergy = false;
+        markDirty();
     }
 
     @Override
@@ -276,6 +278,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (codeSender != null) codeSender = null;
         updateChevronLight(0, false);
         sendRenderingUpdate(StargateRendererActionState.EnumGateAction.CLEAR_CHEVRONS, dialedAddress.size(), isFinalActive);
+
+        dialingWithoutEnergy = false;
+        markDirty();
     }
 
     public boolean isGateBurried() {
@@ -298,6 +303,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
 
         isFinalActive = false;
+        dialingWithoutEnergy = false;
+        markDirty();
 
         if (stargateState != EnumStargateState.INCOMING && !isIncoming) {
             updateChevronLight(0, false);
@@ -325,6 +332,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         super.openGate(targetGatePos, isInitiating);
         playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
         tryHeatUp(8);
+        dialingWithoutEnergy = false;
+        markDirty();
 
         this.isFinalActive = true;
     }
@@ -344,6 +353,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 removeTask(lastSpinFinished);
             failGate();
             if (!isIncoming) disconnectGate();
+            dialingWithoutEnergy = false;
             markDirty();
             resetTargetIncomingAnimation();
             return true;
@@ -357,7 +367,19 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         super.generateIncoming(entities, addressSize, delay);
     }
 
-    public abstract boolean dialAddress(StargateAddress address, int maxSymbols);
+    public boolean dialingWithoutEnergy = false;
+    public boolean dialAddress(StargateAddress address, int maxSymbols, boolean withoutEnergy){
+        dialingWithoutEnergy = withoutEnergy;
+        markDirty();
+        return true;
+    }
+
+    @Override
+    protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos) {
+        if(dialingWithoutEnergy)
+            return new EnergyRequiredToOperate(0, 0);
+        return super.getEnergyRequiredToDial(targetGatePos);
+    }
 
     public abstract void addSymbolToAddressDHD(SymbolInterface symbol);
 

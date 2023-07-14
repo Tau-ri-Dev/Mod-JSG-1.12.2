@@ -709,6 +709,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * Called either on pressing BRB on open gate or close command from a computer.
      */
     protected void closeGate(StargateClosedReasonEnum reason) {
+        JSG.error("Test ", new Exception("Test"));
         stargateState = EnumStargateState.UNSTABLE;
         energySecondsToClose = 0;
         resetOpenedSince();
@@ -931,6 +932,13 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         return false;
     }
 
+    public float getSecondsToClose(int energyStored, int morePower){
+        if(keepAliveEnergyPerTick <= 0){
+            return JSGConfig.Stargate.power.instabilitySeconds + 5;
+        }
+        return (energyStored / (float) (keepAliveEnergyPerTick + morePower + shieldKeepAlive) / 20f);
+    }
+
     @Override
     public void update() {
         // Scheduled tasks
@@ -1013,11 +1021,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                     targetGatePos = getNetwork().getStargate(this.getStargateAddress(SymbolTypeEnum.MILKYWAY));
                     attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
                 }
-                int energyStored = getEnergyStorage().getEnergyStored();
 
                 // Max Open Time
                 int morePower = doTimeLimitFunc();
-                energySecondsToClose = energyStored / (float) (keepAliveEnergyPerTick + morePower + shieldKeepAlive) / 20f;
+                energySecondsToClose = getSecondsToClose(getEnergyStorage().getEnergyStored(), morePower);
 
                 if (energySecondsToClose >= 1) {
 

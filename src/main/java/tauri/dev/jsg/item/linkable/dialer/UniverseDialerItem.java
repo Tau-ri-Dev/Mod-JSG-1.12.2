@@ -419,7 +419,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                 int symbolsNeeded = (sameType ? (sameDim ? 6 : 7) : 8);
                                 maxSymbols = Math.min(symbolsNeeded, maxSymbols);
                             }*/
-                            gateTile.dialAddress(address, maxSymbols);
+                            gateTile.dialAddress(address, maxSymbols, false);
                             player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.dial_start"), true);
                             if(player instanceof EntityPlayerMP)
                                 JSGSoundHelper.playSoundToPlayer(((EntityPlayerMP) player), SoundEventEnum.UNIVERSE_DIALER_START_DIAL, player.getPosition());

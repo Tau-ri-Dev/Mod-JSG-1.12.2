@@ -2,6 +2,7 @@ package tauri.dev.jsg.worldgen.structures;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
@@ -33,10 +34,12 @@ import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.power.general.LargeEnergyStorage;
 import tauri.dev.jsg.power.zpm.IEnergyStorageZPM;
 import tauri.dev.jsg.power.zpm.ZPMItemEnergyStorage;
 import tauri.dev.jsg.stargate.network.StargateAddress;
+import tauri.dev.jsg.stargate.network.StargateNetwork;
 import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.tileentity.dialhomedevice.DHDAbstractTile;
@@ -313,11 +316,15 @@ public class JSGStructure extends WorldGenerator {
     private static void generateLoot(World world, BlockPos chestPos, Random random, String lootTableName) {
         TileEntity tile = world.getTileEntity(chestPos);
         if (tile instanceof TileEntityChest) {
+            StargateNetwork sgn = StargateNetwork.get(world);
+
             TileEntityChest chest = (TileEntityChest) tile;
             chest.setLootTable(new ResourceLocation(JSG.MOD_ID, lootTableName), random.nextLong());
+            chest.fillWithLoot(null);
+            IItemHandler handler = chest.getSingleChestHandler();
+
+            // Set ZPM energy
             if (lootTableName.equalsIgnoreCase("loot_obelisk")) {
-                chest.fillWithLoot(null);
-                IItemHandler handler = chest.getSingleChestHandler();
                 for (int i = 0; i < handler.getSlots(); i++) {
                     ItemStack stack = handler.getStackInSlot(i);
                     if (!stack.isEmpty()) {
@@ -327,6 +334,28 @@ public class JSGStructure extends WorldGenerator {
                             energyCasted.setEnergyStored((long) (energyCasted.getMaxEnergyStored() * (Math.random() * 0.7f) + 0.1f));
                         }
                     }
+                }
+            }
+
+            // Set sus page address
+            for (int i = 0; i < handler.getSlots(); i++) {
+                ItemStack stack = handler.getStackInSlot(i);
+                if (!stack.isEmpty() && stack.getItem() == JSGItems.PAGE_NOTEBOOK_ITEM && stack.getMetadata() == 1) {
+                    Map.Entry<StargatePos, Map<SymbolTypeEnum, StargateAddress>> gotAddressMap = sgn.getRandomNotGeneratedStargate();
+                    if(gotAddressMap == null){
+                        // Got no stargate -> remove page from the chest
+                        stack.setCount(0);
+                        continue;
+                    }
+                    SymbolTypeEnum symbolTypeEnum = SymbolTypeEnum.getRandom();
+                    StargateAddress address = gotAddressMap.getValue().get(symbolTypeEnum);
+                    StargatePos pos = gotAddressMap.getKey();
+
+                    String biome = ((pos.getWorld() == null || pos.gatePos == null) ? "plains" : PageNotebookItem.getRegistryPathFromWorld(pos.getWorld(), pos.gatePos));
+                    int origin = StargateClassicBaseTile.getOriginId(null, pos.dimensionID, -1);
+
+                    NBTTagCompound sgCompound = PageNotebookItem.getCompoundFromAddress(address, true, true, true, biome, origin);
+                    stack.setTagCompound(sgCompound);
                 }
             }
         }

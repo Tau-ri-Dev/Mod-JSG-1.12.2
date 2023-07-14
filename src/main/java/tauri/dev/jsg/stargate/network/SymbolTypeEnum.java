@@ -3,6 +3,7 @@ package tauri.dev.jsg.stargate.network;
 import tauri.dev.jsg.util.EnumKeyInterface;
 import tauri.dev.jsg.util.EnumKeyMap;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
 
@@ -263,5 +264,10 @@ public enum SymbolTypeEnum implements EnumKeyInterface<Integer> {
 
   public static SymbolTypeEnum valueOf(int id) {
     return ID_MAP.valueOf(id);
+  }
+
+  @Nonnull
+  public static SymbolTypeEnum getRandom(){
+    return valueOf((int) (Math.random() * values().length));
   }
 }

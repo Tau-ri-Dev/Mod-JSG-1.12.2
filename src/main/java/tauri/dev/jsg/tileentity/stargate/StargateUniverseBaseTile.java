@@ -159,9 +159,10 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
      * @param address     - address to dial
      * @param symbolCount - symbols to engage
      */
-    public boolean dialAddress(StargateAddress address, int symbolCount) {
+    public boolean dialAddress(StargateAddress address, int symbolCount, boolean withoutEnergy) {
         if (!canContinue()) return false;
         if (!stargateState.idle()) return false;
+        super.dialAddress(address, symbolCount, withoutEnergy);
 
         this.addressToDial = address;
         this.symbolsToDialCount = symbolCount;

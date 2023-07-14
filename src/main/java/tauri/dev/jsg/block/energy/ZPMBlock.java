@@ -22,6 +22,7 @@ import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.item.energy.ZPMItemBlock;
 import tauri.dev.jsg.power.zpm.IEnergyStorageZPM;
 import tauri.dev.jsg.power.zpm.ZPMEnergyStorage;
+import tauri.dev.jsg.power.zpm.ZPMItemEnergyStorage;
 import tauri.dev.jsg.renderer.zpm.ZPMRenderer;
 import tauri.dev.jsg.tileentity.energy.ZPMTile;
 
@@ -69,7 +70,7 @@ public class ZPMBlock extends JSGAbstractCustomItemBlock {
         ZPMEnergyStorage capacitorEnergyStorage = (ZPMEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergyZPM.ENERGY, null);
 
         ItemStack stack = new ItemStack(this);
-        ((ZPMEnergyStorage) stack.getCapability(CapabilityEnergyZPM.ENERGY, null)).setEnergyStored(capacitorEnergyStorage.getEnergyStored());
+        ((ZPMItemEnergyStorage) stack.getCapability(CapabilityEnergyZPM.ENERGY, null)).setEnergyStored(capacitorEnergyStorage.getEnergyStored());
 
         return Collections.singletonList(stack);
     }

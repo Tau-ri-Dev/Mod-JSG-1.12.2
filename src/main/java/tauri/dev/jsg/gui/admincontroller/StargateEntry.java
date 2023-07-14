@@ -6,4 +6,7 @@ import tauri.dev.jsg.stargate.network.StargatePos;
 public class StargateEntry {
     public StargatePos pos;
     public StargateAddress address;
+
+    public boolean notGenerated = false;
+    public String defaultName = "";
 }

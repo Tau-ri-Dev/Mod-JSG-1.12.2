@@ -1,16 +1,5 @@
 package tauri.dev.jsg.item.notebook;
 
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.item.renderer.JSGFontRenderer;
-import tauri.dev.jsg.item.renderer.ItemRenderHelper;
-import tauri.dev.jsg.loader.ElementEnum;
-import tauri.dev.jsg.loader.texture.TextureLoader;
-import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
-import tauri.dev.jsg.stargate.network.StargateAddress;
-import tauri.dev.jsg.stargate.network.SymbolInterface;
-import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
-import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
-import tauri.dev.jsg.transportrings.TransportRingsAddress;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -18,6 +7,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.item.renderer.ItemRenderHelper;
+import tauri.dev.jsg.item.renderer.JSGFontRenderer;
+import tauri.dev.jsg.loader.texture.TextureLoader;
+import tauri.dev.jsg.stargate.network.StargateAddress;
+import tauri.dev.jsg.stargate.network.SymbolInterface;
+import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
+import tauri.dev.jsg.transportrings.TransportRingsAddress;
 
 import java.util.Objects;
 
@@ -84,11 +82,16 @@ public class PageRenderer {
 			StargateAddress stargateAddress = new StargateAddress(compound.getCompoundTag("address"));
 			int maxSymbols = symbolType.getMaxSymbolsDisplay(compound.getBoolean("hasUpgrade"));
 
+			boolean hideLastSymbol = compound.hasKey("hideLastSymbol") && compound.getBoolean("hideLastSymbol");
+			boolean hideOrigin = compound.hasKey("hideOrigin") && compound.getBoolean("hideOrigin");
+
 			int originId = 0;
 			if(compound.hasKey("originId"))
 				originId = compound.getInteger("originId");
 
 			for (int i=0; i<maxSymbols; i++) {
+				if(i == 8 && hideLastSymbol) continue;
+
 				float x = 0.21f*(i%3);
 				float y = 0.20f*((int) Math.floor((float) i/3)) + 0.14f;
 
@@ -101,15 +104,17 @@ public class PageRenderer {
 				}
 			}
 
-			float x = 0.21f*(10%3);
-			float y = 0.20f*((int) Math.floor((float) 10/3)) + 0.14f;
-			float w = 0.2f;
-			if (symbolType == SymbolTypeEnum.UNIVERSE) {
-				w = 0.095f;
-				x += 0.04f;
-			}
+			if(!hideOrigin) {
+				float x = 0.21f * (10 % 3);
+				float y = 0.20f * ((int) Math.floor((float) 10 / 3)) + 0.14f;
+				float w = 0.2f;
+				if (symbolType == SymbolTypeEnum.UNIVERSE) {
+					w = 0.095f;
+					x += 0.04f;
+				}
 
-			renderSymbol(x, y, w, 0.2f, Objects.requireNonNull(symbolType.getOrigin()), originId);
+				renderSymbol(x, y, w, 0.2f, Objects.requireNonNull(symbolType.getOrigin()), originId);
+			}
 		}
 	    else{
 	    	// render tr address

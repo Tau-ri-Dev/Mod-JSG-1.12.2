@@ -196,7 +196,7 @@ public class EntryActionToServer implements IMessage {
                             StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
                             if (gateTile == null) break;
 
-                            if (gateTile.dialAddress(new StargateAddress(selectedCompound), maxSymbols))
+                            if (gateTile.dialAddress(new StargateAddress(selectedCompound), maxSymbols, false))
                                 player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.dial_start"), true);
 
                             break;
@@ -240,7 +240,7 @@ public class EntryActionToServer implements IMessage {
                                 gateTile1.attemptClose(StargateClosedReasonEnum.REQUESTED);
                                 break;
                             }
-                            if (gateTile1.dialAddress(message.addressToDial, message.maxSymbols - 1))
+                            if (gateTile1.dialAddress(message.addressToDial, message.maxSymbols - 1, true))
                                 player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.dial_start"), true);
                             else
                                 player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.gate_busy"), true);

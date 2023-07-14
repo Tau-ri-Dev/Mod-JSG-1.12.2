@@ -1,14 +1,5 @@
 package tauri.dev.jsg.item.notebook;
 
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
-import tauri.dev.jsg.item.renderer.CustomModel;
-import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
-import tauri.dev.jsg.stargate.network.StargateAddress;
-import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
-import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
-import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
-import tauri.dev.jsg.transportrings.TransportRingsAddress;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -24,10 +15,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
+import tauri.dev.jsg.item.renderer.CustomModel;
+import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
+import tauri.dev.jsg.stargate.network.StargateAddress;
+import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
+import tauri.dev.jsg.transportrings.TransportRingsAddress;
 
 import java.util.List;
-
-import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL;
 
 public class PageNotebookItem extends Item implements CustomModelItemInterface {
 
@@ -139,12 +136,17 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 	}
 
 	public static NBTTagCompound getCompoundFromAddress(StargateAddress address, boolean hasUpgrade, String registryPath, int originId) {
+		return getCompoundFromAddress(address, hasUpgrade, false, false, registryPath, originId);
+	}
+	public static NBTTagCompound getCompoundFromAddress(StargateAddress address, boolean hasUpgrade, boolean hideLastSymbol, boolean hideOrigin, String registryPath, int originId) {
 		NBTTagCompound compound = new NBTTagCompound();
 		if(address != null) {
 			if (address.getSymbolType() != null) compound.setInteger("symbolType", address.getSymbolType().id);
 			if (address.serializeNBT() != null) compound.setTag("address", address.serializeNBT());
 		}
 		compound.setBoolean("hasUpgrade", hasUpgrade);
+		compound.setBoolean("hideLastSymbol", hideLastSymbol);
+		compound.setBoolean("hideOrigin", hideOrigin);
 		compound.setInteger("color", PageNotebookItem.getColorForBiome(registryPath));
 		compound.setInteger("originId", originId);
 		
