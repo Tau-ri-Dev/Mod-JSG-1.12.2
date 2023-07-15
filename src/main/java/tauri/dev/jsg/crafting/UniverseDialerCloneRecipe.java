@@ -84,6 +84,6 @@ public class UniverseDialerCloneRecipe extends Impl<IRecipe> implements IRecipe 
 
 	@Override
 	public ItemStack getRecipeOutput() {
-		return ItemStack.EMPTY;
+		return new ItemStack(JSGItems.UNIVERSE_DIALER, 2);
 	}
 }

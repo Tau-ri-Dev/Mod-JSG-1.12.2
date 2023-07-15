@@ -90,7 +90,7 @@ public class PageRenderer {
 				originId = compound.getInteger("originId");
 
 			for (int i=0; i<maxSymbols; i++) {
-				if(i == 8 && hideLastSymbol) continue;
+				if(i == 7 && hideLastSymbol) continue;
 
 				float x = 0.21f*(i%3);
 				float y = 0.20f*((int) Math.floor((float) i/3)) + 0.14f;

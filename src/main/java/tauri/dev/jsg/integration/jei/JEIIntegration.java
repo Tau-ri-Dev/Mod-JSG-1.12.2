@@ -17,10 +17,7 @@ import tauri.dev.jsg.integration.jei.category.JEIAssemblerRecipeCategory;
 import tauri.dev.jsg.integration.jei.category.JEIChamberRecipeCategory;
 import tauri.dev.jsg.integration.jei.category.JEIOreWashingRecipeCategory;
 import tauri.dev.jsg.integration.jei.category.JEIPCBFabricatorRecipeCategory;
-import tauri.dev.jsg.integration.jei.recipe.JEINotebookCloneRecipe;
-import tauri.dev.jsg.integration.jei.recipe.JEINotebookRecipe;
-import tauri.dev.jsg.integration.jei.recipe.JEIUniverseDialerCloneRecipe;
-import tauri.dev.jsg.integration.jei.recipe.JEIUniverseDialerRepairRecipe;
+import tauri.dev.jsg.integration.jei.recipe.*;
 import tauri.dev.jsg.item.JSGIconItem;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.machine.assembler.AssemblerRecipe;
@@ -38,6 +35,7 @@ import java.util.Collections;
 import java.util.List;
 
 @JEIPlugin
+@SuppressWarnings("unused")
 public final class JEIIntegration implements IModPlugin {
     public JEIIntegration() {
     }
@@ -47,7 +45,7 @@ public final class JEIIntegration implements IModPlugin {
         // Hide things in JEI
         registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(JSGBlocks.INVISIBLE_BLOCK, 1, OreDictionary.WILDCARD_VALUE));
         registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(JSGBlocks.IRIS_BLOCK, 1, OreDictionary.WILDCARD_VALUE));
-        registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(JSGItems.NOTEBOOK_ITEM, 1));
+        //registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(JSGItems.NOTEBOOK_ITEM, 1));
         registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(JSGBlocks.ORE_NAQUADAH_BLOCK_STONE, 1));
 
         // Tab handling
@@ -65,6 +63,7 @@ public final class JEIIntegration implements IModPlugin {
         recipes.add(new JEIUniverseDialerCloneRecipe());
         recipes.add(new JEINotebookCloneRecipe());
         recipes.add(new JEIUniverseDialerRepairRecipe());
+        recipes.add(new JEIDialerPageRecipe());
 
         registry.addRecipes(recipes, VanillaRecipeCategoryUid.CRAFTING);
 

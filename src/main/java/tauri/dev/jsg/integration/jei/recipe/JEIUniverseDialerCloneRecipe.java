@@ -29,24 +29,10 @@ public class JEIUniverseDialerCloneRecipe implements IRecipeWrapper {
     return stack;
   }
 
-  static ItemStack getNotebookWithPages(int quantity, ItemStack... pages) {
-    ItemStack notebook = new ItemStack(JSGItems.NOTEBOOK_ITEM, quantity);
-    NBTTagCompound compound = new NBTTagCompound();
-    NBTTagList list = new NBTTagList();
-
-    compound.setTag("addressList", list);
-    notebook.setTagCompound(compound);
-
-    for (ItemStack stack : pages) {
-      list.appendTag(stack.getTagCompound());
-    }
-
-    return notebook;
-  }
-
   static final ItemStack DIALER1 = getDialerWithAddresses(1, "Plains");
   static final ItemStack DIALER2 = getDialerWithAddresses(1, "Tundra");
   static final ItemStack DIALER_OUT = getDialerWithAddresses(2, "Plains", "Tundra");
+  static final ItemStack DIALER_OUT_PAGE = getDialerWithAddresses(1, "Plains", "End");
 
   @Override
   public void getIngredients(IIngredients ingredients) {

@@ -93,7 +93,7 @@ public class NotebookRecipe extends Impl<IRecipe> implements IRecipe {
 
 	@Override
 	public ItemStack getRecipeOutput() {
-		return ItemStack.EMPTY;
+		return new ItemStack(JSGItems.NOTEBOOK_ITEM);
 	}
 
 	public static boolean tagListContains(NBTTagList tagList, NBTTagCompound compound) {

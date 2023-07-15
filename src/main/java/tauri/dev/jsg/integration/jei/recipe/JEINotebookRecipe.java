@@ -19,6 +19,9 @@ import java.util.Random;
 public class JEINotebookRecipe implements IRecipeWrapper {
 
   static ItemStack getRandomPageWithNameColor(String name, String biome) {
+    return getRandomPageWithNameColor(name, biome, SymbolTypeEnum.MILKYWAY);
+  }
+  static ItemStack getRandomPageWithNameColor(String name, String biome, SymbolTypeEnum symbolType) {
     ItemStack pageStack = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 1, 1);
     NBTTagCompound compound = new NBTTagCompound();
     pageStack.setTagCompound(compound);
@@ -26,7 +29,7 @@ public class JEINotebookRecipe implements IRecipeWrapper {
     compound.setInteger("color", PageNotebookItem.getColorForBiome(biome));
     PageNotebookItem.setName(compound, name);
 
-    StargateAddress address = new StargateAddress(SymbolTypeEnum.MILKYWAY).generate(new Random());
+    StargateAddress address = new StargateAddress(symbolType).generate(new Random());
     compound.setInteger("symbolType", address.getSymbolType().id);
     compound.setTag("address", address.serializeNBT());
     compound.setBoolean("hasUpgrade", false);
@@ -51,12 +54,13 @@ public class JEINotebookRecipe implements IRecipeWrapper {
 
   static final ItemStack PAGE1 = getRandomPageWithNameColor("Plains", "plains");
   static final ItemStack PAGE2 = getRandomPageWithNameColor("Tundra", "ice");
+  static final ItemStack PAGE3 = getRandomPageWithNameColor("End", "end", SymbolTypeEnum.UNIVERSE);
 
   static final ItemStack NOTEBOOK = getNotebookWithPages(1, PAGE1, PAGE2);
   static final ItemStack NOTEBOOK2 = getNotebookWithPages(2, PAGE1, PAGE2);
 
-  private List<ItemStack> inputs = new ArrayList<>();
-  private List<ItemStack> outputs = new ArrayList<>();
+  private final List<ItemStack> inputs = new ArrayList<>();
+  private final List<ItemStack> outputs = new ArrayList<>();
 
   JEINotebookRecipe(NotebookRecipeVariantEnum variant) {
     switch (variant) {

@@ -87,8 +87,10 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 					SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf(compound.getInteger("symbolType"));
 					StargateAddress stargateAddress = new StargateAddress(compound.getCompoundTag("address"));
 					int maxSymbols = symbolType.getMaxSymbolsDisplay(compound.getBoolean("hasUpgrade"));
+					boolean hideLastSymbol = compound.hasKey("hideLastSymbol") && compound.getBoolean("hideLastSymbol");
 
 					for (int i = 0; i < maxSymbols; i++) {
+						if(i == 7 && hideLastSymbol) continue;
 						tooltip.add(TextFormatting.ITALIC + "" + (i > 5 ? TextFormatting.DARK_PURPLE : TextFormatting.AQUA) + stargateAddress.get(i).localize());
 					}
 				}
