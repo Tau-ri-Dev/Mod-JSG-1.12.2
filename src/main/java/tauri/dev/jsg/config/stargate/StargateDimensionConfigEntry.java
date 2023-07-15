@@ -54,6 +54,9 @@ public class StargateDimensionConfigEntry {
         if (other.groups == null)
             return false;
 
+        if(this.groups.size() == 0 || other.groups.size() == 0)
+            return false;
+
         for (int i = 0; i < groups.size(); i++) {
             if (other.groups.contains(groups.get(i)))
                 return true;
