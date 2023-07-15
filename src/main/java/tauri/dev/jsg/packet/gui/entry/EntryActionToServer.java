@@ -20,6 +20,7 @@ import tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode;
 import tauri.dev.jsg.item.notebook.NotebookItem;
 import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
 import tauri.dev.jsg.stargate.network.*;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
 
@@ -61,6 +62,15 @@ public class EntryActionToServer implements IMessage {
         this.targetGatePos = targetGate;
         this.addressToDial = null;
         this.linkedGate = null;
+    }
+
+    public EntryActionToServer(EntryActionEnum action, BlockPos linkedGate) {
+        this.hand = EnumHand.MAIN_HAND;
+        this.dataType = EntryDataTypeEnum.ADMIN_CONTROLLER;
+        this.action = action;
+        this.index = -1;
+        this.name = "";
+        this.linkedGate = linkedGate;
     }
 
 
@@ -229,7 +239,7 @@ public class EntryActionToServer implements IMessage {
                 } else if (message.dataType.admin()) {
                     switch (message.action) {
                         case RENAME:
-                            StargateClassicBaseTile gateTile = (StargateClassicBaseTile) message.targetGatePos.getTileEntity();
+                            StargateAbstractBaseTile gateTile = message.targetGatePos.getTileEntity();
                             if (gateTile == null) return;
                             gateTile.renameStargatePos(message.name);
                             break;
@@ -240,11 +250,21 @@ public class EntryActionToServer implements IMessage {
                                 gateTile1.attemptClose(StargateClosedReasonEnum.REQUESTED);
                                 break;
                             }
-                            if (gateTile1.dialAddress(message.addressToDial, message.maxSymbols - 1, true))
-                                player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.dial_start"), true);
-                            else
-                                player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.gate_busy"), true);
-
+                            gateTile1.dialAddress(message.addressToDial, message.maxSymbols - 1, true);
+                            break;
+                        case ABORT:
+                            StargateClassicBaseTile gateTile2 = (StargateClassicBaseTile) world.getTileEntity(message.linkedGate);
+                            if(gateTile2 == null) return;
+                            if(gateTile2.getStargateState().dialing())
+                                gateTile2.abortDialingSequence();
+                            break;
+                        case TOGGLE_IRIS:
+                            StargateClassicBaseTile gateTile3 = (StargateClassicBaseTile) world.getTileEntity(message.linkedGate);
+                            if(gateTile3 == null) return;
+                            if(gateTile3.hasIris())
+                                gateTile3.toggleIris();
+                            break;
+                        default:
                             break;
                     }
                 }

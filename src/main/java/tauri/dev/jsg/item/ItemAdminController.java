@@ -10,11 +10,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.packet.AdminControllerGuiOpenToClient;
 import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.stargate.teleportation.TeleportHelper;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicMemberTile;
 import tauri.dev.jsg.util.RayTraceHelper;
@@ -39,20 +41,19 @@ public class ItemAdminController extends Item {
     @Override
     public void onUpdate(@Nonnull ItemStack stack, @Nonnull World world, @Nonnull Entity entity, int itemSlot, boolean isSelected) {
         if (!world.isRemote) {
-            if(world.getTotalWorldTime() % 5 != 0) return;
-            if(!(entity instanceof EntityPlayerMP)) return;
+            if (world.getTotalWorldTime() % 5 != 0) return;
+            if (!(entity instanceof EntityPlayerMP)) return;
 
-            TileEntity te = RayTraceHelper.rayTraceTileEntity((EntityPlayerMP) entity, 20);
+            NBTTagCompound compound = stack.getTagCompound();
+            if (compound == null) return;
 
-            if (te instanceof StargateClassicMemberTile) {
-                te = ((StargateClassicMemberTile) te).getBaseTile(world);
-            }
+            BlockPos tePos = BlockPos.fromLong(compound.getLong("linkedGatePos"));
+            World w = TeleportHelper.getWorld(compound.getInteger("linkedGateDim"));
+            if(w == null) return;
+            TileEntity te = w.getTileEntity(tePos);
 
             if (!(te instanceof StargateClassicBaseTile)) return;
             StargateClassicBaseTile gateTile = (StargateClassicBaseTile) te;
-
-            NBTTagCompound compound = stack.getTagCompound();
-            if(compound == null) compound = new NBTTagCompound();
 
             compound.setTag("gateNBT", gateTile.writeToNBT(new NBTTagCompound()));
 
@@ -71,6 +72,13 @@ public class ItemAdminController extends Item {
             }
 
             if (te instanceof StargateClassicBaseTile && player instanceof EntityPlayerMP) {
+                ItemStack stack = player.getHeldItem(hand);
+                NBTTagCompound compound = stack.getTagCompound();
+                if (compound == null) compound = new NBTTagCompound();
+
+                compound.setLong("linkedGatePos", te.getPos().toLong());
+                compound.setInteger("linkedGateDim", te.getWorld().provider.getDimension());
+
                 JSGPacketHandler.INSTANCE.sendTo(new AdminControllerGuiOpenToClient(te.getPos(), ((StargateClassicBaseTile) te).getNetwork()), (EntityPlayerMP) player);
             }
         }

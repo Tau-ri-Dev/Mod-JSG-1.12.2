@@ -1185,6 +1185,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     public String getOpenedSecondsToDisplayAsMinutes() {
         long openedSeconds = getOpenedSeconds();
+        if(openedSeconds < 1) return "Closed!";
         int minutes = ((int) Math.floor((double) openedSeconds / 60));
         int seconds = ((int) (openedSeconds - (60 * minutes)));
         String secondsString = ((seconds < 10) ? "0" + seconds : "" + seconds);
@@ -1741,6 +1742,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     protected abstract SmallEnergyStorage getEnergyStorage();
+
+    public int getEnergyStored(){
+        return getEnergyStorage().getEnergyStored();
+    }
 
     protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos) {
         BlockPos sPos = pos;

@@ -16,7 +16,9 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.gui.JSGTexturedGui;
+import tauri.dev.jsg.gui.base.JSGButton;
 import tauri.dev.jsg.gui.element.ArrowButton;
 import tauri.dev.jsg.gui.element.GuiHelper;
 import tauri.dev.jsg.gui.mainmenu.GuiCustomMainMenu;
@@ -30,6 +32,7 @@ import tauri.dev.jsg.stargate.network.SymbolInterface;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.util.JSGTextureLightningHelper;
+import tauri.dev.jsg.util.math.TemperatureHelper;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -157,7 +160,10 @@ public class GuiAdminController extends JSGTexturedGui {
     public void initGui() {
         super.initGui();
         center = getCenterPos(0, 0);
-        gateCenter = center;
+        gateCenter = new int[]{
+                center[0],
+                center[1] + OFFSET/2
+        };
 
         guiRight = xSize;
         guiBottom = ySize;
@@ -166,7 +172,7 @@ public class GuiAdminController extends JSGTexturedGui {
         addressesSection.guiTop = OFFSET;
         addressesSection.width = 145 + (AddressesSection.OFFSET * 2);
         addressesSection.height = ySize - OFFSET * 2;
-        addressesSection.generateAddressEntriesBoxes(true);
+        addressesSection.init(true);
     }
 
     public static final int OFFSET = 15;
@@ -180,7 +186,7 @@ public class GuiAdminController extends JSGTexturedGui {
 
         // render background
         addressesSection.generateAddressEntries();
-        addressesSection.generateAddressEntriesBoxes(false);
+        addressesSection.init(false);
         addressesSection.renderEntries();
 
         renderControlButtons();
@@ -217,7 +223,13 @@ public class GuiAdminController extends JSGTexturedGui {
             field.mouseClicked(this.mouseX, this.mouseY, mouseButton);
         }
         for (ArrowButton button : addressesSection.dialButtons) {
-            if (GuiHelper.isPointInRegion(button.x, button.y, button.width, button.height, this.mouseX, this.mouseY)) {
+            if (button.enabled && GuiHelper.isPointInRegion(button.x, button.y, button.width, button.height, this.mouseX, this.mouseY)) {
+                button.performAction();
+                button.playPressSound(Minecraft.getMinecraft().getSoundHandler());
+            }
+        }
+        for(JSGButton button : addressesSection.optionButtons){
+            if (button.enabled && GuiHelper.isPointInRegion(button.x, button.y, button.width, button.height, this.mouseX, this.mouseY)) {
                 button.performAction();
                 button.playPressSound(Minecraft.getMinecraft().getSoundHandler());
             }
@@ -277,6 +289,26 @@ public class GuiAdminController extends JSGTexturedGui {
             renderSymbol(x, y, width, height, symbol, originId);
         }
         // ----------------------
+
+        // Render info
+        String[] s = new String[]{
+                "Gate state: " + imaginaryGateTile.getStargateState(),
+                "Gate temp: " + JSGConfig.General.visual.temperatureUnit.getTemperatureToDisplay(TemperatureHelper.asKelvins(TemperatureHelper.asCelsius(imaginaryGateTile.gateHeat).toKelvins()), 0),
+                "Iris temp: " + JSGConfig.General.visual.temperatureUnit.getTemperatureToDisplay(TemperatureHelper.asKelvins(TemperatureHelper.asCelsius(imaginaryGateTile.irisHeat).toKelvins()), 0),
+                "Installed capacitors: " + (imaginaryGateTile.getPowerTier() - 1),
+                "Energy: " + String.format("%.0f", (float) imaginaryGateTile.getEnergyStored()) + "RF",
+                "Time opened: " + imaginaryGateTile.getOpenedSecondsToDisplayAsMinutes(),
+                "Seconds to close: " + imaginaryGateTile.getEnergySecondsToClose()
+        };
+
+        int y = OFFSET + 23;
+        for(String line : s){
+            width = fontRenderer.getStringWidth(line);
+            int lineX = guiRight - OFFSET - width - 40;
+            fontRenderer.drawString(line, lineX, y, 0xffffff, true);
+            y += 10;
+        }
+        // ----------------------
     }
 
     public static void renderSymbol(int x, int y, int w, int h, SymbolInterface symbol, int originId) {
@@ -296,5 +328,13 @@ public class GuiAdminController extends JSGTexturedGui {
         GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
 
         GlStateManager.popMatrix();
+    }
+
+    @Override
+    public void onGuiClosed() {
+        for(GuiTextField f : addressesSection.entriesTextFields){
+            f.setFocused(false);
+        }
+        super.onGuiClosed();
     }
 }

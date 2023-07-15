@@ -5,11 +5,11 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 public abstract class JSGTexturedGui extends GuiScreen {
-    protected int guiLeft;
-    protected int guiTop;
+    public int guiLeft;
+    public int guiTop;
 
-    protected final int xSize;
-    protected final int ySize;
+    public final int xSize;
+    public final int ySize;
 
     protected final int texW;
     protected final int texH;

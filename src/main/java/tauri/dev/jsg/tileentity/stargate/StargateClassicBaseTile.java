@@ -1167,9 +1167,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         compound.setByte("irisState", irisState.id);
         compound.setInteger("irisCode", irisCode);
         compound.setByte("irisMode", irisMode.id);
+        compound.setByte("irisType", irisType.id);
         if (codeSender != null && !world.isRemote) {
             compound.setTag("codeSender", codeSender.serializeNBT());
         }
+
+        compound.setInteger("powerTier", currentPowerTier);
 
         compound.setInteger("incomingLastChevronLightUp", incomingLastChevronLightUp);
         compound.setInteger("incomingPeriod", incomingPeriod);
@@ -1220,10 +1223,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         irisState = EnumIrisState.getValue(compound.getByte("irisState"));
         irisCode = compound.getInteger("irisCode") != 0 ? compound.getInteger("irisCode") : -1;
         irisMode = EnumIrisMode.getValue(compound.getByte("irisMode"));
+        irisType = EnumIrisType.byId(compound.getByte("irisType"));
         if (compound.hasKey("codeSender") && !world.isRemote) {
             NBTTagCompound nbt = compound.getCompoundTag("codeSender");
             codeSender = codeSenderFromNBT(nbt);
         }
+
+        currentPowerTier = compound.getInteger("powerTier");
 
         incomingPeriod = compound.getInteger("incomingPeriod");
         incomingLastChevronLightUp = compound.getInteger("incomingLastChevronLightUp");
@@ -2161,6 +2167,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
         switch (irisState) {
             case OPENED:
+            case OPENING:
                 if (hasShieldIris() && getEnergyStorage().getEnergyStored() < shieldKeepAlive * 3)
                     return false;
 
@@ -2172,6 +2179,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 if (targetGatePos != null) executeTask(EnumScheduledTask.STARGATE_HORIZON_LIGHT_BLOCK, null);
                 break;
             case CLOSED:
+            case CLOSING:
                 irisState = EnumIrisState.OPENING;
                 setIrisBlocks(false);
                 sendRenderingUpdate(StargateRendererActionState.EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState, irisAnimation);
@@ -2328,6 +2336,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Override
     protected SmallEnergyStorage getEnergyStorage() {
         return energyStorage;
+    }
+
+    public int getEnergyStored(){
+        return getEnergyStorage().getEnergyStored();
     }
 
     private int currentPowerTier = 1;
