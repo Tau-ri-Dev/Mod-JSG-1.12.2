@@ -307,6 +307,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
      */
     @Override
     protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos) {
+        if(dialingWithoutEnergy)
+            return new EnergyRequiredToOperate(0, 0);
         BlockPos sPos = getFakePos();
         BlockPos tPos = targetGatePos.gatePos;
         DimensionType sourceDim = getFakeWorld().provider.getDimensionType();
