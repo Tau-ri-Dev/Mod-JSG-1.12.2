@@ -12,7 +12,9 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -24,9 +26,9 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -39,8 +41,11 @@ import tauri.dev.jsg.block.dialhomedevice.DHDBlock;
 import tauri.dev.jsg.chunkloader.ChunkManager;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.JSGConfigUtil;
+import tauri.dev.jsg.config.origins.OriginsLoader;
 import tauri.dev.jsg.config.stargate.StargateDimensionConfig;
 import tauri.dev.jsg.config.stargate.StargateTimeLimitModeEnum;
+import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
@@ -1617,6 +1622,33 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public void removeTask(ScheduledTask scheduledTask) {
         scheduledTasks.remove(scheduledTask);
         markDirty();
+    }
+
+    public int getOriginId() {
+        return OriginsLoader.DEFAULT_ORIGIN_ID;
+    }
+
+    public void setOriginId(NBTTagCompound compound) {
+        compound.setInteger("originId", getOriginId());
+    }
+    public ItemStack getAddressPage(SymbolTypeEnum symbolType, ItemStack defaultStack, boolean hasUpgrade, boolean hideOrigin, boolean hideLastSymbol){
+        ItemStack stack = defaultStack;
+
+        if (stack.getItem() == JSGItems.UNIVERSE_DIALER) {
+            NBTTagList saved = Objects.requireNonNull(stack.getTagCompound()).getTagList("saved", Constants.NBT.TAG_COMPOUND);
+            NBTTagCompound compound = gateAddressMap.get(symbolType).serializeNBT();
+            compound.setBoolean("hasUpgrade", hasUpgrade);
+            setOriginId(compound);
+            saved.appendTag(compound);
+        } else {
+            JSG.debug("Giving Notebook page of address " + symbolType);
+
+            NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(gateAddressMap.get(symbolType), hasUpgrade, hideLastSymbol, hideOrigin, PageNotebookItem.getRegistryPathFromWorld(world, pos), getOriginId());
+
+            stack = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 1, 1);
+            stack.setTagCompound(compound);
+        }
+        return stack;
     }
 
     @Override

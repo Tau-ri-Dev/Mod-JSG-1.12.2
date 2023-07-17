@@ -20,28 +20,30 @@ import tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode;
 import tauri.dev.jsg.item.notebook.NotebookItem;
 import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
 import tauri.dev.jsg.stargate.network.*;
+import tauri.dev.jsg.stargate.teleportation.TeleportHelper;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
 
+import javax.vecmath.Vector2f;
 import java.nio.charset.StandardCharsets;
 
 public class EntryActionToServer implements IMessage {
-    public EntryActionToServer() {
-    }
-
     private EnumHand hand;
     private EntryDataTypeEnum dataType;
     private EntryActionEnum action;
     private int index;
     private String name;
-
     private int maxSymbols;
     private StargateAddressDynamic addressToDial;
     private BlockPos linkedGate;
     private StargatePos targetGatePos;
+    private boolean fastDial;
 
-    public EntryActionToServer(EnumHand hand, StargateAddressDynamic addressToDial, int maxSymbols, BlockPos linkedGate) {
+    public EntryActionToServer() {
+    }
+
+    public EntryActionToServer(EnumHand hand, StargateAddressDynamic addressToDial, int maxSymbols, BlockPos linkedGate, boolean fastDial) {
         this.hand = hand;
         this.dataType = EntryDataTypeEnum.ADMIN_CONTROLLER;
         this.action = EntryActionEnum.DIAL;
@@ -51,6 +53,7 @@ public class EntryActionToServer implements IMessage {
         this.maxSymbols = maxSymbols;
         this.linkedGate = linkedGate;
         this.targetGatePos = null;
+        this.fastDial = fastDial;
     }
 
     public EntryActionToServer(EnumHand hand, String name, StargatePos targetGate) {
@@ -59,6 +62,17 @@ public class EntryActionToServer implements IMessage {
         this.action = EntryActionEnum.RENAME;
         this.index = targetGate.symbolType.id;
         this.name = name;
+        this.targetGatePos = targetGate;
+        this.addressToDial = null;
+        this.linkedGate = null;
+    }
+
+    public EntryActionToServer(EntryActionEnum action, StargatePos targetGate) {
+        this.hand = EnumHand.MAIN_HAND;
+        this.dataType = EntryDataTypeEnum.ADMIN_CONTROLLER;
+        this.action = action;
+        this.index = targetGate.symbolType.id;
+        this.name = "";
         this.targetGatePos = targetGate;
         this.addressToDial = null;
         this.linkedGate = null;
@@ -85,6 +99,12 @@ public class EntryActionToServer implements IMessage {
         this.linkedGate = null;
     }
 
+    private static void tagSwitchPlaces(NBTTagList list, int a, int b) {
+        NBTBase tagA = list.get(a);
+        list.set(a, list.get(b));
+        list.set(b, tagA);
+    }
+
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(hand.ordinal());
@@ -103,11 +123,11 @@ public class EntryActionToServer implements IMessage {
             buf.writeBoolean(true);
             buf.writeLong(linkedGate.toLong());
         } else buf.writeBoolean(false);
-        if(targetGatePos != null){
+        if (targetGatePos != null) {
             buf.writeBoolean(true);
             targetGatePos.toBytes(buf);
-        }
-        else buf.writeBoolean(false);
+        } else buf.writeBoolean(false);
+        buf.writeBoolean(fastDial);
     }
 
     @Override
@@ -126,11 +146,11 @@ public class EntryActionToServer implements IMessage {
         if (buf.readBoolean()) {
             linkedGate = BlockPos.fromLong(buf.readLong());
         }
-        if(buf.readBoolean()){
+        if (buf.readBoolean()) {
             targetGatePos = new StargatePos(SymbolTypeEnum.valueOf(index), buf);
         }
+        fastDial = buf.readBoolean();
     }
-
 
     public static class EntryActionServerHandler implements IMessageHandler<EntryActionToServer, IMessage> {
 
@@ -206,7 +226,7 @@ public class EntryActionToServer implements IMessage {
                             StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
                             if (gateTile == null) break;
 
-                            if (gateTile.dialAddress(new StargateAddress(selectedCompound), maxSymbols, false))
+                            if (gateTile.dialAddress(new StargateAddress(selectedCompound), maxSymbols, false, false))
                                 player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.dial_start"), true);
 
                             break;
@@ -246,23 +266,51 @@ public class EntryActionToServer implements IMessage {
                         case DIAL:
                             StargateClassicBaseTile gateTile1 = (StargateClassicBaseTile) world.getTileEntity(message.linkedGate);
                             if (gateTile1 == null) return;
-                            if (gateTile1.getStargateState().engaged()){
+                            if (gateTile1.getStargateState().engaged()) {
                                 gateTile1.attemptClose(StargateClosedReasonEnum.REQUESTED);
                                 break;
                             }
-                            gateTile1.dialAddress(message.addressToDial, message.maxSymbols - 1, true);
+                            gateTile1.dialAddress(message.addressToDial, message.maxSymbols - 1, true, message.fastDial);
                             break;
                         case ABORT:
                             StargateClassicBaseTile gateTile2 = (StargateClassicBaseTile) world.getTileEntity(message.linkedGate);
-                            if(gateTile2 == null) return;
-                            if(gateTile2.getStargateState().dialing())
+                            if (gateTile2 == null) return;
+                            if (gateTile2.getStargateState().dialing())
                                 gateTile2.abortDialingSequence();
                             break;
                         case TOGGLE_IRIS:
                             StargateClassicBaseTile gateTile3 = (StargateClassicBaseTile) world.getTileEntity(message.linkedGate);
-                            if(gateTile3 == null) return;
-                            if(gateTile3.hasIris())
+                            if (gateTile3 == null) return;
+                            if (gateTile3.hasIris())
                                 gateTile3.toggleIris();
+                            break;
+                        case GIVE_NOTEBOOK:
+                            StargateAbstractBaseTile gateTile4 = message.targetGatePos.getTileEntity();
+                            if (gateTile4 == null) return;
+                            NBTTagList tagList = new NBTTagList();
+
+                            for (SymbolTypeEnum s : SymbolTypeEnum.values()) {
+                                ItemStack page = gateTile4.getAddressPage(s, new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM), true, false, false);
+                                page.setStackDisplayName(s.toString());
+                                NBTTagCompound pageCompound = page.getTagCompound();
+                                if (pageCompound != null)
+                                    tagList.appendTag(pageCompound);
+                            }
+
+                            ItemStack notebook = new ItemStack(JSGItems.NOTEBOOK_ITEM, 1);
+                            NBTTagCompound compound1 = new NBTTagCompound();
+                            compound1.setTag("addressList", tagList);
+                            compound1.setInteger("selected", 0);
+                            notebook.setTagCompound(compound1);
+                            if(!message.targetGatePos.getName().equals(""))
+                                notebook.setStackDisplayName(message.targetGatePos.getName());
+
+                            player.addItemStackToInventory(notebook);
+                            break;
+                        case TELEPORT_TO_POS:
+                            StargateAbstractBaseTile gateTile5 = message.targetGatePos.getTileEntity();
+                            if (gateTile5 == null) return;
+                            TeleportHelper.teleportEntity(player, player.getPosition(), message.targetGatePos, 0, new Vector2f(0, 0));
                             break;
                         default:
                             break;
@@ -273,11 +321,5 @@ public class EntryActionToServer implements IMessage {
             return null;
         }
 
-    }
-
-    private static void tagSwitchPlaces(NBTTagList list, int a, int b) {
-        NBTBase tagA = list.get(a);
-        list.set(a, list.get(b));
-        list.set(b, tagA);
     }
 }

@@ -19,8 +19,8 @@ import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.gui.JSGTexturedGui;
 import tauri.dev.jsg.gui.base.JSGButton;
-import tauri.dev.jsg.gui.element.ArrowButton;
 import tauri.dev.jsg.gui.element.GuiHelper;
+import tauri.dev.jsg.gui.element.ModeButton;
 import tauri.dev.jsg.gui.mainmenu.GuiCustomMainMenu;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.loader.texture.TextureLoader;
@@ -222,11 +222,8 @@ public class GuiAdminController extends JSGTexturedGui {
         for (GuiTextField field : addressesSection.entriesTextFields) {
             field.mouseClicked(this.mouseX, this.mouseY, mouseButton);
         }
-        for (ArrowButton button : addressesSection.dialButtons) {
-            if (button.enabled && GuiHelper.isPointInRegion(button.x, button.y, button.width, button.height, this.mouseX, this.mouseY)) {
-                button.performAction();
-                button.playPressSound(Minecraft.getMinecraft().getSoundHandler());
-            }
+        for (ModeButton button : addressesSection.dialButtons) {
+            button.mouseClickedPerformAction(this.mouseX, this.mouseY, mouseButton);
         }
         for(JSGButton button : addressesSection.optionButtons){
             if (button.enabled && GuiHelper.isPointInRegion(button.x, button.y, button.width, button.height, this.mouseX, this.mouseY)) {

@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.stargate.teleportation.TeleportHelper;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 
@@ -69,7 +70,7 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
         try {
             return (StargateAbstractBaseTile) getWorld().getTileEntity(gatePos);
         } catch (Exception e) {
-            e.printStackTrace();
+            JSG.error("Error while getting tile entity from SG pos!", e);
             return null;
         }
     }

@@ -3,13 +3,13 @@ package tauri.dev.jsg.gui.admincontroller;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.fml.client.config.GuiUtils;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.gui.base.JSGButton;
 import tauri.dev.jsg.gui.base.JSGTextField;
-import tauri.dev.jsg.gui.element.ArrowButton;
 import tauri.dev.jsg.gui.element.GuiHelper;
+import tauri.dev.jsg.gui.element.ModeButton;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.gui.entry.EntryActionEnum;
 import tauri.dev.jsg.packet.gui.entry.EntryActionToServer;
@@ -35,7 +35,7 @@ public class AddressesSection {
     public int scrolled = 0;
     public GuiAdminController guiBase;
     public int thisGateEntryIndex = -1;
-    public ArrayList<ArrowButton> dialButtons = new ArrayList<>();
+    public ArrayList<ModeButton> dialButtons = new ArrayList<>();
     public ArrayList<JSGButton> optionButtons = new ArrayList<>();
     public ArrayList<GuiTextField> entriesTextFields = new ArrayList<>();
 
@@ -89,13 +89,16 @@ public class AddressesSection {
             } else {
                 field.setEnabled(false);
             }
-            ArrowButton btn = (ArrowButton) new ArrowButton(index, guiLeft + 125, 0, ArrowButton.ArrowType.RIGHT).setFgColor(GuiUtils.getColorCode('a', true)).setActionCallback(() -> dialGate(finalIndex));
+            ModeButton btn = new ModeButton(index, guiLeft + 125, 0, 20, new ResourceLocation(JSG.MOD_ID, "textures/gui/controller_mode.png"), 80, 40, 4);
+            btn.setActionCallback(() -> mainButtonPerformAction(finalIndex));
             if (e.pos.gatePos.equals(Objects.requireNonNull(guiBase.gateTile).getPos()) && e.pos.dimensionID == guiBase.gateTile.world().provider.getDimension()) {
                 thisGateEntryIndex = index;
-                btn.setEnabled(false);
-                btn.setActionCallback(() -> {
-                });
+                btn.setEnabled(0, false);
+                btn.setEnabled(1, false);
             }
+
+            if(e.notGenerated)
+                btn.setEnabled(3, false);
 
             entriesTextFields.add(field);
             dialButtons.add(btn);
@@ -163,7 +166,35 @@ public class AddressesSection {
         }
     }
 
-    public void dialGate(int index) {
+    public void sendPacketWithTarget(EntryActionEnum action, StargatePos targetPos) {
+        try {
+            JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(action, targetPos));
+        } catch (Exception e) {
+            JSG.error("Error", e);
+        }
+    }
+
+    public void mainButtonPerformAction(int index) {
+        ModeButton btn = dialButtons.get(index);
+        if(!btn.isEnabledCurrent()) return;
+        StargateEntry entry = entries.get(index);
+        StargatePos pos = entry.pos;
+        switch(btn.getCurrentState()){
+            default:break;
+            case 0:
+            case 1:
+                dialGate(index, btn.getCurrentState() == 1);
+                break;
+            case 2:
+                sendPacketWithTarget(EntryActionEnum.GIVE_NOTEBOOK, pos);
+                break;
+            case 3:
+                sendPacketWithTarget(EntryActionEnum.TELEPORT_TO_POS, pos);
+                break;
+        }
+    }
+
+    public void dialGate(int index, boolean fastDial){
         try {
             EnumHand hand = guiBase.getHand();
             StargateEntry entry = entries.get(index);
@@ -184,7 +215,7 @@ public class AddressesSection {
 
             int symbolsCount = Objects.requireNonNull(guiBase.gateTile).getMinimalSymbolsToDial(pos.getGateSymbolType(), pos);
 
-            JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(hand, new StargateAddressDynamic(entry.address), symbolsCount, guiBase.gateTile.getPos()));
+            JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(hand, new StargateAddressDynamic(entry.address), symbolsCount, guiBase.gateTile.getPos(), fastDial));
         } catch (Exception e) {
             JSG.error("Error ", e);
             guiBase.notifer.setText("Unknown error! (" + e.getMessage() + ")", Notifier.EnumAlertType.ERROR, 5);
@@ -207,7 +238,7 @@ public class AddressesSection {
         for (GuiTextField f : entriesTextFields) {
             f.y = (scrolled + (f.getId() * 23)) + OFFSET + guiTop;
         }
-        for (ArrowButton f : dialButtons) {
+        for (ModeButton f : dialButtons) {
             f.y = (scrolled + (f.id * 23)) + OFFSET + guiTop;
         }
     }
@@ -221,10 +252,14 @@ public class AddressesSection {
 
         boolean shouldBeEnabled = (guiBase.imaginaryGateTile != null && (guiBase.imaginaryGateTile.getStargateState().idle() || guiBase.imaginaryGateTile.getStargateState().engaged()));
 
-        for (ArrowButton b : dialButtons) {
+        for (ModeButton b : dialButtons) {
             if (canNotRenderEntry(b.y)) continue;
-            b.setEnabled(shouldBeEnabled && b.id != thisGateEntryIndex);
-            b.drawButton(Minecraft.getMinecraft(), guiBase.mouseX, guiBase.mouseY, guiBase.partialTicks);
+            boolean enabled = shouldBeEnabled && b.id != thisGateEntryIndex;
+            b.setEnabled(0, enabled);
+            b.setEnabled(1, enabled);
+            if(entries.get(b.id).notGenerated)
+                b.setEnabled(3, false);
+            b.drawButton(guiBase.mouseX, guiBase.mouseY);
         }
 
         for (JSGButton b : optionButtons) {
@@ -244,9 +279,26 @@ public class AddressesSection {
                 ), guiBase.mouseX, guiBase.mouseY, guiBase.width, guiBase.height, -1, guiBase.mc.fontRenderer);
             }
         }
-        for (ArrowButton f : dialButtons) {
-            if (!canNotRenderEntry(f.y) && f.enabled && GuiHelper.isPointInRegion(f.x, f.y, f.width, f.height, guiBase.mouseX, guiBase.mouseY)) {
-                Util.drawHoveringText(Collections.singletonList("Dial this address"), guiBase.mouseX, guiBase.mouseY, guiBase.width, guiBase.height, -1, guiBase.mc.fontRenderer);
+        for (ModeButton f : dialButtons) {
+            if (!canNotRenderEntry(f.y) && f.isEnabledCurrent() && GuiHelper.isPointInRegion(f.x, f.y, f.width, f.height, guiBase.mouseX, guiBase.mouseY)) {
+                List<String> lines = new ArrayList<>();
+                switch (f.getCurrentState()) {
+                    default:
+                        break;
+                    case 0:
+                        lines = Collections.singletonList("Dial this address (slow)");
+                        break;
+                    case 1:
+                        lines = Collections.singletonList("Dial this address (fast)");
+                        break;
+                    case 2:
+                        lines = Collections.singletonList("Get gate's addresses");
+                        break;
+                    case 3:
+                        lines = Collections.singletonList("Teleport to gate's location");
+                        break;
+                }
+                Util.drawHoveringText(lines, guiBase.mouseX, guiBase.mouseY, guiBase.width, guiBase.height, -1, guiBase.mc.fontRenderer);
             }
         }
     }

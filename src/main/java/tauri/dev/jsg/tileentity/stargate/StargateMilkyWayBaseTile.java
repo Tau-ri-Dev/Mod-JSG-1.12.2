@@ -153,9 +153,9 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         return isLinkedAndDHDOperational() && stargateState != EnumStargateState.DIALING_COMPUTER && !getLinkedDHD(world).hasUpgrade(DHDUpgradeEnum.CHEVRON_UPGRADE) ? 7 : 9;
     }
 
-    public boolean dialAddress(StargateAddress address, int symbolCount, boolean withoutEnergy) {
+    public boolean dialAddress(StargateAddress address, int symbolCount, boolean withoutEnergy, boolean fastDial) {
         if (!getStargateState().idle()) return false;
-        super.dialAddress(address, symbolCount, withoutEnergy);
+        super.dialAddress(address, symbolCount, withoutEnergy, fastDial);
         for (int i = 0; i < symbolCount; i++) {
             addSymbolToAddressUsingList(address.get(i));
         }
@@ -185,11 +185,6 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         if (targetSymbol != SymbolMilkyWayEnum.BRB && !canAddSymbolToList(targetSymbol)) return;
         if (!(targetSymbol instanceof SymbolMilkyWayEnum)) return;
         if (toDialSymbols.contains(targetSymbol)) return;
-        /*if (isLinkedAndDHDOperational() && (targetSymbol != SymbolMilkyWayEnum.BRB || toDialSymbols.size() > 0)) {
-            DHDAbstractTile dhd = getLinkedDHD(world);
-            if (dhd != null)
-                dhd.activateSymbol(targetSymbol);
-        }*/
         toDialSymbols.add((SymbolMilkyWayEnum) targetSymbol);
     }
 
@@ -452,8 +447,12 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         if (!world.isRemote) {
 
             if ((toDialSymbols.size() > 0) && ((world.getTotalWorldTime() - lastSpinFinishedIn) > 5) && stargateState.idle()) {
-                if (toDialSymbols.get(0) == SymbolMilkyWayEnum.BRB || canAddSymbolInternal(toDialSymbols.get(0)))
-                    addSymbolToAddressDHD(toDialSymbols.get(0));
+                if (toDialSymbols.get(0) == SymbolMilkyWayEnum.BRB || canAddSymbolInternal(toDialSymbols.get(0))) {
+                    if(isFastDialing || toDialSymbols.get(0) == SymbolMilkyWayEnum.BRB)
+                        addSymbolToAddressDHD(toDialSymbols.get(0));
+                    else
+                        addSymbolToAddressManual(toDialSymbols.get(0), null);
+                }
                 if (toDialSymbols.size() > 0)
                     toDialSymbols.remove(0);
                 markDirty();

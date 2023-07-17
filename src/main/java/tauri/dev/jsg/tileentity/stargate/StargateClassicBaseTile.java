@@ -50,7 +50,6 @@ import tauri.dev.jsg.gui.container.stargate.StargateContainerGuiUpdate;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.energy.CapacitorItemBlock;
 import tauri.dev.jsg.item.linkable.gdo.GDOMessages;
-import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.item.stargate.IrisItem;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
@@ -114,6 +113,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     protected boolean isFinalActive;
 
     public boolean isFastDialing;
+    public boolean isFastDialingOverride;
 
     public boolean getFastDialState() {
         return isFastDialing;
@@ -266,6 +266,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 ((BeamerTile) Objects.requireNonNull(world.getTileEntity(beamerPos))).gateClosed();
         }
         dialingWithoutEnergy = false;
+        isFastDialingOverride = false;
         markDirty();
     }
 
@@ -280,6 +281,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         sendRenderingUpdate(StargateRendererActionState.EnumGateAction.CLEAR_CHEVRONS, dialedAddress.size(), isFinalActive);
 
         dialingWithoutEnergy = false;
+        isFastDialingOverride = false;
         markDirty();
     }
 
@@ -304,6 +306,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         isFinalActive = false;
         dialingWithoutEnergy = false;
+        isFastDialingOverride = false;
         markDirty();
 
         if (stargateState != EnumStargateState.INCOMING && !isIncoming) {
@@ -333,6 +336,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
         tryHeatUp(8);
         dialingWithoutEnergy = false;
+        isFastDialingOverride = false;
         markDirty();
 
         this.isFinalActive = true;
@@ -354,6 +358,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             failGate();
             if (!isIncoming) disconnectGate();
             dialingWithoutEnergy = false;
+            isFastDialingOverride = false;
             markDirty();
             resetTargetIncomingAnimation();
             return true;
@@ -368,8 +373,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public boolean dialingWithoutEnergy = false;
-    public boolean dialAddress(StargateAddress address, int maxSymbols, boolean withoutEnergy){
+    public boolean dialAddress(StargateAddress address, int maxSymbols, boolean withoutEnergy, boolean fastDial){
         dialingWithoutEnergy = withoutEnergy;
+        if(fastDial) {
+            isFastDialingOverride = true;
+            setFastDial(true);
+        }
         markDirty();
         return true;
     }
@@ -720,7 +729,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         // Fast dialing
         if (!world.isRemote) {
             boolean shouldBeFast = getConfig().getOption(ENABLE_FAST_DIAL.id).getBooleanValue();
-            if (isFastDialing != shouldBeFast && getStargateState().idle()) {
+            if (!isFastDialingOverride && isFastDialing != shouldBeFast && getStargateState().idle()) {
                 setFastDial(shouldBeFast);
             }
         }
@@ -1186,6 +1195,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         compound.setDouble("lastGateHeat", lastGateHeat);
 
         compound.setBoolean("fastDialing", isFastDialing);
+        compound.setBoolean("isFastDialingOverride", isFastDialingOverride);
 
         compound.setInteger("facingVertical", FacingHelper.toInt(facingVertical));
 
@@ -1243,6 +1253,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         this.lastGateHeat = compound.getDouble("lastGateHeat");
 
         this.isFastDialing = compound.getBoolean("fastDialing");
+        this.isFastDialingOverride = compound.getBoolean("isFastDialingOverride");
 
         facingVertical = FacingHelper.fromInt(compound.getInteger("facingVertical"));
 
@@ -1727,22 +1738,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             case STARGATE_GIVE_PAGE:
                 SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf(pageSlotId - 7);
                 ItemStack stack = itemStackHandler.getStackInSlot(pageSlotId);
-
-                if (stack.getItem() == JSGItems.UNIVERSE_DIALER) {
-                    NBTTagList saved = stack.getTagCompound().getTagList("saved", NBT.TAG_COMPOUND);
-                    NBTTagCompound compound = gateAddressMap.get(symbolType).serializeNBT();
-                    compound.setBoolean("hasUpgrade", hasUpgrade(StargateUpgradeEnum.CHEVRON_UPGRADE));
-                    setOriginId(compound);
-                    saved.appendTag(compound);
-                } else {
-                    JSG.debug("Giving Notebook page of address " + symbolType);
-
-                    NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(gateAddressMap.get(symbolType), hasUpgrade(StargateUpgradeEnum.CHEVRON_UPGRADE), PageNotebookItem.getRegistryPathFromWorld(world, pos), getOriginId());
-
-                    stack = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 1, 1);
-                    stack.setTagCompound(compound);
-                    itemStackHandler.setStackInSlot(pageSlotId, stack);
-                }
+                stack = getAddressPage(symbolType, stack, hasUpgrade(StargateUpgradeEnum.CHEVRON_UPGRADE), false, false);
+                itemStackHandler.setStackInSlot(pageSlotId, stack);
 
                 break;
 
@@ -1782,10 +1779,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     public int getOriginId() {
         return getOriginId(getBiomeOverlayWithOverride(true), getFakeWorld().provider.getDimension(), getConfig().getOption(ORIGIN_MODEL.id).getEnumValue().getIntValue());
-    }
-
-    public void setOriginId(NBTTagCompound compound) {
-        compound.setInteger("originId", getOriginId());
     }
 
 

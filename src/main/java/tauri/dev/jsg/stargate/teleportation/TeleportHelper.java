@@ -2,6 +2,7 @@ package tauri.dev.jsg.stargate.teleportation;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumFacing.AxisDirection;
@@ -29,7 +30,7 @@ public class TeleportHelper {
 		X(0x01),
 		Z(0x02);
 		
-		public int mask;
+		public final int mask;
 		
 		EnumFlipAxis(int mask) {
 			this.mask = mask;
@@ -74,7 +75,7 @@ public class TeleportHelper {
 		v.y += (dest.y + 0.5f);
 	}
 	
-	public static void teleportEntity(Entity entity, BlockPos sourceGatePos, StargatePos targetGatePos, float rotation, Vector2f motionVector) {		
+	public static void teleportEntity(Entity entity, BlockPos sourceGatePos, StargatePos targetGatePos, float rotation, Vector2f motionVector) {
 		List<Entity> passengers = null;
 				
 		if (entity.isRiding())
@@ -91,9 +92,13 @@ public class TeleportHelper {
 		
 		World world = entity.getEntityWorld();
 		int sourceDim = world.provider.getDimension();
-		
-		StargateAbstractBaseTile sourceTile = (StargateAbstractBaseTile) world.getTileEntity(sourceGatePos);
+
 		StargateAbstractBaseTile targetTile = targetGatePos.getTileEntity();
+		StargateAbstractBaseTile sourceTile = targetTile;
+		TileEntity sourceTileEntity = (sourceGatePos == null ? null : world.getTileEntity(sourceGatePos));
+		if(sourceTileEntity instanceof StargateAbstractBaseTile){
+			sourceTile = (StargateAbstractBaseTile) sourceTileEntity;
+		}
 		
 		int flipAxis = 0;
 		
@@ -175,16 +180,6 @@ public class TeleportHelper {
 			default:
 				return new Vec3d(pos.x, pos.y, pos.z+k);
 		}
-	}
-	
-	public static void teleportWithRiders(Entity entity, float yawRotated, Vec3d pos) {
-		if (entity.isBeingRidden()) {			
-			for (Entity entity2 : entity.getPassengers()) {
-				setRotationAndPosition(entity2, yawRotated, pos);
-			}
-		}
-		
-		setRotationAndPosition(entity, yawRotated, pos);
 	}
 	
 	public static void setRotationAndPosition(Entity entity, float yawRotated, Vec3d pos) {

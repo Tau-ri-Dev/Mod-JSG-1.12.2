@@ -142,7 +142,7 @@ public class DestinyCountDownTile extends TileEntity implements ICapabilityProvi
                                         StargateAddress foundAddress = found.address;
                                         int symbols = (found.symbolsNeeded - 1);
                                         if (foundAddress != null) {
-                                            gate.dialAddress(foundAddress, symbols, false);
+                                            gate.dialAddress(foundAddress, symbols, false, false);
                                             gateOpenedThisRound = true;
                                             markDirty();
                                         }

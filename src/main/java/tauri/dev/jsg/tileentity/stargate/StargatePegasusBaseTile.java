@@ -600,9 +600,9 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     }
 
 
-    public boolean dialAddress(StargateAddress address, int symbolCount, boolean withoutEnergy) {
+    public boolean dialAddress(StargateAddress address, int symbolCount, boolean withoutEnergy, boolean fastDial) {
         if (!getStargateState().idle()) return false;
-        super.dialAddress(address, symbolCount, withoutEnergy);
+        super.dialAddress(address, symbolCount, withoutEnergy, fastDial);
         for (int i = 0; i < symbolCount; i++) {
             addSymbolToAddressDHD(address.get(i));
         }
@@ -640,8 +640,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
             return;
         }
 
-        boolean fastDial = (getConfig().getOption(ConfigOptions.PEG_DIAL_ANIMATION.id).getEnumValue().getIntValue() == 1);
-        boolean canContinueByConfig = (getConfig().getOption(ConfigOptions.PEG_DIAL_ANIMATION.id).getEnumValue().getIntValue() == 0);
+        boolean fastDial = isFastDialing || (getConfig().getOption(ConfigOptions.PEG_DIAL_ANIMATION.id).getEnumValue().getIntValue() == 1);
+        boolean canContinueByConfig = !fastDial && (getConfig().getOption(ConfigOptions.PEG_DIAL_ANIMATION.id).getEnumValue().getIntValue() == 0);
 
         stargateState = EnumStargateState.DIALING;
 

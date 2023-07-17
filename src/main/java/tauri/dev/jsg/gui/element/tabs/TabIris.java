@@ -1,18 +1,17 @@
 package tauri.dev.jsg.gui.element.tabs;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.gui.element.GuiHelper;
 import tauri.dev.jsg.gui.element.ModeButton;
 import tauri.dev.jsg.gui.element.NumberOnlyTextField;
 import tauri.dev.jsg.stargate.EnumIrisMode;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,11 +62,8 @@ public class TabIris extends Tab {
         if (!isVisible()) return;
 
         super.render(fontRenderer, mouseX, mouseY);
-        GlStateManager.enableBlend();
-        GlStateManager.color(1, 1, 1, 1);
         buttonChangeMode.x = guiLeft + currentOffsetX + 64 + 11;
         buttonChangeMode.drawButton(mouseX, mouseY);
-        GlStateManager.disableBlend();
         inputField.x = guiLeft + 6 + currentOffsetX;
         inputField.drawTextBox();
     }
