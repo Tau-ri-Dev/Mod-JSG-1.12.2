@@ -64,6 +64,16 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     }
 
     @Override
+    public boolean abortDialingSequence() {
+        if (super.abortDialingSequence()) {
+            toDialSymbols.clear();
+            markDirty();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     protected void dialingFailed(StargateOpenResult reason) {
         resetToDialSymbols();
         super.dialingFailed(reason);

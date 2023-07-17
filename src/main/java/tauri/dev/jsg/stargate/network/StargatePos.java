@@ -109,8 +109,14 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
     public void toBytes(ByteBuf buf) {
         buf.writeInt(dimensionID);
         buf.writeLong(gatePos.toLong());
-        buf.writeInt(additionalSymbols.get(0).getId());
-        buf.writeInt(additionalSymbols.get(1).getId());
+        if(additionalSymbols != null && additionalSymbols.size() > 0)
+            buf.writeInt(additionalSymbols.get(0).getId());
+        else
+            buf.writeInt(0);
+        if(additionalSymbols != null && additionalSymbols.size() > 1)
+            buf.writeInt(additionalSymbols.get(1).getId());
+        else
+            buf.writeInt(0);
         if (name != null) {
             buf.writeBoolean(true);
             buf.writeInt(name.length());

@@ -134,7 +134,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
     @Override
     protected int getMaxChevrons() {
-        if(dialingWithoutEnergy) return 9;
+        if (dialingWithoutEnergy) return 9;
         return isLinkedAndDHDOperational() && stargateState != EnumStargateState.DIALING_COMPUTER && !getLinkedDHD(world).hasUpgrade(DHDPegasusTile.DHDUpgradeEnum.CHEVRON_UPGRADE) ? 7 : 9;
     }
 
@@ -579,6 +579,16 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         markDirty();
 
         return super.attemptOpenAndFail();
+    }
+
+    @Override
+    public boolean abortDialingSequence() {
+        if (super.abortDialingSequence()) {
+            toDialSymbols.clear();
+            markDirty();
+            return true;
+        }
+        return false;
     }
 
     @Override

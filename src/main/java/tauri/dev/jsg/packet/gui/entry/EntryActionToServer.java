@@ -18,6 +18,7 @@ import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerItem;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode;
 import tauri.dev.jsg.item.notebook.NotebookItem;
+import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
 import tauri.dev.jsg.stargate.network.*;
 import tauri.dev.jsg.stargate.teleportation.TeleportHelper;
@@ -67,11 +68,11 @@ public class EntryActionToServer implements IMessage {
         this.linkedGate = null;
     }
 
-    public EntryActionToServer(EntryActionEnum action, StargatePos targetGate) {
+    public EntryActionToServer(EntryActionEnum action, StargatePos targetGate, boolean notGenerated) {
         this.hand = EnumHand.MAIN_HAND;
         this.dataType = EntryDataTypeEnum.ADMIN_CONTROLLER;
         this.action = action;
-        this.index = targetGate.symbolType.id;
+        this.index = (notGenerated ? 1 : 0);
         this.name = "";
         this.targetGatePos = targetGate;
         this.addressToDial = null;
@@ -290,11 +291,18 @@ public class EntryActionToServer implements IMessage {
                             NBTTagList tagList = new NBTTagList();
 
                             for (SymbolTypeEnum s : SymbolTypeEnum.values()) {
-                                ItemStack page = gateTile4.getAddressPage(s, new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM), true, false, false);
-                                page.setStackDisplayName(s.toString());
-                                NBTTagCompound pageCompound = page.getTagCompound();
-                                if (pageCompound != null)
-                                    tagList.appendTag(pageCompound);
+                                StargateAddress address;
+                                int originId;
+                                if (message.index == 1) {
+                                    // gate is not generated
+                                    address = StargateNetwork.get(world).getMapNotGenerated().get(message.targetGatePos).get(s);
+                                    originId = StargateClassicBaseTile.getOriginId(null, message.targetGatePos.dimensionID, -1);
+                                } else {
+                                    address = message.targetGatePos.getTileEntity().getStargateAddress(s);
+                                    originId = message.targetGatePos.getTileEntity().getOriginId();
+                                }
+                                NBTTagCompound pageCompound = PageNotebookItem.getCompoundFromAddress(address, true, false, false, PageNotebookItem.getRegistryPathFromWorld(world, message.targetGatePos.gatePos), originId);
+                                tagList.appendTag(pageCompound);
                             }
 
                             ItemStack notebook = new ItemStack(JSGItems.NOTEBOOK_ITEM, 1);
@@ -302,7 +310,7 @@ public class EntryActionToServer implements IMessage {
                             compound1.setTag("addressList", tagList);
                             compound1.setInteger("selected", 0);
                             notebook.setTagCompound(compound1);
-                            if(!message.targetGatePos.getName().equals(""))
+                            if (!message.targetGatePos.getName().equals(""))
                                 notebook.setStackDisplayName(message.targetGatePos.getName());
 
                             player.addItemStackToInventory(notebook);

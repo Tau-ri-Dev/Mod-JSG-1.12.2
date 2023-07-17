@@ -187,7 +187,7 @@ public class JSGConfig {
             @Config.Comment({
                     "SIDE: CLIENT"
             })
-            public float neededRAM = 4.0f;
+            public float neededRAM = 2.0f;
         }
 
         public static class Integration {

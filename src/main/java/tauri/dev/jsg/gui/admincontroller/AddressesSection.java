@@ -166,14 +166,6 @@ public class AddressesSection {
         }
     }
 
-    public void sendPacketWithTarget(EntryActionEnum action, StargatePos targetPos) {
-        try {
-            JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(action, targetPos));
-        } catch (Exception e) {
-            JSG.error("Error", e);
-        }
-    }
-
     public void mainButtonPerformAction(int index) {
         ModeButton btn = dialButtons.get(index);
         if(!btn.isEnabledCurrent()) return;
@@ -186,10 +178,10 @@ public class AddressesSection {
                 dialGate(index, btn.getCurrentState() == 1);
                 break;
             case 2:
-                sendPacketWithTarget(EntryActionEnum.GIVE_NOTEBOOK, pos);
+                JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(EntryActionEnum.GIVE_NOTEBOOK, pos, entry.notGenerated));
                 break;
             case 3:
-                sendPacketWithTarget(EntryActionEnum.TELEPORT_TO_POS, pos);
+                JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(EntryActionEnum.TELEPORT_TO_POS, pos, false));
                 break;
         }
     }

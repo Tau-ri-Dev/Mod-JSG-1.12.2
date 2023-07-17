@@ -346,7 +346,12 @@ public class StargateNetwork extends WorldSavedData {
         buf.writeInt(notGeneratedSize);
         for (StargatePos pos : notGeneratedStargates.keySet()) {
             for (Map.Entry<SymbolTypeEnum, StargateAddress> entry : notGeneratedStargates.get(pos).entrySet()) {
-                entry.getValue().toBytes(buf);
+                StargateAddress address = entry.getValue();
+                if(pos == null || address == null){
+                    notGeneratedSize--;
+                    continue;
+                }
+                address.toBytes(buf);
                 pos.toBytes(buf);
             }
         }
