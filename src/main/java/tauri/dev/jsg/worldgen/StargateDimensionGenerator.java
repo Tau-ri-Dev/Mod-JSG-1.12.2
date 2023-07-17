@@ -3,7 +3,6 @@ package tauri.dev.jsg.worldgen;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.JSGConfigUtil;
@@ -12,6 +11,7 @@ import tauri.dev.jsg.stargate.network.StargateNetwork;
 import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.stargate.teleportation.TeleportHelper;
+import tauri.dev.jsg.util.DimensionsHelper;
 import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 
 import javax.annotation.Nonnull;
@@ -34,48 +34,42 @@ public class StargateDimensionGenerator {
         for (StargatePos p : virtualGates.keySet()) {
             dimensionsWithGate.add(p.dimensionID);
         }
-        for(StargatePos p : sgNetwork.values()){
+        for (StargatePos p : sgNetwork.values()) {
             dimensionsWithGate.add(p.dimensionID);
         }
 
         int i = 0;
         int y = 0;
-        for (DimensionType t : DimensionManager.getRegisteredDimensions().keySet()) {
-            int id = t.getId();
+        for (Map.Entry<Integer, DimensionType> entry : DimensionsHelper.getRegisteredDimensions().entrySet()) {
+            int id = entry.getKey();
+            DimensionType dt = entry.getValue();
             SymbolTypeEnum symbolType = SymbolTypeEnum.MILKYWAY;
-            if (JSGConfigUtil.isDimBlacklistedForSGSpawn(id)){
+            if (JSGConfigUtil.isDimBlacklistedForSGSpawn(id)) {
                 JSG.debug("Dim " + id + " is blacklisted. Skipping...");
                 continue;
             }
-            if (id == 0 || id == 1 || id == -1){
+            if (id == 0 || id == 1 || id == -1) {
                 JSG.debug("Dim " + id + " is internally blacklisted. Skipping...");
                 continue;
             }
             i++;
-            if (dimensionsWithGate.contains(id)){
+            if (dimensionsWithGate.contains(id)) {
                 JSG.debug("Dim " + id + " has already gate. Skipping...");
                 continue;
             }
-            DimensionType dt = null;
-            try {
-                dt = DimensionManager.getProviderType(id);
-            } catch (Exception e) {
-                JSG.debug("Dim " + id + " has corrupted provider type. Skipping...");
-                continue;
-            }
             World world = TeleportHelper.getWorld(id);
-            if (world == null || world.provider == null){
+            if (world == null || world.provider == null) {
                 JSG.debug("Dim " + id + " has corrupted provider. (Is world null? " + (world == null ? "true" : "false") + ") Skipping...");
                 continue;
             }
-            if (!world.provider.isSurfaceWorld()){
+            if (!world.provider.isSurfaceWorld()) {
                 boolean shouldSkip = true;
-                if(dt.getName().startsWith("planet")) shouldSkip = false;
-                if(dt.getName().startsWith("moon")) shouldSkip = false;
+                if (dt.getName().startsWith("planet")) shouldSkip = false;
+                if (dt.getName().startsWith("moon")) shouldSkip = false;
 
-                if(dt.getName().contains("asteroids")) shouldSkip = true;
+                if (dt.getName().contains("asteroids")) shouldSkip = true;
 
-                if(shouldSkip) {
+                if (shouldSkip) {
                     JSG.debug("Dim " + id + " is not surface world. Skipping...");
                     continue;
                 }
@@ -100,7 +94,7 @@ public class StargateDimensionGenerator {
                 address.generate(random);
             } while (sgn.isStargateInNetwork(address));
 
-            if(gatePos == null)
+            if (gatePos == null)
                 gatePos = new StargatePos(dim, new BlockPos(0, 0, 0), address, symbolTypeEnum);
 
             sgn.addNotGeneratedStargate(address, gatePos);

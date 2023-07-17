@@ -380,11 +380,6 @@
     "sounds": [
       {
         "name": "jsg:gui/mainmenu/loading_music",
-        "preload": true,
-        "weight": 2
-      },
-      {
-        "name": "jsg:gui/mainmenu/loading_music1",
         "preload": true
       }
     ]

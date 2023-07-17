@@ -409,7 +409,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     protected boolean checkAddressLength(StargateAddressDynamic address, StargatePos targetGatePosition) {
         if (targetGatePosition == null) return false;
-        boolean localDial = world.provider.getDimension() == targetGatePosition.dimensionID || StargateDimensionConfig.isGroupEqual(world.provider.getDimensionType(), DimensionManager.getProviderType(targetGatePosition.dimensionID));
+        boolean localDial = world.provider.getDimension() == targetGatePosition.dimensionID || StargateDimensionConfig.isGroupEqual(world.provider.getDimension(), targetGatePosition.dimensionID);
 
         return address.size() < getSymbolType().getMinimalSymbolCountTo(targetGatePosition.getGateSymbolType(), localDial);
     }
@@ -1751,12 +1751,12 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         BlockPos sPos = pos;
         BlockPos tPos = targetGatePos.gatePos;
 
-        DimensionType sourceDim = world.provider.getDimensionType();
-        DimensionType targetDim = targetGatePos.getWorld().provider.getDimensionType();
+        int sourceDim = world.provider.getDimension();
+        int targetDim = targetGatePos.getWorld().provider.getDimension();
 
-        if (sourceDim == DimensionType.OVERWORLD && targetDim == DimensionType.NETHER)
+        if (sourceDim == DimensionType.OVERWORLD.getId() && targetDim == DimensionType.NETHER.getId())
             tPos = new BlockPos(tPos.getX() * 8, tPos.getY(), tPos.getZ() * 8);
-        else if (sourceDim == DimensionType.NETHER && targetDim == DimensionType.OVERWORLD)
+        else if (sourceDim == DimensionType.NETHER.getId() && targetDim == DimensionType.OVERWORLD.getId())
             sPos = new BlockPos(sPos.getX() * 8, sPos.getY(), sPos.getZ() * 8);
 
         double distance = (int) sPos.getDistance(tPos.getX(), tPos.getY(), tPos.getZ());
@@ -1765,7 +1765,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         else distance = 5000 * Math.log10(distance) / Math.log10(5000);
 
         EnergyRequiredToOperate energyRequired = new EnergyRequiredToOperate(JSGConfig.Stargate.power.openingBlockToEnergyRatio, JSGConfig.Stargate.power.keepAliveBlockToEnergyRatioPerTick);
-        energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(world.provider.getDimensionType(), targetDim));
+        energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(sourceDim, targetDim));
 
         if (dialedAddress.size() == 9)
             energyRequired.mul(JSGConfig.Stargate.power.nineSymbolAddressMul);

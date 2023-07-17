@@ -311,18 +311,18 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
             return new EnergyRequiredToOperate(0, 0);
         BlockPos sPos = getFakePos();
         BlockPos tPos = targetGatePos.gatePos;
-        DimensionType sourceDim = getFakeWorld().provider.getDimensionType();
-        DimensionType targetDim = targetGatePos.getWorld().provider.getDimensionType();
+        int sourceDim = getFakeWorld().provider.getDimension();
+        int targetDim = targetGatePos.getWorld().provider.getDimension();
 
         StargateAbstractBaseTile targetTile = targetGatePos.getTileEntity();
         if (targetTile instanceof StargateUniverseBaseTile) {
             tPos = ((StargateUniverseBaseTile) targetTile).getFakePos();
-            targetDim = ((StargateUniverseBaseTile) targetTile).getFakeWorld().provider.getDimensionType();
+            targetDim = ((StargateUniverseBaseTile) targetTile).getFakeWorld().provider.getDimension();
         }
 
-        if (sourceDim == DimensionType.OVERWORLD && targetDim == DimensionType.NETHER)
+        if (sourceDim == DimensionType.OVERWORLD.getId() && targetDim == DimensionType.NETHER.getId())
             tPos = new BlockPos(tPos.getX() * 8, tPos.getY(), tPos.getZ() * 8);
-        else if (sourceDim == DimensionType.NETHER && targetDim == DimensionType.OVERWORLD)
+        else if (sourceDim == DimensionType.NETHER.getId() && targetDim == DimensionType.OVERWORLD.getId())
             sPos = new BlockPos(sPos.getX() * 8, sPos.getY(), sPos.getZ() * 8);
 
         double distance = (int) sPos.getDistance(tPos.getX(), tPos.getY(), tPos.getZ());

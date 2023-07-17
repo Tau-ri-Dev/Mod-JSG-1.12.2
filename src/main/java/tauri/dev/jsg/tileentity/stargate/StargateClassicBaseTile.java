@@ -2513,7 +2513,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public int getMinimalSymbolsToDial(SymbolTypeEnum symbolType, StargatePos targetGatePos){
-        return getSymbolType().getMinimalSymbolCountTo(symbolType, StargateDimensionConfig.isGroupEqual(DimensionManager.getProviderType(targetGatePos.dimensionID), world.provider.getDimensionType()));
+        return getSymbolType().getMinimalSymbolCountTo(symbolType, StargateDimensionConfig.isGroupEqual(targetGatePos.dimensionID, world.provider.getDimension()));
     }
 
 
