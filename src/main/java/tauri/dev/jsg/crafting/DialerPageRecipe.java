@@ -22,7 +22,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class DialerPageRecipe extends Impl<IRecipe> implements IRecipe {
 
     public DialerPageRecipe() {
-        setRegistryName("universe_dialer_cloning");
+        setRegistryName("dialer_page_combination");
     }
 
     @Override
