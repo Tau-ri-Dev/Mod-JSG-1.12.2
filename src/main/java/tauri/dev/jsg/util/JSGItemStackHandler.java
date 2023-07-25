@@ -6,6 +6,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
+
 /**
  * Modified version of {@link ItemStackHandler}.
  * Respects resizing of the item handlers.
@@ -38,5 +40,13 @@ public class JSGItemStackHandler extends ItemStackHandler {
             }
         }
         onLoad();
+    }
+
+    @Override
+    @Nonnull
+    public ItemStack extractItem(int slot, int amount, boolean simulate){
+        ItemStack stack = getStackInSlot(slot);
+        if(!CreativeItemsChecker.canInteractWith(stack, false)) return ItemStack.EMPTY;
+        return super.extractItem(slot, amount, simulate);
     }
 }

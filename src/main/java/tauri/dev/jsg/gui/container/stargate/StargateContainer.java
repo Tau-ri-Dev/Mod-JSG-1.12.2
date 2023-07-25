@@ -3,6 +3,7 @@ package tauri.dev.jsg.gui.container.stargate;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -25,8 +26,10 @@ import tauri.dev.jsg.stargate.EnumIrisMode;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.StargateUpgradeEnum;
+import tauri.dev.jsg.util.CreativeItemsChecker;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
 public class StargateContainer extends JSGContainer implements OpenTabHolderInterface {
@@ -122,6 +125,8 @@ public class StargateContainer extends JSGContainer implements OpenTabHolderInte
     public ItemStack transferStackInSlot(@Nonnull EntityPlayer player, int index) {
         ItemStack stack = getSlot(index).getStack();
 
+        if(!CreativeItemsChecker.canInteractWith(stack, player.isCreative())) return ItemStack.EMPTY;
+
         // Transfering from Stargate to player's inventory
         if (index < 12) {
             if (!mergeItemStack(stack, 12, inventorySlots.size(), false)) {
@@ -199,6 +204,14 @@ public class StargateContainer extends JSGContainer implements OpenTabHolderInte
         }
 
         return stack;
+    }
+
+    @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
+    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player){
+        if(slotId >= 0 && slotId < getInventory().size() && !CreativeItemsChecker.canInteractWith(getSlot(slotId).getStack(), player.isCreative())) return ItemStack.EMPTY;
+        return super.slotClick(slotId, dragType, clickTypeIn, player);
     }
 
     @Override

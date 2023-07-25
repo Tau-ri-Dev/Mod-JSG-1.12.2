@@ -3,6 +3,7 @@ package tauri.dev.jsg.gui.container.zpmhub;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -21,8 +22,10 @@ import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.power.zpm.ZPMHubEnergyStorage;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.tileentity.energy.ZPMHubTile;
+import tauri.dev.jsg.util.CreativeItemsChecker;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 
 public class ZPMHubContainer extends JSGContainer {
@@ -88,6 +91,9 @@ public class ZPMHubContainer extends JSGContainer {
         Slot slot = getSlot(slotId);
         if (slot.getHasStack()) {
             ItemStack stack = slot.getStack();
+
+            if(!CreativeItemsChecker.canInteractWith(stack, playerIn.isCreative())) return ItemStack.EMPTY;
+
             returnStack = stack.copy();
 
             if (slotId < slots.size()) {
@@ -108,6 +114,14 @@ public class ZPMHubContainer extends JSGContainer {
             }
         }
         return returnStack;
+    }
+
+    @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
+    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player){
+        if(slotId >= 0 && slotId < getInventory().size() && !CreativeItemsChecker.canInteractWith(getSlot(slotId).getStack(), player.isCreative())) return ItemStack.EMPTY;
+        return super.slotClick(slotId, dragType, clickTypeIn, player);
     }
 
     @Override

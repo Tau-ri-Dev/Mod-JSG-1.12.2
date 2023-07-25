@@ -8,12 +8,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.creativetabs.JSGCreativeTab;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 public class ItemHelper {
@@ -48,6 +51,12 @@ public class ItemHelper {
                     nbt.setInteger("damage", damage);
                 }
                 stack.setTagCompound(nbt);
+            }
+
+            @Override
+            @ParametersAreNonnullByDefault
+            public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
+                return true;
             }
 
             @Override

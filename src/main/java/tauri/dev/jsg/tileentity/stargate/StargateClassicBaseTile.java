@@ -26,6 +26,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.Capability;
@@ -736,8 +737,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         // Charging gate with lighting bold
         if (!world.isRemote && isMerged()) {
-            BlockPos topBlockPos = getMergeHelper().getTopBlock().add(pos);
-            if (world.getWorldInfo().isThundering() && BlockHelpers.isBlockDirectlyUnderSky(world, topBlockPos)) {
+            BlockPos topBlockPos = getMergeHelper().getTopBlockAboveBase().add(pos);
+            if (world.getWorldInfo().isThundering() && world.getWorldInfo().isRaining() && BlockHelpers.isBlockDirectlyUnderSky(world, topBlockPos)) {
                 Random rand = new Random();
                 float chance = rand.nextFloat();
                 if (chance < JSGConfig.Stargate.mechanics.lightingBoldChance) {
@@ -795,7 +796,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             initConfig();
 
             Random rand = new Random();
-            if (config.getOption(ALLOW_RIG.id).getBooleanValue() && world.isAreaLoaded(pos, 10)) {
+            if (world.getDifficulty() != EnumDifficulty.PEACEFUL && config.getOption(ALLOW_RIG.id).getBooleanValue() && world.isAreaLoaded(pos, 10)) {
                 if (world.getTotalWorldTime() % 200 == 0) { // every 10 seconds
                     int chanceToRandom = rand.nextInt(1000);
 

@@ -146,6 +146,8 @@ public class OriginsLoader {
                 for(String s : JSGConfig.Stargate.pointOfOrigins.additionalOrigins){
                     if(!list.contains(s))
                         list.add(s);
+                    else
+                        size--;
                 }
             }
             String[] toConfig = new String[size];

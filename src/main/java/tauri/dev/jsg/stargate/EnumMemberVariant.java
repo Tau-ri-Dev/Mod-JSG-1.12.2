@@ -7,10 +7,10 @@ public enum EnumMemberVariant {
 	RING(0, "ring"),
 	CHEVRON(1, "chevron");
 	
-	public int id;
-	String name;
+	public final int id;
+	final String name;
 	
-	private EnumMemberVariant(int id, String name) {
+	EnumMemberVariant(int id, String name) {
 		this.id = id;
 		this.name = name;
 	}

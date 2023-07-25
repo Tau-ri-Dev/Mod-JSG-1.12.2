@@ -9,7 +9,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.Rotation;
@@ -48,6 +47,7 @@ import tauri.dev.jsg.state.StateProviderInterface;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.dialhomedevice.DHDActivateButtonState;
 import tauri.dev.jsg.state.stargate.StargateBiomeOverrideState;
+import tauri.dev.jsg.tileentity.SidedTileEntity;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.util.IUpgradable;
@@ -65,7 +65,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers"), @Optional.Interface(iface = "li.cil.oc.api.network.WirelessEndpoint", modid = "opencomputers")})
-public abstract class DHDAbstractTile extends TileEntity implements ILinkable, IUpgradable, StateProviderInterface, ITickable, Environment, WirelessEndpoint {
+public abstract class DHDAbstractTile extends SidedTileEntity implements ILinkable, IUpgradable, StateProviderInterface, ITickable, Environment, WirelessEndpoint {
 
     // ---------------------------------------------------------------------------------------------------
     // Gate linking
@@ -197,6 +197,24 @@ public abstract class DHDAbstractTile extends TileEntity implements ILinkable, I
             markDirty();
         }
     };
+
+    @Override
+    public ItemStackHandler getItemStackHandler() {
+        return itemStackHandler;
+    }
+
+    @Nonnull
+    @Override
+    public int[] getSlotsForFace(@Nonnull EnumFacing side) {
+        switch (side){
+            case UP:
+            case DOWN:
+                return new int[]{0};
+            default:
+                return new int[]{4};
+        }
+    }
+
     // ------------------------------------------------------------
     // Node-related work
     private final Node node = JSG.ocWrapper.createNode(this, "dhd");

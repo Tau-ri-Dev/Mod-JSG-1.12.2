@@ -87,6 +87,23 @@ public abstract class StargateAbstractMergeHelper {
         return blocks.stream().map(pos -> FacingHelper.rotateBlock(pos, facing, facingVertical).add(basePos)).filter(pos -> !matchMember(world.getBlockState(pos))).collect(Collectors.toList());
     }
 
+    @Nonnull
+    public List<BlockPos> getPlacedBlockPositions(IBlockAccess world, BlockPos basePos, EnumFacing facing, EnumFacing facingVertical, EnumMemberVariant variant) {
+        List<BlockPos> blocks = null;
+
+        switch (variant) {
+            case CHEVRON:
+                blocks = getChevronBlocks();
+                break;
+
+            case RING:
+                blocks = getRingBlocks();
+                break;
+        }
+
+        return blocks.stream().map(pos -> FacingHelper.rotateBlock(pos, facing, facingVertical).add(basePos)).filter(pos -> matchMember(world.getBlockState(pos))).collect(Collectors.toList());
+    }
+
     @Nullable
     public abstract EnumMemberVariant getMemberVariantFromItemStack(ItemStack stack);
 

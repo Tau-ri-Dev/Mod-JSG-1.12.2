@@ -50,7 +50,7 @@ public class JSGItems {
     //public static final Item SHIELD_EMITTER = ItemHelper.createGenericItem("shield_emitter", JSG_ITEMS_CREATIVE_TAB);
     public static final Item SHIELD_EMITTER = new AncientShield();
 
-    public static final Item UPGRADE_IRIS_CREATIVE = new IrisItem("upgrade_iris_creative", -1);
+    public static final Item UPGRADE_IRIS_CREATIVE = new IrisItem("upgrade_iris_creative", -1).setCreative();
 
     /**
      * These allow for dialing 8th glyph(cross dimension travel) and show different address spaces

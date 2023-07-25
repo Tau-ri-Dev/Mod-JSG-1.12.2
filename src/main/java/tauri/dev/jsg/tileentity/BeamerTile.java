@@ -75,7 +75,7 @@ import java.util.*;
 import static tauri.dev.jsg.block.JSGBlocks.BEAMER_BLOCK;
 
 @Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers")
-public class BeamerTile extends TileEntity implements ITickable, IUpgradable, StateProviderInterface, ScheduledTaskExecutorInterface, Environment {
+public class BeamerTile extends SidedTileEntity implements ITickable, IUpgradable, StateProviderInterface, ScheduledTaskExecutorInterface, Environment {
 
     // -----------------------------------------------------------------------------
     // Ticking & loading
@@ -140,10 +140,10 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
         if (beamerRole == BeamerRoleEnum.DISABLED)
             return BeamerStatusEnum.BEAMER_DISABLED;
 
-        if(isLaser && beamerRole == BeamerRoleEnum.RECEIVE)
+        if (isLaser && beamerRole == BeamerRoleEnum.RECEIVE)
             return BeamerStatusEnum.BEAMER_CANNOT_RECEIVE;
 
-        if(!isLaser) {
+        if (!isLaser) {
             if (targetBeamerWorld == null || targetBeamerPos == null || !BEAMER_MATCHER.apply(targetBeamerWorld.getBlockState(targetBeamerPos)))
                 return BeamerStatusEnum.NO_BEAMER;
 
@@ -290,7 +290,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 
             beamerStatus = updateBeamerStatus();
 
-            if(targetGatePos == null){
+            if (targetGatePos == null) {
                 beamerStatus = BeamerStatusEnum.NOT_LINKED;
                 markDirty();
             }
@@ -815,6 +815,27 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
         }
 
         markDirty();
+    }
+
+    @Override
+    public ItemStackHandler getItemStackHandler() {
+        return itemStackHandler;
+    }
+
+    @Nonnull
+    @Override
+    public int[] getSlotsForFace(@Nonnull EnumFacing side) {
+        switch (side){
+            case UP:
+            case DOWN:
+                return new int[]{0};
+            default:
+                if(beamerMode == BeamerModeEnum.ITEMS){
+                    return new int[]{1, 2, 3, 4};
+                }
+                else break;
+        }
+        return new int[0];
     }
 
 

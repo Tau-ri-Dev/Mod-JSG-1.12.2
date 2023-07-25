@@ -1,17 +1,20 @@
 package tauri.dev.jsg.block.energy.capacitor;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.gui.GuiIdEnum;
 import tauri.dev.jsg.item.energy.CapacitorItemBlockCreative;
 import tauri.dev.jsg.tileentity.energy.CapacitorCreativeTile;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 public class CapacitorBlockCreative extends CapacitorBlock {
 
@@ -23,8 +26,15 @@ public class CapacitorBlockCreative extends CapacitorBlock {
         setRegistryName(JSG.MOD_ID + ":" + BLOCK_NAME);
         setUnlocalizedName(JSG.MOD_ID + "." + BLOCK_NAME);
 
-        setHardness(3.0f);
-        setHarvestLevel("pickaxe", 10);
+        setHardness(-1);
+        setHarvestLevel(null, -1);
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public boolean canEntityDestroy(IBlockState state, IBlockAccess world, BlockPos pos, Entity entity){
+        if(entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative()) return false;
+        return super.canEntityDestroy(state, world, pos, entity);
     }
 
     @Override
