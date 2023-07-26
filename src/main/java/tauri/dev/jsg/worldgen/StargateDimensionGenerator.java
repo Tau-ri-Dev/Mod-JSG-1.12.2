@@ -48,7 +48,8 @@ public class StargateDimensionGenerator {
                 JSG.debug("Dim " + id + " is blacklisted. Skipping...");
                 continue;
             }
-            if (id == 0 || id == 1 || id == -1) {
+            if(id == 1) symbolType = SymbolTypeEnum.UNIVERSE;
+            if (id == 0 || id == -1) {
                 JSG.debug("Dim " + id + " is internally blacklisted. Skipping...");
                 continue;
             }
@@ -62,7 +63,7 @@ public class StargateDimensionGenerator {
                 JSG.debug("Dim " + id + " has corrupted provider. (Is world null? " + (world == null ? "true" : "false") + ") Skipping...");
                 continue;
             }
-            if (!world.provider.isSurfaceWorld()) {
+            if (!world.provider.isSurfaceWorld() && id != 1) {
                 boolean shouldSkip = true;
                 if (dt.getName().startsWith("planet")) shouldSkip = false;
                 if (dt.getName().startsWith("moon")) shouldSkip = false;

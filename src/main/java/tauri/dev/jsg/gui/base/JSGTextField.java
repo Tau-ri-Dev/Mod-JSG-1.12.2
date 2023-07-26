@@ -1,8 +1,8 @@
 package tauri.dev.jsg.gui.base;
 
-import tauri.dev.jsg.gui.base.JSGButton.ActionCallback;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
+import tauri.dev.jsg.gui.base.JSGButton.ActionCallback;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -18,23 +18,11 @@ public class JSGTextField extends GuiTextField {
 	private String originalContent;
 	private boolean numbersOnly;
 
-	private int borderColor = 0xffffff;
-
+	public boolean performActionOnKeyUp = false;
 	public JSGTextField(int componentId, FontRenderer fontrendererObj, int x, int y, int width, int height, String originalContent) {
 		super(componentId, fontrendererObj, x, y, width, height);
 		this.originalContent = originalContent;
 		setText(originalContent);
-	}
-
-    public JSGTextField(int componentId, FontRenderer fontrendererObj, int x, int y, int width, int height) {
-		super(componentId, fontrendererObj, x, y, width, height);
-		this.originalContent = "";
-		setText(originalContent);
-    }
-
-    public JSGTextField setTextBetter(String textIn) {
-		super.setText(textIn);
-		return this;
 	}
 
 	public JSGTextField setMaxStringLengthBetter(int maxNameLength) {
@@ -60,6 +48,25 @@ public class JSGTextField extends GuiTextField {
 		}
 
 		super.writeText(textToWrite);
+
+		if(performActionOnKeyUp){
+			if (isFocused() && !originalContent.equals(getText())) {
+				originalContent = getText();
+				actionCallback.performAction();
+			}
+		}
+	}
+
+	@Override
+	public void deleteFromCursor(int num){
+		super.deleteFromCursor(num);
+
+		if(performActionOnKeyUp){
+			if (isFocused() && !originalContent.equals(getText())) {
+				originalContent = getText();
+				actionCallback.performAction();
+			}
+		}
 	}
 
 	@Override
@@ -68,6 +75,9 @@ public class JSGTextField extends GuiTextField {
 			// Unfocused and changed name
 			originalContent = getText();
 			actionCallback.performAction();
+		}
+		else if(!isFocused() && focused){
+			originalContent = getText();
 		}
 
 		super.setFocused(focused);

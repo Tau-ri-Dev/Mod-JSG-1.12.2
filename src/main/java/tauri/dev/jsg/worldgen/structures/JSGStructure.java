@@ -2,7 +2,6 @@ package tauri.dev.jsg.worldgen.structures;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -344,7 +343,7 @@ public class JSGStructure extends WorldGenerator {
                 ItemStack stack = handler.getStackInSlot(i);
                 if (!stack.isEmpty() && stack.getItem() == JSGItems.PAGE_NOTEBOOK_ITEM) {
                     Map.Entry<StargatePos, Map<SymbolTypeEnum, StargateAddress>> gotAddressMap = sgn.getRandomNotGeneratedStargate();
-                    if(gotAddressMap == null){
+                    if (gotAddressMap == null) {
                         // Got no stargate -> remove page from the chest
                         stack.setCount(0);
                         handler.insertItem(i, new ItemStack(Blocks.WEB, 1), false);
@@ -354,18 +353,13 @@ public class JSGStructure extends WorldGenerator {
                     StargateAddress address = gotAddressMap.getValue().get(symbolTypeEnum);
                     StargatePos pos = gotAddressMap.getKey();
 
-                    //ItemStack stack1 = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 1, 1);
-
                     String biome = ((pos.getWorld() == null || pos.gatePos == null) ? "plains" : PageNotebookItem.getRegistryPathFromWorld(pos.getWorld(), pos.gatePos));
                     int origin = StargateClassicBaseTile.getOriginId(null, pos.dimensionID, -1);
-
 
                     NBTTagCompound sgCompound = PageNotebookItem.getCompoundFromAddress(address, true, true, true, biome, origin);
                     stack.setTagCompound(sgCompound);
                     stack.setItemDamage(1);
-                    stack.setStackDisplayName("Suspicious address");
-                    //handler.extractItem(i, stack.getCount(), false);
-                    //handler.insertItem(i, stack1, false);
+                    stack.setStackDisplayName("Suspicious page");
                 }
             }
         }

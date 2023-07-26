@@ -113,6 +113,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     private int irisMaxDurability = 0;
     protected boolean isFinalActive;
 
+    public boolean isFinalActive(){
+        return isFinalActive;
+    }
+
     public boolean isFastDialing;
     public boolean isFastDialingOverride;
 

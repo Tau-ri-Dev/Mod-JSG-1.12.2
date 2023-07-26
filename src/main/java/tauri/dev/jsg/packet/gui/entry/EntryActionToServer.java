@@ -25,8 +25,8 @@ import tauri.dev.jsg.stargate.teleportation.TeleportHelper;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
+import tauri.dev.jsg.util.BlockHelpers;
 
-import javax.vecmath.Vector2f;
 import java.nio.charset.StandardCharsets;
 
 public class EntryActionToServer implements IMessage {
@@ -165,6 +165,7 @@ public class EntryActionToServer implements IMessage {
                 NBTTagCompound compound = stack.getTagCompound();
 
                 if (message.dataType.page()) {
+                    if(compound == null) return;
                     NBTTagList list = compound.getTagList("addressList", NBT.TAG_COMPOUND);
 
                     switch (message.action) {
@@ -196,6 +197,7 @@ public class EntryActionToServer implements IMessage {
                             break;
                     }
                 } else if (message.dataType.universe()) {
+                    if(compound == null) return;
                     NBTTagList list = compound.getTagList(UniverseDialerMode.MEMORY.tagListName, NBT.TAG_COMPOUND);
                     BlockPos linkedPos = BlockPos.fromLong(compound.getLong(UniverseDialerMode.MEMORY.tagPosName));
                     NBTTagCompound selectedCompound = list.getCompoundTagAt(message.index);
@@ -233,6 +235,7 @@ public class EntryActionToServer implements IMessage {
                             break;
                     }
                 } else if (message.dataType.oc()) {
+                    if(compound == null) return;
                     NBTTagList list = compound.getTagList(UniverseDialerMode.OC.tagListName, NBT.TAG_COMPOUND);
 
                     switch (message.action) {
@@ -286,15 +289,13 @@ public class EntryActionToServer implements IMessage {
                                 gateTile3.toggleIris();
                             break;
                         case GIVE_NOTEBOOK:
-                            StargateAbstractBaseTile gateTile4 = message.targetGatePos.getTileEntity();
-                            if (gateTile4 == null) return;
                             NBTTagList tagList = new NBTTagList();
 
                             for (SymbolTypeEnum s : SymbolTypeEnum.values()) {
                                 StargateAddress address;
                                 int originId;
                                 if (message.index == 1) {
-                                    // gate is not generated
+                                    // gate is not generated - there is no tileEntity
                                     address = StargateNetwork.get(world).getMapNotGenerated().get(message.targetGatePos).get(s);
                                     originId = StargateClassicBaseTile.getOriginId(null, message.targetGatePos.dimensionID, -1);
                                 } else {
@@ -312,13 +313,13 @@ public class EntryActionToServer implements IMessage {
                             notebook.setTagCompound(compound1);
                             if (!message.targetGatePos.getName().equals(""))
                                 notebook.setStackDisplayName(message.targetGatePos.getName());
+                            else
+                                notebook.setStackDisplayName(BlockHelpers.blockPosToBetterString(message.targetGatePos.gatePos));
 
                             player.addItemStackToInventory(notebook);
                             break;
                         case TELEPORT_TO_POS:
-                            StargateAbstractBaseTile gateTile5 = message.targetGatePos.getTileEntity();
-                            if (gateTile5 == null) return;
-                            TeleportHelper.teleportEntity(player, player.getPosition(), message.targetGatePos, 0, new Vector2f(0, 0));
+                            TeleportHelper.teleportEntityToStargate(player, message.targetGatePos, true);
                             break;
                         default:
                             break;

@@ -245,7 +245,7 @@ public abstract class StargateClassicMergeHelper extends StargateAbstractMergeHe
         if (matchMember(state)) {
             StargateClassicMemberTile memberTile = (StargateClassicMemberTile) world.getTileEntity(checkPos);
 
-            if ((shouldBeMerged && !memberTile.isMerged()) || (memberTile.isMerged() && memberTile.getBasePos().equals(basePos))) {
+            if (memberTile != null && ((shouldBeMerged && !memberTile.isMerged()) || (memberTile.isMerged() && memberTile.getBasePos() != null && memberTile.getBasePos().equals(basePos)))) {
 
                 ItemStack camoStack = memberTile.getCamoItemStack();
                 if (camoStack != null) {
@@ -273,13 +273,15 @@ public abstract class StargateClassicMergeHelper extends StargateAbstractMergeHe
      * @param basePos     Position of {@link StargateMilkyWayBaseBlock} the tiles should be linked to.
      * @param baseFacing  Facing of {@link StargateMilkyWayBaseBlock}.
      */
+    @SuppressWarnings("unused")
     private void updateMemberBasePos(IBlockAccess blockAccess, BlockPos pos, BlockPos basePos, EnumFacing baseFacing, EnumFacing baseFacingVertical) {
         IBlockState state = blockAccess.getBlockState(pos);
 
         if (matchMember(state)) {
             StargateClassicMemberTile memberTile = (StargateClassicMemberTile) blockAccess.getTileEntity(pos);
 
-            memberTile.setBasePos(basePos);
+            if(memberTile != null)
+                memberTile.setBasePos(basePos);
         }
     }
 

@@ -308,7 +308,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         GlStateManager.enableBlend();
         // Tauri dev logo
         Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_TAURI);
-        drawScaledCustomSizeModalRect(x, y, 0, 0, 411, 230, sizeXJSG, sizeYJSG, 410, 229);
+        drawScaledCustomSizeModalRect(x, y, 0, 0, 410, 229, sizeXJSG, sizeYJSG, 411, 230);
 
         center = getCenterPos(0, 0);
         if (alpha > 0.75)

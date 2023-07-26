@@ -161,6 +161,7 @@ public abstract class StargateAbstractMergeHelper {
      * @param variant     Expected {@link EnumMemberVariant}.
      * @return {@code true} if the block matches given parameters, {@code false} otherwise.
      */
+    @SuppressWarnings("all")
     protected abstract boolean checkMemberBlock(IBlockAccess blockAccess, BlockPos pos, EnumFacing facing, EnumFacing facingVertical, EnumMemberVariant variant);
 
     /**

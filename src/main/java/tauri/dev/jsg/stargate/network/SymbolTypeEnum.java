@@ -4,270 +4,254 @@ import tauri.dev.jsg.util.EnumKeyInterface;
 import tauri.dev.jsg.util.EnumKeyMap;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 import java.util.Random;
 
 public enum SymbolTypeEnum implements EnumKeyInterface<Integer> {
-  MILKYWAY(0, 32, 32),
-  PEGASUS(1, 27, 27),
-  UNIVERSE(2, 20, 42);
+    MILKYWAY(0, 32, 32),
+    PEGASUS(1, 27, 27),
+    UNIVERSE(2, 20, 42);
 
-  public int id;
-  public int iconWidht;
-  public int iconHeight;
+    public final int id;
+    public final int iconWidht;
+    public final int iconHeight;
 
-  private SymbolTypeEnum(int id, int iconWidht, int iconHeight) {
-    this.id = id;
-    this.iconWidht = iconWidht;
-    this.iconHeight = iconHeight;
-  }
-
-  public SymbolInterface getRandomSymbol(Random random) {
-    switch (this) {
-      case MILKYWAY:
-        return SymbolMilkyWayEnum.getRandomSymbol(random);
-
-      case PEGASUS:
-        return SymbolPegasusEnum.getRandomSymbol(random);
-
-      case UNIVERSE:
-        return SymbolUniverseEnum.getRandomSymbol(random);
+    SymbolTypeEnum(int id, int iconWidht, int iconHeight) {
+        this.id = id;
+        this.iconWidht = iconWidht;
+        this.iconHeight = iconHeight;
     }
 
-    return null;
-  }
+    public SymbolInterface getRandomSymbol(Random random) {
+        switch (this) {
+            case MILKYWAY:
+                return SymbolMilkyWayEnum.getRandomSymbol(random);
 
-  public SymbolInterface getBRB() {
-    switch (this) {
-      case MILKYWAY:
-        return SymbolMilkyWayEnum.BRB;
+            case PEGASUS:
+                return SymbolPegasusEnum.getRandomSymbol(random);
 
-      case PEGASUS:
-        return SymbolPegasusEnum.BBB;
-
-      case UNIVERSE:
-        return SymbolUniverseEnum.getTopSymbol();
-    }
-
-    return null;
-  }
-
-  public SymbolInterface valueOfSymbol(int id) {
-    switch (this) {
-      case MILKYWAY:
-        return SymbolMilkyWayEnum.valueOf(id);
-
-      case PEGASUS:
-        return SymbolPegasusEnum.valueOf(id);
-
-      case UNIVERSE:
-        return SymbolUniverseEnum.valueOf(id);
-    }
-
-    return null;
-  }
-
-  public boolean validateDialedAddress(StargateAddressDynamic stargateAddress) {
-    switch (this) {
-      case MILKYWAY:
-        return SymbolMilkyWayEnum.validateDialedAddress(stargateAddress);
-
-      case PEGASUS:
-        return SymbolPegasusEnum.validateDialedAddress(stargateAddress);
-
-      case UNIVERSE:
-        return SymbolUniverseEnum.validateDialedAddress(stargateAddress);
-    }
-
-    return false;
-  }
-
-  public List<SymbolInterface> stripOrigin(List<SymbolInterface> dialedAddress) {
-    switch (this) {
-      case MILKYWAY:
-        return SymbolMilkyWayEnum.stripOrigin(dialedAddress);
-
-      case PEGASUS:
-        return SymbolPegasusEnum.stripOrigin(dialedAddress);
-
-      case UNIVERSE:
-        return SymbolUniverseEnum.stripOrigin(dialedAddress);
-    }
-
-    return null;
-  }
-
-  public int getMinimalSymbolCountTo(SymbolTypeEnum symbolType, boolean localDial) {
-    switch (this) {
-      case MILKYWAY:
-        return SymbolMilkyWayEnum.getMinimalSymbolCountTo(symbolType, localDial);
-
-      case PEGASUS:
-        return SymbolPegasusEnum.getMinimalSymbolCountTo(symbolType, localDial);
-
-      case UNIVERSE:
-        return SymbolUniverseEnum.getMinimalSymbolCountTo(symbolType, localDial);
-    }
-
-    return 0;
-  }
-
-  public SymbolInterface getOrigin() {
-    switch (this) {
-      case MILKYWAY:
-        return SymbolMilkyWayEnum.getOrigin();
-
-      case PEGASUS:
-        return SymbolPegasusEnum.getOrigin();
-
-      case UNIVERSE:
-        return SymbolUniverseEnum.getOrigin();
-    }
-
-    return null;
-  }
-
-
-  public SymbolInterface fromEnglishName(String englishName) {
-    switch (this) {
-      case MILKYWAY:
-        return SymbolMilkyWayEnum.fromEnglishName(englishName);
-
-      case PEGASUS:
-        return SymbolPegasusEnum.fromEnglishName(englishName);
-
-      case UNIVERSE:
-        SymbolUniverseEnum symbol = SymbolUniverseEnum.fromEnglishName(englishName);
-
-        if (symbol != null) return symbol;
-
-        try {
-          int index = Integer.parseInt(englishName.replace("G", ""));
-          if (index < 1 || index > 36) return null;
-
-          return SymbolUniverseEnum.values()[index];
-        } catch (NumberFormatException ex) {
-          return null;
+            case UNIVERSE:
+                return SymbolUniverseEnum.getRandomSymbol(random);
         }
+
+        return null;
     }
 
-    return null;
-  }
+    public SymbolInterface getBRB() {
+        switch (this) {
+            case MILKYWAY:
+                return SymbolMilkyWayEnum.BRB;
 
-  public SymbolInterface[] getValues() {
-    switch (this) {
-      case MILKYWAY:
-        return SymbolMilkyWayEnum.values();
+            case PEGASUS:
+                return SymbolPegasusEnum.BBB;
 
-      case PEGASUS:
-        return SymbolPegasusEnum.values();
+            case UNIVERSE:
+                return SymbolUniverseEnum.getTopSymbol();
+        }
 
-      case UNIVERSE:
-        return SymbolUniverseEnum.values();
-      default:
-        break;
+        return null;
     }
 
-    return new SymbolInterface[]{};
-  }
+    public SymbolInterface valueOfSymbol(int id) {
+        switch (this) {
+            case MILKYWAY:
+                return SymbolMilkyWayEnum.valueOf(id);
 
-  public int getMaxSymbolsDisplay(boolean hasUpgrade) {
-    switch (this) {
-      case MILKYWAY:
-        return SymbolMilkyWayEnum.getMaxSymbolsDisplay(hasUpgrade);
+            case PEGASUS:
+                return SymbolPegasusEnum.valueOf(id);
 
-      case PEGASUS:
-        return SymbolPegasusEnum.getMaxSymbolsDisplay(hasUpgrade);
+            case UNIVERSE:
+                return SymbolUniverseEnum.valueOf(id);
+        }
 
-      case UNIVERSE:
-        return SymbolUniverseEnum.getMaxSymbolsDisplay(hasUpgrade);
+        return null;
     }
 
-    return 0;
-  }
+    public boolean validateDialedAddress(StargateAddressDynamic stargateAddress) {
+        switch (this) {
+            case MILKYWAY:
+                return SymbolMilkyWayEnum.validateDialedAddress(stargateAddress);
 
-  public float getAnglePerGlyph() {
-    switch (this) {
-      case MILKYWAY:
-        return SymbolMilkyWayEnum.getAnglePerGlyph();
+            case PEGASUS:
+                return SymbolPegasusEnum.validateDialedAddress(stargateAddress);
 
-      case PEGASUS:
-        return SymbolPegasusEnum.getAnglePerGlyph();
+            case UNIVERSE:
+                return SymbolUniverseEnum.validateDialedAddress(stargateAddress);
+        }
 
-      case UNIVERSE:
-        return SymbolUniverseEnum.getAnglePerGlyph();
+        return false;
     }
 
-    return 0;
-  }
+    public int getMinimalSymbolCountTo(SymbolTypeEnum symbolType, boolean localDial) {
+        switch (this) {
+            case MILKYWAY:
+                return SymbolMilkyWayEnum.getMinimalSymbolCountTo(symbolType, localDial);
 
-  public SymbolInterface getSymbolByAngle(float angle) {
-    switch (this) {
-      case MILKYWAY:
-        return SymbolMilkyWayEnum.getSymbolByAngle(angle);
+            case PEGASUS:
+                return SymbolPegasusEnum.getMinimalSymbolCountTo(symbolType, localDial);
 
-      case PEGASUS:
-        return SymbolPegasusEnum.getSymbolByAngle(angle);
+            case UNIVERSE:
+                return SymbolUniverseEnum.getMinimalSymbolCountTo(symbolType, localDial);
+        }
 
-      case UNIVERSE:
-        return SymbolUniverseEnum.getSymbolByAngle(angle);
+        return 0;
     }
 
-    return null;
-  }
+    public SymbolInterface getOrigin() {
+        switch (this) {
+            case MILKYWAY:
+                return SymbolMilkyWayEnum.getOrigin();
 
-  public float getAngleOfNearest(float angle) {
-    switch (this) {
-      case MILKYWAY:
-        return SymbolMilkyWayEnum.getAngleOfNearest(angle);
+            case PEGASUS:
+                return SymbolPegasusEnum.getOrigin();
 
-      case PEGASUS:
-        return 0; //SymbolPegasusEnum.getAngleOfNearest(angle);
+            case UNIVERSE:
+                return SymbolUniverseEnum.getOrigin();
+        }
 
-      case UNIVERSE:
-        return SymbolUniverseEnum.getAngleOfNearest(angle);
+        return null;
     }
 
-    return 0;
-  }
 
+    public SymbolInterface fromEnglishName(String englishName) {
+        switch (this) {
+            case MILKYWAY:
+                return SymbolMilkyWayEnum.fromEnglishName(englishName);
 
-  public SymbolInterface getTopSymbol() {
-    switch (this) {
-      case MILKYWAY:
-        return SymbolMilkyWayEnum.getTopSymbol();
+            case PEGASUS:
+                return SymbolPegasusEnum.fromEnglishName(englishName);
 
-      case PEGASUS:
-        return SymbolPegasusEnum.getTopSymbol();
+            case UNIVERSE:
+                SymbolUniverseEnum symbol = SymbolUniverseEnum.fromEnglishName(englishName);
 
-      case UNIVERSE:
-        return SymbolUniverseEnum.getTopSymbol();
+                if (symbol != null) return symbol;
+
+                try {
+                    int index = Integer.parseInt(englishName.replace("G", ""));
+                    if (index < 1 || index > 36) return null;
+
+                    return SymbolUniverseEnum.values()[index];
+                } catch (NumberFormatException ex) {
+                    return null;
+                }
+        }
+
+        return null;
     }
 
-    return null;
-  }
+    public SymbolInterface[] getValues() {
+        switch (this) {
+            case MILKYWAY:
+                return SymbolMilkyWayEnum.values();
 
-  public boolean hasOrigin() {
-    return getOrigin() != null;
-  }
+            case PEGASUS:
+                return SymbolPegasusEnum.values();
+
+            case UNIVERSE:
+                return SymbolUniverseEnum.values();
+            default:
+                break;
+        }
+
+        return new SymbolInterface[]{};
+    }
+
+    public int getMaxSymbolsDisplay(boolean hasUpgrade) {
+        switch (this) {
+            case MILKYWAY:
+                return SymbolMilkyWayEnum.getMaxSymbolsDisplay(hasUpgrade);
+
+            case PEGASUS:
+                return SymbolPegasusEnum.getMaxSymbolsDisplay(hasUpgrade);
+
+            case UNIVERSE:
+                return SymbolUniverseEnum.getMaxSymbolsDisplay(hasUpgrade);
+        }
+
+        return 0;
+    }
+
+    public float getAnglePerGlyph() {
+        switch (this) {
+            case MILKYWAY:
+                return SymbolMilkyWayEnum.getAnglePerGlyph();
+
+            case PEGASUS:
+                return SymbolPegasusEnum.getAnglePerGlyph();
+
+            case UNIVERSE:
+                return SymbolUniverseEnum.getAnglePerGlyph();
+        }
+
+        return 0;
+    }
+
+    public SymbolInterface getSymbolByAngle(float angle) {
+        switch (this) {
+            case MILKYWAY:
+                return SymbolMilkyWayEnum.getSymbolByAngle(angle);
+
+            case PEGASUS:
+                return SymbolPegasusEnum.getOrigin();
+
+            case UNIVERSE:
+                return SymbolUniverseEnum.getSymbolByAngle(angle);
+        }
+
+        return null;
+    }
+
+    public float getAngleOfNearest(float angle) {
+        switch (this) {
+            case MILKYWAY:
+                return SymbolMilkyWayEnum.getAngleOfNearest(angle);
+
+            case PEGASUS:
+                return 0; //SymbolPegasusEnum.getAngleOfNearest(angle);
+
+            case UNIVERSE:
+                return SymbolUniverseEnum.getAngleOfNearest(angle);
+        }
+
+        return 0;
+    }
 
 
-  // ------------------------------------------------------------
-  // Static
+    public SymbolInterface getTopSymbol() {
+        switch (this) {
+            case MILKYWAY:
+                return SymbolMilkyWayEnum.getTopSymbol();
 
-  private static final EnumKeyMap<Integer, SymbolTypeEnum> ID_MAP = new EnumKeyMap<Integer, SymbolTypeEnum>(values());
+            case PEGASUS:
+                return SymbolPegasusEnum.getTopSymbol();
 
-  @Override
-  public Integer getKey() {
-    return id;
-  }
+            case UNIVERSE:
+                return SymbolUniverseEnum.getTopSymbol();
+        }
 
-  public static SymbolTypeEnum valueOf(int id) {
-    return ID_MAP.valueOf(id);
-  }
+        return null;
+    }
 
-  @Nonnull
-  public static SymbolTypeEnum getRandom(){
-    return valueOf((int) (Math.random() * values().length));
-  }
+    public boolean hasOrigin() {
+        return getOrigin() != null;
+    }
+
+
+    // ------------------------------------------------------------
+    // Static
+
+    private static final EnumKeyMap<Integer, SymbolTypeEnum> ID_MAP = new EnumKeyMap<>(values());
+
+    @Override
+    public Integer getKey() {
+        return id;
+    }
+
+    public static SymbolTypeEnum valueOf(int id) {
+        return ID_MAP.valueOf(id);
+    }
+
+    @Nonnull
+    public static SymbolTypeEnum getRandom() {
+        return valueOf((int) (Math.random() * values().length));
+    }
 }

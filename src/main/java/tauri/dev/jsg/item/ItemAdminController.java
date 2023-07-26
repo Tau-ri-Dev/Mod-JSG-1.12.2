@@ -10,13 +10,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.packet.AdminControllerGuiOpenToClient;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicMemberTile;
+import tauri.dev.jsg.util.LinkingHelper;
 import tauri.dev.jsg.util.RayTraceHelper;
 
 import javax.annotation.Nonnull;
@@ -42,20 +45,21 @@ public class ItemAdminController extends Item {
             if(world.getTotalWorldTime() % 5 != 0) return;
             if(!(entity instanceof EntityPlayerMP)) return;
 
-            TileEntity te = RayTraceHelper.rayTraceTileEntity((EntityPlayerMP) entity, 20);
-
-            if (te instanceof StargateClassicMemberTile) {
-                te = ((StargateClassicMemberTile) te).getBaseTile(world);
-            }
-
-            if (!(te instanceof StargateClassicBaseTile)) return;
-            StargateClassicBaseTile gateTile = (StargateClassicBaseTile) te;
-
+            // Get compound - if null, gate is probably not even linked
             NBTTagCompound compound = stack.getTagCompound();
-            if(compound == null) compound = new NBTTagCompound();
+            if(compound == null) return;
 
+            // Check if gate is linked
+            if(!compound.hasKey("linkedGatePos")) return;
+
+            // get and check if linked Tile is not null and is classic base tile
+            TileEntity te = world.getTileEntity(BlockPos.fromLong(compound.getLong("linkedGatePos")));
+            if (!(te instanceof StargateClassicBaseTile)) return;
+
+            // cast and set NBT of gate tile to NBT of controller
+            StargateClassicBaseTile gateTile = (StargateClassicBaseTile) te;
             compound.setTag("gateNBT", gateTile.writeToNBT(new NBTTagCompound()));
-
+            compound.setTag("sgNetwork", gateTile.getNetwork().serializeNBT());
             stack.setTagCompound(compound);
         }
     }
@@ -67,10 +71,23 @@ public class ItemAdminController extends Item {
             TileEntity te = RayTraceHelper.rayTraceTileEntity(player, 20);
 
             if (te instanceof StargateClassicMemberTile) {
+                // If member, get base block
                 te = ((StargateClassicMemberTile) te).getBaseTile(world);
             }
 
+            if(!(te instanceof StargateClassicBaseTile)){
+                te = LinkingHelper.findClosestTile(world, player.getPosition(), JSGBlocks.STARGATE_BASE_BLOCKS, StargateClassicBaseTile.class, 20, 20);
+            }
+
             if (te instanceof StargateClassicBaseTile && player instanceof EntityPlayerMP) {
+
+                // Set linked gate for updating
+                NBTTagCompound compound = player.getHeldItem(hand).getTagCompound();
+                if(compound == null) compound = new NBTTagCompound();
+                compound.setLong("linkedGatePos", te.getPos().toLong());
+                player.getHeldItem(hand).setTagCompound(compound);
+
+                // Open GUI for the player
                 JSGPacketHandler.INSTANCE.sendTo(new AdminControllerGuiOpenToClient(te.getPos(), ((StargateClassicBaseTile) te).getNetwork()), (EntityPlayerMP) player);
             }
         }

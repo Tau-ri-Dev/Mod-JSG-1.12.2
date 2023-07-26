@@ -44,6 +44,12 @@ public class JSGConfig {
         })
         public static Visual visual = new Visual();
 
+        @Config.Name("Events")
+        @Config.Comment({
+                "Events settings"
+        })
+        public static Events events = new Events();
+
         @Config.Name("Integration")
         @Config.Comment({
                 "Integration settings"
@@ -139,6 +145,20 @@ public class JSGConfig {
                     "SIDE: CLIENT"
             })
             public int destinyVentParticlesCount = 5;
+        }
+
+        public static class Events {
+            @Config.Name("Enable teleports using End Portal")
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
+            public boolean allowEndPortals = false;
+
+            @Config.Name("Enable teleports using Nether Portal")
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
+            public boolean allowNetherPortals = false;
         }
 
         public static class Debug {

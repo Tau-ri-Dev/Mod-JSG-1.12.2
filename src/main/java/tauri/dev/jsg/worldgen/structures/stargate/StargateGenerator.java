@@ -96,13 +96,12 @@ public class StargateGenerator {
     }
 
     public static GeneratedStargate mystPageGeneration(World pWorld, EnumStructures structure, int dimensionToSpawn, @Nonnull BlockPos pPos) {
+        return mystPageGeneration(pWorld, structure, dimensionToSpawn, pPos, JSGConfig.WorldGen.mystPage.minOverworldCoords, JSGConfig.WorldGen.mystPage.maxOverworldCoords);
+    }
+    public static GeneratedStargate mystPageGeneration(World pWorld, EnumStructures structure, int dimensionToSpawn, @Nonnull BlockPos pPos, int min, int max) {
         Random rand = new Random();
         int tries = 0;
         WorldServer worldToSpawn = Objects.requireNonNull(pWorld.getMinecraftServer()).getWorld(dimensionToSpawn);
-
-        int min = JSGConfig.WorldGen.mystPage.minOverworldCoords;
-        int max = JSGConfig.WorldGen.mystPage.maxOverworldCoords;
-
         int x = (Math.abs(pPos.getX()) + (min + (int) (rand.nextFloat() * max)));
         int z = (Math.abs(pPos.getZ()) + (min + (int) (rand.nextFloat() * max)));
 

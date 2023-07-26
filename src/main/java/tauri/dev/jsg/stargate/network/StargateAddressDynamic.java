@@ -83,7 +83,8 @@ public class StargateAddressDynamic extends StargateAddress {
 	public boolean contains(SymbolInterface symbol) {
 		return address.contains(symbol);
 	}
-	
+
+	@SuppressWarnings("all")
 	public boolean validate() {
 		return symbolType.validateDialedAddress(this);
 	}

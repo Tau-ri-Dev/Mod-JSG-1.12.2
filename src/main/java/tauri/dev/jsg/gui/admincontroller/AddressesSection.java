@@ -39,19 +39,68 @@ public class AddressesSection {
     public ArrayList<JSGButton> optionButtons = new ArrayList<>();
     public ArrayList<GuiTextField> entriesTextFields = new ArrayList<>();
 
+    public JSGTextField searchField;
+
     public AddressesSection(GuiAdminController baseGui) {
         this.guiBase = baseGui;
+        searchField = new JSGTextField(500, Minecraft.getMinecraft().fontRenderer, 0, 0, 120, 20, "");
+    }
+
+    @SuppressWarnings("all")
+    public boolean canAddThisEntry(StargatePos pos) {
+        String searchString = searchField.getText().toLowerCase();
+        if (!searchString.equalsIgnoreCase("")) {
+            boolean notContinue = false;
+            String entryString = BlockHelpers.blockPosToBetterString(pos.gatePos) + " " + pos.getGateSymbolType().name().toLowerCase() + " " + pos.dimensionID + " " + pos.getName().toLowerCase();
+            if (entryString.contains(searchString)) notContinue = true;
+
+            String[] params = searchString.split(" ");
+            for (String s : params) {
+                try {
+                    if (s.startsWith("dim=")) {
+                        if (pos.dimensionID == Integer.parseInt(s.replaceFirst("dim=", "")))
+                            notContinue = true;
+                    } else if (s.startsWith("pos=")) {
+                        String ss = s.replaceFirst("pos=", "");
+                        int i = Integer.parseInt(ss.split(",")[0]);
+                        if (pos.gatePos.getX() == i)
+                            notContinue = true;
+                        i = Integer.parseInt(ss.split(",")[1]);
+                        if (pos.gatePos.getY() == i)
+                            notContinue = true;
+                        i = Integer.parseInt(ss.split(",")[2]);
+                        if (pos.gatePos.getZ() == i)
+                            notContinue = true;
+                    } else if (s.startsWith("name=")) {
+                        if (pos.getName().equalsIgnoreCase(s.replaceFirst("name=", "")))
+                            notContinue = true;
+                    } else if (s.startsWith("type=")) {
+                        if (pos.getGateSymbolType().name().equalsIgnoreCase(s.replaceFirst("type=", "")))
+                            notContinue = true;
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+            return notContinue;
+        }
+        return true;
     }
 
     public void generateAddressEntries() {
+        generateAddressEntries(false);
+    }
+
+    public void generateAddressEntries(boolean reset) {
         if (guiBase.stargateNetwork == null) {
             entries.clear();
             return;
         }
-        if (entries.size() > 0) return;
+        if (!reset && entries.size() > 0) return;
+        entries.clear();
 
         Map<StargateAddress, StargatePos> m = guiBase.stargateNetwork.getMap().get(Objects.requireNonNull(guiBase.gateTile).getSymbolType());
         for (StargateAddress a : m.keySet()) {
+            if (!canAddThisEntry(m.get(a))) continue;
             StargateEntry e = new StargateEntry();
             e.pos = m.get(a);
             e.address = a;
@@ -60,14 +109,16 @@ public class AddressesSection {
 
         Map<StargatePos, Map<SymbolTypeEnum, StargateAddress>> notGeneratedMap = guiBase.stargateNetwork.getMapNotGenerated();
         for (StargatePos pos : notGeneratedMap.keySet()) {
+            if (!canAddThisEntry(pos)) continue;
             StargateEntry e = new StargateEntry();
             e.pos = pos;
             e.address = notGeneratedMap.get(pos).get(Objects.requireNonNull(guiBase.gateTile).getSymbolType());
             e.notGenerated = true;
-            e.defaultName = "[NOT GENERATED GATE] ";
+            e.defaultName = "NOT GENERATED - ";
             entries.add(e);
         }
         sortEntries();
+        init(reset);
     }
 
     public void init(boolean reset) {
@@ -77,10 +128,21 @@ public class AddressesSection {
         dialButtons.clear();
         entriesTextFields.clear();
         if (entries.size() < 1) return;
+
+        boolean focused = searchField.isFocused();
+        int cursor = searchField.getCursorPosition();
+        searchField = new JSGTextField(500, guiBase.mc.fontRenderer, guiBase.center[0] - 45, guiTop + height - 21, 90, 20, searchField.getText());
+        searchField.setActionCallback(() -> generateAddressEntries(true));
+        searchField.performActionOnKeyUp = true;
+        searchField.setFocused(focused);
+        searchField.setCursorPosition(cursor);
+
+        thisGateEntryIndex = -1;
+
         for (StargateEntry e : entries) {
             index++;
             StargatePos p = e.pos;
-            String name = (p.getName() != null && !p.getName().equalsIgnoreCase("") ? p.getName() : BlockHelpers.blockPosToBetterString(p.gatePos));
+            String name = e.notGenerated ? String.valueOf(index) : (p.getName() != null && !p.getName().equalsIgnoreCase("") ? p.getName() : BlockHelpers.blockPosToBetterString(p.gatePos));
             final int finalIndex = index;
             JSGTextField field = new JSGTextField(index, Minecraft.getMinecraft().fontRenderer, guiLeft, 0, 120, 20, e.defaultName + name);
             field.setText(e.defaultName + name);
@@ -97,7 +159,7 @@ public class AddressesSection {
                 btn.setEnabled(1, false);
             }
 
-            if(e.notGenerated)
+            if (e.notGenerated)
                 btn.setEnabled(3, false);
 
             entriesTextFields.add(field);
@@ -110,7 +172,7 @@ public class AddressesSection {
         // Abort button
         String text = "Abort dialing";
         int width = (10 + guiBase.mc.fontRenderer.getStringWidth(text));
-        int y = this.guiTop;
+        int y = guiTop + height - 21;
         int x = guiBase.guiRight - OFFSET - 40 - width;
         optionButtons.add(new JSGButton(100, x, y, width, 20, text).setActionCallback(() -> {
             if (guiBase.imaginaryGateTile != null && guiBase.imaginaryGateTile.getStargateState().dialing()) {
@@ -168,11 +230,12 @@ public class AddressesSection {
 
     public void mainButtonPerformAction(int index) {
         ModeButton btn = dialButtons.get(index);
-        if(!btn.isEnabledCurrent()) return;
+        if (!btn.isEnabledCurrent()) return;
         StargateEntry entry = entries.get(index);
         StargatePos pos = entry.pos;
-        switch(btn.getCurrentState()){
-            default:break;
+        switch (btn.getCurrentState()) {
+            default:
+                break;
             case 0:
             case 1:
                 dialGate(index, btn.getCurrentState() == 1);
@@ -186,7 +249,7 @@ public class AddressesSection {
         }
     }
 
-    public void dialGate(int index, boolean fastDial){
+    public void dialGate(int index, boolean fastDial) {
         try {
             EnumHand hand = guiBase.getHand();
             StargateEntry entry = entries.get(index);
@@ -249,7 +312,7 @@ public class AddressesSection {
             boolean enabled = shouldBeEnabled && b.id != thisGateEntryIndex;
             b.setEnabled(0, enabled);
             b.setEnabled(1, enabled);
-            if(entries.get(b.id).notGenerated)
+            if (entries.get(b.id).notGenerated)
                 b.setEnabled(3, false);
             b.drawButton(guiBase.mouseX, guiBase.mouseY);
         }
@@ -257,6 +320,8 @@ public class AddressesSection {
         for (JSGButton b : optionButtons) {
             b.drawButton(Minecraft.getMinecraft(), guiBase.mouseX, guiBase.mouseY, guiBase.partialTicks);
         }
+
+        searchField.drawTextBox();
     }
 
     public void renderFg() {
@@ -265,12 +330,26 @@ public class AddressesSection {
             StargateEntry e = entries.get(f.getId());
             if (!canNotRenderEntry(f.y) && GuiHelper.isPointInRegion(f.x, f.y, f.width, f.height, guiBase.mouseX, guiBase.mouseY)) {
                 Util.drawHoveringText(Arrays.asList(
-                        "Type: " + e.pos.getGateSymbolType().toString(),
-                        "Pos: " + e.pos.gatePos.toString(),
-                        "Dim: " + e.pos.dimensionID + " (" + DimensionManager.getProviderType(e.pos.dimensionID).getName() + ")"
+                        "\u00a7lType: \u00a77" + e.pos.getGateSymbolType().toString(),
+                        "\u00a7lPos: \u00a77" + (e.notGenerated ? "# # #" : BlockHelpers.blockPosToBetterString(e.pos.gatePos)),
+                        "\u00a7lDim: \u00a77" + e.pos.dimensionID + " (" + DimensionManager.getProviderType(e.pos.dimensionID).getName() + ")"
                 ), guiBase.mouseX, guiBase.mouseY, guiBase.width, guiBase.height, -1, guiBase.mc.fontRenderer);
             }
         }
+
+        // Search tooltip
+        if (GuiHelper.isPointInRegion(searchField.x, searchField.y, searchField.width, searchField.height, guiBase.mouseX, guiBase.mouseY)) {
+            Util.drawHoveringText(Arrays.asList(
+                    "Search entry by DimID, Name, Position or Gate type",
+                    "",
+                    "\u00a7lYou can use:",
+                    "\u00a77\u00a7o dim=<dim>",
+                    "\u00a77\u00a7o name=<name>",
+                    "\u00a77\u00a7o pos=<x,y,z>",
+                    "\u00a77\u00a7o type=<MILKYWAY|PEGASUS|UNIVERSE>"
+            ), guiBase.mouseX, guiBase.mouseY, guiBase.width, guiBase.height, -1, guiBase.mc.fontRenderer);
+        }
+
         for (ModeButton f : dialButtons) {
             if (!canNotRenderEntry(f.y) && f.isEnabledCurrent() && GuiHelper.isPointInRegion(f.x, f.y, f.width, f.height, guiBase.mouseX, guiBase.mouseY)) {
                 List<String> lines = new ArrayList<>();

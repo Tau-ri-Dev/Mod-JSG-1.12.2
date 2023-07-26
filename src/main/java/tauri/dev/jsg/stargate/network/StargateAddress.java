@@ -61,7 +61,6 @@ public class StargateAddress implements INBTSerializable<NBTTagCompound> {
 	/**
 	 * Get glyph at position {@code position}
 	 * @param pos Position of the glyph
-	 * @return
 	 */
 	public SymbolInterface get(int pos) {
 		return address.get(pos);
@@ -94,14 +93,9 @@ public class StargateAddress implements INBTSerializable<NBTTagCompound> {
 	
 	/**
 	 * Get 7th and 8th symbols, as they're not saved by this implementation.
-	 * @return
 	 */
 	public List<SymbolInterface> getAdditional() {
 		return address.subList(6, 8);
-	}
-	
-	public boolean hasAddress() {
-		return address.size() > 0;
 	}
 	
 	
@@ -185,9 +179,7 @@ public class StargateAddress implements INBTSerializable<NBTTagCompound> {
 		else if(other.address.size() < 7) return false;
 		else if (!address.subList(0, 6).equals(other.address.subList(0, 6)))
 			return false;
-		if (symbolType != other.symbolType)
-			return false;
-		return true;
+		return symbolType == other.symbolType;
 	}
 
 	public boolean equalsV2(StargateAddressDynamic address) {
