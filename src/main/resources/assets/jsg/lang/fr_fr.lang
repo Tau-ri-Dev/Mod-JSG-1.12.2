@@ -1,14 +1,14 @@
 # itemGroups - onglets créatifs
 itemGroup.jsg_gates=JSG : Portes
 itemGroup.jsg_items=JSG : Articles
-itemGroup.jsg_rings=JSG : Bagues
+itemGroup.jsg_rings=JSG : Anneaux
 itemGroup.jsg_ores=JSG : Minerais
 itemGroup.jsg_energy=JSG : Énergie
 itemGroup.jsg_tools=JSG : Outils
 itemGroup.jsg_props=JSG : Accessoires
 itemGroup.jsg_machines=JSG : Machines
 itemGroup.jsg_weapons=JSG : Armes
-itemGroup.jsg_records=JSG : Records
+itemGroup.jsg_records=JSG : Enregistrements
 
 # fichier de configuration
 config.jsg.general=Configuration générale
@@ -255,7 +255,7 @@ item.jsg.page_mysterious.tooltip=Qui sait où cela mène?
 
 item.jsg.page_mysterious.generation.start=Démarrage d'une nouvelle génération de portes des étoiles...
 item.jsg.page_mysterious.generation.success=Porte des étoiles générée avec succès!
-item.jsg.page_mysterious.generation.failed=Génération de la porte des étoiles échouée!
+item.jsg.page_mysterious.generation.failed=La génération de la porte des étoiles a ÉCHOUÉ!
 
 # beamer
 item.jsg.beamer_crystal_power.name=Cristal de puissance de Beamer
@@ -266,7 +266,7 @@ item.jsg.beamer_crystal_laser.name=Cristal de laser Beamer
 # universe dialer
 item.jsg.universe_dialer.name=Composteur de l'univers
 item.jsg.universe_dialer.broken.name=Composteur de l'univers (cassé)
-item.jsg.universe_dialer.saved_gates=Portes sauvegardées : %s
+item.jsg.universe_dialer.saved_gates=Portes sauvegardées: %s
 item.jsg.universe_dialer.not_linked=Non lié
 item.jsg.universe_dialer.gate_busy=Porte occupée
 item.jsg.universe_dialer.mode_scan=Près de chez nous
@@ -275,8 +275,8 @@ item.jsg.universe_dialer.mode_rings=Anneaux
 item.jsg.universe_dialer.mode_oc=OpnCom
 item.jsg.universe_dialer.mode_info=Status
 item.jsg.universe_dialer.mode_countdown=Minuteur
-item.jsg.universe_dialer.countdown_not_sync=Non synchronisé !
-item.jsg.universe_dialer.countdown_not_active=Compte à rebours non actif !
+item.jsg.universe_dialer.countdown_not_sync=Non synchronisé!
+item.jsg.universe_dialer.countdown_not_active=Compte à rebours non actif!
 item.jsg.universe_dialer.aborting=Abandon de la numérotation
 item.jsg.universe_dialer.abort=Abandonner
 item.jsg.universe_dialer.dial_start=Composition de la porte...
@@ -288,10 +288,10 @@ item.jsg.universe_dialer.oc_port=Port du modem
 item.jsg.universe_dialer.oc_data=Paramètres d'OpenComputers (séparés par des virgules)
 item.jsg.universe_dialer.oc_save=Sauvegarde
 item.jsg.universe_dialer.oc_port_invalid=Port non valide
-item.jsg.universe_dialer.oc_message_received=Recevoir une réponse :
+item.jsg.universe_dialer.oc_message_received=Recevoir une réponse:
 item.jsg.universe_dialer.toggle_fast_dial=Modifier la numérotation rapide
-item.jsg.universe_dialer.fast_dail_false=Fixation de la numérotation rapide à : Faux
-item.jsg.universe_dialer.fast_dail_true=Composition rapide réglée sur : Vrai
+item.jsg.universe_dialer.fast_dail_false=Fixation de la numérotation rapide à: Faux
+item.jsg.universe_dialer.fast_dail_true=Composition rapide réglée sur: Vrai
 
 # Carnet de notes
 item.jsg.notebook.name=Carnet de notes
@@ -336,8 +336,8 @@ item.jsg.wrench.name=JSG Clé à molette
 # Engrenages
 item.jsg.gear_titanium.name=Engrenage (Titane)
 item.jsg.gear_trinium.name=Engrenage (Trinium)
-item.jsg.gear_naquadah_raw.name=Article (Naquadah brut)
-item.jsg.gear_naquadah.name=Article (Naquadah)
+item.jsg.gear_naquadah_raw.name=Engrenage (Naquadah brut)
+item.jsg.gear_naquadah.name=Engrenage (Naquadah)
 
 # Plaques
 item.jsg.plate_titanium.name=Plaque (Titane)
@@ -347,7 +347,7 @@ item.jsg.plate_naquadah.name=Plaque (Naquadah)
 
 # schémas
 item.jsg.schematic_milkyway.name=Schéma (Voie lactée)
-item.jsg.schematic_pegasus.name=Schéma (Pegasus)
+item.jsg.schematic_pegasus.name=Schéma (Pégase)
 item.jsg.schematic_universe.name=Schéma (Univers)
 item.jsg.schematic_goauld.name=Schéma des anneaux de transport (Goa'uld)
 item.jsg.schematic_ori.name=Schéma des anneaux de transport (Ori)
@@ -425,7 +425,7 @@ tile.jsg.capacitor_block.name=Banque de condensateurs
 tile.jsg.capacitor_block_creative.name=Banque de condensateurs (Creative)
 tile.jsg.capacitor_block_empty.name=Banque de condensateurs (vide)
 
-# zpm
+# E2PZ
 tile.jsg.zpm.name=Module de point zéro (E2PZ)
 tile.jsg.creative_zpm.name=Module de point zéro (E2PZ) (Creative)
 tile.jsg.zpm_hub_block.name=Hub d'E2PZ (Ancien)
@@ -444,7 +444,7 @@ tile.jsg.transportrings_block.non_existing_address=Incapable d'atteindre cette a
 tile.jsg.transportrings_block.wrong_distance=Mauvaise distance, devrait être de -15 à 15
 tile.jsg.transportrings_block.obstructed=Anneaux obstrués, dégager une zone de 5x5 autour des anneaux
 tile.jsg.transportrings_block.obstructed_target=Anneaux cibles obstrués, dégagez la zone de 5x5 autour des anneaux cibles
-tile.jsg.transportrings_block.busy=Ringles occupées
+tile.jsg.transportrings_block.busy=Anneaux occupées
 tile.jsg.transportrings_block.busy_target=Anneaux cibles occupés
 tile.jsg.transportrings_block.not_enough_power=Pas assez de puissance pour activer les anneaux
 tile.jsg.transportrings_block.rings_name=Nom de l'anneau
@@ -454,13 +454,21 @@ tile.jsg.transportrings_block.rings_distance=Distance
 tile.jsg.beamer_block.name=Bloc de Beamer 
 
 # Machines
-tile.jsg.assembler_machine_block.name=Ancien Assembleur
+tile.jsg.assembler_machine_block.name=Assembleur Ancien
 tile.jsg.crystal_chamber_block.name=Chambre de cristal
 tile.jsg.pcb_fabricator_block.name=Fabricateur de circuits imprimés
 tile.jsg.ore_washing_machine_block.name=Machine à laver les minerais
 
 # Signe ancien
 tile.jsg.ancient_sign.name=Signe ancien
+
+# -------------------
+
+# -------------------
+# ENTITIES
+
+entity.Tokra.default=Tok'ra
+entity.tokra.name=Tok'ra
 
 # -------------------
 
@@ -484,14 +492,6 @@ fluid.naquadah_molten_alloy=Alliage liquide de Naquadah
 # autre
 fluid.trinium_molten=Trinium fondu
 fluid.titanium_molten=Titanium fondu
-
-# -------------------
-
-# -------------------
-# ENTITÉS
-
-entity.tokra.default=Tok'ra
-entity.tokra.name=Tok'ra
 
 # -------------------
 
@@ -690,13 +690,13 @@ gui.configuration=Configuration
 
 # dhd
 gui.dhd.fusion=Fusion froide
-gui.dhd.crystalStatus=Contrôle du cristal :
+gui.dhd.crystalStatus=Contrôle du cristal:
 gui.dhd.no_crystal=Cristal manquant
 gui.dhd.crystal_ok=En place
-gui.dhd.linkStatus=Etat des liens du sous-espace :
+gui.dhd.linkStatus=Etat des liens du sous-espace:
 gui.dhd.linked=Lié
 gui.dhd.not_linked=Non lié
-gui.dhd.reactorStatus=Réacteur à fusion froide :
+gui.dhd.reactorStatus=Réacteur à fusion froide:
 gui.dhd.running=Fonctionnement
 gui.dhd.standby=Stand-by
 gui.dhd.no_fuel=Pas de combustible
@@ -717,7 +717,7 @@ gui.stargate.iris.closed_help=L'iris est fermé en permanence
 gui.stargate.iris.auto_help=L'iris se ferme automatiquement sur un trou de ver entrant,
 gui.stargate.iris.auto1_help=L'iris peut être ouvert avec GDO en envoyant le code défini dans le champ.
 gui.stargate.iris.oc_help=L'iris peut être contrôlée par des ordinateurs ouverts
-gui.stargate.iris.dialer_help=Iris can be controlled by universe dialer
+gui.stargate.iris.dialer_help=L'iris peut être commandé par un composeur de l'univers
 
 gui.stargate.biome_overlay=Couvrement du biome
 gui.stargate.biome_overlay.help=Insérer les blocs pour les remplacer
@@ -730,18 +730,18 @@ gui.stargate.biome_overlay.sandy=Sable
 gui.stargate.capacitors=Capaciteurs
 gui.stargate.energyBuffer=Tampon d'énergie
 
-gui.stargate.state.closed=Porte des étoiles fermée !
-gui.stargate.state.opened=Temps d'ouverture :
-gui.stargate.state.gate_temp=Température de la porte :
-gui.stargate.state.iris_temp=Température de l'iris :
+gui.stargate.state.closed=Porte des étoiles fermée!
+gui.stargate.state.opened=Temps d'ouverture:
+gui.stargate.state.gate_temp=Température de la porte:
+gui.stargate.state.iris_temp=Température de l'iris:
 
 gui.stargate.info=Information sur la porte
 
-# hube2pz
-gui.zpmhub.inProgress=Les E2PZ se déplacent !
+# Hub E2PZ
+gui.zpmhub.inProgress=Les E2PZ se déplacent!
 gui.zpmhub.slideDown=Engager les E2PZ
 gui.zpmhub.slideUp=Désengager les E2PZ
-gui.zpmhub.alert=Les emplacements pour les E2PZ sont verrouillés !
+gui.zpmhub.alert=Les emplacements pour les E2PZ sont verrouillés!
 
 # Condensateur
 gui.capacitor.name=Banque de condensateurs
@@ -793,14 +793,14 @@ gui.beamer.save=Sauvegarder
 gui.beamer.invalid=Invalide
 
 # gdo
-gui.gdo.send_code=Entrez le code :
+gui.gdo.send_code=Entrez le code:
 gui.gdo.send_button=Envoyer le code
 
 # assembleur
-gui.assembler.name=Ancien Assembleur
+gui.assembler.name=Assembleur Ancien
 
-# signe ancien
-gui.ancient_sign.edit=Editer le texte ancien
+# signe Ancien
+gui.ancient_sign.edit=Editer le texte Ancien
 
 # -------------------
 
@@ -879,7 +879,7 @@ jsg.subtitle.universe_dialer_connect=Composeur de l'univers connecté
 jsg.subtitle.item_zat_shoot=Tir de Zat'nik'tel
 jsg.subtitle.item_staff_shoot=Tirer avec l'arme du bâton Goa'uld
 
-jsg.subtitle.destiny_countdown_start=Le compte à rebours du destin a commencé !
+jsg.subtitle.destiny_countdown_start=Le compte à rebours du destin a commencé!
 jsg.subtitle.destiny_countdown_stop=Le compte à rebours de Destiny a atteint zéro.
 jsg.subtitle.destiny_countdown_one_minute=Il reste une minute au compte à rebours de Destiny.
 
