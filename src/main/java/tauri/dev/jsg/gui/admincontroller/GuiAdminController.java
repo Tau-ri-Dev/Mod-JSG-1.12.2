@@ -423,6 +423,7 @@ public class GuiAdminController extends JSGTexturedGui {
     }
 
     public void renderSymbol(int x, int y, int w, int h, SymbolInterface symbol, int originId) {
+        if(symbol == null) return;
         GlStateManager.pushMatrix();
         GlStateManager.enableTexture2D();
         GlStateManager.enableBlend();

@@ -714,6 +714,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
         switch (soundEnum) {
             case OPEN:
                 return SoundEventEnum.GATE_UNIVERSE_OPEN;
+            case OPEN_NOX:
+                return SoundEventEnum.GATE_NOX_OPEN;
             case CLOSE:
                 return SoundEventEnum.GATE_UNIVERSE_CLOSE;
             case DIAL_FAILED:

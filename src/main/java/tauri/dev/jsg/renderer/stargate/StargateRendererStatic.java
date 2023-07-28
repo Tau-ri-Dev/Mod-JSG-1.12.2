@@ -10,33 +10,32 @@ import static org.lwjgl.opengl.GL11.*;
 import static tauri.dev.jsg.renderer.stargate.StargateAbstractRenderer.isEhAnimatedLoaded;
 
 public class StargateRendererStatic {
-    static final float eventHorizonRadius = 3.790975f;
+    static final float EVENT_HORIZON_RADIUS = 3.790975f;
 
-    private static final int quads = 16;
-    private static final int sections = 36 * 2;
-    private static final float sectionAngle = (float) (2 * Math.PI / sections);
+    private static final int QUADS = 16;
+    private static final int SECTIONS = 36 * 2;
+    private static final float SECTION_ANGLE = (float) (2 * Math.PI / SECTIONS);
 
-    private static final float innerCircleRadius = 0.25f;
-    private static final float quadStep = (eventHorizonRadius - innerCircleRadius) / quads;
+    public static final float INNER_CIRCLE_RADIUS = 0.25f;
+    private static final float QUAD_STEP = (EVENT_HORIZON_RADIUS - INNER_CIRCLE_RADIUS) / QUADS;
 
-    private static List<Float> offsetList = new ArrayList<Float>();
-    // private long horizonStateChange = 0;
-    private static List<Float> sin = new ArrayList<Float>();
-    private static List<Float> cos = new ArrayList<Float>();
+    private static final List<Float> OFFSET_LIST = new ArrayList<>();
+    private static final List<Float> SIN = new ArrayList<>();
+    private static final List<Float> COS = new ArrayList<>();
 
-    private static List<Float> quadRadius = new ArrayList<Float>();
+    private static final List<Float> QUAD_RADIUS = new ArrayList<>();
 
     static InnerCircle innerCircle;
-    static List<QuadStrip> quadStrips = new ArrayList<QuadStrip>();
+    static List<QuadStrip> quadStrips = new ArrayList<>();
 
-    private static Random rand = new Random();
+    private static final Random RANDOM = new Random();
 
     private static float getRandomFloat() {
-        return rand.nextFloat() * 2 - 1;
+        return RANDOM.nextFloat() * 2 - 1;
     }
 
     private static float getOffset(int index, float tick, float mul, int quadStripIndex) {
-        return (float) (Math.sin(tick / 4f + offsetList.get(index)) * mul * (quadStripIndex / 4f) * (quadStripIndex - quadStrips.size()) / 400f);
+        return (float) (Math.sin(tick / 4f + OFFSET_LIST.get(index)) * mul * (quadStripIndex / 4f) * (quadStripIndex - quadStrips.size()) / 400f);
     }
 
     private static float toUV(float coord) {
@@ -49,22 +48,22 @@ public class StargateRendererStatic {
     }
 
     private static void initEventHorizon() {
-        for (int i = 0; i < sections * (quads + 1); i++) {
-            offsetList.add(getRandomFloat() * 3);
+        for (int i = 0; i < SECTIONS * (QUADS + 1); i++) {
+            OFFSET_LIST.add(getRandomFloat() * 3);
         }
 
-        for (int i = 0; i <= sections; i++) {
-            sin.add(MathHelper.sin(sectionAngle * i));
-            cos.add(MathHelper.cos(sectionAngle * i));
+        for (int i = 0; i <= SECTIONS; i++) {
+            SIN.add(MathHelper.sin(SECTION_ANGLE * i));
+            COS.add(MathHelper.cos(SECTION_ANGLE * i));
         }
 
         innerCircle = new InnerCircle();
 
-        for (int i = 0; i <= quads; i++) {
-            quadRadius.add(innerCircleRadius + quadStep * i);
+        for (int i = 0; i <= QUADS; i++) {
+            QUAD_RADIUS.add(INNER_CIRCLE_RADIUS + QUAD_STEP * i);
         }
 
-        for (int i = 0; i < quads; i++) {
+        for (int i = 0; i < QUADS; i++) {
             quadStrips.add(new QuadStrip(i));
         }
 
@@ -72,21 +71,21 @@ public class StargateRendererStatic {
     }
 
     public static class InnerCircle {
-        private List<Float> x = new ArrayList<Float>();
-        private List<Float> y = new ArrayList<Float>();
+        private final List<Float> x = new ArrayList<>();
+        private final List<Float> y = new ArrayList<>();
 
-        private List<Float> tx = new ArrayList<Float>();
-        private List<Float> ty = new ArrayList<Float>();
+        private final List<Float> tx = new ArrayList<>();
+        private final List<Float> ty = new ArrayList<>();
 
         public InnerCircle() {
-            float texMul = (innerCircleRadius / eventHorizonRadius);
+            float texMul = (INNER_CIRCLE_RADIUS / EVENT_HORIZON_RADIUS);
 
-            for (int i = 0; i < sections; i++) {
-                x.add(sin.get(i) * innerCircleRadius);
-                y.add(cos.get(i) * innerCircleRadius);
+            for (int i = 0; i < SECTIONS; i++) {
+                x.add(SIN.get(i) * INNER_CIRCLE_RADIUS);
+                y.add(COS.get(i) * INNER_CIRCLE_RADIUS);
 
-                tx.add(toUV(sin.get(i) * texMul));
-                ty.add(toUV(cos.get(i) * texMul));
+                tx.add(toUV(SIN.get(i) * texMul));
+                ty.add(toUV(COS.get(i) * texMul));
             }
         }
 
@@ -129,9 +128,9 @@ public class StargateRendererStatic {
 
             glVertex3f(0, 0, 0);
 
-            int index = 0;
-            for (int i = sections; i >= 0; i--) {
-                if (i == sections)
+            int index;
+            for (int i = SECTIONS; i >= 0; i--) {
+                if (i == SECTIONS)
                     index = 0;
                 else
                     index = i;
@@ -158,17 +157,16 @@ public class StargateRendererStatic {
     }
 
     public static class QuadStrip {
-        private List<Float> x = new ArrayList<Float>();
-        private List<Float> y = new ArrayList<Float>();
+        private final List<Float> x = new ArrayList<>();
+        private final List<Float> y = new ArrayList<>();
 
-        private List<Float> tx = new ArrayList<Float>();
-        private List<Float> ty = new ArrayList<Float>();
+        private final List<Float> tx = new ArrayList<>();
+        private final List<Float> ty = new ArrayList<>();
 
-        private int quadStripIndex;
+        private final int quadStripIndex;
 
         public QuadStrip(int quadStripIndex) {
-            // this(quadStripIndex, quadRadius.get(quadStripIndex), quadRadius.get(quadStripIndex+1), false, 0);
-            this(quadStripIndex, quadRadius.get(quadStripIndex), quadRadius.get(quadStripIndex + 1), null);
+            this(quadStripIndex, QUAD_RADIUS.get(quadStripIndex), QUAD_RADIUS.get(quadStripIndex + 1), null);
         }
 
         public QuadStrip(int quadStripIndex, float innerRadius, float outerRadius, Float tick) {
@@ -177,33 +175,30 @@ public class StargateRendererStatic {
         }
 
         public void recalculate(float innerRadius, float outerRadius, Float tick) {
-            //this.quadStripIndex = quadStripIndex;
 
-            List<Float> radius = new ArrayList<Float>();
-            List<Float> texMul = new ArrayList<Float>();
-			
-			/*radius.add( quadRadius.get( quadStripIndex   ) ); // Inner
-			  radius.add( quadRadius.get( quadStripIndex+1 ) ); // Outer */
+            List<Float> radius = new ArrayList<>();
+            List<Float> texMul = new ArrayList<>();
+
 
             radius.add(innerRadius);
             radius.add(outerRadius);
 
             for (int i = 0; i < 2; i++)
-                texMul.add(radius.get(i) / eventHorizonRadius);
+                texMul.add(radius.get(i) / EVENT_HORIZON_RADIUS);
 
             for (int k = 0; k < 2; k++) {
-                for (int i = 0; i < sections; i++) {
+                for (int i = 0; i < SECTIONS; i++) {
                     float rad = radius.get(k);
 
                     if (tick != null) {
                         rad += getOffset(i, tick, 1, quadStripIndex) * 2;
                     }
 
-                    x.add(rad * sin.get(i));
-                    y.add(rad * cos.get(i));
+                    x.add(rad * SIN.get(i));
+                    y.add(rad * COS.get(i));
 
-                    tx.add(toUV(sin.get(i) * texMul.get(k)));
-                    ty.add(toUV(cos.get(i) * texMul.get(k)));
+                    tx.add(toUV(SIN.get(i) * texMul.get(k)));
+                    ty.add(toUV(COS.get(i) * texMul.get(k)));
                 }
             }
         }
@@ -242,14 +237,14 @@ public class StargateRendererStatic {
 
             glBegin(GL_QUAD_STRIP);
 
-            int index = 0;
+            int index;
 
             int texIndex = (int) (tick * 4 % 185);
             float xTexOffset = texIndex % 14 / 14f;
             float yTexOffset = texIndex / 14 / 14f;
 
-            for (int i = reversed ? 0 : sections; (reversed && i <= sections) || (!reversed && i >= 0); i += (reversed ? 1 : -1)) {
-                if (i == sections)
+            for (int i = reversed ? 0 : SECTIONS; (reversed && i <= SECTIONS) || (!reversed && i >= 0); i += (reversed ? 1 : -1)) {
+                if (i == SECTIONS)
                     index = 0;
                 else
                     index = i;
@@ -257,7 +252,7 @@ public class StargateRendererStatic {
                 float z;
 
                 if (outerZ != null) z = outerZ;
-                else z = getOffset(index + sections * quadStripIndex, tick * mul, mul, quadStripIndex);
+                else z = getOffset(index + SECTIONS * quadStripIndex, tick * mul, mul, quadStripIndex);
 
                 float xTex = tx.get(index);
                 float yTex = ty.get(index);
@@ -274,7 +269,7 @@ public class StargateRendererStatic {
 
 //				JSG.info("z: " + z);
 
-                index = index + sections;
+                index = index + SECTIONS;
 
                 xTex = tx.get(index);
                 yTex = ty.get(index);
@@ -287,7 +282,7 @@ public class StargateRendererStatic {
                 } else yTex *= -1;
 
                 if (innerZ != null) z = innerZ;
-                else z = getOffset(index + sections * quadStripIndex, tick * mul, mul, quadStripIndex + 1);
+                else z = getOffset(index + SECTIONS * quadStripIndex, tick * mul, mul, quadStripIndex + 1);
 
                 if (!white) glTexCoord2f(xTex, yTex);
                 glVertex3f(x.get(index), y.get(index), z);
@@ -308,7 +303,7 @@ public class StargateRendererStatic {
 
     // Generate kawoosh shape using 4 functions
     private static void initKawoosh() {
-        Z_RadiusMap = new LinkedHashMap<Float, Float>();
+        Z_RadiusMap = new LinkedHashMap<>();
 
         float begin = 0;
         float end = 0.545f;

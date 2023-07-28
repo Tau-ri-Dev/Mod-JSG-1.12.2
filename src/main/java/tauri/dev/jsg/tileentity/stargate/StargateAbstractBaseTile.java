@@ -475,7 +475,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         getNetwork().removeStargate(gateAddressMap.get(symbolType));
 
         StargatePos gatePos = new StargatePos(world.provider.getDimension(), pos, stargateAddress, getSymbolType());
-        if(oldPos != null)
+        if (oldPos != null)
             gatePos.setName(oldPos.getName());
         gateAddressMap.put(symbolType, stargateAddress);
         gatePosMap.put(symbolType, gatePos);
@@ -484,8 +484,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         markDirty();
     }
 
-    public void renameStargatePos(String newName){
-        for(SymbolTypeEnum s : SymbolTypeEnum.values()){
+    public void renameStargatePos(String newName) {
+        for (SymbolTypeEnum s : SymbolTypeEnum.values()) {
             StargatePos p = gatePosMap.get(s);
             p.setName(newName);
             getNetwork().addStargate(gateAddressMap.get(s), p);
@@ -496,7 +496,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     public void refresh() {
         StargateAddress address = this.getStargateAddress(this.getSymbolType());
-        if(address == null){
+        if (address == null) {
             generateAddresses(true);
             address = this.getStargateAddress(this.getSymbolType());
         }
@@ -581,7 +581,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         if (tryDialInternal(this, symbol))
             addSymbolToAddress(symbol, 0);
         else {
-            if((dialedAddress.getSize() + 1) >= 5)
+            if ((dialedAddress.getSize() + 1) >= 5)
                 network.checkAndGenerateStargate(dialedAddress);
             addSymbolToAddress(symbol, 1);
         }
@@ -690,6 +690,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         this.isInitiating = isInitiating;
         this.targetGatePos = targetGatePos;
         this.stargateState = EnumStargateState.UNSTABLE;
+        this.isNoxDialing = noxDialing;
 
         ChunkManager.forceChunk(world, new ChunkPos(pos));
 
@@ -697,7 +698,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         addTask(new ScheduledTask(EnumScheduledTask.STARGATE_OPEN_SOUND, getOpenSoundDelay()));
         addTask(new ScheduledTask(EnumScheduledTask.STARGATE_HORIZON_LIGHT_BLOCK, EnumScheduledTask.STARGATE_OPEN_SOUND.waitTicks + 19 + getTicksPerHorizonSegment(true)));
-        if(!noxDialing)
+        if (!noxDialing)
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_HORIZON_WIDEN, EnumScheduledTask.STARGATE_OPEN_SOUND.waitTicks + 23 + getTicksPerHorizonSegment(true))); // 1.3s of the sound to the kill
         addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ENGAGE));
 
@@ -935,12 +936,12 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public void activateDHDSymbolBRB() {
     }
 
-    public boolean getForceUnstable(){
+    public boolean getForceUnstable() {
         return false;
     }
 
-    public float getSecondsToClose(int energyStored, int morePower){
-        if(keepAliveEnergyPerTick <= 0){
+    public float getSecondsToClose(int energyStored, int morePower) {
+        if (keepAliveEnergyPerTick <= 0) {
             return JSGConfig.Stargate.power.instabilitySeconds + 5;
         }
         return (energyStored / (float) (keepAliveEnergyPerTick + morePower + shieldKeepAlive) / 20f);
@@ -1024,7 +1025,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             if (stargateState.initiating()) {
                 //if (targetGatePos == null)
                 //   targetGatePos = getNetwork().getStargate(this.getStargateAddress(SymbolTypeEnum.MILKYWAY));
-                if(targetGatePos == null){
+                if (targetGatePos == null) {
                     targetGatePos = getNetwork().getStargate(this.getStargateAddress(SymbolTypeEnum.MILKYWAY));
                     attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
                 }
@@ -1193,7 +1194,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     public String getOpenedSecondsToDisplayAsMinutes() {
         long openedSeconds = getOpenedSeconds();
-        if(openedSeconds < 1) return "Closed!";
+        if (openedSeconds < 1) return "Closed!";
         int minutes = ((int) Math.floor((double) openedSeconds / 60));
         int seconds = ((int) (openedSeconds - (60 * minutes)));
         String secondsString = ((seconds < 10) ? "0" + seconds : "" + seconds);
@@ -1636,7 +1637,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public void setOriginId(NBTTagCompound compound) {
         compound.setInteger("originId", getOriginId());
     }
-    public ItemStack getAddressPage(SymbolTypeEnum symbolType, ItemStack defaultStack, boolean hasUpgrade, boolean hideOrigin, boolean hideLastSymbol){
+
+    public ItemStack getAddressPage(SymbolTypeEnum symbolType, ItemStack defaultStack, boolean hasUpgrade, boolean hideOrigin, boolean hideLastSymbol) {
         ItemStack stack = defaultStack;
 
         if (stack.getItem() == JSGItems.UNIVERSE_DIALER) {
@@ -1660,7 +1662,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public void executeTask(EnumScheduledTask scheduledTask, NBTTagCompound customData) {
         switch (scheduledTask) {
             case STARGATE_OPEN_SOUND:
-                playSoundEvent(StargateSoundEventEnum.OPEN);
+                if (isNoxDialing)
+                    playSoundEvent(StargateSoundEventEnum.OPEN_NOX);
+                else
+                    playSoundEvent(StargateSoundEventEnum.OPEN);
                 break;
 
             case STARGATE_HORIZON_LIGHT_BLOCK:
@@ -1738,7 +1743,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                     else {
                         // Schedule next flash sequence
                         float mul = energySecondsToClose / (float) JSGConfig.Stargate.power.instabilitySeconds;
-                        if(getForceUnstable()){
+                        if (getForceUnstable()) {
                             mul = 0.5f;
                         }
                         int min = (int) (15 * mul);
@@ -1780,7 +1785,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     protected abstract SmallEnergyStorage getEnergyStorage();
 
-    public int getEnergyStored(){
+    public int getEnergyStored() {
         return getEnergyStorage().getEnergyStored();
     }
 
@@ -1935,7 +1940,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             facingVertical = (fVertIndex == 2 ? EnumFacing.UP : fVertIndex == 1 ? EnumFacing.DOWN : EnumFacing.SOUTH);
         }
 
-        if(compound.hasKey("lastPos"))
+        if (compound.hasKey("lastPos"))
             lastPos = BlockPos.fromLong(compound.getLong("lastPos"));
         else
             lastPos = pos;

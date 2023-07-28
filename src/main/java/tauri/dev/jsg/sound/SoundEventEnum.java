@@ -110,7 +110,12 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     RECORD_ATLANTIS(151, "record_atlantis", 0.05f),
     RECORD_ORIGINS(152, "record_origins", 0.05f),
     RECORD_SGC(153, "record_sgc", 0.05f),
-    RECORD_ELEVATOR(154, "record_elevator", 0.05f);
+    RECORD_ELEVATOR(154, "record_elevator", 0.05f),
+
+
+    // ----------------------------------------------------------
+    // Misc
+    GATE_NOX_OPEN(160, "gate_nox_open", 0.4f);
 
 
     // ----------------------------------------------------------

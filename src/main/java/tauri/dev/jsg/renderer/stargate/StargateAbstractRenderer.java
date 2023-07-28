@@ -208,7 +208,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         GlStateManager.enableCull();
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(0, 0, 00.01);
+        GlStateManager.translate(0, 0, 0.02);
 
         if (!render) {
             GlStateManager.scale(0.0000001f, 0.0000001f, 0.0000001f);
@@ -224,7 +224,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         float tick = (float) (getWorld().getTotalWorldTime() - kawooshStart + partialTicks);
         float mul;
 
-        float inner = StargateRendererStatic.eventHorizonRadius - (tick / (rendererState.noxDialing ? 3.2f : 1)) / 3.957f;
+        float inner = StargateRendererStatic.EVENT_HORIZON_RADIUS - (tick / (rendererState.noxDialing ? 3.2f : 1)) / 3.957f;
 
         // Fading in the unstable vortex
         float tick2 = tick / 4f;
@@ -242,14 +242,20 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
         boolean renderKawooshObjModel = (!JSGConfig.Stargate.eventHorizon.disableNewKawoosh && isEhKawooshLoaded());
         float kawooshRadius = StargateRendererStatic.kawooshRadius;
-        if(renderKawooshObjModel){
+        if(renderKawooshObjModel || rendererState.noxDialing){
             kawooshRadius = 0.2f;
+        }
+
+        float noxAlpha = 0;
+        if(rendererState.noxDialing){
+            noxAlpha = Math.min(1, Math.max(0, (inner / StargateRendererStatic.EVENT_HORIZON_RADIUS)));
         }
 
         // Back side of the EH
         if(rendererState.vortexState != EnumVortexState.STILL && rendererState.vortexState != EnumVortexState.CLOSING) {
-            if(inner >= 0.2f)
-                rendererState.frontStrip = new StargateRendererStatic.QuadStrip(8, Math.max(0.1f, inner - 0.2f), StargateRendererStatic.eventHorizonRadius, tick);
+            if(inner >= 0.2f) {
+                rendererState.frontStrip = new StargateRendererStatic.QuadStrip(8, inner - 0.2f, StargateRendererStatic.EVENT_HORIZON_RADIUS, tick);
+            }
         }
         else
             rendererState.frontStrip = null;
@@ -257,13 +263,15 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
         // Going center
         if (inner >= kawooshRadius) {
-            rendererState.backStrip = new StargateRendererStatic.QuadStrip(8, Math.max(0.1f, inner - 0.2f), StargateRendererStatic.eventHorizonRadius, tick);
+            rendererState.backStrip = new StargateRendererStatic.QuadStrip(8, inner - 0.2f, StargateRendererStatic.EVENT_HORIZON_RADIUS, tick);
         }
         if (inner < StargateRendererStatic.kawooshRadius) {
             if (rendererState.backStripClamp) {
                 // Clamping to the desired size
-                rendererState.backStripClamp = false;
-                rendererState.backStrip = new StargateRendererStatic.QuadStrip(8, Math.max(0.1f, kawooshRadius - 0.2f), StargateRendererStatic.eventHorizonRadius, null);
+                if(inner < kawooshRadius) {
+                    rendererState.backStripClamp = false;
+                    rendererState.backStrip = new StargateRendererStatic.QuadStrip(8, kawooshRadius - 0.2f, StargateRendererStatic.EVENT_HORIZON_RADIUS, null);
+                }
 
                 float argState = (tick - VORTEX_START) / SPEED_FACTOR;
 
@@ -272,6 +280,10 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                 else if (argState < 5.898f) rendererState.vortexState = EnumVortexState.DECREASING;
                 else if (rendererState.vortexState != EnumVortexState.CLOSING)
                     rendererState.vortexState = EnumVortexState.STILL;
+            }
+            if(rendererState.frontStripClamp && inner < 0.2f){
+                rendererState.frontStripClamp = false;
+                rendererState.frontStrip = new StargateRendererStatic.QuadStrip(8, 0, StargateRendererStatic.EVENT_HORIZON_RADIUS, null);
             }
             if (!(rendererState.vortexState == EnumVortexState.STILL)) {
                 float arg = (tick - VORTEX_START) / SPEED_FACTOR;
@@ -321,8 +333,6 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                                     //renderEventHorizon(partialTicks, false, 0f, false, mul);
                                     if (renderWortex) {
                                         GlStateManager.pushMatrix();
-                                        //GlStateManager.rotate(180, 0, 1, 0);
-
                                         float factor = Math.abs(mul);
                                         float xyFactor = 0.7f * ((this instanceof StargateUniverseRenderer) ? 1.3f : 1);
 
@@ -363,7 +373,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                                         float zOffset = e.getKey();
                                         float rad = e.getValue();
 
-                                        new StargateRendererStatic.QuadStrip(8, rad, prevRad, tick).render(tick, zOffset * mul, prevZ * mul, false, 1.0f - rendererState.whiteOverlayAlpha, 1);
+                                        new StargateRendererStatic.QuadStrip(8, rad, prevRad, tick).render(tick, zOffset * mul, prevZ * mul, false, 1.0f - rendererState.whiteOverlayAlpha, 5);
 
                                         prevZ = zOffset;
                                         prevRad = rad;
@@ -379,9 +389,9 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                         long stateChange = rendererState.gateWaitClose + 35;
                         float arg2 = (float) ((getWorld().getTotalWorldTime() - stateChange + partialTicks) / 3f) - 1.0f;
 
-                        if (arg2 < StargateRendererStatic.eventHorizonRadius + 0.1f) {
-                            rendererState.backStrip = new StargateRendererStatic.QuadStrip(8, arg2, StargateRendererStatic.eventHorizonRadius, tick);
-                            rendererState.frontStrip = new StargateRendererStatic.QuadStrip(8, arg2, StargateRendererStatic.eventHorizonRadius, tick);
+                        if (arg2 < StargateRendererStatic.EVENT_HORIZON_RADIUS + 0.1f) {
+                            rendererState.backStrip = new StargateRendererStatic.QuadStrip(8, arg2, StargateRendererStatic.EVENT_HORIZON_RADIUS, tick);
+                            rendererState.frontStrip = new StargateRendererStatic.QuadStrip(8, arg2, StargateRendererStatic.EVENT_HORIZON_RADIUS, tick);
                         } else {
                             rendererState.whiteOverlayAlpha = null;
 
@@ -400,10 +410,10 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                         if (arg2 <= Math.PI / 6) rendererState.whiteOverlayAlpha = MathHelper.sin(arg2);
                         else {
                             if (rendererState.backStrip == null)
-                                rendererState.backStrip = new StargateRendererStatic.QuadStrip(8, arg2, StargateRendererStatic.eventHorizonRadius, tick);
+                                rendererState.backStrip = new StargateRendererStatic.QuadStrip(8, arg2, StargateRendererStatic.EVENT_HORIZON_RADIUS, tick);
 
                             if (rendererState.frontStrip == null)
-                                rendererState.frontStrip = new StargateRendererStatic.QuadStrip(8, arg2, StargateRendererStatic.eventHorizonRadius, tick);
+                                rendererState.frontStrip = new StargateRendererStatic.QuadStrip(8, arg2, StargateRendererStatic.EVENT_HORIZON_RADIUS, tick);
 
                             rendererState.vortexState = EnumVortexState.SHRINKING;
                         }
@@ -436,7 +446,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
             GlStateManager.enableBlend();
 
             if (rendererState.backStrip != null)
-                rendererState.backStrip.render(tick, null, null, false, 1.0f - rendererState.whiteOverlayAlpha, 1);
+                rendererState.backStrip.render(tick, 0f, 0f, false, Math.max(0, 1.0f - rendererState.whiteOverlayAlpha - noxAlpha), 1);
 
             if(rendererState.frontStrip != null){
                 GlStateManager.pushMatrix();
@@ -447,7 +457,9 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                 ehTexture = TextureLoader.getTexture(ehTextureRes);
                 if (ehTexture != null) ehTexture.bindTexture();
 
-                rendererState.frontStrip.render(tick, null, null, false, Math.max(0, 1.0f - rendererState.whiteOverlayAlpha - 0.3f), 1);
+                Float alpha = Math.max(0, 1.0f - rendererState.whiteOverlayAlpha - 0.3f - noxAlpha);
+
+                rendererState.frontStrip.render(tick, 0f, 0f, false, alpha, 1);
                 GlStateManager.popMatrix();
             }
 

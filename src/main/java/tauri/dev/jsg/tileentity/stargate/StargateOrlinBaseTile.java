@@ -328,6 +328,8 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
         switch (soundEnum) {
             case OPEN:
                 return SoundEventEnum.GATE_MILKYWAY_OPEN;
+            case OPEN_NOX:
+                return SoundEventEnum.GATE_NOX_OPEN;
             case CLOSE:
                 return SoundEventEnum.GATE_MILKYWAY_CLOSE;
             case DIAL_FAILED:

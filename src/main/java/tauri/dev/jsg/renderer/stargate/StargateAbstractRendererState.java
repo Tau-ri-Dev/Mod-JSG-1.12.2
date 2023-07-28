@@ -52,6 +52,7 @@ public class StargateAbstractRendererState extends State {
 	public StargateRendererStatic.QuadStrip backStrip;
 	public StargateRendererStatic.QuadStrip frontStrip;
 	public boolean backStripClamp;
+	public boolean frontStripClamp;
 	public Float whiteOverlayAlpha;
 	public long gateWaitStart = 0;
 	public long gateWaitClose = 0;
@@ -66,6 +67,7 @@ public class StargateAbstractRendererState extends State {
 		
 		zeroAlphaSet = false;
 		backStripClamp = true;
+		frontStripClamp = true;
 		whiteOverlayAlpha = 1.0f;
 		
 		vortexState = StargateAbstractRenderer.EnumVortexState.FORMING;

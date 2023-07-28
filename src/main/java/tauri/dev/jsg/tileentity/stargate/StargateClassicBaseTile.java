@@ -337,7 +337,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         super.openGate(targetGatePos, isInitiating, noxDialing);
         playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
         tryHeatUp(8);
-        resetACPreferences();
+        resetACPreferences(false);
         markDirty();
 
         this.isFinalActive = true;
@@ -375,9 +375,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public boolean dialingWithoutEnergy = false;
 
     public void resetACPreferences(){
+        resetACPreferences(true);
+    }
+    public void resetACPreferences(boolean resetNox){
         dialingWithoutEnergy = false;
-        isNoxDialing = false;
         isFastDialingOverride = false;
+        if(resetNox)
+            isNoxDialing = false;
         markDirty();
     }
 
@@ -399,14 +403,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void addSymbolToAddressByNox(SymbolInterface symbol){
         if (symbol != getSymbolType().getBRB() && !canAddSymbol(symbol)) return;
         if(symbol == getSymbolType().getBRB()){
-
-            // Debug chevrons for clients
-            sendRenderingUpdate(StargateRendererActionState.EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddress.size(), false);
-
-            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_OPEN_REQUEST, -1));
+            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_OPEN_NOX));
             return;
         }
         addSymbolToAddressDHD(symbol);
+        sendSignal(null, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), isFinalActive, symbol.getEnglishName()});
     }
 
     @Override
@@ -1748,7 +1749,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     disconnectGate();
                 }
                 break;
-            case STARGATE_OPEN_REQUEST:
+            case STARGATE_OPEN_NOX:
+                // Debug chevrons for clients
+                sendRenderingUpdate(StargateRendererActionState.EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddress.size(), false);
+
                 attemptOpenAndFail();
                 break;
 

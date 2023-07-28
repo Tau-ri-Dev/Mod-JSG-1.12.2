@@ -378,6 +378,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         switch (soundEnum) {
             case OPEN:
                 return SoundEventEnum.GATE_PEGASUS_OPEN;
+            case OPEN_NOX:
+                return SoundEventEnum.GATE_NOX_OPEN;
             case CLOSE:
                 return SoundEventEnum.GATE_MILKYWAY_CLOSE;
             case DIAL_FAILED:
@@ -617,7 +619,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
             addSymbolToAddressDHD(address.get(i));
         }
         addSymbolToAddressDHD(getSymbolType().getOrigin());
-        addSymbolToAddressDHD(SymbolPegasusEnum.BBB);
+        addSymbolToAddressDHD(getSymbolType().getBRB());
         return true;
     }
 
@@ -631,18 +633,9 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         if (targetSymbol != SymbolPegasusEnum.BBB && !canAddSymbolToList(targetSymbol)) return;
         if (!(targetSymbol instanceof SymbolPegasusEnum)) return;
         if (toDialSymbols.contains(targetSymbol)) return;
-        if (isLinkedAndDHDOperational() && (targetSymbol != SymbolPegasusEnum.BBB || toDialSymbols.size() > 0)) {
-            DHDAbstractTile dhd = getLinkedDHD(world);
-            if (dhd != null)
-                dhd.activateSymbol(targetSymbol);
-        }
         if(isNoxDialing){
-            if(targetSymbol == SymbolPegasusEnum.BBB){
-
-                // Debug chevrons for clients
-                sendRenderingUpdate(StargateRendererActionState.EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddress.size(), true);
-
-                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_OPEN_REQUEST, -1));
+            if(targetSymbol == getSymbolType().getBRB()){
+                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_OPEN_NOX));
                 return;
             }
             stargateState = EnumStargateState.DIALING;
@@ -654,10 +647,13 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
                 isFinalActive = true;
                 markDirty();
             }
-
-            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 1));
-            sendSignal(null, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), isFinalActive, targetSymbol.getEnglishName()});
             return;
+        }
+
+        if (isLinkedAndDHDOperational() && (targetSymbol != SymbolPegasusEnum.BBB || toDialSymbols.size() > 0)) {
+            DHDAbstractTile dhd = getLinkedDHD(world);
+            if (dhd != null)
+                dhd.activateSymbol(targetSymbol);
         }
 
         toDialSymbols.add((SymbolPegasusEnum) targetSymbol);

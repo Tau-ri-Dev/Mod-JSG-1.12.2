@@ -145,14 +145,16 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         doIncomingAnimation((isNoxDialing ? 1 : 10), false);
         int plusTime = new Random().nextInt(5);
 
-        if (stargateWillLock(symbol)) {
-            isFinalActive = true;
-            if (config.getOption(DHD_TOP_LOCK.id).getBooleanValue() && !isNoxDialing)
-                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 5 + plusTime));
-            else
+        if(!isNoxDialing) {
+            if (stargateWillLock(symbol)) {
+                isFinalActive = true;
+                if (config.getOption(DHD_TOP_LOCK.id).getBooleanValue())
+                    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 5 + plusTime));
+                else
+                    addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10 + plusTime));
+            } else
                 addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10 + plusTime));
-        } else
-            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10 + plusTime));
+        }
 
         sendSignal(null, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), isFinalActive, symbol.getEnglishName()});
 
@@ -161,7 +163,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
 
     @Override
     protected int getMaxChevrons() {
-        if(dialingWithoutEnergy) return 9;
+        if(dialingWithoutEnergy || isNoxDialing) return 9;
         return isLinkedAndDHDOperational() && stargateState != EnumStargateState.DIALING_COMPUTER && !getLinkedDHD(world).hasUpgrade(DHDUpgradeEnum.CHEVRON_UPGRADE) ? 7 : 9;
     }
 
@@ -187,7 +189,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         for (SymbolMilkyWayEnum s : toDialSymbols) {
             if (s.brb()) size--;
         }
-        if (dialedAddress.size() + size + (this.stargateState.dialing() ? 1 : 0) >= getMaxChevrons()) return false;
+        if (dialedAddress.size() + size + (this.stargateState.dialing() && !isNoxDialing ? 1 : 0) >= getMaxChevrons()) return false;
         if (toDialSymbols.contains((SymbolMilkyWayEnum) symbol)) return false;
 
         return super.canAddSymbol(symbol);
@@ -426,6 +428,8 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         switch (soundEnum) {
             case OPEN:
                 return SoundEventEnum.GATE_MILKYWAY_OPEN;
+            case OPEN_NOX:
+                return SoundEventEnum.GATE_NOX_OPEN;
             case CLOSE:
                 return SoundEventEnum.GATE_MILKYWAY_CLOSE;
             case DIAL_FAILED:
