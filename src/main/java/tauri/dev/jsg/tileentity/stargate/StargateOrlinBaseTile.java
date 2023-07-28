@@ -128,10 +128,10 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
     // Ticking
 
     @Override
-    public void openGate(StargatePos targetGatePos, boolean isInitiating) {
+    public void openGate(StargatePos targetGatePos, boolean isInitiating, boolean noxDialing) {
         if (world.provider.getDimensionType() == DimensionType.OVERWORLD)
             StargateNetwork.get(world).setLastActivatedOrlins(gateAddressMap.get(SymbolTypeEnum.MILKYWAY));
-        super.openGate(targetGatePos, isInitiating);
+        super.openGate(targetGatePos, isInitiating, false);
     }
 
     @Override

@@ -13,6 +13,7 @@ import tauri.dev.jsg.gui.element.ModeButton;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.gui.entry.EntryActionEnum;
 import tauri.dev.jsg.packet.gui.entry.EntryActionToServer;
+import tauri.dev.jsg.stargate.EnumDialingType;
 import tauri.dev.jsg.stargate.EnumIrisState;
 import tauri.dev.jsg.stargate.network.StargateAddress;
 import tauri.dev.jsg.stargate.network.StargateAddressDynamic;
@@ -151,7 +152,7 @@ public class AddressesSection {
             } else {
                 field.setEnabled(false);
             }
-            ModeButton btn = new ModeButton(index, guiLeft + 125, 0, 20, new ResourceLocation(JSG.MOD_ID, "textures/gui/controller_mode.png"), 80, 40, 4);
+            ModeButton btn = new ModeButton(index, guiLeft + 125, 0, 20, new ResourceLocation(JSG.MOD_ID, "textures/gui/controller_mode.png"), 100, 40, 5);
             btn.setActionCallback(() -> mainButtonPerformAction(finalIndex));
             if (e.pos.gatePos.equals(Objects.requireNonNull(guiBase.gateTile).getPos()) && e.pos.dimensionID == guiBase.gateTile.world().provider.getDimension()) {
                 thisGateEntryIndex = index;
@@ -238,18 +239,19 @@ public class AddressesSection {
                 break;
             case 0:
             case 1:
-                dialGate(index, btn.getCurrentState() == 1);
-                break;
             case 2:
-                JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(EntryActionEnum.GIVE_NOTEBOOK, pos, entry.notGenerated));
+                dialGate(index, EnumDialingType.values()[btn.getCurrentState()]);
                 break;
             case 3:
+                JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(EntryActionEnum.GIVE_NOTEBOOK, pos, entry.notGenerated));
+                break;
+            case 4:
                 JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(EntryActionEnum.TELEPORT_TO_POS, pos, false));
                 break;
         }
     }
 
-    public void dialGate(int index, boolean fastDial) {
+    public void dialGate(int index, EnumDialingType dialType) {
         try {
             EnumHand hand = guiBase.getHand();
             StargateEntry entry = entries.get(index);
@@ -270,7 +272,7 @@ public class AddressesSection {
 
             int symbolsCount = Objects.requireNonNull(guiBase.gateTile).getMinimalSymbolsToDial(pos.getGateSymbolType(), pos);
 
-            JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(hand, new StargateAddressDynamic(entry.address), symbolsCount, guiBase.gateTile.getPos(), fastDial));
+            JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(hand, new StargateAddressDynamic(entry.address), symbolsCount, guiBase.gateTile.getPos(), dialType));
         } catch (Exception e) {
             JSG.error("Error ", e);
             guiBase.notifer.setText("Unknown error! (" + e.getMessage() + ")", Notifier.EnumAlertType.ERROR, 5);
@@ -363,9 +365,12 @@ public class AddressesSection {
                         lines = Collections.singletonList("Dial this address (fast)");
                         break;
                     case 2:
-                        lines = Collections.singletonList("Get gate's addresses");
+                        lines = Collections.singletonList("Dial this address (nox)");
                         break;
                     case 3:
+                        lines = Collections.singletonList("Get gate's addresses");
+                        break;
+                    case 4:
                         lines = Collections.singletonList("Teleport to gate's location");
                         break;
                 }

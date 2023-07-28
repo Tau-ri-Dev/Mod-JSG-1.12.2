@@ -297,6 +297,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         return resultTarget.result;
     }
 
+    public boolean isNoxDialing = false;
+
     /**
      * Attempts to open the connection to gate pointed by {@link StargateAbstractBaseTile#dialedAddress}.
      * This performs all the checks.
@@ -321,8 +323,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
             tryTriggerRangedAdvancement(this, JSGAdvancementsUtil.EnumAdvancementType.GATE_OPEN);
 
-            openGate(targetGatePos, true);
-            targetTile.openGate(gatePosMap.get(targetGatePos.symbolType), false);
+            openGate(targetGatePos, true, isNoxDialing);
+            targetTile.openGate(gatePosMap.get(targetGatePos.symbolType), false, isNoxDialing);
             targetTile.dialedAddress.clear();
             targetTile.dialedAddress.addAll(gateAddressMap.get(targetGatePos.symbolType).subList(0, dialedAddress.size() - 1));
             targetTile.dialedAddress.addOrigin();
@@ -547,7 +549,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      *
      * @param symbol Currently added symbol.
      */
-    protected void addSymbolToAddress(SymbolInterface symbol, int addSymbol) {
+    private void addSymbolToAddress(SymbolInterface symbol, int addSymbol) {
         if (!canAddSymbol(symbol)) throw new IllegalStateException("Cannot add that symbol");
         if (addSymbol == 1) dialedAddress.addSymbol(symbol);
         StargateAddressDynamic dialAddr_backup = new StargateAddressDynamic(getSymbolType());
@@ -682,7 +684,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * @param targetGatePos Valid {@link StargatePos} pointing to the other Gate.
      * @param isInitiating  True if gate is initializing the connection, false otherwise.
      */
-    protected void openGate(StargatePos targetGatePos, boolean isInitiating) {
+    protected void openGate(StargatePos targetGatePos, boolean isInitiating, boolean noxDialing) {
         setOpenedSince();
 
         this.isInitiating = isInitiating;
@@ -691,11 +693,12 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
         ChunkManager.forceChunk(world, new ChunkPos(pos));
 
-        sendRenderingUpdate(StargateRendererActionState.EnumGateAction.OPEN_GATE, 0, false);
+        sendRenderingUpdate(StargateRendererActionState.EnumGateAction.OPEN_GATE, 0, noxDialing);
 
         addTask(new ScheduledTask(EnumScheduledTask.STARGATE_OPEN_SOUND, getOpenSoundDelay()));
         addTask(new ScheduledTask(EnumScheduledTask.STARGATE_HORIZON_LIGHT_BLOCK, EnumScheduledTask.STARGATE_OPEN_SOUND.waitTicks + 19 + getTicksPerHorizonSegment(true)));
-        addTask(new ScheduledTask(EnumScheduledTask.STARGATE_HORIZON_WIDEN, EnumScheduledTask.STARGATE_OPEN_SOUND.waitTicks + 23 + getTicksPerHorizonSegment(true))); // 1.3s of the sound to the kill
+        if(!noxDialing)
+            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_HORIZON_WIDEN, EnumScheduledTask.STARGATE_OPEN_SOUND.waitTicks + 23 + getTicksPerHorizonSegment(true))); // 1.3s of the sound to the kill
         addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ENGAGE));
 
         if (isInitiating) {
@@ -1558,8 +1561,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 if (getRendererStateClient() == null) break;
                 switch (((StargateRendererActionState) state).action) {
                     case OPEN_GATE:
+                        boolean noxDialing = ((StargateRendererActionState) state).modifyFinal;
+
                         getRendererStateClient().horizonSegments = 0;
-                        getRendererStateClient().openGate(world.getTotalWorldTime());
+                        getRendererStateClient().openGate(world.getTotalWorldTime(), noxDialing);
                         break;
 
                     case CLOSE_GATE:

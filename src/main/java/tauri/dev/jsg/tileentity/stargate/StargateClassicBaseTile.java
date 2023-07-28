@@ -270,8 +270,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             if (world.getTileEntity(beamerPos) != null)
                 ((BeamerTile) Objects.requireNonNull(world.getTileEntity(beamerPos))).gateClosed();
         }
-        dialingWithoutEnergy = false;
-        isFastDialingOverride = false;
+        resetACPreferences();
         markDirty();
     }
 
@@ -285,8 +284,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         updateChevronLight(0, false);
         sendRenderingUpdate(StargateRendererActionState.EnumGateAction.CLEAR_CHEVRONS, dialedAddress.size(), isFinalActive);
 
-        dialingWithoutEnergy = false;
-        isFastDialingOverride = false;
+        resetACPreferences();
         markDirty();
     }
 
@@ -310,8 +308,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
 
         isFinalActive = false;
-        dialingWithoutEnergy = false;
-        isFastDialingOverride = false;
+        resetACPreferences();
         markDirty();
 
         if (stargateState != EnumStargateState.INCOMING && !isIncoming) {
@@ -336,12 +333,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     @Override
-    public void openGate(StargatePos targetGatePos, boolean isInitiating) {
-        super.openGate(targetGatePos, isInitiating);
+    public void openGate(StargatePos targetGatePos, boolean isInitiating, boolean noxDialing) {
+        super.openGate(targetGatePos, isInitiating, noxDialing);
         playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
         tryHeatUp(8);
-        dialingWithoutEnergy = false;
-        isFastDialingOverride = false;
+        resetACPreferences();
         markDirty();
 
         this.isFinalActive = true;
@@ -362,8 +358,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 removeTask(lastSpinFinished);
             failGate();
             if (!isIncoming) disconnectGate();
-            dialingWithoutEnergy = false;
-            isFastDialingOverride = false;
+            resetACPreferences();
             markDirty();
             resetTargetIncomingAnimation();
             return true;
@@ -378,14 +373,40 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     public boolean dialingWithoutEnergy = false;
-    public boolean dialAddress(StargateAddress address, int maxSymbols, boolean withoutEnergy, boolean fastDial){
+
+    public void resetACPreferences(){
+        dialingWithoutEnergy = false;
+        isNoxDialing = false;
+        isFastDialingOverride = false;
+        markDirty();
+    }
+
+    public boolean dialAddress(StargateAddress address, int maxSymbols, boolean withoutEnergy, EnumDialingType dialingType){
         dialingWithoutEnergy = withoutEnergy;
-        if(fastDial) {
+        if(dialingType == EnumDialingType.FAST) {
             isFastDialingOverride = true;
             setFastDial(true);
         }
+        else if(dialingType == EnumDialingType.NOX){
+            isNoxDialing = true;
+        }
         markDirty();
         return true;
+    }
+
+    @Nullable
+    @SuppressWarnings("all")
+    public void addSymbolToAddressByNox(SymbolInterface symbol){
+        if (symbol != getSymbolType().getBRB() && !canAddSymbol(symbol)) return;
+        if(symbol == getSymbolType().getBRB()){
+
+            // Debug chevrons for clients
+            sendRenderingUpdate(StargateRendererActionState.EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddress.size(), false);
+
+            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_OPEN_REQUEST, -1));
+            return;
+        }
+        addSymbolToAddressDHD(symbol);
     }
 
     @Override
@@ -1201,6 +1222,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         compound.setBoolean("fastDialing", isFastDialing);
         compound.setBoolean("isFastDialingOverride", isFastDialingOverride);
+        compound.setBoolean("isNoxDialing", isNoxDialing);
 
         compound.setInteger("facingVertical", FacingHelper.toInt(facingVertical));
 
@@ -1259,6 +1281,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         this.isFastDialing = compound.getBoolean("fastDialing");
         this.isFastDialingOverride = compound.getBoolean("isFastDialingOverride");
+        this.isNoxDialing = compound.getBoolean("isNoxDialing");
 
         facingVertical = FacingHelper.fromInt(compound.getInteger("facingVertical"));
 
@@ -1724,6 +1747,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     world.getBlockState(getGateCenterPos()).getBlock().setLightLevel(0);
                     disconnectGate();
                 }
+                break;
+            case STARGATE_OPEN_REQUEST:
+                attemptOpenAndFail();
                 break;
 
             case STARGATE_SPIN_FINISHED:

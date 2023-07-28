@@ -19,6 +19,7 @@ import tauri.dev.jsg.item.linkable.dialer.UniverseDialerItem;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode;
 import tauri.dev.jsg.item.notebook.NotebookItem;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
+import tauri.dev.jsg.stargate.EnumDialingType;
 import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
 import tauri.dev.jsg.stargate.network.*;
 import tauri.dev.jsg.stargate.teleportation.TeleportHelper;
@@ -39,12 +40,12 @@ public class EntryActionToServer implements IMessage {
     private StargateAddressDynamic addressToDial;
     private BlockPos linkedGate;
     private StargatePos targetGatePos;
-    private boolean fastDial;
+    private EnumDialingType dialType = EnumDialingType.NORMAL;
 
     public EntryActionToServer() {
     }
 
-    public EntryActionToServer(EnumHand hand, StargateAddressDynamic addressToDial, int maxSymbols, BlockPos linkedGate, boolean fastDial) {
+    public EntryActionToServer(EnumHand hand, StargateAddressDynamic addressToDial, int maxSymbols, BlockPos linkedGate, EnumDialingType dialType) {
         this.hand = hand;
         this.dataType = EntryDataTypeEnum.ADMIN_CONTROLLER;
         this.action = EntryActionEnum.DIAL;
@@ -54,7 +55,7 @@ public class EntryActionToServer implements IMessage {
         this.maxSymbols = maxSymbols;
         this.linkedGate = linkedGate;
         this.targetGatePos = null;
-        this.fastDial = fastDial;
+        this.dialType = dialType;
     }
 
     public EntryActionToServer(EnumHand hand, String name, StargatePos targetGate) {
@@ -128,7 +129,8 @@ public class EntryActionToServer implements IMessage {
             buf.writeBoolean(true);
             targetGatePos.toBytes(buf);
         } else buf.writeBoolean(false);
-        buf.writeBoolean(fastDial);
+        if(dialType == null) dialType = EnumDialingType.NORMAL;
+        buf.writeInt(dialType.ordinal());
     }
 
     @Override
@@ -150,7 +152,7 @@ public class EntryActionToServer implements IMessage {
         if (buf.readBoolean()) {
             targetGatePos = new StargatePos(SymbolTypeEnum.valueOf(index), buf);
         }
-        fastDial = buf.readBoolean();
+        dialType = EnumDialingType.values()[buf.readInt()];
     }
 
     public static class EntryActionServerHandler implements IMessageHandler<EntryActionToServer, IMessage> {
@@ -229,7 +231,7 @@ public class EntryActionToServer implements IMessage {
                             StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
                             if (gateTile == null) break;
 
-                            if (gateTile.dialAddress(new StargateAddress(selectedCompound), maxSymbols, false, false))
+                            if (gateTile.dialAddress(new StargateAddress(selectedCompound), maxSymbols, false, EnumDialingType.NORMAL))
                                 player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.dial_start"), true);
 
                             break;
@@ -274,7 +276,7 @@ public class EntryActionToServer implements IMessage {
                                 gateTile1.attemptClose(StargateClosedReasonEnum.REQUESTED);
                                 break;
                             }
-                            gateTile1.dialAddress(message.addressToDial, message.maxSymbols - 1, true, message.fastDial);
+                            gateTile1.dialAddress(message.addressToDial, message.maxSymbols - 1, true, message.dialType);
                             break;
                         case ABORT:
                             StargateClassicBaseTile gateTile2 = (StargateClassicBaseTile) world.getTileEntity(message.linkedGate);

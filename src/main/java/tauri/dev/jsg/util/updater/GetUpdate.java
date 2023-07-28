@@ -79,6 +79,7 @@ public class GetUpdate {
 
     public static String getSiteContent(String link) {
         try {
+            JSG.info("Fetching data from " + link);
             //Instantiating the URL class
             URL url = new URL(link);
             //Retrieving the contents of the specified page
@@ -91,7 +92,7 @@ public class GetUpdate {
             }
             //Retrieving the String from the String Buffer object
             String result = sb.toString();
-            System.out.println(result);
+            JSG.info("Fetched: " + result);
             //Removing the HTML tags
             result = result.replaceAll("<[^>]*>", "");
             return result;

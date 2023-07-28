@@ -151,6 +151,13 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     }
 
     public void addSymbolToAddressDHD(SymbolInterface symbol) {
+        if(isNoxDialing){
+            stargateState = DIALING;
+            markDirty();
+            addSymbolToAddress(symbol);
+            stargateState = EnumStargateState.IDLE;
+            markDirty();
+        }
     }
 
     /**
@@ -159,10 +166,19 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
      * @param address     - address to dial
      * @param symbolCount - symbols to engage
      */
-    public boolean dialAddress(StargateAddress address, int symbolCount, boolean withoutEnergy, boolean fastDial) {
+    public boolean dialAddress(StargateAddress address, int symbolCount, boolean withoutEnergy, EnumDialingType dialingType) {
         if (!canContinue()) return false;
         if (!stargateState.idle()) return false;
-        super.dialAddress(address, symbolCount, withoutEnergy, fastDial);
+        super.dialAddress(address, symbolCount, withoutEnergy, dialingType);
+
+        if(isNoxDialing){
+            for(int i = 0; i < symbolCount; i++) {
+                addSymbolToAddressByNox(address.get(i));
+            }
+            addSymbolToAddressByNox(getSymbolType().getOrigin());
+            addSymbolToAddressByNox(getSymbolType().getBRB());
+            return true;
+        }
 
         this.addressToDial = address;
         this.symbolsToDialCount = symbolCount;
@@ -407,8 +423,8 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     }
 
     @Override
-    public void openGate(StargatePos targetGatePos, boolean isInitiating) {
-        super.openGate(targetGatePos, isInitiating);
+    public void openGate(StargatePos targetGatePos, boolean isInitiating, boolean noxDialing) {
+        super.openGate(targetGatePos, isInitiating, noxDialing);
         wasStargateActivated = true;
         markDirty();
     }

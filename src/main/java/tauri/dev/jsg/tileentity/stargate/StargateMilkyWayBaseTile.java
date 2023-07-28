@@ -19,6 +19,7 @@ import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
 import tauri.dev.jsg.sound.StargateSoundEventEnum;
 import tauri.dev.jsg.sound.StargateSoundPositionedEnum;
+import tauri.dev.jsg.stargate.EnumDialingType;
 import tauri.dev.jsg.stargate.EnumScheduledTask;
 import tauri.dev.jsg.stargate.EnumStargateState;
 import tauri.dev.jsg.stargate.StargateOpenResult;
@@ -90,8 +91,8 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     // Stargate connection
 
     @Override
-    public void openGate(StargatePos targetGatePos, boolean isInitiating) {
-        super.openGate(targetGatePos, isInitiating);
+    public void openGate(StargatePos targetGatePos, boolean isInitiating, boolean noxDialing) {
+        super.openGate(targetGatePos, isInitiating, noxDialing);
         resetToDialSymbols();
 
         if (isLinkedAndDHDOperational()) {
@@ -131,6 +132,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         return SymbolTypeEnum.MILKYWAY;
     }
 
+    @Override
     public void addSymbolToAddressDHD(SymbolInterface symbol) {
         stargateState = EnumStargateState.DIALING;
         markDirty();
@@ -140,12 +142,12 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
             return;
         }
         addSymbolToAddress(symbol);
-        doIncomingAnimation(10, false);
+        doIncomingAnimation((isNoxDialing ? 1 : 10), false);
         int plusTime = new Random().nextInt(5);
 
         if (stargateWillLock(symbol)) {
             isFinalActive = true;
-            if (config.getOption(DHD_TOP_LOCK.id).getBooleanValue())
+            if (config.getOption(DHD_TOP_LOCK.id).getBooleanValue() && !isNoxDialing)
                 addTask(new ScheduledTask(EnumScheduledTask.STARGATE_CHEVRON_OPEN, 5 + plusTime));
             else
                 addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ACTIVATE_CHEVRON, 10 + plusTime));
@@ -163,9 +165,9 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
         return isLinkedAndDHDOperational() && stargateState != EnumStargateState.DIALING_COMPUTER && !getLinkedDHD(world).hasUpgrade(DHDUpgradeEnum.CHEVRON_UPGRADE) ? 7 : 9;
     }
 
-    public boolean dialAddress(StargateAddress address, int symbolCount, boolean withoutEnergy, boolean fastDial) {
+    public boolean dialAddress(StargateAddress address, int symbolCount, boolean withoutEnergy, EnumDialingType dialingType) {
         if (!getStargateState().idle()) return false;
-        super.dialAddress(address, symbolCount, withoutEnergy, fastDial);
+        super.dialAddress(address, symbolCount, withoutEnergy, dialingType);
         for (int i = 0; i < symbolCount; i++) {
             addSymbolToAddressUsingList(address.get(i));
         }
@@ -194,6 +196,10 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     public void addSymbolToAddressUsingList(SymbolInterface targetSymbol) {
         if (targetSymbol != SymbolMilkyWayEnum.BRB && !canAddSymbolToList(targetSymbol)) return;
         if (!(targetSymbol instanceof SymbolMilkyWayEnum)) return;
+        if(isNoxDialing){
+            addSymbolToAddressByNox(targetSymbol);
+            return;
+        }
         if (toDialSymbols.contains(targetSymbol)) return;
         toDialSymbols.add((SymbolMilkyWayEnum) targetSymbol);
     }
@@ -553,7 +559,8 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
                 stargateState = EnumStargateState.IDLE;
                 markDirty();
 
-                playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
+                if(!isNoxDialing)
+                    playSoundEvent(StargateSoundEventEnum.CHEVRON_OPEN);
                 sendRenderingUpdate(StargateRendererActionState.EnumGateAction.CHEVRON_ACTIVATE, -1, isFinalActive);
                 updateChevronLight(dialedAddress.size(), isFinalActive);
                 //			JSGPacketHandler.INSTANCE.sendToAllTracking(new StateUpdatePacketToClient(pos, StateTypeEnum.RENDERER_UPDATE, new StargateRendererActionState(EnumGateAction.CHEVRON_ACTIVATE, -1, customData.getBoolean("final"))), targetPoint);

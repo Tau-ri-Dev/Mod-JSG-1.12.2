@@ -40,10 +40,7 @@ import tauri.dev.jsg.item.renderer.CustomModel;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
-import tauri.dev.jsg.stargate.EnumIrisMode;
-import tauri.dev.jsg.stargate.EnumStargateState;
-import tauri.dev.jsg.stargate.NearbyGate;
-import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
+import tauri.dev.jsg.stargate.*;
 import tauri.dev.jsg.stargate.network.StargateAddress;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.stargate.network.SymbolUniverseEnum;
@@ -419,7 +416,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                                 int symbolsNeeded = (sameType ? (sameDim ? 6 : 7) : 8);
                                 maxSymbols = Math.min(symbolsNeeded, maxSymbols);
                             }*/
-                            gateTile.dialAddress(address, maxSymbols, false, false);
+                            gateTile.dialAddress(address, maxSymbols, false, EnumDialingType.NORMAL);
                             player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.dial_start"), true);
                             if(player instanceof EntityPlayerMP)
                                 JSGSoundHelper.playSoundToPlayer(((EntityPlayerMP) player), SoundEventEnum.UNIVERSE_DIALER_START_DIAL, player.getPosition());
