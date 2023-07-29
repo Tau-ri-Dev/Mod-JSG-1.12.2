@@ -756,7 +756,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 if (this instanceof StargateClassicBaseTile)
                     dialedAddress.addSymbol(getSymbolType().getOrigin());
 
-                Objects.requireNonNull(getNetwork().getStargate(dialedAddress)).getTileEntity().disconnectGate();
+                if(getNetwork().getStargate(dialedAddress) != null)
+                    Objects.requireNonNull(getNetwork().getStargate(dialedAddress)).getTileEntity().disconnectGate();
             }
 
             sendSignal(null, "stargate_failed", new Object[]{reason.toString().toLowerCase()});
