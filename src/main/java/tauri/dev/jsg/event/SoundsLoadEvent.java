@@ -6,7 +6,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
 
@@ -19,6 +18,9 @@ import static tauri.dev.jsg.sound.JSGSoundHelperClient.playPositionedSoundClient
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class SoundsLoadEvent {
 
+    public static boolean isLoadingMusicPlaying = false;
+    public static final BlockPos LOADING_MUSIC_BLOCK_POS = new BlockPos(0, 0, 0);
+
     @SubscribeEvent
     public static void onSoundHandlerLoad(SoundLoadEvent event) {
         if(!JSGConfig.General.mainMenuConfig.loadingMusic) return;
@@ -26,8 +28,10 @@ public class SoundsLoadEvent {
         t.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (JSGConfig.General.mainMenuConfig.loadingMusic)
-                    playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.LOADING_MUSIC, true);
+                if (JSGConfig.General.mainMenuConfig.loadingMusic) {
+                    playPositionedSoundClientSide(LOADING_MUSIC_BLOCK_POS, SoundPositionedEnum.LOADING_MUSIC, true);
+                    isLoadingMusicPlaying = true;
+                }
                 t.cancel();
             }
         }, 5000, 5000);

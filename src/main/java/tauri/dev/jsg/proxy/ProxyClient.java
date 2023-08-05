@@ -33,6 +33,7 @@ import tauri.dev.jsg.entity.friendly.TokraEntity;
 import tauri.dev.jsg.entity.renderer.TokraRenderer;
 import tauri.dev.jsg.event.EventTickClient;
 import tauri.dev.jsg.event.InputHandlerClient;
+import tauri.dev.jsg.event.SoundsLoadEvent;
 import tauri.dev.jsg.fluid.JSGBlockFluid;
 import tauri.dev.jsg.fluid.JSGFluids;
 import tauri.dev.jsg.item.JSGItems;
@@ -48,6 +49,7 @@ import tauri.dev.jsg.sound.SoundPositionedEnum;
 import static tauri.dev.jsg.JSG.memoryTotal;
 import static tauri.dev.jsg.JSG.neededMemory;
 import static tauri.dev.jsg.block.JSGBlocks.BLOCKS;
+import static tauri.dev.jsg.event.SoundsLoadEvent.LOADING_MUSIC_BLOCK_POS;
 
 @SuppressWarnings({"rawtypes", "unused", "unchecked"})
 public class ProxyClient implements IProxy {
@@ -155,7 +157,7 @@ public class ProxyClient implements IProxy {
 
     @Override
     public void loadCompleted() {
-        if (JSGConfig.General.mainMenuConfig.loadingMusic)
-            playPositionedSoundClientSide(new BlockPos(0, 0, 0), SoundPositionedEnum.LOADING_MUSIC, false);
+        if (JSGConfig.General.mainMenuConfig.loadingMusic || SoundsLoadEvent.isLoadingMusicPlaying)
+            playPositionedSoundClientSide(LOADING_MUSIC_BLOCK_POS, SoundPositionedEnum.LOADING_MUSIC, false);
     }
 }
