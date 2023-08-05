@@ -1,6 +1,5 @@
 package tauri.dev.jsg.crafting;
 
-import tauri.dev.jsg.item.JSGItems;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -12,6 +11,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.registries.IForgeRegistryEntry.Impl;
+import tauri.dev.jsg.item.JSGItems;
 
 public class NotebookRecipe extends Impl<IRecipe> implements IRecipe {
 
@@ -23,18 +23,22 @@ public class NotebookRecipe extends Impl<IRecipe> implements IRecipe {
 	public boolean matches(InventoryCrafting inv, World worldIn) {
 		
 		int matchCount = 0;
+		boolean hasNote = false;
 		
 		for (int i=0; i<inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			Item item = stack.getItem();
 			
-			if ((item == JSGItems.PAGE_NOTEBOOK_ITEM && stack.getMetadata() == 1) || item == JSGItems.NOTEBOOK_ITEM || item == Items.BOOK)
+			if ((item == JSGItems.PAGE_NOTEBOOK_ITEM && stack.getMetadata() == 1) || item == JSGItems.NOTEBOOK_ITEM || item == Items.BOOK) {
 				matchCount++;
+				if(!hasNote && ((item == JSGItems.PAGE_NOTEBOOK_ITEM && stack.getMetadata() == 1) || item == JSGItems.NOTEBOOK_ITEM))
+					hasNote = true;
+			}
 			else if (!stack.isEmpty())
 				return false;
 		}
 		
-		return matchCount >= 2;
+		return hasNote && matchCount >= 2;
 	}
 
 	@Override
