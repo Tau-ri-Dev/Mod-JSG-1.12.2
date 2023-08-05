@@ -150,6 +150,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return (getIrisType() == EnumIrisType.IRIS_TRINIUM ? IRIS_MAX_HEAT_TRINIUM : IRIS_MAX_HEAT_TITANIUM);
     }
 
+    public double getMaxGateHeat(){
+        return GATE_MAX_HEAT;
+    }
 
     public void tryHeatUp(boolean heatUpIris, boolean heatUpGate, double gateHeatUpCoefficient, double irisHeatUpCoefficient, double coolDownCoefficient, double maxHeatByAround, double minHeatByAround) {
 
@@ -228,6 +231,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Nonnull
     protected StargateSizeEnum getStargateSize() {
         return stargateSize;
+    }
+
+    public StargateSizeEnum getStargateSizeForApi() {
+        return getStargateSize();
     }
 
 
@@ -372,12 +379,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         super.generateIncoming(entities, addressSize, delay);
     }
 
-    public boolean dialingWithoutEnergy = false;
+    protected boolean dialingWithoutEnergy = false;
 
-    public void resetACPreferences(){
+    public boolean isDialingWithoutEnergy(){
+        return dialingWithoutEnergy;
+    }
+    protected void resetACPreferences(){
         resetACPreferences(true);
     }
-    public void resetACPreferences(boolean resetNox){
+    protected void resetACPreferences(boolean resetNox){
         dialingWithoutEnergy = false;
         isFastDialingOverride = false;
         if(resetNox)
@@ -400,7 +410,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Nullable
     @SuppressWarnings("all")
-    public void addSymbolToAddressByNox(SymbolInterface symbol){
+    protected void addSymbolToAddressByNox(SymbolInterface symbol){
         if (symbol != getSymbolType().getBRB() && !canAddSymbol(symbol)) return;
         if(symbol == getSymbolType().getBRB()){
             addTask(new ScheduledTask(EnumScheduledTask.STARGATE_OPEN_NOX));

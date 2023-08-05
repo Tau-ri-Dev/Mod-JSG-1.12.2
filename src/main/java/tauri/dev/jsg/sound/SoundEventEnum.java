@@ -121,10 +121,10 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     // ----------------------------------------------------------
 
 
-    private static final EnumKeyMap<Integer, SoundEventEnum> idMap = new EnumKeyMap<Integer, SoundEventEnum>(values());
-    public int id;
-    public SoundEvent soundEvent;
-    public float volume;
+    private static final EnumKeyMap<Integer, SoundEventEnum> idMap = new EnumKeyMap<>(values());
+    public final int id;
+    public final SoundEvent soundEvent;
+    public final float volume;
     private final String name;
 
     SoundEventEnum(int id, String name, float volume) {

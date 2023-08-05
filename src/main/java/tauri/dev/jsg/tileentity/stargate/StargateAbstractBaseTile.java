@@ -118,6 +118,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         markDirty();
     }
 
+    @SuppressWarnings("all")
     protected void disconnectGate(boolean force) {
         disconnectGate();
         if (force)
@@ -388,7 +389,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * @param address Address to check,
      * @return {@code True} if the gate can be reached, {@code false} otherwise.
      */
-    protected boolean canDialAddress(StargateAddressDynamic address) {
+    public boolean canDialAddress(StargateAddressDynamic address) {
         StargatePos targetGatePos = getNetwork().getStargate(address);
 
         if (targetGatePos == null) {
@@ -512,6 +513,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     protected int getMaxChevrons() {
         return 7;
+    }
+
+    public int getMaxChevronsForApi() {
+        return getMaxChevrons();
     }
 
     protected boolean stargateWillLock(SymbolInterface symbol, boolean notAddedYet) {
@@ -918,6 +923,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         else if (!((stargateState.idle() || stargateState.dialing()) && !randomIncomingIsActive)) return;
 
         if (stargateState.incoming()) return;
+
+        addressSize = Math.max(7, Math.min(9, addressSize));
 
         this.randomIncomingEntities = entities;
         this.randomIncomingAddrSize = addressSize;
@@ -1786,8 +1793,16 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     protected abstract SmallEnergyStorage getEnergyStorage();
 
+    public SmallEnergyStorage getEnergyStorageForApi(){
+        return getEnergyStorage();
+    }
+
     public int getEnergyStored() {
         return getEnergyStorage().getEnergyStored();
+    }
+
+    public EnergyRequiredToOperate getEnergyRequiredToDialForApi(StargatePos targetGatePos) {
+        return getEnergyRequiredToDial(targetGatePos);
     }
 
     protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos) {

@@ -248,7 +248,7 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
         float noxAlpha = 0;
         if(rendererState.noxDialing){
-            noxAlpha = Math.min(1, Math.max(0, (inner / StargateRendererStatic.EVENT_HORIZON_RADIUS)));
+            noxAlpha = Math.min(0.8f, Math.max(0, (inner / StargateRendererStatic.EVENT_HORIZON_RADIUS)));
         }
 
         // Back side of the EH
@@ -333,6 +333,8 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                                     //renderEventHorizon(partialTicks, false, 0f, false, mul);
                                     if (renderWortex) {
                                         GlStateManager.pushMatrix();
+                                        GlStateManager.resetColor();
+                                        GlStateManager.color(1, 1, 1);
                                         float factor = Math.abs(mul);
                                         float xyFactor = 0.7f * ((this instanceof StargateUniverseRenderer) ? 1.3f : 1);
 

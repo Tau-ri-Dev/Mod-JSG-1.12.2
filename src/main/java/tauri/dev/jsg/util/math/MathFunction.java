@@ -8,5 +8,5 @@ public interface MathFunction {
 	 * @param x Argument
 	 * @return Value
 	 */
-	public abstract float apply(float x);
+	float apply(float x);
 }

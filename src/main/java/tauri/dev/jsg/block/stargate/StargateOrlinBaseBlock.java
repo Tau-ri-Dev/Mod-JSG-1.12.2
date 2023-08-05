@@ -38,7 +38,7 @@ import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
+public class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 	
 	public StargateOrlinBaseBlock() {
 		super("stargate_orlin_base_block");

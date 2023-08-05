@@ -11,5 +11,4 @@ public enum StargateSoundEventEnum {
 	CHEVRON_SHUT,
 
 	OPEN_NOX
-    ;
 }

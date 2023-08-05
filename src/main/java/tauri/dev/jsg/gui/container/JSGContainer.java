@@ -17,6 +17,6 @@ public abstract class JSGContainer extends Container {
     public abstract Block[] getAllowedBlocks();
 
     public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
-        return (JSGBlocks.isInBlocksArray(getWorld().getBlockState(getPos()).getBlock(), getAllowedBlocks()) && playerIn.getDistanceSq((double) getPos().getX() + 0.5D, (double) getPos().getY() + 0.5D, (double) getPos().getZ() + 0.5D) <= 64.0D);
+        return (JSGBlocks.isInBlocksArray(getWorld().getBlockState(getPos()).getBlock(), getAllowedBlocks()) && playerIn.getDistanceSq((double) getPos().getX() + 0.5D, (double) getPos().getY() + 0.5D, (double) getPos().getZ() + 0.5D) <= 128.0D);
     }
 }

@@ -1,16 +1,15 @@
 package tauri.dev.jsg.block.stargate;
 
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import tauri.dev.jsg.renderer.stargate.StargateOrlinRenderer;
-import tauri.dev.jsg.renderer.stargate.StargatePegasusRenderer;
-import tauri.dev.jsg.tileentity.stargate.StargatePegasusBaseTile;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import tauri.dev.jsg.renderer.stargate.StargatePegasusRenderer;
+import tauri.dev.jsg.tileentity.stargate.StargatePegasusBaseTile;
 
-public final class StargatePegasusBaseBlock extends StargateClassicBaseBlock {
+public class StargatePegasusBaseBlock extends StargateClassicBaseBlock {
 
   public static final String BLOCK_NAME = "stargate_pegasus_base_block";
 
