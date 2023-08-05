@@ -423,7 +423,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     public void attemptClose(StargateClosedReasonEnum reason) {
         if (reason == null) return;
-        if (targetGatePos == null) {
+        if (targetGatePos == null || targetGatePos.getTileEntity() == null) {
             closeGate(reason);
             resetRandomIncoming();
             return;
