@@ -167,97 +167,113 @@ public class JSGStructure extends WorldGenerator {
                 case "base":
                     worldToSpawn.setBlockToAir(dataPos);
                     gatePos = dataPos.down(3);
-                    gateTile = (StargateClassicBaseTile) worldToSpawn.getTileEntity(gatePos);
-                    if (gateTile == null) break;
-                    IItemHandler gateContainer = gateTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-                    if (gateContainer != null) {
-                        if (!isUniverseGate || JSGConfig.Stargate.power.universeCapacitors > 0) {
-                            // is not uni gate OR capacitors are enabled for these gates
-                            ItemStack capacitor = new ItemStack(JSGBlocks.CAPACITOR_BLOCK);
-                            if (isUniverseGate) {
-                                // is uni gate -> add energy to capacitor (uni gate doesn't have DHD to power up itself)
-                                IEnergyStorage storage = capacitor.getCapability(CapabilityEnergy.ENERGY, null);
-                                if (storage != null)
-                                    storage.receiveEnergy(((int) (storage.getMaxEnergyStored() * 0.5)), false);
+                    try {
+                        gateTile = (StargateClassicBaseTile) worldToSpawn.getTileEntity(gatePos);
+                        if (gateTile == null) break;
+                        IItemHandler gateContainer = gateTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+                        if (gateContainer != null) {
+                            if (!isUniverseGate || JSGConfig.Stargate.power.universeCapacitors > 0) {
+                                // is not uni gate OR capacitors are enabled for these gates
+                                ItemStack capacitor = new ItemStack(JSGBlocks.CAPACITOR_BLOCK);
+                                if (isUniverseGate) {
+                                    // is uni gate -> add energy to capacitor (uni gate doesn't have DHD to power up itself)
+                                    IEnergyStorage storage = capacitor.getCapability(CapabilityEnergy.ENERGY, null);
+                                    if (storage != null)
+                                        storage.receiveEnergy(((int) (storage.getMaxEnergyStored() * 0.5)), false);
+                                }
+                                gateContainer.insertItem(4, capacitor, false); // insert capacitor
+
+                                if (isMilkyWayGate)
+                                    gateContainer.insertItem(0, new ItemStack(JSGItems.CRYSTAL_GLYPH_MILKYWAY), false);
+                                if (isPegasusGate)
+                                    gateContainer.insertItem(0, new ItemStack(JSGItems.CRYSTAL_GLYPH_PEGASUS), false);
+                                if (isUniverseGate)
+                                    gateContainer.insertItem(0, new ItemStack(JSGItems.CRYSTAL_GLYPH_UNIVERSE), false);
+
+                                if (hasUpgrade)
+                                    gateContainer.insertItem(1, new ItemStack(JSGItems.CRYSTAL_GLYPH_STARGATE), false);
                             }
-                            gateContainer.insertItem(4, capacitor, false); // insert capacitor
-
-                            if (isMilkyWayGate)
-                                gateContainer.insertItem(0, new ItemStack(JSGItems.CRYSTAL_GLYPH_MILKYWAY), false);
-                            if (isPegasusGate)
-                                gateContainer.insertItem(0, new ItemStack(JSGItems.CRYSTAL_GLYPH_PEGASUS), false);
-                            if (isUniverseGate)
-                                gateContainer.insertItem(0, new ItemStack(JSGItems.CRYSTAL_GLYPH_UNIVERSE), false);
-
-                            if (hasUpgrade)
-                                gateContainer.insertItem(1, new ItemStack(JSGItems.CRYSTAL_GLYPH_STARGATE), false);
                         }
+                        // insert power to the gate itself
+                        IEnergyStorage gateEnergy = gateTile.getCapability(CapabilityEnergy.ENERGY, null);
+                        if (gateEnergy != null)
+                            gateEnergy.receiveEnergy(((int) (((LargeEnergyStorage) gateEnergy).getMaxEnergyStoredInternally() * 0.75)), false);
+                        gateTile.getMergeHelper().updateMembersBasePos(worldToSpawn, gatePos, facing, EnumFacing.SOUTH);
                     }
-                    // insert power to the gate itself
-                    IEnergyStorage gateEnergy = gateTile.getCapability(CapabilityEnergy.ENERGY, null);
-                    if (gateEnergy != null)
-                        gateEnergy.receiveEnergy(((int) (((LargeEnergyStorage) gateEnergy).getMaxEnergyStoredInternally() * 0.75)), false);
-                    gateTile.getMergeHelper().updateMembersBasePos(worldToSpawn, gatePos, facing, EnumFacing.SOUTH);
+                    catch (Exception e){
+                        JSG.error("Error while generating structure " + structureName + ":", e);
+                        gateTile = null;
+                    }
                     break;
                 case "dhd":
-                    worldToSpawn.setBlockState(dataPos, worldToSpawn.getBlockState(dataPos.east()));
-                    dhdPos = dataPos.down();
+                    try {
+                        worldToSpawn.setBlockState(dataPos, worldToSpawn.getBlockState(dataPos.east()));
+                        dhdPos = dataPos.down();
 
-                    // set the DHD to the topBlock
-                    JSGWorldTopBlock topBlock = JSGWorldTopBlock.getTopBlock(worldToSpawn, dhdPos.getX(), dhdPos.getZ(), 3, worldToSpawn.provider.getDimension());
-                    if (topBlock != null && (topBlock.y != dhdPos.getY()) && (Math.abs(topBlock.y - dhdPos.getY()) < 12)) {
-                        IBlockState dhd = worldToSpawn.getBlockState(dhdPos);
-                        worldToSpawn.setBlockState(dhdPos, topBlock.topBlockState, 3);
-                        dhdPos = new BlockPos(dhdPos.getX(), (topBlock.y + 1), dhdPos.getZ());
-                        worldToSpawn.setBlockState(dhdPos, dhd, 3);
+                        // set the DHD to the topBlock
+                        JSGWorldTopBlock topBlock = JSGWorldTopBlock.getTopBlock(worldToSpawn, dhdPos.getX(), dhdPos.getZ(), 3, worldToSpawn.provider.getDimension());
+                        if (topBlock != null && (topBlock.y != dhdPos.getY()) && (Math.abs(topBlock.y - dhdPos.getY()) < 12)) {
+                            IBlockState dhd = worldToSpawn.getBlockState(dhdPos);
+                            worldToSpawn.setBlockState(dhdPos, topBlock.topBlockState, 3);
+                            dhdPos = new BlockPos(dhdPos.getX(), (topBlock.y + 1), dhdPos.getZ());
+                            worldToSpawn.setBlockState(dhdPos, dhd, 3);
+                        }
+
+                        if (canDHDDespawn() && random.nextFloat() < JSGConfig.WorldGen.mystPage.despawnDhdChance) {
+                            worldToSpawn.setBlockToAir(dhdPos);
+                            break;
+                        }
+                        DHDAbstractTile dhdTile = (DHDAbstractTile) worldToSpawn.getTileEntity(dhdPos);
+                        if (dhdTile == null) break;
+
+                        final int fluid = JSGConfig.Stargate.power.stargateEnergyStorage / JSGConfig.DialHomeDevice.power.energyPerNaquadah;
+                        final ItemStack crystal = new ItemStack(isPegasusGate ? JSGItems.CRYSTAL_CONTROL_PEGASUS_DHD : JSGItems.CRYSTAL_CONTROL_MILKYWAY_DHD);
+                        IItemHandler dhdContainer = dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+                        IFluidHandler dhdFluidTank = dhdTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+
+                        if (dhdContainer != null) {
+                            dhdContainer.insertItem(0, crystal, false);
+                            if (hasUpgrade)
+                                dhdContainer.insertItem(1, new ItemStack(JSGItems.CRYSTAL_GLYPH_DHD), false);
+                        }
+
+                        if (dhdFluidTank instanceof FluidTank)
+                            ((FluidTank) dhdFluidTank).fillInternal(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, fluid), true);
                     }
-
-                    if (canDHDDespawn() && random.nextFloat() < JSGConfig.WorldGen.mystPage.despawnDhdChance) {
-                        worldToSpawn.setBlockToAir(dhdPos);
-                        break;
+                    catch (Exception e){
+                        JSG.error("Error while generating structure " + structureName + ":", e);
                     }
-                    DHDAbstractTile dhdTile = (DHDAbstractTile) worldToSpawn.getTileEntity(dhdPos);
-                    if (dhdTile == null) break;
-
-                    final int fluid = JSGConfig.Stargate.power.stargateEnergyStorage / JSGConfig.DialHomeDevice.power.energyPerNaquadah;
-                    final ItemStack crystal = new ItemStack(isPegasusGate ? JSGItems.CRYSTAL_CONTROL_PEGASUS_DHD : JSGItems.CRYSTAL_CONTROL_MILKYWAY_DHD);
-                    IItemHandler dhdContainer = dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-                    IFluidHandler dhdFluidTank = dhdTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-
-                    if (dhdContainer != null) {
-                        dhdContainer.insertItem(0, crystal, false);
-                        if (hasUpgrade)
-                            dhdContainer.insertItem(1, new ItemStack(JSGItems.CRYSTAL_GLYPH_DHD), false);
-                    }
-
-                    if (dhdFluidTank instanceof FluidTank)
-                        ((FluidTank) dhdFluidTank).fillInternal(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, fluid), true);
                     break;
                 // rings
                 case "rings":
                 case "rings_top":
-                    boolean top = (name.equals("rings_top"));
+                    try {
+                        boolean top = (name.equals("rings_top"));
 
-                    worldToSpawn.setBlockToAir(dataPos);
-                    BlockPos ringsPos = dataPos.down(2);
+                        worldToSpawn.setBlockToAir(dataPos);
+                        BlockPos ringsPos = dataPos.down(2);
 
-                    if (top) {
-                        JSGWorldTopBlock trTopBlock = JSGWorldTopBlock.getTopBlock(worldToSpawn, ringsPos.getX(), ringsPos.getZ(), 3, worldToSpawn.provider.getDimension());
-                        if (trTopBlock != null && (trTopBlock.y != ringsPos.getY()) && (Math.abs(trTopBlock.y - ringsPos.getY()) < 12)) {
-                            IBlockState bState = worldToSpawn.getBlockState(ringsPos);
-                            worldToSpawn.setBlockState(ringsPos, trTopBlock.topBlockState, 3);
-                            ringsPos = new BlockPos(ringsPos.getX(), (trTopBlock.y - 1), ringsPos.getZ());
-                            worldToSpawn.setBlockState(ringsPos, bState, 3);
+                        if (top) {
+                            JSGWorldTopBlock trTopBlock = JSGWorldTopBlock.getTopBlock(worldToSpawn, ringsPos.getX(), ringsPos.getZ(), 3, worldToSpawn.provider.getDimension());
+                            if (trTopBlock != null && (trTopBlock.y != ringsPos.getY()) && (Math.abs(trTopBlock.y - ringsPos.getY()) < 12)) {
+                                IBlockState bState = worldToSpawn.getBlockState(ringsPos);
+                                worldToSpawn.setBlockState(ringsPos, trTopBlock.topBlockState, 3);
+                                ringsPos = new BlockPos(ringsPos.getX(), (trTopBlock.y - 1), ringsPos.getZ());
+                                worldToSpawn.setBlockState(ringsPos, bState, 3);
+                            }
                         }
+
+                        TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) worldToSpawn.getTileEntity(ringsPos);
+                        if (ringsTile == null) break;
+                        IEnergyStorage ringsEnergy = ringsTile.getCapability(CapabilityEnergy.ENERGY, null);
+                        if (ringsEnergy != null)
+                            ringsEnergy.receiveEnergy(((int) (((LargeEnergyStorage) ringsEnergy).getMaxEnergyStoredInternally() * 0.75)), false);
+
+                        ringsTiles.add(ringsTile);
                     }
-
-                    TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) worldToSpawn.getTileEntity(ringsPos);
-                    if (ringsTile == null) break;
-                    IEnergyStorage ringsEnergy = ringsTile.getCapability(CapabilityEnergy.ENERGY, null);
-                    if (ringsEnergy != null)
-                        ringsEnergy.receiveEnergy(((int) (((LargeEnergyStorage) ringsEnergy).getMaxEnergyStoredInternally() * 0.75)), false);
-
-                    ringsTiles.add(ringsTile);
+                    catch (Exception e){
+                        JSG.error("Error while generating structure " + structureName + ":", e);
+                    }
                     break;
                 // global
                 case "structure":
@@ -308,7 +324,7 @@ public class JSGStructure extends WorldGenerator {
                 ringsTile.updatePlatformStatus();
                 ringsTile.updateRingsDistance();
                 ringsTile.markDirty();
-                ringsTile.setBarrierBlocks(false, false, true);
+                ringsTile.clearObstructedRadius();
             }
         }
         return null;

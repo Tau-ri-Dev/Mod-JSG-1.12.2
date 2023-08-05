@@ -895,6 +895,26 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
         return this.pos.getY() + ringsDistance < 0;
     }
 
+    /**
+     * Used for generating in scrutures
+     */
+    public void clearObstructedRadius() {
+        for (Rotation rotation : Rotation.values()) {
+            for (BlockPos invPos : invisibleBlocksTemplate) {
+                for (int y = 0; y < 3; y++) {
+
+                    BlockPos newPos = new BlockPos(this.pos).add(invPos.rotate(rotation)).add(0, y, 0);
+                    IBlockState newState = world.getBlockState(newPos);
+                    Block newBlock = newState.getBlock();
+
+                    if (!newBlock.isAir(newState, world, newPos) && !newBlock.isReplaceable(world, newPos)) {
+                        world.setBlockToAir(newPos);
+                    }
+                }
+            }
+        }
+    }
+
     public void setBarrierBlocks(boolean set, boolean passable) {
         setBarrierBlocks(set, passable, false);
     }
