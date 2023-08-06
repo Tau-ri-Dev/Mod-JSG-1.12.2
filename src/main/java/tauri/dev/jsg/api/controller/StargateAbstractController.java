@@ -187,7 +187,7 @@ public class StargateAbstractController {
     /**
      * @param newName - name to set
      */
-    public void renameAddressInNetwork(String newName) {
+    public void renameGateInNetwork(String newName) {
         getStargate().renameStargatePos(newName);
     }
 
