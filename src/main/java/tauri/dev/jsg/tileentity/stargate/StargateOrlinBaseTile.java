@@ -381,7 +381,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
             case STARGATE_ORLIN_OPEN:
                 StargatePos targetGatePos = network.getStargate(dialedAddress);
 
-                if (hasEnergyToDial(targetGatePos) && targetGatePos != null && targetGatePos.getTileEntity() != null) {
+                if (targetGatePos != null && targetGatePos.getTileEntity() != null && hasEnergyToDial(targetGatePos)) {
                     targetGatePos.getTileEntity().incomingWormhole(dialedAddress.size());
                 }
 
