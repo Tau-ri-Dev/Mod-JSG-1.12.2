@@ -416,7 +416,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     protected boolean checkAddressLength(StargateAddressDynamic address, StargatePos targetGatePosition) {
-        if (targetGatePosition == null) return false;
+        if (targetGatePosition == null || address == null) return false;
         boolean localDial = world.provider.getDimension() == targetGatePosition.dimensionID || StargateDimensionConfig.isGroupEqual(world.provider.getDimension(), targetGatePosition.dimensionID);
 
         return address.size() < getSymbolType().getMinimalSymbolCountTo(targetGatePosition.getGateSymbolType(), localDial);
@@ -496,14 +496,16 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     public void refresh() {
-        StargateAddress address = this.getStargateAddress(this.getSymbolType());
-        if (address == null) {
-            generateAddresses(true);
-            address = this.getStargateAddress(this.getSymbolType());
+        for(SymbolTypeEnum s : SymbolTypeEnum.values()) {
+            StargateAddress address = getStargateAddress(s);
+            if (address == null) {
+                generateAddresses(true);
+                address = getStargateAddress(s);
+            }
+            setGateAddress(s, address);
         }
-        this.setGateAddress(this.getSymbolType(), address);
-        updateFacing(this.world.getBlockState(this.pos).getValue(JSGProps.FACING_HORIZONTAL), this.world.getBlockState(this.pos).getValue(JSGProps.FACING_VERTICAL), true);
-        lastPos = this.pos;
+        updateFacing(world.getBlockState(pos).getValue(JSGProps.FACING_HORIZONTAL), world.getBlockState(pos).getValue(JSGProps.FACING_VERTICAL), true);
+        lastPos = pos;
         markDirty();
     }
 

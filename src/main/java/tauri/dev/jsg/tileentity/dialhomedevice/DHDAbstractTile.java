@@ -73,6 +73,10 @@ public abstract class DHDAbstractTile extends SidedTileEntity implements ILinkab
     public static final EnumSet<BiomeOverlayEnum> SUPPORTED_OVERLAYS = EnumSet.of(BiomeOverlayEnum.NORMAL, BiomeOverlayEnum.FROST, BiomeOverlayEnum.MOSSY, BiomeOverlayEnum.SOOTY, BiomeOverlayEnum.AGED);
     public static final List<Item> SUPPORTED_UPGRADES = Arrays.asList(JSGItems.CRYSTAL_GLYPH_DHD, JSGItems.CRYSTAL_UPGRADE_CAPACITY, JSGItems.CRYSTAL_UPGRADE_EFFICIENCY);
     public static final int BIOME_OVERRIDE_SLOT = 5;
+
+    public FluidTank getFluidHandler(){
+        return fluidHandler;
+    }
     protected final FluidTank fluidHandler = new FluidTank(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, 0), JSGConfig.DialHomeDevice.mechanics.fluidCapacity) {
 
         @Override

@@ -43,7 +43,7 @@ public class StargateContainer extends JSGContainer implements OpenTabHolderInte
     private int lastProgress;
     private int openTabId = -1;
     private EnumIrisMode irisMode;
-    private int irisCode;
+    private String irisCode = "";
     public long openedSince;
     private double gateTemp;
     private double irisTemp;
@@ -125,7 +125,7 @@ public class StargateContainer extends JSGContainer implements OpenTabHolderInte
     public ItemStack transferStackInSlot(@Nonnull EntityPlayer player, int index) {
         ItemStack stack = getSlot(index).getStack();
 
-        if(!CreativeItemsChecker.canInteractWith(stack, player.isCreative())) return ItemStack.EMPTY;
+        if(!CreativeItemsChecker.canInteractWith(stack, isOperator)) return ItemStack.EMPTY;
 
         // Transfering from Stargate to player's inventory
         if (index < 12) {
@@ -224,7 +224,7 @@ public class StargateContainer extends JSGContainer implements OpenTabHolderInte
                 || lastEnergySecondsToClose != gateTile.getEnergySecondsToClose()
                 || energyTransferedLastTick != gateTile.getEnergyTransferedLastTick()
                 || irisMode != gateTile.getIrisMode()
-                || irisCode != gateTile.getIrisCode()
+                || !Objects.equals(irisCode, gateTile.getIrisCode())
                 || openedSince != gateTile.openedSince
                 || (Math.abs(gateTemp - gateTile.gateHeat) > 5) || (gateTemp == -1 && gateTile.gateHeat != -1)
                 || (Math.abs(irisTemp - gateTile.irisHeat) > 5) || (irisTemp == -1 && gateTile.irisHeat != -1)

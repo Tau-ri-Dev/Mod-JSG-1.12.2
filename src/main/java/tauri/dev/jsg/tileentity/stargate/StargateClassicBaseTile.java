@@ -103,7 +103,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // IRIS/SHIELD VARIABLES/CONSTANTS
     private EnumIrisState irisState = EnumIrisState.OPENED;
     private EnumIrisType irisType = EnumIrisType.NULL;
-    private int irisCode = -1;
+    private String irisCode = "";
     protected EnumIrisMode irisMode = EnumIrisMode.OPENED;
     private long irisAnimation = 0;
 
@@ -1211,7 +1211,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             irisState = EnumIrisState.OPENED;
         }
         compound.setByte("irisState", irisState.id);
-        compound.setInteger("irisCode", irisCode);
+        compound.setString("irisCode", irisCode);
         compound.setByte("irisMode", irisMode.id);
         compound.setByte("irisType", irisType.id);
         if (codeSender != null && !world.isRemote) {
@@ -1269,7 +1269,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
 
         irisState = EnumIrisState.getValue(compound.getByte("irisState"));
-        irisCode = compound.getInteger("irisCode") != 0 ? compound.getInteger("irisCode") : -1;
+        irisCode = !compound.getString("irisCode").equals("") ? compound.getString("irisCode") : "";
         irisMode = EnumIrisMode.getValue(compound.getByte("irisMode"));
         irisType = EnumIrisType.byId(compound.getByte("irisType"));
         if (compound.hasKey("codeSender") && !world.isRemote) {
@@ -2235,7 +2235,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     protected CodeSender codeSender;
 
-    public boolean receiveIrisCode(CodeSender sender, int code) {
+    public boolean receiveIrisCode(CodeSender sender, String code) {
         sendSignal(null, "received_code", code);
         if (irisMode != EnumIrisMode.AUTO) {
             sender.sendMessage(GDOMessages.SEND_TO_COMPUTER.textComponent);
@@ -2267,7 +2267,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return true;
     }
 
-    public void setIrisCode(int code) {
+    public void setIrisCode(String code) {
         this.irisCode = code;
         markDirty();
     }
@@ -2315,7 +2315,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     }
 
-    public int getIrisCode() {
+    public String getIrisCode() {
         return this.irisCode;
     }
 
@@ -2647,7 +2647,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                             StargateNetwork.get(world).getStargate(
                                     this.getStargateAddress(SymbolTypeEnum.MILKYWAY)
                             )
-                    ), args.checkInteger(0)
+                    ), args.checkString(0)
             );
         } else {
             return new Object[]{false, "invalid_target_gate"};

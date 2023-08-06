@@ -1,27 +1,29 @@
 package tauri.dev.jsg.packet.stargate;
 
 import io.netty.buffer.ByteBuf;
-import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.packet.PositionedPacket;
-import tauri.dev.jsg.packet.StateUpdatePacketToClient;
-import tauri.dev.jsg.stargate.EnumIrisMode;
-import tauri.dev.jsg.state.StateTypeEnum;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.packet.PositionedPacket;
+import tauri.dev.jsg.packet.StateUpdatePacketToClient;
+import tauri.dev.jsg.stargate.EnumIrisMode;
+import tauri.dev.jsg.state.StateTypeEnum;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
+
+import java.nio.charset.StandardCharsets;
 
 public class SaveIrisCodeToServer extends PositionedPacket {
     public SaveIrisCodeToServer() {
     }
 
-    int code;
+    String code;
     EnumIrisMode mode;
 
-    public SaveIrisCodeToServer(BlockPos pos, int code, EnumIrisMode mode) {
+    public SaveIrisCodeToServer(BlockPos pos, String code, EnumIrisMode mode) {
         super(pos);
 
         this.code = code;
@@ -32,7 +34,8 @@ public class SaveIrisCodeToServer extends PositionedPacket {
     public void toBytes(ByteBuf buf) {
         super.toBytes(buf);
 
-        buf.writeInt(code);
+        buf.writeInt(code.length());
+        buf.writeCharSequence(code, StandardCharsets.UTF_8);
         buf.writeByte(mode.id);
     }
 
@@ -40,7 +43,8 @@ public class SaveIrisCodeToServer extends PositionedPacket {
     public void fromBytes(ByteBuf buf) {
         super.fromBytes(buf);
 
-        code = buf.readInt();
+        int codeSize = buf.readInt();
+        code = buf.readCharSequence(codeSize, StandardCharsets.UTF_8).toString();
         mode = EnumIrisMode.getValue(buf.readByte());
     }
 

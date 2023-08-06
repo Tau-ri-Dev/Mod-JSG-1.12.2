@@ -28,7 +28,7 @@ public class TabIris extends Tab {
             Minecraft.getMinecraft().fontRenderer, guiLeft + 6, guiTop + defaultY + 25,
             64, 16);
 
-    public int code;
+    public String code;
     public EnumIrisMode irisMode;
     protected ModeButton buttonChangeMode = new ModeButton(
             1, inputField.x + inputField.width + 5, guiTop + defaultY + 25, 16, MODES_ICONS,
@@ -44,7 +44,7 @@ public class TabIris extends Tab {
         code = builder.code;
         buttonChangeMode.setCurrentState(irisMode.id);
         inputField.setMaxStringLength(JSGConfig.Stargate.iris.irisCodeLength);
-        inputField.setText(code > -1 ? Integer.toString(code) : "");
+        inputField.setText(code);
         inputField.setEnabled(buttonChangeMode.getCurrentState() == EnumIrisMode.AUTO.id);
     }
 
@@ -53,8 +53,8 @@ public class TabIris extends Tab {
         inputField.setEnabled(buttonChangeMode.getCurrentState() == EnumIrisMode.AUTO.id);
     }
 
-    public void updateValue(int irisCode) {
-        inputField.setText(irisCode > 0 ? irisCode + "" : "");
+    public void updateValue(String irisCode) {
+        inputField.setText(irisCode);
     }
 
     @Override
@@ -93,11 +93,11 @@ public class TabIris extends Tab {
     public static class TabIrisBuilder extends TabBuilder {
         private EnumIrisMode irisMode = EnumIrisMode.OPENED;
 
-        private int code = -1;
+        private String code = "";
         private boolean isUniverse = false;
 
 
-        public TabIris.TabIrisBuilder setCode(int code) {
+        public TabIris.TabIrisBuilder setCode(String code) {
             this.code = code;
             return this;
         }
@@ -164,8 +164,8 @@ public class TabIris extends Tab {
         return EnumIrisMode.getValue((byte) buttonChangeMode.getCurrentState());
     }
 
-    public int getCode() {
-        return inputField.getText().length() > 0 ? Integer.parseInt(inputField.getText()) : -1;
+    public String getCode() {
+        return inputField.getText().length() > 0 ? inputField.getText() : "";
     }
 
     public boolean keyTyped(char typedChar, int keyCode) {

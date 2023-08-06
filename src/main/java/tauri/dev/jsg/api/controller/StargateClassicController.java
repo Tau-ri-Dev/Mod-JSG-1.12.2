@@ -114,7 +114,7 @@ public class StargateClassicController extends StargateAbstractController {
      * @param symbol - symbol to dial
      */
     public boolean addSymbolToAddress(boolean useDHD, SymbolInterface symbol) {
-        if(!getStargate().getStargateState().idle()) return false;
+        if (!getStargate().getStargateState().idle()) return false;
         if (useDHD && getStargate().getSymbolType() != SymbolTypeEnum.UNIVERSE) {
             getStargate().addSymbolToAddressDHD(symbol);
         } else {
@@ -139,6 +139,35 @@ public class StargateClassicController extends StargateAbstractController {
      */
     public void saveGateConfig(JSGTileEntityConfig config) {
         getStargate().setConfigAndUpdate(config);
+    }
+
+    /**
+     * @return amount of capacitors supported by gate
+     */
+    public int getSupportedCapacitors() {
+        return getStargate().getSupportedCapacitors();
+    }
+
+    /**
+     * Opens iris of the gate
+     *
+     * @return true if success
+     */
+    public boolean openIris() {
+        if (getStargate().isIrisOpened()) return false;
+        getStargate().toggleIris();
+        return true;
+    }
+
+    /**
+     * Closes iris of the gate
+     *
+     * @return true if success
+     */
+    public boolean closeIris() {
+        if (getStargate().isIrisClosed()) return false;
+        getStargate().toggleIris();
+        return true;
     }
 
 

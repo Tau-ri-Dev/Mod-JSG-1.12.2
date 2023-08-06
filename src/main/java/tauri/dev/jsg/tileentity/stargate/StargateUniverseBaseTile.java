@@ -49,21 +49,25 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     protected World fakeWorld;
     protected BlockPos fakePos;
 
+    @Override
     public World getFakeWorld() {
         if (fakeWorld == null) return world;
         return fakeWorld;
     }
 
+    @Override
     public void setFakeWorld(World world) {
         fakeWorld = world;
         markDirty();
     }
 
+    @Override
     public BlockPos getFakePos() {
         if (fakePos == null) return pos;
         return fakePos;
     }
 
+    @Override
     public void setFakePos(BlockPos pos) {
         fakePos = pos;
         markDirty();

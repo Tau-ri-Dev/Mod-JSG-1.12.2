@@ -52,6 +52,8 @@ public class LargeEnergyStorage extends SmallEnergyStorage {
 			
 			toReceive -= storage.receiveEnergy(toReceive, simulate);
 		}
+
+		if(!simulate) onEnergyChanged();
 		
 		return maxReceive - toReceive;
 	}
@@ -68,6 +70,7 @@ public class LargeEnergyStorage extends SmallEnergyStorage {
 		}
 		
 		toExtract -= super.extractEnergy(toExtract, simulate);
+		if(!simulate) onEnergyChanged();
 		return maxExtract - toExtract;
 	}
 	

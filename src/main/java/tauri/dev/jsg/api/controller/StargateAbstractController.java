@@ -1,6 +1,7 @@
 package tauri.dev.jsg.api.controller;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.energy.CapabilityEnergy;
 import tauri.dev.jsg.power.general.EnergyRequiredToOperate;
 import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
@@ -12,6 +13,7 @@ import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 
 import javax.annotation.Nonnull;
 import java.util.EnumSet;
+import java.util.Objects;
 
 /**
  * Controller contains safe methods to operate with stargate from your project.
@@ -133,6 +135,24 @@ public class StargateAbstractController {
      */
     public SmallEnergyStorage getEnergyStorage() {
         return getStargate().getEnergyStorageForApi();
+    }
+
+    /**
+     * @param energy - energy to add to the stargate
+     * @param simulate - set to true if only check capacity
+     * @return energy that can be added to storage
+     */
+    public int receiveEnergy(int energy, boolean simulate){
+        return Objects.requireNonNull(getStargate().getCapability(CapabilityEnergy.ENERGY, null)).receiveEnergy(energy, simulate);
+    }
+
+    /**
+     * @param energy - energy to drain from the stargate
+     * @param simulate - set to true if only check capacity
+     * @return energy that can be extracted from storage
+     */
+    public int extractEnergy(int energy, boolean simulate){
+        return Objects.requireNonNull(getStargate().getCapability(CapabilityEnergy.ENERGY, null)).extractEnergy(energy, simulate);
     }
 
     /**

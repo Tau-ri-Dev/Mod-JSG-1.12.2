@@ -3,6 +3,7 @@ package tauri.dev.jsg.util;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 
@@ -28,6 +29,18 @@ public class RayTraceHelper {
             RayTraceResult rayTraceResult = rayTraceEntity(player, distance, 0);
             if (rayTraceResult != null && rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
                 return player.getEntityWorld().getTileEntity(rayTraceResult.getBlockPos());
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
+    @Nullable
+    public static BlockPos rayTracePos(@Nonnull EntityPlayer player, int distance) {
+        try {
+            RayTraceResult rayTraceResult = rayTraceEntity(player, distance, 0);
+            if (rayTraceResult != null && rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
+                return rayTraceResult.getBlockPos();
             }
         } catch (Exception ignored) {
         }
