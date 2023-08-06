@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.renderer.stargate.StargatePegasusRenderer;
 import tauri.dev.jsg.tileentity.stargate.StargatePegasusBaseTile;
 
-public class StargatePegasusBaseBlock extends StargateClassicBaseBlock {
+public final class StargatePegasusBaseBlock extends StargateClassicBaseBlock {
 
   public static final String BLOCK_NAME = "stargate_pegasus_base_block";
 

@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.renderer.stargate.StargateMilkyWayRenderer;
 import tauri.dev.jsg.tileentity.stargate.StargateMilkyWayBaseTile;
 
-public class StargateMilkyWayBaseBlock extends StargateClassicBaseBlock {
+public final class StargateMilkyWayBaseBlock extends StargateClassicBaseBlock {
 
 	public static final String BLOCK_NAME = "stargate_milkyway_base_block";
 	

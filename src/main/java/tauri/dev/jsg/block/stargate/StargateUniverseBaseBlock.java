@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.renderer.stargate.StargateUniverseRenderer;
 import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
 
-public class StargateUniverseBaseBlock extends StargateClassicBaseBlock {
+public final class StargateUniverseBaseBlock extends StargateClassicBaseBlock {
 
 	public static final String BLOCK_NAME = "stargate_universe_base_block";
 	
