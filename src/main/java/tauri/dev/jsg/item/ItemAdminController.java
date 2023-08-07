@@ -1,5 +1,6 @@
 package tauri.dev.jsg.item;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -23,6 +24,8 @@ import tauri.dev.jsg.util.LinkingHelper;
 import tauri.dev.jsg.util.RayTraceHelper;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemAdminController extends Item {
     public static final String ITEM_NAME = "admin_controller";
@@ -32,6 +35,11 @@ public class ItemAdminController extends Item {
         setUnlocalizedName(JSG.MOD_ID + "." + ITEM_NAME);
 
         setCreativeTab(JSGCreativeTabsHandler.JSG_TOOLS_CREATIVE_TAB);
+    }
+
+    @Override
+    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
+        tooltip.add(JSG.getInProgress());
     }
 
     @Override
