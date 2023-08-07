@@ -13,6 +13,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Mouse;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
@@ -40,6 +42,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Objects;
 
+@SideOnly(Side.CLIENT)
 public class GuiAdminController extends JSGTexturedGui {
 
     public final StargateClassicBaseTile gateTile;

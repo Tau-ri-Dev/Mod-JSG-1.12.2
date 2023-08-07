@@ -62,6 +62,7 @@ import tauri.dev.jsg.stargate.network.*;
 import tauri.dev.jsg.stargate.teleportation.EventHorizon;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateProviderInterface;
+import tauri.dev.jsg.state.StateSoundPositionedUpdate;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.stargate.StargateFlashState;
 import tauri.dev.jsg.state.stargate.StargateRendererActionState;
@@ -73,6 +74,7 @@ import tauri.dev.jsg.util.JSGAdvancementsUtil;
 import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.main.JSGProps;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.vecmath.Vector2f;
 import java.util.*;
@@ -818,6 +820,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         if (positionedSound == null)
             throw new IllegalArgumentException("Tried to play " + soundEnum + " on " + getClass().getCanonicalName() + " which apparently doesn't support it.");
 
+        playPositionedSound(positionedSound, play);
+    }
+
+    public void playPositionedSound(@Nonnull SoundPositionedEnum positionedSound, boolean play) {
         if (world.isRemote) JSG.proxy.playPositionedSoundClientSide(getGateCenterPos(), positionedSound, play);
         else JSGSoundHelper.playPositionedSound(world, getGateCenterPos(), positionedSound, play);
     }
@@ -885,6 +891,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
             }
         } else {
             JSGPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.RENDERER_STATE));
+            JSGPacketHandler.INSTANCE.sendToServer(new StateUpdateRequestToServer(pos, StateTypeEnum.SOUND_UPDATE));
         }
     }
 
@@ -1519,6 +1526,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     // Linking (sg generator)
     public abstract void setLinkedDHD(BlockPos dhdPos, int linkId);
 
+    public boolean isSpinning(){
+        return false;
+    }
+
 
     // ------------------------------------------------------------------------
     // States
@@ -1528,6 +1539,12 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         switch (stateType) {
             case RENDERER_STATE:
                 return getRendererStateServer().build();
+
+            case SOUND_UPDATE:
+                StateSoundPositionedUpdate state = new StateSoundPositionedUpdate();
+                state.add(SoundPositionedEnum.WORMHOLE_LOOP, getStargateState().engaged());
+                state.add(getPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL), isSpinning());
+                return state;
 
             default:
                 return null;
@@ -1539,6 +1556,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         switch (stateType) {
             case RENDERER_STATE:
                 return createRendererStateClient();
+
+            case SOUND_UPDATE:
+                return new StateSoundPositionedUpdate();
 
             case RENDERER_UPDATE:
                 return new StargateRendererActionState();
@@ -1566,6 +1586,15 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
                 updateFacing(facing, facingVertical, false);
 
+                break;
+
+            case SOUND_UPDATE:
+                StateSoundPositionedUpdate s = (StateSoundPositionedUpdate) state;
+                for(Map.Entry<Integer, Boolean> e : s.soundMap.entrySet()){
+                    SoundPositionedEnum sound = SoundPositionedEnum.valueOf(e.getKey());
+                    if(sound == null) continue;
+                    playPositionedSound(sound, e.getValue());
+                }
                 break;
 
             case RENDERER_UPDATE:

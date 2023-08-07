@@ -42,15 +42,15 @@ public class ItemAdminController extends Item {
     @Override
     public void onUpdate(@Nonnull ItemStack stack, @Nonnull World world, @Nonnull Entity entity, int itemSlot, boolean isSelected) {
         if (!world.isRemote) {
-            if(world.getTotalWorldTime() % 5 != 0) return;
-            if(!(entity instanceof EntityPlayerMP)) return;
+            if (world.getTotalWorldTime() % 5 != 0) return;
+            if (!(entity instanceof EntityPlayerMP)) return;
 
             // Get compound - if null, gate is probably not even linked
             NBTTagCompound compound = stack.getTagCompound();
-            if(compound == null) return;
+            if (compound == null) return;
 
             // Check if gate is linked
-            if(!compound.hasKey("linkedGatePos")) return;
+            if (!compound.hasKey("linkedGatePos")) return;
 
             // get and check if linked Tile is not null and is classic base tile
             TileEntity te = world.getTileEntity(BlockPos.fromLong(compound.getLong("linkedGatePos")));
@@ -66,7 +66,7 @@ public class ItemAdminController extends Item {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         if (!world.isRemote) {
             TileEntity te = RayTraceHelper.rayTraceTileEntity(player, 20);
 
@@ -75,7 +75,7 @@ public class ItemAdminController extends Item {
                 te = ((StargateClassicMemberTile) te).getBaseTile(world);
             }
 
-            if(!(te instanceof StargateClassicBaseTile)){
+            if (!(te instanceof StargateClassicBaseTile)) {
                 te = LinkingHelper.findClosestTile(world, player.getPosition(), JSGBlocks.STARGATE_BASE_BLOCKS, StargateClassicBaseTile.class, 20, 20);
             }
 
@@ -83,7 +83,7 @@ public class ItemAdminController extends Item {
 
                 // Set linked gate for updating
                 NBTTagCompound compound = player.getHeldItem(hand).getTagCompound();
-                if(compound == null) compound = new NBTTagCompound();
+                if (compound == null) compound = new NBTTagCompound();
                 compound.setLong("linkedGatePos", te.getPos().toLong());
                 player.getHeldItem(hand).setTagCompound(compound);
 

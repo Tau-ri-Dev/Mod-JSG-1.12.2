@@ -1831,6 +1831,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // Ring spinning
 
     protected boolean isSpinning;
+
+    @Override
+    public boolean isSpinning(){
+        return isSpinning;
+    }
     protected long spinStartTime;
     protected SymbolInterface currentRingSymbol = getSymbolType().getTopSymbol();
     protected SymbolInterface targetRingSymbol = getSymbolType().getTopSymbol();

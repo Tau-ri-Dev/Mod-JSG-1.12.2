@@ -1,6 +1,6 @@
 package tauri.dev.jsg;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
@@ -54,13 +54,14 @@ public class JSG {
     // VARIABLES
 
     public static Logger logger;
+    public static MinecraftServer currentServer = null;
     public static File modConfigDir;
     public static OCWrapperInterface ocWrapper;
     public static File clientModPath;
     public static File modsDirectory;
 
     public static long memoryTotal = 0;
-    public static double neededMemory = 4D * 1024 * 1024 * 1024; // 4GB
+    public static double neededMemory = 2D * 1024 * 1024 * 1024; // 2GB
 
     // --------------------------------------------
     // PROXY
@@ -214,6 +215,7 @@ public class JSG {
     public void serverStarting(FMLServerStartingEvent event) {
         JSGCommands.registerCommands(event);
         JSG.info("Successfully registered Commands!");
+        currentServer = event.getServer();
     }
 
     @EventHandler
@@ -221,7 +223,8 @@ public class JSG {
         StargateDimensionConfig.reload();
         JSG.info("Server started!");
 
-        StargateDimensionGenerator.tryGenerate(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(Minecraft.getMinecraft().getIntegratedServer()).getServer()).getWorld(0)));
+        if (currentServer != null)
+            StargateDimensionGenerator.tryGenerate(Objects.requireNonNull(currentServer.getWorld(0)));
     }
 
     @EventHandler

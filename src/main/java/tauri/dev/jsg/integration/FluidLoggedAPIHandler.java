@@ -1,4 +1,4 @@
-package tauri.dev.jsg.waterlog;
+package tauri.dev.jsg.integration;
 
 import git.jbredwards.fluidlogged_api.api.event.FluidloggableEvent;
 import git.jbredwards.fluidlogged_api.api.event.FluidloggedEvent;
