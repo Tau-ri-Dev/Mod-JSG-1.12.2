@@ -44,6 +44,7 @@ import tauri.dev.jsg.stargate.network.StargateNetwork;
 import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.tileentity.dialhomedevice.DHDAbstractTile;
+import tauri.dev.jsg.tileentity.energy.ZPMHubTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import tauri.dev.jsg.util.FacingHelper;
@@ -128,8 +129,8 @@ public class JSGStructure extends WorldGenerator {
     public GeneratedStargate generateStructure(World executedInWorld, BlockPos pos, Random random, @Nullable WorldServer worldToSpawn, @Nullable Rotation rotationOverride) {
         pos = pos.down(yNegativeOffset);
         MinecraftServer mcServer = executedInWorld.getMinecraftServer();
-        JSG.info("Structure " + structureName + " generation started!");
         if (mcServer == null) return null;
+        JSG.info("Structure " + structureName + " generation started!");
         worldToSpawn = (worldToSpawn == null ? mcServer.getWorld(dimensionToSpawn) : worldToSpawn);
         worldToSpawn.getChunkProvider().loadChunk(pos.getX() / 16, pos.getZ() / 16);
         TemplateManager manager = worldToSpawn.getStructureTemplateManager();
@@ -199,8 +200,7 @@ public class JSGStructure extends WorldGenerator {
                         if (gateEnergy != null)
                             gateEnergy.receiveEnergy(((int) (((LargeEnergyStorage) gateEnergy).getMaxEnergyStoredInternally() * 0.75)), false);
                         gateTile.getMergeHelper().updateMembersBasePos(worldToSpawn, gatePos, facing, EnumFacing.SOUTH);
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
                         JSG.error("Error while generating structure " + structureName + ":", e);
                         gateTile = null;
                     }
@@ -239,8 +239,7 @@ public class JSGStructure extends WorldGenerator {
 
                         if (dhdFluidTank instanceof FluidTank)
                             ((FluidTank) dhdFluidTank).fillInternal(new FluidStack(JSGFluids.NAQUADAH_MOLTEN_REFINED, fluid), true);
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
                         JSG.error("Error while generating structure " + structureName + ":", e);
                     }
                     break;
@@ -270,8 +269,7 @@ public class JSGStructure extends WorldGenerator {
                             ringsEnergy.receiveEnergy(((int) (((LargeEnergyStorage) ringsEnergy).getMaxEnergyStoredInternally() * 0.75)), false);
 
                         ringsTiles.add(ringsTile);
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
                         JSG.error("Error while generating structure " + structureName + ":", e);
                     }
                     break;
@@ -333,50 +331,84 @@ public class JSGStructure extends WorldGenerator {
     private static void generateLoot(World world, BlockPos chestPos, Random random, String lootTableName) {
         TileEntity tile = world.getTileEntity(chestPos);
         if (tile instanceof TileEntityChest) {
-            StargateNetwork sgn = StargateNetwork.get(world);
-
             TileEntityChest chest = (TileEntityChest) tile;
             chest.setLootTable(new ResourceLocation(JSG.MOD_ID, lootTableName), random.nextLong());
             chest.fillWithLoot(null);
-            IItemHandler handler = chest.getSingleChestHandler();
 
             // Set ZPM energy
             if (lootTableName.equalsIgnoreCase("loot_obelisk")) {
-                for (int i = 0; i < handler.getSlots(); i++) {
-                    ItemStack stack = handler.getStackInSlot(i);
-                    if (!stack.isEmpty()) {
-                        IEnergyStorageZPM energyStorage = stack.getCapability(CapabilityEnergyZPM.ENERGY, null);
-                        if (energyStorage instanceof ZPMItemEnergyStorage) {
-                            ZPMItemEnergyStorage energyCasted = (ZPMItemEnergyStorage) energyStorage;
-                            energyCasted.setEnergyStored((long) (energyCasted.getMaxEnergyStored() * (Math.random() * 0.7f) + 0.1f));
-                        }
-                    }
-                }
+                spawnZPMInChest(chest, true, null, false);
             }
 
             // Set sus page address
-            for (int i = 0; i < handler.getSlots(); i++) {
-                ItemStack stack = handler.getStackInSlot(i);
-                if (!stack.isEmpty() && stack.getItem() == JSGItems.PAGE_NOTEBOOK_ITEM) {
-                    Map.Entry<StargatePos, Map<SymbolTypeEnum, StargateAddress>> gotAddressMap = sgn.getRandomNotGeneratedStargate();
-                    if (gotAddressMap == null) {
-                        // Got no stargate -> remove page from the chest
-                        stack.setCount(0);
-                        handler.insertItem(i, new ItemStack(Blocks.WEB, 1), false);
-                        continue;
+            spawnSusPageInChest(chest, true, false);
+        }
+    }
+
+    public static void spawnZPMInChest(@Nonnull TileEntityChest chest, boolean findAlreadySpawned, @Nullable Float energyPercent, boolean stopOnFound) {
+        spawnZPMInHandler(chest.getSingleChestHandler(), findAlreadySpawned, energyPercent, stopOnFound);
+    }
+
+    public static void spawnZPMInZPMHub(@Nonnull ZPMHubTile zpmHub, boolean findAlreadySpawned, @Nullable Float energyPercent, boolean stopOnFound) {
+        spawnZPMInHandler(zpmHub.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), findAlreadySpawned, energyPercent, stopOnFound);
+    }
+    public static void spawnZPMInHandler(@Nullable IItemHandler handler, boolean findAlreadySpawned, @Nullable Float energyPercent, boolean stopOnFound) {
+        if(handler == null) return;
+        if(energyPercent == null) energyPercent = (float) ((Math.random() * 0.7f) + 0.1f);
+        if(energyPercent < 0) energyPercent = 0f;
+
+        for (int i = 0; i < handler.getSlots(); i++) {
+            ItemStack stack = handler.getStackInSlot(i);
+            IEnergyStorageZPM energyStorage = stack.getCapability(CapabilityEnergyZPM.ENERGY, null);
+            if (findAlreadySpawned) {
+                if(!stack.isEmpty()){
+                    if ((energyStorage instanceof ZPMItemEnergyStorage)) {
+                        ZPMItemEnergyStorage energyCasted = (ZPMItemEnergyStorage) energyStorage;
+                        energyCasted.setEnergyStored((long) (energyCasted.getMaxEnergyStored() * energyPercent));
+                        if(stopOnFound) return;
                     }
-                    SymbolTypeEnum symbolTypeEnum = SymbolTypeEnum.getRandom();
-                    StargateAddress address = gotAddressMap.getValue().get(symbolTypeEnum);
-                    StargatePos pos = gotAddressMap.getKey();
-
-                    String biome = ((pos.getWorld() == null || pos.gatePos == null) ? "plains" : PageNotebookItem.getRegistryPathFromWorld(pos.getWorld(), pos.gatePos));
-                    int origin = StargateClassicBaseTile.getOriginId(null, pos.dimensionID, -1);
-
-                    NBTTagCompound sgCompound = PageNotebookItem.getCompoundFromAddress(address, true, true, true, biome, origin);
-                    stack.setTagCompound(sgCompound);
-                    stack.setItemDamage(1);
-                    stack.setStackDisplayName("Suspicious page");
                 }
+            } else {
+                if(stack.isEmpty()){
+                    stack = new ItemStack(JSGBlocks.ZPM, 1);
+                    energyStorage = stack.getCapability(CapabilityEnergyZPM.ENERGY, null);
+                    if ((energyStorage instanceof ZPMItemEnergyStorage)) {
+                        ZPMItemEnergyStorage energyCasted = (ZPMItemEnergyStorage) energyStorage;
+                        energyCasted.setEnergyStored((long) (energyCasted.getMaxEnergyStored() * energyPercent));
+                        handler.insertItem(i, stack, false);
+                        if(stopOnFound) return;
+                    }
+                }
+            }
+        }
+    }
+    public static void spawnSusPageInChest(@Nonnull TileEntityChest chest, boolean findAlreadySpawned, boolean stopOnFound) {
+        StargateNetwork sgn = StargateNetwork.get(chest.getWorld());
+        IItemHandler handler = chest.getSingleChestHandler();
+        for (int i = 0; i < handler.getSlots(); i++) {
+            ItemStack stack = handler.getStackInSlot(i);
+            if ((findAlreadySpawned && !stack.isEmpty() && stack.getItem() == JSGItems.PAGE_NOTEBOOK_ITEM) || (!findAlreadySpawned && stack.isEmpty())) {
+                if(!findAlreadySpawned) stack = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 1);
+                Map.Entry<StargatePos, Map<SymbolTypeEnum, StargateAddress>> gotAddressMap = sgn.getRandomNotGeneratedStargate();
+                if (gotAddressMap == null) {
+                    // Got no stargate -> remove page from the chest
+                    stack.setCount(0);
+                    handler.insertItem(i, new ItemStack(Blocks.WEB, 1), false);
+                    continue;
+                }
+                SymbolTypeEnum symbolTypeEnum = SymbolTypeEnum.getRandom();
+                StargateAddress address = gotAddressMap.getValue().get(symbolTypeEnum);
+                StargatePos pos = gotAddressMap.getKey();
+
+                String biome = ((pos.getWorld() == null || pos.gatePos == null) ? "plains" : PageNotebookItem.getRegistryPathFromWorld(pos.getWorld(), pos.gatePos));
+                int origin = StargateClassicBaseTile.getOriginId(null, pos.dimensionID, -1);
+
+                NBTTagCompound sgCompound = PageNotebookItem.getCompoundFromAddress(address, true, true, true, biome, origin);
+                stack.setTagCompound(sgCompound);
+                stack.setItemDamage(1);
+                stack.setStackDisplayName("Suspicious page");
+                if(!findAlreadySpawned) handler.insertItem(i, stack, false);
+                if(stopOnFound) return;
             }
         }
     }
