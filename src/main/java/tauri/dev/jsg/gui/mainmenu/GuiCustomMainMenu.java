@@ -38,7 +38,7 @@ public class GuiCustomMainMenu extends GuiScreen {
 
     public static final String WIKI_RAM_ALLOCATION_URL = "https://justsgmod.eu/wiki/?category=general&topic=start#Allocating%20more%20RAM";
     public static final String GITHUB = "https://github.com/Tau-ri-Dev";
-    public static final String MINECRAFT_SITES = "https://minecraft.net/en-us";
+    //public static final String MINECRAFT_SITES = "https://minecraft.net/en-us";
     public static final String JSG_RUNNING_TEXT = "Just Stargate Mod v" + JSG.MOD_VERSION.replaceAll(JSG.MC_VERSION + "-", "");
 
     public static class MainMenuBackground {
@@ -50,7 +50,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         }
     }
     public static final ResourceLocation LOGO_TAURI = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/tauri_dev_logo.png");
-    public static final ResourceLocation LOGO_MOJANG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/mojang_logo.png");
+    //public static final ResourceLocation LOGO_MOJANG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/mojang_logo.png");
     public static final ResourceLocation LOGO_JSG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/jsg_logo.png");
     public static final int BACKGROUNDS_COUNT = JSGConfig.General.mainMenuConfig.backgroundImagesCount;
     public static final long FIRST_TRANSITION_LENGTH = 7 * 20; // in relative ticks
@@ -338,13 +338,13 @@ public class GuiCustomMainMenu extends GuiScreen {
             // Clickable images/texts
             int sizeXTauri = width / 10;
             int sizeYTauri = (230 * sizeXTauri) / 411;
-            int sizeYMojang = (52 * sizeXTauri) / 300;
+            int sizeYMojang = 0; //(52 * sizeXTauri) / 300;
             if (isPointInRegion(PADDING, height - PADDING - sizeYTauri - sizeYMojang - 8, sizeXTauri, sizeYTauri, mouseX, mouseY)) {
                 openWebsiteToClient(GITHUB);
             }
-            if (isPointInRegion(PADDING, height - PADDING - sizeYMojang, sizeXTauri, sizeYMojang, mouseX, mouseY)) {
+            /*..if (isPointInRegion(PADDING, height - PADDING - sizeYMojang, sizeXTauri, sizeYMojang, mouseX, mouseY)) {
                 openWebsiteToClient(MINECRAFT_SITES);
-            }
+            }*/
 
             // JSG text
             int jsgSizeX = fontRenderer.getStringWidth(JSG_RUNNING_TEXT);
@@ -504,8 +504,8 @@ public class GuiCustomMainMenu extends GuiScreen {
 
         int sizeXTauri = width / 10;
         int sizeYTauri = (230 * sizeXTauri) / 411;
-        int sizeXMojang = width / 10;
-        int sizeYMojang = (52 * sizeXMojang) / 300;
+        //int sizeXMojang = sizeXTauri;
+        int sizeYMojang = 0; //(52 * sizeXMojang) / 300;
 
         int sizeXJSG = (int) (width / 2.33);
         int sizeYJSG = (603 * sizeXJSG) / 1586;
@@ -521,8 +521,8 @@ public class GuiCustomMainMenu extends GuiScreen {
         drawScaledCustomSizeModalRect(PADDING, height - PADDING - sizeYTauri - sizeYMojang - 8, 0, 0, 411, 230, sizeXTauri, sizeYTauri, 410, 229);
 
         // Mojang logo
-        Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_MOJANG);
-        drawScaledCustomSizeModalRect(PADDING, height - PADDING - sizeYMojang, 0, 0, 301, 53, sizeXMojang, sizeYMojang, 300, 52);
+        //Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_MOJANG);
+        //drawScaledCustomSizeModalRect(PADDING, height - PADDING - sizeYMojang, 0, 0, 301, 53, sizeXMojang, sizeYMojang, 300, 52);
 
         // JSG logo - main
         Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_JSG);
@@ -554,7 +554,7 @@ public class GuiCustomMainMenu extends GuiScreen {
 
             int sizeXTauri = width / 10;
             int sizeYTauri = (230 * sizeXTauri) / 411;
-            int sizeYMojang = (52 * sizeXTauri) / 300;
+            int sizeYMojang = 0; //(52 * sizeXTauri) / 300;
             if (isPointInRegion(PADDING, height - PADDING - sizeYTauri - sizeYMojang - 8, sizeXTauri, sizeYTauri, mouseX, mouseY)) {
                 List<String> power = Arrays.asList(
                         TextFormatting.WHITE.toString() + TextFormatting.BOLD + "Just Stargate Mod developed by:",
