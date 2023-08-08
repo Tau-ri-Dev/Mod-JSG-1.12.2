@@ -16,6 +16,7 @@ import java.util.List;
 
 public class StargatePos implements INBTSerializable<NBTTagCompound> {
 
+    public boolean blacklisted = false;
     public int dimensionID;
     public BlockPos gatePos;
     public SymbolTypeEnum symbolType;
@@ -91,6 +92,7 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
         if (gateSymbolType != null)
             compound.setByte("gateSymbolType", (byte) gateSymbolType.id);
 
+        compound.setBoolean("blacklisted", blacklisted);
         return compound;
     }
 
@@ -104,6 +106,7 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
         if (compound.hasKey("gateSymbolType"))
             gateSymbolType = SymbolTypeEnum.valueOf(compound.getByte("gateSymbolType"));
         else gateSymbolType = symbolType;
+        blacklisted = compound.getBoolean("blacklisted");
     }
 
     public void toBytes(ByteBuf buf) {
@@ -128,6 +131,7 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
             buf.writeInt(gateSymbolType.id);
         } else
             buf.writeBoolean(false);
+        buf.writeBoolean(blacklisted);
     }
 
     public void fromBytes(ByteBuf buf) {
@@ -142,6 +146,7 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
         if (buf.readBoolean()) {
             gateSymbolType = SymbolTypeEnum.valueOf(buf.readInt());
         }
+        blacklisted = buf.readBoolean();
     }
 
 

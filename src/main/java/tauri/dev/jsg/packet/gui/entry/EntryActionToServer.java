@@ -152,7 +152,9 @@ public class EntryActionToServer implements IMessage {
         if (buf.readBoolean()) {
             targetGatePos = new StargatePos(SymbolTypeEnum.valueOf(index), buf);
         }
-        dialType = EnumDialingType.values()[buf.readInt()];
+        int i = buf.readInt();
+        if(EnumDialingType.values().length <= i) i = 0;
+        dialType = EnumDialingType.values()[i];
     }
 
     public static class EntryActionServerHandler implements IMessageHandler<EntryActionToServer, IMessage> {

@@ -140,6 +140,8 @@ public class StargateNetwork extends WorldSavedData {
 
         StargatePos pos = getStargatePosFromAddressNotGenerated(address);
         if (pos == null) return;
+        if (pos.blacklisted) return;
+        if (JSGConfigUtil.isDimBlacklistedForSGSpawn(pos.dimensionID)) return;
         int id = pos.dimensionID;
         BlockPos bp = pos.gatePos;
         EnumStructures structure = EnumStructures.INTERNAL_MW;
@@ -154,12 +156,16 @@ public class StargateNetwork extends WorldSavedData {
                 break;
         }
         GeneratedStargate gs;
-        if(pos.symbolType == SymbolTypeEnum.UNIVERSE)
+        if (pos.symbolType == SymbolTypeEnum.UNIVERSE)
             // Generate stargate on the main island...
             gs = StargateGenerator.mystPageGeneration(pos.getWorld(), structure, id, bp, 5, 50);
         else
             gs = StargateGenerator.mystPageGeneration(pos.getWorld(), structure, id, bp);
-        if (gs == null) return;
+        if (gs == null) {
+            pos.blacklisted = true;
+            JSGConfigUtil.addBlacklistedDimForSGSpawnAndUpdate(id);
+            return;
+        }
         Objects.requireNonNull(this.getStargate(gs.address)).getTileEntity().setGateAddress(address.symbolType, notGeneratedStargates.get(pos).get(address.symbolType));
         removeNotGeneratedStargate(pos);
     }

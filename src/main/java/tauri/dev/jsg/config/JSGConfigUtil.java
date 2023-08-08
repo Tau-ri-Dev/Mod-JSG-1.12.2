@@ -30,7 +30,7 @@ public class JSGConfigUtil {
         }
     }
 
-    public static void reloadConfig(){
+    public static void reloadConfig() {
         ConfigManager.sync(JSG.MOD_ID, Config.Type.INSTANCE);
         JSG.info("Main config reloaded!");
         JSGConfigUtil.resetCache();
@@ -83,7 +83,7 @@ public class JSGConfigUtil {
     private static Map<IBlockState, Boolean> cachedCamoBlacklistBlocks = null;
 
     public static boolean canBeUsedAsCamoBlock(IBlockState state) {
-        if(JSGBlocks.isInBlocksArray(state.getBlock(), JSGBlocks.CAMO_BLOCKS_BLACKLIST)) return false;
+        if (JSGBlocks.isInBlocksArray(state.getBlock(), JSGBlocks.CAMO_BLOCKS_BLACKLIST)) return false;
 
         if (cachedCamoBlacklistBlocks == null) {
             cachedCamoBlacklistBlocks = BlockMetaParser.parseConfig(JSGConfig.Stargate.visual.camoBlacklist);
@@ -139,7 +139,7 @@ public class JSGConfigUtil {
             genBiomeOverrideCache();
         }
 
-        if(cachedBiomeOverrideBlocks == null) return new HashMap<>();
+        if (cachedBiomeOverrideBlocks == null) return new HashMap<>();
 
         return cachedBiomeOverrideBlocks;
     }
@@ -154,13 +154,26 @@ public class JSGConfigUtil {
 
     // Blacklisted DIM for Other DIMS stargate generator
     private static List<Integer> cachedBlacklistedDimsForDimsSgGen = null;
-    public static boolean isDimBlacklistedForSGSpawn(int idmId){
-        if(cachedBlacklistedDimsForDimsSgGen == null){
+
+    public static boolean isDimBlacklistedForSGSpawn(int idmId) {
+        if (cachedBlacklistedDimsForDimsSgGen == null) {
             cachedBlacklistedDimsForDimsSgGen = new ArrayList<>();
-            for(int i : JSGConfig.WorldGen.otherDimGenerator.blacklistDims)
+            for (int i : JSGConfig.WorldGen.otherDimGenerator.blacklistDims)
                 cachedBlacklistedDimsForDimsSgGen.add(i);
         }
 
         return cachedBlacklistedDimsForDimsSgGen.contains(idmId);
+    }
+
+    public static void addBlacklistedDimForSGSpawnAndUpdate(int dimId) {
+        int[] newDims = new int[JSGConfig.WorldGen.otherDimGenerator.blacklistDims.length + 1];
+        for (int i = 0; i < newDims.length; i++) {
+            if (i == (newDims.length - 1))
+                newDims[i] = dimId;
+            else
+                newDims[i] = JSGConfig.WorldGen.otherDimGenerator.blacklistDims[i];
+        }
+        JSGConfig.WorldGen.otherDimGenerator.blacklistDims = newDims;
+        reloadConfig();
     }
 }
