@@ -388,10 +388,12 @@ public class BeamerTile extends SidedTileEntity implements ITickable, IUpgradabl
                             break;
 
                         case LASER:
-                            int lx = energyStorage.extractEnergy(JSGConfig.Beamer.power.laserEnergy, false);
-                            StargateClassicBaseTile gate = ((StargateClassicBaseTile) this.targetGatePos.getTileEntity());
-                            gate.tryHeatUp(true, true, 0.3, 0.6, 0, -1, -1);
-                            powerTransferredSinceLastSignal += lx;
+                            powerTransferredSinceLastSignal += energyStorage.extractEnergy(JSGConfig.Beamer.power.laserEnergy, false);
+                            TileEntity te = this.targetGatePos.getTileEntity();
+                            if(te instanceof StargateClassicBaseTile) {
+                                StargateClassicBaseTile gate = (StargateClassicBaseTile) te;
+                                gate.tryHeatUp(true, true, 0.3, 0.6, 0, -1, -1);
+                            }
                             break;
 
                         default:
