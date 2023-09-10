@@ -97,7 +97,7 @@ public class AssemblerTile extends AbstractMachineTile {
         ItemStack subStack = itemStackHandler.getStackInSlot(10);
 
         for (AssemblerRecipe recipe : AssemblerRecipes.RECIPES) {
-            if (itemStackHandler.insertItem(11, recipe.getResult(), true).equals(recipe.getResult())) continue;
+            if (!itemStackHandler.insertItem(11, recipe.getResult(), true).equals(ItemStack.EMPTY)) continue;
             if (recipe.isOk(energyStorage.getEnergyStored(), scheme, stacks, subStack)) return recipe;
         }
 

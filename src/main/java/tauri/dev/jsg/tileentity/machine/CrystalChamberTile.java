@@ -93,7 +93,7 @@ public class CrystalChamberTile extends AbstractMachineTile {
     @Override
     public AbstractMachineRecipe getRecipeIfPossible() {
         for (CrystalChamberRecipe recipe : CrystalChamberRecipes.RECIPES) {
-            if (itemStackHandler.insertItem(1, recipe.getResult(), true).equals(recipe.getResult())) continue;
+            if (!itemStackHandler.insertItem(1, recipe.getResult(), true).equals(ItemStack.EMPTY)) continue;
             if (fluidHandler.getFluid() == null) continue;
             if (recipe.isOk(energyStorage.getEnergyStored(), new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()), itemStackHandler.getStackInSlot(0)))
                 return recipe;
