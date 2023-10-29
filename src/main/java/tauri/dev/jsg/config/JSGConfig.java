@@ -132,6 +132,13 @@ public class JSGConfig {
             })
             public boolean changeTitle = true;
 
+            @Config.Name("Disable white fadeout")
+            @Config.Comment({
+                    "Disable fadeout when going through a gate or using transport rings or victim of Destiny FTL jump",
+                    "SIDE: CLIENT"
+            })
+            public boolean disableFadeOutEffects = false;
+
             @Config.Name("Temperature unit")
             @Config.Comment({
                     "Specifies what unit will be used to display temperatures",

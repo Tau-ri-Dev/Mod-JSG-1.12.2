@@ -5,6 +5,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.renderer.effect.DestinyFTL;
 import tauri.dev.jsg.renderer.effect.RingsWhiteFadeOut;
 import tauri.dev.jsg.renderer.effect.StargateFadeOut;
@@ -62,6 +63,7 @@ public class StartPlayerFadeOutToClient implements IMessage {
         @Override
         public IMessage onMessage(StartPlayerFadeOutToClient message, MessageContext ctx) {
             EnumFadeOutEffectType t = EnumFadeOutEffectType.valueOf(message.type);
+            if(JSGConfig.General.visual.disableFadeOutEffects) return null;
             switch (t) {
                 case RINGS:
                     JSG.proxy.addScheduledTaskClientSide(RingsWhiteFadeOut::startFadeOut);
