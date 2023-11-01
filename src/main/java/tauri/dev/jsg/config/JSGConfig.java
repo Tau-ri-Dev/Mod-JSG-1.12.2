@@ -479,6 +479,14 @@ public class JSGConfig {
         public static OpenLimitConfig openLimit = new OpenLimitConfig();
 
         public static class Mechanics {
+            @Config.Name("Enable wrench to disassemble gate")
+            @Config.Comment({
+                    "Enable wrench to be used as disassembling tool for gates?",
+                    "This can bypass for example claimed chunks (from FTB) on servers...",
+                    "If false - will be set iron pickaxe as correct tool",
+                    "SIDE: SERVER"
+            })
+            public boolean enableGateDisassembleWrench = true;
             @Config.Name("Enable burried state for gates")
             @Config.Comment({
                     "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI",

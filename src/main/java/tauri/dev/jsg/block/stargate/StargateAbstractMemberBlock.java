@@ -17,6 +17,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.TechnicalBlock;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
@@ -41,7 +42,10 @@ public abstract class StargateAbstractMemberBlock extends TechnicalBlock {
 
         setHardness(-1);
         setResistance(60.0f);
-        setHarvestLevel("wrench", -1);
+        if(JSGConfig.Stargate.mechanics.enableGateDisassembleWrench)
+            setHarvestLevel("wrench", -1);
+        else
+            setHarvestLevel("pickaxe", 2);
     }
 
     @Override
