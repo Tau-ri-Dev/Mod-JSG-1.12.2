@@ -31,6 +31,7 @@ import java.util.ArrayList;
 public class ZPMHubContainer extends JSGContainer {
 
     public ZPMHubTile hubTile;
+    public boolean isOperator;
     public ArrayList<Slot> slots;
     private final BlockPos pos;
     private long lastEnergyStored;
@@ -45,7 +46,8 @@ public class ZPMHubContainer extends JSGContainer {
         return slots;
     }
 
-    public ZPMHubContainer(IInventory playerInventory, World world, int x, int y, int z) {
+    public ZPMHubContainer(IInventory playerInventory, World world, int x, int y, int z, boolean isOperator) {
+        this.isOperator = isOperator;
         pos = new BlockPos(x, y, z);
         this.world = world;
         hubTile = (ZPMHubTile) world.getTileEntity(pos);
@@ -92,7 +94,7 @@ public class ZPMHubContainer extends JSGContainer {
         if (slot.getHasStack()) {
             ItemStack stack = slot.getStack();
 
-            if(!CreativeItemsChecker.canInteractWith(stack, playerIn.isCreative())) return ItemStack.EMPTY;
+            if(!CreativeItemsChecker.canInteractWith(stack, isOperator)) return ItemStack.EMPTY;
 
             returnStack = stack.copy();
 
@@ -120,7 +122,7 @@ public class ZPMHubContainer extends JSGContainer {
     @Nonnull
     @ParametersAreNonnullByDefault
     public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player){
-        if(slotId >= 0 && slotId < getInventory().size() && !CreativeItemsChecker.canInteractWith(getSlot(slotId).getStack(), player.isCreative())) return ItemStack.EMPTY;
+        if(slotId >= 0 && slotId < getInventory().size() && !CreativeItemsChecker.canInteractWith(getSlot(slotId).getStack(), isOperator)) return ItemStack.EMPTY;
         return super.slotClick(slotId, dragType, clickTypeIn, player);
     }
 

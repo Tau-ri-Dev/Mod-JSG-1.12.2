@@ -70,10 +70,10 @@ public class JSGGuiHandler implements IGuiHandler {
                 return new OreWashingContainer(player.inventory, world, x, y, z);
 
             case GUI_ZPM_HUB:
-                return new ZPMHubContainer(player.inventory, world, x, y, z);
+                return new ZPMHubContainer(player.inventory, world, x, y, z, isOp);
 
             case GUI_ZPM_SLOT:
-                return new ZPMSlotContainer(player.inventory, world, x, y, z);
+                return new ZPMSlotContainer(player.inventory, world, x, y, z, isOp);
 
             case GUI_COUNTDOWN:
                 return new CountDownContainer(player.inventory, world, x, y, z, isOp);
@@ -117,10 +117,10 @@ public class JSGGuiHandler implements IGuiHandler {
                 return new OreWashingContainerGui(new OreWashingContainer(player.inventory, world, x, y, z));
 
             case GUI_ZPM_HUB:
-                return new ZPMHubContainerGui(new ZPMHubContainer(player.inventory, world, x, y, z));
+                return new ZPMHubContainerGui(new ZPMHubContainer(player.inventory, world, x, y, z, isOp));
 
             case GUI_ZPM_SLOT:
-                return new ZPMSlotContainerGui(new ZPMSlotContainer(player.inventory, world, x, y, z));
+                return new ZPMSlotContainerGui(new ZPMSlotContainer(player.inventory, world, x, y, z, isOp));
 
             case GUI_COUNTDOWN:
                 return new CountDownContainerGui(new BlockPos(x, y, z), new CountDownContainer(player.inventory, world, x, y, z, isOp));

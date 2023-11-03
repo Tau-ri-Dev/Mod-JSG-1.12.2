@@ -497,6 +497,16 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         markDirty();
     }
 
+    public void updatePosSymbolType() {
+        for (SymbolTypeEnum s : SymbolTypeEnum.values()) {
+            StargatePos p = gatePosMap.get(s);
+            p.gateSymbolType = getSymbolType();
+            getNetwork().addStargate(gateAddressMap.get(s), p);
+            gatePosMap.put(s, p);
+        }
+        markDirty();
+    }
+
     public void refresh() {
         for(SymbolTypeEnum s : SymbolTypeEnum.values()) {
             StargateAddress address = getStargateAddress(s);

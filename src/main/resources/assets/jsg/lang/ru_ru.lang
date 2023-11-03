@@ -333,6 +333,8 @@ item.jsg.hammer.name=JSG Молот
 item.jsg.screwdriver.name=JSG Отвертка
 item.jsg.wrench.name=JSG ключ
 
+item.jsg.admin_controller.name=Admin Controller
+
 # gears
 item.jsg.gear_titanium.name=Шестерня (титан)
 item.jsg.gear_trinium.name=Шестерня (Триниум)

@@ -286,6 +286,7 @@ public class GuiAdminController extends JSGTexturedGui {
 
     public void renderDialedAddress() {
         if (imaginaryGateTile == null) return;
+        if (imaginaryGateTile.getStargateState().notInitiating()) return;
 
         StargateAddressDynamic dialedAddress = imaginaryGateTile.getDialedAddress();
         int originId = imaginaryGateTile.getOriginId();

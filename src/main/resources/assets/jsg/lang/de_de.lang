@@ -31,7 +31,7 @@ config.jsg.beamers.tooltip=Configuration of Beamers
 
 config.jsg.worldgen=World Generation Config
 config.jsg.worldgen.tooltip=Configuration of World Gen and Mysterious Pages
-  
+
 config.jsg.items=Items Config
 config.jsg.items.tooltip=Configuration of Items, Armor and Weapons
 
@@ -329,6 +329,12 @@ item.jsg.gdo.oc_message_received=Antwort erhalten:
 item.jsg.zat.name=Zat'nik'tel
 item.jsg.staff.name=Goa'uld Stabwaffe
 item.jsg.energyWeapon.available_shots=Verfügbare Schüsse:
+
+item.jsg.hammer.name=JSG Hammer
+item.jsg.screwdriver.name=JSG Screwdriver
+item.jsg.wrench.name=JSG Wrench
+
+item.jsg.admin_controller.name=Admin Controller
 
 # -------------------
 

@@ -22,8 +22,8 @@ public class ZPMSlotContainer extends ZPMHubContainer {
         return slots;
     }
 
-    public ZPMSlotContainer(IInventory playerInventory, World world, int x, int y, int z) {
-        super(playerInventory, world, x, y, z);
+    public ZPMSlotContainer(IInventory playerInventory, World world, int x, int y, int z, boolean isOp) {
+        super(playerInventory, world, x, y, z, isOp);
     }
 
     @Override

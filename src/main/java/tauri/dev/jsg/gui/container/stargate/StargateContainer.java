@@ -210,7 +210,7 @@ public class StargateContainer extends JSGContainer implements OpenTabHolderInte
     @Nonnull
     @ParametersAreNonnullByDefault
     public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player){
-        if(slotId >= 0 && slotId < getInventory().size() && !CreativeItemsChecker.canInteractWith(getSlot(slotId).getStack(), player.isCreative())) return ItemStack.EMPTY;
+        if(slotId >= 0 && slotId < getInventory().size() && !CreativeItemsChecker.canInteractWith(getSlot(slotId).getStack(), isOperator)) return ItemStack.EMPTY;
         return super.slotClick(slotId, dragType, clickTypeIn, player);
     }
 

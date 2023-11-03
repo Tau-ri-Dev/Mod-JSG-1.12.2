@@ -290,7 +290,8 @@ public class StargateGenerator {
             StargateClassicBaseTile gateTileNew = (StargateClassicBaseTile) world.getTileEntity(gatePos);
             if(keepNBT)
                 Objects.requireNonNull(gateTileNew).deserializeNBT(oldStargateNBT);
-            Objects.requireNonNull(gateTileNew).markDirty();
+            gateTileNew.updatePosSymbolType();
+            gateTileNew.markDirty();
             gateTileNew.refresh();
         } catch (Exception ignored) {
         }

@@ -327,6 +327,8 @@ item.jsg.hammer.name=JSG Kladivo
 item.jsg.screwdriver.name=JSG Šroubovák
 item.jsg.wrench.name=JSG Klíč (ten na matičky)
 
+item.jsg.admin_controller.name=Admin Controller
+
 # gears
 item.jsg.gear_titanium.name=Ozubené Kolečko (Titanium)
 item.jsg.gear_trinium.name=Ozubené Kolečko (Trinium)

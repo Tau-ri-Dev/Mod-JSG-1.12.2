@@ -19,6 +19,7 @@ import tauri.dev.jsg.stargate.network.StargateAddress;
 import tauri.dev.jsg.stargate.network.StargateAddressDynamic;
 import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
 import tauri.dev.jsg.util.BlockHelpers;
 
 import java.util.*;
@@ -161,7 +162,7 @@ public class AddressesSection {
             }
 
             if (e.notGenerated)
-                btn.setEnabled(3, false);
+                btn.setEnabled(4, false);
 
             entriesTextFields.add(field);
             dialButtons.add(btn);
@@ -315,7 +316,9 @@ public class AddressesSection {
             b.setEnabled(0, enabled);
             b.setEnabled(1, enabled);
             if (entries.get(b.id).notGenerated)
-                b.setEnabled(3, false);
+                b.setEnabled(4, false);
+            if(guiBase.gateTile instanceof StargateUniverseBaseTile || entries.get(b.id).pos.getGateSymbolType() == SymbolTypeEnum.UNIVERSE)
+                b.setEnabled(2, false);
             b.drawButton(guiBase.mouseX, guiBase.mouseY);
         }
 

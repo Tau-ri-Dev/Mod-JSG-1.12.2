@@ -333,6 +333,8 @@ item.jsg.hammer.name=JSG Hammer
 item.jsg.screwdriver.name=JSG Screwdriver
 item.jsg.wrench.name=JSG Wrench
 
+item.jsg.admin_controller.name=Admin Controller
+
 # gears
 item.jsg.gear_titanium.name=Gear (Titanium)
 item.jsg.gear_trinium.name=Gear (Trinium)

@@ -333,6 +333,8 @@ item.jsg.hammer.name=Marteau JSG
 item.jsg.screwdriver.name=JSG Tournevis
 item.jsg.wrench.name=JSG Clé à molette
 
+item.jsg.admin_controller.name=Admin Controller
+
 # Engrenages
 item.jsg.gear_titanium.name=Engrenage (Titane)
 item.jsg.gear_trinium.name=Engrenage (Trinium)

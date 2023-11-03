@@ -20,7 +20,7 @@ public class StargatePos implements INBTSerializable<NBTTagCompound> {
     public int dimensionID;
     public BlockPos gatePos;
     public SymbolTypeEnum symbolType;
-    private SymbolTypeEnum gateSymbolType;
+    public SymbolTypeEnum gateSymbolType;
     public List<SymbolInterface> additionalSymbols;
 
     private String name;

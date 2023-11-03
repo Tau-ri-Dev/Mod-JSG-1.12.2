@@ -333,6 +333,8 @@ item.jsg.hammer.name=JSG Kalapács
 item.jsg.screwdriver.name=JSG Csavarhúzó
 item.jsg.wrench.name=JSG Csavarkulcs
 
+item.jsg.admin_controller.name=Admin Controller
+
 # gears
 item.jsg.gear_titanium.name=Fogaskerék (Titánium)
 item.jsg.gear_trinium.name=Fogaskerék (Trínium)

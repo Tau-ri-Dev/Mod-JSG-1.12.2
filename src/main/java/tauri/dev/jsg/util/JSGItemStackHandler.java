@@ -46,7 +46,7 @@ public class JSGItemStackHandler extends ItemStackHandler {
     @Nonnull
     public ItemStack extractItem(int slot, int amount, boolean simulate){
         ItemStack stack = getStackInSlot(slot);
-        if(!CreativeItemsChecker.canInteractWith(stack, false)) return ItemStack.EMPTY;
+        //if(!CreativeItemsChecker.canInteractWith(stack, false)) return ItemStack.EMPTY;
         return super.extractItem(slot, amount, simulate);
     }
 }
