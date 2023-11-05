@@ -158,8 +158,10 @@ public class StargateGenerator {
         gateTile.refresh();
         gateTile.markDirty();
 
-        if (conf.stargateConfig != null)
+        if (conf.stargateConfig != null) {
+            gateTile.initConfig();
             gateTile.setConfigAndUpdate(conf.stargateConfig);
+        }
 
         int nextSlot = 0;
         boolean isTypeCrystalIn = false;

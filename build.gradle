@@ -26,7 +26,6 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
 
 
-
 version = "${mc_version}-${mod_version}"
 group = "tauri.dev.jsg"
 archivesBaseName = "${build_extrapath}jsg"
