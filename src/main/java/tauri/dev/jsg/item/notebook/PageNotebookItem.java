@@ -5,11 +5,16 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformT
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.IRegistry;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -17,14 +22,20 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
+import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.renderer.CustomModel;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
 import tauri.dev.jsg.stargate.network.StargateAddress;
+import tauri.dev.jsg.stargate.network.StargateNetwork;
+import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
 import tauri.dev.jsg.transportrings.TransportRingsAddress;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Map;
 
 public class PageNotebookItem extends Item implements CustomModelItemInterface {
 
@@ -65,6 +76,53 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 	public void setCustomModelLocation() {
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName() + "_empty", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation(getRegistryName() + "_filled", "inventory"));
+	}
+
+	@Nonnull
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
+		if (!world.isRemote) {
+			NBTTagCompound tag = player.getHeldItem(hand).getTagCompound();
+			if(tag != null){
+				if(tag.hasKey("generateEndAddress")){
+					boolean b = tag.getBoolean("generateEndAddress");
+					if(b){
+						StargateNetwork sgn = StargateNetwork.get(player.getEntityWorld());
+						Map.Entry<StargatePos, Map<SymbolTypeEnum, StargateAddress>> gotAddressMap = sgn.getEndStargate();
+						if (gotAddressMap == null) {
+							player.sendStatusMessage(new TextComponentTranslation("item.jsg.page_mysterious.generation.failed"), true);
+						}
+						else {
+							// gen page
+							SymbolTypeEnum symbolTypeEnum = SymbolTypeEnum.getRandom();
+							StargateAddress address = gotAddressMap.getValue().get(symbolTypeEnum);
+							StargatePos pos = gotAddressMap.getKey();
+
+							String biome = ((pos.getWorld() == null || pos.gatePos == null) ? "plains" : PageNotebookItem.getRegistryPathFromWorld(pos.getWorld(), pos.gatePos));
+							int origin = StargateClassicBaseTile.getOriginId(null, 1, -1);
+
+							NBTTagCompound sgCompound = PageNotebookItem.getCompoundFromAddress(address, true, false, false, biome, origin);
+
+							ItemStack stack = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 1, 1);
+							stack.setTagCompound(sgCompound);
+
+							ItemStack held = player.getHeldItem(hand);
+							held.shrink(1);
+
+							if (held.isEmpty())
+								player.setHeldItem(hand, stack);
+
+							else {
+								player.setHeldItem(hand, held);
+								player.addItemStackToInventory(stack);
+							}
+							return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+						}
+					}
+				}
+			}
+		}
+		return super.onItemRightClick(world, player, hand);
 	}
 	
 	@Override

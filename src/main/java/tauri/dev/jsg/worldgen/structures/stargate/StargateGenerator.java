@@ -7,6 +7,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.stargate.network.StargateAddress;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.worldgen.structures.EnumStructures;
 import tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator;
@@ -14,6 +15,7 @@ import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 import tauri.dev.jsg.worldgen.util.JSGStructurePos;
 
 import javax.annotation.Nonnull;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
@@ -156,5 +158,16 @@ public class StargateGenerator {
         }
 
         return structure.getActualStructure(dimensionToSpawn).generateStructure(pWorld, structurePos.foundPos, rand, worldToSpawn);
+    }
+
+    public static boolean overrideAddress = false;
+    public static Map<SymbolTypeEnum, StargateAddress> overrideAddressMap = null;
+    public static void startAddressOverride(@Nonnull Map<SymbolTypeEnum, StargateAddress> addresses){
+        overrideAddress = true;
+        overrideAddressMap = addresses;
+    }
+    public static void endAddressOverride(){
+        overrideAddress = false;
+        overrideAddressMap = null;
     }
 }

@@ -3,7 +3,7 @@ package tauri.dev.jsg.command;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import tauri.dev.jsg.config.origins.OriginsLoader;
+import tauri.dev.jsg.loader.OriginsLoader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -46,8 +46,10 @@ public class CommandImportOrigins extends AbstractJSGCommand {
                 break;
             }
         }
-        if(OriginsLoader.loadOriginsToConfig(rewrite))
+        if(OriginsLoader.loadOriginsToConfig(rewrite)) {
             baseCommand.sendSuccessMess(sender, "Origins imported!");
+            baseCommand.sendSuccessMess(sender, "Restart your minecraft to load new textures and models!!");
+        }
         else {
             baseCommand.sendErrorMess(sender, "Error occurred while attempting to import origins!");
             baseCommand.sendErrorMess(sender, "Check the importing file");

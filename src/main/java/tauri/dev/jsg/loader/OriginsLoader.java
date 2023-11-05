@@ -1,4 +1,4 @@
-package tauri.dev.jsg.config.origins;
+package tauri.dev.jsg.loader;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -159,7 +159,8 @@ public class OriginsLoader {
             JSGConfig.Stargate.pointOfOrigins.additionalOrigins = toConfig;
             JSGConfigUtil.reloadConfig();
             return true;
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            JSG.warn("Error ", e);
         }
         return false;
     }

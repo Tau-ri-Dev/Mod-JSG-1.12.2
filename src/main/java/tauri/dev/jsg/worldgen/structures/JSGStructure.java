@@ -60,6 +60,8 @@ import java.util.Map;
 import java.util.Random;
 
 import static tauri.dev.jsg.worldgen.structures.JSGStructuresGenerator.findOptimalRotation;
+import static tauri.dev.jsg.worldgen.structures.stargate.StargateGenerator.overrideAddress;
+import static tauri.dev.jsg.worldgen.structures.stargate.StargateGenerator.overrideAddressMap;
 
 
 public class JSGStructure extends WorldGenerator {
@@ -298,6 +300,7 @@ public class JSGStructure extends WorldGenerator {
                 LinkingHelper.updateLinkedGate(worldToSpawn, gatePos, dhdPos);
             gateTile.refresh();
             gateTile.getMergeHelper().updateMembersMergeStatus(worldToSpawn, gateTile.getPos(), gateTile.getFacing(), gateTile.getFacingVertical(), true);
+            gateTile.generateAddresses(false);
             gateTile.markDirty();
 
             double unstableChance = JSGConfig.WorldGen.mystPage.forcedUnstableGateChance;
@@ -308,15 +311,26 @@ public class JSGStructure extends WorldGenerator {
                 gateTile.setConfigAndUpdate(config);
             }
 
-            StargateAddress address = gateTile.getStargateAddress(symbolType);
+            StargateAddress address;
+            for(SymbolTypeEnum s : SymbolTypeEnum.values()){
+                address = gateTile.getStargateAddress(s);
+                if (address != null && !gateTile.getNetwork().isStargateInNetwork(address) && !overrideAddress)
+                    gateTile.getNetwork().addStargate(address, new StargatePos(worldToSpawn.provider.getDimensionType().getId(), gatePos, address, gateTile.getSymbolType()));
+                else if(address != null && gateTile.getNetwork().isStargateInNetwork(address) && overrideAddress){
+                    gateTile.getNetwork().removeStargate(address);
+                }
 
-            if (address != null && !gateTile.getNetwork().isStargateInNetwork(address))
-                gateTile.getNetwork().addStargate(address, new StargatePos(worldToSpawn.provider.getDimensionType().getId(), gatePos, address, gateTile.getSymbolType()));
+                if(overrideAddress){
+                    gateTile.setGateAddress(s, overrideAddressMap.get(s));
+                }
+            }
+            gateTile.markDirty();
+            address = gateTile.getStargateAddress(symbolType);
 
             ResourceLocation biomePath = biome.getRegistryName();
             return new GeneratedStargate(address, (biomePath == null ? null : biomePath.getResourcePath()), hasUpgrade, gateTile.getOriginId());
         }
-        if (isRingsStructure && ringsTiles.size() > 0) {
+        if (isRingsStructure && !ringsTiles.isEmpty()) {
             for (TransportRingsAbstractTile ringsTile : ringsTiles) {
                 ringsTile.generateAddress(true);
                 ringsTile.updateLinkStatus();
@@ -383,6 +397,7 @@ public class JSGStructure extends WorldGenerator {
             }
         }
     }
+
     public static void spawnSusPageInChest(@Nonnull TileEntityChest chest, boolean findAlreadySpawned, boolean stopOnFound) {
         StargateNetwork sgn = StargateNetwork.get(chest.getWorld());
         IItemHandler handler = chest.getSingleChestHandler();

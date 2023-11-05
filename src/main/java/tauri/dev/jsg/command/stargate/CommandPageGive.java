@@ -23,8 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static net.minecraft.command.CommandBase.getPlayer;
-import static tauri.dev.jsg.config.origins.OriginsLoader.DEFAULT_ORIGIN_ID;
-import static tauri.dev.jsg.config.origins.OriginsLoader.getAllOrigins;
+import static tauri.dev.jsg.loader.OriginsLoader.DEFAULT_ORIGIN_ID;
+import static tauri.dev.jsg.loader.OriginsLoader.getAllOrigins;
 
 public class CommandPageGive extends AbstractJSGCommand {
 

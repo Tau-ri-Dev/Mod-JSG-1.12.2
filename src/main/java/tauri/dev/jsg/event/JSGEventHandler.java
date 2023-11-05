@@ -83,6 +83,15 @@ public class JSGEventHandler {
 
 			event.getTable().addPool(pool);
 		}
+		if (event.getName().toString().equals("minecraft:chests/stronghold_corridor")
+				|| event.getName().toString().equals("minecraft:chests/stronghold_crossing")
+				|| event.getName().toString().equals("minecraft:chests/stronghold_library")
+		) {
+			LootEntry entry = new LootEntryTable(new ResourceLocation(JSG.MOD_ID, "stronghold"), 1, 0, new LootCondition[]{}, "sus_page");
+			LootPool pool = new LootPool(new LootEntry[]{entry}, new LootCondition[]{}, new RandomValueRange(1), new RandomValueRange(0), "sus_page_pool");
+
+			event.getTable().addPool(pool);
+		}
 	}
 
 	@SubscribeEvent

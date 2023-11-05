@@ -86,6 +86,17 @@ public class StargateNetwork extends WorldSavedData {
         return notGeneratedStargates;
     }
 
+    public Map<SymbolTypeEnum, StargateAddress> getMapNotGenerated(StargatePos pos) {
+        if (!JSGConfig.WorldGen.otherDimGenerator.generatorEnabled) {
+            return new HashMap<>();
+        }
+        for(Map.Entry<StargatePos, Map<SymbolTypeEnum, StargateAddress>> map : getMapNotGenerated().entrySet()){
+            if(map.getKey().dimensionID == pos.dimensionID)
+                return map.getValue();
+        }
+        return new HashMap<>();
+    }
+
     @Nullable
     public Map.Entry<StargatePos, Map<SymbolTypeEnum, StargateAddress>> getRandomNotGeneratedStargate() {
         if (!JSGConfig.WorldGen.otherDimGenerator.generatorEnabled)
@@ -97,6 +108,48 @@ public class StargateNetwork extends WorldSavedData {
         for (Map.Entry<StargatePos, Map<SymbolTypeEnum, StargateAddress>> map : notGeneratedStargates.entrySet()) {
             if (i == index) return map;
             i++;
+        }
+        return null;
+    }
+
+    @Nullable
+    public Map.Entry<StargatePos, Map<SymbolTypeEnum, StargateAddress>> getEndStargate() {
+        if (!JSGConfig.WorldGen.otherDimGenerator.generatorEnabled)
+            return null;
+        int size = notGeneratedStargates.size();
+        if (size < 1) return null;
+        for (Map.Entry<StargatePos, Map<SymbolTypeEnum, StargateAddress>> map : notGeneratedStargates.entrySet()) {
+            if (map.getKey().dimensionID == 1) return map;
+        }
+        final Map<SymbolTypeEnum, StargateAddress> map = new HashMap<>();
+        StargatePos p = null;
+        for (Map.Entry<SymbolTypeEnum, Map<StargateAddress, StargatePos>> e1 : stargateNetworkMap.entrySet()) {
+            for(Map.Entry<StargateAddress, StargatePos> e : e1.getValue().entrySet()){
+                if(e.getValue().dimensionID == 1 && e.getValue().getGateSymbolType() == SymbolTypeEnum.UNIVERSE){
+                    map.put(e1.getKey(), e.getKey());
+                    p = e.getValue();
+                    break;
+                }
+            }
+        }
+        if(p != null){
+            final StargatePos finalP = p;
+            return new Map.Entry<StargatePos, Map<SymbolTypeEnum, StargateAddress>>() {
+                @Override
+                public StargatePos getKey() {
+                    return finalP;
+                }
+
+                @Override
+                public Map<SymbolTypeEnum, StargateAddress> getValue() {
+                    return map;
+                }
+
+                @Override
+                public Map<SymbolTypeEnum, StargateAddress> setValue(Map<SymbolTypeEnum, StargateAddress> value) {
+                    return value;
+                }
+            };
         }
         return null;
     }
@@ -156,17 +209,18 @@ public class StargateNetwork extends WorldSavedData {
                 break;
         }
         GeneratedStargate gs;
-        if (pos.symbolType == SymbolTypeEnum.UNIVERSE)
+        StargateGenerator.startAddressOverride(getMapNotGenerated(pos));
+        if (pos.getGateSymbolType() == SymbolTypeEnum.UNIVERSE)
             // Generate stargate on the main island...
-            gs = StargateGenerator.mystPageGeneration(pos.getWorld(), structure, id, bp, 5, 50);
+            gs = StargateGenerator.mystPageGeneration(pos.getWorld(), structure, id, new BlockPos(0, 0, 0), 5, 50);
         else
             gs = StargateGenerator.mystPageGeneration(pos.getWorld(), structure, id, bp);
+        StargateGenerator.endAddressOverride();
         if (gs == null) {
             pos.blacklisted = true;
             JSGConfigUtil.addBlacklistedDimForSGSpawnAndUpdate(id);
             return;
         }
-        Objects.requireNonNull(this.getStargate(gs.address)).getTileEntity().setGateAddress(address.symbolType, notGeneratedStargates.get(pos).get(address.symbolType));
         removeNotGeneratedStargate(pos);
     }
 

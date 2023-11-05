@@ -14,8 +14,8 @@ import net.minecraftforge.fml.common.ProgressManager.ProgressBar;
 import org.apache.commons.io.IOUtils;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.config.origins.OriginsLoader;
 import tauri.dev.jsg.loader.FolderLoader;
+import tauri.dev.jsg.loader.OriginsLoader;
 import tauri.dev.jsg.loader.ReloadListener;
 
 import javax.annotation.Nullable;
@@ -30,7 +30,7 @@ public class TextureLoader {
 
     public static final String TEXTURES_PATH = "assets/jsg/textures/tesr";
     private static final int EH_ANIMATED_TEXTURE_SUB_TEXTURES = 185;
-    private static final Map<ResourceLocation, Texture> LOADED_TEXTURES = new HashMap<>();
+    public static final Map<ResourceLocation, Texture> LOADED_TEXTURES = new HashMap<>();
 
     public static Texture getTexture(ResourceLocation resourceLocation) {
         return LOADED_TEXTURES.get(resourceLocation);

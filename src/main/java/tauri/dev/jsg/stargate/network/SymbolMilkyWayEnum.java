@@ -3,7 +3,7 @@ package tauri.dev.jsg.stargate.network;
 import net.minecraft.util.ResourceLocation;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.config.origins.OriginsLoader;
+import tauri.dev.jsg.loader.OriginsLoader;
 import tauri.dev.jsg.loader.model.ModelLoader;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import static tauri.dev.jsg.config.origins.OriginsLoader.DEFAULT_ORIGIN_ID;
-import static tauri.dev.jsg.config.origins.OriginsLoader.MOD_POINT_OF_ORIGINS_COUNT;
+import static tauri.dev.jsg.loader.OriginsLoader.DEFAULT_ORIGIN_ID;
+import static tauri.dev.jsg.loader.OriginsLoader.MOD_POINT_OF_ORIGINS_COUNT;
 
 public enum SymbolMilkyWayEnum implements SymbolInterface {
     SCULPTOR(0, 19, "Sculptor", "0.obj"),
