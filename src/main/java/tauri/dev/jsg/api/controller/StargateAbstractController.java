@@ -2,6 +2,7 @@ package tauri.dev.jsg.api.controller;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
 import tauri.dev.jsg.power.general.EnergyRequiredToOperate;
 import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
@@ -12,6 +13,7 @@ import tauri.dev.jsg.stargate.network.*;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Objects;
 
@@ -138,6 +140,29 @@ public class StargateAbstractController {
     }
 
     /**
+     * @return energy stored in the gate
+     */
+    public int getEnergyStored() {
+        return getStargate().getEnergyStorageForApi().getEnergyStored();
+    }
+
+    /**
+     * @return max energy stored in the gate
+     */
+    public int getEnergyMaxStored() {
+        return getStargate().getEnergyStorageForApi().getMaxEnergyStored();
+    }
+
+    /**
+     * Sets energy stored in the gate
+     */
+    public void setEnergyStored(int energy) {
+        EnergyStorage storage = getStargate().getEnergyStorageForApi();
+        storage.extractEnergy(storage.getMaxEnergyStored(), false);
+        storage.receiveEnergy(energy, false);
+    }
+
+    /**
      * @param energy - energy to add to the stargate
      * @param simulate - set to true if only check capacity
      * @return energy that can be added to storage
@@ -160,6 +185,26 @@ public class StargateAbstractController {
      */
     public StargateAddressDynamic getDialedAddress() {
         return getStargate().getDialedAddress();
+    }
+
+    /**
+     * @return dialed gate
+     */
+    @Nullable
+    public StargatePos getTargetGatePos(){
+        return getStargate().targetGatePos;
+    }
+
+    /**
+     * @return dialed gate tile
+     * <p>
+     * WARNING!
+     * When executed, loads world in what is target gate
+     */
+    @Nullable
+    public StargateAbstractBaseTile getTargetGateTile(){
+        if(getTargetGatePos() == null) return null;
+        return getTargetGatePos().getTileEntity();
     }
 
     /**

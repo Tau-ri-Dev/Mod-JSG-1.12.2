@@ -1,11 +1,13 @@
 package tauri.dev.jsg.api.controller;
 
+import tauri.dev.jsg.config.ingame.JSGConfigOption;
 import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
 import tauri.dev.jsg.config.stargate.StargateSizeEnum;
 import tauri.dev.jsg.stargate.EnumDialingType;
 import tauri.dev.jsg.stargate.network.StargateAddressDynamic;
 import tauri.dev.jsg.stargate.network.SymbolInterface;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 
 import javax.annotation.Nonnull;
@@ -133,6 +135,15 @@ public class StargateClassicController extends StargateAbstractController {
     }
 
     /**
+     * Gets option from gate config (not need to be saved after change)
+     *
+     * @return gate's config option
+     */
+    public JSGConfigOption getGateConfigOption(String name) {
+        return getStargate().getConfig().getOption(StargateClassicBaseTile.ConfigOptions.valueOf(name.toUpperCase()).id);
+    }
+
+    /**
      * Saves gate's config and update its visual parts on clients
      *
      * @param config - config to save
@@ -160,6 +171,24 @@ public class StargateClassicController extends StargateAbstractController {
     }
 
     /**
+     * Opens iris of the target gate
+     * <p>
+     * WARNING!
+     * When executed, loads world in what is target gate
+     *
+     * @return true if success
+     */
+    public boolean openTargetIris() {
+        StargateAbstractBaseTile t = getTargetGateTile();
+        if (t == null) return false;
+        if (!(t instanceof StargateClassicBaseTile)) return false;
+        StargateClassicBaseTile c = (StargateClassicBaseTile) t;
+        if (c.isIrisOpened()) return false;
+        c.toggleIris();
+        return true;
+    }
+
+    /**
      * Closes iris of the gate
      *
      * @return true if success
@@ -167,6 +196,24 @@ public class StargateClassicController extends StargateAbstractController {
     public boolean closeIris() {
         if (getStargate().isIrisClosed()) return false;
         getStargate().toggleIris();
+        return true;
+    }
+
+    /**
+     * Closes iris of the target gate
+     * <p>
+     * WARNING!
+     * When executed, loads world in what is target gate
+     *
+     * @return true if success
+     */
+    public boolean closeTargetIris() {
+        StargateAbstractBaseTile t = getTargetGateTile();
+        if (t == null) return false;
+        if (!(t instanceof StargateClassicBaseTile)) return false;
+        StargateClassicBaseTile c = (StargateClassicBaseTile) t;
+        if (c.isIrisClosed()) return false;
+        c.toggleIris();
         return true;
     }
 
