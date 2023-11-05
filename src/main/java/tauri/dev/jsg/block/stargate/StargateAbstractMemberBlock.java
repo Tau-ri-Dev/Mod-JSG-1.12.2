@@ -40,7 +40,7 @@ public abstract class StargateAbstractMemberBlock extends TechnicalBlock {
         setSoundType(SoundType.METAL);
         setCreativeTab(JSGCreativeTabsHandler.JSG_GATES_CREATIVE_TAB);
 
-        setHardness(-1);
+        setHardness(JSGConfig.Stargate.mechanics.enableGateDisassembleWrench ? -1 : 5);
         setResistance(60.0f);
         if(JSGConfig.Stargate.mechanics.enableGateDisassembleWrench)
             setHarvestLevel("wrench", -1);

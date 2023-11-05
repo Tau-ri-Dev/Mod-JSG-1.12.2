@@ -486,6 +486,7 @@ public class JSGConfig {
                     "If false - will be set iron pickaxe as correct tool",
                     "SIDE: SERVER"
             })
+            @Config.RequiresMcRestart
             public boolean enableGateDisassembleWrench = true;
             @Config.Name("Enable burried state for gates")
             @Config.Comment({

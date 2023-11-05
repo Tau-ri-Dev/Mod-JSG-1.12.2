@@ -31,7 +31,7 @@ public abstract class TechnicalBlock extends JSGBlock {
 
     @ParametersAreNonnullByDefault
     public boolean isToolEffective(String type, IBlockState state) {
-        return !JSGConfig.Stargate.mechanics.enableGateDisassembleWrench;
+        return !JSGConfig.Stargate.mechanics.enableGateDisassembleWrench && super.isToolEffective(type, state);
     }
 
     @ParametersAreNonnullByDefault
@@ -58,6 +58,10 @@ public abstract class TechnicalBlock extends JSGBlock {
     @Override
     @ParametersAreNonnullByDefault
     public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
+        if(!JSGConfig.Stargate.mechanics.enableGateDisassembleWrench) {
+            super.dropBlockAsItemWithChance(worldIn, pos, state, chance, fortune);
+            return;
+        }
         if (fortune == -2) {
             super.dropBlockAsItemWithChance(worldIn, pos, state, chance, 0);
         }

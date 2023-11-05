@@ -46,7 +46,7 @@ public abstract class StargateAbstractBaseBlock extends TechnicalBlock {
         setDefaultState(blockState.getBaseState().withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.NORTH).withProperty(JSGProps.FACING_VERTICAL, EnumFacing.SOUTH).withProperty(JSGProps.RENDER_BLOCK, true));
 
         setLightOpacity(0);
-        setHardness(-1);
+        setHardness(JSGConfig.Stargate.mechanics.enableGateDisassembleWrench ? -1 : 5);
         setResistance(60.0f);
         if(JSGConfig.Stargate.mechanics.enableGateDisassembleWrench)
             setHarvestLevel("wrench", -1);
