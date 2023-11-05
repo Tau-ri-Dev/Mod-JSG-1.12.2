@@ -302,6 +302,7 @@ public class JSGStructure extends WorldGenerator {
 
             double unstableChance = JSGConfig.WorldGen.mystPage.forcedUnstableGateChance;
             if (unstableChance > 0 && (random.nextFloat() < unstableChance)) {
+                gateTile.initConfig();
                 JSGTileEntityConfig config = gateTile.getConfig();
                 config.getOption(StargateClassicBaseTile.ConfigOptions.FORCE_UNSTABLE_EH.id).setBooleanValue(true);
                 gateTile.setConfigAndUpdate(config);
