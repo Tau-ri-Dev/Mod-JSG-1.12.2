@@ -429,6 +429,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         if (targetGatePos == null || targetGatePos.getTileEntity() == null) {
             closeGate(reason);
             resetRandomIncoming();
+            clearDHDSymbols();
             return;
         }
         if ((new StargateClosingEvent(this, targetGatePos.getTileEntity(), isInitiating, reason).post() || new StargateClosingEvent(targetGatePos.getTileEntity(), this, !isInitiating, reason).post()) && reason.equals(StargateClosedReasonEnum.REQUESTED))
@@ -437,6 +438,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         if (targetGatePos != null) targetGatePos.getTileEntity().closeGate(reason);
 
         closeGate(reason);
+        clearDHDSymbols();
     }
 
     protected static class ResultTargetValid {
