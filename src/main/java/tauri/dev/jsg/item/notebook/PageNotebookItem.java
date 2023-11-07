@@ -76,6 +76,7 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 	public void setCustomModelLocation() {
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName() + "_empty", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation(getRegistryName() + "_filled", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(this, 2, new ModelResourceLocation(getRegistryName() + "_end", "inventory"));
 	}
 
 	@Nonnull
@@ -132,9 +133,12 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag) {
+	public void addInformation(ItemStack stack, World world, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flag) {
 		if (stack.getItemDamage() == 0) {			
 			tooltip.add(JSG.proxy.localize("item.jsg.page_notebook.empty"));
+		}
+		else if (stack.getItemDamage() == 2) {
+			tooltip.add(JSG.proxy.localize("item.jsg.page_notebook.end"));
 		}
 		
 		else {			

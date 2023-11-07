@@ -14,6 +14,7 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerItem;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode;
@@ -29,6 +30,7 @@ import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
 import tauri.dev.jsg.util.BlockHelpers;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 public class EntryActionToServer implements IMessage {
     private EnumHand hand;
@@ -300,6 +302,12 @@ public class EntryActionToServer implements IMessage {
                                 int originId;
                                 if (message.index == 1) {
                                     // gate is not generated - there is no tileEntity
+                                    StargateNetwork sgn = StargateNetwork.get(world);
+                                    Map<SymbolTypeEnum, StargateAddress> map = sgn.getMapNotGenerated().get(message.targetGatePos);
+                                    if(map == null){
+                                        JSG.info("Lol123");
+                                        continue;
+                                    }
                                     address = StargateNetwork.get(world).getMapNotGenerated().get(message.targetGatePos).get(s);
                                     originId = StargateClassicBaseTile.getOriginId(null, message.targetGatePos.dimensionID, -1);
                                 } else {
