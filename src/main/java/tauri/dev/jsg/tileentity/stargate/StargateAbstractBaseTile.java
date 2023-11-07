@@ -486,6 +486,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         gatePosMap.put(symbolType, gatePos);
         getNetwork().addStargate(stargateAddress, gatePos);
 
+        JSG.debug("Setting gate's address at pos " + gatePos.dimensionID + " : " + gatePos.gatePos.toString() + " to " + stargateAddress);
+
         markDirty();
     }
 
@@ -920,6 +922,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
             this.setGateAddress(symbolType, address);
         }
+        lastPos = pos;
+        markDirty();
     }
 
     private boolean addedToNetwork;

@@ -132,6 +132,18 @@ public class StargateNetwork extends WorldSavedData {
                 }
             }
         }
+        if(p == null){
+            // rerun - check for all gate types
+            for (Map.Entry<SymbolTypeEnum, Map<StargateAddress, StargatePos>> e1 : stargateNetworkMap.entrySet()) {
+                for(Map.Entry<StargateAddress, StargatePos> e : e1.getValue().entrySet()){
+                    if(e.getValue().dimensionID == 1){
+                        map.put(e1.getKey(), e.getKey());
+                        p = e.getValue();
+                        break;
+                    }
+                }
+            }
+        }
         if(p != null){
             final StargatePos finalP = p;
             return new Map.Entry<StargatePos, Map<SymbolTypeEnum, StargateAddress>>() {

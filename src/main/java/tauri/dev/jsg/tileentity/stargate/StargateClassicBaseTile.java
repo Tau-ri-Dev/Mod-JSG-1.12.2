@@ -1013,7 +1013,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         extractEnergyByShield(0);
         if (!world.isRemote && hasShieldIris()) {
             shieldKeepAlive = JSGConfig.Stargate.iris.shieldPowerDraw;
-            shieldKeepAlive += irisHeat * (irisHeat / IRIS_MAX_HEAT_TRINIUM);
+            shieldKeepAlive += (int) (irisHeat * (irisHeat / IRIS_MAX_HEAT_TRINIUM));
             if (isIrisClosed()) extractEnergyByShield(shieldKeepAlive);
             if (getEnergyStorage().getEnergyStored() < shieldKeepAlive) {
                 toggleIris();
@@ -1030,7 +1030,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
             if (!lastPos.equals(pos)) {
                 lastPos = pos;
-                generateAddresses(!hasUpgrade(StargateClassicBaseTile.StargateUpgradeEnum.CHEVRON_UPGRADE));
+                //generateAddresses(true);
 
                 if (isMerged()) {
                     updateMergeState(onGateMergeRequested(), facing, facingVertical);
@@ -2247,7 +2247,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             codeSender = sender;
             return false;
         }
-        if (code == this.irisCode) {
+        if (code.equalsIgnoreCase(irisCode)) {
             switch (this.irisState) {
                 case OPENED:
                     sender.sendMessage(GDOMessages.OPENED.textComponent);
@@ -2266,6 +2266,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             }
         } else {
             sender.sendMessage(GDOMessages.CODE_REJECTED.textComponent);
+            //sender.sendMessage(new TextComponentString("Iris code: " + irisCode));
             return false;
         }
         markDirty();
