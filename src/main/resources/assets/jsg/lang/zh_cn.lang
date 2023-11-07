@@ -246,6 +246,7 @@ item.jsg.holder_crystal_pegasus.name=Crystal Holder (pegasus)
 # notebook
 item.jsg.page_notebook.name=Notebook Page
 item.jsg.page_notebook.empty=Empty
+item.jsg.page_notebook.end=Address with 9 symbols
 
 # mysterious page
 item.jsg.page_mysterious_milkyway.name=Mysterious Page (Milky Way)

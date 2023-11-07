@@ -246,6 +246,7 @@ item.jsg.holder_crystal_pegasus.name=Porte-cristal (Pégase)
 # carnet de notes
 item.jsg.page_notebook.name=Page du carnet de notes
 item.jsg.page_notebook.empty=Vide
+item.jsg.page_notebook.end=Address with 9 symbols
 
 # page mystérieuse
 item.jsg.page_mysterious_milkyway.name=Page mystérieuse (Voie lactée)

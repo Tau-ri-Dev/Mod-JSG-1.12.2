@@ -246,6 +246,7 @@ item.jsg.holder_crystal_pegasus.name=Crystal Holder (Pegasus)
 # notebook
 item.jsg.page_notebook.name=Stránka z deníčku
 item.jsg.page_notebook.empty=Prázdná
+item.jsg.page_notebook.end=Adresa s devíti symboly
 
 # mysterious page
 item.jsg.page_mysterious_milkyway.name=Tajuplná stránka (Milky Way)

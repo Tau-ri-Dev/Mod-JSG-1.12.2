@@ -246,6 +246,7 @@ item.jsg.holder_crystal_pegasus.name=Kristálytartó (Pegazus)
 # notebook
 item.jsg.page_notebook.name=Jegyzetfüzet oldal
 item.jsg.page_notebook.empty=Üres
+item.jsg.page_notebook.end=Address with 9 symbols
 
 # mysterious page
 item.jsg.page_mysterious_milkyway.name=Titokzatos Oldal (Tejút)

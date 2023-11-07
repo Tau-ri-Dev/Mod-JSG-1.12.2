@@ -247,6 +247,7 @@ item.jsg.holder_crystal_pegasus.name=Pegasus Kristallhalter
 # notebook
 item.jsg.page_notebook.name=Notizbuchseite
 item.jsg.page_notebook.empty=Leer
+item.jsg.page_notebook.end=Address with 9 symbols
 
 # mysterious page
 item.jsg.page_mysterious_milkyway.name=Mysteriöse Seite (Milchstraße)
