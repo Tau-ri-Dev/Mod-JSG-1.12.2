@@ -6,6 +6,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -24,6 +26,7 @@ public class JSGMinecraftHelper {
         return ((Minecraft.getSystemTime() / 1000D) * 20D);
     }
 
+    @SideOnly(Side.CLIENT)
     public static long getPlayerTickClientSide() {
         EntityPlayer player = Minecraft.getMinecraft().player;
         if (player == null) return 0;
