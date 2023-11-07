@@ -115,6 +115,7 @@ public class AddressesSection {
             StargateEntry e = new StargateEntry();
             e.pos = pos;
             e.address = notGeneratedMap.get(pos).get(Objects.requireNonNull(guiBase.gateTile).getSymbolType());
+            e.addresses = notGeneratedMap.get(pos);
             e.notGenerated = true;
             e.defaultName = "NOT GENERATED - ";
             entries.add(e);
@@ -244,10 +245,10 @@ public class AddressesSection {
                 dialGate(index, EnumDialingType.values()[btn.getCurrentState()]);
                 break;
             case 3:
-                JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(EntryActionEnum.GIVE_NOTEBOOK, pos, entry.notGenerated));
+                JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(EntryActionEnum.GIVE_NOTEBOOK, pos, entry.addresses, entry.notGenerated));
                 break;
             case 4:
-                JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(EntryActionEnum.TELEPORT_TO_POS, pos, false));
+                JSGPacketHandler.INSTANCE.sendToServer(new EntryActionToServer(EntryActionEnum.TELEPORT_TO_POS, pos, null, false));
                 break;
         }
     }

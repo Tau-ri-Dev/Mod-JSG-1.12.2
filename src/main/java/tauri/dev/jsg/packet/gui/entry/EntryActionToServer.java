@@ -14,7 +14,6 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerItem;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode;
@@ -30,6 +29,7 @@ import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
 import tauri.dev.jsg.util.BlockHelpers;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 public class EntryActionToServer implements IMessage {
@@ -43,6 +43,8 @@ public class EntryActionToServer implements IMessage {
     private BlockPos linkedGate;
     private StargatePos targetGatePos;
     private EnumDialingType dialType = EnumDialingType.NORMAL;
+
+    private Map<SymbolTypeEnum, StargateAddress> addresses = new HashMap<>();
 
     public EntryActionToServer() {
     }
@@ -71,7 +73,7 @@ public class EntryActionToServer implements IMessage {
         this.linkedGate = null;
     }
 
-    public EntryActionToServer(EntryActionEnum action, StargatePos targetGate, boolean notGenerated) {
+    public EntryActionToServer(EntryActionEnum action, StargatePos targetGate, Map<SymbolTypeEnum, StargateAddress> addresses, boolean notGenerated) {
         this.hand = EnumHand.MAIN_HAND;
         this.dataType = EntryDataTypeEnum.ADMIN_CONTROLLER;
         this.action = action;
@@ -80,6 +82,7 @@ public class EntryActionToServer implements IMessage {
         this.targetGatePos = targetGate;
         this.addressToDial = null;
         this.linkedGate = null;
+        this.addresses = addresses;
     }
 
     public EntryActionToServer(EntryActionEnum action, BlockPos linkedGate) {
@@ -129,10 +132,20 @@ public class EntryActionToServer implements IMessage {
         } else buf.writeBoolean(false);
         if (targetGatePos != null) {
             buf.writeBoolean(true);
+            buf.writeInt(targetGatePos.symbolType.id);
             targetGatePos.toBytes(buf);
         } else buf.writeBoolean(false);
-        if(dialType == null) dialType = EnumDialingType.NORMAL;
+        if (dialType == null) dialType = EnumDialingType.NORMAL;
         buf.writeInt(dialType.ordinal());
+
+        if (addresses != null) {
+            buf.writeBoolean(true);
+            buf.writeInt(addresses.size());
+            for (Map.Entry<SymbolTypeEnum, StargateAddress> e : addresses.entrySet()) {
+                buf.writeInt(e.getKey().id);
+                e.getValue().toBytes(buf);
+            }
+        }
     }
 
     @Override
@@ -152,11 +165,22 @@ public class EntryActionToServer implements IMessage {
             linkedGate = BlockPos.fromLong(buf.readLong());
         }
         if (buf.readBoolean()) {
-            targetGatePos = new StargatePos(SymbolTypeEnum.valueOf(index), buf);
+            int id = buf.readInt();
+            targetGatePos = new StargatePos(SymbolTypeEnum.valueOf(id), buf);
         }
         int i = buf.readInt();
-        if(EnumDialingType.values().length <= i) i = 0;
+        if (EnumDialingType.values().length <= i) i = 0;
         dialType = EnumDialingType.values()[i];
+
+        if (buf.readBoolean()) {
+            addresses = new HashMap<>();
+            int ii = buf.readInt();
+            for (int j = 0; j < ii; j++) {
+                SymbolTypeEnum s = SymbolTypeEnum.valueOf(buf.readInt());
+                StargateAddress sa = new StargateAddress(buf);
+                addresses.put(s, sa);
+            }
+        }
     }
 
     public static class EntryActionServerHandler implements IMessageHandler<EntryActionToServer, IMessage> {
@@ -171,7 +195,7 @@ public class EntryActionToServer implements IMessage {
                 NBTTagCompound compound = stack.getTagCompound();
 
                 if (message.dataType.page()) {
-                    if(compound == null) return;
+                    if (compound == null) return;
                     NBTTagList list = compound.getTagList("addressList", NBT.TAG_COMPOUND);
 
                     switch (message.action) {
@@ -203,7 +227,7 @@ public class EntryActionToServer implements IMessage {
                             break;
                     }
                 } else if (message.dataType.universe()) {
-                    if(compound == null) return;
+                    if (compound == null) return;
                     NBTTagList list = compound.getTagList(UniverseDialerMode.MEMORY.tagListName, NBT.TAG_COMPOUND);
                     BlockPos linkedPos = BlockPos.fromLong(compound.getLong(UniverseDialerMode.MEMORY.tagPosName));
                     NBTTagCompound selectedCompound = list.getCompoundTagAt(message.index);
@@ -241,7 +265,7 @@ public class EntryActionToServer implements IMessage {
                             break;
                     }
                 } else if (message.dataType.oc()) {
-                    if(compound == null) return;
+                    if (compound == null) return;
                     NBTTagList list = compound.getTagList(UniverseDialerMode.OC.tagListName, NBT.TAG_COMPOUND);
 
                     switch (message.action) {
@@ -301,14 +325,16 @@ public class EntryActionToServer implements IMessage {
                                 StargateAddress address;
                                 int originId;
                                 if (message.index == 1) {
+                                    if (message.addresses == null) continue;
                                     // gate is not generated - there is no tileEntity
-                                    StargateNetwork sgn = StargateNetwork.get(world);
+                                    /*StargateNetwork sgn = StargateNetwork.get(world);
                                     Map<SymbolTypeEnum, StargateAddress> map = sgn.getMapNotGenerated().get(message.targetGatePos);
                                     if(map == null){
                                         JSG.info("Lol123");
                                         continue;
                                     }
-                                    address = StargateNetwork.get(world).getMapNotGenerated().get(message.targetGatePos).get(s);
+                                    address = map.get(s);*/
+                                    address = message.addresses.get(s);
                                     originId = StargateClassicBaseTile.getOriginId(null, message.targetGatePos.dimensionID, -1);
                                 } else {
                                     address = message.targetGatePos.getTileEntity().getStargateAddress(s);
