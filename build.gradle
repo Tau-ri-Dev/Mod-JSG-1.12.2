@@ -158,7 +158,8 @@ jar {
 
 task replaceTokens(type: Sync) {
     from sourceSets.main.java
-    inputs.property 'version', project.mc_version.toString()
+    inputs.property 'mc_version', project.mod_version.toString()
+    inputs.property 'version', project.version.toString()
     filter(ReplaceTokens, tokens: [VERSION: version.toString()])
     filter(ReplaceTokens, tokens: [MCVERSION: "${project.mc_version}".toString()])
     into "$buildDir/src"
