@@ -146,6 +146,8 @@ public class EntryActionToServer implements IMessage {
                 e.getValue().toBytes(buf);
             }
         }
+        else
+            buf.writeBoolean(false);
     }
 
     @Override
