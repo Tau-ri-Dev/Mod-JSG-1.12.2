@@ -175,7 +175,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         double maxHeat = getMaxIrisHeat();
         if (irisHeat >= maxHeat) {
             int heatCoefficient = (int) Math.round(Math.abs(irisHeat - maxHeat));
-            if (JSGConfig.Stargate.iris.enableIrisOverHeatCollapse) {
+            if (JSGConfig.Stargate.iris.enableIrisOverHeatCollapse && heatCoefficient > 0) {
                 if (world.getTotalWorldTime() % (((int) (Math.random() * 70)) + 1) == 0) {
                     if (hasPhysicalIris() && irisItem.isItemStackDamageable()) {
                         irisItem.getItem().setDamage(irisItem, irisItem.getItem().getDamage(irisItem) + (new Random().nextInt(heatCoefficient) + 1));
