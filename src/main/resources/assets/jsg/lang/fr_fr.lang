@@ -246,7 +246,6 @@ item.jsg.holder_crystal_pegasus.name=Porte-cristal (Pégase)
 # carnet de notes
 item.jsg.page_notebook.name=Page du carnet de notes
 item.jsg.page_notebook.empty=Vide
-item.jsg.page_notebook.end=Address with 9 symbols
 
 # page mystérieuse
 item.jsg.page_mysterious_milkyway.name=Page mystérieuse (Voie lactée)
@@ -331,10 +330,10 @@ item.jsg.staff.name=Arme à bâton Goa'uld
 item.jsg.energyWeapon.available_shots=Coups disponibles :
 
 item.jsg.hammer.name=Marteau JSG
-item.jsg.screwdriver.name=JSG Tournevis
-item.jsg.wrench.name=JSG Clé à molette
+item.jsg.screwdriver.name=Tournevis JSG
+item.jsg.wrench.name=JSG Clé à molette JSG
 
-item.jsg.admin_controller.name=Admin Controller
+item.jsg.admin_controller.name=Contrôleur administrateur
 
 # Engrenages
 item.jsg.gear_titanium.name=Engrenage (Titane)
