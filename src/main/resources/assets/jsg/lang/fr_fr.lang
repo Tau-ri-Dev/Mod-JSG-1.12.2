@@ -264,9 +264,9 @@ item.jsg.beamer_crystal_fluid.name=Cristal fluide de Beamer
 item.jsg.beamer_crystal_items.name=Cristal d'objets de Beamer
 item.jsg.beamer_crystal_laser.name=Cristal de laser Beamer
 
-# universe dialer
-item.jsg.universe_dialer.name=Composteur de l'univers
-item.jsg.universe_dialer.broken.name=Composteur de l'univers (cassé)
+# composeur de l'univers
+item.jsg.universe_dialer.name=Composeur de l'univers
+item.jsg.universe_dialer.broken.name=Composeur de l'univers cassé
 item.jsg.universe_dialer.saved_gates=Portes sauvegardées: %s
 item.jsg.universe_dialer.not_linked=Non lié
 item.jsg.universe_dialer.gate_busy=Porte occupée
