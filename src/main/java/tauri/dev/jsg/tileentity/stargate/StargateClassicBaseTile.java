@@ -1187,8 +1187,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         setWorld(world);
     }
 
+    @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         compound.setInteger("stargateSize", stargateSize.id);
         compound.setTag("itemHandler", itemStackHandler.serializeNBT());
         compound.setBoolean("isFinalActive", isFinalActive);
@@ -1246,7 +1247,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         if (compound.hasKey("patternVersion")) stargateSize = StargateSizeEnum.SMALL;
         else {
             if (compound.hasKey("stargateSize"))
@@ -2423,12 +2424,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // Capabilities
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
         return (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing == null) || super.hasCapability(capability, facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing == null)
             return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemStackHandler);
 

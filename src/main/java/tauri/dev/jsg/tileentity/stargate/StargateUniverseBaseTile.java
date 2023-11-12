@@ -35,6 +35,7 @@ import tauri.dev.jsg.tileentity.props.DestinyVentTile;
 import tauri.dev.jsg.tileentity.util.ScheduledTask;
 import tauri.dev.jsg.util.LinkingHelper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -785,8 +786,9 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     // --------------------------------------------------------------------------------
     // NBTs
 
+    @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         if (addressToDial != null) compound.setTag("addressToDial", addressToDial.serializeNBT());
         compound.setInteger("symbolsToDialCount", symbolsToDialCount);
         compound.setInteger("addressPosition", addressPosition);
@@ -806,7 +808,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         super.readFromNBT(compound);
 
         addressToDial = new StargateAddress(compound.getCompoundTag("addressToDial"));

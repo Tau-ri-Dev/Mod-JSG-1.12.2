@@ -43,6 +43,7 @@ import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
@@ -432,8 +433,9 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
     // ------------------------------------------------------------------------
     // NBT
 
+    @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         compound.setBoolean("isPowered", isPowered);
         compound.setInteger("openCount", openCount);
         compound.setBoolean("canNotGenerate", canNotGenerate);
@@ -442,7 +444,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         isPowered = compound.getBoolean("isPowered");
         openCount = compound.getInteger("openCount");
         canNotGenerate = compound.getBoolean("canNotGenerate");

@@ -280,8 +280,8 @@ public class GuiCustomMainMenu extends GuiScreen {
         int sizeXJSG = (int) (width / sizeCoef);
         int sizeYJSG = (230 * sizeXJSG) / 411;
 
-        int sizeXMojang = (int) (width / sizeCoef);
-        int sizeYMojang = (52 * sizeXMojang) / 300;
+        //int sizeXMojang = (int) (width / sizeCoef);
+        int sizeYMojang = 0; //(52 * sizeXMojang) / 300;
 
         int[] center = getCenterPos(sizeXJSG, sizeYJSG);
         int xEnd = PADDING;

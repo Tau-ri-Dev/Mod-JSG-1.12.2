@@ -36,6 +36,7 @@ import tauri.dev.jsg.tileentity.util.ScheduledTask;
 import tauri.dev.jsg.util.ILinkable;
 import tauri.dev.jsg.util.LinkingHelper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -382,8 +383,9 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     // ------------------------------------------------------------------------
     // NBT
 
+    @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         if (isLinked()) {
             compound.setLong("linkedDHD", linkedDHD.toLong());
             compound.setInteger("linkId", linkId);
@@ -393,7 +395,7 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile implements
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         if (compound.hasKey("linkedDHD")) this.linkedDHD = BlockPos.fromLong(compound.getLong("linkedDHD"));
         if (compound.hasKey("linkId")) this.linkId = compound.getInteger("linkId");
 

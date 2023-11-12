@@ -1392,10 +1392,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     @Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+    public boolean shouldRefresh(@Nonnull World world, @Nonnull BlockPos pos, IBlockState oldState, IBlockState newSate) {
         return oldState.getBlock() != newSate.getBlock();
     }
 
+    @Nonnull
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         return renderBoundingBox;
@@ -1889,20 +1890,16 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public boolean hasEnergyToDial(StargatePos targetGatePos) {
         EnergyRequiredToOperate energyRequired = getEnergyRequiredToDial(targetGatePos);
 
-        if (getEnergyStorage().getEnergyStored() >= energyRequired.energyToOpen) {
-            return true;
-        }
-
-        return false;
+        return getEnergyStorage().getEnergyStored() >= energyRequired.energyToOpen;
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
         return (capability == CapabilityEnergy.ENERGY) || super.hasCapability(capability, facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityEnergy.ENERGY) {
             return CapabilityEnergy.ENERGY.cast(getEnergyStorage());
         }
@@ -1913,11 +1910,16 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     // ------------------------------------------------------------------------
     // NBT
+    @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         for (StargateAddress stargateAddress : gateAddressMap.values()) {
+            // we don't want to copy address of gate to another gate -_-
+            if(stargateAddress == null) continue;
+            StargatePos pos = gatePosMap.get(stargateAddress.getSymbolType());
+            if(pos == null) continue;
             compound.setTag("address_" + stargateAddress.getSymbolType(), stargateAddress.serializeNBT());
-            compound.setTag("gatePos_" + stargateAddress.getSymbolType(), gatePosMap.get(stargateAddress.getSymbolType()).serializeNBT());
+            compound.setTag("gatePos_" + stargateAddress.getSymbolType(), pos.serializeNBT());
         }
 
         compound.setTag("dialedAddress", dialedAddress.serializeNBT());
@@ -1957,7 +1959,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         for (SymbolTypeEnum symbolType : SymbolTypeEnum.values()) {
             if (compound.hasKey("address_" + symbolType))
                 gateAddressMap.put(symbolType, new StargateAddress(compound.getCompoundTag("address_" + symbolType)));
@@ -1983,8 +1985,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         } catch (NullPointerException | IndexOutOfBoundsException | ClassCastException e) {
             JSG.warn("Exception at reading NBT");
             JSG.warn("If loading world used with previous version and nothing game-breaking doesn't happen, please ignore it");
-
-            e.printStackTrace();
+            JSG.warn("Stacktrace: ", e);
         }
 
         getEnergyStorage().deserializeNBT(compound.getCompoundTag("energyStorage"));
