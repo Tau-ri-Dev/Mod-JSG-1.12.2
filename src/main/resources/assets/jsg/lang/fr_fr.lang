@@ -151,7 +151,7 @@ soundCategory.jsg_sounds=Just Stargate mod
 # -------------------
 # ITEMS
 
-# records
+# enregistrements
 item.jsg.record_sgc.name=Thème SG-1
 item.jsg.record_atlantis.name=Thème Atlantis
 item.jsg.record_destiny.name=Thème du Destinée
