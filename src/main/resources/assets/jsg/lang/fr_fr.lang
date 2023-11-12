@@ -77,7 +77,7 @@ advancement.gdo_used.desc=Utiliser le GDO pour envoyer le code
 advancement.kawoosh_cremation.title=Échapper à Hadante
 advancement.kawoosh_cremation.desc=Expérimentez vous-même la crémation de Kawoosh
 
-advancement.first_zpm.title=Quoi? MPZ, il est canadien
+advancement.first_zpm.title=Quoi? EPPZ, il est canadien
 advancement.first_zpm.desc=Obtenir un Module de Point Zero
 
 advancement.three_zpms.title=Je n'en crois pas mes yeux : Trois E2PZ
@@ -113,7 +113,7 @@ advancement.tokra_crystal.desc=Obtenir des cristaux de tok'ra
 advancement.beamer_crystal_laser.title=Un accélérateur de particules tirant à travers une porte des étoiles?
 advancement.beamer_crystal_laser.desc=Obtenir un cristal de laser beamer
 
-advancement.transportrings_goauld.title=Les ascenseurs sont une vraie plaie.
+advancement.transportrings_goauld.title=les ascenseurs c'est la barbe.
 advancement.transportrings_goauld.desc=Utiliser des anneaux de transport goa'uld
 
 advancement.transportrings_ori.title=Plaines de Celestis
@@ -152,22 +152,22 @@ soundCategory.jsg_sounds=Just Stargate mod
 # ITEMS
 
 # records
-item.jsg.record_sgc.name=SG-1 Theme
-item.jsg.record_atlantis.name=Atlantis Theme
-item.jsg.record_destiny.name=Destiny Theme
-item.jsg.record_origins.name=Origins Theme
-item.jsg.record_elevator.name=Loading Music
+item.jsg.record_sgc.name=Thème SG-1
+item.jsg.record_atlantis.name=Thème Atlantis
+item.jsg.record_destiny.name=Thème du Destinée
+item.jsg.record_origins.name=Thème des origines
+item.jsg.record_elevator.name=Chargement de la musique
 
 # iris
-item.jsg.iris_blade.name=Lame Iris (Titane)
-item.jsg.iris_blade_trinium.name=Lame d'iris (Trinium)
-item.jsg.quad_iris_blade.name=Lame d'iris fois quatre (Titanium)
-item.jsg.quad_iris_blade_trinium.name=Lame d'iris fois quatre (Trinium)
-item.jsg.upgrade_iris.name=Mise à niveau d'Iris (Titane)
-item.jsg.upgrade_iris_trinium.name=Amélioration d'Iris (Trinium)
-item.jsg.upgrade_iris_creative.name=Iris Upgrade (Creative)
-item.jsg.iris.tooltip.integrity=Integrity:
-item.jsg.iris.tooltip.durability=Durability:
+item.jsg.iris_blade.name=Lame Iris en Titane
+item.jsg.iris_blade_trinium.name=Lame d'iris en Trinium
+item.jsg.quad_iris_blade.name=Lame d'iris fois quatre en Titane
+item.jsg.quad_iris_blade_trinium.name=Lame d'iris fois quatre en Trinium
+item.jsg.upgrade_iris.name=Mise à niveau d'Iris en Titane
+item.jsg.upgrade_iris_trinium.name=Amélioration d'Iris en Trinium
+item.jsg.upgrade_iris_creative.name=Mise à niveau de l'iris (Creative)
+item.jsg.iris.tooltip.integrity=Intégrité :
+item.jsg.iris.tooltip.durability=Durabilité :
 item.jsg.shield_emitter.name=Émetteur de bouclier
 item.jsg.upgrade_shield.name=Mise à niveau du bouclier
 
@@ -212,9 +212,9 @@ item.jsg.circuit_control_base.name=Base de circuit de contrôle
 item.jsg.circuit_control_naquadah.name=Circuit de contrôle du Naquadah
 item.jsg.circuit_control_crystal.name=Circuit de contrôle du cristal
 
-item.jsg.crystal_control_dhd.name=Cristal de contrôle DHD (Voie lactée)
-item.jsg.crystal_control_pegasus_dhd.name=Cristal de contrôle DHD (Pegasus)
-item.jsg.raw_pegasus_dhd_crystal.name=Cristal DHD brut (Pegasus)
+item.jsg.crystal_control_dhd.name=Cristal de contrôle DHD de la Voie lactée
+item.jsg.crystal_control_pegasus_dhd.name=Cristal de contrôle DHD de Pégase
+item.jsg.raw_pegasus_dhd_crystal.name=Cristal brut du DHD de Pégase
 item.jsg.crystal_glyph_dhd.name=Cristal de glyphes DHD
 item.jsg.crystal_glyph_stargate.name=Cristal de glyphe de stargate
 item.jsg.crystal_glyph_milkyway.name=Cristal de glyphes de la voie lactée
@@ -225,32 +225,33 @@ item.jsg.crystal_glyph_ori.name=Cristal de glyphes d'Ori
 item.jsg.crystal_glyph_ancient.name=Cristal de glyphes ancien
 
 item.jsg.crystal_upgrade_capacity.name=Capacité de mise à niveau de Crystal
-item.jsg.crystal_upgrade_efficiency.name=Mise à niveau de l'efficacité en cristal
+item.jsg.crystal_upgrade_efficiency.name=Mise à niveau de l'efficacité du cristal
 
 # dhd
-item.jsg.dhd_brb.name=Bright Red Button (BRB)
-item.jsg.dhd_bbb.name=Bright Blue Button (BBB)
+item.jsg.dhd_brb.name=Bouton rouge vif (BRB en anglais)
+item.jsg.dhd_bbb.name=Bouton bleu vif (BBB en anglais)
 
 # fragments
-item.jsg.fragment_stargate_milkyway.name=Fragment d'anneau (Voie lactée)
-item.jsg.fragment_stargate_pegasus.name=Fragment d'anneau (Pégase)
-item.jsg.fragment_stargate_universe.name=Ring Fragment (Univers)
-item.jsg.fragment_transportrings_goauld.name=Fragment d'anneaux de transport (Goa'uld)
-item.jsg.fragment_transportrings_ori.name=Fragment d'anneaux de transport (Ori)
-item.jsg.fragment_transportrings_ancient.name=Fragment d'anneaux de transport (Anciens)
+item.jsg.fragment_stargate_milkyway.name=Fragment d'anneau de la Voie lactée
+item.jsg.fragment_stargate_pegasus.name=Fragment d'anneau de Pégase
+item.jsg.fragment_stargate_universe.name=Ring Fragment de l'Univers
+item.jsg.fragment_transportrings_goauld.name=Fragment d'anneaux de transport Goa'uld
+item.jsg.fragment_transportrings_ori.name=Fragment d'anneaux de transport Ori
+item.jsg.fragment_transportrings_ancient.name=Fragment d'anneaux de transport des Anciens
 
 # Porteurs
-item.jsg.holder_crystal.name=Porte-cristaux (Voie lactée)
-item.jsg.holder_crystal_pegasus.name=Porte-cristal (Pégase)
+item.jsg.holder_crystal.name=Porte-cristal de la Voie lactée
+item.jsg.holder_crystal_pegasus.name=Porte-cristal de Pégase
 
 # carnet de notes
 item.jsg.page_notebook.name=Page du carnet de notes
 item.jsg.page_notebook.empty=Vide
+item.jsg.page_notebook.end=Address with 9 symbols
 
 # page mystérieuse
-item.jsg.page_mysterious_milkyway.name=Page mystérieuse (Voie lactée)
-item.jsg.page_mysterious_pegasus.name=Page mystérieuse (Pégase)
-item.jsg.page_mysterious_universe.name=Page mystérieuse (Univers)
+item.jsg.page_mysterious_milkyway.name=Page mystérieuse de laVoie lactée
+item.jsg.page_mysterious_pegasus.name=Page mystérieuse de Pégase
+item.jsg.page_mysterious_universe.name=Page mystérieuse de l'Univers
 item.jsg.page_mysterious.tooltip=Qui sait où cela mène?
 
 item.jsg.page_mysterious.generation.start=Démarrage d'une nouvelle génération de portes des étoiles...
@@ -309,11 +310,11 @@ item.jsg.gui.oc_port_invalid=Port invalide
 item.jsg.gdo.name=Garage Door Opener (GDO)
 item.jsg.gdo.not_linked=Non lié
 item.jsg.gdo.code_sender=Code
-item.jsg.gdo.iris_opened=L'iris est ouvert !
-item.jsg.gdo.iris_busy=L'iris est occupé !
-item.jsg.gdo.code_accepted=Code accepté ! Ouverture de l'iris...
-item.jsg.gdo.code_rejected=Mauvais code !
-item.jsg.gdo.code_not_set=Vous devez entrer le code !
+item.jsg.gdo.iris_opened=L'iris est ouvert!
+item.jsg.gdo.iris_busy=L'iris est occupé!
+item.jsg.gdo.code_accepted=Code accepté! Ouverture de l'iris...
+item.jsg.gdo.code_rejected=Mauvais code!
+item.jsg.gdo.code_not_set=Vous devez entrer le code!
 item.jsg.gdo.computer_handled=En attente sur l'ordinateur...
 item.jsg.gdo.mode_oc=OpnCom
 item.jsg.gdo.oc_name=Nom de l'entrée
@@ -322,43 +323,43 @@ item.jsg.gdo.oc_port=Port du modem
 item.jsg.gdo.oc_data=Paramètres d'OpenComputers (séparés par des virgules)
 item.jsg.gdo.oc_save=Sauvegarde
 item.jsg.gdo.oc_port_invalid=Port invalide
-item.jsg.gdo.oc_message_received=Recevoir la réponse :
+item.jsg.gdo.oc_message_received=Recevoir la réponse:
 
 # Outils
 item.jsg.zat.name=Zat'nik'tel
-item.jsg.staff.name=Arme à bâton Goa'uld
-item.jsg.energyWeapon.available_shots=Coups disponibles :
+item.jsg.staff.name=Lance Goa'uld
+item.jsg.energyWeapon.available_shots=Coups disponibles:
 
 item.jsg.hammer.name=Marteau JSG
 item.jsg.screwdriver.name=Tournevis JSG
-item.jsg.wrench.name=JSG Clé à molette JSG
+item.jsg.wrench.name=Clé à molette JSG
 
-item.jsg.admin_controller.name=Contrôleur administrateur
+item.jsg.admin_controller.name=Contrôleur d'administration
 
 # Engrenages
-item.jsg.gear_titanium.name=Engrenage (Titane)
-item.jsg.gear_trinium.name=Engrenage (Trinium)
-item.jsg.gear_naquadah_raw.name=Engrenage (Naquadah brut)
-item.jsg.gear_naquadah.name=Engrenage (Naquadah)
+item.jsg.gear_titanium.name=Engrenage en Titane
+item.jsg.gear_trinium.name=Engrenage en Trinium
+item.jsg.gear_naquadah_raw.name=Engrenage en Naquadah brut
+item.jsg.gear_naquadah.name=Engrenage en Naquadah
 
 # Plaques
-item.jsg.plate_titanium.name=Plaque (Titane)
-item.jsg.plate_trinium.name=Plaque (Trinium)
-item.jsg.plate_naquadah_raw.name=Plaque (Naquadah brut)
-item.jsg.plate_naquadah.name=Plaque (Naquadah)
+item.jsg.plate_titanium.name=Plaque de Titane
+item.jsg.plate_trinium.name=Plaque de Trinium
+item.jsg.plate_naquadah_raw.name=Plaque de Naquadah brut
+item.jsg.plate_naquadah.name=Plaque de Naquadah
 
 # schémas
-item.jsg.schematic_milkyway.name=Schéma (Voie lactée)
-item.jsg.schematic_pegasus.name=Schéma (Pégase)
-item.jsg.schematic_universe.name=Schéma (Univers)
-item.jsg.schematic_goauld.name=Schéma des anneaux de transport (Goa'uld)
-item.jsg.schematic_ori.name=Schéma des anneaux de transport (Ori)
-item.jsg.schematic_ancient.name=Schéma des anneaux de transport (Anciens)
+item.jsg.schematic_milkyway.name=Schéma de la Voie lactée
+item.jsg.schematic_pegasus.name=Schéma de Pégase
+item.jsg.schematic_universe.name=Schéma de l'Univers
+item.jsg.schematic_goauld.name=Schéma des anneaux de transport Goa'uld
+item.jsg.schematic_ori.name=Schéma des anneaux de transport Ori
+item.jsg.schematic_ancient.name=Schéma des anneaux de transport des Anciens
 
 # -------------------
 
 # -------------------
-# ENTITÉS/BLOCS DE TUILES
+# CARREAUX D'ENTITÉS/BLOCS 
 
 # Blocs spéciaux
 tile.jsg.invisible_block.name=Bloc que vous ne pouvez pas voir
@@ -375,20 +376,20 @@ tile.jsg.titanium_block.name=Bloc de titane
 
 # Blocs décoratifs
 tile.jsg.tokra_crystal_block.name=Bloc de cristal de Tokra
-tile.jsg.destiny_countdown_block.name=Bloc compte à rebours du destin
-tile.jsg.destiny_bearing_block.name=Destiny Bearing
-tile.jsg.destiny_chevron_block.name=Destiny Floor Chevron
-tile.jsg.destiny_vent_block.name=Destiny CO2 Blaster
+tile.jsg.destiny_countdown_block.name=Bloc compte à rebours du Destinée
+tile.jsg.destiny_bearing_block.name=Lampe de roulement du Destinée
+tile.jsg.destiny_chevron_block.name=Chevron de sol du Destinée
+tile.jsg.destiny_vent_block.name=Blaster au CO2 du Destinée
 
 # accessoires
-prop.jsg.platform_ships_block.name=Plate-forme d'anneaux (Vaisseaux)
+prop.jsg.platform_ships_block.name=Plate-forme d'anneaux pour Vaisseaux
 
-prop.jsg.decor_abydos_pot_block.name=Abydos Pot
-prop.jsg.decor_abydos_lamp_off_block.name=Abydos Lamp (Off)
-prop.jsg.decor_abydos_lamp_on_block.name=Abydos Lamp (On)
-prop.jsg.decor_drone_weapon_off_block.name=Ancient Drone (Off)
-prop.jsg.decor_drone_weapon_on_block.name=Ancient Drone (On)
-prop.jsg.decor_ancient_obelisk_block.name=Ancient Obelisk
+prop.jsg.decor_abydos_pot_block.name=Pot d'Abydos
+prop.jsg.decor_abydos_lamp_off_block.name=lampe d'Abydos Off)
+prop.jsg.decor_abydos_lamp_on_block.name=lampe d'Abydos (On)
+prop.jsg.decor_drone_weapon_off_block.name=Drone des Ancients (Off)
+prop.jsg.decor_drone_weapon_on_block.name=Drone des Ancients (On)
+prop.jsg.decor_ancient_obelisk_block.name=Obelisk des Ancients
 
 # dhd
 tile.jsg.dhd_block.name=Dial Home Device (DHD de la Voie lactée)
@@ -403,24 +404,24 @@ tile.jsg.dhd_pegasus_block.name=Dial Home Device (DHD de Pégase)
 tile.jsg.dhd_pegasus_block.unknown_buttons=Ce bouton ne fonctionne pas
 
 # Porte des étoiles - MW
-tile.jsg.stargate_milkyway_base_block.name=Base de la porte des étoiles (Voie lactée)
-tile.jsg.stargate_milkyway_ring_block.name=Anneau de la porte des étoiles (Voie lactée)
-tile.jsg.stargate_milkyway_chevron_block.name=Chevron de la porte des étoiles (Voie lactée)
+tile.jsg.stargate_milkyway_base_block.name=Base de la porte des étoiles de la Voie lactée
+tile.jsg.stargate_milkyway_ring_block.name=Anneau de la porte des étoiles de la Voie lactée
+tile.jsg.stargate_milkyway_chevron_block.name=Chevron de la porte des étoiles de la Voie lactée
 
 # Porte des étoiles - ORLIN
 tile.jsg.stargate_orlin_base_block.open_count=Compte des ouvertures : %s / %s
-tile.jsg.stargate_orlin_base_block.name=Base de la Porte des étoiles (Orlin)
-tile.jsg.stargate_orlin_member_block.name=Anneau de la porte des étoiles (Orlin)
+tile.jsg.stargate_orlin_base_block.name=Base de la Porte des étoiles d'Orlin
+tile.jsg.stargate_orlin_member_block.name=Anneau de la porte des étoiles d'Orlin
 
 # Porte des étoiles - UNI
-tile.jsg.stargate_universe_base_block.name=Base de la porte des étoiles (Univers)
-tile.jsg.stargate_universe_chevron_block.name=SChevron de la porte des étoiles (Univers)
-tile.jsg.stargate_universe_ring_block.name=Anneau de la porte des étoiles (Univers)
+tile.jsg.stargate_universe_base_block.name=Base de la porte des étoiles de l'Univers
+tile.jsg.stargate_universe_chevron_block.name=SChevron de la porte des étoiles l'Univers
+tile.jsg.stargate_universe_ring_block.name=Anneau de la porte des étoiles l'Univers
 
 # Porte des étoiles - PEG
-tile.jsg.stargate_pegasus_base_block.name=Base de la porte des étoiles (Pégase)
-tile.jsg.stargate_pegasus_ring_block.name=Anneau de la porte des étoiles (Pégase)
-tile.jsg.stargate_pegasus_chevron_block.name=Chevron de la porte des étoiles (Pegasus)
+tile.jsg.stargate_pegasus_base_block.name=Base de la porte des étoiles de Pégase
+tile.jsg.stargate_pegasus_ring_block.name=Anneau de la porte des étoiles de Pégase
+tile.jsg.stargate_pegasus_chevron_block.name=Chevron de la porte des étoiles de Pégase
 
 # Condensateur
 tile.jsg.capacitor_block.name=Banque de condensateurs
@@ -430,17 +431,17 @@ tile.jsg.capacitor_block_empty.name=Banque de condensateurs (vide)
 # E2PZ
 tile.jsg.zpm.name=Module de point zéro (E2PZ)
 tile.jsg.creative_zpm.name=Module de point zéro (E2PZ) (Creative)
-tile.jsg.zpm_hub_block.name=Hub d'E2PZ (Ancien)
+tile.jsg.zpm_hub_block.name=Hub d'E2PZ des Anciens
 tile.jsg.zpm_slot_block.name=Slot E2PZ (Tau'ri)
 
 # Contrôleur d'anneaux
-tile.jsg.transportrings_controller_goauld_block.name=Contrôleur d'anneaux de transport (Goa'uld)
+tile.jsg.transportrings_controller_goauld_block.name=Contrôleur d'anneaux de transport Goa'uld
 tile.jsg.transportrings_controller_block.not_linked=Contrôleur non lié
 
 # Anneaux
-tile.jsg.transportrings_goauld_block.name=Anneaux de transport (Goa'uld)
-tile.jsg.transportrings_ori_block.name=Anneaux de transport (Ori)
-tile.jsg.transportrings_ancient_block.name=Anneaux de transport (Anciens)
+tile.jsg.transportrings_goauld_block.name=Anneaux de transport Goa'uld
+tile.jsg.transportrings_ori_block.name=Anneaux de transport Ori
+tile.jsg.transportrings_ancient_block.name=Anneaux de transport des Anciens
 
 tile.jsg.transportrings_block.non_existing_address=Incapable d'atteindre cette adresse
 tile.jsg.transportrings_block.wrong_distance=Mauvaise distance, devrait être de -15 à 15
@@ -456,7 +457,7 @@ tile.jsg.transportrings_block.rings_distance=Distance
 tile.jsg.beamer_block.name=Bloc de Beamer 
 
 # Machines
-tile.jsg.assembler_machine_block.name=Assembleur Ancien
+tile.jsg.assembler_machine_block.name=Assembleur des Anciens
 tile.jsg.crystal_chamber_block.name=Chambre de cristal
 tile.jsg.pcb_fabricator_block.name=Fabricateur de circuits imprimés
 tile.jsg.ore_washing_machine_block.name=Machine à laver les minerais
@@ -467,7 +468,7 @@ tile.jsg.ancient_sign.name=Signe ancien
 # -------------------
 
 # -------------------
-# ENTITIES
+# ENTITÉS
 
 entity.Tokra.default=Tok'ra
 entity.tokra.name=Tok'ra
@@ -535,10 +536,10 @@ commands.sggenincoming.notstargate=Le bloc ciblé n'est pas une base de porte de
 death.attack.eventHorizon=%s a reçu une crémation kawoosh
 death.attack.irisDeath=%s a reçu une crémation d'iris.
 death.attack.wrongSide=%s est entré du mauvais côté de la porte
-death.attack.unstableEventHorizon=%s didn't make it to the other side
+death.attack.unstableEventHorizon=%s n'a pas réussi à passer de l'autre côté
 
 death.attack.zatHit=%s a été électrolysé
-death.attack.staffHit=%s a été fondu en utilisant l'arme du bâton Goa'uld
+death.attack.staffHit=%s a été fondu en utilisant la lance Goa'uld
 
 # -------------------
 
@@ -602,7 +603,7 @@ glyph.jsg.milkyway.capricornus=Capricornus
 glyph.jsg.milkyway.lynx=Lynx
 glyph.jsg.milkyway.orion=Orion
 glyph.jsg.milkyway.piscis_austrinus=Piscis Austrinus
-glyph.jsg.milkyway.bright_red_button=Bright Red Button
+glyph.jsg.milkyway.bright_red_button=Bouton rouge vif
 
 # Glyphes de Pégase
 glyph.jsg.pegasus.acjesis=Acjesis
@@ -700,7 +701,7 @@ gui.dhd.linked=Lié
 gui.dhd.not_linked=Non lié
 gui.dhd.reactorStatus=Réacteur à fusion froide:
 gui.dhd.running=Fonctionnement
-gui.dhd.standby=Stand-by
+gui.dhd.standby=en attente
 gui.dhd.no_fuel=Pas de combustible
 
 # porte des étoiles
@@ -799,7 +800,7 @@ gui.gdo.send_code=Entrez le code:
 gui.gdo.send_button=Envoyer le code
 
 # assembleur
-gui.assembler.name=Assembleur Ancien
+gui.assembler.name=Assembleur des Anciens
 
 # signe Ancien
 gui.ancient_sign.edit=Editer le texte Ancien
@@ -807,7 +808,7 @@ gui.ancient_sign.edit=Editer le texte Ancien
 # -------------------
 
 # -------------------
-# KEY BINDINGS
+# ASSIGNATION DES TOUCHES
 
 config.jsg.mode_scroll=Défilement du mode du composeur de l'univers
 config.jsg.mode_up=Mode du composeur de l'univers haut
@@ -869,9 +870,9 @@ jsg.subtitle.shield_hit=Quelque chose a touché le bouclier
 jsg.subtitle.shield_opening=Ouverture du bouclier
 jsg.subtitle.shield_closing=Fermeture du bouclier
 
-jsg.subtitle.beamer_start=Beamer démarre
-jsg.subtitle.beamer_stop=Beamer s'arrête
-jsg.subtitle.beamer_loop=Beamers s'arrête
+jsg.subtitle.beamer_start=démarrage du Beamer 
+jsg.subtitle.beamer_stop=Le Beamer s'arrête
+jsg.subtitle.beamer_loop=Le Beamers s'arrête
 jsg.subtitle.page_flip=Feuilletage des pages
 jsg.subtitle.gdo_button_beep=Bouton GDO pressé
 jsg.subtitle.universe_dialer_beep=Commencement de la numérotation par le composeur de l'univers
@@ -879,7 +880,7 @@ jsg.subtitle.universe_dialer_change_mode=Changement de mode du composeur de l'un
 jsg.subtitle.universe_dialer_connect=Composeur de l'univers connecté
 
 jsg.subtitle.item_zat_shoot=Tir de Zat'nik'tel
-jsg.subtitle.item_staff_shoot=Tirer avec l'arme du bâton Goa'uld
+jsg.subtitle.item_staff_shoot=Tire avec la lance Goa'uld
 
 jsg.subtitle.destiny_countdown_start=Le compte à rebours du destin a commencé!
 jsg.subtitle.destiny_countdown_stop=Le compte à rebours de Destiny a atteint zéro.
@@ -890,7 +891,7 @@ jsg.subtitle.destiny_countdown_one_minute=Il reste une minute au compte à rebou
 # -------------------
 # AUTRE
 
-# Message du chat orlin
+# Message du chat Orlin
 chat.orlins.energyStored=Energie stockée : %s RF (Requis : %s RF, %s s)
 
 # -------------------
@@ -901,12 +902,12 @@ chat.orlins.energyStored=Energie stockée : %s RF (Requis : %s RF, %s s)
 menu.about=A propos de JSG Mod
 menu.updater.download=Téléchargement
 menu.updater.close=Fermer
-menu.ram.help=Help
+menu.ram.help=Aide
 
 # tips
-menu.nether_gate=TIP : Si vous allez dans le Nether, n'oubliez pas de sauvegarder l'adresse de la porte du Nether !
-menu.energy=TIP : Si vous branchez les câbles de la porte sur plusieurs blocs de la porte, la porte se chargera plus rapidement !
-menu.dhd=TIP : N'oubliez pas que les DHD peuvent être améliorés avec des améliorations de capacité et d'efficacité !
-menu.gdo=TIP : Si vous installez un iris sur votre porte, n'oubliez pas de vérifier parfois sa durabilité !
+menu.nether_gate=TIP : Si vous allez dans le Nether, n'oubliez pas de sauvegarder l'adresse de la porte du Nether!
+menu.energy=TIP : Si vous branchez les câbles de la porte sur plusieurs blocs de la porte, la porte se chargera plus rapidement!
+menu.dhd=TIP : N'oubliez pas que les DHD peuvent être améliorés avec des améliorations de capacité et d'efficacité!
+menu.gdo=TIP : Si vous installez un iris sur votre porte, n'oubliez pas de vérifier parfois sa durabilité!
 
 # -------------------
