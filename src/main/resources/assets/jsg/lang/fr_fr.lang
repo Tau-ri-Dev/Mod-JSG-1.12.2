@@ -39,7 +39,7 @@ config.jsg.items.tooltip=Configuration of Items, Armor and Weapons
 soundCategory.jsg=Just Stargate Mod
 
 # -------------------
-# AVANCEMENTS
+# SUCCÈS
 
 advancement.machines.title=Plusieurs engrenages et vis
 advancement.machines.desc=Catégorie pleine de trucs de machines
@@ -152,24 +152,24 @@ soundCategory.jsg_sounds=Just Stargate mod
 # ITEMS
 
 # enregistrements
-item.jsg.record_sgc.name=Thème SG-1
-item.jsg.record_atlantis.name=Thème Atlantis
+item.jsg.record_sgc.name=Thème de Stargate SG-1
+item.jsg.record_atlantis.name=Thème de Stargate Atlantis
 item.jsg.record_destiny.name=Thème du Destinée
-item.jsg.record_origins.name=Thème des origines
-item.jsg.record_elevator.name=Chargement de la musique
+item.jsg.record_origins.name=Thème de Stargate origins
+item.jsg.record_elevator.name=Musique de chargement
 
 # iris
-item.jsg.iris_blade.name=Lame Iris en Titane
+item.jsg.iris_blade.name=Lame d'iris en Titane
 item.jsg.iris_blade_trinium.name=Lame d'iris en Trinium
 item.jsg.quad_iris_blade.name=Lame d'iris fois quatre en Titane
 item.jsg.quad_iris_blade_trinium.name=Lame d'iris fois quatre en Trinium
-item.jsg.upgrade_iris.name=Mise à niveau d'Iris en Titane
-item.jsg.upgrade_iris_trinium.name=Amélioration d'Iris en Trinium
-item.jsg.upgrade_iris_creative.name=Mise à niveau de l'iris (Creative)
-item.jsg.iris.tooltip.integrity=Intégrité :
-item.jsg.iris.tooltip.durability=Durabilité :
+item.jsg.upgrade_iris.name=Amélioration de l'iris en Titane
+item.jsg.upgrade_iris_trinium.name=Amélioration de l'iris en Trinium
+item.jsg.upgrade_iris_creative.name=Amélioration de l'iris (Creative)
+item.jsg.iris.tooltip.integrity=Intégrité:
+item.jsg.iris.tooltip.durability=Durabilité:
 item.jsg.shield_emitter.name=Émetteur de bouclier
-item.jsg.upgrade_shield.name=Mise à niveau du bouclier
+item.jsg.upgrade_shield.name=Amélioration du bouclier
 
 # Lingots de trinium
 item.jsg.trinium_impure.name=Minerai de trinium impur
@@ -224,8 +224,8 @@ item.jsg.crystal_glyph_goauld.name=Cristal de glyphes Goa'uld
 item.jsg.crystal_glyph_ori.name=Cristal de glyphes d'Ori
 item.jsg.crystal_glyph_ancient.name=Cristal de glyphes ancien
 
-item.jsg.crystal_upgrade_capacity.name=Capacité de mise à niveau de Crystal
-item.jsg.crystal_upgrade_efficiency.name=Mise à niveau de l'efficacité du cristal
+item.jsg.crystal_upgrade_capacity.name=Capacité d'amélioration du Crystal
+item.jsg.crystal_upgrade_efficiency.name=Amélioration de l'efficacité du cristal
 
 # dhd
 item.jsg.dhd_brb.name=Bouton rouge vif (BRB en anglais)
@@ -264,9 +264,9 @@ item.jsg.beamer_crystal_fluid.name=Cristal fluide de Beamer
 item.jsg.beamer_crystal_items.name=Cristal d'objets de Beamer
 item.jsg.beamer_crystal_laser.name=Cristal de laser Beamer
 
-# universe dialer
-item.jsg.universe_dialer.name=Composteur de l'univers
-item.jsg.universe_dialer.broken.name=Composteur de l'univers (cassé)
+# composeur de l'univers
+item.jsg.universe_dialer.name=Composeur de l'univers
+item.jsg.universe_dialer.broken.name=Composeur de l'univers cassé
 item.jsg.universe_dialer.saved_gates=Portes sauvegardées: %s
 item.jsg.universe_dialer.not_linked=Non lié
 item.jsg.universe_dialer.gate_busy=Porte occupée
@@ -892,7 +892,7 @@ jsg.subtitle.destiny_countdown_one_minute=Il reste une minute au compte à rebou
 # AUTRE
 
 # Message du chat Orlin
-chat.orlins.energyStored=Energie stockée : %s RF (Requis : %s RF, %s s)
+chat.orlins.energyStored=%Énergie stockée : %s RF (Requis : %s RF, %s s)
 
 # -------------------
 
