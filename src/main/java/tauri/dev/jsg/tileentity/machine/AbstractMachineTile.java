@@ -43,8 +43,17 @@ public abstract class AbstractMachineTile extends TileEntity implements IUpgrada
 
     public abstract JSGItemStackHandler getJSGItemHandler();
 
+
+    public boolean hasChanged = true;
+    public void onItemHandlerChange(){
+        hasChanged = true;
+        markDirty();
+    }
+
     @Override
     public void onLoad() {
+        hasChanged = true;
+        markDirty();
         if (!world.isRemote) {
             targetPoint = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 512);
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
@@ -103,7 +112,11 @@ public abstract class AbstractMachineTile extends TileEntity implements IUpgrada
             energyStoredLastTick = getEnergyStorage().getEnergyStored();
 
 
-            currentRecipe = getRecipeIfPossible();
+            if(isWorking || hasChanged) {
+                currentRecipe = getRecipeIfPossible();
+                hasChanged = false;
+                markDirty();
+            }
             if (isWorking) {
                 if (currentRecipe == null) {
                     isWorking = false;

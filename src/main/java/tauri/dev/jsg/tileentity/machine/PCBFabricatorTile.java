@@ -58,6 +58,7 @@ public class PCBFabricatorTile extends AbstractMachineTile {
         @Override
         protected void onContentsChanged() {
             markDirty();
+            onItemHandlerChange();
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
@@ -85,6 +86,15 @@ public class PCBFabricatorTile extends AbstractMachineTile {
         ArrayList<ItemStack> stacks = new ArrayList<>();
         for (int i = 0; i < 9; i++)
             stacks.add(itemStackHandler.getStackInSlot(i));
+
+        if(currentRecipe instanceof PCBFabricatorRecipe){
+            PCBFabricatorRecipe recipe = (PCBFabricatorRecipe) currentRecipe;
+            if (!itemStackHandler.insertItem(9, recipe.getResult(), true).equals(ItemStack.EMPTY)) return null;
+            if (fluidHandler.getFluid() == null) return null;
+            if (recipe.isOk(energyStorage.getEnergyStored(), new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()), stacks))
+                return recipe;
+            return null;
+        }
 
         for (PCBFabricatorRecipe recipe : PCBFabricatorRecipes.RECIPES) {
             if (!itemStackHandler.insertItem(9, recipe.getResult(), true).equals(ItemStack.EMPTY)) continue;

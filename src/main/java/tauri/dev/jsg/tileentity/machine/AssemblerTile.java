@@ -57,6 +57,7 @@ public class AssemblerTile extends AbstractMachineTile {
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             markDirty();
+            onItemHandlerChange();
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
@@ -95,6 +96,13 @@ public class AssemblerTile extends AbstractMachineTile {
 
         Item scheme = itemStackHandler.getStackInSlot(0).getItem();
         ItemStack subStack = itemStackHandler.getStackInSlot(10);
+
+        if(currentRecipe instanceof AssemblerRecipe){
+            AssemblerRecipe recipe = (AssemblerRecipe) currentRecipe;
+            if (!itemStackHandler.insertItem(11, recipe.getResult(), true).equals(ItemStack.EMPTY)) return null;
+            if (recipe.isOk(energyStorage.getEnergyStored(), scheme, stacks, subStack)) return recipe;
+            return null;
+        }
 
         for (AssemblerRecipe recipe : AssemblerRecipes.RECIPES) {
             if (!itemStackHandler.insertItem(11, recipe.getResult(), true).equals(ItemStack.EMPTY)) continue;
