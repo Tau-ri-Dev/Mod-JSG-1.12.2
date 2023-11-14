@@ -2640,13 +2640,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
-    @Callback(doc = "function(code:integer) -- send code like GDO")
+    @Callback(doc = "function(code:string) -- send code like GDO (should be only numbers)")
     public Object[] sendIrisCode(Context context, Arguments args) {
-
-        StargatePos destinationPos = StargateNetwork.get(world).getStargate(dialedAddress);
-        if (!args.isInteger(0)) {
-            throw new IllegalArgumentException("code must be integer!");
+        if (args.count() <= 0) {
+            return new Object[]{false, "invalid_method_format", "You must enter code!"};
         }
+        StargatePos destinationPos = StargateNetwork.get(world).getStargate(dialedAddress);
         if (destinationPos == null) return new Object[]{false, "stargate_not_engaged"};
         StargateAbstractBaseTile te = destinationPos.getTileEntity();
         if (te instanceof StargateClassicBaseTile) {
