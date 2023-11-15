@@ -494,7 +494,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (!world.isRemote) {
 
             updateBeamers();
-            updatePowerTier();
+            updatePowerTier(true);
 
             updateIrisType();
             boolean set = irisType != EnumIrisType.NULL;
@@ -2394,6 +2394,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     private void updatePowerTier() {
+        updatePowerTier(false);
+    }
+    private void updatePowerTier(boolean resetEnergy) {
         int powerTier = 1;
 
         for (int i = 4; i < 7; i++) {
@@ -2402,7 +2405,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             }
         }
 
-        if (powerTier != currentPowerTier) {
+        if (resetEnergy || powerTier != currentPowerTier) {
             currentPowerTier = powerTier;
 
             energyStorage.clearStorages();
