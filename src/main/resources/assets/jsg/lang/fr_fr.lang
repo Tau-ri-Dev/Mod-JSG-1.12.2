@@ -155,7 +155,7 @@ soundCategory.jsg_sounds=Just Stargate mod
 item.jsg.record_sgc.name=Thème de Stargate SG-1
 item.jsg.record_atlantis.name=Thème de Stargate Atlantis
 item.jsg.record_destiny.name=Thème du Destinée
-item.jsg.record_origins.name=Thème de Stargate origins
+item.jsg.record_origins.name=Thème de Stargate Origins
 item.jsg.record_elevator.name=Musique de chargement
 
 # iris
@@ -176,14 +176,14 @@ item.jsg.trinium_impure.name=Minerai de trinium impur
 item.jsg.trinium_purified.name=Minerai de trinium purifié
 item.jsg.trinium_raw.name=Minerai de trinium brut
 item.jsg.trinium_ingot.name=Lingot de trinium
-item.jsg.trinium_dust.name=Poussière de trinium
+item.jsg.trinium_dust.name=Poudre de trinium
 item.jsg.trinium_nugget.name=Pépite de trinium
 
 item.jsg.titanium_impure.name=Minerai de titane impur
 item.jsg.titanium_purified.name=Minerai de titane purifié
 item.jsg.titanium_raw.name=Minerai de titane brut
 item.jsg.titanium_ingot.name=Lingot de titane
-item.jsg.titanium_dust.name=Poussière de titane
+item.jsg.titanium_dust.name=Poudre de titane
 item.jsg.titanium_nugget.name=Pépite de titane
 
 item.jsg.naquadah_impure.name=Minerai de naquadah impur
@@ -256,7 +256,7 @@ item.jsg.page_mysterious.tooltip=Qui sait où cela mène?
 
 item.jsg.page_mysterious.generation.start=Démarrage d'une nouvelle génération de portes des étoiles...
 item.jsg.page_mysterious.generation.success=Porte des étoiles générée avec succès!
-item.jsg.page_mysterious.generation.failed=La génération de la porte des étoiles a ÉCHOUÉ!
+item.jsg.page_mysterious.generation.failed=La génération de la porte des étoiles a échouée!
 
 # beamer
 item.jsg.beamer_crystal_power.name=Cristal de puissance de Beamer
@@ -711,12 +711,12 @@ gui.stargate.universe_address=Adresse de l'univers
 gui.stargate.iris_code=Code d'iris
 gui.stargate.iris.help_title=Mode actuel:
 gui.stargate.iris.opened=Ouvrir
-gui.stargate.iris.closed=Fermé
+gui.stargate.iris.closed=Fermée
 gui.stargate.iris.auto=Automatique
 gui.stargate.iris.oc=OC
 gui.stargate.iris.dialer=Dialer
-gui.stargate.iris.opened_help=L'ris est ouvert en permanence
-gui.stargate.iris.closed_help=L'iris est fermé en permanence
+gui.stargate.iris.opened_help=L'ris est ouverte en permanence
+gui.stargate.iris.closed_help=L'iris est fermée en permanence
 gui.stargate.iris.auto_help=L'iris se ferme automatiquement sur un trou de ver entrant,
 gui.stargate.iris.auto1_help=L'iris peut être ouvert avec GDO en envoyant le code défini dans le champ.
 gui.stargate.iris.oc_help=L'iris peut être contrôlée par des ordinateurs ouverts
@@ -727,7 +727,7 @@ gui.stargate.biome_overlay.help=Insérer les blocs pour les remplacer
 gui.stargate.biome_overlay.normal=Normal
 gui.stargate.biome_overlay.frost=Givre
 gui.stargate.biome_overlay.mossy=Mousse
-gui.stargate.biome_overlay.aged=Âgée
+gui.stargate.biome_overlay.aged= gée
 gui.stargate.biome_overlay.sooty=Suie
 gui.stargate.biome_overlay.sandy=Sable
 gui.stargate.capacitors=Capaciteurs
@@ -892,7 +892,7 @@ jsg.subtitle.destiny_countdown_one_minute=Il reste une minute au compte à rebou
 # AUTRE
 
 # Message du chat Orlin
-chat.orlins.energyStored=%Énergie stockée : %s RF (Requis : %s RF, %s s)
+chat.orlins.energyStored=Énergie stockée: %s RF (Requise: %s RF, %s s)
 
 # -------------------
 
