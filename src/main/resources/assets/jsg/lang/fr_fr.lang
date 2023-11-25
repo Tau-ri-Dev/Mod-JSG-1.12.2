@@ -132,7 +132,7 @@ advancement.pcb.title=Technologie basée sur les cristaux
 advancement.pcb.desc=Créer un fabricant de circuits imprimés
 
 advancement.ore_washing.title=Purification des minerais
-advancement.ore_washing.desc=Créer une machine à laver les minerais
+advancement.ore_washing.desc=Créer un lave minerais
 
 advancement.chemicals.title=C'est le laboratoire secret de Janus?
 advancement.chemicals.desc=Construire un ancien laboratoire chimique
@@ -460,7 +460,7 @@ tile.jsg.beamer_block.name=Bloc de Beamer
 tile.jsg.assembler_machine_block.name=Assembleur des Anciens
 tile.jsg.crystal_chamber_block.name=Chambre de cristal
 tile.jsg.pcb_fabricator_block.name=Fabricateur de circuits imprimés
-tile.jsg.ore_washing_machine_block.name=Machine à laver les minerais
+tile.jsg.ore_washing_machine_block.name=Lave minerais
 
 # Signe ancien
 tile.jsg.ancient_sign.name=Signe ancien
