@@ -2,7 +2,6 @@ package tauri.dev.jsg.sound;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import tauri.dev.jsg.JSG;
 
 import java.util.HashMap;

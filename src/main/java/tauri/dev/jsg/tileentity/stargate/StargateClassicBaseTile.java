@@ -26,6 +26,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.Capability;
@@ -50,13 +51,12 @@ import tauri.dev.jsg.gui.container.stargate.StargateContainerGuiUpdate;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.energy.CapacitorItemBlock;
 import tauri.dev.jsg.item.linkable.gdo.GDOMessages;
-import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.item.stargate.IrisItem;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
-import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
-import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
+import tauri.dev.jsg.power.general.EnergyRequiredToOperate;
+import tauri.dev.jsg.power.general.LargeEnergyStorage;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRenderer;
 import tauri.dev.jsg.renderer.stargate.StargateClassicRendererState;
@@ -103,7 +103,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // IRIS/SHIELD VARIABLES/CONSTANTS
     private EnumIrisState irisState = EnumIrisState.OPENED;
     private EnumIrisType irisType = EnumIrisType.NULL;
-    private int irisCode = -1;
+    private String irisCode = "";
     protected EnumIrisMode irisMode = EnumIrisMode.OPENED;
     private long irisAnimation = 0;
 
@@ -113,7 +113,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     private int irisMaxDurability = 0;
     protected boolean isFinalActive;
 
+    public boolean isFinalActive(){
+        return isFinalActive;
+    }
+
     public boolean isFastDialing;
+    public boolean isFastDialingOverride;
 
     public boolean getFastDialState() {
         return isFastDialing;
@@ -145,6 +150,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return (getIrisType() == EnumIrisType.IRIS_TRINIUM ? IRIS_MAX_HEAT_TRINIUM : IRIS_MAX_HEAT_TITANIUM);
     }
 
+    public double getMaxGateHeat(){
+        return GATE_MAX_HEAT;
+    }
 
     public void tryHeatUp(boolean heatUpIris, boolean heatUpGate, double gateHeatUpCoefficient, double irisHeatUpCoefficient, double coolDownCoefficient, double maxHeatByAround, double minHeatByAround) {
 
@@ -167,7 +175,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         double maxHeat = getMaxIrisHeat();
         if (irisHeat >= maxHeat) {
             int heatCoefficient = (int) Math.round(Math.abs(irisHeat - maxHeat));
-            if (JSGConfig.Stargate.iris.enableIrisOverHeatCollapse) {
+            if (JSGConfig.Stargate.iris.enableIrisOverHeatCollapse && heatCoefficient > 0) {
                 if (world.getTotalWorldTime() % (((int) (Math.random() * 70)) + 1) == 0) {
                     if (hasPhysicalIris() && irisItem.isItemStackDamageable()) {
                         irisItem.getItem().setDamage(irisItem, irisItem.getItem().getDamage(irisItem) + (new Random().nextInt(heatCoefficient) + 1));
@@ -225,6 +233,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return stargateSize;
     }
 
+    public StargateSizeEnum getStargateSizeForApi() {
+        return getStargateSize();
+    }
+
 
     // ------------------------------------------------------------------------
     // Killing and block vaporizing
@@ -265,6 +277,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             if (world.getTileEntity(beamerPos) != null)
                 ((BeamerTile) Objects.requireNonNull(world.getTileEntity(beamerPos))).gateClosed();
         }
+        resetACPreferences();
+        markDirty();
     }
 
     @Override
@@ -276,6 +290,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (codeSender != null) codeSender = null;
         updateChevronLight(0, false);
         sendRenderingUpdate(StargateRendererActionState.EnumGateAction.CLEAR_CHEVRONS, dialedAddress.size(), isFinalActive);
+
+        resetACPreferences();
+        markDirty();
     }
 
     public boolean isGateBurried() {
@@ -298,6 +315,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
 
         isFinalActive = false;
+        resetACPreferences();
+        markDirty();
 
         if (stargateState != EnumStargateState.INCOMING && !isIncoming) {
             updateChevronLight(0, false);
@@ -309,20 +328,24 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     protected ResultTargetValid attemptOpenDialed() {
         StargateOpenResult result = checkAddressAndEnergy(dialedAddress);
         boolean targetValid = result.ok();
-        if (connectedToGatePos == null)
+        if (connectedToGatePos == null) {
+            return new ResultTargetValid(StargateOpenResult.ADDRESS_MALFORMED, targetValid);
+        }
+        if (!(connectedToGatePos.getTileEntity().stargateState.incoming())) {
             return new ResultTargetValid(StargateOpenResult.CALLER_HUNG_UP, targetValid);
-        if (!(connectedToGatePos.getTileEntity().stargateState.incoming()))
-            return new ResultTargetValid(StargateOpenResult.CALLER_HUNG_UP, targetValid);
+        }
         if (this.isGateBurried())
             return new ResultTargetValid(StargateOpenResult.GATE_BURRIED, targetValid);
         return super.attemptOpenDialed();
     }
 
     @Override
-    public void openGate(StargatePos targetGatePos, boolean isInitiating) {
-        super.openGate(targetGatePos, isInitiating);
+    public void openGate(StargatePos targetGatePos, boolean isInitiating, boolean noxDialing) {
+        super.openGate(targetGatePos, isInitiating, noxDialing);
         playPositionedSound(StargateSoundPositionedEnum.GATE_RING_ROLL, false);
         tryHeatUp(8);
+        resetACPreferences(false);
+        markDirty();
 
         this.isFinalActive = true;
     }
@@ -342,6 +365,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 removeTask(lastSpinFinished);
             failGate();
             if (!isIncoming) disconnectGate();
+            resetACPreferences();
             markDirty();
             resetTargetIncomingAnimation();
             return true;
@@ -353,6 +377,54 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     public void generateIncoming(int entities, int addressSize, int delay) {
         if (this.isGateBurried()) return;
         super.generateIncoming(entities, addressSize, delay);
+    }
+
+    protected boolean dialingWithoutEnergy = false;
+
+    public boolean isDialingWithoutEnergy(){
+        return dialingWithoutEnergy;
+    }
+    protected void resetACPreferences(){
+        resetACPreferences(true);
+    }
+    protected void resetACPreferences(boolean resetNox){
+        dialingWithoutEnergy = false;
+        isFastDialingOverride = false;
+        if(resetNox)
+            isNoxDialing = false;
+        markDirty();
+    }
+
+    public boolean dialAddress(StargateAddress address, int maxSymbols, boolean withoutEnergy, EnumDialingType dialingType){
+        dialingWithoutEnergy = withoutEnergy;
+        if(dialingType == EnumDialingType.FAST) {
+            isFastDialingOverride = true;
+            setFastDial(true);
+        }
+        else if(dialingType == EnumDialingType.NOX){
+            isNoxDialing = true;
+        }
+        markDirty();
+        return true;
+    }
+
+    @Nullable
+    @SuppressWarnings("all")
+    protected void addSymbolToAddressByNox(SymbolInterface symbol){
+        if (symbol != getSymbolType().getBRB() && !canAddSymbol(symbol)) return;
+        if(symbol == getSymbolType().getBRB()){
+            addTask(new ScheduledTask(EnumScheduledTask.STARGATE_OPEN_NOX));
+            return;
+        }
+        addSymbolToAddressDHD(symbol);
+        sendSignal(null, "stargate_dhd_chevron_engaged", new Object[]{dialedAddress.size(), isFinalActive, symbol.getEnglishName()});
+    }
+
+    @Override
+    protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos) {
+        if(dialingWithoutEnergy)
+            return new EnergyRequiredToOperate(0, 0);
+        return super.getEnergyRequiredToDial(targetGatePos);
     }
 
     public abstract void addSymbolToAddressDHD(SymbolInterface symbol);
@@ -419,19 +491,20 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Override
     public void onLoad() {
         super.onLoad();
-
-        lastPos = pos;
-
         if (!world.isRemote) {
 
             updateBeamers();
-            updatePowerTier();
+            updatePowerTier(true);
 
             updateIrisType();
             boolean set = irisType != EnumIrisType.NULL;
             if (isMerged()) {
                 setIrisBlocks(set && irisState == EnumIrisState.CLOSED);
             }
+
+            this.lastFakeWorld = getFakeWorld();
+            this.lastFakePos = getFakePos();
+            markDirty();
         }
     }
 
@@ -653,6 +726,11 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     @Override
+    public boolean getForceUnstable(){
+        return (getConfig().getOption(FORCE_UNSTABLE_EH.id).getBooleanValue() || (targetGatePos != null && (targetGatePos.getTileEntity() instanceof StargateClassicBaseTile) && ((StargateClassicBaseTile) targetGatePos.getTileEntity()).getConfig().getOption(FORCE_UNSTABLE_EH.id).getBooleanValue()));
+    }
+
+    @Override
     public void update() {
         if (world.isRemote) {
             // Client -> request to update client config
@@ -661,26 +739,60 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             }
         }
 
+        // Checking lastFakePos and lastFakeWorld (if changed, close the gate if its open (gate was probably warped))
+        if(!world.isRemote){
+            if ((lastFakePos != getFakePos() || lastFakeWorld != getFakeWorld())) {
+                if (!getStargateState().engaged() && !getStargateState().unstable() && !getStargateState().idle() && (connectedToGate || connectingToGate)) {
+                    abortDialingSequence();
+                    lastFakePos = getFakePos();
+                    lastFakeWorld = getFakeWorld();
+                    markDirty();
+                }
+                else if (getStargateState().engaged() || getStargateState().unstable()) {
+                    JSG.info("A stargateState indicates the Gate should be open, but gate was warped! Closing gate...");
+                    attemptClose(StargateClosedReasonEnum.CONNECTION_LOST);
+                    lastFakePos = getFakePos();
+                    lastFakeWorld = getFakeWorld();
+                    markDirty();
+                }
+                else{
+                    lastFakePos = getFakePos();
+                    lastFakeWorld = getFakeWorld();
+                    markDirty();
+                }
+            }
+        }
+
         // Fast dialing
         if (!world.isRemote) {
             boolean shouldBeFast = getConfig().getOption(ENABLE_FAST_DIAL.id).getBooleanValue();
-            if (isFastDialing != shouldBeFast && getStargateState().idle()) {
+            if (!isFastDialingOverride && isFastDialing != shouldBeFast && getStargateState().idle()) {
                 setFastDial(shouldBeFast);
             }
         }
 
         // Charging gate with lighting bold
         if (!world.isRemote && isMerged()) {
-            BlockPos topBlockPos = getMergeHelper().getTopBlock().add(pos);
-            if (world.getWorldInfo().isThundering() && BlockHelpers.isBlockDirectlyUnderSky(world, topBlockPos)) {
+            BlockPos topBlockPos = getMergeHelper().getTopBlockAboveBase().add(pos);
+            if (world.getWorldInfo().isThundering() && world.getWorldInfo().isRaining() && BlockHelpers.isBlockDirectlyUnderSky(world, topBlockPos)) {
                 Random rand = new Random();
                 float chance = rand.nextFloat();
                 if (chance < JSGConfig.Stargate.mechanics.lightingBoldChance) {
-                    int max = JSGConfig.Stargate.power.stargateEnergyStorage / 17;
-                    int min = max / 6;
-                    int energy = (int) ((rand.nextFloat() * (max - min)) + min);
-                    getEnergyStorage().receiveEnergy(energy, false);
-                    world.addWeatherEffect(new EntityLightningBolt(world, topBlockPos.getX(), topBlockPos.getY(), topBlockPos.getZ(), false));
+                    boolean canStrike = true;
+                    int dim = this.world.provider.getDimension();
+                    for(int i : JSGConfig.Stargate.mechanics.lightingStrikeDisabledDims){
+                        if(dim == i){
+                            canStrike = false;
+                            break;
+                        }
+                    }
+                    if(canStrike){
+                        int max = JSGConfig.Stargate.power.stargateEnergyStorage / 17;
+                        int min = max / 6;
+                        int energy = (int) ((rand.nextFloat() * (max - min)) + min);
+                        getEnergyStorage().receiveEnergy(energy, false);
+                        world.addWeatherEffect(new EntityLightningBolt(world, topBlockPos.getX(), topBlockPos.getY(), topBlockPos.getZ(), false));
+                    }
                 }
             }
         }
@@ -720,7 +832,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             initConfig();
 
             Random rand = new Random();
-            if (config.getOption(ALLOW_RIG.id).getBooleanValue() && world.isAreaLoaded(pos, 10)) {
+            if (world.getDifficulty() != EnumDifficulty.PEACEFUL && config.getOption(ALLOW_RIG.id).getBooleanValue() && world.isAreaLoaded(pos, 10)) {
                 if (world.getTotalWorldTime() % 200 == 0) { // every 10 seconds
                     int chanceToRandom = rand.nextInt(1000);
 
@@ -811,18 +923,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
                         // Load entities
                         String[] entityListString = JSGConfig.Stargate.rig.entitiesToSpawn;
-                        List<Entity> entityList = new ArrayList<Entity>();
+                        List<Entity> entityList = new ArrayList<>();
                         for (String entityString : entityListString) {
-                            String[] entityTemporallyList = entityString.split(":");
-                            if (entityTemporallyList.length < 2)
-                                continue; // prevents from Ticking block entity null pointer
-                            String entityStringNew =
-                                    (
-                                            (entityTemporallyList[0].equals("minecraft"))
-                                                    ? entityTemporallyList[1]
-                                                    : entityTemporallyList[0] + ":" + entityTemporallyList[1]
-                                    );
-                            ResourceLocation rlString = new ResourceLocation(entityStringNew);
+                            ResourceLocation rlString = new ResourceLocation(entityString);
                             entityList.add(EntityList.createEntityByIDFromName(rlString, world));
                         }
 
@@ -910,7 +1013,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         extractEnergyByShield(0);
         if (!world.isRemote && hasShieldIris()) {
             shieldKeepAlive = JSGConfig.Stargate.iris.shieldPowerDraw;
-            shieldKeepAlive += irisHeat * (irisHeat / IRIS_MAX_HEAT_TRINIUM);
+            shieldKeepAlive += (int) (irisHeat * (irisHeat / IRIS_MAX_HEAT_TRINIUM));
             if (isIrisClosed()) extractEnergyByShield(shieldKeepAlive);
             if (getEnergyStorage().getEnergyStored() < shieldKeepAlive) {
                 toggleIris();
@@ -927,7 +1030,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
             if (!lastPos.equals(pos)) {
                 lastPos = pos;
-                generateAddresses(!hasUpgrade(StargateClassicBaseTile.StargateUpgradeEnum.CHEVRON_UPGRADE));
+                //generateAddresses(true);
 
                 if (isMerged()) {
                     updateMergeState(onGateMergeRequested(), facing, facingVertical);
@@ -1084,8 +1187,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         setWorld(world);
     }
 
+    @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         compound.setInteger("stargateSize", stargateSize.id);
         compound.setTag("itemHandler", itemStackHandler.serializeNBT());
         compound.setBoolean("isFinalActive", isFinalActive);
@@ -1108,11 +1212,14 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             irisState = EnumIrisState.OPENED;
         }
         compound.setByte("irisState", irisState.id);
-        compound.setInteger("irisCode", irisCode);
+        compound.setString("irisCode", irisCode);
         compound.setByte("irisMode", irisMode.id);
+        compound.setByte("irisType", irisType.id);
         if (codeSender != null && !world.isRemote) {
             compound.setTag("codeSender", codeSender.serializeNBT());
         }
+
+        compound.setInteger("powerTier", currentPowerTier);
 
         compound.setInteger("incomingLastChevronLightUp", incomingLastChevronLightUp);
         compound.setInteger("incomingPeriod", incomingPeriod);
@@ -1126,14 +1233,21 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         compound.setDouble("lastGateHeat", lastGateHeat);
 
         compound.setBoolean("fastDialing", isFastDialing);
+        compound.setBoolean("isFastDialingOverride", isFastDialingOverride);
+        compound.setBoolean("isNoxDialing", isNoxDialing);
 
         compound.setInteger("facingVertical", FacingHelper.toInt(facingVertical));
+
+        if (lastFakePos != null)
+            compound.setLong("lastFakePos", lastFakePos.toLong());
+        if (lastFakeWorld != null)
+            compound.setInteger("lastFakeWorld", lastFakeWorld.provider.getDimension());
 
         return super.writeToNBT(compound);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         if (compound.hasKey("patternVersion")) stargateSize = StargateSizeEnum.SMALL;
         else {
             if (compound.hasKey("stargateSize"))
@@ -1156,12 +1270,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
 
         irisState = EnumIrisState.getValue(compound.getByte("irisState"));
-        irisCode = compound.getInteger("irisCode") != 0 ? compound.getInteger("irisCode") : -1;
+        irisCode = !compound.getString("irisCode").equals("") ? compound.getString("irisCode") : "";
         irisMode = EnumIrisMode.getValue(compound.getByte("irisMode"));
+        irisType = EnumIrisType.byId(compound.getByte("irisType"));
         if (compound.hasKey("codeSender") && !world.isRemote) {
             NBTTagCompound nbt = compound.getCompoundTag("codeSender");
             codeSender = codeSenderFromNBT(nbt);
         }
+
+        currentPowerTier = compound.getInteger("powerTier");
 
         incomingPeriod = compound.getInteger("incomingPeriod");
         incomingLastChevronLightUp = compound.getInteger("incomingLastChevronLightUp");
@@ -1175,8 +1292,15 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         this.lastGateHeat = compound.getDouble("lastGateHeat");
 
         this.isFastDialing = compound.getBoolean("fastDialing");
+        this.isFastDialingOverride = compound.getBoolean("isFastDialingOverride");
+        this.isNoxDialing = compound.getBoolean("isNoxDialing");
 
         facingVertical = FacingHelper.fromInt(compound.getInteger("facingVertical"));
+
+        if (compound.hasKey("lastFakePos"))
+            this.lastFakePos = BlockPos.fromLong(compound.getLong("lastFakePos"));
+        if (compound.hasKey("lastFakeWorld") && world.getMinecraftServer() != null)
+            this.lastFakeWorld = this.world.getMinecraftServer().getWorld(compound.getInteger("lastFakeWorld"));
 
         super.readFromNBT(compound);
     }
@@ -1297,6 +1421,14 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 1, 300,
                 "Speed factor of the gate",
                 " - ONLY FOR MW AND UNI GATES - "
+        ),
+        FORCE_UNSTABLE_EH(
+                14, "forceUnstable", JSGConfigOptionTypeEnum.BOOLEAN, "false",
+                "Force unstable state on this gate?"
+        ),
+        UNIVERSE_ORANGE_SHIELD(
+                15, "universeOrangeShield", JSGConfigOptionTypeEnum.BOOLEAN, "true",
+                "Should be universe gate's shield orange?"
         );
 
         public final int id;
@@ -1628,6 +1760,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     disconnectGate();
                 }
                 break;
+            case STARGATE_OPEN_NOX:
+                // Debug chevrons for clients
+                sendRenderingUpdate(StargateRendererActionState.EnumGateAction.LIGHT_UP_CHEVRONS, dialedAddress.size(), false);
+
+                attemptOpenAndFail();
+                break;
 
             case STARGATE_SPIN_FINISHED:
                 lastSpinFinishedIn = world.getTotalWorldTime();
@@ -1646,22 +1784,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             case STARGATE_GIVE_PAGE:
                 SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf(pageSlotId - 7);
                 ItemStack stack = itemStackHandler.getStackInSlot(pageSlotId);
-
-                if (stack.getItem() == JSGItems.UNIVERSE_DIALER) {
-                    NBTTagList saved = stack.getTagCompound().getTagList("saved", NBT.TAG_COMPOUND);
-                    NBTTagCompound compound = gateAddressMap.get(symbolType).serializeNBT();
-                    compound.setBoolean("hasUpgrade", hasUpgrade(StargateUpgradeEnum.CHEVRON_UPGRADE));
-                    setOriginId(compound);
-                    saved.appendTag(compound);
-                } else {
-                    JSG.debug("Giving Notebook page of address " + symbolType);
-
-                    NBTTagCompound compound = PageNotebookItem.getCompoundFromAddress(gateAddressMap.get(symbolType), hasUpgrade(StargateUpgradeEnum.CHEVRON_UPGRADE), PageNotebookItem.getRegistryPathFromWorld(world, pos), getOriginId());
-
-                    stack = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 1, 1);
-                    stack.setTagCompound(compound);
-                    itemStackHandler.setStackInSlot(pageSlotId, stack);
-                }
+                stack = getAddressPage(symbolType, stack, hasUpgrade(StargateUpgradeEnum.CHEVRON_UPGRADE), false, false);
+                itemStackHandler.setStackInSlot(pageSlotId, stack);
 
                 break;
 
@@ -1674,7 +1798,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 super.executeTask(scheduledTask, customData);
         }
     }
-
     public static int getOriginId(BiomeOverlayEnum overlay, int dimId, int configOrigin) {
         if (configOrigin >= 0) return configOrigin;
 
@@ -1704,15 +1827,16 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         return getOriginId(getBiomeOverlayWithOverride(true), getFakeWorld().provider.getDimension(), getConfig().getOption(ORIGIN_MODEL.id).getEnumValue().getIntValue());
     }
 
-    public void setOriginId(NBTTagCompound compound) {
-        compound.setInteger("originId", getOriginId());
-    }
-
 
     // ------------------------------------------------------------------------
     // Ring spinning
 
     protected boolean isSpinning;
+
+    @Override
+    public boolean isSpinning(){
+        return isSpinning;
+    }
     protected long spinStartTime;
     protected SymbolInterface currentRingSymbol = getSymbolType().getTopSymbol();
     protected SymbolInterface targetRingSymbol = getSymbolType().getTopSymbol();
@@ -2087,6 +2211,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         }
         switch (irisState) {
             case OPENED:
+            case OPENING:
                 if (hasShieldIris() && getEnergyStorage().getEnergyStored() < shieldKeepAlive * 3)
                     return false;
 
@@ -2098,6 +2223,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 if (targetGatePos != null) executeTask(EnumScheduledTask.STARGATE_HORIZON_LIGHT_BLOCK, null);
                 break;
             case CLOSED:
+            case CLOSING:
                 irisState = EnumIrisState.OPENING;
                 setIrisBlocks(false);
                 sendRenderingUpdate(StargateRendererActionState.EnumGateAction.IRIS_UPDATE, 0, true, irisType, irisState, irisAnimation);
@@ -2115,14 +2241,14 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     protected CodeSender codeSender;
 
-    public boolean receiveIrisCode(CodeSender sender, int code) {
+    public boolean receiveIrisCode(CodeSender sender, String code) {
         sendSignal(null, "received_code", code);
         if (irisMode != EnumIrisMode.AUTO) {
             sender.sendMessage(GDOMessages.SEND_TO_COMPUTER.textComponent);
             codeSender = sender;
             return false;
         }
-        if (code == this.irisCode) {
+        if (code.equalsIgnoreCase(irisCode)) {
             switch (this.irisState) {
                 case OPENED:
                     sender.sendMessage(GDOMessages.OPENED.textComponent);
@@ -2141,13 +2267,14 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             }
         } else {
             sender.sendMessage(GDOMessages.CODE_REJECTED.textComponent);
+            //sender.sendMessage(new TextComponentString("Iris code: " + irisCode));
             return false;
         }
         markDirty();
         return true;
     }
 
-    public void setIrisCode(int code) {
+    public void setIrisCode(String code) {
         this.irisCode = code;
         markDirty();
     }
@@ -2195,7 +2322,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     }
 
-    public int getIrisCode() {
+    public String getIrisCode() {
         return this.irisCode;
     }
 
@@ -2243,7 +2370,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // -----------------------------------------------------------------------------
     // Power system
 
-    private final StargateClassicEnergyStorage energyStorage = new StargateClassicEnergyStorage() {
+    private final LargeEnergyStorage energyStorage = new LargeEnergyStorage() {
 
         @Override
         protected void onEnergyChanged() {
@@ -2252,8 +2379,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     };
 
     @Override
-    protected StargateAbstractEnergyStorage getEnergyStorage() {
+    protected SmallEnergyStorage getEnergyStorage() {
         return energyStorage;
+    }
+
+    public int getEnergyStored(){
+        return getEnergyStorage().getEnergyStored();
     }
 
     private int currentPowerTier = 1;
@@ -2263,6 +2394,9 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     private void updatePowerTier() {
+        updatePowerTier(false);
+    }
+    private void updatePowerTier(boolean resetEnergy) {
         int powerTier = 1;
 
         for (int i = 4; i < 7; i++) {
@@ -2271,7 +2405,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             }
         }
 
-        if (powerTier != currentPowerTier) {
+        if (resetEnergy || powerTier != currentPowerTier) {
             currentPowerTier = powerTier;
 
             energyStorage.clearStorages();
@@ -2293,12 +2427,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     // Capabilities
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
         return (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing == null) || super.hasCapability(capability, facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing == null)
             return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemStackHandler);
 
@@ -2333,6 +2467,17 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             }
         }
     }
+
+    @Override
+    public void refresh() {
+        super.refresh();
+        this.lastFakeWorld = getFakeWorld();
+        this.lastFakePos = getFakePos();
+        markDirty();
+    }
+
+    protected World lastFakeWorld = getFakeWorld();
+    protected BlockPos lastFakePos = getFakePos();
 
     public World getFakeWorld() {
         return world;
@@ -2401,7 +2546,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             if (stargatePos.gatePos.equals(pos) && stargatePos.dimensionID == world.provider.getDimension())
                 continue;
 
-            int symbolsNeeded = getSymbolType().getMinimalSymbolCountTo(gateType, StargateDimensionConfig.isGroupEqual(DimensionManager.getProviderType(stargatePos.dimensionID), world.provider.getDimensionType()));
+            int symbolsNeeded = getMinimalSymbolsToDial(gateType, stargatePos);
 
             if (checkAddressAndEnergy) {
                 StargateAddressDynamic addr3 = new StargateAddressDynamic(gateType);
@@ -2413,6 +2558,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 addresses.add(new NearbyGate(entry.getKey(), symbolsNeeded, targetGateTile.getSymbolType()));
         }
         return addresses;
+    }
+
+    public int getMinimalSymbolsToDial(SymbolTypeEnum symbolType, StargatePos targetGatePos){
+        return getSymbolType().getMinimalSymbolCountTo(symbolType, StargateDimensionConfig.isGroupEqual(targetGatePos.dimensionID, world.provider.getDimension()));
     }
 
 
@@ -2494,13 +2643,12 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @SuppressWarnings("unused")
     @Optional.Method(modid = "opencomputers")
-    @Callback(doc = "function(code:integer) -- send code like GDO")
+    @Callback(doc = "function(code:string) -- send code like GDO (should be only numbers)")
     public Object[] sendIrisCode(Context context, Arguments args) {
-
-        StargatePos destinationPos = StargateNetwork.get(world).getStargate(dialedAddress);
-        if (!args.isInteger(0)) {
-            throw new IllegalArgumentException("code must be integer!");
+        if (args.count() <= 0) {
+            return new Object[]{false, "invalid_method_format", "You must enter code!"};
         }
+        StargatePos destinationPos = StargateNetwork.get(world).getStargate(dialedAddress);
         if (destinationPos == null) return new Object[]{false, "stargate_not_engaged"};
         StargateAbstractBaseTile te = destinationPos.getTileEntity();
         if (te instanceof StargateClassicBaseTile) {
@@ -2508,7 +2656,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                             StargateNetwork.get(world).getStargate(
                                     this.getStargateAddress(SymbolTypeEnum.MILKYWAY)
                             )
-                    ), args.checkInteger(0)
+                    ), args.checkString(0)
             );
         } else {
             return new Object[]{false, "invalid_target_gate"};
@@ -2646,6 +2794,50 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @SuppressWarnings({"unused", "unchecked"})
     @Optional.Method(modid = "opencomputers")
+    @Callback(doc = "function(address:table|address:string...) -- Returns symbols needed to dial an address")
+    public Object[] getSymbolsNeeded(Context context, Arguments args) {
+        if (!isMerged()) return new Object[]{"not_merged"};
+
+        StargateAddressDynamic stargateAddress = new StargateAddressDynamic(getSymbolType());
+        Iterator<Object> iterator;
+
+        if (args.isTable(0)) {
+            iterator = args.checkTable(0).values().iterator();
+        } else {
+            iterator = args.iterator();
+        }
+
+        while (iterator.hasNext()) {
+            Object symbolObj = iterator.next();
+
+            if (stargateAddress.size() == 9) {
+                throw new IllegalArgumentException("Too much glyphs");
+            }
+
+            SymbolInterface symbol = getSymbolFromNameIndex(symbolObj);
+            if (stargateAddress.contains(symbol)) {
+                throw new IllegalArgumentException("Duplicate glyph");
+            }
+
+            stargateAddress.addSymbol(symbol);
+        }
+
+        if (!stargateAddress.getLast().origin() && stargateAddress.size() < 9) stargateAddress.addOrigin();
+
+        if (!stargateAddress.validate()) return new Object[]{"address_malformed"};
+
+        if (!canDialAddress(stargateAddress)) return new Object[]{"address_malformed"};
+
+        StargatePos pos = network.getStargate(stargateAddress);
+        if(pos == null) return new Object[]{"gate_not_found"};
+
+        int symbols = getMinimalSymbolsToDial(pos.getGateSymbolType(), pos);
+
+        return new Object[]{true, symbols};
+    }
+
+    @SuppressWarnings({"unused", "unchecked"})
+    @Optional.Method(modid = "opencomputers")
     @Callback(doc = "function(address:table|address:string...) -- Returns energy needed to dial an address")
     public Object[] getEnergyRequiredToDial(Context context, Arguments args) {
         if (!isMerged()) return new Object[]{"not_merged"};
@@ -2680,7 +2872,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         if (!canDialAddress(stargateAddress)) return new Object[]{"address_malformed"};
 
-        StargateEnergyRequired energyRequired = getEnergyRequiredToDial(Objects.requireNonNull(network.getStargate(stargateAddress)));
+        EnergyRequiredToOperate energyRequired = getEnergyRequiredToDial(Objects.requireNonNull(network.getStargate(stargateAddress)));
         Map<String, Object> energyMap = new HashMap<>(2);
 
         energyMap.put("open", energyRequired.energyToOpen);

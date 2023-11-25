@@ -5,8 +5,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.renderer.effect.DestinyFTL;
 import tauri.dev.jsg.renderer.effect.RingsWhiteFadeOut;
+import tauri.dev.jsg.renderer.effect.StargateFadeOut;
 
 import static tauri.dev.jsg.packet.transportrings.StartPlayerFadeOutToClient.EnumFadeOutEffectType.FTL_IN;
 
@@ -14,7 +16,9 @@ public class StartPlayerFadeOutToClient implements IMessage {
     public enum EnumFadeOutEffectType {
         RINGS(0),
         FTL_IN(1),
-        FTL_OUT(2);
+        FTL_OUT(2),
+
+        STARGATE(3);
 
         public final int id;
 
@@ -30,10 +34,13 @@ public class StartPlayerFadeOutToClient implements IMessage {
         }
     }
 
-    private int type;
+    @SuppressWarnings("unused")
+    // IntelliJ shit doesn't like this, but client needs it
+    public StartPlayerFadeOutToClient(){
 
-    public StartPlayerFadeOutToClient() {
     }
+
+    private int type;
 
     public StartPlayerFadeOutToClient(EnumFadeOutEffectType type) {
         this.type = type.id;
@@ -56,6 +63,7 @@ public class StartPlayerFadeOutToClient implements IMessage {
         @Override
         public IMessage onMessage(StartPlayerFadeOutToClient message, MessageContext ctx) {
             EnumFadeOutEffectType t = EnumFadeOutEffectType.valueOf(message.type);
+            if(JSGConfig.General.visual.disableFadeOutEffects) return null;
             switch (t) {
                 case RINGS:
                     JSG.proxy.addScheduledTaskClientSide(RingsWhiteFadeOut::startFadeOut);
@@ -63,6 +71,9 @@ public class StartPlayerFadeOutToClient implements IMessage {
                 case FTL_IN:
                 case FTL_OUT:
                     JSG.proxy.addScheduledTaskClientSide(() -> DestinyFTL.jumpIn(t == FTL_IN));
+                    break;
+                case STARGATE:
+                    JSG.proxy.addScheduledTaskClientSide(StargateFadeOut::startFadeOut);
                     break;
                 default:
                     break;

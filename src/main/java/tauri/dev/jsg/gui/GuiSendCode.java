@@ -166,7 +166,7 @@ public class GuiSendCode extends JSGGuiBase {
                 codeField.setFocused(true);
                 return;
             }
-            int code = Integer.parseInt(codeField.getText());
+            String code = codeField.getText();
             JSGPacketHandler.INSTANCE.sendToServer(new GDOActionPacketToServer(GDOActionEnum.SEND_CODE, hand, code, false));
             this.mc.player.closeScreen();
 

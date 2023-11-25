@@ -1,9 +1,9 @@
 package tauri.dev.jsg.tileentity.energy;
 
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 
 public class CapacitorCreativeTile extends CapacitorTile {
-    private final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage() {
+    private final SmallEnergyStorage energyStorage = new SmallEnergyStorage() {
 
         // Creative item should not receive any energy...
         @Override
@@ -56,7 +56,7 @@ public class CapacitorCreativeTile extends CapacitorTile {
     }
 
     @Override
-    public StargateAbstractEnergyStorage getEnergyStorage() {
+    public SmallEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
 }

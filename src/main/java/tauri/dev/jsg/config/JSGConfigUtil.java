@@ -16,6 +16,7 @@ import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.util.ItemMetaPair;
 import tauri.dev.jsg.util.JSGAxisAlignedBB;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,12 +24,16 @@ import java.util.Map;
 public class JSGConfigUtil {
 
     @SubscribeEvent
-    public void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
+    public static void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.getModID().equals(JSG.MOD_ID)) {
-            ConfigManager.sync(JSG.MOD_ID, Config.Type.INSTANCE);
-            JSG.info("Should be saved");
-            JSGConfigUtil.resetCache();
+            reloadConfig();
         }
+    }
+
+    public static void reloadConfig() {
+        ConfigManager.sync(JSG.MOD_ID, Config.Type.INSTANCE);
+        JSG.info("Main config reloaded!");
+        JSGConfigUtil.resetCache();
     }
 
     @SuppressWarnings("unused")
@@ -51,9 +56,11 @@ public class JSGConfigUtil {
 
     public static void resetCache() {
         cachedInvincibleBlocks = null;
+        cachedCamoBlacklistBlocks = null;
         cachedBiomeMatchesReverse = null;
         cachedBiomeOverrideBlocks = null;
         cachedBiomeOverrideBlocksReverse = null;
+        cachedBlacklistedDimsForDimsSgGen = null;
     }
 
     // Kawoosh blocks
@@ -71,6 +78,22 @@ public class JSGConfigUtil {
         }
         return cachedInvincibleBlocks.get(state) == null;
     }
+
+    // Camo blacklist
+    private static Map<IBlockState, Boolean> cachedCamoBlacklistBlocks = null;
+
+    public static boolean canBeUsedAsCamoBlock(IBlockState state) {
+        if (JSGBlocks.isInBlocksArray(state.getBlock(), JSGBlocks.CAMO_BLOCKS_BLACKLIST)) return false;
+
+        if (cachedCamoBlacklistBlocks == null) {
+            cachedCamoBlacklistBlocks = BlockMetaParser.parseConfig(JSGConfig.Stargate.visual.camoBlacklist);
+        }
+        if (cachedCamoBlacklistBlocks.get(state.getBlock().getDefaultState()) != null && cachedCamoBlacklistBlocks.get(state.getBlock().getDefaultState())) {
+            return false;
+        }
+        return cachedCamoBlacklistBlocks.get(state) == null;
+    }
+
 
     // Biome overlays
     private static Map<Biome, BiomeOverlayEnum> cachedBiomeMatchesReverse = null;
@@ -116,6 +139,8 @@ public class JSGConfigUtil {
             genBiomeOverrideCache();
         }
 
+        if (cachedBiomeOverrideBlocks == null) return new HashMap<>();
+
         return cachedBiomeOverrideBlocks;
     }
 
@@ -125,5 +150,30 @@ public class JSGConfigUtil {
         }
 
         return cachedBiomeOverrideBlocksReverse;
+    }
+
+    // Blacklisted DIM for Other DIMS stargate generator
+    private static List<Integer> cachedBlacklistedDimsForDimsSgGen = null;
+
+    public static boolean isDimBlacklistedForSGSpawn(int idmId) {
+        if (cachedBlacklistedDimsForDimsSgGen == null) {
+            cachedBlacklistedDimsForDimsSgGen = new ArrayList<>();
+            for (int i : JSGConfig.WorldGen.otherDimGenerator.blacklistDims)
+                cachedBlacklistedDimsForDimsSgGen.add(i);
+        }
+
+        return cachedBlacklistedDimsForDimsSgGen.contains(idmId);
+    }
+
+    public static void addBlacklistedDimForSGSpawnAndUpdate(int dimId) {
+        int[] newDims = new int[JSGConfig.WorldGen.otherDimGenerator.blacklistDims.length + 1];
+        for (int i = 0; i < newDims.length; i++) {
+            if (i == (newDims.length - 1))
+                newDims[i] = dimId;
+            else
+                newDims[i] = JSGConfig.WorldGen.otherDimGenerator.blacklistDims[i];
+        }
+        JSGConfig.WorldGen.otherDimGenerator.blacklistDims = newDims;
+        reloadConfig();
     }
 }

@@ -1,8 +1,8 @@
 package tauri.dev.jsg.gui.container.dhd;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -17,7 +17,9 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.fluid.JSGFluids;
+import tauri.dev.jsg.gui.container.JSGContainer;
 import tauri.dev.jsg.gui.container.OpenTabHolderInterface;
 import tauri.dev.jsg.gui.util.ContainerHelper;
 import tauri.dev.jsg.packet.JSGPacketHandler;
@@ -28,7 +30,7 @@ import tauri.dev.jsg.tileentity.util.ReactorStateEnum;
 
 import javax.annotation.Nonnull;
 
-public abstract class DHDAbstractContainer extends Container implements OpenTabHolderInterface {
+public abstract class DHDAbstractContainer extends JSGContainer implements OpenTabHolderInterface {
 
     public Slot slotCrystal;
     public FluidTank tankNaquadah;
@@ -52,6 +54,7 @@ public abstract class DHDAbstractContainer extends Container implements OpenTabH
 
     public DHDAbstractContainer(IInventory playerInventory, World world, int x, int y, int z) {
         pos = new BlockPos(x, y, z);
+        this.world = world;
         dhdTile = (DHDAbstractTile) world.getTileEntity(pos);
         IItemHandler itemHandler = dhdTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
@@ -76,14 +79,26 @@ public abstract class DHDAbstractContainer extends Container implements OpenTabH
             addSlotToContainer(slot);
     }
 
+    private final World world;
+
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
-        return true;
+    public World getWorld() {
+        return world;
+    }
+
+    @Override
+    public BlockPos getPos() {
+        return pos;
+    }
+
+    @Override
+    public Block[] getAllowedBlocks() {
+        return new Block[]{JSGBlocks.DHD_BLOCK, JSGBlocks.DHD_PEGASUS_BLOCK};
     }
 
     @Nonnull
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int index) {
+    public ItemStack transferStackInSlot(@Nonnull EntityPlayer player, int index) {
         ItemStack stack = getSlot(index).getStack();
 
         // Transfering from DHD to player's inventory

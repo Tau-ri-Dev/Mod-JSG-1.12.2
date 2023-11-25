@@ -28,10 +28,7 @@ import tauri.dev.jsg.sound.StargateSoundPositionedEnum;
 import tauri.dev.jsg.stargate.*;
 import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import tauri.dev.jsg.stargate.merging.StargatePegasusMergeHelper;
-import tauri.dev.jsg.stargate.network.StargatePos;
-import tauri.dev.jsg.stargate.network.SymbolInterface;
-import tauri.dev.jsg.stargate.network.SymbolPegasusEnum;
-import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.stargate.network.*;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.dialhomedevice.DHDActivateButtonState;
@@ -44,6 +41,7 @@ import tauri.dev.jsg.tileentity.util.ScheduledTask;
 import tauri.dev.jsg.util.ILinkable;
 import tauri.dev.jsg.util.LinkingHelper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -93,8 +91,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     // Stargate connection
 
     @Override
-    public void openGate(StargatePos targetGatePos, boolean isInitiating) {
-        super.openGate(targetGatePos, isInitiating);
+    public void openGate(StargatePos targetGatePos, boolean isInitiating, boolean noxDialing) {
+        super.openGate(targetGatePos, isInitiating, noxDialing);
 
         resetToDialSymbols();
 
@@ -137,6 +135,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
     @Override
     protected int getMaxChevrons() {
+        if (dialingWithoutEnergy) return 9;
         return isLinkedAndDHDOperational() && stargateState != EnumStargateState.DIALING_COMPUTER && !getLinkedDHD(world).hasUpgrade(DHDPegasusTile.DHDUpgradeEnum.CHEVRON_UPGRADE) ? 7 : 9;
     }
 
@@ -329,8 +328,9 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     // ------------------------------------------------------------------------
     // NBT
 
+    @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         if (isLinked()) {
             compound.setLong("linkedDHD", linkedDHD.toLong());
             compound.setInteger("linkId", linkId);
@@ -340,7 +340,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         if (compound.hasKey("linkedDHD")) this.linkedDHD = BlockPos.fromLong(compound.getLong("linkedDHD"));
         if (compound.hasKey("linkId")) this.linkId = compound.getInteger("linkId");
 
@@ -380,6 +380,8 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         switch (soundEnum) {
             case OPEN:
                 return SoundEventEnum.GATE_PEGASUS_OPEN;
+            case OPEN_NOX:
+                return SoundEventEnum.GATE_NOX_OPEN;
             case CLOSE:
                 return SoundEventEnum.GATE_MILKYWAY_CLOSE;
             case DIAL_FAILED:
@@ -584,6 +586,16 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
     }
 
     @Override
+    public boolean abortDialingSequence() {
+        if (super.abortDialingSequence()) {
+            toDialSymbols.clear();
+            markDirty();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean canAddSymbol(SymbolInterface symbol) {
         if (dialedAddress.size() >= getMaxChevrons()) return false;
 
@@ -601,6 +613,18 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         return super.canAddSymbol(symbol);
     }
 
+
+    public boolean dialAddress(StargateAddress address, int symbolCount, boolean withoutEnergy, EnumDialingType dialingType) {
+        if (!getStargateState().idle()) return false;
+        super.dialAddress(address, symbolCount, withoutEnergy, dialingType);
+        for (int i = 0; i < symbolCount; i++) {
+            addSymbolToAddressDHD(address.get(i));
+        }
+        addSymbolToAddressDHD(getSymbolType().getOrigin());
+        addSymbolToAddressDHD(getSymbolType().getBRB());
+        return true;
+    }
+
     public void addSymbolToAddressDHD(SymbolInterface targetSymbol, EntityPlayer sender) {
         lastSender = sender;
         addSymbolToAddressDHD(targetSymbol);
@@ -611,11 +635,29 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
         if (targetSymbol != SymbolPegasusEnum.BBB && !canAddSymbolToList(targetSymbol)) return;
         if (!(targetSymbol instanceof SymbolPegasusEnum)) return;
         if (toDialSymbols.contains(targetSymbol)) return;
+        if(isNoxDialing){
+            if(targetSymbol == getSymbolType().getBRB()){
+                addTask(new ScheduledTask(EnumScheduledTask.STARGATE_OPEN_NOX));
+                return;
+            }
+            stargateState = EnumStargateState.DIALING;
+            markDirty();
+            addSymbolToAddress(targetSymbol);
+            doIncomingAnimation(1, false);
+
+            if (stargateWillLock(targetSymbol)) {
+                isFinalActive = true;
+                markDirty();
+            }
+            return;
+        }
+
         if (isLinkedAndDHDOperational() && (targetSymbol != SymbolPegasusEnum.BBB || toDialSymbols.size() > 0)) {
             DHDAbstractTile dhd = getLinkedDHD(world);
             if (dhd != null)
                 dhd.activateSymbol(targetSymbol);
         }
+
         toDialSymbols.add((SymbolPegasusEnum) targetSymbol);
     }
 
@@ -630,15 +672,15 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
             return;
         }
 
-        boolean fastDial = (getConfig().getOption(ConfigOptions.PEG_DIAL_ANIMATION.id).getEnumValue().getIntValue() == 1);
-        boolean canContinueByConfig = (getConfig().getOption(ConfigOptions.PEG_DIAL_ANIMATION.id).getEnumValue().getIntValue() == 0);
+        boolean fastDial = isFastDialing || (getConfig().getOption(ConfigOptions.PEG_DIAL_ANIMATION.id).getEnumValue().getIntValue() == 1);
+        boolean canContinueByConfig = !fastDial && (getConfig().getOption(ConfigOptions.PEG_DIAL_ANIMATION.id).getEnumValue().getIntValue() == 0);
 
         stargateState = EnumStargateState.DIALING;
 
         targetRingSymbol = targetSymbol;
         spinDirection = spinDirection.opposite();
 
-        if(fastDial){
+        if (fastDial) {
             continueDialing = false;
             markDirty();
 
@@ -678,7 +720,7 @@ public class StargatePegasusBaseTile extends StargateClassicBaseTile implements 
 
 
         int toDialSize = toDialSymbols.size();
-        if(toDialSymbols.contains(SymbolPegasusEnum.BBB))
+        if (toDialSymbols.contains(SymbolPegasusEnum.BBB))
             toDialSize--;
         continueDialing = (canContinueByConfig && (toDialSize >= 2) && (targetChevron != ChevronEnum.getFinal()));
         markDirty();

@@ -1,8 +1,8 @@
 package tauri.dev.jsg.gui.container.machine.assembler;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -13,11 +13,13 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.gui.container.JSGContainer;
 import tauri.dev.jsg.gui.util.ContainerHelper;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.tileentity.machine.AssemblerTile;
 
@@ -27,7 +29,7 @@ import java.util.ArrayList;
 import static tauri.dev.jsg.tileentity.machine.AssemblerTile.CONTAINER_SIZE;
 import static tauri.dev.jsg.tileentity.machine.AssemblerTile.getAllowedSchematics;
 
-public class AssemblerContainer extends Container {
+public class AssemblerContainer extends JSGContainer {
 
     public AssemblerTile tile;
     public ArrayList<Slot> slots = new ArrayList<>();
@@ -38,13 +40,26 @@ public class AssemblerContainer extends Container {
     private long machineStart = 0;
     private long machineEnd = 0;
 
+    private final World world;
+
     @Override
-    public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
-        return true;
+    public World getWorld() {
+        return world;
+    }
+
+    @Override
+    public BlockPos getPos() {
+        return pos;
+    }
+
+    @Override
+    public Block[] getAllowedBlocks() {
+        return new Block[]{JSGBlocks.MACHINE_ASSEMBLER};
     }
 
     public AssemblerContainer(IInventory playerInventory, World world, int x, int y, int z) {
         pos = new BlockPos(x, y, z);
+        this.world = world;
         tile = (AssemblerTile) world.getTileEntity(pos);
         if (tile != null) {
             IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
@@ -104,7 +119,7 @@ public class AssemblerContainer extends Container {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) tile.getCapability(CapabilityEnergy.ENERGY, null);
+        SmallEnergyStorage energyStorage = (SmallEnergyStorage) tile.getCapability(CapabilityEnergy.ENERGY, null);
 
         if (machineStart != tile.getMachineStart() || machineEnd != tile.getMachineEnd() || (energyStorage != null && (lastEnergyStored != energyStorage.getEnergyStored() || energyTransferedLastTick != tile.getEnergyTransferedLastTick()))) {
             for (IContainerListener listener : listeners) {

@@ -6,7 +6,6 @@ import tauri.dev.jsg.config.craftings.CraftingConfig;
 import tauri.dev.jsg.machine.AbstractMachineRecipe;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public abstract class PCBFabricatorRecipe extends AbstractMachineRecipe {
     public static final String ID = "PCB Fabricator";
@@ -22,7 +21,7 @@ public abstract class PCBFabricatorRecipe extends AbstractMachineRecipe {
     public boolean isOk(int energyStored, FluidStack fluidStored, ArrayList<ItemStack> stacks) {
         if(isDisabled()) return false;
 
-        if (energyStored < getEnergyPerTick()) return false;
+        if (energyStored < (getEnergyPerTick() * (getWorkingTime() / 2))) return false;
         if (!(fluidStored.isFluidEqual(getSubFluidStack()))) return false;
         if (fluidStored.amount < getSubFluidStack().amount) return false;
         int i = 0;

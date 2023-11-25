@@ -5,8 +5,8 @@ import net.minecraftforge.fml.common.ProgressManager;
 import net.minecraftforge.fml.common.ProgressManager.ProgressBar;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.config.origins.OriginsLoader;
 import tauri.dev.jsg.loader.FolderLoader;
+import tauri.dev.jsg.loader.OriginsLoader;
 import tauri.dev.jsg.loader.ReloadListener;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class ModelLoader {
 
     public static final String MODELS_PATH = "assets/jsg/models/tesr";
-    private static final Map<ResourceLocation, OBJModel> LOADED_MODELS = new HashMap<>();
+    public static final Map<ResourceLocation, OBJModel> LOADED_MODELS = new HashMap<>();
 
     public static OBJModel getModel(ResourceLocation resourceLocation) {
         return LOADED_MODELS.get(resourceLocation);

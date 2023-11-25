@@ -1,33 +1,41 @@
 package tauri.dev.jsg.item.notebook;
 
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
-import tauri.dev.jsg.item.renderer.CustomModel;
-import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
-import tauri.dev.jsg.stargate.network.StargateAddress;
-import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
-import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
-import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
-import tauri.dev.jsg.transportrings.TransportRingsAddress;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.IRegistry;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
+import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.item.renderer.CustomModel;
+import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
+import tauri.dev.jsg.stargate.network.StargateAddress;
+import tauri.dev.jsg.stargate.network.StargateNetwork;
+import tauri.dev.jsg.stargate.network.StargatePos;
+import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
+import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
+import tauri.dev.jsg.transportrings.TransportRingsAddress;
 
+import javax.annotation.Nonnull;
 import java.util.List;
-
-import static tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.ConfigOptions.ORIGIN_MODEL;
+import java.util.Map;
 
 public class PageNotebookItem extends Item implements CustomModelItemInterface {
 
@@ -68,6 +76,54 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 	public void setCustomModelLocation() {
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName() + "_empty", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation(getRegistryName() + "_filled", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(this, 2, new ModelResourceLocation(getRegistryName() + "_end", "inventory"));
+	}
+
+	@Nonnull
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
+		if (!world.isRemote) {
+			NBTTagCompound tag = player.getHeldItem(hand).getTagCompound();
+			if(tag != null){
+				if(tag.hasKey("generateEndAddress")){
+					boolean b = tag.getBoolean("generateEndAddress");
+					if(b){
+						StargateNetwork sgn = StargateNetwork.get(player.getEntityWorld());
+						Map.Entry<StargatePos, Map<SymbolTypeEnum, StargateAddress>> gotAddressMap = sgn.getEndStargate();
+						if (gotAddressMap == null) {
+							player.sendStatusMessage(new TextComponentTranslation("item.jsg.page_mysterious.generation.failed"), true);
+						}
+						else {
+							// gen page
+							SymbolTypeEnum symbolTypeEnum = SymbolTypeEnum.getRandom();
+							StargateAddress address = gotAddressMap.getValue().get(symbolTypeEnum);
+							StargatePos pos = gotAddressMap.getKey();
+
+							String biome = ((pos.getWorld() == null || pos.gatePos == null) ? "plains" : PageNotebookItem.getRegistryPathFromWorld(pos.getWorld(), pos.gatePos));
+							int origin = StargateClassicBaseTile.getOriginId(null, 1, -1);
+
+							NBTTagCompound sgCompound = PageNotebookItem.getCompoundFromAddress(address, true, false, false, biome, origin);
+
+							ItemStack stack = new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 1, 1);
+							stack.setTagCompound(sgCompound);
+
+							ItemStack held = player.getHeldItem(hand);
+							held.shrink(1);
+
+							if (held.isEmpty())
+								player.setHeldItem(hand, stack);
+
+							else {
+								player.setHeldItem(hand, held);
+								player.addItemStackToInventory(stack);
+							}
+							return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+						}
+					}
+				}
+			}
+		}
+		return super.onItemRightClick(world, player, hand);
 	}
 	
 	@Override
@@ -77,9 +133,12 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag) {
+	public void addInformation(ItemStack stack, World world, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flag) {
 		if (stack.getItemDamage() == 0) {			
 			tooltip.add(JSG.proxy.localize("item.jsg.page_notebook.empty"));
+		}
+		else if (stack.getItemDamage() == 2) {
+			tooltip.add(JSG.proxy.localize("item.jsg.page_notebook.end"));
 		}
 		
 		else {			
@@ -90,8 +149,10 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 					SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf(compound.getInteger("symbolType"));
 					StargateAddress stargateAddress = new StargateAddress(compound.getCompoundTag("address"));
 					int maxSymbols = symbolType.getMaxSymbolsDisplay(compound.getBoolean("hasUpgrade"));
+					boolean hideLastSymbol = compound.hasKey("hideLastSymbol") && compound.getBoolean("hideLastSymbol");
 
 					for (int i = 0; i < maxSymbols; i++) {
+						if(i == 7 && hideLastSymbol) continue;
 						tooltip.add(TextFormatting.ITALIC + "" + (i > 5 ? TextFormatting.DARK_PURPLE : TextFormatting.AQUA) + stargateAddress.get(i).localize());
 					}
 				}
@@ -139,12 +200,17 @@ public class PageNotebookItem extends Item implements CustomModelItemInterface {
 	}
 
 	public static NBTTagCompound getCompoundFromAddress(StargateAddress address, boolean hasUpgrade, String registryPath, int originId) {
+		return getCompoundFromAddress(address, hasUpgrade, false, false, registryPath, originId);
+	}
+	public static NBTTagCompound getCompoundFromAddress(StargateAddress address, boolean hasUpgrade, boolean hideLastSymbol, boolean hideOrigin, String registryPath, int originId) {
 		NBTTagCompound compound = new NBTTagCompound();
 		if(address != null) {
 			if (address.getSymbolType() != null) compound.setInteger("symbolType", address.getSymbolType().id);
 			if (address.serializeNBT() != null) compound.setTag("address", address.serializeNBT());
 		}
 		compound.setBoolean("hasUpgrade", hasUpgrade);
+		compound.setBoolean("hideLastSymbol", hideLastSymbol);
+		compound.setBoolean("hideOrigin", hideOrigin);
 		compound.setInteger("color", PageNotebookItem.getColorForBiome(registryPath));
 		compound.setInteger("originId", originId);
 		

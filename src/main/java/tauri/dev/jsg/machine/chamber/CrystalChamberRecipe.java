@@ -20,7 +20,7 @@ public abstract class CrystalChamberRecipe extends AbstractMachineRecipe {
     public boolean isOk(int energyStored, FluidStack fluidStored, ItemStack seeds) {
         if(isDisabled()) return false;
 
-        if (energyStored < getEnergyPerTick()) return false;
+        if (energyStored < (getEnergyPerTick() * (getWorkingTime() / 2))) return false;
         if (!(fluidStored.isFluidEqual(getSubFluidStack()))) return false;
         if (fluidStored.amount < getSubFluidStack().amount) return false;
         if (seeds.getItem() != JSGItems.CRYSTAL_SEED) return false;

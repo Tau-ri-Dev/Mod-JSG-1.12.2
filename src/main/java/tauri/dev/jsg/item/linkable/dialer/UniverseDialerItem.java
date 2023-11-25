@@ -40,11 +40,10 @@ import tauri.dev.jsg.item.renderer.CustomModel;
 import tauri.dev.jsg.item.renderer.CustomModelItemInterface;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
-import tauri.dev.jsg.stargate.EnumIrisMode;
-import tauri.dev.jsg.stargate.EnumStargateState;
-import tauri.dev.jsg.stargate.NearbyGate;
-import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
-import tauri.dev.jsg.stargate.network.*;
+import tauri.dev.jsg.stargate.*;
+import tauri.dev.jsg.stargate.network.StargateAddress;
+import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.stargate.network.SymbolUniverseEnum;
 import tauri.dev.jsg.tileentity.props.DestinyCountDownTile;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
@@ -60,6 +59,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
+import java.util.Objects;
 
 import static tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode.NEARBY;
 
@@ -124,7 +124,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
             ItemStack stack = new ItemStack(this);
             initNBT(stack);
@@ -160,6 +160,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
         return oldStack.getItem() != newStack.getItem();
     }
 
+    @Nonnull
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         if (stack.getMetadata() == UniverseDialerVariants.BROKEN.meta) {
@@ -169,11 +170,11 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
     }
 
     @Override
-    public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, World world, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
         if (stack.hasTagCompound()) {
             switch (UniverseDialerVariants.valueOf(stack.getItemDamage())) {
                 case NORMAL:
-                    NBTTagList list = stack.getTagCompound().getTagList("saved", NBT.TAG_COMPOUND);
+                    NBTTagList list = Objects.requireNonNull(stack.getTagCompound()).getTagList("saved", NBT.TAG_COMPOUND);
                     tooltip.add(TextFormatting.GRAY + JSG.proxy.localize("item.jsg.universe_dialer.saved_gates", list.tagCount()));
 
                     for (int i = 0; i < list.tagCount(); i++) {
@@ -360,20 +361,21 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
     }
 
     @Override
-    public boolean onDroppedByPlayer(ItemStack stack, EntityPlayer player) {
+    public boolean onDroppedByPlayer(ItemStack stack, @Nonnull EntityPlayer player) {
         if (stack.getItemDamage() != UniverseDialerVariants.BROKEN.meta)
-            stack.getCapability(ItemEndpointCapability.ENDPOINT_CAPABILITY, null).removeEndpoint();
+            Objects.requireNonNull(stack.getCapability(ItemEndpointCapability.ENDPOINT_CAPABILITY, null)).removeEndpoint();
 
         return super.onDroppedByPlayer(stack, player);
     }
 
+    @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         if (!world.isRemote && player.getHeldItem(hand).getItemDamage() == UniverseDialerVariants.NORMAL.meta) {
             boolean shift = player.isSneaking();
             checkNBT(player.getHeldItem(hand));
             NBTTagCompound compound = player.getHeldItem(hand).getTagCompound();
-            UniverseDialerMode mode = UniverseDialerMode.valueOf(compound.getByte("mode"));
+            UniverseDialerMode mode = UniverseDialerMode.valueOf(Objects.requireNonNull(compound).getByte("mode"));
             int selected = compound.getByte("selected");
 
             if (mode.linkable && !compound.hasKey(mode.tagPosName))
@@ -381,6 +383,17 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
             BlockPos linkedPos = BlockPos.fromLong(compound.getLong(mode.tagPosName));
             NBTTagList tagList = compound.getTagList(mode.tagListName, NBT.TAG_COMPOUND);
+
+            TileEntity linkedTe = world.getTileEntity(linkedPos);
+            if(shift){
+                if(linkedTe instanceof StargateUniverseBaseTile){ // Can be also rings - make this check
+                    StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) linkedTe;
+                    if(gateTile.hasIris() && gateTile.getIrisMode() == EnumIrisMode.DIALER){
+                        gateTile.toggleIris();
+                        return super.onItemRightClick(world, player, hand);
+                    }
+                }
+            }
 
             if (selected >= tagList.tagCount())
                 return super.onItemRightClick(world, player, hand);
@@ -390,16 +403,20 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
             switch (mode) {
                 case MEMORY:
                 case NEARBY:
-                    StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
+                    StargateUniverseBaseTile gateTile = (StargateUniverseBaseTile) linkedTe;
                     if (gateTile == null) break;
-                    if(shift && gateTile.hasIris() && gateTile.getIrisMode() == EnumIrisMode.DIALER){
-                        gateTile.toggleIris();
-                        break;
-                    }
                     switch (gateTile.getStargateState()) {
                         case IDLE:
                             int maxSymbols = SymbolUniverseEnum.getMaxSymbolsDisplay(selectedCompound.getBoolean("hasUpgrade"));
-                            gateTile.dialAddress(new StargateAddress(selectedCompound), maxSymbols);
+                            StargateAddress address = new StargateAddress(selectedCompound);
+                            /*StargatePos targetStargate = gateTile.getNetwork().getStargate(address);
+                            if(targetStargate != null){
+                                boolean sameDim = (targetStargate.dimensionID == gateTile.world().provider.getDimension());
+                                boolean sameType = (targetStargate.getTileEntity().getSymbolType() == gateTile.getSymbolType());
+                                int symbolsNeeded = (sameType ? (sameDim ? 6 : 7) : 8);
+                                maxSymbols = Math.min(symbolsNeeded, maxSymbols);
+                            }*/
+                            gateTile.dialAddress(address, maxSymbols, false, EnumDialingType.NORMAL);
                             player.sendStatusMessage(new TextComponentTranslation("item.jsg.universe_dialer.dial_start"), true);
                             if(player instanceof EntityPlayerMP)
                                 JSGSoundHelper.playSoundToPlayer(((EntityPlayerMP) player), SoundEventEnum.UNIVERSE_DIALER_START_DIAL, player.getPosition());
@@ -437,12 +454,8 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                     break;
 
                 case GATE_INFO:
-                    StargateUniverseBaseTile tile = (StargateUniverseBaseTile) world.getTileEntity(linkedPos);
-                    if (tile == null) break;
-                    if(shift && tile.hasIris() && tile.getIrisMode() == EnumIrisMode.DIALER){
-                        tile.toggleIris();
-                        break;
-                    }
+                    if(!(linkedTe instanceof StargateUniverseBaseTile)) break;
+                    StargateUniverseBaseTile tile = (StargateUniverseBaseTile) linkedTe;
                     switch (tile.getStargateState()) {
                         case IDLE:
                             break;
@@ -468,15 +481,15 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
                     break;
 
                 case RINGS:
-                    TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) world.getTileEntity(linkedPos);
-                    if (ringsTile == null) break;
+                    if(!(linkedTe instanceof TransportRingsAbstractTile)) break;
+                    TransportRingsAbstractTile ringsTile = (TransportRingsAbstractTile) linkedTe;
                     ringsTile.attemptTransportTo(new TransportRings(selectedCompound).getAddress(SymbolTypeTransportRingsEnum.GOAULD), 5).sendMessageIfFailed(player);
 
                     break;
 
                 case OC:
                     ItemOCMessage message = new ItemOCMessage(selectedCompound);
-                    JSG.debug("Sending OC message: " + message.toString());
+                    JSG.debug("Sending OC message: " + message);
                     JSG.ocWrapper.sendWirelessPacketPlayer("unv-dialer", player, player.getHeldItem(hand), message.address, message.port, message.getData());
                     break;
             }
@@ -487,7 +500,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
 
     @Override
     public void setCustomModelLocation() {
-        ModelResourceLocation modelLocation = new ModelResourceLocation(this.getRegistryName(), "inventory");
+        ModelResourceLocation modelLocation = new ModelResourceLocation(Objects.requireNonNull(this.getRegistryName()), "inventory");
         ModelLoader.setCustomModelResourceLocation(this, 0, modelLocation);
 
         CustomModelItemInterface.super.setCustomModelLocation();
@@ -515,7 +528,7 @@ public class UniverseDialerItem extends Item implements CustomModelItemInterface
         list.set(index, message.serializeNBT());
     }
 
-    public static interface ChangeMessage {
-        public void change(ItemOCMessage message);
+    public interface ChangeMessage {
+        void change(ItemOCMessage message);
     }
 }

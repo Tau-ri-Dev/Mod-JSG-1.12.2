@@ -58,6 +58,11 @@ public class JSGNetherStructure extends JSGStructure {
                 BlockMatcher.forBlock(Blocks.SOUL_SAND));
     }
 
+    @Override
+    public boolean canDHDDespawn(){
+        return false;
+    }
+
     /**
      * Searches for a place and spawns the structure.
      */

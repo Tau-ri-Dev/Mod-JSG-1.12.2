@@ -1,12 +1,5 @@
 package tauri.dev.jsg.stargate.merging;
 
-import tauri.dev.jsg.util.JSGAxisAlignedBB;
-import tauri.dev.jsg.util.main.JSGProps;
-import tauri.dev.jsg.block.JSGBlocks;
-import tauri.dev.jsg.block.stargate.StargateOrlinMemberBlock;
-import tauri.dev.jsg.stargate.EnumMemberVariant;
-import tauri.dev.jsg.tileentity.stargate.StargateOrlinMemberTile;
-import tauri.dev.jsg.util.FacingHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.item.ItemBlock;
@@ -15,7 +8,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.block.stargate.StargateOrlinMemberBlock;
+import tauri.dev.jsg.stargate.EnumMemberVariant;
+import tauri.dev.jsg.tileentity.stargate.StargateOrlinMemberTile;
+import tauri.dev.jsg.util.FacingHelper;
+import tauri.dev.jsg.util.JSGAxisAlignedBB;
+import tauri.dev.jsg.util.main.JSGProps;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -40,11 +41,13 @@ public class StargateOrlinMergeHelper extends StargateAbstractMergeHelper {
 		BLOCK_MAP.put(new BlockPos(1, 0, 0), EnumFacing.WEST);
 	}
 	
-	@Override
+	@Nonnull
+    @Override
 	public List<BlockPos> getRingBlocks() {
 		return new ArrayList<BlockPos>(BLOCK_MAP.keySet());
 	}
 
+	@Nonnull
 	@Override
 	public List<BlockPos> getChevronBlocks() {
 		return new ArrayList<BlockPos>(0);

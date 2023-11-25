@@ -1,9 +1,5 @@
 package tauri.dev.jsg.sound;
 
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.packet.SoundPositionedPlayToClient;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.util.SoundEvent;
@@ -13,6 +9,10 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.packet.SoundPositionedPlayToClient;
 
 @EventBusSubscriber
 public class JSGSoundHelper {
@@ -23,7 +23,7 @@ public class JSGSoundHelper {
 	
 	public static void playSoundEventClientSide(World world, BlockPos pos, SoundEventEnum soundEventEnum) {		
 		world.playSound(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, soundEventEnum.soundEvent, JSG.JSG_SOUNDS, soundEventEnum.volume * tauri.dev.jsg.config.JSGConfig.General.audio.volume * 5f, 1.0f, false);
-	}	
+	}
 	
 	public static void playSoundEvent(World world, BlockPos pos, SoundEventEnum soundEventEnum) {		
 		world.playSound(null, pos, soundEventEnum.soundEvent, JSG.JSG_SOUNDS, soundEventEnum.volume * JSGConfig.General.audio.volume * 5f, 1.0f);

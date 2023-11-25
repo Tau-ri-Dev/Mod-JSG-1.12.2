@@ -6,7 +6,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.registries.GameData;
 import tauri.dev.jsg.item.JSGItems;
 
 @Mod.EventBusSubscriber
@@ -45,5 +44,6 @@ public class JSGRecipeHandler {
         event.getRegistry().register(new NotebookPageCloneRecipe());
         event.getRegistry().register(new UniverseDialerCloneRecipe());
         event.getRegistry().register(new UniverseDialerRepairRecipe());
+        event.getRegistry().register(new DialerPageRecipe());
     }
 }

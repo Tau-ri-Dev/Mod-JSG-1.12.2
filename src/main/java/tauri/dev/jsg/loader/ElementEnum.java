@@ -87,6 +87,11 @@ public enum ElementEnum {
 
     ASSEMBLER_MACHINE("machine/assembler/assembler.obj", "machine/assembler/assembler_base.png", false),
 
+    // Lab
+    LAB_MACHINE("machine/lab/machine.obj", "machine/lab/machine.jpg", false),
+    LAB_TUBES("machine/lab/tubes.obj", "machine/lab/tubes.png", false),
+    LAB_INTERFACE("", "machine/lab/interface.jpg", false),
+
     // --------------------------------------------------------------------------------------------
     // ZPM
 
@@ -94,11 +99,36 @@ public enum ElementEnum {
     ZPM_HUB("zpm/pg_zpm_hub.obj", "zpm/hub/pg_zpm_hub.jpg", false),
     ZPM_HUB_LIGHTS("zpm/pg_lights.obj", "zpm/hub/pg_lights0.jpg", false),
     ZPM_SLOT("zpm/slot.obj", "zpm/slot.png", false),
+    //ZPM_ASURAN_SLOT("zpm/asuran_zpm_slot.obj", "zpm/asuran_zpm_slot_texture.png", false), => light overlay: asuran_zpm_light.png
+    //this model is same size as ZPM hub, but different position
 
     // --------------------------------------------------------------------------------------------
     // DESTINY PROPS
 
-    DESTINY_COUNTDOWN("props/destiny/countdown.obj", "props/destiny/countdown.png", false);
+    DESTINY_COUNTDOWN("props/destiny/countdown.obj", "props/destiny/countdown.png", false),
+    DESTINY_BEARING_OFF("props/destiny/bearing_light.obj", "props/destiny/bearing_light_off.png", false),
+    DESTINY_BEARING_ON("props/destiny/bearing_light.obj", "props/destiny/bearing_light_on.png", false),
+    DESTINY_BEARING_BODY("props/destiny/bearing_body.obj", "props/destiny/bearing_body.png", false),
+
+    DESTINY_CHEVRON("props/destiny/floor_chevron.obj", "universe/universe_chevron.png", false),
+    DESTINY_VENT_MOVING("props/destiny/vent_moving.obj", "props/destiny/vent_moving.png", false),
+    DESTINY_VENT_HOLE("props/destiny/vent_hole.obj", "props/destiny/vent_hole.png", false),
+
+    // --------------------------------------------------------------------------------------------
+    // DECOR PROPS
+
+    DECOR_ABYDOS_POT("props/decor/abydos_pot.obj", "props/decor/abydos_pot.png", false),
+    DECOR_DRONE_WEAPON_OFF("props/decor/drone_weapon.obj", "props/decor/drone_weapon_off.png", false),
+    DECOR_DRONE_WEAPON_ON("props/decor/drone_weapon.obj", "props/decor/drone_weapon_on.png", false),
+    DECOR_ANCIENT_OBELISK("props/decor/ancient_obelisk.obj", "props/decor/ancient_obelisk.png", false),
+
+
+    // --------------------------------------------------------------------------------------------
+    // DECOR PROPS - BRAZIERS
+
+    DECOR_ABYDOS_LAMP("props/decor/braziers/brazier_type_1.obj", "props/decor/braziers/abydos_brazier.png", false);
+    // Message for Minedragon :D => model: brazier_type_1.obj , textures: abydos_brazier.png; hatak_brazier.png
+    //                              model: brazier_type_2.obj , textures: goauld_brazier.png; anubis_brazier.png
 
     // --------------------------------------------------------------------------------------------
 
@@ -115,6 +145,10 @@ public enum ElementEnum {
                 String[] split = texture.split("\\.");
                 biomeTextureResourceMap.put(biomeOverlay, TextureLoader.getTextureResource(split[0] + biomeOverlay.suffix + "." + split[1]));
             }
+    }
+
+    public static void renderModel(String path){
+        ModelLoader.getModel(ModelLoader.getModelResource(path)).render();
     }
 
     public void render() {

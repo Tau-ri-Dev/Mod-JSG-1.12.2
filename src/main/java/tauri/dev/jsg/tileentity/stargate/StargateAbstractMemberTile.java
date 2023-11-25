@@ -1,6 +1,5 @@
 package tauri.dev.jsg.tileentity.stargate;
 
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -9,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 
 import javax.annotation.Nullable;
 
@@ -83,10 +83,10 @@ public abstract class StargateAbstractMemberTile extends TileEntity{
         return super.getCapability(capability, facing);
     }
 
-    protected StargateAbstractEnergyStorage getEnergyStorage() {
+    protected SmallEnergyStorage getEnergyStorage() {
         if(getBaseTile(world) != null)
             return getBaseTile(world).getEnergyStorage();
-        else return new StargateAbstractEnergyStorage();
+        else return new SmallEnergyStorage();
     }
 
 

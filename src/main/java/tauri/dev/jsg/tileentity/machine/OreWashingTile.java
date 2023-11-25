@@ -12,12 +12,12 @@ import tauri.dev.jsg.gui.container.machine.orewashing.OreWashingContainerGuiUpda
 import tauri.dev.jsg.machine.AbstractMachineRecipe;
 import tauri.dev.jsg.machine.orewashing.OreWashingRecipe;
 import tauri.dev.jsg.machine.orewashing.OreWashingRecipes;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.renderer.machine.AbstractMachineRendererState;
 import tauri.dev.jsg.renderer.machine.OreWashingRendererState;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.util.JSGItemStackHandler;
@@ -42,7 +42,7 @@ public class OreWashingTile extends AbstractMachineTile {
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
-    protected final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(OreWashingBlock.MAX_ENERGY, OreWashingBlock.MAX_ENERGY_TRANSFER) {
+    protected final SmallEnergyStorage energyStorage = new SmallEnergyStorage(OreWashingBlock.MAX_ENERGY, OreWashingBlock.MAX_ENERGY_TRANSFER) {
         @Override
         protected void onEnergyChanged() {
             markDirty();
@@ -57,12 +57,13 @@ public class OreWashingTile extends AbstractMachineTile {
         @Override
         protected void onContentsChanged() {
             markDirty();
+            onItemHandlerChange();
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
 
     @Override
-    public StargateAbstractEnergyStorage getEnergyStorage() {
+    public SmallEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
 
@@ -86,8 +87,17 @@ public class OreWashingTile extends AbstractMachineTile {
 
     @Override
     public AbstractMachineRecipe getRecipeIfPossible() {
+        if(currentRecipe instanceof OreWashingRecipe){
+            OreWashingRecipe recipe = (OreWashingRecipe) currentRecipe;
+            if (!itemStackHandler.insertItem(1, recipe.getResult(), true).equals(ItemStack.EMPTY)) return null;
+            if (fluidHandler.getFluid() == null) return null;
+            if (recipe.isOk(energyStorage.getEnergyStored(), new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()), itemStackHandler.getStackInSlot(0)))
+                return recipe;
+            return null;
+        }
+
         for (OreWashingRecipe recipe : OreWashingRecipes.RECIPES) {
-            if (itemStackHandler.insertItem(1, recipe.getResult(), true).equals(recipe.getResult())) continue;
+            if (!itemStackHandler.insertItem(1, recipe.getResult(), true).equals(ItemStack.EMPTY)) continue;
             if (fluidHandler.getFluid() == null) continue;
             if (recipe.isOk(energyStorage.getEnergyStored(), new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()), itemStackHandler.getStackInSlot(0)))
                 return recipe;

@@ -12,28 +12,28 @@ itemGroup.jsg_records=JSG: Musik
 
 # config file
 config.jsg.general=General Config
-config.jsg.general.tooltip=Configuration of misc things
+config.jsg.general.tooltip=Konfiguration verschiedener Dinge
 
 config.jsg.zpm=ZPM Config
-config.jsg.zpm.tooltip=Configuration of ZPM and ZPM Hubs
+config.jsg.zpm.tooltip=Konfiguration von ZPM und ZPM-Hubs
 
 config.jsg.stargates=Stargates Config
-config.jsg.stargates.tooltip=Configuration of Stargates
+config.jsg.stargates.tooltip=Konfiguration von Stargates
 
 config.jsg.rings=Transport Rings Config
-config.jsg.rings.tooltip=Configuration of Transport Rings
+config.jsg.rings.tooltip=Konfiguration von Transportringen
 
 config.jsg.dhd=DHD Config
-config.jsg.dhd.tooltip=Configuration of DHD and Universe Dialer
+config.jsg.dhd.tooltip=Konfiguration von DHD und Universe Dialer
 
 config.jsg.beamers=Beamers Config
-config.jsg.beamers.tooltip=Configuration of Beamers
+config.jsg.beamers.tooltip=Konfiguration von Beamer
 
 config.jsg.worldgen=World Generation Config
-config.jsg.worldgen.tooltip=Configuration of World Gen and Mysterious Pages
-  
+config.jsg.worldgen.tooltip=Konfiguration von World-Gen und Mysteriösen Seiten
+
 config.jsg.items=Items Config
-config.jsg.items.tooltip=Configuration of Items, Armor and Weapons
+config.jsg.items.tooltip=Konfiguration von Gegenständen, Rüstungen und Waffen
 
 # Sound category
 soundCategory.jsg=Just Stargate Mod
@@ -62,10 +62,10 @@ advancement.merged_universe.desc=Baue das älteste Sternentor des Universums
 advancement.chevron_seven_locked.title=Chevron 7 fixiert!
 advancement.chevron_seven_locked.desc=Vorhandene 7-Zeichen-Adresse anwählen
 
-advancement.chevron_eight_locked.title=Address is not incorrect, but incomplete.
+advancement.chevron_eight_locked.title=Die Adresse ist nicht falsch, aber unvollständig.
 advancement.chevron_eight_locked.desc=Vorhandene 8-Zeichen-Adresse anwählen
 
-advancement.chevron_nine_locked.title=Several billion light years from home
+advancement.chevron_nine_locked.title=Mehrere Milliarden Lichtjahre von zu Hause entfernt
 advancement.chevron_nine_locked.desc=Vorhandene 9-Zeichen-Adresse anwählen
 
 advancement.iris_impact.title=Klopf, klopf... Wer ist da?
@@ -92,8 +92,8 @@ advancement.upgrade_shield.desc=Erhalte den Stargate-Schild
 advancement.beamer.title=Transporter wird strahlen
 advancement.beamer.desc=Holen Sie sich einen Transporter
 
-advancement.titanium.title=Getting harder and tougher
-advancement.titanium.desc=Obtain a titanium ingot
+advancement.titanium.title=Werde hart und zäh
+advancement.titanium.desc=Besorge dir einen Titanbarren
 
 advancement.naquadah_raw.title=Naqua... was?
 advancement.naquadah_raw.desc=Stelle eine rohe Naquadah-Legierung her
@@ -125,7 +125,7 @@ advancement.transportrings_ancient.desc=Verwenden Sie Antiker-Transportringe
 advancement.assembler.title=Antike Fabrik
 advancement.assembler.desc=Erstelle einen Antiken Monteur
 
-advancement.chamber.title=Wachse, Kristalle, wachse!
+advancement.chamber.title=Wachse, Kristall, wachse!
 advancement.chamber.desc=Stelle eine Kristallkammer her
 
 advancement.pcb.title=Technologie auf Kristallbasis
@@ -247,6 +247,7 @@ item.jsg.holder_crystal_pegasus.name=Pegasus Kristallhalter
 # notebook
 item.jsg.page_notebook.name=Notizbuchseite
 item.jsg.page_notebook.empty=Leer
+item.jsg.page_notebook.end=Adresse mit 9 Symbolen
 
 # mysterious page
 item.jsg.page_mysterious_milkyway.name=Mysteriöse Seite (Milchstraße)
@@ -330,6 +331,12 @@ item.jsg.zat.name=Zat'nik'tel
 item.jsg.staff.name=Goa'uld Stabwaffe
 item.jsg.energyWeapon.available_shots=Verfügbare Schüsse:
 
+item.jsg.hammer.name=JSG Hammer
+item.jsg.screwdriver.name=JSG Schraubenzieher
+item.jsg.wrench.name=JSG Schraubenschlüssel
+
+item.jsg.admin_controller.name=Admin Controller
+
 # -------------------
 
 # -------------------
@@ -350,10 +357,20 @@ tile.jsg.titanium_block.name=Titanium Block
 
 # decor blocks
 tile.jsg.tokra_crystal_block.name=Tokra Kristall Block
-tile.jsg.destiny_countdown_block.name=Destiny Countdown Block
+tile.jsg.destiny_countdown_block.name=Destiny Countdown
+tile.jsg.destiny_bearing_block.name=Destiny Bearing
+tile.jsg.destiny_chevron_block.name=Destiny Floor Chevron
+tile.jsg.destiny_vent_block.name=Destiny CO2 Blaster
 
 # props
 prop.jsg.platform_ships_block.name=Ringplatform (Schiff)
+
+prop.jsg.decor_abydos_pot_block.name=Abydos Topf
+prop.jsg.decor_abydos_lamp_off_block.name=Abydos Lampe (Inaktiv)
+prop.jsg.decor_abydos_lamp_on_block.name=Abydos Lampe (Aktiv)
+prop.jsg.decor_drone_weapon_off_block.name=Drohne (Inaktiv)
+prop.jsg.decor_drone_weapon_on_block.name=Drohne (Aktiv)
+prop.jsg.decor_ancient_obelisk_block.name=Antiker Obelisk
 
 # dhd
 tile.jsg.dhd_block.name=Dial Home Device (DHD)
@@ -498,6 +515,7 @@ commands.sggenincoming.notstargate=Angepeilter Block ist kein Stargate
 death.attack.eventHorizon=%s wurde durch das Kawoosh ausgelöscht
 death.attack.irisDeath=%s warf sich gegen eine Iris
 death.attack.wrongSide=%s hat das Gate auf der falschen Seite betreten
+death.attack.unstableEventHorizon=%s hat es nicht auf die andere Seite geschafft
 
 death.attack.zatHit=%s wurde elektrisiert
 death.attack.staffHit=%s ist geschmolzen durch eine Goa'uld Stabwaffe

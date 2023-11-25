@@ -20,6 +20,22 @@
           "weight": 15
         }
       ]
+    },
+    {
+      "name": "sus_page",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "jsg:page_notebook",
+          "data": 1,
+          "weight": 50
+        },
+        {
+          "type": "empty",
+          "weight": 50
+        }
+      ]
     }
   ]
 }

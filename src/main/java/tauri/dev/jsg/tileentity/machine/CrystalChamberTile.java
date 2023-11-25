@@ -12,12 +12,12 @@ import tauri.dev.jsg.gui.container.machine.crystalchamber.CrystalChamberContaine
 import tauri.dev.jsg.machine.AbstractMachineRecipe;
 import tauri.dev.jsg.machine.chamber.CrystalChamberRecipe;
 import tauri.dev.jsg.machine.chamber.CrystalChamberRecipes;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.renderer.machine.AbstractMachineRendererState;
 import tauri.dev.jsg.renderer.machine.CrystalChamberRendererState;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.util.JSGItemStackHandler;
@@ -45,10 +45,11 @@ public class CrystalChamberTile extends AbstractMachineTile {
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             markDirty();
+            onItemHandlerChange();
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
-    protected final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(CrystalChamberBlock.MAX_ENERGY, CrystalChamberBlock.MAX_ENERGY_TRANSFER) {
+    protected final SmallEnergyStorage energyStorage = new SmallEnergyStorage(CrystalChamberBlock.MAX_ENERGY, CrystalChamberBlock.MAX_ENERGY_TRANSFER) {
         @Override
         protected void onEnergyChanged() {
             markDirty();
@@ -63,12 +64,13 @@ public class CrystalChamberTile extends AbstractMachineTile {
         @Override
         protected void onContentsChanged() {
             markDirty();
+            onItemHandlerChange();
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
 
     @Override
-    public StargateAbstractEnergyStorage getEnergyStorage() {
+    public SmallEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
 
@@ -92,8 +94,16 @@ public class CrystalChamberTile extends AbstractMachineTile {
 
     @Override
     public AbstractMachineRecipe getRecipeIfPossible() {
+        if(currentRecipe instanceof CrystalChamberRecipe){
+            CrystalChamberRecipe recipe = (CrystalChamberRecipe) currentRecipe;
+            if (!itemStackHandler.insertItem(1, recipe.getResult(), true).equals(ItemStack.EMPTY)) return null;
+            if (fluidHandler.getFluid() == null) return null;
+            if (recipe.isOk(energyStorage.getEnergyStored(), new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()), itemStackHandler.getStackInSlot(0)))
+                return recipe;
+            return null;
+        }
         for (CrystalChamberRecipe recipe : CrystalChamberRecipes.RECIPES) {
-            if (itemStackHandler.insertItem(1, recipe.getResult(), true).equals(recipe.getResult())) continue;
+            if (!itemStackHandler.insertItem(1, recipe.getResult(), true).equals(ItemStack.EMPTY)) continue;
             if (fluidHandler.getFluid() == null) continue;
             if (recipe.isOk(energyStorage.getEnergyStored(), new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()), itemStackHandler.getStackInSlot(0)))
                 return recipe;

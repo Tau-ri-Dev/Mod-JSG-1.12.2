@@ -119,12 +119,15 @@ public class BeamerBeam {
                 Block targetBlock = world.getBlockState(stepPos).getBlock();
                 IBlockState targetBlockState = world.getBlockState(stepPos);
                 if (!debug) {
-                    if (destroyBlocks && !JSGBlocks.isInBlocksArray(targetBlock, JSGBlocks.BEAMER_BREAK_BLACKLIST) && targetBlockState.getBlockHardness(world, stepPos) >= 0.0f)
-                        world.setBlockToAir(stepPos);
-                    else if (!destroyBlocks) {
-                        if ((!targetBlock.isAir(targetBlockState, world, pos) && !targetBlock.isReplaceable(world, pos) && targetBlockState.isOpaqueCube()) || targetBlock == JSGBlocks.IRIS_BLOCK)
-                            return true;
+                    try {
+                        if (destroyBlocks && !JSGBlocks.isInBlocksArray(targetBlock, JSGBlocks.BEAMER_BREAK_BLACKLIST) && targetBlockState.getBlockHardness(world, stepPos) >= 0.0f)
+                            world.setBlockToAir(stepPos);
+                        else if (!destroyBlocks) {
+                            if ((!targetBlock.isAir(targetBlockState, world, pos) && !targetBlock.isReplaceable(world, pos) && targetBlockState.isOpaqueCube()) || targetBlock == JSGBlocks.IRIS_BLOCK)
+                                return true;
+                        }
                     }
+                    catch (Exception ignored){}
                 } else {
                     world.setBlockState(stepPos, Blocks.STONE.getDefaultState());
                 }

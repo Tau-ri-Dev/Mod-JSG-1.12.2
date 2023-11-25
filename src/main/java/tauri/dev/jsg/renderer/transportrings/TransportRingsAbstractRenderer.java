@@ -238,7 +238,8 @@ public abstract class TransportRingsAbstractRenderer extends TileEntitySpecialRe
 
                 platformBase.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
 
-                Minecraft.getMinecraft().getTextureManager().bindTexture(platformOverlayTextureLocation);
+                if(platformOverlayTextureLocation != null)
+                    Minecraft.getMinecraft().getTextureManager().bindTexture(platformOverlayTextureLocation);
                 //JSG.info(platformOverlayTextureLocation.toString());
                 platformToOverlay.render();
                 GlStateManager.popMatrix();

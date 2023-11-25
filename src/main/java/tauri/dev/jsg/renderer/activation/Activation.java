@@ -1,8 +1,8 @@
 package tauri.dev.jsg.renderer.activation;
 
+import net.minecraft.world.World;
 import tauri.dev.jsg.renderer.dialhomedevice.DHDMilkyWayRenderer;
 import tauri.dev.jsg.renderer.stargate.StargateMilkyWayRenderer;
-import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ import java.util.List;
  * 
  * @author MrJake222
  */
+@SuppressWarnings("unused")
 public abstract class Activation<K> {
 	
 	/**
@@ -27,7 +28,7 @@ public abstract class Activation<K> {
 	 * 
 	 * Previously "activationStateChange".
 	 */
-	private long stateChange;
+	private final long stateChange;
 	
 	/**
 	 * Are we dimming?
@@ -35,9 +36,9 @@ public abstract class Activation<K> {
 	protected boolean dim;
 	
 	/**
-	 * {@link ActivationState} containing texture of the {@link Activation#textureIndex} and removal state.
+	 * {@link ActivationState} containing texture of the {@link Activation#textureKey} and removal state.
 	 */
-	private ActivationState state;
+	private final ActivationState state;
 	
 	/**
 	 * Is this {@link Activation} actively called from the render loop?
@@ -47,7 +48,7 @@ public abstract class Activation<K> {
 	/**
 	 * Main constructor
 	 * 
-	 * @param textureIndex Index on the texture list.
+	 * @param textureKey Index on the texture list.
 	 * @param stateChange When the {@link Activation} was created.
 	 * @param dim Are we dimming?
 	 */
@@ -68,9 +69,8 @@ public abstract class Activation<K> {
 	protected abstract float getMaxStage();
 	
 	/**
-	 * Get tick multiplier for given {@link Activation#textureIndex}.
-	 * 
-	 * @param textureIndex Texture index.
+	 * Get tick multiplier
+	 *
 	 * @return Tick multiplier.
 	 */
 	protected abstract float getTickMultiplier();
@@ -114,7 +114,7 @@ public abstract class Activation<K> {
 	 * @param worldTicks Usually {@link World#getTotalWorldTime()}.
 	 * @param partialTicks Partial ticks.
 	 * 
-	 * {@link ActivationState} containing texture of the {@link Activation#textureIndex} and removal state.
+	 * {@link ActivationState} containing texture of the {@link Activation#textureKey} and removal state.
 	 */
 	public ActivationState activate(long worldTicks, double partialTicks) {
 		double stage = (worldTicks - stateChange + partialTicks) * getTickMultiplier();
@@ -158,8 +158,8 @@ public abstract class Activation<K> {
 	 * 
 	 * @author MrJake222
 	 */
-	public static interface IActivationCallback<K> {
-		public void run(K textureKey, float stage);
+	public interface IActivationCallback<K> {
+		void run(K textureKey, float stage);
 	}
 	
 	/**
@@ -215,8 +215,6 @@ public abstract class Activation<K> {
 			return false;
 		if (dim != other.dim)
 			return false;
-		if (stateChange != other.stateChange)
-			return false;
-		return true;
+		return stateChange == other.stateChange;
 	}
 }

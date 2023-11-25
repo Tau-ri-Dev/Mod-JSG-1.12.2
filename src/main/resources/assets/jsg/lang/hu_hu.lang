@@ -246,6 +246,7 @@ item.jsg.holder_crystal_pegasus.name=Kristálytartó (Pegazus)
 # notebook
 item.jsg.page_notebook.name=Jegyzetfüzet oldal
 item.jsg.page_notebook.empty=Üres
+item.jsg.page_notebook.end=Address with 9 symbols
 
 # mysterious page
 item.jsg.page_mysterious_milkyway.name=Titokzatos Oldal (Tejút)
@@ -333,6 +334,8 @@ item.jsg.hammer.name=JSG Kalapács
 item.jsg.screwdriver.name=JSG Csavarhúzó
 item.jsg.wrench.name=JSG Csavarkulcs
 
+item.jsg.admin_controller.name=Admin Controller
+
 # gears
 item.jsg.gear_titanium.name=Fogaskerék (Titánium)
 item.jsg.gear_trinium.name=Fogaskerék (Trínium)
@@ -365,10 +368,20 @@ tile.jsg.titanium_block.name=Titánium Tömb
 
 # decor blocks
 tile.jsg.tokra_crystal_block.name=Tok'ra Kristály Blokk
-tile.jsg.destiny_countdown_block.name=Végzet Időzítő Blokk
+tile.jsg.destiny_countdown_block.name=Végzet Időzítő
+tile.jsg.destiny_bearing_block.name=Destiny Bearing
+tile.jsg.destiny_chevron_block.name=Destiny Floor Chevron
+tile.jsg.destiny_vent_block.name=Destiny CO2 Blaster
 
 # props
 prop.jsg.platform_ships_block.name=Gyűrű platform (Hajók)
+
+prop.jsg.decor_abydos_pot_block.name=Abydos Pot
+prop.jsg.decor_abydos_lamp_off_block.name=Abydos Lamp (Off)
+prop.jsg.decor_abydos_lamp_on_block.name=Abydos Lamp (On)
+prop.jsg.decor_drone_weapon_off_block.name=Ancient Drone (Off)
+prop.jsg.decor_drone_weapon_on_block.name=Ancient Drone (On)
+prop.jsg.decor_ancient_obelisk_block.name=Ancient Obelisk
 
 # dhd
 tile.jsg.dhd_block.name=Tárcsázókészülék
@@ -515,6 +528,7 @@ commands.sggenincoming.notstargate=Célblokk nem egy Csillagkapu Alap
 death.attack.eventHorizon=%s-t elért egy kawoosh
 death.attack.irisDeath=%s-t elhamvaszott egy írisz
 death.attack.wrongSide=%s a kapu rossz oldalába lépett
+death.attack.unstableEventHorizon=%s didn't make it to the other side
 
 death.attack.zatHit=%s elektrolizálva lett
 death.attack.staffHit=%s-t elégette egy Goa'uld Botfegyver

@@ -12,12 +12,12 @@ import tauri.dev.jsg.gui.container.machine.pcbfabricator.PCBFabricatorContainerG
 import tauri.dev.jsg.machine.AbstractMachineRecipe;
 import tauri.dev.jsg.machine.pcbfabricator.PCBFabricatorRecipe;
 import tauri.dev.jsg.machine.pcbfabricator.PCBFabricatorRecipes;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.renderer.machine.AbstractMachineRendererState;
 import tauri.dev.jsg.renderer.machine.PCBFabricatorRendererState;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.util.JSGItemStackHandler;
@@ -43,7 +43,7 @@ public class PCBFabricatorTile extends AbstractMachineTile {
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
-    protected final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(PCBFabricatorBlock.MAX_ENERGY, PCBFabricatorBlock.MAX_ENERGY_TRANSFER) {
+    protected final SmallEnergyStorage energyStorage = new SmallEnergyStorage(PCBFabricatorBlock.MAX_ENERGY, PCBFabricatorBlock.MAX_ENERGY_TRANSFER) {
         @Override
         protected void onEnergyChanged() {
             markDirty();
@@ -58,6 +58,7 @@ public class PCBFabricatorTile extends AbstractMachineTile {
         @Override
         protected void onContentsChanged() {
             markDirty();
+            onItemHandlerChange();
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
@@ -86,8 +87,17 @@ public class PCBFabricatorTile extends AbstractMachineTile {
         for (int i = 0; i < 9; i++)
             stacks.add(itemStackHandler.getStackInSlot(i));
 
+        if(currentRecipe instanceof PCBFabricatorRecipe){
+            PCBFabricatorRecipe recipe = (PCBFabricatorRecipe) currentRecipe;
+            if (!itemStackHandler.insertItem(9, recipe.getResult(), true).equals(ItemStack.EMPTY)) return null;
+            if (fluidHandler.getFluid() == null) return null;
+            if (recipe.isOk(energyStorage.getEnergyStored(), new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()), stacks))
+                return recipe;
+            return null;
+        }
+
         for (PCBFabricatorRecipe recipe : PCBFabricatorRecipes.RECIPES) {
-            if (itemStackHandler.insertItem(9, recipe.getResult(), true).equals(recipe.getResult())) continue;
+            if (!itemStackHandler.insertItem(9, recipe.getResult(), true).equals(ItemStack.EMPTY)) continue;
             if (fluidHandler.getFluid() == null) continue;
             if (recipe.isOk(energyStorage.getEnergyStored(), new FluidStack(fluidHandler.getFluid(), fluidHandler.getFluidAmount()), stacks))
                 return recipe;
@@ -110,7 +120,7 @@ public class PCBFabricatorTile extends AbstractMachineTile {
     }
 
     @Override
-    public StargateAbstractEnergyStorage getEnergyStorage() {
+    public SmallEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
 

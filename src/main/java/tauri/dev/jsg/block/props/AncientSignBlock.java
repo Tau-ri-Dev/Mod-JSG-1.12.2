@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
@@ -62,6 +61,26 @@ public class AncientSignBlock extends JSGBlock {
         setHarvestLevel("pickaxe", 2);
     }
 
+    // --------------------------------------------------------------------------------------
+    // Block states
+
+    @Nonnull
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, JSGProps.FACING_HORIZONTAL);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(JSGProps.FACING_HORIZONTAL).getHorizontalIndex();
+    }
+
+    @Nonnull
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.getHorizontal(meta));
+    }
+
     @Override
     public boolean hasTileEntity(@Nonnull IBlockState state) {
         return true;
@@ -111,23 +130,6 @@ public class AncientSignBlock extends JSGBlock {
     @Override
     public IBlockState getStateForPlacement(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @Nonnull EntityLivingBase placer, @Nonnull EnumHand hand) {
         return getDefaultState().withProperty(JSGProps.FACING_HORIZONTAL, facing);
-    }
-
-    @Nonnull
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, JSGProps.FACING_HORIZONTAL);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(JSGProps.FACING_HORIZONTAL).getHorizontalIndex();
-    }
-
-    @Nonnull
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.getHorizontal(meta));
     }
 
     @Nonnull
@@ -213,11 +215,11 @@ public class AncientSignBlock extends JSGBlock {
 
     @Override
     public void onBlockPlacedBy(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EntityLivingBase placer, @Nonnull ItemStack stack) {
-        if(stack.hasTagCompound()){
+        if (stack.hasTagCompound()) {
             NBTTagCompound compound = stack.getTagCompound();
-            if(compound != null && compound.hasKey("BlockEntityTag")){
+            if (compound != null && compound.hasKey("BlockEntityTag")) {
                 TileEntity tile = world.getTileEntity(pos);
-                if(tile instanceof AncientSignTile){
+                if (tile instanceof AncientSignTile) {
                     AncientSignTile casted = (AncientSignTile) tile;
                     NBTTagCompound c = compound.getCompoundTag("BlockEntityTag");
                     casted.fromItemStack(c);
@@ -243,5 +245,10 @@ public class AncientSignBlock extends JSGBlock {
 
     protected boolean isInvalidNeighbor(World worldIn, BlockPos pos, EnumFacing facing) {
         return worldIn.getBlockState(pos.offset(facing)).getMaterial() == Material.CACTUS;
+    }
+
+    @Override
+    public boolean isPassable(@Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
+        return true;
     }
 }

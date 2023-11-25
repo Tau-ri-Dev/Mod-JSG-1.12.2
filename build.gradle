@@ -26,7 +26,6 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
 
 
-
 version = "${mc_version}-${mod_version}"
 group = "tauri.dev.jsg"
 archivesBaseName = "${build_extrapath}jsg"
@@ -84,8 +83,9 @@ repositories {
 
     maven {
         // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
+        name = "JEI maven"
+        //url = "https://maven.blamejared.com/mezz/jei"
+        url = "https://modmaven.dev"
     }
 
     maven {
@@ -158,7 +158,8 @@ jar {
 
 task replaceTokens(type: Sync) {
     from sourceSets.main.java
-    inputs.property 'version', project.mc_version.toString()
+    inputs.property 'mc_version', project.mod_version.toString()
+    inputs.property 'version', project.version.toString()
     filter(ReplaceTokens, tokens: [VERSION: version.toString()])
     filter(ReplaceTokens, tokens: [MCVERSION: "${project.mc_version}".toString()])
     into "$buildDir/src"

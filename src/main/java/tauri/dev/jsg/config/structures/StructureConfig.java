@@ -36,8 +36,8 @@ public class StructureConfig {
         this.configId = configId;
     }
 
-    public void addKey(String key, boolean defaultValue, float chance) {
-        entries.put(key, new StructureConfigEntry(defaultValue, chance));
+    public void addKey(String key, boolean defaultValue, float defaultChance) {
+        entries.put(key, new StructureConfigEntry(defaultValue, defaultChance));
     }
 
     // -------------------------------------------------

@@ -1,16 +1,15 @@
 package tauri.dev.jsg.gui.element.tabs;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.resources.I18n;
 import tauri.dev.jsg.config.ingame.JSGConfigOption;
 import tauri.dev.jsg.config.ingame.JSGConfigOptionTypeEnum;
 import tauri.dev.jsg.config.ingame.JSGTileEntityConfig;
 import tauri.dev.jsg.gui.element.GuiHelper;
 import tauri.dev.jsg.gui.element.ModeButton;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.resources.I18n;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,10 +53,7 @@ public class TabConfig extends TabScrollAble {
             if (canRenderEntry(x, y)) {
                 if (id < 0) continue;
                 fontRenderer.drawString(I18n.format(config.getOption(id).getLabel()), x, y, 4210752);
-                GlStateManager.enableBlend();
-                GlStateManager.color(1, 1, 1, 1);
                 button.drawButton(mouseX, mouseY);
-                GlStateManager.disableBlend();
             }
         }
         renderCover(fontRenderer);

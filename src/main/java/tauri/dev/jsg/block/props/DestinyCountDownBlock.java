@@ -7,8 +7,6 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,20 +18,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlock;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.gui.GuiIdEnum;
 import tauri.dev.jsg.renderer.props.DestinyCountDownRenderer;
-import tauri.dev.jsg.tileentity.dialhomedevice.DHDAbstractTile;
 import tauri.dev.jsg.tileentity.props.DestinyCountDownTile;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateUniverseBaseTile;
-import tauri.dev.jsg.util.ItemHandlerHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
@@ -96,22 +88,6 @@ public class DestinyCountDownBlock extends JSGBlock {
         EnumFacing facing = placer.getHorizontalFacing().getOpposite();
         state = state.withProperty(JSGProps.FACING_HORIZONTAL, facing);
         world.setBlockState(pos, state);
-
-        DestinyCountDownTile tile = (DestinyCountDownTile) world.getTileEntity(pos);
-        if(tile != null)
-            tile.updateLinkStatus();
-    }
-
-    @Override
-    public void breakBlock(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
-        DestinyCountDownTile tile = (DestinyCountDownTile) world.getTileEntity(pos);
-
-        if (!world.isRemote && tile != null) {
-            StargateUniverseBaseTile gateTile = tile.getLinkedGate(world);
-            if (gateTile != null) gateTile.setLinkedCountdown(null, -1);
-        }
-
-        super.breakBlock(world, pos, state);
     }
 
     @Override

@@ -5,5 +5,9 @@ public enum EntryActionEnum {
 	MOVE_UP,
 	MOVE_DOWN,
 	REMOVE,
-	DIAL
+	DIAL,
+	ABORT,
+	TOGGLE_IRIS,
+	GIVE_NOTEBOOK,
+	TELEPORT_TO_POS
 }

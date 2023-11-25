@@ -5,6 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -13,12 +14,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.block.JSGBlock;
+import tauri.dev.jsg.block.TechnicalBlock;
+import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 import tauri.dev.jsg.stargate.EnumMemberVariant;
 import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
@@ -27,9 +28,11 @@ import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.Objects;
 
-public abstract class StargateAbstractBaseBlock extends JSGBlock {
+public abstract class StargateAbstractBaseBlock extends TechnicalBlock {
 
     public StargateAbstractBaseBlock(String blockName) {
         super(Material.IRON);
@@ -43,9 +46,86 @@ public abstract class StargateAbstractBaseBlock extends JSGBlock {
         setDefaultState(blockState.getBaseState().withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.NORTH).withProperty(JSGProps.FACING_VERTICAL, EnumFacing.SOUTH).withProperty(JSGProps.RENDER_BLOCK, true));
 
         setLightOpacity(0);
-        setHardness(3.0f);
+        setHardness(JSGConfig.Stargate.mechanics.enableGateDisassembleWrench ? -1 : 5);
         setResistance(60.0f);
-        setHarvestLevel("pickaxe", 3);
+        if(JSGConfig.Stargate.mechanics.enableGateDisassembleWrench)
+            setHarvestLevel("wrench", -1);
+        else
+            setHarvestLevel("pickaxe", 2);
+
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public boolean canEntityDestroy(IBlockState state, IBlockAccess world, BlockPos pos, Entity entity){
+        return false;
+    }
+
+    public void destroyAndGiveDrops(boolean isShifting, EntityPlayer player, World world, BlockPos pos, EnumHand hand, IBlockState state) {
+        if (isShifting) {
+            collectGate(player, hand, world, pos, state);
+            return;
+        }
+
+        dropBlockAsItem(world, pos, state, -2);
+        world.setBlockToAir(pos);
+        player.getHeldItem(hand).damageItem(1, player);
+    }
+
+    protected void collectGate(EntityPlayer player, EnumHand hand, World world, BlockPos basePos, IBlockState state) {
+        ItemStack toolStack = player.getHeldItem(hand);
+        if (toolStack.isEmpty()) return;
+        final StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(basePos);
+        final EnumFacing facing = Objects.requireNonNull(gateTile).getFacing();
+        final EnumFacing facingVertical = gateTile.getFacingVertical();
+
+        StargateAbstractMergeHelper mergeHelper = gateTile.getMergeHelper();
+
+
+        // Collect member blocks
+        for (EnumMemberVariant variant : EnumMemberVariant.values()) {
+            List<BlockPos> posList = mergeHelper.getPlacedBlockPositions(world, basePos, facing, facingVertical, variant);
+
+            if (posList.isEmpty()) continue;
+            for (BlockPos pos : posList) {
+
+                if (toolStack.isEmpty()) return;
+                IBlockState memberState = world.getBlockState(pos);
+
+                List<ItemStack> stacks = memberState.getBlock().getDrops(world, pos, memberState, -2);
+                boolean shouldSkip = false;
+                for (ItemStack stack : stacks) {
+                    if (!player.addItemStackToInventory(stack)) {
+                        shouldSkip = true;
+                    }
+                }
+
+                if (shouldSkip) continue;
+                toolStack.damageItem(1, player);
+
+                SoundType soundtype = memberState.getBlock().getSoundType(memberState, world, pos, player);
+                world.playSound(null, pos, soundtype.getBreakSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+
+                world.setBlockToAir(pos);
+
+                gateTile.updateMergeState(false, facing, facingVertical);
+            }
+        }
+
+        // Collect base block
+        if (toolStack.isEmpty()) return;
+        List<ItemStack> stacks = state.getBlock().getDrops(world, basePos, state, -2);
+        boolean shouldSkip = false;
+        for (ItemStack stack : stacks) {
+            if (!player.addItemStackToInventory(stack)) {
+                shouldSkip = true;
+            }
+        }
+
+        if (shouldSkip) return;
+        toolStack.damageItem(1, player);
+
+        world.setBlockToAir(basePos);
     }
 
     // -----------------------------------
@@ -82,11 +162,12 @@ public abstract class StargateAbstractBaseBlock extends JSGBlock {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
+            if (tryBreak(player.getHeldItem(hand), false, player.isSneaking(), player, world, pos, hand, state))
+                return true;
             if (!player.isSneaking() && !tryAutobuild(player, world, pos, hand)) {
                 showGateInfo(player, hand, world, pos);
             }
         }
-
         return !player.isSneaking();
     }
 
@@ -152,6 +233,7 @@ public abstract class StargateAbstractBaseBlock extends JSGBlock {
 
     @Override
     public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack tool) {
+        tryBreak(null, true, false, player, world, pos, player.getActiveHand(), state);
         super.harvestBlock(world, player, pos, state, te, tool);
         world.setBlockToAir(pos);
     }
@@ -159,7 +241,8 @@ public abstract class StargateAbstractBaseBlock extends JSGBlock {
     @Override
     public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
         StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getTileEntity(pos);
-        gateTile.refresh();
+        if (gateTile != null)
+            gateTile.refresh();
     }
 
     // --------------------------------------------------------------------------------------

@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "jsg:items/page_base",
+        "layer1": "jsg:items/notebook_page_end"
+    }
+}

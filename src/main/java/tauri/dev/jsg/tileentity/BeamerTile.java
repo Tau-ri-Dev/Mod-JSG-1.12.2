@@ -45,6 +45,7 @@ import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.packet.StateUpdateRequestToServer;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.JSGSoundHelperClient;
 import tauri.dev.jsg.sound.SoundEventEnum;
@@ -53,7 +54,6 @@ import tauri.dev.jsg.stargate.EnumScheduledTask;
 import tauri.dev.jsg.stargate.EnumStargateState;
 import tauri.dev.jsg.stargate.network.StargatePos;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateProviderInterface;
 import tauri.dev.jsg.state.StateTypeEnum;
@@ -75,7 +75,7 @@ import java.util.*;
 import static tauri.dev.jsg.block.JSGBlocks.BEAMER_BLOCK;
 
 @Optional.Interface(iface = "li.cil.oc.api.network.Environment", modid = "opencomputers")
-public class BeamerTile extends TileEntity implements ITickable, IUpgradable, StateProviderInterface, ScheduledTaskExecutorInterface, Environment {
+public class BeamerTile extends SidedTileEntity implements ITickable, IUpgradable, StateProviderInterface, ScheduledTaskExecutorInterface, Environment {
 
     // -----------------------------------------------------------------------------
     // Ticking & loading
@@ -140,10 +140,10 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
         if (beamerRole == BeamerRoleEnum.DISABLED)
             return BeamerStatusEnum.BEAMER_DISABLED;
 
-        if(isLaser && beamerRole == BeamerRoleEnum.RECEIVE)
+        if (isLaser && beamerRole == BeamerRoleEnum.RECEIVE)
             return BeamerStatusEnum.BEAMER_CANNOT_RECEIVE;
 
-        if(!isLaser) {
+        if (!isLaser) {
             if (targetBeamerWorld == null || targetBeamerPos == null || !BEAMER_MATCHER.apply(targetBeamerWorld.getBlockState(targetBeamerPos)))
                 return BeamerStatusEnum.NO_BEAMER;
 
@@ -290,6 +290,11 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
 
             beamerStatus = updateBeamerStatus();
 
+            if (targetGatePos == null) {
+                beamerStatus = BeamerStatusEnum.NOT_LINKED;
+                markDirty();
+            }
+
             if ((beamerStatus == BeamerStatusEnum.OK || beamerStatus == BeamerStatusEnum.OBSTRUCTED) && beamerMode != BeamerModeEnum.NONE && beamerRole != BeamerRoleEnum.DISABLED) {
                 BeamerBeam.isSomethingInBeam(this, true, true);
             }
@@ -383,10 +388,12 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
                             break;
 
                         case LASER:
-                            int lx = energyStorage.extractEnergy(JSGConfig.Beamer.power.laserEnergy, false);
-                            StargateClassicBaseTile gate = ((StargateClassicBaseTile) this.targetGatePos.getTileEntity());
-                            gate.tryHeatUp(true, true, 0.3, 0.6, 0, -1, -1);
-                            powerTransferredSinceLastSignal += lx;
+                            powerTransferredSinceLastSignal += energyStorage.extractEnergy(JSGConfig.Beamer.power.laserEnergy, false);
+                            TileEntity te = this.targetGatePos.getTileEntity();
+                            if(te instanceof StargateClassicBaseTile) {
+                                StargateClassicBaseTile gate = (StargateClassicBaseTile) te;
+                                gate.tryHeatUp(true, true, 0.3, 0.6, 0, -1, -1);
+                            }
                             break;
 
                         default:
@@ -812,6 +819,27 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
         markDirty();
     }
 
+    @Override
+    public ItemStackHandler getItemStackHandler() {
+        return itemStackHandler;
+    }
+
+    @Nonnull
+    @Override
+    public int[] getSlotsForFace(@Nonnull EnumFacing side) {
+        switch (side){
+            case UP:
+            case DOWN:
+                return new int[]{0};
+            default:
+                if(beamerMode == BeamerModeEnum.ITEMS){
+                    return new int[]{1, 2, 3, 4};
+                }
+                else break;
+        }
+        return new int[0];
+    }
+
 
     // -----------------------------------------------------------------------------
     // Item handler
@@ -939,7 +967,7 @@ public class BeamerTile extends TileEntity implements ITickable, IUpgradable, St
     // -----------------------------------------------------------------------------
     // Power system
 
-    private final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(tauri.dev.jsg.config.JSGConfig.Beamer.container.energyCapacity, JSGConfig.Beamer.container.energyTransfer) {
+    private final SmallEnergyStorage energyStorage = new SmallEnergyStorage(tauri.dev.jsg.config.JSGConfig.Beamer.container.energyCapacity, JSGConfig.Beamer.container.energyTransfer) {
 
         @Override
         protected void onEnergyChanged() {

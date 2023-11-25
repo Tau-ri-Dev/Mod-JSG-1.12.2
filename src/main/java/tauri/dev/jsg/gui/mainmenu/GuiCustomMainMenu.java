@@ -38,21 +38,21 @@ public class GuiCustomMainMenu extends GuiScreen {
 
     public static final String WIKI_RAM_ALLOCATION_URL = "https://justsgmod.eu/wiki/?category=general&topic=start#Allocating%20more%20RAM";
     public static final String GITHUB = "https://github.com/Tau-ri-Dev";
-    public static final String MINECRAFT_SITES = "https://minecraft.net/en-us";
+    //public static final String MINECRAFT_SITES = "https://minecraft.net/en-us";
     public static final String JSG_RUNNING_TEXT = "Just Stargate Mod v" + JSG.MOD_VERSION.replaceAll(JSG.MC_VERSION + "-", "");
-    public static final ArrayList<ResourceLocation> BACKGROUNDS = new ArrayList<ResourceLocation>() {{
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background0.jpg"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background1.jpg"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background2.jpg"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background3.jpg"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background4.jpg"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background5.jpg"));
-        add(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/background6.jpg"));
-    }};
+
+    public static class MainMenuBackground {
+        protected static final String PATH = "textures/gui/mainmenu/background";
+        protected static final String END = ".jpg";
+
+        public static ResourceLocation get(int id){
+            return new ResourceLocation(JSG.MOD_ID, PATH + id + END);
+        }
+    }
     public static final ResourceLocation LOGO_TAURI = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/tauri_dev_logo.png");
-    public static final ResourceLocation LOGO_MOJANG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/mojang_logo.png");
+    //public static final ResourceLocation LOGO_MOJANG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/mojang_logo.png");
     public static final ResourceLocation LOGO_JSG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/jsg_logo.png");
-    public static final int BACKGROUNDS_COUNT = BACKGROUNDS.size();
+    public static final int BACKGROUNDS_COUNT = JSGConfig.General.mainMenuConfig.backgroundImagesCount;
     public static final long FIRST_TRANSITION_LENGTH = 7 * 20; // in relative ticks
     public static final int PADDING = 10;
     public static final MainMenuNotifications NOTIFIER = MainMenuNotifications.getManager();
@@ -134,8 +134,8 @@ public class GuiCustomMainMenu extends GuiScreen {
             tick = JSGMinecraftHelper.getClientTickPrecise();
         } else {
             int currentFPS = Minecraft.getDebugFPS();
-            if (currentFPS > bestFPS) bestFPS = Math.min(currentFPS, 30);
-            tick += (bestFPS > 0 ? ((30D / (double) bestFPS) * (20D / (double) bestFPS)) : 1D);
+            if (currentFPS > bestFPS || bestFPS > 30) bestFPS = currentFPS;
+            tick += (bestFPS > 0 ? ((30D / (double) bestFPS) * (20D / 30D)) : 1D);
         }
     }
 
@@ -280,8 +280,8 @@ public class GuiCustomMainMenu extends GuiScreen {
         int sizeXJSG = (int) (width / sizeCoef);
         int sizeYJSG = (230 * sizeXJSG) / 411;
 
-        int sizeXMojang = (int) (width / sizeCoef);
-        int sizeYMojang = (52 * sizeXMojang) / 300;
+        //int sizeXMojang = (int) (width / sizeCoef);
+        int sizeYMojang = 0; //(52 * sizeXMojang) / 300;
 
         int[] center = getCenterPos(sizeXJSG, sizeYJSG);
         int xEnd = PADDING;
@@ -308,7 +308,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         GlStateManager.enableBlend();
         // Tauri dev logo
         Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_TAURI);
-        drawScaledCustomSizeModalRect(x, y, 0, 0, 411, 230, sizeXJSG, sizeYJSG, 410, 229);
+        drawScaledCustomSizeModalRect(x, y, 0, 0, 410, 229, sizeXJSG, sizeYJSG, 411, 230);
 
         center = getCenterPos(0, 0);
         if (alpha > 0.75)
@@ -338,13 +338,13 @@ public class GuiCustomMainMenu extends GuiScreen {
             // Clickable images/texts
             int sizeXTauri = width / 10;
             int sizeYTauri = (230 * sizeXTauri) / 411;
-            int sizeYMojang = (52 * sizeXTauri) / 300;
+            int sizeYMojang = 0; //(52 * sizeXTauri) / 300;
             if (isPointInRegion(PADDING, height - PADDING - sizeYTauri - sizeYMojang - 8, sizeXTauri, sizeYTauri, mouseX, mouseY)) {
                 openWebsiteToClient(GITHUB);
             }
-            if (isPointInRegion(PADDING, height - PADDING - sizeYMojang, sizeXTauri, sizeYMojang, mouseX, mouseY)) {
+            /*..if (isPointInRegion(PADDING, height - PADDING - sizeYMojang, sizeXTauri, sizeYMojang, mouseX, mouseY)) {
                 openWebsiteToClient(MINECRAFT_SITES);
-            }
+            }*/
 
             // JSG text
             int jsgSizeX = fontRenderer.getStringWidth(JSG_RUNNING_TEXT);
@@ -466,7 +466,7 @@ public class GuiCustomMainMenu extends GuiScreen {
         GlStateManager.translate(center[0], center[1], 0);
         GlStateManager.scale(scale, scale, 1);
         backgroundScale = scale;
-        Minecraft.getMinecraft().getTextureManager().bindTexture(BACKGROUNDS.get(currentBackground));
+        Minecraft.getMinecraft().getTextureManager().bindTexture(MainMenuBackground.get(currentBackground));
         drawScaledCustomSizeModalRect(-(width / 2), -(height / 2), 0, 0, 1921, 1018, width, height, 1920, 1017);
         GlStateManager.popMatrix();
 
@@ -504,8 +504,8 @@ public class GuiCustomMainMenu extends GuiScreen {
 
         int sizeXTauri = width / 10;
         int sizeYTauri = (230 * sizeXTauri) / 411;
-        int sizeXMojang = width / 10;
-        int sizeYMojang = (52 * sizeXMojang) / 300;
+        //int sizeXMojang = sizeXTauri;
+        int sizeYMojang = 0; //(52 * sizeXMojang) / 300;
 
         int sizeXJSG = (int) (width / 2.33);
         int sizeYJSG = (603 * sizeXJSG) / 1586;
@@ -521,8 +521,8 @@ public class GuiCustomMainMenu extends GuiScreen {
         drawScaledCustomSizeModalRect(PADDING, height - PADDING - sizeYTauri - sizeYMojang - 8, 0, 0, 411, 230, sizeXTauri, sizeYTauri, 410, 229);
 
         // Mojang logo
-        Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_MOJANG);
-        drawScaledCustomSizeModalRect(PADDING, height - PADDING - sizeYMojang, 0, 0, 301, 53, sizeXMojang, sizeYMojang, 300, 52);
+        //Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_MOJANG);
+        //drawScaledCustomSizeModalRect(PADDING, height - PADDING - sizeYMojang, 0, 0, 301, 53, sizeXMojang, sizeYMojang, 300, 52);
 
         // JSG logo - main
         Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_JSG);
@@ -554,7 +554,7 @@ public class GuiCustomMainMenu extends GuiScreen {
 
             int sizeXTauri = width / 10;
             int sizeYTauri = (230 * sizeXTauri) / 411;
-            int sizeYMojang = (52 * sizeXTauri) / 300;
+            int sizeYMojang = 0; //(52 * sizeXTauri) / 300;
             if (isPointInRegion(PADDING, height - PADDING - sizeYTauri - sizeYMojang - 8, sizeXTauri, sizeYTauri, mouseX, mouseY)) {
                 List<String> power = Arrays.asList(
                         TextFormatting.WHITE.toString() + TextFormatting.BOLD + "Just Stargate Mod developed by:",
@@ -644,7 +644,8 @@ public class GuiCustomMainMenu extends GuiScreen {
                             UPDATER_RESULT.response,
                             "",
                             "Can not get response from the server!",
-                            "Please check your internet connection."
+                            "Please check your internet connection.",
+                            "Problem can also be on our side."
                     ) {
                         @Override
                         public void render(int mouseX, int mouseY, int width, int height, int rectX, int rectY, GuiScreen parentScreen) {
@@ -684,7 +685,7 @@ public class GuiCustomMainMenu extends GuiScreen {
                 add(new GuiButton(BUTTONS_ID_START + 11, (PADDING / 2), 0, width, 20, update));
             }}, "Allocate more RAM!",
                     "",
-                    "Recommended RAM for JSG mod is 6GB!",
+                    "Recommended minimum RAM for JSG mod is 6GB!",
                     "By ignoring this fact, you can",
                     "run into troubles with this mod."
             ) {

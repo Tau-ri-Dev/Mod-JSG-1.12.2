@@ -1,52 +1,73 @@
 package tauri.dev.jsg.command.stargate;
 
-import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import tauri.dev.jsg.command.AbstractJSGCommand;
+import tauri.dev.jsg.command.JSGCommand;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 
-public class CommandFix extends CommandBase {
+import javax.annotation.Nonnull;
 
-  @Override
-  public String getName() {
-    return "sgfix";
-  }
+import static net.minecraft.command.CommandBase.parseCoordinate;
 
-  @Override
-  public String getUsage(ICommandSender sender) {
-    return "/sgfix";
-  }
+public class CommandFix extends AbstractJSGCommand {
 
-  @Override
-  public int getRequiredPermissionLevel() {
-    return 2;
-  }
-
-  @Override
-  public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-    World world = sender.getEntityWorld();
-
-    if (args.length < 3) {
-      throw new WrongUsageException("commands.sgsetaddress.usage");
+    public CommandFix() {
+        super(JSGCommand.JSG_BASE_COMMAND);
     }
 
-    BlockPos pos = sender.getPosition();
-    int x1 = (int) parseCoordinate(pos.getX(), args[0], false).getResult();
-    int y1 = (int) parseCoordinate(pos.getY(), args[1], 0, 255, false).getResult();
-    int z1 = (int) parseCoordinate(pos.getZ(), args[2], false).getResult();
+    @Nonnull
+    @Override
+    public String getName() {
+        return "sgfix";
+    }
 
-    BlockPos gatePos = new BlockPos(x1, y1, z1);
-    TileEntity tileEntity = world.getTileEntity(gatePos);
+    @Nonnull
+    @Override
+    public String getDescription() {
+        return "Refresh gate tile (pos and address)";
+    }
 
-    if (tileEntity instanceof StargateAbstractBaseTile) {
-      StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) tileEntity;
-      gateTile.refresh();
-    } else throw new WrongUsageException("commands.sgsetaddress.notstargate");
-  }
+    @Nonnull
+    @Override
+    public String getGeneralUsage() {
+        return "sgfix <x y z>";
+    }
+
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 2;
+    }
+
+    @Override
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
+        World world = sender.getEntityWorld();
+
+        if (args.length < 3) {
+            baseCommand.sendUsageMess(sender, this);
+            return;
+            //throw new WrongUsageException("commands.sgsetaddress.usage");
+        }
+
+        BlockPos pos = sender.getPosition();
+        int x1 = (int) parseCoordinate(pos.getX(), args[0], false).getResult();
+        int y1 = (int) parseCoordinate(pos.getY(), args[1], 0, 255, false).getResult();
+        int z1 = (int) parseCoordinate(pos.getZ(), args[2], false).getResult();
+
+        BlockPos gatePos = new BlockPos(x1, y1, z1);
+        TileEntity tileEntity = world.getTileEntity(gatePos);
+
+        if (tileEntity instanceof StargateAbstractBaseTile) {
+            StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) tileEntity;
+            gateTile.refresh();
+            baseCommand.sendSuccessMess(sender, "Successfully executed!");
+        } else
+            baseCommand.sendErrorMess(sender, "Target block is not a stargate base block!");
+        //throw new WrongUsageException("commands.sgsetaddress.notstargate");
+    }
 
 }

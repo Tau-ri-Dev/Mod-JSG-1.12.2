@@ -1,7 +1,6 @@
 package tauri.dev.jsg.item.stargate;
 
 import net.minecraft.client.resources.I18n;
-import tauri.dev.jsg.JSG;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
@@ -11,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
 
@@ -25,6 +25,12 @@ import java.util.List;
 public class IrisItem extends Item {
     public final int MAX_DAMAGE;
     public Item itemToRepair;
+
+    public boolean creativeIris = false;
+    public IrisItem setCreative(){
+        creativeIris = true;
+        return this;
+    }
 
     public IrisItem(String name, int durability) {
         this(name, durability, null);

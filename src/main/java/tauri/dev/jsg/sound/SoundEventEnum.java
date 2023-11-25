@@ -1,13 +1,13 @@
 package tauri.dev.jsg.sound;
 
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.util.EnumKeyInterface;
-import tauri.dev.jsg.util.EnumKeyMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.util.EnumKeyInterface;
+import tauri.dev.jsg.util.EnumKeyMap;
 
 import javax.annotation.Nullable;
 
@@ -95,6 +95,8 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     DESTINY_FTL_JUMP_IN(128, "destiny_ftl_in", 1f),
     DESTINY_FTL_JUMP_OUT(129, "destiny_ftl_out", 1f),
 
+    DESTINY_BLASTER(130, "destiny_vent", 1f),
+
     //UNIVERSE_DIALER_ERROR(130, "universe_dialer_error", 0.1f),
 
     // ----------------------------------------------------------
@@ -108,16 +110,21 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     RECORD_ATLANTIS(151, "record_atlantis", 0.05f),
     RECORD_ORIGINS(152, "record_origins", 0.05f),
     RECORD_SGC(153, "record_sgc", 0.05f),
-    RECORD_ELEVATOR(154, "record_elevator", 0.05f);
+    RECORD_ELEVATOR(154, "record_elevator", 0.05f),
+
+
+    // ----------------------------------------------------------
+    // Misc
+    GATE_NOX_OPEN(160, "gate_nox_open", 0.4f);
 
 
     // ----------------------------------------------------------
 
 
-    private static final EnumKeyMap<Integer, SoundEventEnum> idMap = new EnumKeyMap<Integer, SoundEventEnum>(values());
-    public int id;
-    public SoundEvent soundEvent;
-    public float volume;
+    private static final EnumKeyMap<Integer, SoundEventEnum> idMap = new EnumKeyMap<>(values());
+    public final int id;
+    public final SoundEvent soundEvent;
+    public final float volume;
     private final String name;
 
     SoundEventEnum(int id, String name, float volume) {

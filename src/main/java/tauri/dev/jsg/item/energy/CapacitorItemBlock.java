@@ -1,10 +1,5 @@
 package tauri.dev.jsg.item.energy;
 
-import tauri.dev.jsg.block.energy.capacitor.CapacitorBlock;
-import tauri.dev.jsg.block.energy.capacitor.CapacitorBlockCreative;
-import tauri.dev.jsg.capability.ItemCapabilityProvider;
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.power.stargate.ItemEnergyStorage;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -16,6 +11,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import tauri.dev.jsg.block.energy.capacitor.CapacitorBlock;
+import tauri.dev.jsg.block.energy.capacitor.CapacitorBlockCreative;
+import tauri.dev.jsg.capability.ItemCapabilityProvider;
+import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.power.general.ItemEnergyStorage;
 
 import javax.annotation.Nullable;
 import java.util.List;

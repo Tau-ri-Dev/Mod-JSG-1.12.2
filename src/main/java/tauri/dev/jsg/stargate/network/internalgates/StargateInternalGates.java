@@ -1,7 +1,8 @@
 package tauri.dev.jsg.stargate.network.internalgates;
 
-import tauri.dev.jsg.stargate.network.StargateAddressDynamic;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
+import tauri.dev.jsg.stargate.network.StargateAddressDynamic;
 
 import java.util.HashMap;
 
@@ -39,6 +40,29 @@ public class StargateInternalGates {
                     e.address.maxAddressLength,
                     e.address.addressToMatch,
                     new StargateAddressDynamic(compound.getCompoundTag(id + "_replaceAddr"))
+            );
+            map.put(id, a);
+        }
+    }
+
+    public void toBytes(ByteBuf buf){
+        if (map.size() < StargateAddressesEnum.values().length) init();
+        for (StargateAddressesEnum e : StargateAddressesEnum.values()) {
+            int id = e.id;
+            map.get(id).addressToReplace.toBytes(buf);
+        }
+    }
+
+    public void fromBytes(ByteBuf buf){
+        map.clear();
+        init();
+        for (StargateAddressesEnum e : StargateAddressesEnum.values()) {
+            int id = e.id;
+            StargateInternalAddress a = new StargateInternalAddress(
+                    e.address.minAddressLength,
+                    e.address.maxAddressLength,
+                    e.address.addressToMatch,
+                    new StargateAddressDynamic(buf)
             );
             map.put(id, a);
         }

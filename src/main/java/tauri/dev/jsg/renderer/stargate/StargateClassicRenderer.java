@@ -37,7 +37,6 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
         GlStateManager.scale(scale, scale, scale);
     }
 
-
     @Override
     protected void applyLightMap(StargateClassicRendererState rendererState, double partialTicks) {
         final int chevronCount = 6;
@@ -131,21 +130,22 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
             GlStateManager.enableBlend();
             GlStateManager.disableLighting();
             GlStateManager.translate(0, 0, 0.13);
-            //GlStateManager.translate(0, 0, 0.13);
+            GlStateManager.pushMatrix();
+            JSGTextureLightningHelper.lightUpTexture(1f);
             for (int k = (backOnly ? 1 : 0); k < 2; k++) {
-                if (k == 1 /* && !rendererState.doEventHorizonRender*/) {
+                if (k == 1) {
                     GlStateManager.rotate(180, 0, 1, 0);
-                } /*else if (k == 1) break;*/
+                }
 
-                StargateRendererStatic.innerCircle.render(tick, false, irisAnimationStage, 0, (byte) -1);
-
+                StargateRendererStatic.innerCircle.render(tick, false, irisAnimationStage, 0, (byte) -1, getShieldColor(rendererState));
 
                 for (StargateRendererStatic.QuadStrip strip : StargateRendererStatic.quadStrips) {
-                    strip.render(tick, false, irisAnimationStage, 0, (byte) -1);
+                    strip.render(tick, false, irisAnimationStage, 0, (byte) -1, getShieldColor(rendererState));
                 }
             }
             GlStateManager.enableLighting();
             GlStateManager.disableBlend();
+            GlStateManager.popMatrix();
             GlStateManager.popMatrix();
         }
         if ((irisType == EnumIrisType.IRIS_TITANIUM || irisType == EnumIrisType.IRIS_TRINIUM || irisType == EnumIrisType.IRIS_CREATIVE) && backOnly) {
@@ -159,10 +159,9 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
                 float rotateIndex = 18f * i;
 
                 GlStateManager.pushMatrix();
-                ElementEnum.IRIS.bindTexture(rendererState.getBiomeOverlay());
                 GlStateManager.rotate(rotateIndex, 0, 0, 1);
                 GlStateManager.translate(-irisAnimationStage, -(irisAnimationStage * 2), 0.02);
-                ElementEnum.IRIS.render();
+                ElementEnum.IRIS.bindTextureAndRender();
                 GlStateManager.popMatrix();
             }
         }
@@ -170,6 +169,10 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
 
     public void setIrisHeatColor(StargateClassicRendererState rendererState, float red) {
         GlStateManager.color(1 + (red * 3F), 1, 1);
+    }
+
+    public float[] getShieldColor(StargateClassicRendererState rendererState){
+        return new float[]{1, 1, 1};
     }
 
     public void setIrisHeatColor(StargateClassicRendererState rendererState) {
@@ -180,15 +183,11 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
         float red = (float) (rendererState.irisHeat / (rendererState.irisType == EnumIrisType.IRIS_TITANIUM ? StargateClassicBaseTile.IRIS_MAX_HEAT_TITANIUM : StargateClassicBaseTile.IRIS_MAX_HEAT_TRINIUM));
         if(rendererState.irisType == EnumIrisType.IRIS_CREATIVE) red = 0;
         setIrisHeatColor(rendererState, red);
-        //.if(red > 0)
-        //    JSGTextureLightningHelper.lightUpTexture(getWorld(), rendererState.pos, red);
     }
 
     public void setGateHeatColor(StargateClassicRendererState rendererState) {
         if (rendererState.gateHeat == -1) return;
         float red = (float) (rendererState.gateHeat / StargateClassicBaseTile.GATE_MAX_HEAT);
         GlStateManager.color(1 + (red * 2.7F), 1, 1);
-        //.if(red > 0)
-        //    JSGTextureLightningHelper.lightUpTexture(getWorld(), rendererState.pos, red);
     }
 }

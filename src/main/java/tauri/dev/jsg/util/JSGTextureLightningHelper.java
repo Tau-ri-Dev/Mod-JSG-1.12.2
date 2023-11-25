@@ -5,19 +5,29 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Loader;
 import tauri.dev.jsg.config.JSGConfig;
 
 import java.util.ArrayList;
 
 public class JSGTextureLightningHelper {
+
+    protected static boolean disabled = false;
+    public static void enable(){
+        disabled = false;
+    }
+    public static void disable(){
+        disabled = true;
+    }
+
     public static void lightUpTexture(World world, BlockPos pos, float lightIntensity) {
+        if(disabled) return;
         lightUpTexture(world, new ArrayList<BlockPos>() {{
             add(pos);
         }}, lightIntensity);
     }
 
     public static void lightUpTexture(World world, ArrayList<BlockPos> poses, float lightIntensity) {
+        if(disabled) return;
         if (!JSGConfig.General.visual.renderEmissive) return;
         final int count = poses.size();
         int skyLight = 0;
@@ -40,6 +50,7 @@ public class JSGTextureLightningHelper {
      * @param lightIntensity Is 0-1F when 0 is the lowest light
      */
     public static void lightUpTexture(float lightIntensity) {
+        if(disabled) return;
         if (!JSGConfig.General.visual.renderEmissive) return;
         RenderHelper.enableStandardItemLighting();
         if (lightIntensity > 1) lightIntensity = 1;
@@ -56,12 +67,14 @@ public class JSGTextureLightningHelper {
      * @param pos   Is pos of the tile entity
      */
     public static void resetLight(World world, BlockPos pos) {
+        if(disabled) return;
         resetLight(world, new ArrayList<BlockPos>() {{
             add(pos);
         }});
     }
 
     public static void resetLight(World world, ArrayList<BlockPos> poses) {
+        if(disabled) return;
         //if (!Loader.isModLoaded("optifine")) return;
         final int count = poses.size();
         int skyLight = 0;

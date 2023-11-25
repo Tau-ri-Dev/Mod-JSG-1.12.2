@@ -1,18 +1,18 @@
 package tauri.dev.jsg.util;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.block.JSGBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.block.JSGBlock;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -53,6 +53,19 @@ public class BlockHelpers {
 		
 		return top;
 	}
+	public static BlockPos getHighestWithXZCords(List<BlockPos> list, int x, int z) {
+		int maxy = -1;
+		BlockPos top = null;
+
+		for (BlockPos pos : list) {
+			if (pos.getY() > maxy && pos.getX() == x & pos.getZ() == z) {
+				maxy = pos.getY();
+				top = pos;
+			}
+		}
+
+		return top;
+	}
 
 	public static JSGBlock createSimpleBlock(String id, Material material, CreativeTabs tab) {
 		JSGBlock block = new JSGBlock(material);
@@ -74,5 +87,9 @@ public class BlockHelpers {
 		block.setUnlocalizedName(JSG.MOD_ID + "." + id);
 		block.setCreativeTab(tab);
 		return block;
+	}
+
+	public static String blockPosToBetterString(BlockPos pos){
+		return pos.getX() + " " + pos.getY() + " " + pos.getZ();
 	}
 }

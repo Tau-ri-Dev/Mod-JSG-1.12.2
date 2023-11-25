@@ -20,7 +20,7 @@ import tauri.dev.jsg.tileentity.machine.OreWashingTile;
 
 import javax.annotation.Nonnull;
 
-public class OreWashingBlock extends JSGMachineBlock {
+public class OreWashingBlock extends AbstractMachineBlock {
     public static final String BLOCK_NAME = "ore_washing_machine_block";
     public static final int MAX_ENERGY = 9_000_000;
     public static final int MAX_ENERGY_TRANSFER = 20_000;

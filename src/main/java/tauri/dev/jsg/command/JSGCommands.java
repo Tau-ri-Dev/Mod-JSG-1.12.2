@@ -1,20 +1,15 @@
 package tauri.dev.jsg.command;
 
-import net.minecraft.command.CommandBase;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import tauri.dev.jsg.command.stargate.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public final class JSGCommands {
 
-    private static final List<CommandBase> COMMANDS = Arrays.asList(
+    @SuppressWarnings("unused")
+    public static final ArrayList<AbstractJSGCommand> COMMANDS = new ArrayList<>(Arrays.asList(
             new CommandStargateQuery(),
             new CommandPrepare(),
             new CommandStargateCloseAll(),
@@ -31,21 +26,31 @@ public final class JSGCommands {
             new CommandDestinyFTL(),
             new CommandStargateSetFakePos(),
             new CommandStargateGetFakePos(),
-            new CommandStructureSpawn()
-    );
+            new CommandStargateResetFakePos(),
+            new CommandImportOrigins(),
+            new CommandStructureSpawn(),
+            new CommandTest()
+    ));
 
-    public static void registerCommands(FMLServerStartingEvent event) {
-        for (CommandBase command : COMMANDS) {
-            event.registerServerCommand(command);
-        }
+    /**
+     * Used as API
+     * <p>
+     * Register your sub commands to /jsg command.
+     * <p>
+     * ! REGISTER YOUR COMMANDS WHEN SERVER IS STARTING !
+     * Call this when FMLServerStartingEvent event is fired
+     *
+     * @param commandInstance - instance of IJSGCommand from your mod
+     */
+    @SuppressWarnings("unused")
+    public static void registerSubCommand(JSGCommand baseCommand, AbstractJSGCommand commandInstance) {
+        baseCommand.subCommands.add(commandInstance);
     }
 
-    @Nullable
-    public static TileEntity rayTraceTileEntity(@Nonnull EntityPlayerMP player) {
-        RayTraceResult rayTraceResult = player.rayTrace(8, 0);
-        if (rayTraceResult != null && rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
-            return player.getEntityWorld().getTileEntity(rayTraceResult.getBlockPos());
-        }
-        return null;
+    public static void load() {
+    }
+
+    public static void registerCommands(FMLServerStartingEvent event) {
+        event.registerServerCommand(JSGCommand.JSG_BASE_COMMAND);
     }
 }

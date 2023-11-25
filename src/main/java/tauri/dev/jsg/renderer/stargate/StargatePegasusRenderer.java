@@ -49,7 +49,12 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         JSGTextureLightningHelper.lightUpTexture(1f);
 
         if (rendererState.spinHelper.getIsSpinning()) {
-            int index = Math.round(rendererState.spinHelper.apply(getWorld().getTotalWorldTime() + partialTicks));
+            double tick = (getWorld().getTotalWorldTime() + partialTicks);
+            //JSG.info("--------------------------------------");
+            //JSG.info("Tick: " + String.format("%.2f", tick));
+            int index = (int) Math.floor(rendererState.spinHelper.apply(tick));
+            //JSG.info("Index: " + index);
+            //JSG.info("--------------------------------------");
             if (!rendererState.slotToGlyphMap.containsKey(index)) {
                 renderGlyph(rendererState.spinHelper.getTargetSymbol().getId(), index, false);
             }
@@ -76,6 +81,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
     // ----------------------------------------------------------------------------------------
     // Ring
 
+    @SuppressWarnings("all")
     private void renderRing(StargatePegasusRendererState rendererState, double partialTicks) {
         GlStateManager.pushMatrix();
 
@@ -110,8 +116,7 @@ public class StargatePegasusRenderer extends StargateClassicRenderer<StargatePeg
         if (onlyLight) {
             float color = rendererState.chevronTextureList.getColor(chevron);
             GlStateManager.color(color, color, color);
-        }
-        else
+        } else
             setGateHeatColor(rendererState);
 
         Texture chevronTexture = TextureLoader.getTexture(rendererState.chevronTextureList.get(rendererState.getBiomeOverlay(), chevron, onlyLight));

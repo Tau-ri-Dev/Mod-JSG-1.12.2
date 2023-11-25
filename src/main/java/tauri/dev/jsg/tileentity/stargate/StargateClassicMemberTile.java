@@ -48,8 +48,8 @@ public abstract class StargateClassicMemberTile extends StargateAbstractMemberTi
 
     @Override
     public void update() {
-        if(world.getBlockState(pos).getValue(JSGProps.FACING_VERTICAL) != getFacingVertical())
-            world.setBlockState(pos, world.getBlockState(pos).withProperty(JSGProps.FACING_VERTICAL, getFacingVertical()));
+        //if(world.getBlockState(pos).getValue(JSGProps.FACING_VERTICAL) != getFacingVertical())
+        //    world.setBlockState(pos, world.getBlockState(pos).withProperty(JSGProps.FACING_VERTICAL, getFacingVertical()));
     }
 
     @Override

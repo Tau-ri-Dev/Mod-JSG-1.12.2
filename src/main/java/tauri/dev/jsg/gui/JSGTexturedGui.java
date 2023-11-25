@@ -5,15 +5,23 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 public abstract class JSGTexturedGui extends GuiScreen {
-    protected int guiLeft;
-    protected int guiTop;
+    public int guiLeft;
+    public int guiTop;
 
-    protected final int xSize;
-    protected final int ySize;
+    public final int xSize;
+    public final int ySize;
+
+    protected final int texW;
+    protected final int texH;
 
     public JSGTexturedGui(int sizeX, int sizeY){
+        this(sizeX, sizeY, 256, 256);
+    }
+    public JSGTexturedGui(int sizeX, int sizeY, int texW, int texH){
         this.xSize = sizeX;
         this.ySize = sizeY;
+        this.texW = texW;
+        this.texH = texH;
     }
 
     public abstract ResourceLocation getBackground();
@@ -21,7 +29,7 @@ public abstract class JSGTexturedGui extends GuiScreen {
     public void drawBackground(){
         drawDefaultBackground();
         mc.getTextureManager().bindTexture(getBackground());
-        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+        drawModalRectWithCustomSizedTexture(guiLeft, guiTop, 0, 0, xSize, ySize, texW, texH);
     }
 
     @Override

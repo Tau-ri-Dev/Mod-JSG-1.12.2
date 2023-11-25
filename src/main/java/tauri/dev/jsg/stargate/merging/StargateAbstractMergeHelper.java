@@ -56,6 +56,17 @@ public abstract class StargateAbstractMergeHelper {
         return topBlock;
     }
 
+    private BlockPos topBlockAboveBase = null;
+    public BlockPos getTopBlockAboveBase() {
+        // null - not initialized
+        if (topBlockAboveBase == null) topBlockAboveBase = BlockHelpers.getHighestWithXZCords(getChevronBlocks(), 0, 0);
+
+        // Still null - chevron list empty (Orlin's gate)
+        if (topBlockAboveBase == null) topBlockAboveBase = BlockHelpers.getHighestWithXZCords(getRingBlocks(), 0, 0);
+
+        return topBlockAboveBase;
+    }
+
     /**
      * @return {@link List} of {@link BlockPos} pointing to absent blocks of variant given. Positions are absolute.
      */
@@ -74,6 +85,23 @@ public abstract class StargateAbstractMergeHelper {
         }
 
         return blocks.stream().map(pos -> FacingHelper.rotateBlock(pos, facing, facingVertical).add(basePos)).filter(pos -> !matchMember(world.getBlockState(pos))).collect(Collectors.toList());
+    }
+
+    @Nonnull
+    public List<BlockPos> getPlacedBlockPositions(IBlockAccess world, BlockPos basePos, EnumFacing facing, EnumFacing facingVertical, EnumMemberVariant variant) {
+        List<BlockPos> blocks = null;
+
+        switch (variant) {
+            case CHEVRON:
+                blocks = getChevronBlocks();
+                break;
+
+            case RING:
+                blocks = getRingBlocks();
+                break;
+        }
+
+        return blocks.stream().map(pos -> FacingHelper.rotateBlock(pos, facing, facingVertical).add(basePos)).filter(pos -> matchMember(world.getBlockState(pos))).collect(Collectors.toList());
     }
 
     @Nullable
@@ -133,6 +161,7 @@ public abstract class StargateAbstractMergeHelper {
      * @param variant     Expected {@link EnumMemberVariant}.
      * @return {@code true} if the block matches given parameters, {@code false} otherwise.
      */
+    @SuppressWarnings("all")
     protected abstract boolean checkMemberBlock(IBlockAccess blockAccess, BlockPos pos, EnumFacing facing, EnumFacing facingVertical, EnumMemberVariant variant);
 
     /**

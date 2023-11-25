@@ -1,5 +1,6 @@
 package tauri.dev.jsg;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
@@ -22,9 +23,11 @@ import tauri.dev.jsg.loader.ReloadListener;
 import tauri.dev.jsg.proxy.IProxy;
 import tauri.dev.jsg.util.main.loader.JSGInit;
 import tauri.dev.jsg.util.main.loader.JSGPreInit;
+import tauri.dev.jsg.worldgen.StargateDimensionGenerator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 @Mod(modid = JSG.MOD_ID, name = JSG.MOD_NAME, version = JSG.MOD_VERSION, acceptedMinecraftVersions = JSG.MC_VERSION, dependencies = "after:cofhcore@[4.6.0,);after:opencomputers;after:thermalexpansion;after:tconstruct;after:fluidlogged_api")
 @Mod.EventBusSubscriber
@@ -36,11 +39,11 @@ public class JSG {
     public static final String MOD_ID = "jsg";
     public static final String MOD_NAME = "Just Stargate Mod";
     public static final String MOD_VERSION = "@VERSION@";
-    public static final int DATA_VERSION = 25;
-    public static final String CONFIG_GENERAL_VERSION = "3.1";
-    public static final String CONFIG_CRAFTINGS_VERSION = "1.1";
-    public static final String CONFIG_STRUCTURES_VERSION = "1.0";
-    public static final String CONFIG_DIMENSIONS_VERSION = "1.1";
+    public static final int DATA_VERSION = 27;
+    public static final String CONFIG_GENERAL_VERSION = "3.2";
+    public static final String CONFIG_CRAFTINGS_VERSION = "1.2";
+    public static final String CONFIG_STRUCTURES_VERSION = "2.0";
+    public static final String CONFIG_DIMENSIONS_VERSION = "2.0";
     public static final String MC_VERSION = "@MCVERSION@";
     public static final String CLIENT = "tauri.dev.jsg.proxy.ProxyClient";
     public static final String SERVER = "tauri.dev.jsg.proxy.ProxyServer";
@@ -51,13 +54,14 @@ public class JSG {
     // VARIABLES
 
     public static Logger logger;
+    public static MinecraftServer currentServer = null;
     public static File modConfigDir;
     public static OCWrapperInterface ocWrapper;
     public static File clientModPath;
     public static File modsDirectory;
 
     public static long memoryTotal = 0;
-    public static double neededMemory = 4D * 1024 * 1024 * 1024; // 4GB
+    public static double neededMemory = 2D * 1024 * 1024 * 1024; // 2GB
 
     // --------------------------------------------
     // PROXY
@@ -203,6 +207,7 @@ public class JSG {
     @EventHandler
     public void loadComplete(FMLLoadCompleteEvent event) {
         JSG.info("Just Stargate Mod loading completed!");
+        JSGCommands.load();
         proxy.loadCompleted();
     }
 
@@ -210,12 +215,16 @@ public class JSG {
     public void serverStarting(FMLServerStartingEvent event) {
         JSGCommands.registerCommands(event);
         JSG.info("Successfully registered Commands!");
+        currentServer = event.getServer();
     }
 
     @EventHandler
     public void serverStarted(FMLServerStartedEvent event) throws IOException {
-        StargateDimensionConfig.update();
+        StargateDimensionConfig.reload();
         JSG.info("Server started!");
+
+        if (currentServer != null)
+            StargateDimensionGenerator.tryGenerate(Objects.requireNonNull(currentServer.getWorld(0)));
     }
 
     @EventHandler

@@ -6,7 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.energy.CapabilityEnergy;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +43,7 @@ public class AssemblerContainerGui extends GuiContainer {
         double progress = (start == -1 || end == -1 || start == end) ? 0 : ((double) (container.tile.getWorld().getTotalWorldTime() - start)) / ((double) (end - start));
         drawModalRectWithCustomSizedTexture(guiLeft + 95, guiTop + 65, 176, 128, ((int) ((216 - 176) * progress)), 143 - 128, 256, 256);
 
-        StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.tile.getCapability(CapabilityEnergy.ENERGY, null);
+        SmallEnergyStorage energyStorage = (SmallEnergyStorage) container.tile.getCapability(CapabilityEnergy.ENERGY, null);
 
         int width = Math.round((energyStorage.getEnergyStored() / ((float) energyStorage.getMaxEnergyStored()) * 156));
         drawGradientRect(guiLeft + 10, guiTop + 124, guiLeft + 10 + width, guiTop + 124 + 6, 0xffcc2828, 0xff731616);
@@ -54,7 +54,7 @@ public class AssemblerContainerGui extends GuiContainer {
         fontRenderer.drawString(I18n.format("gui.assembler.name"), 7, 6, 4210752);
         fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 
-        StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) container.tile.getCapability(CapabilityEnergy.ENERGY, null);
+        SmallEnergyStorage energyStorage = (SmallEnergyStorage) container.tile.getCapability(CapabilityEnergy.ENERGY, null);
 
         int energyStored = energyStorage.getEnergyStored();
         int maxEnergyStored = energyStorage.getMaxEnergyStored();

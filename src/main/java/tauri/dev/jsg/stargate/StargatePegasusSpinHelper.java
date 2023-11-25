@@ -71,17 +71,23 @@ public class StargatePegasusSpinHelper implements ISpinHelper {
     }
 
     private float calculate(float tick) {
+        //JSG.info("Tick before calc: " + String.format("%.2f", tick));
         if (tick < 0) {
             //JSG.logger.warn("Negative argument");
             return 0;
         }
 
-        return (tick) % 36;
+        return (tick) % 36f;
     }
 
+    @Override
     public float apply(double tick) {
-        float slot = calculate((float) tick - spinStartTime);
-        return (float) ((direction.mul == -1 ? Math.ceil(36 - slot) : Math.floor(slot)) + startOffset) % 36;
+        //JSG.info("SpinStartTime: " + String.format("%.0f", (double) spinStartTime));
+        float slot = calculate((float) (tick - spinStartTime));
+        //JSG.info("Calculated: " + slot);
+        slot = (float) (((direction.mul == -1 ? Math.ceil(36f - slot) : Math.floor(slot)) + startOffset) % 36f);
+        //JSG.info("Directed: " + slot);
+        return slot;
     }
 
     public void toBytes(ByteBuf buf) {

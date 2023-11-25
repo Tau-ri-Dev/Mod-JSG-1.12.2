@@ -32,7 +32,8 @@ public enum StateTypeEnum {
 	BEAMER_FLUID_UPDATE(16),
 	IRIS_UPDATE(17),
 	RINGS_DISTANCE_UPDATE(18),
-	PROP_VARIANT(20);
+	PROP_VARIANT(20),
+	SOUND_UPDATE(21);
 
     public int id;
 	

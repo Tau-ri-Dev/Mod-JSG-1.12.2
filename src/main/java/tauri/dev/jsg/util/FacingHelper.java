@@ -89,6 +89,27 @@ public class FacingHelper {
         }
     }
 
+    public static EnumFacing getFacingFromRotation(int rotation, boolean inverted) {
+        if(!inverted){
+            if(rotation < 45 || rotation >= (270+45))
+                return EnumFacing.NORTH;
+            if(rotation < 90+45)
+                return EnumFacing.WEST;
+            if(rotation < 180+45)
+                return EnumFacing.SOUTH;
+            return EnumFacing.EAST;
+        }
+        else{
+            if(rotation < 45 || rotation >= (270+45))
+                return EnumFacing.SOUTH;
+            if(rotation < 90+45)
+                return EnumFacing.EAST;
+            if(rotation < 180+45)
+                return EnumFacing.NORTH;
+            return EnumFacing.WEST;
+        }
+    }
+
     public static EnumFacing getVerticalFacingFromPitch(float pitch) {
         if (pitch < -45f)
             return EnumFacing.DOWN;
@@ -120,5 +141,13 @@ public class FacingHelper {
 				return new BlockPos(newPos.getZ(), newPos.getY(), -newPos.getX());
 		}
 		return newPos;
+    }
+
+    public static int getIntDHDRotationFromFacing(EnumFacing facing, boolean inverted){
+        return (int) Math.floor((getIntRotation(facing, inverted) / 360f) * 16);
+    }
+
+    public static EnumFacing getFacingFromDHDRotation(int rotation, boolean inverted){
+        return getFacingFromRotation((int) (rotation / 16f * 360), inverted);
     }
 }

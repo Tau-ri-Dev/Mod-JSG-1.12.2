@@ -7,9 +7,9 @@ import net.minecraft.world.gen.structure.template.ITemplateProcessor;
 import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.config.structures.StructureConfig;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
-import tauri.dev.jsg.worldgen.structures.stargate.nether.JSGNetherStructure;
 import tauri.dev.jsg.worldgen.structures.processor.NetherProcessor;
 import tauri.dev.jsg.worldgen.structures.processor.OverworldProcessor;
+import tauri.dev.jsg.worldgen.structures.stargate.nether.JSGNetherStructure;
 import tauri.dev.jsg.worldgen.util.EnumGenerationHeight;
 
 import javax.annotation.Nonnull;
@@ -139,6 +139,16 @@ public enum EnumStructures {
                 add(Blocks.DIRT);
                 add(Blocks.GRAVEL);
             }}, null, 5, Rotation.NONE, 0.9, 0.3, EnumGenerationHeight.LOW),
+
+    // ---------------------------------------------------------------------------
+    // STRUCTURES FOR OTHER DIMENSIONS
+
+    INTERNAL_MW("sg_plains_milkyway", 0, true, false, SymbolTypeEnum.MILKYWAY, 13, 13, 0, true, false, 0, new OverworldProcessor(),
+            null, null, 35, Rotation.CLOCKWISE_90, 0.7, 0.8, EnumGenerationHeight.MIDDLE, true),
+    INTERNAL_PG("sg_plains_pegasus", 0, true, false, SymbolTypeEnum.PEGASUS, 13, 13, 0, true, false, 0, new OverworldProcessor(),
+            null, null, 35, Rotation.CLOCKWISE_90, 0.8, 0.8, EnumGenerationHeight.MIDDLE, true),
+    INTERNAL_UNI("sg_end_universe", 0, true, false, SymbolTypeEnum.UNIVERSE, 10, 10, 1, true, false, 0, new OverworldProcessor(),
+            null, null, 15, Rotation.CLOCKWISE_90, 0.7, 0.8, EnumGenerationHeight.LOW, true),
     ;
 
     public final String name;
@@ -149,7 +159,12 @@ public enum EnumStructures {
     public final List<String> allowedInBiomes;
     public final List<Block> allowedOnBlocks;
 
+    public final boolean internal;
+
     EnumStructures(String structureName, int yNegativeOffset, boolean isStargateStructure, boolean isRingsStructure, SymbolTypeEnum symbolType, int structureSizeX, int structureSizeZ, int dimensionToSpawn, boolean findOptimalRotation, boolean randomGenEnable, float chanceToGenerateRandom, ITemplateProcessor templateProcessor, @Nullable List<Block> allowedOnBlocks, @Nullable List<String> allowedInBiomes, int airCountUp, Rotation rotationToNorth, double terrainFlatPercents, double topBlockMatchPercent, @Nonnull EnumGenerationHeight genHeight) {
+        this(structureName, yNegativeOffset, isStargateStructure, isRingsStructure, symbolType, structureSizeX, structureSizeZ, dimensionToSpawn, findOptimalRotation, randomGenEnable, chanceToGenerateRandom, templateProcessor, allowedOnBlocks, allowedInBiomes, airCountUp, rotationToNorth, terrainFlatPercents, topBlockMatchPercent, genHeight, false);
+    }
+    EnumStructures(String structureName, int yNegativeOffset, boolean isStargateStructure, boolean isRingsStructure, SymbolTypeEnum symbolType, int structureSizeX, int structureSizeZ, int dimensionToSpawn, boolean findOptimalRotation, boolean randomGenEnable, float chanceToGenerateRandom, ITemplateProcessor templateProcessor, @Nullable List<Block> allowedOnBlocks, @Nullable List<String> allowedInBiomes, int airCountUp, Rotation rotationToNorth, double terrainFlatPercents, double topBlockMatchPercent, @Nonnull EnumGenerationHeight genHeight, boolean internal) {
         this.name = structureName;
         this.netherStructure = new JSGNetherStructure(structureName, yNegativeOffset, isStargateStructure, isRingsStructure, symbolType, structureSizeX, structureSizeZ, airCountUp, dimensionToSpawn, findOptimalRotation, templateProcessor, rotationToNorth, terrainFlatPercents, topBlockMatchPercent, genHeight);
         this.structure = new JSGStructure(structureName, yNegativeOffset, isStargateStructure, isRingsStructure, symbolType, structureSizeX, structureSizeZ, airCountUp, dimensionToSpawn, findOptimalRotation, templateProcessor, rotationToNorth, terrainFlatPercents, topBlockMatchPercent, genHeight);
@@ -159,6 +174,7 @@ public enum EnumStructures {
 
         this.allowedInBiomes = allowedInBiomes;
         this.allowedOnBlocks = allowedOnBlocks;
+        this.internal = internal;
     }
 
     public JSGStructure getActualStructure(int dimId){
@@ -171,12 +187,13 @@ public enum EnumStructures {
         StructureConfig configRings = new StructureConfig("ringsStructures");
         StructureConfig configOther = new StructureConfig("otherStructures");
         for(EnumStructures s : EnumStructures.values()){
+            if(s.internal) continue;
             if(s.name.startsWith("sg_"))
-                configStargates.addKey(s.name, s.randomGenEnableDefault, s.chance);
+                configStargates.addKey(s.name, s.randomGenEnableDefault, 1f);
             else if(s.name.startsWith("tr_"))
-                configRings.addKey(s.name, s.randomGenEnableDefault, s.chance);
+                configRings.addKey(s.name, s.randomGenEnableDefault, 1f);
             else
-                configOther.addKey(s.name, s.randomGenEnableDefault, s.chance);
+                configOther.addKey(s.name, s.randomGenEnableDefault, 1f);
         }
         StructureConfig.addConfig(configStargates);
         StructureConfig.addConfig(configRings);
@@ -184,6 +201,7 @@ public enum EnumStructures {
     }
 
     public boolean randomGeneratorEnabled() {
+        if(internal) return false;
         if(name.startsWith("sg_"))
             return StructureConfig.isEnabled("stargateStructures", name);
         if(name.startsWith("tr_"))
@@ -192,11 +210,12 @@ public enum EnumStructures {
     }
 
     public float getChance() {
+        if(internal) return 0;
         if(name.startsWith("sg_"))
-            return StructureConfig.getChance("stargateStructures", name);
+            return chance * StructureConfig.getChance("stargateStructures", name);
         if(name.startsWith("tr_"))
-            return StructureConfig.getChance("ringsStructures", name);
-        return StructureConfig.getChance("otherStructures", name);
+            return chance * StructureConfig.getChance("ringsStructures", name);
+        return chance * StructureConfig.getChance("otherStructures", name);
     }
 
     @Nullable

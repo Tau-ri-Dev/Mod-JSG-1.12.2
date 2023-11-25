@@ -22,7 +22,7 @@ import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.SetOpenTabToServer;
 import tauri.dev.jsg.packet.stargate.SaveConfigToServer;
 import tauri.dev.jsg.packet.transportrings.SaveRingsParametersToServer;
-import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
+import tauri.dev.jsg.power.general.LargeEnergyStorage;
 import tauri.dev.jsg.tileentity.transportrings.TransportRingsAbstractTile;
 import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
 
@@ -189,7 +189,7 @@ public class TRGui extends GuiContainer implements TabbedContainerInterface {
 
         Tab.updatePositions(tabs);
 
-        StargateClassicEnergyStorage energyStorageInternal = (StargateClassicEnergyStorage) container.trTile.getCapability(CapabilityEnergy.ENERGY, null);
+        LargeEnergyStorage energyStorageInternal = (LargeEnergyStorage) container.trTile.getCapability(CapabilityEnergy.ENERGY, null);
         energyStored = Objects.requireNonNull(energyStorageInternal).getEnergyStoredInternally();
         maxEnergyStored = energyStorageInternal.getMaxEnergyStoredInternally();
 

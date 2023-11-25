@@ -9,38 +9,42 @@ import java.util.Map;
 
 public class StargateDimensionConfigEntry {
 
-    public int energyToOpen;
-    public int keepAlive;
+    public String name;
+    public int distance;
     public ArrayList<String> groups;
     public Map<BiomeOverlayEnum, Integer> milkyWayOrigins;
 
-    public StargateDimensionConfigEntry(int energyToOpen, int keepAlive, ArrayList<String> groups) {
-        this(energyToOpen, keepAlive, groups, new HashMap<>());
+    public StargateDimensionConfigEntry(String name, int distance,  ArrayList<String> groups) {
+        this(name, distance, groups, new HashMap<>());
     }
 
-    public StargateDimensionConfigEntry(int energyToOpen, int keepAlive, ArrayList<String> groups, @Nonnull Map<BiomeOverlayEnum, Integer> origins) {
-        this.energyToOpen = energyToOpen;
-        this.keepAlive = keepAlive;
+    public StargateDimensionConfigEntry(String name, int distance, ArrayList<String> groups, @Nonnull Map<BiomeOverlayEnum, Integer> origins) {
+        this.name = name;
+        this.distance = distance;
         this.groups = groups;
         this.milkyWayOrigins = origins;
-        if(this.groups == null)
+        if (this.groups == null)
             this.groups = new ArrayList<>();
     }
 
     @Override
     public String toString() {
-        if(milkyWayOrigins.size() > 0){
+        if (milkyWayOrigins.size() > 0) {
             StringBuilder originIdsString = new StringBuilder("[");
             int i = 0;
-            for(BiomeOverlayEnum k : milkyWayOrigins.keySet()){
+            for (BiomeOverlayEnum k : milkyWayOrigins.keySet()) {
                 i++;
-                originIdsString.append(k.toString()).append(": ").append(milkyWayOrigins.get(k));
-                if(i < milkyWayOrigins.size()) originIdsString.append(", ");
+                if(k == null){
+                    originIdsString.append("[null]").append(": ").append(milkyWayOrigins.get(k));
+                }
+                else
+                    originIdsString.append(k).append(": ").append(milkyWayOrigins.get(k));
+                if (i < milkyWayOrigins.size()) originIdsString.append(", ");
             }
             originIdsString.append("]");
-            return "[open=" + energyToOpen + ", keepAlive=" + keepAlive + ", groups: '" + groups.toString() + "', milkyWayOrigins: '" + originIdsString + "']";
+            return "[name=" + name + ", distance=" + distance + ", groups: '" + groups.toString() + "', milkyWayOrigins: '" + originIdsString + "']";
         }
-        return "[open=" + energyToOpen + ", keepAlive=" + keepAlive + ", groups: '" + groups.toString() + "']";
+        return "[name=" + name + ", distance=" + distance + ", groups: '" + groups.toString() + "']";
     }
 
     public boolean isGroupEqual(StargateDimensionConfigEntry other) {
@@ -48,6 +52,9 @@ public class StargateDimensionConfigEntry {
             return false;
 
         if (other.groups == null)
+            return false;
+
+        if(this.groups.size() == 0 || other.groups.size() == 0)
             return false;
 
         for (int i = 0; i < groups.size(); i++) {

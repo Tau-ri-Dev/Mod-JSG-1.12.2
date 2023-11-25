@@ -1,39 +1,57 @@
 package tauri.dev.jsg.command;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.TextFormatting;
 import tauri.dev.jsg.tileentity.util.PreparableInterface;
+import tauri.dev.jsg.util.RayTraceHelper;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-public class CommandPrepare extends CommandBase {
+public class CommandPrepare extends AbstractJSGCommand {
 
-	@Override
-	public String getName() {
-		return "sgprepare";
-	}
+    public CommandPrepare() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
 
-	@Override
-	public String getUsage(ICommandSender sender) {
-		return "/sgprepare";
-	}
+    @Override
+    @Nonnull
+    public String getName() {
+        return "sgprepare";
+    }
 
-	@Override
-	public void execute(MinecraftServer server, @Nonnull ICommandSender sender, String[] args) throws CommandException {
-		TileEntity tileEntity = JSGCommands.rayTraceTileEntity((EntityPlayerMP) sender);
+    @Nonnull
+    @Override
+    public String getDescription() {
+        return "Prepares TileEntity for saving as structure";
+    }
 
-		if (tileEntity instanceof PreparableInterface) {
-			if (((PreparableInterface) tileEntity).prepare(sender, this)) {
-				notifyCommandListener(sender, this, "Preparing " + tileEntity.getClass().getSimpleName());
-			} else {
-				notifyCommandListener(sender, this, TextFormatting.RED + "Failed to prepare " + tileEntity.getClass().getSimpleName() + ".");
-			}
-		} else
-			notifyCommandListener(sender, this, "Can't prepare this block. TileEntity not a instance of PreparableInterface.");
-	}
+    @Override
+    @Nonnull
+    public String getGeneralUsage() {
+        return "sgprepare";
+    }
+
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 2;
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public void execute(MinecraftServer server, @Nonnull ICommandSender sender, String[] args) throws CommandException {
+        TileEntity tileEntity = RayTraceHelper.rayTraceTileEntity((EntityPlayerMP) sender);
+
+        if (tileEntity instanceof PreparableInterface) {
+            if (((PreparableInterface) tileEntity).prepare(sender, this)) {
+                baseCommand.sendSuccessMess(sender, "Preparing " + tileEntity.getClass().getSimpleName());
+            } else {
+                baseCommand.sendErrorMess(sender, "Failed to prepare " + tileEntity.getClass().getSimpleName() + ".");
+            }
+        } else
+            baseCommand.sendErrorMess(sender, "Can't prepare this block. TileEntity not a instance of PreparableInterface.");
+    }
 }

@@ -40,15 +40,12 @@ import tauri.dev.jsg.block.machine.PCBFabricatorBlock;
 import tauri.dev.jsg.block.ore.NaquadahOreBlock;
 import tauri.dev.jsg.block.ore.TitaniumOreBlock;
 import tauri.dev.jsg.block.ore.TriniumOreBlock;
-import tauri.dev.jsg.block.props.AncientSignBlock;
-import tauri.dev.jsg.block.props.DestinyCountDownBlock;
-import tauri.dev.jsg.block.props.TRPlatformBlock;
+import tauri.dev.jsg.block.props.*;
 import tauri.dev.jsg.block.stargate.*;
 import tauri.dev.jsg.block.transportrings.TransportRingsAncientBlock;
 import tauri.dev.jsg.block.transportrings.TransportRingsGoauldBlock;
 import tauri.dev.jsg.block.transportrings.TransportRingsOriBlock;
 import tauri.dev.jsg.block.transportrings.controller.TRControllerGoauldBlock;
-import tauri.dev.jsg.block.transportrings.controller.TRControllerOriBlock;
 import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerMode;
 import tauri.dev.jsg.item.linkable.gdo.GDOItem;
@@ -138,6 +135,8 @@ public class JSGBlocks {
     public static final CrystalChamberBlock MACHINE_CHAMBER = new CrystalChamberBlock();
     public static final PCBFabricatorBlock MACHINE_PCB_FABRICATOR = new PCBFabricatorBlock();
     public static final OreWashingBlock MACHINE_ORE_WASHING = new OreWashingBlock();
+    //public static final ChemLabControlBlock MACHINE_LAB = new ChemLabControlBlock();
+    //public static final ChemLabConstructBlock MACHINE_CONSTRUCT = new ChemLabConstructBlock();
 
     // -----------------------------------------------------------------------------
     // ZPM stuff
@@ -152,6 +151,12 @@ public class JSGBlocks {
     public static final JSGBlock DECOR_CRYSTAL_BLOCK = (JSGBlock) BlockHelpers.createSimpleBlock("tokra_crystal_block", Material.ROCK, CreativeTabs.BUILDING_BLOCKS, JSGItems.CRYSTAL_TOKRA, 2, 4, 3).setHardness(1.5f).setLightLevel(11f);
     public static final DestinyCountDownBlock DESTINY_COUNTDOWN_BLOCK = new DestinyCountDownBlock();
     public static final AncientSignBlock ANCIENT_SIGN_BLOCK = new AncientSignBlock();
+
+    public static final JSGDecorPropBlock DECOR_PROP_BLOCK = new JSGDecorPropBlock();
+
+    public static final DestinyBearingBlock DESTINY_BEARING_BLOCK = new DestinyBearingBlock();
+    public static final DestinyChevronBlock DESTINY_CHEVRON_BLOCK = new DestinyChevronBlock();
+    public static final DestinyVentBlock DESTINY_VENT_BLOCK = new DestinyVentBlock();
 
     // -----------------------------------------------------------------------------
     // CREATIVE ITEMS/BLOCKS
@@ -184,6 +189,14 @@ public class JSGBlocks {
             STARGATE_MILKY_WAY_BASE_BLOCK,
             STARGATE_UNIVERSE_BASE_BLOCK
     };
+    public static final JSGBlock[] STARGATE_CLASSIC_ALL_BLOCKS = {
+            STARGATE_PEGASUS_BASE_BLOCK,
+            STARGATE_MILKY_WAY_BASE_BLOCK,
+            STARGATE_UNIVERSE_BASE_BLOCK,
+            STARGATE_PEGASUS_MEMBER_BLOCK,
+            STARGATE_MILKY_WAY_MEMBER_BLOCK,
+            STARGATE_UNIVERSE_MEMBER_BLOCK
+    };
     /**
      * Used in {@link StargateClassicMemberBlock}
      */
@@ -201,11 +214,17 @@ public class JSGBlocks {
             BEAMER_BLOCK,
             MACHINE_ASSEMBLER,
             MACHINE_CHAMBER,
+            //MACHINE_LAB,
+            //MACHINE_CONSTRUCT,
             ZPM,
             ZPM_HUB,
             ZPM_SLOT,
             CAPACITOR_BLOCK_CREATIVE,
-            ZPM_CREATIVE
+            ZPM_CREATIVE,
+            DECOR_PROP_BLOCK,
+            DESTINY_BEARING_BLOCK,
+            DESTINY_CHEVRON_BLOCK,
+            DESTINY_VENT_BLOCK
     };
     /**
      * Used in {@link tauri.dev.jsg.beamer.BeamerBeam}
@@ -276,18 +295,26 @@ public class JSGBlocks {
             MACHINE_CHAMBER,
             MACHINE_PCB_FABRICATOR,
             MACHINE_ORE_WASHING,
+            //MACHINE_LAB,
+            //MACHINE_CONSTRUCT,
 
             ZPM,
             ZPM_HUB,
             ZPM_SLOT,
 
             DECOR_CRYSTAL_BLOCK,
+
             DESTINY_COUNTDOWN_BLOCK,
+            DESTINY_BEARING_BLOCK,
+            DESTINY_CHEVRON_BLOCK,
+            DESTINY_VENT_BLOCK,
+
             ANCIENT_SIGN_BLOCK,
 
             CAPACITOR_BLOCK_CREATIVE,
-            ZPM_CREATIVE
+            ZPM_CREATIVE,
 
+            DECOR_PROP_BLOCK
     };
 
     public static boolean isInBlocksArray(Block block, Block[] array) {

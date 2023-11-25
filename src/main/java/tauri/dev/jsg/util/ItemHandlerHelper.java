@@ -30,6 +30,16 @@ public class ItemHandlerHelper {
         }
     }
 
+    public static void clearInventory(IItemHandler inventory){
+        for (int i = 0; i < inventory.getSlots(); ++i) {
+            ItemStack itemstack = inventory.getStackInSlot(i);
+
+            if (!itemstack.isEmpty()) {
+                itemstack.setCount(0);
+            }
+        }
+    }
+
     public static void spawnItemStack(World worldIn, BlockPos pos, ItemStack stack) {
         spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), stack);
     }

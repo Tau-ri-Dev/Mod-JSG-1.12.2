@@ -8,12 +8,12 @@ import tauri.dev.jsg.item.JSGItems;
 import tauri.dev.jsg.machine.AbstractMachineRecipe;
 import tauri.dev.jsg.machine.assembler.AssemblerRecipe;
 import tauri.dev.jsg.machine.assembler.AssemblerRecipes;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.renderer.machine.AbstractMachineRendererState;
 import tauri.dev.jsg.renderer.machine.AssemblerRendererState;
 import tauri.dev.jsg.sound.JSGSoundHelper;
 import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.util.JSGItemStackHandler;
@@ -57,16 +57,17 @@ public class AssemblerTile extends AbstractMachineTile {
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             markDirty();
+            onItemHandlerChange();
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
         }
     };
-    protected final StargateAbstractEnergyStorage energyStorage = new StargateAbstractEnergyStorage(AssemblerBlock.MAX_ENERGY, AssemblerBlock.MAX_ENERGY_TRANSFER) {
+    protected final SmallEnergyStorage energyStorage = new SmallEnergyStorage(AssemblerBlock.MAX_ENERGY, AssemblerBlock.MAX_ENERGY_TRANSFER) {
         @Override
         protected void onEnergyChanged() {
             markDirty();
         }
     };
-    public StargateAbstractEnergyStorage getEnergyStorage() {
+    public SmallEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
 
@@ -96,8 +97,15 @@ public class AssemblerTile extends AbstractMachineTile {
         Item scheme = itemStackHandler.getStackInSlot(0).getItem();
         ItemStack subStack = itemStackHandler.getStackInSlot(10);
 
+        if(currentRecipe instanceof AssemblerRecipe){
+            AssemblerRecipe recipe = (AssemblerRecipe) currentRecipe;
+            if (!itemStackHandler.insertItem(11, recipe.getResult(), true).equals(ItemStack.EMPTY)) return null;
+            if (recipe.isOk(energyStorage.getEnergyStored(), scheme, stacks, subStack)) return recipe;
+            return null;
+        }
+
         for (AssemblerRecipe recipe : AssemblerRecipes.RECIPES) {
-            if (itemStackHandler.insertItem(11, recipe.getResult(), true).equals(recipe.getResult())) continue;
+            if (!itemStackHandler.insertItem(11, recipe.getResult(), true).equals(ItemStack.EMPTY)) continue;
             if (recipe.isOk(energyStorage.getEnergyStored(), scheme, stacks, subStack)) return recipe;
         }
 

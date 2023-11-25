@@ -1,8 +1,8 @@
 package tauri.dev.jsg.gui.container.machine.orewashing;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -15,10 +15,12 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.gui.container.JSGContainer;
 import tauri.dev.jsg.gui.util.ContainerHelper;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.tileentity.machine.OreWashingTile;
 
@@ -28,7 +30,7 @@ import java.util.ArrayList;
 import static tauri.dev.jsg.tileentity.machine.CrystalChamberTile.CONTAINER_SIZE;
 
 
-public class OreWashingContainer extends Container {
+public class OreWashingContainer extends JSGContainer {
 
     public OreWashingTile tile;
     public FluidTank tank;
@@ -42,13 +44,26 @@ public class OreWashingContainer extends Container {
     private long machineStart = 0;
     private long machineEnd = 0;
 
+    private final World world;
+
     @Override
-    public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
-        return true;
+    public World getWorld() {
+        return world;
+    }
+
+    @Override
+    public BlockPos getPos() {
+        return pos;
+    }
+
+    @Override
+    public Block[] getAllowedBlocks() {
+        return new Block[]{JSGBlocks.MACHINE_ORE_WASHING};
     }
 
     public OreWashingContainer(IInventory playerInventory, World world, int x, int y, int z) {
         pos = new BlockPos(x, y, z);
+        this.world = world;
         tile = (OreWashingTile) world.getTileEntity(pos);
         if (tile != null) {
             IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
@@ -98,7 +113,7 @@ public class OreWashingContainer extends Container {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        StargateAbstractEnergyStorage energyStorage = (StargateAbstractEnergyStorage) tile.getCapability(CapabilityEnergy.ENERGY, null);
+        SmallEnergyStorage energyStorage = (SmallEnergyStorage) tile.getCapability(CapabilityEnergy.ENERGY, null);
 
         if (machineStart != tile.getMachineStart()
                 || machineEnd != tile.getMachineEnd()

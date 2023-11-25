@@ -272,8 +272,19 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         if (capability == CapabilityEnergyZPM.ENERGY)
             return CapabilityEnergyZPM.ENERGY.cast(getEnergyStorage());
 
-        if (capability == CapabilityEnergy.ENERGY)
-            return CapabilityEnergy.ENERGY.cast(new EnergyStorage((int) Math.min(getEnergyStorage().getMaxEnergyStored(), Integer.MAX_VALUE), getEnergyStorage().maxReceive, getEnergyStorage().maxExtract, (int) Math.min(getEnergyStorage().getEnergyStored(), Integer.MAX_VALUE)));
+        if (capability == CapabilityEnergy.ENERGY) {
+            EnergyStorage normalStorage = new EnergyStorage((int) Math.min(getEnergyStorage().getMaxEnergyStored(), Integer.MAX_VALUE), getEnergyStorage().maxReceive, getEnergyStorage().maxExtract, (int) Math.min(getEnergyStorage().getEnergyStored(), Integer.MAX_VALUE)){
+                @Override
+                public int receiveEnergy(int maxEnergy, boolean simulate){
+                    return 0;
+                }
+                @Override
+                public boolean canReceive(){
+                    return false;
+                }
+            };
+            return CapabilityEnergy.ENERGY.cast(normalStorage);
+        }
 
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemStackHandler);

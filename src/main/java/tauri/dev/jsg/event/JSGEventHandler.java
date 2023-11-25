@@ -1,8 +1,5 @@
 package tauri.dev.jsg.event;
 
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.block.JSGBlocks;
-import tauri.dev.jsg.raycaster.RaycasterDHD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
@@ -22,6 +19,9 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.raycaster.dhd.RaycasterDHD;
 
 import static tauri.dev.jsg.block.JSGBlocks.INVISIBLE_BLOCK;
 import static tauri.dev.jsg.block.JSGBlocks.IRIS_BLOCK;
@@ -80,6 +80,15 @@ public class JSGEventHandler {
 		if (event.getName().toString().equals("minecraft:chests/end_city_treasure")) {
 			LootEntry entry = new LootEntryTable(new ResourceLocation(JSG.MOD_ID, "end_city_treasure"), 1, 0, new LootCondition[]{}, "universe_dialer");
 			LootPool pool = new LootPool(new LootEntry[]{entry}, new LootCondition[]{}, new RandomValueRange(1), new RandomValueRange(0), "universe_dialer_pool");
+
+			event.getTable().addPool(pool);
+		}
+		if (event.getName().toString().equals("minecraft:chests/stronghold_corridor")
+				|| event.getName().toString().equals("minecraft:chests/stronghold_crossing")
+				|| event.getName().toString().equals("minecraft:chests/stronghold_library")
+		) {
+			LootEntry entry = new LootEntryTable(new ResourceLocation(JSG.MOD_ID, "stronghold"), 1, 0, new LootCondition[]{}, "sus_page");
+			LootPool pool = new LootPool(new LootEntry[]{entry}, new LootCondition[]{}, new RandomValueRange(1), new RandomValueRange(0), "sus_page_pool");
 
 			event.getTable().addPool(pool);
 		}

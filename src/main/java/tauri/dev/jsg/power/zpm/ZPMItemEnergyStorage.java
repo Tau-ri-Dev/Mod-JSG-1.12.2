@@ -2,7 +2,6 @@ package tauri.dev.jsg.power.zpm;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import tauri.dev.jsg.config.JSGConfig;
 
 public class ZPMItemEnergyStorage implements IEnergyStorageZPM {
     private final ItemStack stack;
@@ -15,12 +14,7 @@ public class ZPMItemEnergyStorage implements IEnergyStorageZPM {
 
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
-        if (!canReceive()) return 0;
-        long energyStored = getEnergyStored();
-        int energyReceived = (int) Math.min(getMaxEnergyStored() - energyStored, Math.min(JSGConfig.ZPM.power.zpmHubMaxEnergyTransfer / 3, maxReceive));
-        if (!simulate)
-            setEnergyStored(energyStored + energyReceived);
-        return energyReceived;
+        return 0;
     }
 
     @Override

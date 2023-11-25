@@ -3,7 +3,8 @@ package tauri.dev.jsg.packet.gui.entry;
 public enum EntryDataTypeEnum {
 	PAGE,
 	UNIVERSE,
-	OC;
+	OC,
+	ADMIN_CONTROLLER;
 	
 	boolean page() {
 		return this == PAGE;
@@ -15,5 +16,8 @@ public enum EntryDataTypeEnum {
 
 	boolean oc() {
 		return this == OC;
+	}
+	boolean admin() {
+		return this == ADMIN_CONTROLLER;
 	}
 }

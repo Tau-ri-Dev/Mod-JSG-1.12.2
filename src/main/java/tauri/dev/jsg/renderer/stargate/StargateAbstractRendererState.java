@@ -1,11 +1,11 @@
 package tauri.dev.jsg.renderer.stargate;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.stargate.EnumStargateState;
 import tauri.dev.jsg.state.State;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 
 public class StargateAbstractRendererState extends State {
 
@@ -50,23 +50,30 @@ public class StargateAbstractRendererState extends State {
 	// Event horizon
 	// Not saved
 	public StargateRendererStatic.QuadStrip backStrip;
+	public StargateRendererStatic.QuadStrip frontStrip;
 	public boolean backStripClamp;
+	public boolean frontStripClamp;
 	public Float whiteOverlayAlpha;
 	public long gateWaitStart = 0;
 	public long gateWaitClose = 0;
 	public boolean zeroAlphaSet;	
 	public boolean horizonUnstable = false;
 	public int horizonSegments = 0;
+
+	public boolean noxDialing = false;
 	
-	public void openGate(long totalWorldTime) {		
+	public void openGate(long totalWorldTime, boolean noxDialing) {
 		gateWaitStart = totalWorldTime;
 		
 		zeroAlphaSet = false;
 		backStripClamp = true;
+		frontStripClamp = true;
 		whiteOverlayAlpha = 1.0f;
 		
 		vortexState = StargateAbstractRenderer.EnumVortexState.FORMING;
 		doEventHorizonRender = true;
+
+		this.noxDialing = noxDialing;
 	}
 	
 	public void closeGate(long totalWorldTime) {		

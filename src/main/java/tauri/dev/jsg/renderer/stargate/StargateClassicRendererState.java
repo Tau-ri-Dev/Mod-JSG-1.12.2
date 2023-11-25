@@ -160,7 +160,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
         //Iris
         public EnumIrisState irisState;
         public EnumIrisType irisType;
-        public int irisCode;
+        public String irisCode;
         public EnumIrisMode irisMode;
         public long irisAnimation;
 
@@ -228,7 +228,7 @@ public abstract class StargateClassicRendererState extends StargateAbstractRende
             return this;
         }
 
-        public StargateClassicRendererStateBuilder setIrisCode(int code) {
+        public StargateClassicRendererStateBuilder setIrisCode(String code) {
             this.irisCode = code;
             return this;
         }

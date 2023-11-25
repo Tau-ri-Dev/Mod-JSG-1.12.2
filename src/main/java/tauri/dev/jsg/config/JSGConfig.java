@@ -44,6 +44,12 @@ public class JSGConfig {
         })
         public static Visual visual = new Visual();
 
+        @Config.Name("Events")
+        @Config.Comment({
+                "Events settings"
+        })
+        public static Events events = new Events();
+
         @Config.Name("Integration")
         @Config.Comment({
                 "Integration settings"
@@ -126,12 +132,40 @@ public class JSGConfig {
             })
             public boolean changeTitle = true;
 
+            @Config.Name("Disable white fadeout")
+            @Config.Comment({
+                    "Disable fadeout when going through a gate or using transport rings or victim of Destiny FTL jump",
+                    "SIDE: CLIENT"
+            })
+            public boolean disableFadeOutEffects = false;
+
             @Config.Name("Temperature unit")
             @Config.Comment({
                     "Specifies what unit will be used to display temperatures",
                     "SIDE: CLIENT"
             })
             public TemperatureHelper.EnumTemperatureUnit temperatureUnit = TemperatureHelper.EnumTemperatureUnit.CELSIUS;
+
+            @Config.Name("Destiny CO2 blaster particles count/tick")
+            @Config.RangeInt(min = 0, max = 100)
+            @Config.Comment({
+                    "SIDE: CLIENT"
+            })
+            public int destinyVentParticlesCount = 5;
+        }
+
+        public static class Events {
+            @Config.Name("Enable teleports using End Portal")
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
+            public boolean allowEndPortals = false;
+
+            @Config.Name("Enable teleports using Nether Portal")
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
+            public boolean allowNetherPortals = false;
         }
 
         public static class Debug {
@@ -180,7 +214,7 @@ public class JSGConfig {
             @Config.Comment({
                     "SIDE: CLIENT"
             })
-            public float neededRAM = 4.0f;
+            public float neededRAM = 2.0f;
         }
 
         public static class Integration {
@@ -254,6 +288,8 @@ public class JSGConfig {
             public int dialStartDelay = 5;
         }
 
+        @SuppressWarnings("unused")
+
         public static class DevConfig {
             @Config.Name("Dev mode")
             public boolean enableDevMode = false;
@@ -290,6 +326,16 @@ public class JSGConfig {
                     "SIDE: CLIENT"
             })
             public boolean disableJSGMainMenu = false;
+
+            @Config.RequiresMcRestart
+            @Config.Name("Background images count")
+            @Config.Comment({
+                    "Specifies how many images can be used as background of mainmenu. (starts from 0)",
+                    "DO NOT CHANGE THIS IF YOU DO NOT KNOW WHAT ARE YOU DOING!",
+                    "WARNING! - Requires reloading!",
+                    "SIDE: CLIENT"
+            })
+            public int backgroundImagesCount = 7;
 
             @Config.RequiresMcRestart
             @Config.Name("Enable Tau'ri logo on startup")
@@ -358,7 +404,6 @@ public class JSGConfig {
 
             @Config.Name("ZPMHub's max power throughput")
             @Config.RangeInt(min = 1, max = 1043600)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -434,6 +479,15 @@ public class JSGConfig {
         public static OpenLimitConfig openLimit = new OpenLimitConfig();
 
         public static class Mechanics {
+            @Config.Name("Enable wrench to disassemble gate")
+            @Config.Comment({
+                    "Enable wrench to be used as disassembling tool for gates?",
+                    "This can bypass for example claimed chunks (from FTB) on servers...",
+                    "If false - will be set iron pickaxe as correct tool",
+                    "SIDE: SERVER"
+            })
+            @Config.RequiresMcRestart
+            public boolean enableGateDisassembleWrench = true;
             @Config.Name("Enable burried state for gates")
             @Config.Comment({
                     "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI",
@@ -443,7 +497,6 @@ public class JSGConfig {
 
             @Config.Name("Orlin's gate max open count")
             @Config.RangeInt(min = 0, max = 15000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -451,7 +504,6 @@ public class JSGConfig {
 
             @Config.Name("Universe dialer nearby radius")
             @Config.RangeInt(min = 5)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -468,7 +520,6 @@ public class JSGConfig {
             @Config.RequiresMcRestart
             @Config.Name("Max stargate heat")
             @Config.RangeDouble(min = 0)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -481,6 +532,12 @@ public class JSGConfig {
                     "SIDE: SERVER"
             })
             public float lightingBoldChance = 0.0005f;
+
+            @Config.Name("DIM IDs where lighting strike should not charge gates")
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
+            public int[] lightingStrikeDisabledDims = new int[]{1, -1};
 
             @Config.Name("Connect to dialing gate")
             @Config.Comment({
@@ -523,7 +580,6 @@ public class JSGConfig {
                     "SIDE: SERVER/CLIENT"
             })
             @Config.RangeInt(min = 0, max = 50000)
-            @Config.SlidingOption
             public int titaniumIrisDurability = 500;
 
             @Config.Name("Trinium iris durability")
@@ -533,7 +589,6 @@ public class JSGConfig {
                     "SIDE: SERVER/CLIENT"
             })
             @Config.RangeInt(min = 0, max = 50000)
-            @Config.SlidingOption
             public int triniumIrisDurability = 1000;
 
             @Config.Name("Shield power draw")
@@ -542,7 +597,6 @@ public class JSGConfig {
                     "SIDE: SERVER"
             })
             @Config.RangeInt(min = 0, max = 500000)
-            @Config.SlidingOption
             public int shieldPowerDraw = 500;
 
             @Config.Name("Allow creative bypass")
@@ -587,7 +641,6 @@ public class JSGConfig {
             @Config.RequiresMcRestart
             @Config.Name("Max titanium iris heat")
             @Config.RangeDouble(min = 0)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -596,7 +649,6 @@ public class JSGConfig {
             @Config.RequiresMcRestart
             @Config.Name("Max trinium iris heat")
             @Config.RangeDouble(min = 0)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -606,7 +658,6 @@ public class JSGConfig {
         public static class Power {
             @Config.Name("Stargate's internal buffer size")
             @Config.RangeInt(min = 4608)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -614,7 +665,6 @@ public class JSGConfig {
 
             @Config.Name("Stargate's max power throughput")
             @Config.RangeInt(min = 1, max = 500000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -622,7 +672,6 @@ public class JSGConfig {
 
             @Config.Name("Stargate wormhole open power draw")
             @Config.RangeInt(min = 0, max = 500000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -702,6 +751,19 @@ public class JSGConfig {
             @Config.SlidingOption
             public float frostyTemperatureThreshold = 0.1f;
 
+            @Config.Name("Camo blocks blacklist")
+            @Config.Comment({
+                    "Specify what blocks can not be used as camo for gates.",
+                    "These blocks are only additional. There are also blocks that are internally coded",
+                    "and can not be deleted from the blacklist!",
+                    "Format: \"modid:block[:meta/*]\", for example: ",
+                    "\"minecraft:stone:2\"",
+                    "\"minecraft:cobblestone\"",
+                    "\"minecraft:concrete:*\"",
+                    "SIDE: SERVER/CLIENT"
+            })
+            public String[] camoBlacklist = new String[]{};
+
             @Config.Name("Biome overlay biome matches")
             @Config.Comment({
                     "This check comes last (after block is directly under sky (except Nether) and temperature is high enough).",
@@ -715,9 +777,17 @@ public class JSGConfig {
                 {
                     put(BiomeOverlayEnum.NORMAL.toString(), new String[]{});
                     put(BiomeOverlayEnum.FROST.toString(), new String[]{});
-                    put(BiomeOverlayEnum.MOSSY.toString(), new String[]{"minecraft:jungle", "minecraft:jungle_hills", "minecraft:jungle_edge", "minecraft:mutated_jungle", "minecraft:mutated_jungle_edge"});
+                    put(BiomeOverlayEnum.MOSSY.toString(), new String[]{
+                            "minecraft:jungle",
+                            "minecraft:jungle_hills",
+                            "minecraft:jungle_edge",
+                            "minecraft:mutated_jungle",
+                            "minecraft:mutated_jungle_edge"
+                    });
                     put(BiomeOverlayEnum.AGED.toString(), new String[]{});
-                    put(BiomeOverlayEnum.SOOTY.toString(), new String[]{"minecraft:hell"});
+                    put(BiomeOverlayEnum.SOOTY.toString(), new String[]{
+                            "minecraft:hell"
+                    });
                 }
             };
 
@@ -872,7 +942,6 @@ public class JSGConfig {
                     "SIDE: SERVER"
             })
             @Config.RangeInt(min = 5, max = 3000)
-            @Config.SlidingOption
             public int maxOpenedSeconds = 240;
 
             @Config.Name("Gate open time limit mode")
@@ -884,7 +953,6 @@ public class JSGConfig {
 
             @Config.Name("Power draw after opened time limit")
             @Config.RangeInt(min = 0, max = 50000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -978,7 +1046,6 @@ public class JSGConfig {
                     "SIDE: SERVER"
             })
             @Config.RangeInt(min = 0, max = 25600)
-            @Config.SlidingOption
             public int ringsTeleportPowerDraw = 640;
         }
     }
@@ -1037,7 +1104,6 @@ public class JSGConfig {
 
             @Config.Name("DHD's max fluid capacity")
             @Config.RangeInt(min = 1, max = 128000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -1057,7 +1123,6 @@ public class JSGConfig {
 
             @Config.Name("Energy per 1mB Naquadah")
             @Config.RangeInt(min = 1, max = 50000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -1206,7 +1271,6 @@ public class JSGConfig {
         public static class Container {
             @Config.Name("Fluid buffer capacity")
             @Config.RangeInt(min = 3000, max = 600000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -1214,7 +1278,6 @@ public class JSGConfig {
 
             @Config.Name("Energy buffer capacity")
             @Config.RangeInt(min = 3000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER/CLIENT"
             })
@@ -1222,7 +1285,6 @@ public class JSGConfig {
 
             @Config.Name("Energy buffer max transfer")
             @Config.RangeInt(min = 1)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -1230,7 +1292,6 @@ public class JSGConfig {
 
             @Config.Name("Fluid max transfer")
             @Config.RangeInt(min = 1, max = 5000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -1256,7 +1317,6 @@ public class JSGConfig {
         public static class Power {
             @Config.Name("Energy/tick needed to keep laser alive")
             @Config.RangeInt(min = 10000, max = 500000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -1340,10 +1400,15 @@ public class JSGConfig {
         })
         public static Structures structures = new Structures();
 
+        @Config.Name("Other DIM Stargate Generator")
+        @Config.Comment({
+                "Stargates generated in other dimensions"
+        })
+        public static OtherDimGenerator otherDimGenerator = new OtherDimGenerator();
+
         public static class MystPage {
             @Config.Name("Max XZ-coords generation")
             @Config.RangeInt(min = 1000, max = 30000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -1351,7 +1416,6 @@ public class JSGConfig {
 
             @Config.Name("Min XZ-coords generation")
             @Config.RangeInt(min = 1000, max = 30000)
-            @Config.SlidingOption
             @Config.Comment({
                     "SIDE: SERVER"
             })
@@ -1364,6 +1428,14 @@ public class JSGConfig {
                     "SIDE: SERVER"
             })
             public double despawnDhdChance = 0.05;
+
+            @Config.Name("Chance of force unstable gate")
+            @Config.RangeDouble(min = 0, max = 1)
+            @Config.SlidingOption
+            @Config.Comment({
+                    "SIDE: SERVER"
+            })
+            public double forcedUnstableGateChance = 0.05;
 
             @Config.Name("Mysterious page cooldown")
             @Config.RangeInt(min = 0, max = 400)
@@ -1485,6 +1557,24 @@ public class JSGConfig {
                     "SIDE: SERVER"
             })
             public float stargateRGChanceTheEnd = 0.00007f;
+        }
+
+        public static class OtherDimGenerator {
+            @Config.Name("Enable other DIM stargate generator")
+            @Config.RequiresMcRestart
+            @Config.Comment({
+                    "Generate stargate in other dimensions (other than END, NETHER, OVERWORLD).",
+                    "SIDE: SERVER"
+            })
+            public boolean generatorEnabled = true;
+
+            @Config.Name("Blacklisted Dimensions")
+            @Config.RequiresMcRestart
+            @Config.Comment({
+                    "List of disabled dimensions",
+                    "SIDE: SERVER"
+            })
+            public int[] blacklistDims = new int[]{};
         }
     }
 }

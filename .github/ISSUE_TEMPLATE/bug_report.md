@@ -28,3 +28,6 @@ Version of mod you are using. (aunis-1.12.2-4.9.4.3)
 
 **Additional context**
 Add any other context about the problem here.
+
+**My whole JSG config (as .zip)**
+Upload here your jsg config folder (as .zip) **if it's not default one**

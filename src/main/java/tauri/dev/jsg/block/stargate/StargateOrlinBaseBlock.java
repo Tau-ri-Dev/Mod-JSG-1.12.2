@@ -1,19 +1,8 @@
 package tauri.dev.jsg.block.stargate;
 
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.renderer.stargate.StargateOrlinRenderer;
-import tauri.dev.jsg.util.FacingHelper;
-import tauri.dev.jsg.util.main.JSGProps;
-import tauri.dev.jsg.stargate.merging.StargateOrlinMergeHelper;
-import tauri.dev.jsg.stargate.network.StargateNetwork;
-import tauri.dev.jsg.power.stargate.StargateEnergyRequired;
-import tauri.dev.jsg.tileentity.stargate.StargateOrlinBaseTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -34,8 +23,19 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.config.JSGConfig;
+import tauri.dev.jsg.power.general.EnergyRequiredToOperate;
+import tauri.dev.jsg.renderer.stargate.StargateOrlinRenderer;
+import tauri.dev.jsg.stargate.merging.StargateOrlinMergeHelper;
+import tauri.dev.jsg.stargate.network.StargateNetwork;
+import tauri.dev.jsg.tileentity.stargate.StargateOrlinBaseTile;
+import tauri.dev.jsg.util.main.JSGProps;
 import tauri.dev.jsg.worldgen.util.GeneratedStargate;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
@@ -49,7 +49,7 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 	// Explosions
 
 	@Override
-	public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn) {
+	public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, @Nonnull Explosion explosionIn) {
 		worldIn.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 5, true, true).doExplosionA();
 	}
 	
@@ -83,7 +83,7 @@ public final class StargateOrlinBaseBlock extends StargateAbstractBaseBlock {
 
 		String energy = String.format("%,d", energyStorage.getEnergyStored());
 
-		StargateEnergyRequired energyRequired = gateTile.getEnergyRequiredToDial();
+		EnergyRequiredToOperate energyRequired = gateTile.getEnergyRequiredToDial();
 		String required = String.format("%,d", energyRequired.energyToOpen);
 		int energyStored = gateTile.getEnergyStored();
 		boolean hasEnergy = (energyStored >= energyRequired.energyToOpen);

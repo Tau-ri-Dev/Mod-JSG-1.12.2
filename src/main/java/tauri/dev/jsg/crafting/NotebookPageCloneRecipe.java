@@ -73,6 +73,6 @@ public class NotebookPageCloneRecipe extends Impl<IRecipe> implements IRecipe {
 
 	@Override
 	public ItemStack getRecipeOutput() {
-		return ItemStack.EMPTY;
+		return new ItemStack(JSGItems.PAGE_NOTEBOOK_ITEM, 2);
 	}
 }

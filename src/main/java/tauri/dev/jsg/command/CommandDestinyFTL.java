@@ -1,9 +1,7 @@
 package tauri.dev.jsg.command;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -17,62 +15,71 @@ import tauri.dev.jsg.util.JSGAxisAlignedBB;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class CommandDestinyFTL extends CommandBase {
+import static net.minecraft.command.CommandBase.parseCoordinate;
+
+public class CommandDestinyFTL extends AbstractJSGCommand {
+    public CommandDestinyFTL() {
+        super(JSGCommand.JSG_BASE_COMMAND);
+    }
+
     @Nonnull
     @Override
     public String getName() {
-        return "destinyexecuteftl";
+        return "destinyftl";
     }
 
     @Nonnull
     @Override
-    public String getUsage(@Nonnull ICommandSender sender) {
-        return "/destinyexecuteftl [<x> <y> <z>] <range> [from ftl?]";
+    public String getDescription() {
+        return "Executes Destiny's FTL effect";
+    }
+
+    @Nonnull
+    @Override
+    public String getGeneralUsage() {
+        return "destinyftl [<x> <y> <z>] <range> [from ftl?]";
     }
 
     @Override
-    public int getRequiredPermissionLevel()
-    {
+    public int getRequiredPermissionLevel() {
         return 2;
     }
 
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
-            BlockPos pos = sender.getPosition();
-            World world = sender.getEntityWorld();
-            int r;
+        BlockPos pos = sender.getPosition();
+        World world = sender.getEntityWorld();
+        int r;
 
-            try {
-                if (args.length > 3) {
-                    int x1 = (int) parseCoordinate(pos.getX(), args[0], false).getResult();
-                    int y1 = (int) parseCoordinate(pos.getY(), args[1], 0, 255, false).getResult();
-                    int z1 = (int) parseCoordinate(pos.getZ(), args[2], false).getResult();
-                    r = Integer.parseInt(args[3]);
+        try {
+            if (args.length > 3) {
+                int x1 = (int) parseCoordinate(pos.getX(), args[0], false).getResult();
+                int y1 = (int) parseCoordinate(pos.getY(), args[1], 0, 255, false).getResult();
+                int z1 = (int) parseCoordinate(pos.getZ(), args[2], false).getResult();
+                r = Integer.parseInt(args[3]);
 
-                    pos = new BlockPos(x1, y1, z1);
-                }
-                else{
-                    r = Integer.parseInt(args[0]);
-                }
-                BlockPos from = new BlockPos(pos).add(new BlockPos(r, r, r));
-                BlockPos to = new BlockPos(pos).subtract(new BlockPos(r, r, r));
-
-                StartPlayerFadeOutToClient.EnumFadeOutEffectType type = StartPlayerFadeOutToClient.EnumFadeOutEffectType.FTL_IN;
-                SoundEventEnum sound = SoundEventEnum.DESTINY_FTL_JUMP_IN;
-                if (args.length > 4 || args.length == 2) {
-                    type = StartPlayerFadeOutToClient.EnumFadeOutEffectType.FTL_OUT;
-                    sound = SoundEventEnum.DESTINY_FTL_JUMP_OUT;
-                }
-
-                List<EntityPlayerMP> entities = world.getEntitiesWithinAABB(EntityPlayerMP.class, new JSGAxisAlignedBB(from, to));
-                for(EntityPlayerMP e : entities){
-                    JSGPacketHandler.INSTANCE.sendTo(new StartPlayerFadeOutToClient(type), e);
-                    JSGSoundHelper.playSoundToPlayer(e, sound, e.getPosition());
-                }
-                notifyCommandListener(sender, this, "Successfully executed!");
+                pos = new BlockPos(x1, y1, z1);
+            } else {
+                r = Integer.parseInt(args[0]);
             }
-            catch(Exception e){
-                throw new WrongUsageException("Wrong format!");
+            BlockPos from = new BlockPos(pos).add(new BlockPos(r, r, r));
+            BlockPos to = new BlockPos(pos).subtract(new BlockPos(r, r, r));
+
+            StartPlayerFadeOutToClient.EnumFadeOutEffectType type = StartPlayerFadeOutToClient.EnumFadeOutEffectType.FTL_IN;
+            SoundEventEnum sound = SoundEventEnum.DESTINY_FTL_JUMP_IN;
+            if (args.length > 4 || args.length == 2) {
+                type = StartPlayerFadeOutToClient.EnumFadeOutEffectType.FTL_OUT;
+                sound = SoundEventEnum.DESTINY_FTL_JUMP_OUT;
             }
+
+            List<EntityPlayerMP> entities = world.getEntitiesWithinAABB(EntityPlayerMP.class, new JSGAxisAlignedBB(from, to));
+            for (EntityPlayerMP e : entities) {
+                JSGPacketHandler.INSTANCE.sendTo(new StartPlayerFadeOutToClient(type), e);
+                JSGSoundHelper.playSoundToPlayer(e, sound, e.getPosition());
+            }
+            baseCommand.sendSuccessMess(sender, "Successfully executed!");
+        } catch (Exception e) {
+            baseCommand.sendUsageMess(sender, this);
+        }
     }
 }

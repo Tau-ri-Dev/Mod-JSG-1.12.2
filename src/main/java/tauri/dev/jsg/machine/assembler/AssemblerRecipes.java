@@ -718,6 +718,168 @@ public class AssemblerRecipes {
             return new ItemStack(JSGBlocks.DESTINY_COUNTDOWN_BLOCK);
         }
     };
+    public static AssemblerRecipe DESTINY_BEARING = new AssemblerRecipe() {
+        @Override
+        public String getUnlocalizedName() {
+            return "tile.jsg.destiny_bearing_block.name";
+        }
+
+        @Override
+        public int getWorkingTime() {
+            return 100;
+        }
+
+        @Override
+        public boolean removeSubItem() {
+            return true;
+        }
+
+        @Override
+        public int getEnergyPerTick() {
+            return 2048;
+        }
+
+        @Override
+        public Item getSchematic() {
+            return JSGItems.SCHEMATIC_UNIVERSE;
+        }
+
+        @Override
+        public ArrayList<ItemStack> getPattern() {
+            ArrayList<ItemStack> array = new ArrayList<>();
+
+            array.add(new ItemStack(JSGItems.NAQUADAH_ALLOY_RAW));
+            array.add(new ItemStack(JSGItems.CRYSTAL_RED));
+            array.add(new ItemStack(JSGItems.NAQUADAH_ALLOY_RAW));
+
+            array.add(null);
+            array.add(new ItemStack(JSGItems.FRAGMENT_UNIVERSE));
+            array.add(null);
+
+            array.add(null);
+            array.add(new ItemStack(JSGItems.CRYSTAL_WHITE));
+            array.add(null);
+            return array;
+        }
+
+        @Override
+        public ItemStack getSubItemStack() {
+            return new ItemStack(JSGItems.CIRCUIT_CONTROL_CRYSTAL);
+        }
+
+        @Override
+        public ItemStack getResult() {
+            return new ItemStack(JSGBlocks.DESTINY_BEARING_BLOCK);
+        }
+    };
+    public static AssemblerRecipe DESTINY_BLASTER = new AssemblerRecipe() {
+        @Override
+        public String getUnlocalizedName() {
+            return "tile.jsg.destiny_vent_block.name";
+        }
+
+        @Override
+        public int getWorkingTime() {
+            return 80;
+        }
+
+        @Override
+        public boolean removeSubItem() {
+            return true;
+        }
+
+        @Override
+        public int getEnergyPerTick() {
+            return 1024;
+        }
+
+        @Override
+        public Item getSchematic() {
+            return JSGItems.SCHEMATIC_UNIVERSE;
+        }
+
+        @Override
+        public ArrayList<ItemStack> getPattern() {
+            ArrayList<ItemStack> array = new ArrayList<>();
+
+            array.add(null);
+            array.add(null);
+            array.add(null);
+
+            array.add(null);
+            array.add(null);
+            array.add(null);
+
+            array.add(null);
+            array.add(new ItemStack(JSGItems.FRAGMENT_UNIVERSE));
+            array.add(new ItemStack(JSGItems.GEAR_NAQUADAH_RAW));
+            return array;
+        }
+
+        @Override
+        public ItemStack getSubItemStack() {
+            return new ItemStack(JSGItems.CIRCUIT_CONTROL_CRYSTAL);
+        }
+
+        @Override
+        public ItemStack getResult() {
+            return new ItemStack(JSGBlocks.DESTINY_VENT_BLOCK);
+        }
+    };
+    public static AssemblerRecipe DESTINY_FLOOR_CHEVRON = new AssemblerRecipe() {
+        @Override
+        public String getUnlocalizedName() {
+            return "tile.jsg.destiny_chevron_block.name";
+        }
+
+        @Override
+        public int getWorkingTime() {
+            return 100;
+        }
+
+        @Override
+        public boolean removeSubItem() {
+            return true;
+        }
+
+        @Override
+        public int getEnergyPerTick() {
+            return 2048;
+        }
+
+        @Override
+        public Item getSchematic() {
+            return JSGItems.SCHEMATIC_UNIVERSE;
+        }
+
+        @Override
+        public ArrayList<ItemStack> getPattern() {
+            ArrayList<ItemStack> array = new ArrayList<>();
+
+            array.add(null);
+            array.add(new ItemStack(Blocks.GLASS));
+            array.add(null);
+
+            array.add(new ItemStack(JSGItems.FRAGMENT_UNIVERSE));
+            array.add(new ItemStack(JSGItems.CRYSTAL_WHITE));
+            array.add(new ItemStack(JSGItems.FRAGMENT_UNIVERSE));
+
+            array.add(null);
+            array.add(null);
+            array.add(null);
+            return array;
+        }
+
+        @Override
+        public ItemStack getSubItemStack() {
+            return new ItemStack(JSGItems.CIRCUIT_CONTROL_CRYSTAL);
+        }
+
+        @Override
+        public ItemStack getResult() {
+            return new ItemStack(JSGBlocks.DESTINY_CHEVRON_BLOCK);
+        }
+    };
 
     public static AssemblerRecipe TR_GOAULD = new AssemblerRecipe() {
         @Override
@@ -973,6 +1135,9 @@ public class AssemblerRecipes {
             SG_UNI_RING_BLOCK,
 
             DESTINY_COUNTDOWN,
+            DESTINY_BEARING,
+            DESTINY_BLASTER,
+            DESTINY_FLOOR_CHEVRON,
 
             TR_GOAULD,
             TR_ORI,

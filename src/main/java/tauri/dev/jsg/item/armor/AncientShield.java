@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.capability.ItemCapabilityProvider;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.power.stargate.ItemEnergyStorage;
+import tauri.dev.jsg.power.general.ItemEnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -67,7 +67,6 @@ public class AncientShield extends ItemArmor {
         if (nbt == null) nbt = new NBTTagCompound();
         long lastHit = nbt.getLong("lastHit");
         if ((entity.world.getTotalWorldTime() - lastHit) < 20) {
-            JSG.info("Test1");
             texture = "shield_on";
         }
 
@@ -78,6 +77,7 @@ public class AncientShield extends ItemArmor {
     @Nullable
     @ParametersAreNonnullByDefault
     public net.minecraft.client.model.ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, net.minecraft.client.model.ModelBiped _default) {
+
         _default.bipedHead.isHidden = false;
         _default.bipedBody.isHidden = false;
         _default.bipedHeadwear.isHidden = false;
@@ -85,6 +85,8 @@ public class AncientShield extends ItemArmor {
         _default.bipedRightArm.isHidden = false;
         _default.bipedLeftLeg.isHidden = false;
         _default.bipedRightLeg.isHidden = false;
+
+        _default.setVisible(true);
         return _default;
     }
 
@@ -132,6 +134,8 @@ public class AncientShield extends ItemArmor {
     @Override
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(JSG.getInProgress());
+        tooltip.add("");
         ItemEnergyStorage energyStorage = (ItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null);
         if (energyStorage == null) return;
         String energy = String.format("%,d", energyStorage.getEnergyStored());
@@ -181,19 +185,10 @@ public class AncientShield extends ItemArmor {
         }
     }
 
-    // Do not change that! I see you!
-    //public static final UUID MODIFIERS_UUID = UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E");
-
     @Nonnull
     @ParametersAreNonnullByDefault
     public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
-        //Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(equipmentSlot);
-
-        /*.if (equipmentSlot == EntityEquipmentSlot.CHEST) {
-            multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(MODIFIERS_UUID, "Anti-knock-back", 1f, 0));
-        }*/
-
-        return HashMultimap.create();//multimap;
+        return HashMultimap.create();
     }
 
     @Override
@@ -215,7 +210,6 @@ public class AncientShield extends ItemArmor {
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt == null) nbt = new NBTTagCompound();
         nbt.setLong("lastHit", e.world.getTotalWorldTime());
-        JSG.info("Test2");
 
         stack.setTagCompound(nbt);
     }
@@ -239,12 +233,6 @@ public class AncientShield extends ItemArmor {
 
         boolean isThereChange = false;
 
-        /*// Last hit
-        if (nbt.getLong("lastHit") == -3) {
-            nbt.setLong("lastHit", tick);
-            isThereChange = true;
-            JSG.info("Test3");
-        }*/
         if (!world.isRemote) {
             if (tick % 20 == 0) {
                 if (getEnergyStored(itemStack) >= JSGConfig.Items.shield.energyPerTick) {

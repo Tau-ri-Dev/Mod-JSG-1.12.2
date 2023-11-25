@@ -3,18 +3,17 @@ package tauri.dev.jsg.stargate.network;
 import net.minecraft.util.ResourceLocation;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
-import tauri.dev.jsg.config.origins.OriginsLoader;
+import tauri.dev.jsg.loader.OriginsLoader;
 import tauri.dev.jsg.loader.model.ModelLoader;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static tauri.dev.jsg.config.origins.OriginsLoader.DEFAULT_ORIGIN_ID;
-import static tauri.dev.jsg.config.origins.OriginsLoader.MOD_POINT_OF_ORIGINS_COUNT;
+import static tauri.dev.jsg.loader.OriginsLoader.DEFAULT_ORIGIN_ID;
+import static tauri.dev.jsg.loader.OriginsLoader.MOD_POINT_OF_ORIGINS_COUNT;
 
 public enum SymbolMilkyWayEnum implements SymbolInterface {
     SCULPTOR(0, 19, "Sculptor", "0.obj"),
@@ -223,7 +222,7 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
     // Static
 
     public static SymbolMilkyWayEnum getRandomSymbol(Random random) {
-        int id = 0;
+        int id;
         do {
             id = random.nextInt(38);
         } while (id == ORIGIN.id);
@@ -235,14 +234,7 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
         if (stargateAddress.size() < 7)
             return false;
 
-        if (!stargateAddress.get(stargateAddress.size() - 1).origin())
-            return false;
-
-        return true;
-    }
-
-    public static List<SymbolInterface> stripOrigin(List<SymbolInterface> dialedAddress) {
-        return dialedAddress.subList(0, dialedAddress.size() - 1);
+        return stargateAddress.get(stargateAddress.size() - 1).origin();
     }
 
     public static int getMinimalSymbolCountTo(SymbolTypeEnum symbolType, boolean localDial) {
@@ -290,11 +282,11 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
         }
     }
 
-    public static final SymbolMilkyWayEnum valueOf(int id) {
+    public static SymbolMilkyWayEnum valueOf(int id) {
         return ID_MAP.get(id);
     }
 
-    public static final SymbolMilkyWayEnum fromEnglishName(String englishName) {
+    public static SymbolMilkyWayEnum fromEnglishName(String englishName) {
         return ENGLISH_NAME_MAP.get(englishName.toLowerCase().replace("ö", "o"));
     }
 }

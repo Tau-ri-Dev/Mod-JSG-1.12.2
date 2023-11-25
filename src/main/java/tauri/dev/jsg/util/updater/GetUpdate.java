@@ -3,14 +3,9 @@ package tauri.dev.jsg.util.updater;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.config.JSGConfig;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Map;
+import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 
@@ -34,7 +29,7 @@ public class GetUpdate {
 
     public static final String ERROR_STRING = "Error was occurred while updating JSG!";
 
-    public static final String URL_BASE = "https://api.justsgmod.eu/?api=curseforge&version=" + JSG.MC_VERSION;
+    public static final String URL_BASE = "https://justsgmod.eu/api/?api=curseforge&version=" + JSG.MC_VERSION;
 
     public static final String GET_NAME_URL = URL_BASE + "&t=name";
     public static final String GET_DOWNLOAD_URL = URL_BASE + "&t=url";
@@ -83,74 +78,29 @@ public class GetUpdate {
     }
 
     public static String getSiteContent(String link) {
-        URL Url;
         try {
-            Url = new URL(link);
-        } catch (MalformedURLException e1) {
-            return ERROR_STRING;
-        }
-        HttpURLConnection Http;
-        try {
-            Http = (HttpURLConnection) Url.openConnection();
-        } catch (IOException e1) {
-            return ERROR_STRING;
-        }
-        if (Http == null) return ERROR_STRING;
-        Map<String, List<String>> Header = Http.getHeaderFields();
-
-        try {
-            for (String header : Header.get(null)) {
-                if (header.contains(" 302 ") || header.contains(" 301 ")) {
-                    link = Header.get("Location").get(0);
-                    try {
-                        Url = new URL(link);
-                    } catch (MalformedURLException e) {
-                        return ERROR_STRING;
-                    }
-                    try {
-                        Http = (HttpURLConnection) Url.openConnection();
-                    } catch (IOException e) {
-                        return ERROR_STRING;
-                    }
-                    Header = Http.getHeaderFields();
-                }
+            JSG.info("Fetching data from " + link);
+            //Instantiating the URL class
+            URL url = new URL(link);
+            //Retrieving the contents of the specified page
+            Scanner sc = new Scanner(url.openStream());
+            //Instantiating the StringBuffer class to hold the result
+            StringBuilder sb = new StringBuilder();
+            while (sc.hasNext()) {
+                sb.append(sc.next());
+                //System.out.println(sc.next());
             }
-        } catch (Exception ignored) {
-            return ERROR_STRING;
+            //Retrieving the String from the String Buffer object
+            String result = sb.toString();
+            JSG.info("Fetched: " + result);
+            //Removing the HTML tags
+            result = result.replaceAll("<[^>]*>", "");
+            return result;
         }
-
-        InputStream Stream;
-        try {
-            Stream = Http.getInputStream();
-        } catch (IOException e) {
-            return ERROR_STRING;
+        catch (Exception e){
+            JSG.error("Error while getting data from " + link);
+            JSG.error("Site content Exception", e);
         }
-        String Response;
-        try {
-            Response = GetStringFromStream(Stream);
-        } catch (IOException e) {
-            return ERROR_STRING;
-        }
-        return Response;
-    }
-
-    private static String GetStringFromStream(InputStream Stream) throws IOException {
-        if (Stream != null) {
-            Writer Writer = new StringWriter();
-
-            char[] Buffer = new char[2048];
-            try {
-                Reader Reader = new BufferedReader(new InputStreamReader(Stream, StandardCharsets.UTF_8));
-                int counter;
-                while ((counter = Reader.read(Buffer)) != -1) {
-                    Writer.write(Buffer, 0, counter);
-                }
-            } finally {
-                Stream.close();
-            }
-            return Writer.toString();
-        } else {
-            return ERROR_STRING;
-        }
+        return ERROR_STRING;
     }
 }

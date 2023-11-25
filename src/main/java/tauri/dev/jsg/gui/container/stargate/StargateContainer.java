@@ -1,18 +1,9 @@
 package tauri.dev.jsg.gui.container.stargate;
 
-import tauri.dev.jsg.gui.container.OpenTabHolderInterface;
-import tauri.dev.jsg.gui.util.ContainerHelper;
-import tauri.dev.jsg.item.energy.CapacitorItemBlock;
-import tauri.dev.jsg.packet.JSGPacketHandler;
-import tauri.dev.jsg.packet.StateUpdatePacketToClient;
-import tauri.dev.jsg.stargate.EnumIrisMode;
-import tauri.dev.jsg.power.stargate.StargateClassicEnergyStorage;
-import tauri.dev.jsg.state.StateTypeEnum;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.StargateUpgradeEnum;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -23,11 +14,25 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.block.JSGBlocks;
+import tauri.dev.jsg.gui.container.JSGContainer;
+import tauri.dev.jsg.gui.container.OpenTabHolderInterface;
+import tauri.dev.jsg.gui.util.ContainerHelper;
+import tauri.dev.jsg.item.energy.CapacitorItemBlock;
+import tauri.dev.jsg.packet.JSGPacketHandler;
+import tauri.dev.jsg.packet.StateUpdatePacketToClient;
+import tauri.dev.jsg.power.general.LargeEnergyStorage;
+import tauri.dev.jsg.stargate.EnumIrisMode;
+import tauri.dev.jsg.state.StateTypeEnum;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile.StargateUpgradeEnum;
+import tauri.dev.jsg.util.CreativeItemsChecker;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
-public class StargateContainer extends Container implements OpenTabHolderInterface {
+public class StargateContainer extends JSGContainer implements OpenTabHolderInterface {
 
     public StargateClassicBaseTile gateTile;
     public boolean isOperator;
@@ -38,14 +43,31 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
     private int lastProgress;
     private int openTabId = -1;
     private EnumIrisMode irisMode;
-    private int irisCode;
+    private String irisCode = "";
     public long openedSince;
     private double gateTemp;
     private double irisTemp;
 
+    private final World world;
+
+    @Override
+    public World getWorld() {
+        return world;
+    }
+
+    @Override
+    public BlockPos getPos() {
+        return pos;
+    }
+
+    @Override
+    public Block[] getAllowedBlocks() {
+        return JSGBlocks.STARGATE_CLASSIC_ALL_BLOCKS;
+    }
+
     public StargateContainer(IInventory playerInventory, World world, int x, int y, int z, boolean isOperator) {
         this.isOperator = isOperator;
-
+        this.world = world;
         pos = new BlockPos(x, y, z);
         gateTile = (StargateClassicBaseTile) world.getTileEntity(pos);
         IItemHandler itemHandler = Objects.requireNonNull(gateTile).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
@@ -94,11 +116,6 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
     }
 
     @Override
-    public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
-        return true;
-    }
-
-    @Override
     public void updateProgressBar(int id, int data) {
         gateTile.setPageProgress(data);
     }
@@ -107,6 +124,8 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
     @Override
     public ItemStack transferStackInSlot(@Nonnull EntityPlayer player, int index) {
         ItemStack stack = getSlot(index).getStack();
+
+        if(!CreativeItemsChecker.canInteractWith(stack, isOperator)) return ItemStack.EMPTY;
 
         // Transfering from Stargate to player's inventory
         if (index < 12) {
@@ -188,16 +207,24 @@ public class StargateContainer extends Container implements OpenTabHolderInterfa
     }
 
     @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
+    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player){
+        if(slotId >= 0 && slotId < getInventory().size() && !CreativeItemsChecker.canInteractWith(getSlot(slotId).getStack(), isOperator)) return ItemStack.EMPTY;
+        return super.slotClick(slotId, dragType, clickTypeIn, player);
+    }
+
+    @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        StargateClassicEnergyStorage energyStorage = (StargateClassicEnergyStorage) gateTile.getCapability(CapabilityEnergy.ENERGY, null);
+        LargeEnergyStorage energyStorage = (LargeEnergyStorage) gateTile.getCapability(CapabilityEnergy.ENERGY, null);
 
         if (lastEnergyStored != Objects.requireNonNull(energyStorage).getEnergyStoredInternally()
                 || lastEnergySecondsToClose != gateTile.getEnergySecondsToClose()
                 || energyTransferedLastTick != gateTile.getEnergyTransferedLastTick()
                 || irisMode != gateTile.getIrisMode()
-                || irisCode != gateTile.getIrisCode()
+                || !Objects.equals(irisCode, gateTile.getIrisCode())
                 || openedSince != gateTile.openedSince
                 || (Math.abs(gateTemp - gateTile.gateHeat) > 5) || (gateTemp == -1 && gateTile.gateHeat != -1)
                 || (Math.abs(irisTemp - gateTile.irisHeat) > 5) || (irisTemp == -1 && gateTile.irisHeat != -1)

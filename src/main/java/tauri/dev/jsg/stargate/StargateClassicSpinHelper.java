@@ -7,6 +7,7 @@ import tauri.dev.jsg.util.math.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Client-side class helping with the ring's rotation.
@@ -187,7 +188,7 @@ public class StargateClassicSpinHelper implements ISpinHelper {
         buf.writeInt(symbolType.id);
 
         buf.writeBoolean(isSpinning);
-        buf.writeInt(currentSymbol.getId());
+        buf.writeInt(currentSymbol == null ? Objects.requireNonNull(symbolType.getTopSymbol()).getId() : currentSymbol.getId());
         buf.writeInt(direction.id);
 
         buf.writeLong(spinStartTime);

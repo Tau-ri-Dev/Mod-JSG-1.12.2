@@ -1,0 +1,16 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "jsg:decor_prop_block"
+	},
+	"variants": {
+		"normal": [{}],
+		"inventory": [{}],
+		"facing": {
+			"south": {},
+			"west": {},
+			"north": {},
+			"east": {}
+		}
+	}
+}

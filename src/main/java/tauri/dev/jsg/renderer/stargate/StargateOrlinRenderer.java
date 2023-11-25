@@ -34,7 +34,7 @@ public class StargateOrlinRenderer extends StargateAbstractRenderer<StargateAbst
 
 	@Override
 	protected Map<BlockPos, IBlockState> getMemberBlockStates(StargateAbstractMergeHelper mergeHelper, EnumFacing facing, EnumFacing facingVertical) {
-		Map<BlockPos, IBlockState> map = new HashMap<BlockPos, IBlockState>();
+		Map<BlockPos, IBlockState> map = new HashMap<>();
 		
 		for (BlockPos pos : mergeHelper.getRingBlocks())
 			map.put(pos, mergeHelper.getMemberBlock().getDefaultState().withProperty(JSGProps.ORLIN_VARIANT, facing));
@@ -50,7 +50,7 @@ public class StargateOrlinRenderer extends StargateAbstractRenderer<StargateAbst
 		GlStateManager.translate(0.5, 0, 0.5);			
 		GlStateManager.scale(GATE_SCALE, GATE_SCALE, GATE_SCALE);
 	}
-	
+
 	@Override
 	protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks) {
 		GlStateManager.translate(0, 3.80873f, -0.204347f);
@@ -64,9 +64,9 @@ public class StargateOrlinRenderer extends StargateAbstractRenderer<StargateAbst
 	// Particles
 	
 	private static final List<ParticleBlender> GATE_PARTICLES = Arrays.asList(
-			new ParticleBlenderSmoke(-2.71127f,  0.188794f, 5.76731f, 1, 10, -0.1f, 0, false, (motion) -> { motion.z = -0.03f + Math.random()*0.06f; }),
-			new ParticleBlenderSmoke(2.698340f,  0.210467f, 1.65171f, 1, 10, 0.1f, 0, false, (motion) -> { motion.z = -0.03f + Math.random()*0.06f; }),
-			new ParticleBlenderSmoke(-2.81152f,  0.007747f, 4.34894f, 1, 10, true,  (motion) -> { motion.z = 0.03f + Math.random()*0.05f; }),
+			new ParticleBlenderSmoke(-2.71127f,  0.188794f, 5.76731f, 1, 10, -0.1f, 0, false, (motion) -> motion.z = -0.03f + Math.random()*0.06f),
+			new ParticleBlenderSmoke(2.698340f,  0.210467f, 1.65171f, 1, 10, 0.1f, 0, false, (motion) -> motion.z = -0.03f + Math.random()*0.06f),
+			new ParticleBlenderSmoke(-2.81152f,  0.007747f, 4.34894f, 1, 10, true,  (motion) -> motion.z = 0.03f + Math.random()*0.05f),
 			new ParticleBlenderSmoke(0.880709f, -0.045567f, 6.63663f, 2, 20, true,  (motion) -> { motion.x = -0.03f + Math.random()*0.06f; motion.z = 0.03f + Math.random()*0.01f; }),
 			new ParticleBlenderSmoke(-1.27690f, -0.025613f, 1.15695f, 5, 50, false, (motion) -> { motion.x = -0.03f + Math.random()*0.06f; motion.z = 0.03f + Math.random()*0.01f; }),
 			new ParticleBlenderSmoke(1.276900f, -0.025613f, 1.15695f, 5, 50, false, (motion) -> { motion.x = -0.03f + Math.random()*0.06f; motion.z = 0.03f + Math.random()*0.01f; }),

@@ -1,8 +1,9 @@
 package tauri.dev.jsg.gui.container.zpmhub;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -12,20 +13,25 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.capability.CapabilityEnergyZPM;
+import tauri.dev.jsg.gui.container.JSGContainer;
 import tauri.dev.jsg.gui.util.ContainerHelper;
 import tauri.dev.jsg.packet.JSGPacketHandler;
 import tauri.dev.jsg.packet.StateUpdatePacketToClient;
 import tauri.dev.jsg.power.zpm.ZPMHubEnergyStorage;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.tileentity.energy.ZPMHubTile;
+import tauri.dev.jsg.util.CreativeItemsChecker;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 
-public class ZPMHubContainer extends Container {
+public class ZPMHubContainer extends JSGContainer {
 
     public ZPMHubTile hubTile;
+    public boolean isOperator;
     public ArrayList<Slot> slots;
     private final BlockPos pos;
     private long lastEnergyStored;
@@ -40,8 +46,10 @@ public class ZPMHubContainer extends Container {
         return slots;
     }
 
-    public ZPMHubContainer(IInventory playerInventory, World world, int x, int y, int z) {
+    public ZPMHubContainer(IInventory playerInventory, World world, int x, int y, int z, boolean isOperator) {
+        this.isOperator = isOperator;
         pos = new BlockPos(x, y, z);
+        this.world = world;
         hubTile = (ZPMHubTile) world.getTileEntity(pos);
         IItemHandler itemHandler = null;
         if (hubTile != null) {
@@ -61,9 +69,21 @@ public class ZPMHubContainer extends Container {
         return 97;
     }
 
+    private final World world;
+
     @Override
-    public boolean canInteractWith(@Nonnull EntityPlayer player) {
-        return true;
+    public World getWorld() {
+        return world;
+    }
+
+    @Override
+    public BlockPos getPos() {
+        return pos;
+    }
+
+    @Override
+    public Block[] getAllowedBlocks() {
+        return new Block[]{JSGBlocks.ZPM_HUB};
     }
 
     @Nonnull
@@ -73,6 +93,9 @@ public class ZPMHubContainer extends Container {
         Slot slot = getSlot(slotId);
         if (slot.getHasStack()) {
             ItemStack stack = slot.getStack();
+
+            if(!CreativeItemsChecker.canInteractWith(stack, isOperator)) return ItemStack.EMPTY;
+
             returnStack = stack.copy();
 
             if (slotId < slots.size()) {
@@ -93,6 +116,14 @@ public class ZPMHubContainer extends Container {
             }
         }
         return returnStack;
+    }
+
+    @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
+    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player){
+        if(slotId >= 0 && slotId < getInventory().size() && !CreativeItemsChecker.canInteractWith(getSlot(slotId).getStack(), isOperator)) return ItemStack.EMPTY;
+        return super.slotClick(slotId, dragType, clickTypeIn, player);
     }
 
     @Override

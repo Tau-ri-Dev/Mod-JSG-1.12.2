@@ -1,16 +1,5 @@
 package tauri.dev.jsg.block.energy.capacitor;
 
-import net.minecraftforge.items.CapabilityItemHandler;
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
-import tauri.dev.jsg.util.ItemHandlerHelper;
-import tauri.dev.jsg.util.main.JSGProps;
-import tauri.dev.jsg.block.JSGAbstractCustomItemBlock;
-import tauri.dev.jsg.gui.GuiIdEnum;
-import tauri.dev.jsg.item.energy.CapacitorItemBlock;
-import tauri.dev.jsg.power.stargate.StargateAbstractEnergyStorage;
-import tauri.dev.jsg.power.stargate.ItemEnergyStorage;
-import tauri.dev.jsg.tileentity.energy.CapacitorTile;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
@@ -28,6 +17,17 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.items.CapabilityItemHandler;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.block.JSGAbstractCustomItemBlock;
+import tauri.dev.jsg.creativetabs.JSGCreativeTabsHandler;
+import tauri.dev.jsg.gui.GuiIdEnum;
+import tauri.dev.jsg.item.energy.CapacitorItemBlock;
+import tauri.dev.jsg.power.general.ItemEnergyStorage;
+import tauri.dev.jsg.power.general.SmallEnergyStorage;
+import tauri.dev.jsg.tileentity.energy.CapacitorTile;
+import tauri.dev.jsg.util.ItemHandlerHelper;
+import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -104,14 +104,14 @@ public class CapacitorBlock extends JSGAbstractCustomItemBlock {
 		
 		IEnergyStorage energyStorage = stack.getCapability(CapabilityEnergy.ENERGY, null);
 		
-		StargateAbstractEnergyStorage capacitorEnergyStorage = (StargateAbstractEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
+		SmallEnergyStorage capacitorEnergyStorage = (SmallEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
 		capacitorEnergyStorage.setEnergyStored(energyStorage.getEnergyStored());
 	}
 	
 	
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		StargateAbstractEnergyStorage capacitorEnergyStorage = (StargateAbstractEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
+		SmallEnergyStorage capacitorEnergyStorage = (SmallEnergyStorage) world.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
 
 		ItemStack stack = new ItemStack(this);
 		((ItemEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null)).setEnergyStored(capacitorEnergyStorage.getEnergyStored());

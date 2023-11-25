@@ -1,15 +1,18 @@
 package tauri.dev.jsg.packet;
 
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerActionPacketToServer;
 import tauri.dev.jsg.item.linkable.dialer.UniverseDialerActionPacketToServer.UniverseDialerActionPacketServerHandler;
-import tauri.dev.jsg.item.oc.ItemOCProgramToServer;
-import tauri.dev.jsg.item.oc.ItemOCProgramToServer.ItemOCProgramServerHandler;
 import tauri.dev.jsg.item.linkable.gdo.GDOActionPacketToServer;
 import tauri.dev.jsg.item.linkable.gdo.GDOActionPacketToServer.GDOActionPacketServerHandler;
 import tauri.dev.jsg.item.notebook.NotebookActionPacketToServer;
 import tauri.dev.jsg.item.notebook.NotebookActionPacketToServer.NotebookActionPacketServerHandler;
 import tauri.dev.jsg.item.notebook.PageNotebookSetNameToServer;
 import tauri.dev.jsg.item.notebook.PageNotebookSetNameToServer.PageNotebookSetNameServerHandler;
+import tauri.dev.jsg.item.oc.ItemOCProgramToServer;
+import tauri.dev.jsg.item.oc.ItemOCProgramToServer.ItemOCProgramServerHandler;
 import tauri.dev.jsg.packet.ChangeRedstoneModeToServer.ChangeRedstoneModeServerHandler;
 import tauri.dev.jsg.packet.SetOpenTabToServer.SetOpenTabServerHandler;
 import tauri.dev.jsg.packet.gui.entry.EntryActionToServer;
@@ -20,9 +23,6 @@ import tauri.dev.jsg.packet.stargate.DHDPegasusButtonClickedToServer.DHDPegasusB
 import tauri.dev.jsg.packet.transportrings.SaveRingsParametersToServer;
 import tauri.dev.jsg.packet.transportrings.StartPlayerFadeOutToClient;
 import tauri.dev.jsg.packet.transportrings.TRControllerActivatedToServer;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class JSGPacketHandler {
 	public static SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel("jsg");
@@ -59,5 +59,6 @@ public class JSGPacketHandler {
 		INSTANCE.registerMessage(StartPlayerFadeOutToClient.StartPlayerFadeOutToClientHandler.class, StartPlayerFadeOutToClient.class, id, Side.CLIENT); id++;
 		INSTANCE.registerMessage(StateUpdatePacketToClient.StateUpdateClientHandler.class, StateUpdatePacketToClient.class, id, Side.CLIENT); id++;
 		INSTANCE.registerMessage(SoundPositionedPlayToClient.PlayPositionedSoundClientHandler.class, SoundPositionedPlayToClient.class, id, Side.CLIENT); id++;
+		INSTANCE.registerMessage(AdminControllerGuiOpenToClient.AdminControllerGuiOpenToClientHandler.class, AdminControllerGuiOpenToClient.class, id, Side.CLIENT); id++;
 	}
 }

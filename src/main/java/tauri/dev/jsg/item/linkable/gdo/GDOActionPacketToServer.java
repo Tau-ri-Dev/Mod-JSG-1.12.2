@@ -1,13 +1,6 @@
 package tauri.dev.jsg.item.linkable.gdo;
 
 import io.netty.buffer.ByteBuf;
-import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.advancements.JSGAdvancements;
-import tauri.dev.jsg.item.JSGItems;
-import tauri.dev.jsg.stargate.codesender.PlayerCodeSender;
-import tauri.dev.jsg.stargate.network.StargateNetwork;
-import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
-import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,6 +11,15 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import tauri.dev.jsg.JSG;
+import tauri.dev.jsg.advancements.JSGAdvancements;
+import tauri.dev.jsg.item.JSGItems;
+import tauri.dev.jsg.stargate.codesender.PlayerCodeSender;
+import tauri.dev.jsg.stargate.network.StargateNetwork;
+import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
+import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
+
+import java.nio.charset.StandardCharsets;
 
 public class GDOActionPacketToServer implements IMessage {
 	public GDOActionPacketToServer() {}
@@ -25,9 +27,9 @@ public class GDOActionPacketToServer implements IMessage {
 	private GDOActionEnum action;
 	private EnumHand hand;
 	private boolean next;
-	private int code;
+	private String code;
 	
-	public GDOActionPacketToServer(GDOActionEnum action, EnumHand hand, int code, boolean next) {
+	public GDOActionPacketToServer(GDOActionEnum action, EnumHand hand, String code, boolean next) {
 		this.action = action;
 		this.hand = hand;
 		this.code = code;
@@ -37,7 +39,7 @@ public class GDOActionPacketToServer implements IMessage {
 	public GDOActionPacketToServer(GDOActionEnum action, EnumHand hand, boolean next) {
 		this.action = action;
 		this.hand = hand;
-		this.code = -1;
+		this.code = "";
 		this.next = next;
 	}
 	
@@ -45,7 +47,8 @@ public class GDOActionPacketToServer implements IMessage {
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(action.ordinal());
 		buf.writeInt(hand == EnumHand.MAIN_HAND ? 0 : 1);
-		buf.writeInt(code);
+		buf.writeInt(code.length());
+		buf.writeCharSequence(code, StandardCharsets.UTF_8);
 		buf.writeBoolean(next);
 	}
 	
@@ -53,7 +56,8 @@ public class GDOActionPacketToServer implements IMessage {
 	public void fromBytes(ByteBuf buf) {
 		action = GDOActionEnum.values()[buf.readInt()];
 		hand = buf.readInt() == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
-		code = buf.readInt();
+		int codeSize = buf.readInt();
+		code = buf.readCharSequence(codeSize, StandardCharsets.UTF_8).toString();
 		next = buf.readBoolean();
 	}
 

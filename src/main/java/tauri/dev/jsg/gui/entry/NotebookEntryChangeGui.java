@@ -1,14 +1,14 @@
 package tauri.dev.jsg.gui.entry;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.EnumHand;
+import net.minecraftforge.common.util.Constants.NBT;
 import tauri.dev.jsg.item.notebook.PageNotebookItem;
 import tauri.dev.jsg.stargate.network.StargateAddress;
 import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
 import tauri.dev.jsg.transportrings.SymbolTypeTransportRingsEnum;
 import tauri.dev.jsg.transportrings.TransportRingsAddress;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumHand;
-import net.minecraftforge.common.util.Constants.NBT;
 
 /**
  * Class handles universal screen shown when editing Notebook or Universe Dialer
@@ -25,6 +25,7 @@ public class NotebookEntryChangeGui extends AbstractAddressEntryChangeGui {
 
 	@Override
 	protected void generateEntries() {
+		if(mainCompound == null) return;
 		NBTTagList list = mainCompound.getTagList("addressList", NBT.TAG_COMPOUND);
 		
 		for (int i=0; i<list.tagCount(); i++) {

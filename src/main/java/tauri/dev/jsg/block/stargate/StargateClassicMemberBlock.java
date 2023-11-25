@@ -30,16 +30,17 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import tauri.dev.jsg.JSG;
 import tauri.dev.jsg.block.JSGBlocks;
 import tauri.dev.jsg.block.dialhomedevice.DHDAbstractBlock;
+import tauri.dev.jsg.config.JSGConfigUtil;
 import tauri.dev.jsg.gui.GuiIdEnum;
 import tauri.dev.jsg.stargate.CamoPropertiesHelper;
 import tauri.dev.jsg.stargate.EnumMemberVariant;
 import tauri.dev.jsg.tileentity.stargate.StargateAbstractBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicBaseTile;
 import tauri.dev.jsg.tileentity.stargate.StargateClassicMemberTile;
-import tauri.dev.jsg.util.FacingHelper;
 import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 import java.util.Objects;
 
@@ -52,6 +53,7 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
         if (world.getBlockState(pos).getBlock() != this) return 0;
 
@@ -64,13 +66,16 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
 
     // ------------------------------------------------------------------------
     @Override
+    @ParametersAreNonnullByDefault
     public void getSubBlocks(CreativeTabs creativeTabs, NonNullList<ItemStack> items) {
         for (EnumMemberVariant variant : EnumMemberVariant.values()) {
             items.add(new ItemStack(this, 1, getMetaFromState(getDefaultState().withProperty(JSGProps.MEMBER_VARIANT, variant))));
         }
     }
 
+    @Nonnull
     @Override
+    @ParametersAreNonnullByDefault
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         EnumMemberVariant variant = state.getValue(JSGProps.MEMBER_VARIANT);
         //		JSG.info("state: " + state + ", meta:"+getMetaFromState(getDefaultState().withProperty(JSGProps.MEMBER_VARIANT, variant)));
@@ -79,6 +84,7 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         EnumMemberVariant variant = state.getValue(JSGProps.MEMBER_VARIANT);
 
@@ -106,16 +112,18 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
 
     @Nonnull
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState().withProperty(JSGProps.MEMBER_VARIANT, EnumMemberVariant.byId((meta >> 3) & 0x01)).withProperty(JSGProps.RENDER_BLOCK, (meta & 0x04) != 0).withProperty(JSGProps.FACING_HORIZONTAL, EnumFacing.getHorizontal(meta & 0x03));//.withProperty(JSGProps.FACING_VERTICAL, (((meta & 0x05) != 0) ? EnumFacing.DOWN : ((meta & 0x06) != 0) ? EnumFacing.UP : EnumFacing.SOUTH));
     }
 
     @Nonnull
     @Deprecated
+    @SuppressWarnings("deprecation")
     public IBlockState getActualState(@Nonnull IBlockState state, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
         if (worldIn.getBlockState(pos).getBlock() != this) return state;
         StargateClassicMemberTile sg = (StargateClassicMemberTile) worldIn.getTileEntity(pos);
-        if(sg != null)
+        if (sg != null)
             return state.withProperty(JSGProps.FACING_VERTICAL, sg.getFacingVertical());
         return state;
     }
@@ -146,17 +154,17 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     public void registerCustomModel(IRegistry<ModelResourceLocation, IBakedModel> registry) {
 
         for (IBlockState state : getBlockState().getValidStates()) {
-            String variant = "";
+            StringBuilder variant = new StringBuilder();
 
             for (IProperty prop : state.getPropertyKeys()) {
                 Object value = state.getValue(prop);
 
-                variant += prop.getName() + "=" + value.toString() + ",";
+                variant.append(prop.getName()).append("=").append(value).append(",");
             }
 
-            variant = variant.substring(0, variant.length() - 1);
+            variant = new StringBuilder(variant.substring(0, variant.length() - 1));
 
-            ModelResourceLocation modelResourceLocation = new ModelResourceLocation(getRegistryName(), variant);
+            ModelResourceLocation modelResourceLocation = new ModelResourceLocation(Objects.requireNonNull(getRegistryName()), variant.toString());
 
             IBakedModel defaultModel = registry.getObject(modelResourceLocation);
             StargateClassicMemberBlockBakedModel memberBlockBakedModel = new StargateClassicMemberBlockBakedModel(this, defaultModel);
@@ -166,6 +174,8 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     }
 
     @Override
+    @ParametersAreNonnullByDefault
+    @SuppressWarnings("deprecation")
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
         StargateClassicMemberTile memberTile = (StargateClassicMemberTile) world.getTileEntity(pos);
 
@@ -186,10 +196,11 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     // ------------------------------------------------------------------------
     @SuppressWarnings("deprecation")
     @Override
+    @ParametersAreNonnullByDefault
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack heldItemStack = player.getHeldItem(EnumHand.MAIN_HAND);
 
-        if (JSGBlocks.isInBlocksArray(Block.getBlockFromItem(heldItemStack.getItem()), JSGBlocks.CAMO_BLOCKS_BLACKLIST)) {
+        if (!JSGConfigUtil.canBeUsedAsCamoBlock(Block.getBlockFromItem(heldItemStack.getItem()).getBlockState().getBaseState())) {
             heldItemStack = ItemStack.EMPTY;
         }
 
@@ -199,7 +210,9 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
         StargateClassicMemberTile memberTile = (StargateClassicMemberTile) world.getTileEntity(pos);
 
         if (!world.isRemote) {
-            IBlockState camoBlockState = memberTile.getCamoState();
+            if (tryBreak(player.getHeldItem(hand), false, player.isSneaking(), player, world, pos, hand, state))
+                return true;
+            IBlockState camoBlockState = Objects.requireNonNull(memberTile).getCamoState();
             if (!memberTile.isMerged() || heldBlock instanceof StargateClassicMemberBlock || heldBlock instanceof StargateClassicBaseBlock)
                 return false;
             if (!(heldItem instanceof ItemBlock) && heldItem != Items.WATER_BUCKET && camoBlockState == null) {
@@ -311,6 +324,7 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         EnumFacing verticalFacing;// = FacingHelper.getVerticalFacingFromPitch(placer.rotationPitch);
         verticalFacing = EnumFacing.SOUTH;
@@ -331,12 +345,13 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         super.breakBlock(world, pos, state);
 
         if (!world.isRemote) {
             StargateClassicMemberTile memberTile = (StargateClassicMemberTile) world.getTileEntity(pos);
-            if (memberTile.getCamoItemStack() != null)
+            if (Objects.requireNonNull(memberTile).getCamoItemStack() != null)
                 InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), memberTile.getCamoItemStack());
         }
     }
@@ -344,21 +359,28 @@ public abstract class StargateClassicMemberBlock extends StargateAbstractMemberB
     // ------------------------------------------------------------------------
 
     @Override
+    @ParametersAreNonnullByDefault
     public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
         return CamoPropertiesHelper.getLightOpacity(state, world, pos);
     }
 
+    @Nonnull
     @Override
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.SOLID;
     }
 
+    @Nonnull
     @Override
+    @SuppressWarnings("deprecation")
+    @ParametersAreNonnullByDefault
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess access, BlockPos pos) {
         return CamoPropertiesHelper.getStargateBlockBoundingBox(state, access, pos, false);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
+    @ParametersAreNonnullByDefault
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess access, BlockPos pos) {
         return CamoPropertiesHelper.getStargateBlockBoundingBox(state, access, pos, true);
     }
