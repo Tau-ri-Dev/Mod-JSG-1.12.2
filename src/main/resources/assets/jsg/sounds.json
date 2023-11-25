@@ -51,6 +51,13 @@
       "jsg:gate/pegasus/gate_pegasus_open"
     ]
   },
+  "gate_nox_open": {
+    "category": "ambient",
+    "subtitle": "jsg.subtitle.gate_milkyway_open",
+    "sounds": [
+      "jsg:gate/gate_nox_open"
+    ]
+  },
   "gate_milkyway_close": {
     "category": "ambient",
     "subtitle": "jsg.subtitle.gate_milkyway_close",
@@ -380,7 +387,6 @@
     "sounds": [
       {
         "name": "jsg:gui/mainmenu/loading_music",
-        "stream": true,
         "preload": true
       }
     ]
@@ -389,7 +395,10 @@
     "category": "ambient",
     "subtitle": "jsg.subtitle.gdo_button_beep",
     "sounds": [
-      "jsg:misc/button_press"
+      "jsg:misc/button_press",
+      "jsg:misc/button_press2",
+      "jsg:misc/button_press3",
+      "jsg:misc/button_press4"
     ]
   },
   "universe_dialer_start_dial": {
@@ -424,7 +433,15 @@
     "category": "ambient",
     "subtitle": "jsg.subtitle.item_zat_shoot",
     "sounds": [
-      "jsg:item/zat/shoot"
+      "jsg:item/zat/shoot",
+      "jsg:item/zat/shoot2",
+      "jsg:item/zat/shoot3",
+      "jsg:item/zat/shoot4",
+      "jsg:item/zat/shoot5",
+      "jsg:item/zat/shoot6",
+      "jsg:item/zat/shoot7",
+      "jsg:item/zat/shoot8",
+      "jsg:item/zat/shoot9"
     ]
   },
   "item_staff_shoot": {
@@ -467,6 +484,13 @@
     "subtitle": "jsg.subtitle.destiny_countdown_one_minute",
     "sounds": [
       "jsg:misc/destiny/countdown_one_minute"
+    ]
+  },
+  "destiny_vent": {
+    "category": "ambient",
+    "subtitle": "jsg.subtitle.destiny_vent",
+    "sounds": [
+      "jsg:misc/destiny/vent"
     ]
   },
   "destiny_ftl_in": {
@@ -534,4 +558,3 @@
     ]
   }
 }
-
