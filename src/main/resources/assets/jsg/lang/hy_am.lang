@@ -1,0 +1,913 @@
+# itemGroups - creative tabs
+itemGroup.jsg_gates=JSG: Դարպասներ
+itemGroup.jsg_items=JSG: Իրեր
+itemGroup.jsg_rings=JSG: Օղակներ
+itemGroup.jsg_ores=JSG: հանքաքարեր
+itemGroup.jsg_energy=JSG: Էներգիա
+itemGroup.jsg_tools=JSG: Գործիքներ
+itemGroup.jsg_props=JSG: Պահեստներ
+itemGroup.jsg_machines=JSG: մեքենաներ
+itemGroup.jsg_weapons=JSG: Զենքեր
+itemGroup.jsg_records=JSG: ձայնագրություններ
+
+# config file
+config.jsg.general=General Config
+config.jsg.general.tooltip=Configuration of misc things
+
+config.jsg.zpm=ZPM Config
+config.jsg.zpm.tooltip=Configuration of ZPM and ZPM Hubs
+
+config.jsg.stargates=Stargates Config
+config.jsg.stargates.tooltip=Configuration of Stargates
+
+config.jsg.rings=Transport Rings Config
+config.jsg.rings.tooltip=Configuration of Transport Rings
+
+config.jsg.dhd=DHD Config
+config.jsg.dhd.tooltip=Configuration of DHD and Universe Dialer
+
+config.jsg.beamers=Beamers Config
+config.jsg.beamers.tooltip=Configuration of Beamers
+
+config.jsg.worldgen=World Generation Config
+config.jsg.worldgen.tooltip=Configuration of World Gen and Mysterious Pages
+
+config.jsg.items=Items Config
+config.jsg.items.tooltip=Configuration of Items, Armor and Weapons
+
+# Sound category
+soundCategory.jsg=Just Stargate Mod
+
+# -------------------
+# ADVANCEMENTS
+
+advancement.machines.title=Որոշ շարժակներ և պտուտակներ
+advancement.machines.desc=Մեքենաներով լի կատեգորիա
+
+advancement.wormhole_go.title=Ի՞նչ է որդանանցքը: և ինչու՞ որդ։
+advancement.wormhole_go.desc=Մտնել Աստղային Դարպասի Իրադարձության Հորիզոն
+
+advancement.merged_orlin.title=Քեզ անհրաժեշտ կլինի նոր տոստեր
+advancement.merged_orlin.desc=Կառուցել Օրլինի Դարպասը
+
+advancement.merged_milkyway.title=Բուրգ, որի վրա արևն անմիջապես վերևում է
+advancement.merged_milkyway.desc=Կառուցել Ծիր Կաթնի Աստղային Դարպաս
+
+advancement.merged_pegasus.title=Թռչունը ներառված չէ (TM)
+advancement.merged_pegasus.desc=Կառուցել Պեգասի Աստղային Դարպաս
+
+advancement.merged_universe.title=Հնագույն, երկու իմաստով էլ
+advancement.merged_universe.desc=Կառուցել Տիեզերքի Աստղային Դարպաս
+
+advancement.chevron_seven_locked.title=7րդ խորհրդանիշը կողպված է
+advancement.chevron_seven_locked.desc=Հավաքեք գոյություն ունեցող 7 խորհրդանիշի հասցեն
+
+advancement.chevron_eight_locked.title=Ձեր հասցեն ոչ թե սխալ է, այլ թերի։
+advancement.chevron_eight_locked.desc=Հավաքեք գոյություն ունեցող 8 խորհրդանիշի հասցեն
+
+advancement.chevron_nine_locked.title=Մի քանի միլիարդ լուսային տարի տնից
+advancement.chevron_nine_locked.desc=Հավաքեք գոյություն ունեցող 9-նիշանի հասցեն
+
+advancement.iris_impact.title=Ո՞վ է այնտեղ։
+advancement.iris_impact.desc=Ականատեսեք առարկա հարվածի ծիածանաթաղանթին
+
+advancement.gdo_used.title=Կոդն ընդունված է - ծիածանաթաղանթը Բացվում է
+advancement.gdo_used.desc=Կոդ ուղարկելու համար օգտագործեք GDO-ն
+
+advancement.kawoosh_cremation.title=Փախչեք Հադանտեից
+advancement.kawoosh_cremation.desc=Փորձեք Քավուշ դիակիզումը ինքներդ ձեր վրա
+
+advancement.first_zpm.title=Ի՞նչ Zed-PM․․․, նա կանադացի է
+advancement.first_zpm.desc=Ստացեք զրոյական կետի մոդուլ
+
+advancement.three_zpms.title=Ես չեմ հավատում իմ աչքերին. երեք ԶԿՄ
+advancement.three_zpms.desc=Օգտագործեք ԶԿՄ հանգույցը երեք ԶԿՄով
+
+advancement.zpm_slot.title=Այո՛
+advancement.zpm_slot.desc=Օգտագորցեք ԶԿՄ բնիկ
+
+advancement.upgrade_shield.title=Էներգիան․․․ էներգիան․․․
+advancement.upgrade_shield.desc=Ստացեք Աստղային Դարպասի վահան
+
+advancement.beamer.title=Ճառագայթները կճառագայթեն 
+advancement.beamer.desc=Ձեռք բերեք ճառագայթիչ
+
+advancement.titanium.title=Դառնալով ավելի կոշտ և կոշտ
+advancement.titanium.desc=Ստացեք տիտանի ձուլակտոր
+
+advancement.naquadah_raw.title=Նաքուա․․․․․Ի՞նչ
+advancement.naquadah_raw.desc=Ստեղծեք հում նակվադախի համաձուլվածք
+
+advancement.naquadah_alloy.title=Լավագույն գերհաղորդիչ
+advancement.naquadah_alloy.desc=Ստեղծեք նակվադախի համաձուլվածք
+
+advancement.trinium.title=Հարցրե՞լ եք Քե´լսին և Տ´ակայային:
+advancement.trinium.desc=Ստացեք տրինիումի ձուլակտոր
+
+advancement.unstable_eh_survive.title=Մի պահ այնտեղ մտածեցի, որ մենք դժվարության մեջ ենք
+advancement.unstable_eh_survive.desc=Մտեք անկայուն որդանանցք և գոյատևեք
+
+advancement.tokra_crystal.title=Նրանք ապրում են գետնի տակ
+advancement.tokra_crystal.desc=Ստացեք Տոկռաի բյուրեղներ
+
+advancement.beamer_crystal_laser.title=Մասնիկների արագացուցիչն է՞ կրակում աստղային դարպասի միջով:
+advancement.beamer_crystal_laser.desc=Ստացեք ճառագայթային լազերային բյուրեղ
+
+advancement.transportrings_goauld.title=Վերելակներն այնպիսի ցավ են
+advancement.transportrings_goauld.desc=Օգտագործեք գուաուլդի տրանսպորտային օղակները
+
+advancement.transportrings_ori.title=Կելեստիսի հարթավայրեր
+advancement.transportrings_ori.desc=Օգտագործեք Օռայի տրանսպորտային օղակներ
+
+advancement.transportrings_ancient.title=Բնօրինակը կարող եք ասել
+advancement.transportrings_ancient.desc=Օգտագործեք հնագույն տրանսպորտային օղակներ
+
+advancement.assembler.title=Հնագույն գործարան
+advancement.assembler.desc=Ստեղծեք հնագույն հավաքիչ
+
+advancement.chamber.title=Աճե՛ք, բյուրեղներ, աճե՛ք
+advancement.chamber.desc=Ստեղծեք բյուրեղյա խցիկ
+
+advancement.pcb.title=Բյուրեղների վրա հիմնված տեխնոլոգիա
+advancement.pcb.desc=Ստեղծեք PCB արտադրող
+
+advancement.ore_washing.title=Հանքաքարերի մաքրում
+advancement.ore_washing.desc=Ստեղծեք հանքաքարի լվացքի մեքենա
+
+advancement.chemicals.title=Արդյո՞ք դա Յանուսի գաղտնի լաբորատորիա է
+advancement.chemicals.desc=Ստեղծեք հնագույն քիմիական լաբորատորիա
+
+advancement.refined_naquadah.title=Հիմա դա ԹԵԺ բաներ են
+advancement.refined_naquadah.desc=Ձեռք բերեք զտված հեղուկ Նաքվադախ
+
+advancement.myst_page.title=Աբիդոսի Կարտուշ
+advancement.myst_page.desc=Օգտագործեք առեղծվածային էջը
+
+# -------------------
+
+# sound categories
+soundCategory.jsg_sounds=Just Stargate mod
+
+# -------------------
+# ITEMS
+
+# records
+item.jsg.record_sgc.name=SG-1 Թեմա
+item.jsg.record_atlantis.name=Atlantis Թեմա
+item.jsg.record_destiny.name=Destiny Թեմա
+item.jsg.record_origins.name=Origins Թեմա
+item.jsg.record_elevator.name=Բեռնման Երաժշտություն
+
+# iris
+item.jsg.iris_blade.name=ծիածանաթաղանթի Սայր (Տիտան)
+item.jsg.iris_blade_trinium.name=ծիածանաթաղանթի Սայր (Տրինիում)
+item.jsg.quad_iris_blade.name=Քառյակ ծիածանաթաղանթի Սայր (Տիտան)
+item.jsg.quad_iris_blade_trinium.name=Քառյակ ծիածանաթաղանթի Սայր (Տրինիում)
+item.jsg.upgrade_iris.name=ծիածանաթաղանթի արդիականացնում (Տիտան)
+item.jsg.upgrade_iris_trinium.name=ծիածանաթաղանթի արդիականացնում (Թրինիում)
+item.jsg.upgrade_iris_creative.name=ծիածանաթաղանթի արդիականացնում (Creative)
+item.jsg.iris.tooltip.integrity=Ամբողջականություն:
+item.jsg.iris.tooltip.durability=Երկարակեցություն:
+item.jsg.shield_emitter.name=Վահանի Ստեղծող
+item.jsg.upgrade_shield.name=Վահանի արդիականացնում
+
+# ingots
+item.jsg.trinium_impure.name=Տրինիումի անմաքուր հանքաքար
+item.jsg.trinium_purified.name=Մաքրված Տրինիումի հանքաքար
+item.jsg.trinium_raw.name=Հում Տրինիումի հանքաքար
+item.jsg.trinium_ingot.name=Տրինիումի ձուլակտոր
+item.jsg.trinium_dust.name=Տրինիումի փոշի
+item.jsg.trinium_nugget.name=Տրինիումի բնակտոր
+
+item.jsg.titanium_impure.name=Տիտանի անմաքուր հանքաքար
+item.jsg.titanium_purified.name=Մաքրված տիտանի հանքաքար
+item.jsg.titanium_raw.name=Հում տիտանի հանքաքար
+item.jsg.titanium_ingot.name=Տիտանի ձուլակտոր
+item.jsg.titanium_dust.name=Տիտանի փոշի
+item.jsg.titanium_nugget.name=Տիտանի բնակտոր
+
+item.jsg.naquadah_impure.name=Անմաքուր Նակվադախի հանքաքար
+item.jsg.naquadah_purified.name=Մաքրված Նակվադախի հանքաքար
+item.jsg.naquadah_raw.name=Հում Նակվադախի հանքաքար
+item.jsg.naquadah_alloy_raw.name=Հում Նակվադախի խառնուրդ ձուլակտոր
+item.jsg.naquadah_raw_dust.name=Հում Նակվադախի փոշի
+item.jsg.naquadah_raw_nugget.name=Հում Նակվադախի բնակտոր
+
+item.jsg.naquadah_alloy.name=Նակվադախի խառնուրդի ձուլակտոր
+item.jsg.naquadah_dust.name=Նակվադախի փոշի
+item.jsg.naquadah_nugget.name=Նակվադախի բնակտոր
+
+# crystals
+item.jsg.crystal_fragment.name=Բյուրեղյա սերմ
+
+item.jsg.crystal_blue.name=Հեռահաղորդակցության բյուրեղ
+item.jsg.crystal_red.name=Էներգիայի բյուրեղ
+item.jsg.crystal_ender.name=Էնդեր բյուրեղ
+item.jsg.crystal_yellow.name=Լույսի բյուրեղ
+item.jsg.crystal_white.name=Սպիտակ բյուրեղ
+item.jsg.crystal_blue_pegasus.name=Պեգասի բյուրեղ
+item.jsg.crystal_tokra.name=Տոկռա բյուրեղ
+
+item.jsg.circuit_control_base.name=Կառավարման սխեմայի բազա
+item.jsg.circuit_control_naquadah.name=Նակվադախի Կառավարման միացում
+item.jsg.circuit_control_crystal.name=Բյուրեղի Կառավարման միացում
+
+item.jsg.crystal_control_dhd.name=DHD Վերահսկիչ բյուրեղյա (Ծիր Կաթին)
+item.jsg.crystal_control_pegasus_dhd.name=DHD Վերահսկիչ բյուրեղյա (Պեգասի)
+item.jsg.raw_pegasus_dhd_crystal.name=Հում DHD Բյուրեղ (Պեգասի)
+item.jsg.crystal_glyph_dhd.name=DHD Գլիֆի բյուրեղ
+item.jsg.crystal_glyph_stargate.name=Աստղային դարպասի գլիֆի բյուրեղ
+item.jsg.crystal_glyph_milkyway.name=Ծիր կաթին գլիֆի բյուրեղ
+item.jsg.crystal_glyph_pegasus.name=Պեգասի գլիֆի բյուրեղ
+item.jsg.crystal_glyph_universe.name=Տիեզերական գլիֆի բյուրեղ
+item.jsg.crystal_glyph_goauld.name=Գուաուլդ գլիֆի բյուրեղ
+item.jsg.crystal_glyph_ori.name=Օռայ գլիֆի բյուրեղ
+item.jsg.crystal_glyph_ancient.name=Հնագույն գլիֆի բյուրեղ
+
+item.jsg.crystal_upgrade_capacity.name=Կարողությունների բարելավում բյուրեղ
+item.jsg.crystal_upgrade_efficiency.name=Արդյունավետության բարելավում բյուրեղ
+
+# dhd
+item.jsg.dhd_brb.name=Վառ կարմիր կոճակ (BRB)
+item.jsg.dhd_bbb.name=Վառ կապույտ կոճակ (BBB)
+
+# fragments
+item.jsg.fragment_stargate_milkyway.name=Օղակի բեկոր (Ծիր Կաթին)
+item.jsg.fragment_stargate_pegasus.name=Օղակի բեկոր (Պեգասի)
+item.jsg.fragment_stargate_universe.name=Օղակի բեկոր (տիեզերք)
+item.jsg.fragment_transportrings_goauld.name=Տրանսպորտային օղակների հատված (Գուաուլդ)
+item.jsg.fragment_transportrings_ori.name=Տրանսպորտային օղակների հատված (Օռայ)
+item.jsg.fragment_transportrings_ancient.name=Տրանսպորտային օղակների հատված (հնագույն)
+
+# holders
+item.jsg.holder_crystal.name=Բյուրեղապակ (Ծիր Կաթին)
+item.jsg.holder_crystal_pegasus.name=Բյուրեղապակ (Պեգասի)
+
+# notebook
+item.jsg.page_notebook.name=Նոթատետրի էջ
+item.jsg.page_notebook.empty=Դատարկ
+item.jsg.page_notebook.end=Հասցե 9 խորհրդանիշով
+
+# mysterious page
+item.jsg.page_mysterious_milkyway.name=Առեղծվածային էջ (Ծիր Կաթին)
+item.jsg.page_mysterious_pegasus.name=Առեղծվածային էջ (Պոգասի)
+item.jsg.page_mysterious_universe.name=Առեղծվածային էջ (Տիեղերք)
+item.jsg.page_mysterious.tooltip=Ով գիտի, թե դա ուր է տանում
+
+item.jsg.page_mysterious.generation.start=Սկսում ենք աստղային դարպասի նոր ստեղծում...
+item.jsg.page_mysterious.generation.success=Աստղային դարպասի հաջողությամբ ստեղծվեց
+item.jsg.page_mysterious.generation.failed=Աստղային դարպասների ստողծումը ձախողվեց
+
+# beamer
+item.jsg.beamer_crystal_power.name=Ճառագայթչի եներգիայի բյուրեղ
+item.jsg.beamer_crystal_fluid.name=Ճառագայթչի նյութի բյուրեղ
+item.jsg.beamer_crystal_items.name=Ճառագայթչի իրերի բյուրեղ
+item.jsg.beamer_crystal_laser.name=Ճառագայթչի լազերային բյուրեղ
+
+# universe dialer
+item.jsg.universe_dialer.name=Տիեզերական Հավաքիչ
+item.jsg.universe_dialer.broken.name=Տիեզերական Հավաքիչ (Կոտրված)
+item.jsg.universe_dialer.saved_gates=Պահված դարպասներ՝ %s
+item.jsg.universe_dialer.not_linked=Կապված չէ
+item.jsg.universe_dialer.gate_busy=Դարպասը զբաղված է
+item.jsg.universe_dialer.mode_scan=Մոտակայքում
+item.jsg.universe_dialer.mode_saved=Հիշողություն
+item.jsg.universe_dialer.mode_rings=Օղակներ
+item.jsg.universe_dialer.mode_oc=ԲացՀղրդ
+item.jsg.universe_dialer.mode_info=Կարգավիճակ
+item.jsg.universe_dialer.mode_countdown=Ժամաչափ
+item.jsg.universe_dialer.countdown_not_sync=Համաժամեցված չէ:
+item.jsg.universe_dialer.countdown_not_active=Հետհաշվարկն ակտիվ չէ:
+item.jsg.universe_dialer.aborting=Հավաքումը ընդհատվում է
+item.jsg.universe_dialer.abort=Դադարեցում
+item.jsg.universe_dialer.dial_start=Դարպասի հավաքում...
+item.jsg.universe_dialer.not_dialing=Չհավաքում
+item.jsg.universe_dialer.dialer_broke=Հավաքիչը կոտրվել է՝ կանխելու համար Minecraft-ի վթարը
+item.jsg.universe_dialer.oc_name=Մուտքի անունը
+item.jsg.universe_dialer.oc_address=OpenComputers-ի մոդեմի հասցեն (թողնել դատարկ հեռարձակման համար)
+item.jsg.universe_dialer.oc_port=Մոդեմի պորտ
+item.jsg.universe_dialer.oc_data=OpenComputers պարամետրեր (ստորակետերով առանձնացված)
+item.jsg.universe_dialer.oc_save=Պահպանել
+item.jsg.universe_dialer.oc_port_invalid=Անվավեր պորտ
+item.jsg.universe_dialer.oc_message_received=Ստացված պատասխանը.
+item.jsg.universe_dialer.toggle_fast_dial=Միացնել արագ հավաքումը
+item.jsg.universe_dialer.fast_dail_false=Արագ հավաքումը դրված է՝ Կեղծ
+item.jsg.universe_dialer.fast_dail_true=Արագ հավաքումը դրված է՝ Ճիշտ
+
+# notebook
+item.jsg.notebook.name=Տետր
+item.jsg.notebook.rename_gui=Նոր անուն
+item.jsg.notebook.unnamed=<անանուն>
+
+# gdo
+item.jsg.gui.name=Անուն
+item.jsg.gui.address=Հասցե
+item.jsg.gui.rename=Վերանվանել
+item.jsg.gui.oc_address=Մոդեմի հասցե
+item.jsg.gui.oc_port=Պորտ
+item.jsg.gui.oc_params=Պարամետրեր
+item.jsg.gui.oc_port_invalid=Անվավեր պորտ
+item.jsg.gdo.name=Ավտոտնակի դռների բացիչ (GDO)
+item.jsg.gdo.not_linked=Կապված չէ
+item.jsg.gdo.code_sender=Կոդ
+item.jsg.gdo.iris_opened=ծիածանաթաղանթը բացված է:
+item.jsg.gdo.iris_busy=ծիածանաթաղանթը զբաղված է:
+item.jsg.gdo.code_accepted=Կոդն ընդունված է: Ծիածանաթաղանթի բացում...
+item.jsg.gdo.code_rejected=Սխալ կոդ!
+item.jsg.gdo.code_not_set=մուտքագրեք կոդը
+item.jsg.gdo.computer_handled=Սպասում է համակարգչին․․․
+item.jsg.gdo.mode_oc=ԲացՀղրդ
+item.jsg.gdo.oc_name=Մուտքի անունը
+item.jsg.gdo.oc_address=OpenComputers-ի մոդեմի հասցեն (թողնել դատարկ հեռարձակման համար)
+item.jsg.gdo.oc_port=Մոդեմի պորտ
+item.jsg.gdo.oc_data=OpenComputers պարամետրեր (ստորակետերով առանձնացված)
+item.jsg.gdo.oc_save=Պահպանել
+item.jsg.gdo.oc_port_invalid=Անվավեր պորտ
+item.jsg.gdo.oc_message_received=Ստացված պատասխան.
+
+# tools
+item.jsg.zat.name=Zat'nik'tel
+item.jsg.staff.name=Գուաուլդի անձնական զենք
+item.jsg.energyWeapon.available_shots=Հասանելի կրակոցներ.
+
+item.jsg.hammer.name=JSG Մուրճ
+item.jsg.screwdriver.name=JSG պտուտակահան
+item.jsg.wrench.name=JSG պտուտակաբանալի
+
+item.jsg.admin_controller.name=Ադմին Վերահսկիչ
+
+# gears
+item.jsg.gear_titanium.name=Շարժակների (տիտան)
+item.jsg.gear_trinium.name=Շարժակների (Տրինիում)
+item.jsg.gear_naquadah_raw.name=Շարժակների (Հուն Նակվադախ)
+item.jsg.gear_naquadah.name=Շարժակներ (Նակվադախ)
+
+# plates
+item.jsg.plate_titanium.name=Ափսե (Տիտան)
+item.jsg.plate_trinium.name=Ափսե (Տրինիում)
+item.jsg.plate_naquadah_raw.name=Ափսե (Հուն Նակվադախ)
+item.jsg.plate_naquadah.name=Ափսե (Նակվադախ)
+
+# schematics
+item.jsg.schematic_milkyway.name=Սխեմա (Ծիր Կաթին)
+item.jsg.schematic_pegasus.name=Սխեմա (Պեգասի)
+item.jsg.schematic_universe.name=Սխեմա (տիեզերք)
+item.jsg.schematic_goauld.name=Տրանսպորտային օղակների սխեմա (Գուաուլդ)
+item.jsg.schematic_ori.name=Տրանսպորտային օղակների սխեմա (Օռայ)
+item.jsg.schematic_ancient.name=Տրանսպորտային օղակների սխեմա (Հնագույն)
+
+# -------------------
+
+# -------------------
+# TILE ENTITIES/BLOCKS
+
+# special blocks
+tile.jsg.invisible_block.name=Դուք չեք կարող տեսնել ինձ բլոկ
+
+# ores and ore blocks
+tile.jsg.naquadah_ore.name=Նակվադախ հանքաքար
+tile.jsg.naquadah_ore_stone.name=Նակվադախ հանքաքար (քար)
+tile.jsg.naquadah_block.name=Նակվադախ բլոկ
+tile.jsg.naquadah_block_raw.name=Հուն Նակվադախ բլոկ
+tile.jsg.trinium_ore.name=Տրինիումի հանքաքար
+tile.jsg.titanium_ore.name=Տիտանի հանքաքար
+tile.jsg.trinium_block.name=Տրինիումի բլոկ
+tile.jsg.titanium_block.name=Տիտանի բլոկ
+
+# decor blocks
+tile.jsg.tokra_crystal_block.name=Տոկռաի բյուրեղի բլոկ
+tile.jsg.destiny_countdown_block.name=Դեստնիի հետհաշվարկ
+tile.jsg.destiny_bearing_block.name=Տիեզերական Դարպասի կրիչ
+tile.jsg.destiny_chevron_block.name=Դեստնիի հատակային Շևրոն
+tile.jsg.destiny_vent_block.name=Դեստնիի CO2 Օդափոխիչ
+
+# props
+prop.jsg.platform_ships_block.name=Օղակների հարթակ (Նավեր)
+
+prop.jsg.decor_abydos_pot_block.name=Աբիդոս Կաթսա
+prop.jsg.decor_abydos_lamp_off_block.name=Աբիդոս լամպ (անջատված)
+prop.jsg.decor_abydos_lamp_on_block.name=Աբիդոս լամպ (միացված)
+prop.jsg.decor_drone_weapon_off_block.name=Հնագույն դրոն (անջատված)
+prop.jsg.decor_drone_weapon_on_block.name=Հնագույն դրոն (միացված)
+prop.jsg.decor_ancient_obelisk_block.name=Հին Օբելիսկ
+
+# dhd
+tile.jsg.dhd_block.name=Տուն Զանգելու Սարք (Ծիր Կաթին DHD)
+tile.jsg.dhd_block.incoming_wormhole_warn=Անհնար է փակել դարպասը այս կողմից
+tile.jsg.dhd_block.not_linked_warn=DHD-ը կապված չէ դարպասի հետ
+tile.jsg.dhd_block.no_crystal_warn=DHD-ն կառավարման բյուրեղ չունի
+tile.jsg.dhd_block.no_enough_power=DHD-ն պահանջում է առնվազն 10,000 uI՝ ճիշտ աշխատելու համար
+tile.jsg.dhd_block.computer_dial=Համակարգչի հավաքումն ընթացքի մեջ է
+tile.jsg.dhd_block.not_enough_power=Անբավարար հզորություն
+
+tile.jsg.dhd_pegasus_block.name=Տուն Զանգելու Սարք (Պեգասի)
+tile.jsg.dhd_pegasus_block.unknown_buttons=Այս կոճակը չի աշխատում
+
+# stargate - MW
+tile.jsg.stargate_milkyway_base_block.name=Աստղային դարպասների բազա (Ծիր Կաթին)
+tile.jsg.stargate_milkyway_ring_block.name=Աստղային Դարպասի օղակ (Ծիր Կաթին)
+tile.jsg.stargate_milkyway_chevron_block.name=Աստղային Դարպասի շևրոն (Ծիր Կաթին)
+
+# stargate - ORLIN
+tile.jsg.stargate_orlin_base_block.open_count=Բաց քանակ՝ %s / %s
+tile.jsg.stargate_orlin_base_block.name=Աստղային դարպասների բազա (Օռլին)
+tile.jsg.stargate_orlin_member_block.name=Աստղային դարպասների օղակ (Օռլին)
+
+# stargate - UNI
+tile.jsg.stargate_universe_base_block.name=Աստղային դարպասների բազա (Տիեզերք)
+tile.jsg.stargate_universe_chevron_block.name=Աստղային Դարպասի շևրոն (Տիեզերք)
+tile.jsg.stargate_universe_ring_block.name=Աստղային դարպասների օղակ (Տիեզերք)
+
+# stargate - PEG
+tile.jsg.stargate_pegasus_base_block.name=Աստղային դարպասների բազա (Պեգասի)
+tile.jsg.stargate_pegasus_ring_block.name=Աստղային դարպասների օղակ (Պեգասի)
+tile.jsg.stargate_pegasus_chevron_block.name=Աստղային Դարպասի շևրոն (Պեգասի)
+
+# capacitor
+tile.jsg.capacitor_block.name=Կոնդենսատորային բանկ
+tile.jsg.capacitor_block_creative.name=Կոնդենսատորային բանկ (Creative)
+tile.jsg.capacitor_block_empty.name=Կոնդենսատորային բանկ (դատարկ)
+
+# zpm
+tile.jsg.zpm.name=Զրոյական կետի մոդուլ (ԶԿՄ)
+tile.jsg.creative_zpm.name=Զրոյական կետի մոդուլ (ԶԿՄ) (Creative)
+tile.jsg.zpm_hub_block.name=ԶԿՄ հանգույց (Creative)
+tile.jsg.zpm_slot_block.name=ԶԿՄ բնիկ (Tau'ri)
+
+# rings controller
+tile.jsg.transportrings_controller_goauld_block.name=Տրանսպորտային օղակների վերահսկիչ (Գուաուլդ)
+tile.jsg.transportrings_controller_block.not_linked=Կարգավորիչը միացված չէ
+
+# rings
+tile.jsg.transportrings_goauld_block.name=Տրանսպորտային օղակներ (Գուաուլդ)
+tile.jsg.transportrings_ori_block.name=Տրանսպորտային օղակներ (Օռայ)
+tile.jsg.transportrings_ancient_block.name=Տրանսպորտային օղակներ (հնագույն)
+
+tile.jsg.transportrings_block.non_existing_address=Չհաջողվեց հասնել այս հասցեին
+tile.jsg.transportrings_block.wrong_distance=Սխալ հեռավորություն, պետք է լինի -15-ից 15
+tile.jsg.transportrings_block.obstructed=Օղակները խցանված են, օղակների շուրջը մաքրեք 5x5 տարածք
+tile.jsg.transportrings_block.obstructed_target=Թիրախային օղակները խցանված են, թիրախ օղակների շուրջ 5x5 մաքրեք տարածք
+tile.jsg.transportrings_block.busy=Օղակները զբաղված են
+tile.jsg.transportrings_block.busy_target=Թիրախի օղակները զբաղվացեն
+tile.jsg.transportrings_block.not_enough_power=Օղակները ակտիվացնելու համար բավարար հզորություն չկա
+tile.jsg.transportrings_block.rings_name=Անուն
+tile.jsg.transportrings_block.rings_distance=Հեռավորությունը
+
+# beamer
+tile.jsg.beamer_block.name=ճառագայթիչի բլոկ
+
+# machines
+tile.jsg.assembler_machine_block.name=Հին հավաքիչ
+tile.jsg.crystal_chamber_block.name=Բյուրեղյա պալատ
+tile.jsg.pcb_fabricator_block.name=PCB արտադրող
+tile.jsg.ore_washing_machine_block.name=Հանքաքարի լվացքի մեքենա
+
+# ancient sign
+tile.jsg.ancient_sign.name=Հնագույն նշան
+
+# -------------------
+
+# -------------------
+# FLUIDS
+
+# silicon
+fluid.silicon_molten_black=Հալած սիլիցիում
+fluid.silicon_molten_white=Զտված սիլիցիում
+fluid.silicon_molten_red=ուժային խառնուրդ
+fluid.silicon_molten_blue=Հեռահաղորդման խառնուրդ
+fluid.silicon_molten_ender=Ենդերի խարնուրդ
+fluid.silicon_molten_yellow=Լուսային խարնուրդ
+fluid.silicon_molten_pegasus=Պեգասի խառնուրդ
+
+# naquadah
+fluid.naquadah_molten_raw=Հեղուկ Նակվադախ
+fluid.naquadah_molten_refined=Զտված Նակվադախ
+fluid.naquadah_molten_alloy=Հեղուկ Նակվադախի խառնուրդ
+
+# other
+fluid.trinium_molten=Հալած տրինիում
+fluid.titanium_molten=Հալած տիտան
+
+# -------------------
+
+# -------------------
+# ENTITIES
+
+entity.Tokra.default=Տոկռա
+entity.tokra.name=Տոկռա
+
+# -------------------
+
+# -------------------
+# COMMANDS
+
+commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim=X] [map=Y] [id=Z]
+commands.sgquery.number_expected=Number expected
+commands.sgquery.no_map=No such map
+commands.sgquery.stargates=Stargates %s
+commands.sgquery.wrong_id=Wrong ID or no ID given
+commands.sgquery.wrong_map=Wrong map or no map given
+commands.sgquery.wrong_sender=Wrong sender (not a player)
+commands.sgquery.wrong_quantity=Wrong quantity of pages given
+commands.sgquery.giving_page=Giving page to %s
+commands.sggivepage.usage=/sggivepage (player) (map=X) [biome=Y] (Symbol)x8/6
+commands.sggivepage.no_map=No map or wrong map given
+commands.sggivepage.give_page=Giving Page to %s
+commands.sgsetaddress.usage=/sgsetaddress (x y z) (map=X) (Symbol)x8
+commands.sgsetaddress.notstargate=Targeted block is not a Stargate Base
+commands.sgsetaddress.noaddressspace=No map or wrong map given
+commands.sgsetaddress.wrongaddress=Address should be a space-separated list of 7 symbols (English names)
+commands.sgsetaddress.wrongsymbol=Wrong %s. symbol name
+commands.sgsetaddress.duplicatesymbol=Duplicate %s. symbol name
+commands.sgsetaddress.exists=Stargate with given address already exists
+commands.sgsetaddress.success=Set Stargate's address at %s to %s 
+commands.sgcloseall.usage=/sgcloseall [(x y z) (x y z)] [dim=X]
+commands.sgcloseall.closing=Closing Stargates in dim=%s, %s.
+commands.sgcloseall.closed=Closed %s gates.
+commands.sgcloseall.number_expected=Number or "current" expected as dimension ID
+commands.sggenincoming.usage=/sggenincoming (x y z) (entities<0-10>) (addressLength<7-9>)
+commands.sggenincoming.notstargate=Targeted block is not a Stargate Base
+
+# -------------------
+
+# -------------------
+# DEATH MESSAGES
+
+death.attack.eventHorizon=%s տրվել է քավուշի դիակիզում
+death.attack.irisDeath=%s տրվել է ծիածանաթաղանթի դիակիզում
+death.attack.wrongSide=%s մուտք է գործել դարպասի սխալ կողմից
+death.attack.unstableEventHorizon=%s չհասավ մյուս կողմը
+
+death.attack.zatHit=%s էլեկտրոլիզվել է
+death.attack.staffHit=%s հալվել է Գուաուլդի անձնական զենքիի միջոցով
+
+# -------------------
+
+# -------------------
+# GLYPHS
+
+# RINGS
+# Ori Glyphs
+glyph.jsg.transportrings.ori.alpha=Ալֆա
+glyph.jsg.transportrings.ori.beta=Բետա
+glyph.jsg.transportrings.ori.gamma=Գամմա
+glyph.jsg.transportrings.ori.delta=Դելտա
+glyph.jsg.transportrings.ori.omega=Օմեգա
+glyph.jsg.transportrings.ori.origin=Ծագում
+
+# Goa'uld Glyphs
+glyph.jsg.transportrings.goauld.amun=Ամուն
+glyph.jsg.transportrings.goauld.serket=Սերկետ
+glyph.jsg.transportrings.goauld.khepri=Խեպրի
+glyph.jsg.transportrings.goauld.ra=Ռա
+glyph.jsg.transportrings.goauld.felluca=Ֆելլուկա
+glyph.jsg.transportrings.goauld.cobra=Կոբրա
+
+# STARGATE
+# Milkyway Glyphs
+glyph.jsg.milkyway.sculptor=Քանդակագործ
+glyph.jsg.milkyway.scorpius=Կարիճ
+glyph.jsg.milkyway.centaurus=Կենտավրոս
+glyph.jsg.milkyway.monoceros=Մոնոկերոս
+glyph.jsg.milkyway.point_of_origin=Ծագման կետ
+glyph.jsg.milkyway.pegasus=Պեգասի
+glyph.jsg.milkyway.andromeda=Անդրոմեդա
+glyph.jsg.milkyway.serpens_caput=Օձեր Կապուտ
+glyph.jsg.milkyway.aries=Խոյ
+glyph.jsg.milkyway.libra=Կշեռք
+glyph.jsg.milkyway.eridanus=Էրիդանոս
+glyph.jsg.milkyway.leo_minor=Լեո Մինոր
+glyph.jsg.milkyway.hydra=Հիդրա
+glyph.jsg.milkyway.sagittarius=Աղեղնավոր
+glyph.jsg.milkyway.sextans=Սեքստաններ
+glyph.jsg.milkyway.scutum=Սկուտում
+glyph.jsg.milkyway.pisces=Ձկներ
+glyph.jsg.milkyway.virgo=կույս
+glyph.jsg.milkyway.bootes=Բոյոտես
+glyph.jsg.milkyway.auriga=Աուրիգա
+glyph.jsg.milkyway.corona_australis=Կորոնա Ավստրալիա
+glyph.jsg.milkyway.gemini=երկվորյակ
+glyph.jsg.milkyway.leo=Լեո
+glyph.jsg.milkyway.cetus=Ցետուս
+glyph.jsg.milkyway.triangulum=Եռանկյուն
+glyph.jsg.milkyway.aquarius=Ջրհոս
+glyph.jsg.milkyway.microscopium=Միկրոսկոպիա
+glyph.jsg.milkyway.equuleus=Էկյուլեուս
+glyph.jsg.milkyway.crater=Խառնարան
+glyph.jsg.milkyway.perseus=Պերսևս
+glyph.jsg.milkyway.cancer=Քաղցկեղ
+glyph.jsg.milkyway.norma=Նորմա
+glyph.jsg.milkyway.taurus=Ցուլ
+glyph.jsg.milkyway.canis_minor=Կանիս Մինորիս
+glyph.jsg.milkyway.capricornus=Այծեղջյուր
+glyph.jsg.milkyway.lynx=Լուսան
+glyph.jsg.milkyway.orion=Օրիոն
+glyph.jsg.milkyway.piscis_austrinus=Արևելյան Ձկներ
+glyph.jsg.milkyway.bright_red_button=Վառ կարմիր կոճակ
+
+# Pegasus Glyphs
+glyph.jsg.pegasus.acjesis=Աջեսիս
+glyph.jsg.pegasus.lenchan=Լենչան
+glyph.jsg.pegasus.alura=Ալուրա
+glyph.jsg.pegasus.ca_po=Քա Պո
+glyph.jsg.pegasus.laylox=Լեյլոքս
+glyph.jsg.pegasus.ecrumig=Էքրումիգ
+glyph.jsg.pegasus.avoniv=Ավոնիվ
+glyph.jsg.pegasus.bydo=Բայդո
+glyph.jsg.pegasus.aaxel=Աաքսել
+glyph.jsg.pegasus.aldeni=Ալդենին
+glyph.jsg.pegasus.setas=Սետաս
+glyph.jsg.pegasus.arami=Արամի
+glyph.jsg.pegasus.danami=Դանամի
+glyph.jsg.pegasus.poco_re=Պոկո Ռէ
+glyph.jsg.pegasus.robandus=Ռոբանդուս
+glyph.jsg.pegasus.recktic=Ռեկտիք
+glyph.jsg.pegasus.zamilloz=Զամիլոզ
+glyph.jsg.pegasus.subido=Սուբիդո
+glyph.jsg.pegasus.dawnre=Դավնրէ
+glyph.jsg.pegasus.salma=Սալմա
+glyph.jsg.pegasus.hamlinto=Համլինտո
+glyph.jsg.pegasus.elenami=Էլենամի
+glyph.jsg.pegasus.tahnan=Թահնան
+glyph.jsg.pegasus.zeo=Զեո
+glyph.jsg.pegasus.roehi=Ռոեհի
+glyph.jsg.pegasus.once_el=Օնցէ Ել
+glyph.jsg.pegasus.baselai=Բասելայ
+glyph.jsg.pegasus.sandovi=Սանդովի
+glyph.jsg.pegasus.illume=Իլլումէ
+glyph.jsg.pegasus.amiwill=Ամիվիլ
+glyph.jsg.pegasus.sibbron=Սիբրոն
+glyph.jsg.pegasus.gilltin=Գիլթին
+glyph.jsg.pegasus.abrin=Աբրին
+glyph.jsg.pegasus.ramnon=Ռամնոն
+glyph.jsg.pegasus.olavii=Օլավիին
+glyph.jsg.pegasus.hacemill=Հեյսմիլ
+glyph.jsg.pegasus.unknow1=Անհայտ 1
+glyph.jsg.pegasus.unknow2=Անհայտ 2
+
+# Universe Glyphs
+glyph.jsg.universe.g1=Գլիֆ 1
+glyph.jsg.universe.g2=Գլիֆ 2
+glyph.jsg.universe.g3=Գլիֆ 3
+glyph.jsg.universe.g4=Գլիֆ 4
+glyph.jsg.universe.g5=Գլիֆ 5
+glyph.jsg.universe.g6=Գլիֆ 6
+glyph.jsg.universe.g7=Գլիֆ 7
+glyph.jsg.universe.g8=Գլիֆ 8
+glyph.jsg.universe.g9=Գլիֆ 9
+glyph.jsg.universe.g10=Գլիֆ 10
+glyph.jsg.universe.g11=Գլիֆ 11
+glyph.jsg.universe.g12=Գլիֆ 12
+glyph.jsg.universe.g13=Գլիֆ 13
+glyph.jsg.universe.g14=Գլիֆ 14
+glyph.jsg.universe.g15=Գլիֆ 15
+glyph.jsg.universe.g16=Գլիֆ 16
+glyph.jsg.universe.g17=Գլիֆ 17
+glyph.jsg.universe.g18=Գլիֆ 18
+glyph.jsg.universe.g19=Գլիֆ 19
+glyph.jsg.universe.g20=Գլիֆ 20
+glyph.jsg.universe.g21=Գլիֆ 21
+glyph.jsg.universe.g22=Գլիֆ 22
+glyph.jsg.universe.g23=Գլիֆ 23
+glyph.jsg.universe.g24=Գլիֆ 24
+glyph.jsg.universe.g25=Գլիֆ 25
+glyph.jsg.universe.g26=Գլիֆ 26
+glyph.jsg.universe.g27=Գլիֆ 27
+glyph.jsg.universe.g28=Գլիֆ 28
+glyph.jsg.universe.g29=Գլիֆ 29
+glyph.jsg.universe.g30=Գլիֆ 30
+glyph.jsg.universe.g31=Գլիֆ 31
+glyph.jsg.universe.g32=Գլիֆ 32
+glyph.jsg.universe.g33=Գլիֆ 33
+glyph.jsg.universe.g34=Գլիֆ 34
+glyph.jsg.universe.g35=Գլիֆ 35
+glyph.jsg.universe.g36=Գլիֆ 36
+
+# -------------------
+
+# -------------------
+# GUI
+
+gui.upgrades=Թարմացումներ
+gui.configuration=Կոնֆիգուրացիա
+
+# dhd
+gui.dhd.fusion=Սառը միաձուլում
+gui.dhd.crystalStatus=Վերահսկիչ բյուրեղ.
+gui.dhd.no_crystal=Բյուրեղը բացակայում է
+gui.dhd.crystal_ok=Տեղում
+gui.dhd.linkStatus=Ենթատարածության հղման կարգավիճակը.
+gui.dhd.linked=Կապված
+gui.dhd.not_linked=Կապված չէ
+gui.dhd.reactorStatus=Սառը միաձուլման ռեակտոր.
+gui.dhd.running=Աշխատում է
+gui.dhd.standby=Սպասման
+gui.dhd.no_fuel=Վառելիք չկա
+
+# stargate
+gui.stargate.milky_way_address=Ծիր Կաթին հասցե
+gui.stargate.pegasus_address=Պեգասուս հասցե
+gui.stargate.universe_address=Տիեզերքի հասցեն
+gui.stargate.iris_code=ծիածանաթաղանթի հասցեն
+gui.stargate.iris.help_title=Ընթացիկ ռեժիմ.
+gui.stargate.iris.opened=Բաց
+gui.stargate.iris.closed=Փակված է
+gui.stargate.iris.auto=Ավտոմատ
+gui.stargate.iris.oc=ԲԿ
+gui.stargate.iris.dialer=Հավակիչ
+gui.stargate.iris.opened_help=ծիածանաթաղանթը մշտապես բաց է
+gui.stargate.iris.closed_help=ծիածանաթաղանթը մշտապես փակ է
+gui.stargate.iris.auto_help=ծիածանաթաղանթը ինքնաբերաբար փակվում է մուտքային որդանանցքի վրա,
+gui.stargate.iris.auto1_help=այն կարող է բացվել GDO-ի միջոցով՝ ուղարկելով դաշտում սահմանված կոդը
+gui.stargate.iris.oc_help=ծիածանաթաղանթը կարելի է կառավարել open computers-օվ
+gui.stargate.iris.dialer_help=ծիածանաթաղանթը կարող է կառավարվել տիեզերքի հավաքիչով
+
+gui.stargate.biome_overlay=Բիոմի ծածկույթ
+gui.stargate.biome_overlay.help=Տեղադրեք բլոկներ՝ անտեսելու համար
+gui.stargate.biome_overlay.normal=Նորմալ
+gui.stargate.biome_overlay.frost=Սառցե
+gui.stargate.biome_overlay.mossy=Մամռային
+gui.stargate.biome_overlay.aged=Տարեց
+gui.stargate.biome_overlay.sooty=Մուր
+gui.stargate.biome_overlay.sandy=Ավազոտ
+gui.stargate.capacitors=Կոնդենսատորներ
+gui.stargate.energyBuffer=Էներգիայի բուֆեր
+
+gui.stargate.state.closed=Աստղային դարպասը փակվեց։
+gui.stargate.state.opened=Բաց ժամանակ.
+gui.stargate.state.gate_temp=Դարպասի ջերմաստիճանը.
+gui.stargate.state.iris_temp=ծիածանաթաղանթի ջերմաստիճանը:
+
+gui.stargate.info=Դարպասի տեղեկատվություն
+
+# zpmhub
+gui.zpmhub.inProgress=ԶԿՄները շարժվում են:
+gui.zpmhub.slideDown=Ներգրավել ԶԿՄներին
+gui.zpmhub.slideUp=Անջատել ԶԿՄները
+gui.zpmhub.alert=ԶԿՄների համար նախատեսված սլոտերը կողպված են:
+
+# capacitor
+gui.capacitor.name=Կոնդենսատորային բանկ
+
+# rings
+gui.transportrings.energyBuffer=Էներգիայի բուֆեր
+gui.transportrings.ori_address=Օռայ հասցեն
+gui.transportrings.goauld_address=Գուաուլդի հասցեն
+gui.transportrings.ancient_address=Հնագույն հասցե
+gui.transportrings.parameters=Պարամետրեր
+
+# beamer
+gui.beamer.name=Gate Beamer
+gui.beamer.beamer_status=Beamer status:
+gui.beamer.beamer_ok=Beamer sees gate
+gui.beamer.beamer_link_status=Beamer link status:
+gui.beamer.beamer_link_ok=Beamer link ok
+gui.beamer.role_status=Role status:
+gui.beamer.role_ok=Role ok
+gui.beamer.disabled_target=Target beamer disabled
+gui.beamer.obstructed=Obstructed
+gui.beamer.obstructed_target=Obstructed (Target)
+gui.beamer.two_transmitters=Two transmitters
+gui.beamer.two_receivers=Two receivers
+gui.beamer.mode_mismatch=Mode mismatch
+gui.beamer.no_beamer=No Beamer found
+gui.beamer.closed=Gate closed
+gui.beamer.incoming=Incoming wormhole
+gui.beamer.disabled_by_logic=Disabled by logic
+gui.beamer.disabled_by_logic_target=Disabled by logic (Target)
+gui.beamer.running=Running
+gui.beamer.no_crystal=No crystal
+gui.beamer.no_power=Not enough power
+gui.beamer.can_not_receive=Can not receive
+
+gui.beamer.transmit=Transmit
+gui.beamer.receive=Receive
+gui.beamer.disabled=Disabled
+gui.beamer.activation=Beamer activation
+gui.beamer.auto=Auto
+gui.beamer.on_high=On signal
+gui.beamer.on_low=Without signal
+gui.beamer.ignored=Ignored
+gui.beamer.activate_below=Activate below [%%]
+gui.beamer.deactivate_over=Deactivate over [%%]
+gui.beamer.deactivate=Deactivate after
+gui.beamer.after_inactivity=inactivity [s]
+gui.beamer.save=Save
+gui.beamer.invalid=Invalid
+
+# gdo
+gui.gdo.send_code=Մուտքագրեք կոդը.
+gui.gdo.send_button=Ուղարկել կոդը
+
+# assembler
+gui.assembler.name=Հին հավաքիչ
+
+# ancient sign
+gui.ancient_sign.edit=Խմբագրել հին տեքստը
+
+# -------------------
+
+# -------------------
+# KEY BINDINGS
+
+config.jsg.mode_scroll=Universe dialer mode scroll
+config.jsg.mode_up=Universe dialer mode up
+config.jsg.mode_down=Universe dialer mode down
+config.jsg.address_scroll=Universe dialer/Notebook address scroll
+config.jsg.address_up=Universe dialer/Notebook address up
+config.jsg.address_down=Universe dialer/Notebook address down
+config.jsg.address_edit=Open address edit menu
+
+# -------------------
+
+# -------------------
+# SUBTITLES
+
+jsg.subtitle.dhd_milkyway_press=DHD նշանը սեղմվեց
+jsg.subtitle.dhd_milkyway_press_brb=DHD վառ կարմիր կոճակը սեղմվեց
+jsg.subtitle.gate_milkyway_open=որդանցքը բացվեց
+jsg.subtitle.gate_milkyway_close=որդանցքը փագվեց
+jsg.subtitle.gate_milkyway_ring_roll=Աստղային դարպասների օղակը պտտվում է
+jsg.subtitle.gate_milkyway_dial_fail=Անհաջող միացում
+jsg.subtitle.gate_orlin_broke=Աստղային դարպասը կոտրվել է
+jsg.subtitle.gate_orlin_dial_fail=չհաջողվեց միանալ
+jsg.subtitle.gate_milkyway_dial_fail_computer=համակարգչի հավաքումը չհաջողվում է
+jsg.subtitle.gate_milkyway_incoming=Շևրոնի ֆիկսում
+jsg.subtitle.gate_milkyway_chevron_shut=շևրոնը փակվում է
+jsg.subtitle.gate_milkyway_chevron_open=շևրոնը բացվում է
+
+jsg.subtitle.dhd_pegasus_press=DHD նշանը սեղմվեց
+jsg.subtitle.dhd_pegasus_press_brb=DHD վառ կապույտ կոճակը սեղմվեց
+jsg.subtitle.gate_pegasus_open=որդանցքը բացվեց
+jsg.subtitle.gate_pegasus_close=որդանցքը փագվեց
+jsg.subtitle.gate_pegasus_ring_roll=Աստղային դարպասների օղակը պտտվում է
+jsg.subtitle.gate_pegasus_dial_fail=Անհաջող միացում
+jsg.subtitle.gate_pegasus_dial_fail_computer=համակարգչի հավաքումը չհաջողվում է
+jsg.subtitle.gate_pegasus_incoming=Շևրոնի ֆիկսում
+jsg.subtitle.gate_pegasus_chevron_shut=շևրոնը փակվում է
+jsg.subtitle.gate_pegasus_chevron_open=շևրոնը բացվում է
+
+jsg.subtitle.gate_orlin_dial=Orlin դարպասի հավաքում
+
+jsg.subtitle.gate_universe_dial_start=Universe gate starts to dial
+jsg.subtitle.gate_universe_roll=Universe gate rolls
+jsg.subtitle.gate_universe_chevron_lock=Universe gate chevron locks
+jsg.subtitle.gate_universe_fail=Universe gate fails to connect
+jsg.subtitle.gate_universe_chevron_top_lock=Universe gate top chevron locks
+jsg.subtitle.gate_universe_open=Universe gate wormhole opens
+jsg.subtitle.gate_universe_close=Universe gate wormhole closes
+
+jsg.subtitle.wormhole_loop=Stargate wormhole ripples
+jsg.subtitle.wormhole_go=Stargate wormhole receives traveller
+jsg.subtitle.wormhole_flicker=Stargate wormhole flickers
+jsg.subtitle.rings_transport=Transport rings activate
+jsg.subtitle.rings_controller_button=Transport rings controller button pressed
+
+jsg.subtitle.iris_hit=Something hit the iris
+jsg.subtitle.iris_opening=Iris opening
+jsg.subtitle.iris_closing=Iris closing
+jsg.subtitle.shield_hit=Something hit the shield
+jsg.subtitle.shield_opening=Shield opening
+jsg.subtitle.shield_closing=Shield closing
+
+jsg.subtitle.beamer_start=Beamer starts
+jsg.subtitle.beamer_stop=Beamer stops
+jsg.subtitle.beamer_loop=Beamer beams
+jsg.subtitle.page_flip=Page flips
+jsg.subtitle.gdo_button_beep=Pressed GDO button
+jsg.subtitle.universe_dialer_beep=Universe Dialer started dialing
+jsg.subtitle.universe_dialer_change_mode=Changed Universe Dialer mode
+jsg.subtitle.universe_dialer_connect=Universe Dialer connected
+
+jsg.subtitle.item_zat_shoot=Zat'nik'tel shoot
+jsg.subtitle.item_staff_shoot=Goa'uld Staff Weapon shoot
+
+jsg.subtitle.destiny_countdown_start=Destiny's countdown started!
+jsg.subtitle.destiny_countdown_stop=Destiny's countdown reached zero
+jsg.subtitle.destiny_countdown_one_minute=One minute left on Destiny's countdown
+
+# -------------------
+
+# -------------------
+# OTHER
+
+# orlin chat message
+chat.orlins.energyStored=Պահպանված էներգիա. %s RF (Պահանջվում է: %s RF, %s s)
+
+# -------------------
+
+# -------------------
+# MAIN MENU
+
+menu.about=JSG Mod-ի մասին
+menu.updater.download=Բեռնել
+menu.updater.close=փակել
+menu.ram.help=Օգնություն
+
+# tips
+menu.nether_gate=TIP: Եթե դուք մտնում եք Nether, մի մոռացեք պահպանել Nether դարպասի հասցեն:
+menu.energy=TIP: Եթե դարպասի մալուխները միացնեք մի քանի դարպասների բլոկների մեջ, դարպասն ավելի արագ կլիցքավորվի:
+menu.dhd=TIP: Մի մոռացեք, որ DHD-ները կարող են արդիականացվել հզորության և արդյունավետության բարելավումներով:
+menu.gdo=TIP: Եթե ձեր դարպասի վրա տեղադրեք ծիածանաթաղանթ, մի մոռացեք երբեմն ստուգել դրա ամրությունը:
+
+# -------------------
