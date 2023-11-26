@@ -900,7 +900,7 @@ chat.orlins.energyStored=Énergie stockée: %s RF (Requise: %s RF, %s s)
 # MENU PRINCIPAL
 
 menu.about=A propos de JSG Mod
-menu.updater.download=Téléchargement
+menu.updater.download=Téléchargements
 menu.updater.close=Fermer
 menu.ram.help=Aide
 
