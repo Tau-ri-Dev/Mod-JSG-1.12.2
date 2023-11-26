@@ -904,10 +904,10 @@ menu.updater.download=Téléchargements
 menu.updater.close=Fermer
 menu.ram.help=Aide
 
-# tips
-menu.nether_gate=TIP : Si vous allez dans le Nether, n'oubliez pas de sauvegarder l'adresse de la porte du Nether!
-menu.energy=TIP : Si vous branchez les câbles de la porte sur plusieurs blocs de la porte, la porte se chargera plus rapidement!
-menu.dhd=TIP : N'oubliez pas que les DHD peuvent être améliorés avec des améliorations de capacité et d'efficacité!
-menu.gdo=TIP : Si vous installez un iris sur votre porte, n'oubliez pas de vérifier parfois sa durabilité!
+# astuces
+menu.nether_gate=Astuce: Si vous allez dans le Nether, n'oubliez pas de sauvegarder l'adresse de la porte du Nether!
+menu.energy=Astuce: Si vous branchez les câbles de la porte sur plusieurs blocs de la porte, la porte se chargera plus rapidement!
+menu.dhd=Astuce: N'oubliez pas que les DHD peuvent être améliorés avec des améliorations de capacité et d'efficacité!
+menu.gdo=Astuce: Si vous installez un iris sur votre porte, n'oubliez pas de vérifier parfois sa durabilité!
 
 # -------------------
