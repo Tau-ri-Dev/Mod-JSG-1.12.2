@@ -15,7 +15,7 @@ config.jsg.general=Configuration générale
 config.jsg.general.tooltip=Configuration de choses diverses
 
 config.jsg.zpm=Configuration de E2PZ
-config.jsg.zpm.tooltip=Configuration de E2PZ et Hubs d'E2PZ 
+config.jsg.zpm.tooltip=Configuration de E2PZ et des Hubs d'E2PZ 
 
 config.jsg.stargates=Configuration des portes des étoiles
 config.jsg.stargates.tooltip=Configuration des portes des étoiles
@@ -33,7 +33,7 @@ config.jsg.worldgen=Configuration de la génération du monde
 config.jsg.worldgen.tooltip=Configuration de la Génération du Monde et des Pages Mystérieuses
 
 config.jsg.items=Items Config
-config.jsg.items.tooltip=Configuration of Items, Armor and Weapons
+config.jsg.items.tooltip=Configuration des objets, armures et armes
 
 # Catégorie de son
 soundCategory.jsg=Just Stargate Mod
@@ -78,7 +78,7 @@ advancement.kawoosh_cremation.title=Échapper à Hadante
 advancement.kawoosh_cremation.desc=Expérimentez vous-même la crémation de Kawoosh
 
 advancement.first_zpm.title=Quoi? EPPZ, il est canadien
-advancement.first_zpm.desc=Obtenir un Module de Point Zero
+advancement.first_zpm.desc=Obtenir un Extracteur de Potentiel de Point Zéro
 
 advancement.three_zpms.title=Je n'en crois pas mes yeux : Trois E2PZ
 advancement.three_zpms.desc=Utiliser un concentrateur de E2PZ avec trois E2PZ en place
@@ -96,10 +96,10 @@ advancement.titanium.title=De plus en plus dur et résistant
 advancement.titanium.desc=Obtenir un lingot de titane
 
 advancement.naquadah_raw.title=Naqua... Quoi?
-advancement.naquadah_raw.desc=Créer un alliage de naquadah brut
+advancement.naquadah_raw.desc=Fabriquer un alliage de naquadah brut
 
 advancement.naquadah_alloy.title=Le meilleur super conducteur
-advancement.naquadah_alloy.desc=Créer un alliage de naquadah
+advancement.naquadah_alloy.desc=Fabriquer un alliage de naquadah
 
 advancement.trinium.title=Tu as demandé à Xe'ls et à T'akaya!
 advancement.trinium.desc=Obtenir un lingot de trinium
@@ -129,15 +129,15 @@ advancement.chamber.title=Croissance, cristaux, croissance!
 advancement.chamber.desc=Fabriquer une chambre de cristal
 
 advancement.pcb.title=Technologie basée sur les cristaux
-advancement.pcb.desc=Créer un fabricant de circuits imprimés
+advancement.pcb.desc=Fabriquer un fabricant de circuits imprimés
 
 advancement.ore_washing.title=Purification des minerais
-advancement.ore_washing.desc=Créer un lave minerais
+advancement.ore_washing.desc=fabriquer un lave-minerais
 
 advancement.chemicals.title=C'est le laboratoire secret de Janus?
 advancement.chemicals.desc=Construire un ancien laboratoire chimique
 
-advancement.refined_naquadah.title=Maintenant c'est un truc CHAUD
+advancement.refined_naquadah.title=Maintenant là, c’est CHAUD
 advancement.refined_naquadah.desc=Obtenir un Naquadah liquide raffiné
 
 advancement.myst_page.title=Cartouche d'Abydos
@@ -165,7 +165,7 @@ item.jsg.quad_iris_blade.name=Lame d'iris fois quatre en Titane
 item.jsg.quad_iris_blade_trinium.name=Lame d'iris fois quatre en Trinium
 item.jsg.upgrade_iris.name=Amélioration de l'iris en Titane
 item.jsg.upgrade_iris_trinium.name=Amélioration de l'iris en Trinium
-item.jsg.upgrade_iris_creative.name=Amélioration de l'iris (Creative)
+item.jsg.upgrade_iris_creative.name=Amélioration de l'iris (Créative)
 item.jsg.iris.tooltip.integrity=Intégrité:
 item.jsg.iris.tooltip.durability=Durabilité:
 item.jsg.shield_emitter.name=Émetteur de bouclier
@@ -246,10 +246,10 @@ item.jsg.holder_crystal_pegasus.name=Porte-cristal de Pégase
 # carnet de notes
 item.jsg.page_notebook.name=Page du carnet de notes
 item.jsg.page_notebook.empty=Vide
-item.jsg.page_notebook.end=Address with 9 symbols
+item.jsg.page_notebook.end=Adresse avec 9 symboles
 
 # page mystérieuse
-item.jsg.page_mysterious_milkyway.name=Page mystérieuse de laVoie lactée
+item.jsg.page_mysterious_milkyway.name=Page mystérieuse de la Voie lactée
 item.jsg.page_mysterious_pegasus.name=Page mystérieuse de Pégase
 item.jsg.page_mysterious_universe.name=Page mystérieuse de l'Univers
 item.jsg.page_mysterious.tooltip=Qui sait où cela mène?
@@ -260,7 +260,7 @@ item.jsg.page_mysterious.generation.failed=La génération de la porte des étoi
 
 # beamer
 item.jsg.beamer_crystal_power.name=Cristal de puissance de Beamer
-item.jsg.beamer_crystal_fluid.name=Cristal fluide de Beamer
+item.jsg.beamer_crystal_fluid.name=Cristal de fluide de Beamer
 item.jsg.beamer_crystal_items.name=Cristal d'objets de Beamer
 item.jsg.beamer_crystal_laser.name=Cristal de laser Beamer
 
@@ -375,7 +375,7 @@ tile.jsg.trinium_block.name=Bloc de trinium
 tile.jsg.titanium_block.name=Bloc de titane
 
 # Blocs décoratifs
-tile.jsg.tokra_crystal_block.name=Bloc de cristal de Tokra
+tile.jsg.tokra_crystal_block.name=Bloc de cristal Tokra
 tile.jsg.destiny_countdown_block.name=Bloc compte à rebours du Destinée
 tile.jsg.destiny_bearing_block.name=Lampe de roulement du Destinée
 tile.jsg.destiny_chevron_block.name=Chevron de sol du Destinée
@@ -385,10 +385,10 @@ tile.jsg.destiny_vent_block.name=Blaster au CO2 du Destinée
 prop.jsg.platform_ships_block.name=Plate-forme d'anneaux pour Vaisseaux
 
 prop.jsg.decor_abydos_pot_block.name=Pot d'Abydos
-prop.jsg.decor_abydos_lamp_off_block.name=lampe d'Abydos Off)
-prop.jsg.decor_abydos_lamp_on_block.name=lampe d'Abydos (On)
-prop.jsg.decor_drone_weapon_off_block.name=Drone des Ancients (Off)
-prop.jsg.decor_drone_weapon_on_block.name=Drone des Ancients (On)
+prop.jsg.decor_abydos_lamp_off_block.name=lampe d'Abydos (Éteinte)
+prop.jsg.decor_abydos_lamp_on_block.name=lampe d'Abydos (Allumée)
+prop.jsg.decor_drone_weapon_off_block.name=Drone des Ancients (Éteint)
+prop.jsg.decor_drone_weapon_on_block.name=Drone des Ancients (Allumé)
 prop.jsg.decor_ancient_obelisk_block.name=Obelisk des Ancients
 
 # dhd
@@ -425,12 +425,12 @@ tile.jsg.stargate_pegasus_chevron_block.name=Chevron de la porte des étoiles de
 
 # Condensateur
 tile.jsg.capacitor_block.name=Banque de condensateurs
-tile.jsg.capacitor_block_creative.name=Banque de condensateurs (Creative)
+tile.jsg.capacitor_block_creative.name=Banque de condensateurs (Créative)
 tile.jsg.capacitor_block_empty.name=Banque de condensateurs (vide)
 
 # E2PZ
-tile.jsg.zpm.name=Module de point zéro (E2PZ)
-tile.jsg.creative_zpm.name=Module de point zéro (E2PZ) (Creative)
+tile.jsg.zpm.name=Extracteur de Potentiel de Point Zéro (E2PZ)
+tile.jsg.creative_zpm.name=Extracteur de Potentiel de Point Zéro (E2PZ) (Créative)
 tile.jsg.zpm_hub_block.name=Hub d'E2PZ des Anciens
 tile.jsg.zpm_slot_block.name=Slot E2PZ (Tau'ri)
 
@@ -460,7 +460,7 @@ tile.jsg.beamer_block.name=Bloc de Beamer
 tile.jsg.assembler_machine_block.name=Assembleur des Anciens
 tile.jsg.crystal_chamber_block.name=Chambre de cristal
 tile.jsg.pcb_fabricator_block.name=Fabricateur de circuits imprimés
-tile.jsg.ore_washing_machine_block.name=Lave minerais
+tile.jsg.ore_washing_machine_block.name=Lave-minerais
 
 # Signe ancien
 tile.jsg.ancient_sign.name=Signe ancien
@@ -714,15 +714,15 @@ gui.stargate.iris.opened=Ouvrir
 gui.stargate.iris.closed=Fermée
 gui.stargate.iris.auto=Automatique
 gui.stargate.iris.oc=OC
-gui.stargate.iris.dialer=Dialer
+gui.stargate.iris.dialer=Composeur
 gui.stargate.iris.opened_help=L'ris est ouverte en permanence
 gui.stargate.iris.closed_help=L'iris est fermée en permanence
 gui.stargate.iris.auto_help=L'iris se ferme automatiquement sur un trou de ver entrant,
 gui.stargate.iris.auto1_help=L'iris peut être ouvert avec GDO en envoyant le code défini dans le champ.
-gui.stargate.iris.oc_help=L'iris peut être contrôlée par des ordinateurs ouverts
+gui.stargate.iris.oc_help=L'iris peut être contrôlée par Open Computers
 gui.stargate.iris.dialer_help=L'iris peut être commandé par un composeur de l'univers
 
-gui.stargate.biome_overlay=Couvrement du biome
+gui.stargate.biome_overlay=Recouvrement du biome
 gui.stargate.biome_overlay.help=Insérer les blocs pour les remplacer
 gui.stargate.biome_overlay.normal=Normal
 gui.stargate.biome_overlay.frost=Givre
@@ -741,7 +741,7 @@ gui.stargate.state.iris_temp=Température de l'iris:
 gui.stargate.info=Information sur la porte
 
 # Hub E2PZ
-gui.zpmhub.inProgress=Les E2PZ se déplacent!
+gui.zpmhub.inProgress=Les E2PZ bougent!
 gui.zpmhub.slideDown=Engager les E2PZ
 gui.zpmhub.slideUp=Désengager les E2PZ
 gui.zpmhub.alert=Les emplacements pour les E2PZ sont verrouillés!
@@ -759,11 +759,11 @@ gui.transportrings.parameters=Paramètres
 # beamer
 gui.beamer.name=Beamer de la porte
 gui.beamer.beamer_status=Statut du beamer :
-gui.beamer.beamer_ok=Beamer voit la porte
+gui.beamer.beamer_ok=Le Beamer voit la porte
 gui.beamer.beamer_link_status=Etat du lien du Beamer :
 gui.beamer.beamer_link_ok=Lien du beamer ok
 gui.beamer.role_status=Statut du rôle :
-gui.beamer.role_ok=Role ok
+gui.beamer.role_ok=Rôle ok
 gui.beamer.disabled_target=Cible du beamer désactivée
 gui.beamer.obstructed=Obstrué
 gui.beamer.obstructed_target=Obstrué (Cible)
@@ -823,7 +823,7 @@ config.jsg.address_edit=Ouvrir le menu d'édition d'adresse
 # -------------------
 # SOUS-TITRES
 
-jsg.subtitle.dhd_milkyway_press=Symbole DHD pressé
+jsg.subtitle.dhd_milkyway_press=Symbole du DHD pressé
 jsg.subtitle.dhd_milkyway_press_brb=Bouton rouge vif du DHD pressé
 jsg.subtitle.gate_milkyway_open=Ouverture du vortex de la porte des étoiles
 jsg.subtitle.gate_milkyway_close=Fermeture du trou de ver de la porte des étoiles
@@ -836,8 +836,8 @@ jsg.subtitle.gate_milkyway_incoming=Les chevrons de la Porte des étoiles se ver
 jsg.subtitle.gate_milkyway_chevron_shut=Le chevron de la Porte des étoile se ferme
 jsg.subtitle.gate_milkyway_chevron_open=Le chevron de la porte des étoiles s'ouvre
 
-jsg.subtitle.dhd_pegasus_press=Symbole DHD pressé
-jsg.subtitle.dhd_pegasus_press_brb=Bouton bleu vif DHD enfoncé
+jsg.subtitle.dhd_pegasus_press=Symbole du DHD pressé
+jsg.subtitle.dhd_pegasus_press_brb=Bouton bleu vif du DHD enfoncé
 jsg.subtitle.gate_pegasus_open=Un trou de ver de la porte des étoiles s'ouvre
 jsg.subtitle.gate_pegasus_close=Fermeture du trou de ver de la porte des étoiles
 jsg.subtitle.gate_pegasus_ring_roll=Roulements de l'anneaux de la Porte des étoiles.
@@ -882,9 +882,9 @@ jsg.subtitle.universe_dialer_connect=Composeur de l'univers connecté
 jsg.subtitle.item_zat_shoot=Tir de Zat'nik'tel
 jsg.subtitle.item_staff_shoot=Tire avec la lance Goa'uld
 
-jsg.subtitle.destiny_countdown_start=Le compte à rebours du destin a commencé!
-jsg.subtitle.destiny_countdown_stop=Le compte à rebours de Destiny a atteint zéro.
-jsg.subtitle.destiny_countdown_one_minute=Il reste une minute au compte à rebours de Destiny.
+jsg.subtitle.destiny_countdown_start=Le compte à rebours du Destinée a commencé!
+jsg.subtitle.destiny_countdown_stop=Le compte à rebours du Destinée a atteint zéro.
+jsg.subtitle.destiny_countdown_one_minute=Il reste une minute au compte à rebours du Destinée.
 
 # -------------------
 
