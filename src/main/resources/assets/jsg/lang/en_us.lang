@@ -122,8 +122,8 @@ advancement.transportrings_ori.desc=Use ori transport rings
 advancement.transportrings_ancient.title=The original you might say
 advancement.transportrings_ancient.desc=Use ancient transport rings
 
-advancement.assembler.title=Ancient factory
-advancement.assembler.desc=Craft an Ancient Assembler
+advancement.assembler.title=The Ancient's factory
+advancement.assembler.desc=Craft the Molecular Construction Device
 
 advancement.chamber.title=Grow, crystals, Grow!
 advancement.chamber.desc=Craft a Crystal Chamber
@@ -457,7 +457,7 @@ tile.jsg.transportrings_block.rings_distance=Distance
 tile.jsg.beamer_block.name=Beamer Block
 
 # machines
-tile.jsg.assembler_machine_block.name=Ancient Assembler
+tile.jsg.assembler_machine_block.name=Molecular Construction Device
 tile.jsg.crystal_chamber_block.name=Crystal Chamber
 tile.jsg.pcb_fabricator_block.name=PCB Fabricator
 tile.jsg.ore_washing_machine_block.name=Ore Washing Machine
@@ -800,7 +800,7 @@ gui.gdo.send_code=Enter code:
 gui.gdo.send_button=Send code
 
 # assembler
-gui.assembler.name=Ancient Assembler
+gui.assembler.name=Molecular Construction Device
 
 # ancient sign
 gui.ancient_sign.edit=Edit ancient text
