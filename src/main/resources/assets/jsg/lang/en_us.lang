@@ -24,7 +24,7 @@ config.jsg.rings=Transport Rings Config
 config.jsg.rings.tooltip=Configuration of Transport Rings
 
 config.jsg.dhd=DHD Config
-config.jsg.dhd.tooltip=Configuration of DHD and Universe Dialer
+config.jsg.dhd.tooltip=Configuration of DHD and Ancient Remote
 
 config.jsg.beamers=Beamers Config
 config.jsg.beamers.tooltip=Configuration of Beamers
@@ -264,9 +264,9 @@ item.jsg.beamer_crystal_fluid.name=Beamer Fluid Crystal
 item.jsg.beamer_crystal_items.name=Beamer Items Crystal
 item.jsg.beamer_crystal_laser.name=Beamer Laser Crystal
 
-# universe dialer
-item.jsg.universe_dialer.name=Universe Dialer
-item.jsg.universe_dialer.broken.name=Universe Dialer (Broken)
+# ancient remote (universe dialer)
+item.jsg.universe_dialer.name=Ancient Remote
+item.jsg.universe_dialer.broken.name=Broken Ancient Remote
 item.jsg.universe_dialer.saved_gates=Saved gates: %s
 item.jsg.universe_dialer.not_linked=Not linked
 item.jsg.universe_dialer.gate_busy=Gate is busy
@@ -282,7 +282,7 @@ item.jsg.universe_dialer.aborting=Aborting dial
 item.jsg.universe_dialer.abort=Abort
 item.jsg.universe_dialer.dial_start=Dialing the gate...
 item.jsg.universe_dialer.not_dialing=Not dialing
-item.jsg.universe_dialer.dialer_broke=Dialer cracked to prevent minecraft from crash
+item.jsg.universe_dialer.dialer_broke=Remote cracked to prevent minecraft from crash
 item.jsg.universe_dialer.oc_name=Entry name
 item.jsg.universe_dialer.oc_address=OpenComputers' modem's address (Leave blank for broadcast)
 item.jsg.universe_dialer.oc_port=Modem's port
@@ -720,7 +720,7 @@ gui.stargate.iris.closed_help=Iris is permanently closed
 gui.stargate.iris.auto_help=Iris automatically closes on incoming wormhole,
 gui.stargate.iris.auto1_help=it can be opened with GDO by sending code set in field
 gui.stargate.iris.oc_help=Iris can be controlled by open computers
-gui.stargate.iris.dialer_help=Iris can be controlled by universe dialer
+gui.stargate.iris.dialer_help=Iris can be controlled by an Ancient Remote
 
 gui.stargate.biome_overlay=Biome overlay
 gui.stargate.biome_overlay.help=Insert blocks to override
@@ -810,12 +810,12 @@ gui.ancient_sign.edit=Edit ancient text
 # -------------------
 # KEY BINDINGS
 
-config.jsg.mode_scroll=Universe dialer mode scroll
-config.jsg.mode_up=Universe dialer mode up
-config.jsg.mode_down=Universe dialer mode down
-config.jsg.address_scroll=Universe dialer/Notebook address scroll
-config.jsg.address_up=Universe dialer/Notebook address up
-config.jsg.address_down=Universe dialer/Notebook address down
+config.jsg.mode_scroll=Ancient Remote mode scroll
+config.jsg.mode_up=Ancient Remote mode up
+config.jsg.mode_down=Ancient Remote mode down
+config.jsg.address_scroll=Ancient Remote/Notebook address scroll
+config.jsg.address_up=Ancient Remote/Notebook address up
+config.jsg.address_down=Ancient Remote/Notebook address down
 config.jsg.address_edit=Open address edit menu
 
 # -------------------
@@ -875,9 +875,9 @@ jsg.subtitle.beamer_stop=Beamer stops
 jsg.subtitle.beamer_loop=Beamer beams
 jsg.subtitle.page_flip=Page flips
 jsg.subtitle.gdo_button_beep=Pressed GDO button
-jsg.subtitle.universe_dialer_beep=Universe Dialer started dialing
-jsg.subtitle.universe_dialer_change_mode=Changed Universe Dialer mode
-jsg.subtitle.universe_dialer_connect=Universe Dialer connected
+jsg.subtitle.universe_dialer_beep=Ancient Remote started dialing
+jsg.subtitle.universe_dialer_change_mode=Changed Ancient Remote mode
+jsg.subtitle.universe_dialer_connect=Ancient Remote connected
 
 jsg.subtitle.item_zat_shoot=Zat'nik'tel shoot
 jsg.subtitle.item_staff_shoot=Goa'uld Staff Weapon shoot
