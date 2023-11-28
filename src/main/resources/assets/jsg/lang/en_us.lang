@@ -159,13 +159,13 @@ item.jsg.record_origins.name=Origins Theme
 item.jsg.record_elevator.name=Loading Music
 
 # iris
-item.jsg.iris_blade.name=Iris Blade (Titanium)
-item.jsg.iris_blade_trinium.name=Iris Blade (Trinium)
-item.jsg.quad_iris_blade.name=Quad Iris Blade (Titanium)
-item.jsg.quad_iris_blade_trinium.name=Quad Iris Blade (Trinium)
-item.jsg.upgrade_iris.name=Iris Upgrade (Titanium)
-item.jsg.upgrade_iris_trinium.name=Iris Upgrade (Trinium)
-item.jsg.upgrade_iris_creative.name=Iris Upgrade (Creative)
+item.jsg.iris_blade.name=Titanium Iris Blade
+item.jsg.iris_blade_trinium.name=Trinium Iris Blade
+item.jsg.quad_iris_blade.name=Titanium Quad Iris Blade
+item.jsg.quad_iris_blade_trinium.name=Trinium Quad Iris Blade
+item.jsg.upgrade_iris.name=Titanium Iris
+item.jsg.upgrade_iris_trinium.name=Trinium Iris
+item.jsg.upgrade_iris_creative.name=Creative Iris
 item.jsg.iris.tooltip.integrity=Integrity:
 item.jsg.iris.tooltip.durability=Durability:
 item.jsg.shield_emitter.name=Shield Emitter
