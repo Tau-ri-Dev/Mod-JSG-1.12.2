@@ -759,7 +759,7 @@ gui.transportrings.parameters=Parameters
 # beamer
 gui.beamer.name=Gate Beamer
 gui.beamer.beamer_status=Beamer status:
-gui.beamer.beamer_ok=Beamer in range
+gui.beamer.beamer_ok=Beamer facing gate
 gui.beamer.beamer_link_status=Beamer link status:
 gui.beamer.beamer_link_ok=Beamer link ok
 gui.beamer.role_status=Role status:
