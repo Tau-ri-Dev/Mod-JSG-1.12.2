@@ -80,8 +80,8 @@ advancement.kawoosh_cremation.desc=Get cremated by the Unstable Vortex
 advancement.first_zpm.title=What? Zed-PM, he's Canadian
 advancement.first_zpm.desc=Obtain a Zero Point Module
 
-advancement.three_zpms.title=I can't believe my eyes: Three ZPMs
-advancement.three_zpms.desc=Use ZPM hub with three ZPMs in
+advancement.three_zpms.title=I can't believe my eyes.
+advancement.three_zpms.desc=Use a ZPM hub with three ZPMs
 
 advancement.zpm_slot.title=Oh yeah.
 advancement.zpm_slot.desc=Use ZPM slot
