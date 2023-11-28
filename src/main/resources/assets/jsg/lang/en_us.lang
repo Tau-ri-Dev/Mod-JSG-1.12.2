@@ -212,9 +212,9 @@ item.jsg.circuit_control_base.name=Control Circuit Base
 item.jsg.circuit_control_naquadah.name=Naquadah Control Circuit
 item.jsg.circuit_control_crystal.name=Crystal Control Circuit
 
-item.jsg.crystal_control_dhd.name=DHD Control Crystal (Milky Way)
-item.jsg.crystal_control_pegasus_dhd.name=DHD Control Crystal (Pegasus)
-item.jsg.raw_pegasus_dhd_crystal.name=Raw DHD Crystal (Pegasus)
+item.jsg.crystal_control_dhd.name=Milky Way DHD Control Crystal
+item.jsg.crystal_control_pegasus_dhd.name=Pegasus DHD Control Crystal
+item.jsg.raw_pegasus_dhd_crystal.name=Raw Pegasus DHD Crystal
 item.jsg.crystal_glyph_dhd.name=DHD Glyph Crystal
 item.jsg.crystal_glyph_stargate.name=Stargate Glyph Crystal
 item.jsg.crystal_glyph_milkyway.name=Milky Way Glyphs Crystal
@@ -232,16 +232,16 @@ item.jsg.dhd_brb.name=Bright Red Button (BRB)
 item.jsg.dhd_bbb.name=Bright Blue Button (BBB)
 
 # fragments
-item.jsg.fragment_stargate_milkyway.name=Ring Fragment (Milky Way)
-item.jsg.fragment_stargate_pegasus.name=Ring Fragment (Pegasus)
-item.jsg.fragment_stargate_universe.name=Ring Fragment (Universe)
-item.jsg.fragment_transportrings_goauld.name=Transport Rings Fragment (Goa'uld)
-item.jsg.fragment_transportrings_ori.name=Transport Rings Fragment (Ori)
-item.jsg.fragment_transportrings_ancient.name=Transport Rings Fragment (Ancient)
+item.jsg.fragment_stargate_milkyway.name=Milky Way Ring Fragment
+item.jsg.fragment_stargate_pegasus.name=Pegasus Ring Fragment
+item.jsg.fragment_stargate_universe.name=Universe Ring Fragment
+item.jsg.fragment_transportrings_goauld.name=Goa'uld Transport Rings Fragment
+item.jsg.fragment_transportrings_ori.name=Ori Transport Rings Fragment
+item.jsg.fragment_transportrings_ancient.name=Ancient Transport Rings Fragment
 
 # holders
-item.jsg.holder_crystal.name=Crystal Holder (Milky Way)
-item.jsg.holder_crystal_pegasus.name=Crystal Holder (Pegasus)
+item.jsg.holder_crystal.name=Milky Way Crystal Holder
+item.jsg.holder_crystal_pegasus.name=Pegasus Crystal Holder
 
 # notebook
 item.jsg.page_notebook.name=Notebook Page
@@ -266,7 +266,7 @@ item.jsg.beamer_crystal_laser.name=Beamer Laser Crystal
 
 # universe dialer
 item.jsg.universe_dialer.name=Universe Dialer
-item.jsg.universe_dialer.broken.name=Universe Dialer (Broken)
+item.jsg.universe_dialer.broken.name=Broken Universe Dialer
 item.jsg.universe_dialer.saved_gates=Saved gates: %s
 item.jsg.universe_dialer.not_linked=Not linked
 item.jsg.universe_dialer.gate_busy=Gate is busy
@@ -366,7 +366,7 @@ tile.jsg.invisible_block.name=Invisible Block
 
 # ores and ore blocks
 tile.jsg.naquadah_ore.name=Naquadah Ore
-tile.jsg.naquadah_ore_stone.name=Naquadah Ore (Stone)
+tile.jsg.naquadah_ore_stone.name=Naquadah Ore
 tile.jsg.naquadah_block.name=Naquadah Block
 tile.jsg.naquadah_block_raw.name=Raw Naquadah Block
 tile.jsg.trinium_ore.name=Trinium Ore
@@ -382,7 +382,7 @@ tile.jsg.destiny_chevron_block.name=Destiny Floor Chevron
 tile.jsg.destiny_vent_block.name=Destiny CO2 Blaster
 
 # props
-prop.jsg.platform_ships_block.name=Ring Cover (Ship)
+prop.jsg.platform_ships_block.name=Ship Ring Platform
 
 prop.jsg.decor_abydos_pot_block.name=Abydos Pot
 prop.jsg.decor_abydos_lamp_off_block.name=Abydos Brazier (Off)
@@ -392,7 +392,7 @@ prop.jsg.decor_drone_weapon_on_block.name=Ancient Drone (On)
 prop.jsg.decor_ancient_obelisk_block.name=Ancient Obelisk
 
 # dhd
-tile.jsg.dhd_block.name=Dial Home Device (Milky Way DHD)
+tile.jsg.dhd_block.name=Milky Way Dial Home Device
 tile.jsg.dhd_block.incoming_wormhole_warn=Unable to close an incoming wormhole
 tile.jsg.dhd_block.not_linked_warn=DHD is not linked to the gate
 tile.jsg.dhd_block.no_crystal_warn=DHD has no control crystal
@@ -400,37 +400,37 @@ tile.jsg.dhd_block.no_enough_power=DHD requires at least 10,000uI to operate pro
 tile.jsg.dhd_block.computer_dial=Computer dial is in progress
 tile.jsg.dhd_block.not_enough_power=Insufficient power
 
-tile.jsg.dhd_pegasus_block.name=Dial Home Device (Pegasus DHD)
+tile.jsg.dhd_pegasus_block.name=Pegasus Dial Home Device
 tile.jsg.dhd_pegasus_block.unknown_buttons=This button isn't working
 
 # stargate - MW
-tile.jsg.stargate_milkyway_base_block.name=Stargate Base (Milky Way)
-tile.jsg.stargate_milkyway_ring_block.name=Stargate Ring (Milky Way)
-tile.jsg.stargate_milkyway_chevron_block.name=Stargate Chevron (Milky Way)
+tile.jsg.stargate_milkyway_base_block.name=Milky Way Stargate Base
+tile.jsg.stargate_milkyway_ring_block.name=Milky Way Stargate Ring
+tile.jsg.stargate_milkyway_chevron_block.name=Milky Way Stargate Chevron
 
 # stargate - ORLIN
 tile.jsg.stargate_orlin_base_block.open_count=Open count: %s / %s
-tile.jsg.stargate_orlin_base_block.name=Stargate Base (Orlin)
-tile.jsg.stargate_orlin_member_block.name=Stargate Ring (Orlin)
+tile.jsg.stargate_orlin_base_block.name=Orlin's Stargate Base
+tile.jsg.stargate_orlin_member_block.name=Orlin's Stargate Ring
 
 # stargate - UNI
-tile.jsg.stargate_universe_base_block.name=Stargate Base (Universe)
-tile.jsg.stargate_universe_chevron_block.name=Stargate Chevron (Universe)
-tile.jsg.stargate_universe_ring_block.name=Stargate Ring (Universe)
+tile.jsg.stargate_universe_base_block.name=Universe Stargate Base
+tile.jsg.stargate_universe_chevron_block.name=Universe Stargate Chevron
+tile.jsg.stargate_universe_ring_block.name=Universe Stargate Ring
 
 # stargate - PEG
-tile.jsg.stargate_pegasus_base_block.name=Stargate Base (Pegasus)
-tile.jsg.stargate_pegasus_ring_block.name=Stargate Ring (Pegasus)
-tile.jsg.stargate_pegasus_chevron_block.name=Stargate Chevron (Pegasus)
+tile.jsg.stargate_pegasus_base_block.name=Pegasus Stargate Base
+tile.jsg.stargate_pegasus_ring_block.name=Pegasus Stargate Ring
+tile.jsg.stargate_pegasus_chevron_block.name=Pegasus Stargate Chevron
 
 # capacitor
 tile.jsg.capacitor_block.name=Capacitor Bank
-tile.jsg.capacitor_block_creative.name=Capacitor Bank (Creative)
-tile.jsg.capacitor_block_empty.name=Capacitor Bank (Empty)
+tile.jsg.capacitor_block_creative.name=Creative Capacitor Bank
+tile.jsg.capacitor_block_empty.name=Empty Capacitor Bank
 
 # zpm
 tile.jsg.zpm.name=Zero Point Module (ZPM)
-tile.jsg.creative_zpm.name=Zero Point Module (ZPM) (Creative)
+tile.jsg.creative_zpm.name=Creative Zero Point Module (ZPM)
 tile.jsg.zpm_hub_block.name=Atlantis ZPM Hub
 tile.jsg.zpm_slot_block.name=ZPM Slot
 
