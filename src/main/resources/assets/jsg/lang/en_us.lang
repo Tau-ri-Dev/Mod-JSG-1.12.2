@@ -8,7 +8,7 @@ itemGroup.jsg_tools=JSG: Tools
 itemGroup.jsg_props=JSG: Props
 itemGroup.jsg_machines=JSG: Machines
 itemGroup.jsg_weapons=JSG: Weapons
-itemGroup.jsg_records=JSG: Records
+itemGroup.jsg_records=JSG: Music Discs
 
 # config file
 config.jsg.general=General Config
@@ -313,7 +313,7 @@ item.jsg.gdo.code_sender=Code
 item.jsg.gdo.iris_opened=Iris is opened!
 item.jsg.gdo.iris_busy=Iris is busy!
 item.jsg.gdo.code_accepted=Code accepted! Opening iris...
-item.jsg.gdo.code_rejected=Wrong code!
+item.jsg.gdo.code_rejected=CODE INVALID
 item.jsg.gdo.code_not_set=You must enter a code!
 item.jsg.gdo.computer_handled=Waiting on computer...
 item.jsg.gdo.mode_oc=OpnCom
