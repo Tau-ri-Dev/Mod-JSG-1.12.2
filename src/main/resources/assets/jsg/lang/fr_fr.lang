@@ -688,7 +688,7 @@ glyph.jsg.universe.g36=Glyph 36
 # -------------------
 # INTERFACE UTILISATEUR GRAPHIQUE (GUI)
 
-gui.upgrades=Mises à niveau
+gui.upgrades=Améliorations
 gui.configuration=Configuration
 
 # dhd
