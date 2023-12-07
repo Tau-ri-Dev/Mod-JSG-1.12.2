@@ -78,15 +78,15 @@ public class AssemblerTile extends AbstractMachineTile {
 
     @Override
     protected void playLoopSound(boolean stop) {
-        JSGSoundHelper.playPositionedSound(world, pos, SoundPositionedEnum.BEAMER_LOOP, !stop);
+        JSGSoundHelper.playPositionedSound(world, pos, SoundPositionedEnum.ASSEMBLER_LOOP, !stop);
     }
 
     @Override
     protected void playSound(boolean start) {
         if (!start)
-            JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.BEAMER_STOP);
+            JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.ASSEMBLER_STOP);
         else
-            JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.BEAMER_START);
+            JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.ASSEMBLER_START);
     }
 
     public AbstractMachineRecipe getRecipeIfPossible() {
