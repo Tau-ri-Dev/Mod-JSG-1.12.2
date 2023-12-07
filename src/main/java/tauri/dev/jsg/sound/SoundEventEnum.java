@@ -77,7 +77,7 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     RINGS_PLATFORM_SHIPS_CLOSE(106, "platform_ships_close", 0.5f),
 
     // ----------------------------------------------------------
-    // Beamer
+    // Machines
     BEAMER_START(110, "beamer_start", 0.5f),
     BEAMER_STOP(111, "beamer_stop", 0.5f),
     WASHER_TOGGLE(161, "washer_toggle", 0.5f),
