@@ -74,15 +74,15 @@ public class OreWashingTile extends AbstractMachineTile {
 
     @Override
     protected void playLoopSound(boolean stop) {
-        JSGSoundHelper.playPositionedSound(world, pos, SoundPositionedEnum.BEAMER_LOOP, !stop);
+        JSGSoundHelper.playPositionedSound(world, pos, SoundPositionedEnum.WASHER_LOOP, !stop);
     }
 
     @Override
     protected void playSound(boolean start) {
         if (!start)
-            JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.BEAMER_STOP);
+            JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.WASHER_TOGGLE);
         else
-            JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.BEAMER_START);
+            JSGSoundHelper.playSoundEvent(world, pos, SoundEventEnum.WASHER_TOGGLE);
     }
 
     @Override
