@@ -80,6 +80,9 @@ public enum SoundEventEnum implements EnumKeyInterface<Integer> {
     // Beamer
     BEAMER_START(110, "beamer_start", 0.5f),
     BEAMER_STOP(111, "beamer_stop", 0.5f),
+    WASHER_TOGGLE(161, "washer_toggle", 0.5f),
+    ASSEMBLER_START(162, "assembler_start", 0.5f),
+    ASSEMBLER_STOP(163, "assembler_stop", 0.5f),
 
     // ----------------------------------------------------------
     // Misc
