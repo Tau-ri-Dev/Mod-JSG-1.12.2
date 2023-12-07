@@ -361,14 +361,28 @@
     "category": "ambient",
     "subtitle": "jsg.subtitle.assembler_stop",
     "sounds": [
-      "jsg:assembler/assembler_stop"
+      "jsg:assembler/assemblerstop"
     ]
   },
   "assembler_loop": {
     "category": "ambient",
     "subtitle": "jsg.subtitle.assembler_loop",
     "sounds": [
-      "jsg:assembler/assembler_loop"
+      "jsg:assembler/assemblerloop"
+    ]
+  },
+  "washer_toggle": {
+    "category": "ambient",
+    "subtitle": "jsg.subtitle.washer_start",
+    "sounds": [
+      "jsg:washer/washertoggle"
+    ]
+  },
+  "washer_loop": {
+    "category": "ambient",
+    "subtitle": "jsg.subtitle.washer_loop",
+    "sounds": [
+      "jsg:washer/washerloop"
     ]
   },
   "page_flip": {
