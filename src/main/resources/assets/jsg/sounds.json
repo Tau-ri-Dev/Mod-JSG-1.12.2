@@ -350,6 +350,27 @@
       "jsg:beamer/beamer_loop"
     ]
   },
+  "assembler_start": {
+    "category": "ambient",
+    "subtitle": "jsg.subtitle.assembler_start",
+    "sounds": [
+      "jsg:assembler/assemblerstart"
+    ]
+  },
+  "assembler_stop": {
+    "category": "ambient",
+    "subtitle": "jsg.subtitle.assembler_stop",
+    "sounds": [
+      "jsg:assembler/assembler_stop"
+    ]
+  },
+  "assembler_loop": {
+    "category": "ambient",
+    "subtitle": "jsg.subtitle.assembler_loop",
+    "sounds": [
+      "jsg:assembler/assembler_loop"
+    ]
+  },
   "page_flip": {
     "category": "ambient",
     "subtitle": "jsg.subtitle.page_flip",
