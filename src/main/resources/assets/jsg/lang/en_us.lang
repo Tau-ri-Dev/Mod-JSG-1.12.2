@@ -89,7 +89,7 @@ advancement.zpm_slot.desc=Use ZPM slot
 advancement.upgrade_shield.title=Using power, using power...
 advancement.upgrade_shield.desc=Obtain stargate shield
 
-advancement.beamer.title=Wireless Resource Transport
+advancement.beamer.title=Demolecularized
 advancement.beamer.desc=Obtain a beamer
 
 advancement.titanium.title=Getting harder and tougher
@@ -146,7 +146,7 @@ advancement.myst_page.desc=Use a Mysterious Page
 # -------------------
 
 # sound categories
-soundCategory.jsg_sounds=Just Stargate mod
+soundCategory.jsg_sounds=Just Stargate Mod
 
 # -------------------
 # ITEMS
@@ -362,7 +362,7 @@ item.jsg.schematic_ancient.name=Ancient Transport Rings Schematic
 # TILE ENTITIES/BLOCKS
 
 # special blocks
-tile.jsg.invisible_block.name=Invisible Block
+tile.jsg.invisible_block.name=You Can't See Me!
 
 # ores and ore blocks
 tile.jsg.naquadah_ore.name=Naquadah Ore
@@ -375,7 +375,7 @@ tile.jsg.trinium_block.name=Trinium Block
 tile.jsg.titanium_block.name=Titanium Block
 
 # decor blocks
-tile.jsg.tokra_crystal_block.name=Tokra Crystal Block
+tile.jsg.tokra_crystal_block.name=Tok'ra Crystal Block
 tile.jsg.destiny_countdown_block.name=Destiny Countdown Clock
 tile.jsg.destiny_bearing_block.name=Destiny Bearing
 tile.jsg.destiny_chevron_block.name=Destiny Floor Chevron
@@ -392,7 +392,7 @@ prop.jsg.decor_drone_weapon_on_block.name=Ancient Drone (On)
 prop.jsg.decor_ancient_obelisk_block.name=Ancient Obelisk
 
 # dhd
-tile.jsg.dhd_block.name=Milky Way Dial Home Device
+tile.jsg.dhd_block.name=Milky Way Dial Home Device (DHD)
 tile.jsg.dhd_block.incoming_wormhole_warn=Unable to close an incoming wormhole
 tile.jsg.dhd_block.not_linked_warn=DHD is not linked to the gate
 tile.jsg.dhd_block.no_crystal_warn=DHD has no control crystal
@@ -400,7 +400,7 @@ tile.jsg.dhd_block.no_enough_power=DHD requires at least 10,000uI to operate pro
 tile.jsg.dhd_block.computer_dial=Computer dial is in progress
 tile.jsg.dhd_block.not_enough_power=Insufficient power
 
-tile.jsg.dhd_pegasus_block.name=Pegasus Dial Home Device
+tile.jsg.dhd_pegasus_block.name=Pegasus Dial Home Device (DHD)
 tile.jsg.dhd_pegasus_block.unknown_buttons=This button isn't working
 
 # stargate - MW
