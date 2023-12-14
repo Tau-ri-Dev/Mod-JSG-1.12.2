@@ -1,6 +1,6 @@
 # Just Stargate Mod License
-> Version 1.0, 2022
-> Copyright (C) 2022 Tau'ri Development
+> Version 1.0, 2023 - 2024
+> Copyright (C) 2023 - 2024 Tau'ri Development
 
 1. You are ***allowed*** to:
 	*  Look around the code and figure out what we did (feel free to ask about certain solutions, on [*Discord*](https://discord.gg/NXp4NA8mBR) for example).
