@@ -97,8 +97,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
     private final Node node = JSG.ocWrapper.createNode(this, "transportrings");
     // ---------------------------------------------------------------------------------
     // Ticking and loading
-    public Map<Map<SymbolTypeTransportRingsEnum, TransportRingsAddress>, TransportRings> ringsMap = new HashMap<>();    private final JSGItemStackHandler itemStackHandler = new JSGItemStackHandler(10) {
+    public Map<Map<SymbolTypeTransportRingsEnum, TransportRingsAddress>, TransportRings> ringsMap = new HashMap<>();
 
+    private final JSGItemStackHandler itemStackHandler = new JSGItemStackHandler(10) {
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
             Item item = stack.getItem();
