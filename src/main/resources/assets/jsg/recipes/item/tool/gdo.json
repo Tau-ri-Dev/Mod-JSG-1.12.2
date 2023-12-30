@@ -12,19 +12,23 @@
 		},
 
 		"G": {
-			"item": "minecraft:glass_pane"
+			"type": "forge:ore_dict",
+      			"ore": "paneGlass"
 		},
 
 		"N": {
-			"item": "minecraft:iron_ingot"
+			"type": "forge:ore_dict",
+      			"ore": "ingotIron"
 		},
 
 		"I": {
-			"item": "minecraft:redstone"
+			"type": "forge:ore_dict",
+      			"ore": "dustRedstone"
 		},
 
 		"Y": {
-			"item": "jsg:gear_titanium"
+			"type": "forge:ore_dict",
+      			"ore": "gearTitanium"
 		}
 	},
 
