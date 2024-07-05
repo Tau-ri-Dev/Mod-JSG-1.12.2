@@ -403,11 +403,11 @@ public class JSGConfig {
             public double zpmCapacity = 4_398_046_511_104D;
 
             @Config.Name("ZPMHub's max power throughput")
-            @Config.RangeInt(min = 1, max = 1043600)
+            @Config.RangeInt(min = 1, max = Integer.MAX_VALUE)
             @Config.Comment({
                     "SIDE: SERVER"
             })
-            public int zpmHubMaxEnergyTransfer = 104360;
+            public int zpmHubMaxEnergyTransfer = 1043600;
         }
 
     }
