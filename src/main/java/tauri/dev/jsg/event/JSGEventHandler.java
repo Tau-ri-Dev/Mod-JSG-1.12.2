@@ -55,7 +55,7 @@ public class JSGEventHandler {
 			EnumFacing left = playerFacing.rotateYCCW();
 			EnumFacing right = playerFacing.rotateY();
 
-			Iterable<BlockPos> blocks = BlockPos.getAllInBox(pos.offset(left).down().offset(playerFacing.getOpposite()), pos.offset(right).up().offset(playerFacing));
+			Iterable<BlockPos> blocks = BlockPos.getAllInBox(pos.offset(left).down(2).offset(playerFacing.getOpposite()), pos.offset(right).up().offset(playerFacing));
 
 			for (BlockPos activatedBlock : blocks) {
 				Block block = world.getBlockState(activatedBlock).getBlock();

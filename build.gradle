@@ -106,6 +106,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.jetbrains:annotations:24.0.0'
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
 
     implementation fg.deobf("cofh:RedstoneFlux:${rf_mc_version}-${rf_version}:universal")

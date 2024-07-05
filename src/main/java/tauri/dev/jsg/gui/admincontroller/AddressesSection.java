@@ -135,7 +135,10 @@ public class AddressesSection {
         boolean focused = searchField.isFocused();
         int cursor = searchField.getCursorPosition();
         searchField = new JSGTextField(500, guiBase.mc.fontRenderer, guiBase.center[0] - 45, guiTop + height - 21, 90, 20, searchField.getText());
-        searchField.setActionCallback(() -> generateAddressEntries(true));
+        searchField.setActionCallback(() -> {
+            scrolled = 0;
+            generateAddressEntries(true);
+        });
         searchField.performActionOnKeyUp = true;
         searchField.setFocused(focused);
         searchField.setCursorPosition(cursor);

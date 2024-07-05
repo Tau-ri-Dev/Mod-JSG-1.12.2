@@ -196,7 +196,7 @@ public abstract class AbstractEntry {
         GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
     }
 
-    static interface ActionListener {
-        public void action(EntryActionEnum action, int index);
+    public interface ActionListener {
+        void action(EntryActionEnum action, int index);
     }
 }
