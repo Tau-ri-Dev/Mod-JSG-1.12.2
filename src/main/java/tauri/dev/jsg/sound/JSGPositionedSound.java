@@ -18,6 +18,10 @@ public class JSGPositionedSound extends PositionedSoundRecord {
         return new JSGPositionedSound(soundEnum.resourceLocation, soundEnum.soundCategory, soundEnum.volume * JSGConfig.General.audio.volume * 5f, 1.0f, soundEnum.repeat, 0, ISound.AttenuationType.LINEAR, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f);
     }
 
+    public static JSGPositionedSound getSoundRecord(SoundEventEnum soundEnum, BlockPos pos, float vol, float pitch) {
+        return new JSGPositionedSound(soundEnum.soundEvent.getSoundName(), JSG.JSG_SOUNDS, soundEnum.volume * JSGConfig.General.audio.volume * 5f * vol, pitch, false, 0, ISound.AttenuationType.LINEAR, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f);
+    }
+
     private JSGPositionedSound(ResourceLocation soundId, SoundCategory categoryIn, float volumeIn, float pitchIn, boolean repeatIn, int repeatDelayIn, AttenuationType attenuationTypeIn, float xIn, float yIn, float zIn) {
         super(soundId, categoryIn, volumeIn, pitchIn, repeatIn, repeatDelayIn, attenuationTypeIn, xIn, yIn, zIn);
     }

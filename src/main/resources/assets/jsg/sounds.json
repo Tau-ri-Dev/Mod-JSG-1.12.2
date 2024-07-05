@@ -382,6 +382,17 @@
       }
     ]
   },
+  "mainmenu_intro": {
+    "category": "ambient",
+    "subtitle": "jsg.subtitle.mainmenu_intro",
+    "sounds": [
+      {
+        "name": "jsg:gui/mainmenu/intro",
+        "stream": true,
+        "preload": true
+      }
+    ]
+  },
   "loading_music": {
     "category": "ambient",
     "sounds": [

@@ -14,6 +14,7 @@ import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.gui.element.IconButton;
 import tauri.dev.jsg.loader.ReloadListener;
 import tauri.dev.jsg.sound.JSGSoundHelperClient;
+import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
 import tauri.dev.jsg.util.JSGMinecraftHelper;
 import tauri.dev.jsg.util.updater.GetUpdate;
@@ -53,7 +54,7 @@ public class GuiCustomMainMenu extends GuiScreen {
     //public static final ResourceLocation LOGO_MOJANG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/mojang_logo.png");
     public static final ResourceLocation LOGO_JSG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/jsg_logo.png");
     public static final int BACKGROUNDS_COUNT = JSGConfig.General.mainMenuConfig.backgroundImagesCount;
-    public static final long FIRST_TRANSITION_LENGTH = 7 * 20; // in relative ticks
+    public static final long FIRST_TRANSITION_LENGTH = 12 * 20; // in relative ticks
     public static final int PADDING = 10;
     public static final MainMenuNotifications NOTIFIER = MainMenuNotifications.getManager();
     private static final int BACKGROUND_CHANGE_ANIMATION_LENGTH = 60; //ticks
@@ -156,7 +157,7 @@ public class GuiCustomMainMenu extends GuiScreen {
     }
 
     public void updateMusic() {
-        if ((tick - menuDisplayed) <= 20 * 7 || (Minecraft.getDebugFPS() < 28 && (tick - menuDisplayed) <= 20 * 30))
+        if ((tick - menuDisplayed) <= FIRST_TRANSITION_LENGTH + 5 * 20 || (Minecraft.getDebugFPS() < 28 && (tick - menuDisplayed) <= 20 * 30))
             return; // wait some seconds before first play
 
         if ((tick - menuDisplayed) > 20 * 30)
@@ -262,10 +263,18 @@ public class GuiCustomMainMenu extends GuiScreen {
         }
     }
 
+    public boolean soundUniPlayed = false;
+    public boolean soundPageFlipPlayed = false;
+    public boolean soundIntroPlayed = false;
+
     public void drawFirstAnimation() {
         if (!JSGConfig.General.mainMenuConfig.enableLogo) return;
         double current = (tick - firstTransitionStart);
         if (current > FIRST_TRANSITION_LENGTH) return;
+        if (!soundIntroPlayed) {
+            JSGSoundHelperClient.playPositionedSoundClientSide(JSG.lastPlayerPosInWorld, SoundPositionedEnum.MAINMENU_INTRO, true);
+            soundIntroPlayed = true;
+        }
 
         double step = FIRST_TRANSITION_LENGTH / 5D;
 
@@ -295,6 +304,15 @@ public class GuiCustomMainMenu extends GuiScreen {
 
         int x = (int) (xEnd + (1f - coef) * xSum);
         int y = (int) (yEnd + (1f - coef) * ySum);
+
+        if (current > step && !soundUniPlayed) {
+            soundUniPlayed = true;
+            JSGSoundHelperClient.playSoundEventClientSide(JSG.lastPlayerPosInWorld, SoundEventEnum.UNIVERSE_DIALER_CONNECTED, 4, 0.65f);
+        }
+        if (current > step * 4 && !soundPageFlipPlayed) {
+            soundPageFlipPlayed = true;
+            JSGSoundHelperClient.playSoundEventClientSide(JSG.lastPlayerPosInWorld, SoundEventEnum.PAGE_FLIP, 4, 1);
+        }
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, 52);
@@ -469,6 +487,11 @@ public class GuiCustomMainMenu extends GuiScreen {
         Minecraft.getMinecraft().getTextureManager().bindTexture(MainMenuBackground.get(currentBackground));
         drawScaledCustomSizeModalRect(-(width / 2), -(height / 2), 0, 0, 1921, 1018, width, height, 1920, 1017);
         GlStateManager.popMatrix();
+
+        // Back progress
+        double currentImgCoef = ((tick % BACKGROUND_STAY_TIME) / BACKGROUND_STAY_TIME);
+        drawRect(0, height - 2, width, height, 0x6E6E6EFF);
+        drawRect(0, height - 2, (int) (width * currentImgCoef), height, 0xEBEBEBFF);
 
         drawRect(0, 0, width, height, new Color(0, 0, 0, (int) (255 * coef)).getRGB());
 

@@ -25,7 +25,8 @@ public enum SoundPositionedEnum {
 
     // main menu
     MAINMENU_MUSIC(6, "mainmenu_music", JSG.JSG_SOUNDS, false, 0.05f),
-    LOADING_MUSIC(7, "loading_music", JSG.JSG_SOUNDS, true, 0.07f);
+    LOADING_MUSIC(7, "loading_music", JSG.JSG_SOUNDS, true, 0.07f),
+    MAINMENU_INTRO(8, "mainmenu_intro", JSG.JSG_SOUNDS, false, 0.05f);
 
     public final int id;
     public final ResourceLocation resourceLocation;
