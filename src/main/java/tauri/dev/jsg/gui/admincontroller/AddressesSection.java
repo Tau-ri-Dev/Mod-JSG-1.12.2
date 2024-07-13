@@ -105,6 +105,7 @@ public class AddressesSection {
             if (!canAddThisEntry(m.get(a))) continue;
             StargateEntry e = new StargateEntry();
             e.pos = m.get(a);
+            if(!DimensionManager.isDimensionRegistered(e.pos.dimensionID)) continue;
             e.address = a;
             entries.add(e);
         }
@@ -114,6 +115,7 @@ public class AddressesSection {
             if (!canAddThisEntry(pos)) continue;
             StargateEntry e = new StargateEntry();
             e.pos = pos;
+            if(!DimensionManager.isDimensionRegistered(e.pos.dimensionID)) continue;
             e.address = notGeneratedMap.get(pos).get(Objects.requireNonNull(guiBase.gateTile).getSymbolType());
             e.addresses = notGeneratedMap.get(pos);
             e.notGenerated = true;
