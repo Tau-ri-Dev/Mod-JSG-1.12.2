@@ -21,6 +21,7 @@ import tauri.dev.jsg.loader.ReloadListener;
 import javax.annotation.Nullable;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +46,7 @@ public class TextureLoader {
         return !LOADED_TEXTURES.containsKey(resourceLocation);
     }
 
-    public static void reloadTextures(IResourceManager resourceManager) throws IOException {
+    public static void reloadTextures(IResourceManager resourceManager) throws IOException, URISyntaxException {
         for (Texture texture : LOADED_TEXTURES.values())
             texture.deleteTexture();
 

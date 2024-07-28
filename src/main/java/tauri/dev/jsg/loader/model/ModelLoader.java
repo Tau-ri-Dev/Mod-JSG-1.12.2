@@ -11,6 +11,7 @@ import tauri.dev.jsg.loader.ReloadListener;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class ModelLoader {
         return LOADED_MODELS.get(resourceLocation);
     }
 
-    public static void reloadModels() throws IOException {
+    public static void reloadModels() throws IOException, URISyntaxException {
         LOADED_MODELS.clear();
 
         List<String> modelPaths = FolderLoader.getAllFiles(MODELS_PATH, ".obj");

@@ -4,7 +4,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.world.DimensionType;
 import tauri.dev.jsg.JSG;
-import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.power.general.EnergyRequiredToOperate;
 import tauri.dev.jsg.renderer.biomes.BiomeOverlayEnum;
 import tauri.dev.jsg.util.DimensionsHelper;
@@ -57,13 +56,11 @@ public class StargateDimensionConfig {
                     .map(en -> en.getKey() + " | " + en.getValue().toString())
                     .collect(Collectors.joining(System.lineSeparator()))
             );
-            return new EnergyRequiredToOperate(0, 0);
+            return EnergyRequiredToOperate.free();
         }
 
-        EnergyRequiredToOperate energyRequired = new EnergyRequiredToOperate(JSGConfig.Stargate.power.openingBlockToEnergyRatio, JSGConfig.Stargate.power.keepAliveBlockToEnergyRatioPerTick);
-        double dist = Math.abs(reqFrom.distance - reqTo.distance);
-        if (dist < 50) dist *= 0.8;
-        else dist = 50 * Math.log10(dist) / Math.log10(50);
+        EnergyRequiredToOperate energyRequired = EnergyRequiredToOperate.stargate();
+        double dist = Math.abs((double) reqFrom.distance - reqTo.distance);
         return energyRequired.mul(dist);
     }
 

@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -15,17 +17,17 @@ import java.util.jar.JarFile;
 
 public class FolderLoader {
 
-  public static List<String> getAllFiles(String path, String... suffixes) throws IOException {
+  public static List<String> getAllFiles(String path, String... suffixes) throws IOException, URISyntaxException {
     List<String> out = new ArrayList<>();
 
-    String classPath = JSG.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-    JSG.debug(String.format("classPath was '%s'.", classPath));
+    String classPath = new URI(JSG.class.getProtectionDomain().getCodeSource().getLocation().toString()).getPath();
+    JSG.info(String.format("classPath was '%s'.", classPath));
 
     classPath = classPath.replaceAll("%20", " ");
 
-    JSG.debug(String.format("classPath is  '%s'.", classPath));
+    JSG.info(String.format("classPath is  '%s'.", classPath));
 
-    int separatorIndex = classPath.indexOf("!");
+    int separatorIndex = classPath.lastIndexOf("!");
 
     // Separator found, we're inside a JAR file.
     if (separatorIndex != -1) {

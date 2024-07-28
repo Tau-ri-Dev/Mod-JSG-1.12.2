@@ -9,7 +9,6 @@ import tauri.dev.jsg.loader.model.ModelLoader;
 import tauri.dev.jsg.loader.texture.TextureLoader;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 import java.util.function.Predicate;
 
 public class ReloadListener implements ISelectiveResourceReloadListener {
@@ -31,7 +30,7 @@ public class ReloadListener implements ISelectiveResourceReloadListener {
         if (resourcePredicate.test(VanillaResourceType.MODELS)) {
             try {
                 ModelLoader.reloadModels();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 JSG.error("Failed reloading models");
                 e.printStackTrace();
             }
@@ -40,7 +39,7 @@ public class ReloadListener implements ISelectiveResourceReloadListener {
         if (resourcePredicate.test(VanillaResourceType.TEXTURES)) {
             try {
                 TextureLoader.reloadTextures(resourceManager);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 JSG.error("Failed reloading textures");
                 e.printStackTrace();
             }

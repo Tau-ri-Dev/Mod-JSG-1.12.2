@@ -1870,7 +1870,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         if (distance < 5000) distance *= 0.8;
         else distance = 5000 * Math.log10(distance) / Math.log10(5000);
 
-        EnergyRequiredToOperate energyRequired = new EnergyRequiredToOperate(JSGConfig.Stargate.power.openingBlockToEnergyRatio, JSGConfig.Stargate.power.keepAliveBlockToEnergyRatioPerTick);
+        EnergyRequiredToOperate energyRequired = EnergyRequiredToOperate.stargate();
         energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(sourceDim, targetDim));
 
         if (dialedAddress.size() == 9)

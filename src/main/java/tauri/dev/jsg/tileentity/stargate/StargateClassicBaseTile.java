@@ -423,7 +423,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     @Override
     protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos) {
         if(dialingWithoutEnergy)
-            return new EnergyRequiredToOperate(0, 0);
+            return EnergyRequiredToOperate.free();
         return super.getEnergyRequiredToDial(targetGatePos);
     }
 
