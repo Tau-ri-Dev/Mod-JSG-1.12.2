@@ -7,8 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -17,65 +15,65 @@ import java.util.jar.JarFile;
 
 public class FolderLoader {
 
-  public static List<String> getAllFiles(String path, String... suffixes) throws IOException, URISyntaxException {
-    List<String> out = new ArrayList<>();
+    public static List<String> getAllFiles(String path, String... suffixes) throws IOException {
+        List<String> out = new ArrayList<>();
 
-    String classPath = new URI(JSG.class.getProtectionDomain().getCodeSource().getLocation().toString()).getPath();
-    JSG.info(String.format("classPath was '%s'.", classPath));
+        String classPath = JSG.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        JSG.info(String.format("classPath was '%s'.", classPath));
 
-    classPath = classPath.replaceAll("%20", " ");
+        classPath = classPath.replaceAll("%20", " ");
 
-    JSG.info(String.format("classPath is  '%s'.", classPath));
+        JSG.info(String.format("classPath is  '%s'.", classPath));
 
-    int separatorIndex = classPath.lastIndexOf("!");
+        int separatorIndex = classPath.lastIndexOf("!");
 
-    // Separator found, we're inside a JAR file.
-    if (separatorIndex != -1) {
-      classPath = classPath.substring(5, separatorIndex);
+        // Separator found, we're inside a JAR file.
+        if (separatorIndex != -1) {
+            classPath = classPath.substring(5, separatorIndex);
 
-      JarFile jar = new JarFile(classPath);
-      Enumeration<JarEntry> entries = jar.entries();
+            JarFile jar = new JarFile(classPath);
+            Enumeration<JarEntry> entries = jar.entries();
 
-      while (entries.hasMoreElements()) {
-        String name = entries.nextElement().getName();
+            while (entries.hasMoreElements()) {
+                String name = entries.nextElement().getName();
 
-        if (name.startsWith(path) && endsWith(name, suffixes)) {
-          out.add(name);
+                if (name.startsWith(path) && endsWith(name, suffixes)) {
+                    out.add(name);
+                }
+            }
+
+            jar.close();
         }
-      }
 
-      jar.close();
+        // No separator, it's a debug environment.
+        else {
+            getAllFilesDev(path, out, suffixes);
+        }
+
+        return out;
     }
 
-    // No separator, it's a debug environment.
-    else {
-      getAllFilesDev(path, out, suffixes);
+    private static boolean endsWith(String in, String... suffixes) {
+        for (String suffix : suffixes) {
+            if (in.endsWith(suffix)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    return out;
-  }
+    private static void getAllFilesDev(String path, List<String> out, String... suffixes) throws IOException {
+        InputStream stream = JSG.class.getClassLoader().getResourceAsStream(path);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 
-  private static boolean endsWith(String in, String... suffixes) {
-    for (String suffix : suffixes) {
-      if (in.endsWith(suffix)) {
-        return true;
-      }
+        while (reader.ready()) {
+            String name = path + "/" + reader.readLine();
+
+            if (endsWith(name, suffixes)) out.add(name);
+            else getAllFilesDev(name, out, suffixes);
+        }
+
+        reader.close();
     }
-
-    return false;
-  }
-
-  private static void getAllFilesDev(String path, List<String> out, String... suffixes) throws IOException {
-    InputStream stream = JSG.class.getClassLoader().getResourceAsStream(path);
-    BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-
-    while (reader.ready()) {
-      String name = path + "/" + reader.readLine();
-
-      if (endsWith(name, suffixes)) out.add(name);
-      else getAllFilesDev(name, out, suffixes);
-    }
-
-    reader.close();
-  }
 }
