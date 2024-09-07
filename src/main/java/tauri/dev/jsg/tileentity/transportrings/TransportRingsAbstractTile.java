@@ -24,6 +24,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -562,9 +563,9 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                             getEnergyStorage().extractEnergy(extracted, false);
 
                         if (!excludedEntities.contains(entity)) {
-                            BlockPos ePos = entity.getPosition().add(teleportVector);
+                            Vec3d ePos = entity.getPositionVector().add(new Vec3d(teleportVector));
                             double y = targetRingsPos.getY() + targetRingsHeight;
-                            entity.setPositionAndUpdate(ePos.getX(), y, ePos.getZ());
+                            entity.setPositionAndUpdate(ePos.x, y, ePos.z);
 
                             if (entity instanceof TokraEntity) // move tokra away from the rings platform
                                 ((TokraEntity) entity).moveFromRingsPlatform();
@@ -1283,6 +1284,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
                 break;
         }
     }
+
     protected void sendState(StateTypeEnum type, State state) {
         if (world.isRemote) return;
 
@@ -1691,8 +1693,6 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
             return item;
         }
     }
-
-
 
 
 }
