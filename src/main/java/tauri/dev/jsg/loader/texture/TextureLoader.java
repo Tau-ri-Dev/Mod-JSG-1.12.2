@@ -144,31 +144,6 @@ public class TextureLoader {
 
             LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage));
             ReloadListener.LoadingStats.loadedTextures++;
-
-            if(!JSGConfig.Stargate.eventHorizon.disableNewKawoosh) {
-
-                ProgressBar subProgressBar = ProgressManager.push("JSG - Event Horizon Sub-Textures", EH_ANIMATED_TEXTURE_SUB_TEXTURES);
-
-                final int onePiece = bufferedImage.getWidth() / 14;
-
-                for (int i = 0; i < EH_ANIMATED_TEXTURE_SUB_TEXTURES; i++) {
-                    int texIndex = (i % EH_ANIMATED_TEXTURE_SUB_TEXTURES);
-                    int x = texIndex % 14;
-                    int y = texIndex / 14;
-                    String subPath = (texturePath + "_" + x + "." + y);
-
-                    subProgressBar.step(x + ":" + y);
-                    if (JSGConfig.General.debug.logTexturesLoading)
-                        JSG.info("Loading sub-texture: " + subPath);
-
-                    BufferedImage texturePart = bufferedImage.getSubimage(x * onePiece, y * onePiece, onePiece, onePiece);
-                    LOADED_TEXTURES.put(new ResourceLocation(JSG.MOD_ID, subPath), new Texture(texturePart));
-                    ReloadListener.LoadingStats.loadedTextures++;
-                }
-
-                ReloadListener.LoadingStats.loadedNewKawoosh = true;
-                ProgressManager.pop(subProgressBar);
-            }
         } catch (IOException e) {
             JSG.error("Failed to load texture " + texturePath);
             e.printStackTrace();

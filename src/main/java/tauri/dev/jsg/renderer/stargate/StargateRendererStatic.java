@@ -34,7 +34,7 @@ public class StargateRendererStatic {
         return RANDOM.nextFloat() * 2 - 1;
     }
 
-    private static float getOffset(int index, float tick, float mul, int quadStripIndex) {
+    static float getOffset(int index, float tick, float mul, int quadStripIndex) {
         return (float) (Math.sin(tick / 4f + OFFSET_LIST.get(index)) * mul * (quadStripIndex / 4f) * (quadStripIndex - quadStrips.size()) / 400f);
     }
 
@@ -96,6 +96,7 @@ public class StargateRendererStatic {
         public void render(float tick, boolean white, Float alpha, float mul, byte animationOverride) {
             render(tick, white, alpha, mul, animationOverride, new float[]{1, 1, 1});
         }
+
         public void render(float tick, boolean white, Float alpha, float mul, byte animationOverride, float[] color) {
             boolean animated = !JSGConfig.Stargate.eventHorizon.disableAnimatedEventHorizon && isEhAnimatedLoaded();
             if (animationOverride == -1) animated = false;
@@ -165,12 +166,22 @@ public class StargateRendererStatic {
 
         private final int quadStripIndex;
 
+        private final float radMul;
+
+        public final float innerRadius;
+
         public QuadStrip(int quadStripIndex) {
             this(quadStripIndex, QUAD_RADIUS.get(quadStripIndex), QUAD_RADIUS.get(quadStripIndex + 1), null);
         }
 
         public QuadStrip(int quadStripIndex, float innerRadius, float outerRadius, Float tick) {
+            this(quadStripIndex, innerRadius, outerRadius, tick, 1);
+        }
+
+        public QuadStrip(int quadStripIndex, float innerRadius, float outerRadius, Float tick, float radMul) {
             this.quadStripIndex = quadStripIndex;
+            this.radMul = radMul;
+            this.innerRadius = innerRadius;
             recalculate(innerRadius, outerRadius, tick);
         }
 
@@ -191,7 +202,10 @@ public class StargateRendererStatic {
                     float rad = radius.get(k);
 
                     if (tick != null) {
-                        rad += getOffset(i, tick, 1, quadStripIndex) * 2;
+                        if (quadStripIndex == 9)
+                            rad += getOffset(i, tick, 5 * radMul, quadStripIndex) * 0.75f;
+                        else
+                            rad += getOffset(i, tick, 1 * radMul, quadStripIndex) * 2;
                     }
 
                     x.add(rad * SIN.get(i));
@@ -212,17 +226,22 @@ public class StargateRendererStatic {
         }
 
         public void render(float tick, boolean white, Float alpha, float mul, byte animationOverride, float[] color) {
-            render(tick, null, null, white, alpha, mul, false, animationOverride, color);
+            render(tick, null, null, white, alpha, mul, false, animationOverride, color, false);
         }
 
         public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul) {
             render(tick, outerZ, innerZ, white, alpha, mul, false, (byte) 0);
         }
 
-        public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul, boolean reversed, byte animationOverride) {
-            render(tick, outerZ, innerZ, white, alpha, mul, reversed, animationOverride, new float[]{1, 1, 1});
+        public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul, boolean offsetZ) {
+            render(tick, outerZ, innerZ, white, alpha, mul, false, (byte) 0, new float[]{1, 1, 1}, offsetZ);
         }
-        public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul, boolean reversed, byte animationOverride, float[] color) {
+
+        public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul, boolean reversed, byte animationOverride) {
+            render(tick, outerZ, innerZ, white, alpha, mul, reversed, animationOverride, new float[]{1, 1, 1}, false);
+        }
+
+        public void render(float tick, Float outerZ, Float innerZ, boolean white, Float alpha, float mul, boolean reversed, byte animationOverride, float[] color, boolean offsetZ) {
             boolean animate = !tauri.dev.jsg.config.JSGConfig.Stargate.eventHorizon.disableAnimatedEventHorizon && isEhAnimatedLoaded();
             if (animationOverride == -1) animate = false;
             if (animationOverride == 1) animate = true;
@@ -296,8 +315,8 @@ public class StargateRendererStatic {
     }
 
     static final float kawooshRadius = 2.5f;
-    private static final float kawooshSize = 7f;
-    private static final float kawooshSections = 128;
+    private static final float kawooshSize = 9f;
+    private static final int kawooshSections = 36;
 
     static Map<Float, Float> Z_RadiusMap;
 
@@ -305,60 +324,45 @@ public class StargateRendererStatic {
     private static void initKawoosh() {
         Z_RadiusMap = new LinkedHashMap<>();
 
-        float begin = 0;
-        float end = 0.545f;
+        float wortexLengthRange = 0.5090f;
 
-        float rng = end - begin;
+        float step = wortexLengthRange / kawooshSections;
 
-        float step = rng / kawooshSections;
-        boolean first = true;
+        float scaleZ = kawooshSize / wortexLengthRange;
+        float scaleY = kawooshRadius / 0.1333f;
 
-        float scaleX = kawooshSize / rng;
-        float scaleY = 1;
+        // back wortex
+        boolean soundStart = false;
+        for (int i = kawooshSections; i >= 0; i--) {
+            float zPrev = step * (i + 1);
+            float z = step * i;
+            float y = (0.195f / (z * 5 + 0.8f)) - 0.05f;
 
+            if (i == kawooshSections) y = 0;
+            if (y < 0) y = 0;
+            if (y == 0) continue;
+            if (!soundStart) {
+                soundStart = true;
+                Z_RadiusMap.put(-zPrev * scaleZ, 0f);
+            }
+            Z_RadiusMap.put(-z * scaleZ, y * scaleY);
+        }
+
+        // front kawoosh
         for (int i = 0; i <= kawooshSections; i++) {
-            float x = begin + step * i;
+            float z = step * i;
             float y = 0;
-
-            float border1 = 0.2575f;
-            float border2 = 0.4241f;
-            float border3 = 0.4577f;
-
-
-            if (x >= 0 && x <= border1) {
-                float a = 2f;
-                float b = -4.7f;
-                float c = 2.1f;
-
-                float p = x + (b / 20f);
-                y = (a / 2f) * (p * p) + (c / 30f);
-
-                if (first) {
-                    first = false;
-                    scaleY = kawooshRadius / y;
-                    // JSG.info("radius: " + kawooshRadius + "  y: " + y + "  scale: "+kawooshScaleFactor);
-                }
-            } else if (x > border1 && x <= border2) {
-                float a = 1.4f;
-                float b = -4.3f;
-                float c = 1.4f;
-
-                float p = x + (b / 20f);
-                y = (a / 5f) * (p * p) + (c / 20f);
-            } else if (x > border2 && x <= border3) {
-                float a = -7.4f;
-                float b = -8.6f;
-                float c = 3.3f;
-
-                float p = x + (b / 20f);
-                y = a * (p * p) + (c / 40f);
-            } else if (x > border3 && x <= 0.545f) {
-                float a = 5.2f;
-
-                y = (float) (a / 20f * Math.sqrt(0.545f - x));
+            if (z <= 0.1f) {
+                y = ((float) -Math.sqrt(0.01 - Math.pow(z - 0.1, 2))) + 0.190f;
+            } else if (z <= 0.4f) {
+                y = (float) (Math.sin(-z * 13f) / 92 + 0.10f);
+            } else if (z <= wortexLengthRange) {
+                y = ((float) Math.sqrt(0.012 - Math.pow(z - 0.4, 2)));
             }
 
-            Z_RadiusMap.put(x * scaleX, y * scaleY);
+            if (i == kawooshSections) y = 0;
+            if (y < 0) y = 0;
+            Z_RadiusMap.put(z * scaleZ, y * scaleY);
         }
     }
 

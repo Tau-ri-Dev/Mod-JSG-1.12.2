@@ -80,6 +80,9 @@ public class StargateUniverseRenderer extends StargateClassicRenderer<StargateUn
         super.renderKawoosh(rendererState, partialTicks);
 
     }
+    public void scaleVortex() {
+        GlStateManager.scale(1.2f, 1.2f, 1);
+    }
 
     private static final float IRIS_DARK_COLOR = 0.6f;
 

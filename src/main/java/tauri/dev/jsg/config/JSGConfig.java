@@ -884,13 +884,6 @@ public class JSGConfig {
             })
             public float ehDeathChance = 0.07f;
 
-            @Config.Name("Disable new kawoosh model (from 4.11.0.0)")
-            @Config.RequiresMcRestart
-            @Config.Comment({
-                    "SIDE: CLIENT"
-            })
-            public boolean disableNewKawoosh = false;
-
             @Config.Name("Kawoosh invincible blocks")
             @Config.Comment({
                     "Format: \"modid:blockid[:meta/*]\", for example: ",

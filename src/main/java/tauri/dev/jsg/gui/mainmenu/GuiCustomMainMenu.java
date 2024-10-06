@@ -314,7 +314,6 @@ public class GuiCustomMainMenu extends GuiScreen {
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
         GlStateManager.popMatrix();
-        GlStateManager.popMatrix();
     }
 
     @Override
