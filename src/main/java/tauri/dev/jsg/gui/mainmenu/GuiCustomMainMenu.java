@@ -14,7 +14,6 @@ import tauri.dev.jsg.config.JSGConfig;
 import tauri.dev.jsg.gui.element.IconButton;
 import tauri.dev.jsg.loader.ReloadListener;
 import tauri.dev.jsg.sound.JSGSoundHelperClient;
-import tauri.dev.jsg.sound.SoundEventEnum;
 import tauri.dev.jsg.sound.SoundPositionedEnum;
 import tauri.dev.jsg.util.JSGMinecraftHelper;
 import tauri.dev.jsg.util.updater.GetUpdate;
@@ -46,15 +45,16 @@ public class GuiCustomMainMenu extends GuiScreen {
         protected static final String PATH = "textures/gui/mainmenu/background";
         protected static final String END = ".jpg";
 
-        public static ResourceLocation get(int id){
+        public static ResourceLocation get(int id) {
             return new ResourceLocation(JSG.MOD_ID, PATH + id + END);
         }
     }
+
     public static final ResourceLocation LOGO_TAURI = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/tauri_dev_logo.png");
     //public static final ResourceLocation LOGO_MOJANG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/mojang_logo.png");
     public static final ResourceLocation LOGO_JSG = new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/jsg_logo.png");
     public static final int BACKGROUNDS_COUNT = JSGConfig.General.mainMenuConfig.backgroundImagesCount;
-    public static final long FIRST_TRANSITION_LENGTH = 12 * 20; // in relative ticks
+    public static final long FIRST_TRANSITION_LENGTH = 15 * 20; // in relative ticks
     public static final int PADDING = 10;
     public static final MainMenuNotifications NOTIFIER = MainMenuNotifications.getManager();
     private static final int BACKGROUND_CHANGE_ANIMATION_LENGTH = 60; //ticks
@@ -263,81 +263,56 @@ public class GuiCustomMainMenu extends GuiScreen {
         }
     }
 
-    public boolean soundUniPlayed = false;
-    public boolean soundPageFlipPlayed = false;
     public boolean soundIntroPlayed = false;
 
     public void drawFirstAnimation() {
         if (!JSGConfig.General.mainMenuConfig.enableLogo) return;
-        double current = (tick - firstTransitionStart);
-        if (current > FIRST_TRANSITION_LENGTH) return;
-        if (!soundIntroPlayed) {
-            JSGSoundHelperClient.playPositionedSoundClientSide(JSG.lastPlayerPosInWorld, SoundPositionedEnum.MAINMENU_INTRO, true);
-            soundIntroPlayed = true;
+        double current = (JSGMinecraftHelper.getClientTickPrecise() - firstTransitionStart);
+        if (current > FIRST_TRANSITION_LENGTH) {
+            return;
         }
 
         double step = FIRST_TRANSITION_LENGTH / 5D;
-
         double alpha = 1 - Math.min(1, (Math.max(0, current - (4.5D * step)) / (step / 2)));
-        double alpha2 = 1 - Math.min(1, (Math.max(0, current - step) / step));
-        double coef = Math.min(1, (Math.max(0, current - (4 * step)) / (step / 2)));
-
-        final float sizeCoefEnd = 10f;
-
-        float sizeCoef = (float) Math.max(coef * sizeCoefEnd, 3D);
-
-        int sizeXJSG = (int) (width / sizeCoef);
-        int sizeYJSG = (230 * sizeXJSG) / 411;
-
-        //int sizeXMojang = (int) (width / sizeCoef);
-        int sizeYMojang = 0; //(52 * sizeXMojang) / 300;
-
-        int[] center = getCenterPos(sizeXJSG, sizeYJSG);
-        int xEnd = PADDING;
-        int yEnd = (height - PADDING - sizeYJSG - sizeYMojang - 8);
-
-        int xStart = center[0];
-        int yStart = center[1];
-
-        double xSum = (xStart - xEnd);
-        double ySum = (yStart - yEnd);
-
-        int x = (int) (xEnd + (1f - coef) * xSum);
-        int y = (int) (yEnd + (1f - coef) * ySum);
-
-        if (current > step && !soundUniPlayed) {
-            soundUniPlayed = true;
-            JSGSoundHelperClient.playSoundEventClientSide(JSG.lastPlayerPosInWorld, SoundEventEnum.UNIVERSE_DIALER_CONNECTED, 4, 0.65f);
-        }
-        if (current > step * 4 && !soundPageFlipPlayed) {
-            soundPageFlipPlayed = true;
-            JSGSoundHelperClient.playSoundEventClientSide(JSG.lastPlayerPosInWorld, SoundEventEnum.PAGE_FLIP, 4, 1);
-        }
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, 52);
         GlStateManager.pushMatrix();
-        drawRect(0, 0, width, height, new Color(0, 0, 0, (int) (255 * alpha)).getRGB());
+        GlStateManager.enableBlend();
+
+        int introFrameInt = (int) current - (3 * 20);
+
+        if (introFrameInt >= 0)
+            drawRect(0, 0, width, height, new Color(255, 255, 255, (int) (255 * alpha)).getRGB());
+        else
+            drawRect(0, 0, width, height, new Color(0, 0, 0, 255).getRGB());
+
+        if (!soundIntroPlayed && introFrameInt >= 0) {
+            JSGSoundHelperClient.playPositionedSoundClientSide(JSG.lastPlayerPosInWorld, SoundPositionedEnum.MAINMENU_INTRO, true);
+            soundIntroPlayed = true;
+        }
+
+        String introFrame = "";
+        if (introFrameInt < 10) introFrame = "00" + introFrameInt;
+        else if (introFrameInt < 100) introFrame = "0" + introFrameInt;
+        else introFrame = "" + introFrameInt;
+
+        if (introFrameInt < 1) introFrame = "001";
+        if (introFrameInt <= 175 && introFrameInt > -1) {
+            Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(JSG.MOD_ID, "textures/gui/mainmenu/intro/ezgif-frame-" + introFrame + ".jpg"));
+            drawScaledCustomSizeModalRect(0, 0, 0, 0, 1920, 1080, width, height, 1920, 1080);
+        }
         GlStateManager.popMatrix();
 
         GlStateManager.pushMatrix();
         GlStateManager.color(1, 1, 1, 1);
 
-        GlStateManager.enableBlend();
-        // Tauri dev logo
-        Minecraft.getMinecraft().getTextureManager().bindTexture(LOGO_TAURI);
-        drawScaledCustomSizeModalRect(x, y, 0, 0, 410, 229, sizeXJSG, sizeYJSG, 411, 230);
-
-        center = getCenterPos(0, 0);
+        int[] center = getCenterPos(0, 0);
         if (alpha > 0.75)
             drawCenteredString(fontRenderer, "We are not associated with Mojang.", center[0], height - PADDING - 10, 0xFFFFFF, true);
 
         GlStateManager.disableBlend();
-
         GlStateManager.popMatrix();
-
-        GlStateManager.pushMatrix();
-        drawRect(0, 0, width, height, new Color(0, 0, 0, (int) (255 * alpha2)).getRGB());
         GlStateManager.popMatrix();
         GlStateManager.popMatrix();
     }

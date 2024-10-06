@@ -87,7 +87,7 @@ public class JSG {
             "\\$$$$$$  |\\$$$$$$  |\\$$$$$$  |",
             " \\______/  \\______/  \\______/",
             "",
-            " Authors: MineDragonCZ_, matousss, Fredyman_95, MrJake222",
+            " Authors: Tau'ri Dev",
             " Wiki: https://justsgmod.eu/wiki",
             " Version: " + MOD_VERSION,
             "======================================="

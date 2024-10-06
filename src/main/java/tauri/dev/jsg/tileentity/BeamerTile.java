@@ -307,6 +307,7 @@ public class BeamerTile extends SidedTileEntity implements ITickable, IUpgradabl
                     switch (beamerMode) {
                         case POWER:
                             int tx = energyStorage.extractEnergy(JSGConfig.Beamer.container.energyTransfer, true);
+                            if (targetBeamerTile == null) break;
                             tx = targetBeamerTile.energyStorage.receiveEnergyInternal(tx, false);
                             energyStorage.extractEnergy(tx, false);
                             powerTransferredSinceLastSignal += tx;
@@ -314,6 +315,8 @@ public class BeamerTile extends SidedTileEntity implements ITickable, IUpgradabl
 
                         case FLUID:
                             FluidStack fluid = fluidHandler.drainInternal(tauri.dev.jsg.config.JSGConfig.Beamer.container.fluidTransfer, false);
+                            if (fluid == null) break;
+                            if (targetBeamerTile == null) break;
                             int filled = targetBeamerTile.fluidHandler.fillInternal(fluid, true);
                             fluidHandler.drainInternal(filled, true);
 
@@ -334,50 +337,30 @@ public class BeamerTile extends SidedTileEntity implements ITickable, IUpgradabl
                             break;
 
                         case ITEMS:
+                            if (targetBeamerTile == null) break;
                             int toTransfer = tauri.dev.jsg.config.JSGConfig.Beamer.container.itemTransfer;
 
                             for (int i = 1; i < 5; i++) {
-                                ItemStack stack = itemStackHandler.extractItem(i, toTransfer, true);
-
-                                if (stack.isEmpty())
-                                    continue;
-
                                 for (int k = 1; k < 5; k++) {
-                                    int accepted = stack.getCount() - targetBeamerTile.itemStackHandler.insertItemInternal(k, stack.copy(), false).getCount();
-                                    itemStackHandler.extractItem(i, accepted, false);
+                                    ItemStack copyOfStack = itemStackHandler.extractItem(i, toTransfer, true).copy();
 
-                                    if (accepted > 0) {
-                                        boolean found = false;
-                                        for (ItemStack itemStack : itemsTransferredSinceLastSignal) {
-                                            if (itemStack.isItemEqual(stack)) {
-                                                // Equals - stack exists
-                                                itemStack.grow(accepted);
-                                                found = true;
-                                                break;
-                                            }
-                                        }
-
-                                        if (!found) {
-                                            // Does not exists
-                                            ItemStack itemStack = stack.copy();
-                                            itemStack.setCount(accepted);
-                                            itemsTransferredSinceLastSignal.add(itemStack);
-                                        }
-                                    }
-
-                                    toTransfer -= accepted;
-                                    timeWithoutItemTransfer = 0;
-
-                                    stack.shrink(accepted);
-
-                                    if (stack.isEmpty())
+                                    if (copyOfStack.isEmpty())
                                         break;
+                                    int count = copyOfStack.getCount();
+                                    int accepted = count - targetBeamerTile.itemStackHandler.insertItemInternal(k, copyOfStack, false).getCount();
+                                    if (accepted > 0) {
+                                        itemStackHandler.extractItem(i, accepted, false);
 
-                                    if (toTransfer == 0)
+                                        toTransfer -= accepted;
+                                        timeWithoutItemTransfer = 0;
+
+                                        if (itemStackHandler.getStackInSlot(i).isEmpty())
+                                            break;
+                                    }
+                                    if (toTransfer <= 0)
                                         break;
                                 }
-
-                                if (toTransfer == 0)
+                                if (toTransfer <= 0)
                                     break;
                             }
 
@@ -390,7 +373,7 @@ public class BeamerTile extends SidedTileEntity implements ITickable, IUpgradabl
                         case LASER:
                             powerTransferredSinceLastSignal += energyStorage.extractEnergy(JSGConfig.Beamer.power.laserEnergy, false);
                             TileEntity te = this.targetGatePos.getTileEntity();
-                            if(te instanceof StargateClassicBaseTile) {
+                            if (te instanceof StargateClassicBaseTile) {
                                 StargateClassicBaseTile gate = (StargateClassicBaseTile) te;
                                 gate.tryHeatUp(true, true, 0.3, 0.6, 0, -1, -1);
                             }
@@ -485,17 +468,17 @@ public class BeamerTile extends SidedTileEntity implements ITickable, IUpgradabl
 
                                 if (tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite())) {
                                     IItemHandler targetItemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite());
+                                    if (targetItemHandler == null) break;
 
                                     int toTransfer = tauri.dev.jsg.config.JSGConfig.Beamer.container.itemTransfer;
 
                                     for (int i = 1; i < 5; i++) {
-                                        ItemStack stack = itemStackHandler.extractItem(i, toTransfer, true);
-
-                                        if (stack.isEmpty())
-                                            continue;
-
                                         for (int k = 0; k < targetItemHandler.getSlots(); k++) {
-                                            int accepted = stack.getCount() - targetItemHandler.insertItem(k, stack, false).getCount();
+                                            ItemStack copyOfStack = itemStackHandler.extractItem(i, toTransfer, true).copy();
+                                            if (copyOfStack.isEmpty())
+                                                break;
+                                            int count = copyOfStack.getCount();
+                                            int accepted = count - targetItemHandler.insertItem(k, copyOfStack, false).getCount();
                                             itemStackHandler.extractItem(i, accepted, false);
                                             toTransfer -= accepted;
 
@@ -827,15 +810,14 @@ public class BeamerTile extends SidedTileEntity implements ITickable, IUpgradabl
     @Nonnull
     @Override
     public int[] getSlotsForFace(@Nonnull EnumFacing side) {
-        switch (side){
+        switch (side) {
             case UP:
             case DOWN:
                 return new int[]{0};
             default:
-                if(beamerMode == BeamerModeEnum.ITEMS){
+                if (beamerMode == BeamerModeEnum.ITEMS) {
                     return new int[]{1, 2, 3, 4};
-                }
-                else break;
+                } else break;
         }
         return new int[0];
     }
