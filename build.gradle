@@ -6,10 +6,6 @@ buildscript {
         jcenter()
         mavenCentral()
 
-        maven {
-            name = "ic2"
-            url = "http://maven.ic2.player.to/"
-        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
@@ -93,10 +89,6 @@ repositories {
         url = "https://maven.cil.li/"
     }
 
-    maven {
-        name = "ic2"
-        url = "https://maven.ic2.player.to/"
-    }
 
     maven {
         name = "fluidlogged-api"
@@ -116,7 +108,6 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei_${mc_version}:${jei_version}")
 
     compile "li.cil.oc:OpenComputers:MC1.12.2-1.7.5.213:api"
-    compile 'net.industrial-craft:industrialcraft-2:2.1.470-experimental:api'
 
     compile 'com.github.jbredwards:fluidlogged-api:2573e41f3e'
 }
