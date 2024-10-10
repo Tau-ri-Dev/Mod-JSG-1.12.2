@@ -1103,6 +1103,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 }
                 markDirty();
             }
+            // update iris blocks each 5 ticks
+            if(isIrisClosed() && hasIris() && world.getTotalWorldTime() % 5 == 0){
+                setIrisBlocks(true);
+            }
 
         } else {
             // Client
@@ -2341,7 +2345,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
             if (set) {
 
-                if (world.getBlockState(newPos).getMaterial() != Material.AIR) {
+                if (world.getBlockState(newPos).getMaterial() != Material.AIR && world.getBlockState(newPos).getBlock() != invBlockState.getBlock()) {
                     if (!JSGConfig.Stargate.iris.irisDestroysBlocks) continue;
                     world.destroyBlock(newPos, true);
                 }
