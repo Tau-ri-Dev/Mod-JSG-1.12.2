@@ -603,6 +603,7 @@ public abstract class TransportRingsAbstractTile extends TileEntity implements I
 
 
             case STARGATE_GIVE_PAGE:
+                if(pageSlotId < 7) break;
                 SymbolTypeTransportRingsEnum symbolType = SymbolTypeTransportRingsEnum.valueOf(pageSlotId - 7);
                 ItemStack stack = itemStackHandler.getStackInSlot(pageSlotId);
                 if (stack.isEmpty()) break;

@@ -1782,6 +1782,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 break;
 
             case STARGATE_GIVE_PAGE:
+                if(pageSlotId < 7) break;
                 SymbolTypeEnum symbolType = SymbolTypeEnum.valueOf(pageSlotId - 7);
                 ItemStack stack = itemStackHandler.getStackInSlot(pageSlotId);
                 stack = getAddressPage(symbolType, stack, hasUpgrade(StargateUpgradeEnum.CHEVRON_UPGRADE), false, false);
