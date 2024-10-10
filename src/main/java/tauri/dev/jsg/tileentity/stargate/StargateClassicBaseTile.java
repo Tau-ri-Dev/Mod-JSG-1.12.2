@@ -2654,7 +2654,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             return new Object[]{false, "invalid_method_format", "You must enter code!"};
         }
         StargatePos destinationPos = StargateNetwork.get(world).getStargate(dialedAddress);
-        if (destinationPos == null) return new Object[]{false, "stargate_not_engaged"};
+        if (destinationPos == null || this.getStargateState().notInitiating()) return new Object[]{false, "stargate_not_engaged_initiating"};
         StargateAbstractBaseTile te = destinationPos.getTileEntity();
         if (te instanceof StargateClassicBaseTile) {
             ((StargateClassicBaseTile) te).receiveIrisCode(new ComputerCodeSender(
