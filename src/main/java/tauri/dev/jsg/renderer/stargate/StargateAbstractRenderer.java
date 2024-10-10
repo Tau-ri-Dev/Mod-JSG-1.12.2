@@ -49,11 +49,6 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
         return !TextureLoader.isNotTextureLoaded(new ResourceLocation(JSG.MOD_ID, EV_HORIZON_NORMAL_TEXTURE_ANIMATED));
     }
 
-    public static boolean isEhKawooshLoaded() {
-        if (!isEhAnimatedLoaded()) return true;
-        return !TextureLoader.isNotTextureLoaded(new ResourceLocation(JSG.MOD_ID, EV_HORIZON_KAWOOSH_TEXTURE_ANIMATED + "_0.0"));
-    }
-
     private static final Map<ResourceLocation, Boolean> EH_RENDERED = new HashMap<>();
 
     static {
@@ -199,6 +194,14 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
     }
 
     protected void renderKawoosh(StargateAbstractRendererState rendererState, double partialTicks, boolean render) {
+        long kawooshStart = rendererState.gateWaitStart + 44 - 24;
+        float tick = (float) (getWorld().getTotalWorldTime() - kawooshStart + partialTicks);
+        float mul;
+
+        float inner = StargateRendererStatic.EVENT_HORIZON_RADIUS - (tick / (rendererState.noxDialing ? 3.2f : 1)) / 3.957f;
+        if(inner - 0.2f > StargateRendererStatic.EVENT_HORIZON_RADIUS) return;
+
+
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 15 * 16, 15 * 16);
 
         float gateWait = (float) getWorld().getTotalWorldTime() - rendererState.gateWaitStart;
@@ -213,7 +216,6 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
                 || rendererState.vortexState == EnumVortexState.FULL);
 
         ResourceLocation ehTextureRes = getEventHorizonTextureResource(rendererState, isKawoosh && !rendererState.noxDialing);
-        String ehTextureResKawooshPath = getEventHorizonTexturePath(rendererState, true);
         if (!render && EH_RENDERED.get(ehTextureRes)) return;
 
         EH_RENDERED.put(ehTextureRes, true);
@@ -233,12 +235,6 @@ public abstract class StargateAbstractRenderer<S extends StargateAbstractRendere
 
         // bind texture
         if (ehTexture != null) ehTexture.bindTexture();
-
-        long kawooshStart = rendererState.gateWaitStart + 44 - 24;
-        float tick = (float) (getWorld().getTotalWorldTime() - kawooshStart + partialTicks);
-        float mul;
-
-        float inner = StargateRendererStatic.EVENT_HORIZON_RADIUS - (tick / (rendererState.noxDialing ? 3.2f : 1)) / 3.957f;
 
         // Fading in the unstable vortex
         float tick2 = tick / 4f;

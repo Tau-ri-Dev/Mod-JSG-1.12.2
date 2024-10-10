@@ -613,9 +613,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected void resetTargetIncomingAnimation() {
         if (connectedToGatePos != null) {
             StargateAbstractBaseTile targetGateTile = connectedToGatePos.getTileEntity();
-            targetGateTile.disconnectGate(true);
-            targetGateTile.stargateState = EnumStargateState.IDLE;
-            targetGateTile.markDirty();
+            if(targetGateTile != null) {
+                targetGateTile.disconnectGate(true);
+                targetGateTile.stargateState = EnumStargateState.IDLE;
+                targetGateTile.markDirty();
+            }
             connectedToGatePos = null;
             connectedToGate = false;
             connectingToGate = false;
