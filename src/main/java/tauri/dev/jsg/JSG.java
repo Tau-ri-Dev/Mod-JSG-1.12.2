@@ -23,6 +23,7 @@ import tauri.dev.jsg.loader.ReloadListener;
 import tauri.dev.jsg.proxy.IProxy;
 import tauri.dev.jsg.util.main.loader.JSGInit;
 import tauri.dev.jsg.util.main.loader.JSGPreInit;
+import tauri.dev.jsg.webserver.WebServer;
 import tauri.dev.jsg.worldgen.StargateDimensionGenerator;
 
 import java.io.File;
@@ -213,9 +214,10 @@ public class JSG {
 
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
+        currentServer = event.getServer();
         JSGCommands.registerCommands(event);
         JSG.info("Successfully registered Commands!");
-        currentServer = event.getServer();
+        WebServer.start();
     }
 
     @EventHandler
@@ -229,6 +231,7 @@ public class JSG {
 
     @EventHandler
     public void serverStopped(FMLServerStoppedEvent event) {
+        WebServer.stop();
     }
 
     /**

@@ -58,7 +58,7 @@ public abstract class AbstractEntry {
                 .setActionCallback(() -> action(EntryActionEnum.RENAME));
 
         nameField.setText(name);
-        nameField.setMaxStringLength(getMaxNameLength());
+        //nameField.setMaxStringLength(getMaxNameLength());
         textFields.add(nameField);
 
 

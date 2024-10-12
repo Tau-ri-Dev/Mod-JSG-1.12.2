@@ -1570,4 +1570,36 @@ public class JSGConfig {
             public int[] blacklistDims = new int[]{};
         }
     }
+
+    @Config(modid = JSG.MOD_ID, name = CONFIG_FILE_NAME + "webserver", category = "webserver")
+    @Config.LangKey("config.jsg.webserver")
+    public static class WebServer {
+        @Config.Name("General")
+        @Config.Comment({
+                "Web server general settings"
+        })
+        public static General general = new General();
+
+        public static class General {
+            @Config.Name("Enabled")
+            @Config.Comment({
+                    "Enabled web server?",
+                    "SIDE: SERVER"
+            })
+            public boolean enabled = false;
+            @Config.Name("Auth Token")
+            @Config.Comment({
+                    "Token to authenticate yourself to get data",
+                    "SIDE: SERVER"
+            })
+            public String token = "";
+
+            @Config.Name("Port")
+            @Config.Comment({
+                    "Port to listen on",
+                    "SIDE: SERVER"
+            })
+            public int port = 7070;
+        }
+    }
 }
