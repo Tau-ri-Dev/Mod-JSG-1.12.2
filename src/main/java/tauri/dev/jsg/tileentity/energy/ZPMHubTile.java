@@ -41,6 +41,7 @@ import tauri.dev.jsg.util.main.JSGProps;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static tauri.dev.jsg.util.JSGAdvancementsUtil.tryTriggerRangedAdvancement;
@@ -454,5 +455,40 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
             return new Object[]{null, true, "slots_toggled_up", "Slots are sliding up now!"};
         }
         return new Object[]{null, false, "slots_busy", "Slots are busy!"};
+    }
+
+    @SuppressWarnings("unused")
+    @Optional.Method(modid = "opencomputers")
+    @Callback(doc = "function() -- Returns states of each slot")
+    public Object[] getSlotsState(Context context, Arguments args) {
+        List<Object> retuning = new ArrayList<>();
+        retuning.add(isAnimating);
+        retuning.add(isSlidingUp);
+        retuning.add(getContainerSize());
+        for(int i = 0; i < getContainerSize(); i++){
+            retuning.add(!itemStackHandler.getStackInSlot(i).isEmpty());
+        }
+        return retuning.toArray();
+    }
+
+    @SuppressWarnings("unused")
+    @Optional.Method(modid = "opencomputers")
+    @Callback(doc = "function() -- Returns amount of energy in ZPM Hub and ZPMs")
+    public Object[] getEnergyStored(Context context, Arguments args) {
+        if (isAnimating || isSlidingUp) {
+            return new Object[]{false, "slots_not_engaged", "ZPM slots are not engaged to the hub!"};
+        }
+        List<Object> retuning = new ArrayList<>();
+        retuning.add(true);
+        retuning.add(getEnergyStorage().getEnergyStored());
+        for(int i = 0; i < getContainerSize(); i++){
+            IEnergyStorageZPM zpmStorage = itemStackHandler.getStackInSlot(i).getCapability(CapabilityEnergyZPM.ENERGY, null);
+            if(zpmStorage == null) {
+                retuning.add("NULL!");
+                continue;
+            }
+            retuning.add(zpmStorage.getEnergyStored());
+        }
+        return retuning.toArray();
     }
 }
