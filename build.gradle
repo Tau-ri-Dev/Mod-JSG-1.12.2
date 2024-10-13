@@ -18,14 +18,9 @@ buildscript {
     }
 }
 
-plugins {
-    id 'com.github.johnrengelman.shadow' version '1.2.3'
-}
-
 apply plugin: 'net.minecraftforge.gradle'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'idea'
-apply plugin: 'com.github.johnrengelman.shadow'
 
 
 version = "${mc_version}-${mod_version}"
@@ -102,21 +97,6 @@ repositories {
     jcenter()
 }
 
-shadowJar {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    classifier = ""
-    manifest {
-        attributes 'Main-Class' : 'tauri.dev.jsg.JSG'
-    }
-    dependencies {
-        include(dependency('io.javalin:javalin:4.6.8'))
-        include(dependency('org.jetbrains.kotlin:kotlin-stdlib:1.5.32'))
-        include(dependency('org.slf4j:slf4j-simple:2.0.11'))
-        include(dependency('com.fasterxml.jackson.core:jackson-databind:2.13.2'))
-    }
-    mergeServiceFiles()
-}
-
 dependencies {
     implementation 'org.jetbrains:annotations:24.0.0'
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
@@ -130,11 +110,6 @@ dependencies {
     compile "li.cil.oc:OpenComputers:MC1.12.2-1.7.5.213:api"
 
     compile 'com.github.jbredwards:fluidlogged-api:2573e41f3e'
-
-    implementation 'io.javalin:javalin:4.6.8'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.32"
-    implementation "org.slf4j:slf4j-simple:2.0.11"
-    implementation "com.fasterxml.jackson.core:jackson-databind:2.13.2"
 }
 
 processResources {
@@ -189,7 +164,6 @@ compileJava {
 // Example configuration to allow publishing using the maven-publish task
 // This is the preferred method to reobfuscate your jar file
 jar.finalizedBy('reobfJar')
-shadowJar.finalizedBy('reobfJar')
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 //publish.dependsOn('reobfJar')
 
