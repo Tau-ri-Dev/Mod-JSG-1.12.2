@@ -7,7 +7,7 @@ public enum StargateOpenResult {
 	ABORTED,
 	ABORTED_BY_EVENT,
 	CALLER_HUNG_UP,
-	GATE_BURRIED,
+	GATE_BURIED,
 	SYMBOL_ADDED;
 	
 	public boolean ok() {

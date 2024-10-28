@@ -295,7 +295,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         markDirty();
     }
 
-    public boolean isGateBurried() {
+    public boolean isGateBuried() {
         if (!getConfig().getOption(ENABLE_BURY_STATE.id).getBooleanValue()) return false;
         for (BlockPos targetPos : Objects.requireNonNull(StargateSizeEnum.getIrisBlocksPattern(getStargateSize()))) {
             BlockPos newPos = pos.add(FacingHelper.rotateBlock(targetPos, facing, facingVertical));
@@ -334,8 +334,8 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         if (!(connectedToGatePos.getTileEntity().stargateState.incoming())) {
             return new ResultTargetValid(StargateOpenResult.CALLER_HUNG_UP, targetValid);
         }
-        if (this.isGateBurried())
-            return new ResultTargetValid(StargateOpenResult.GATE_BURRIED, targetValid);
+        if (this.isGateBuried())
+            return new ResultTargetValid(StargateOpenResult.GATE_BURIED, targetValid);
         return super.attemptOpenDialed();
     }
 
@@ -375,7 +375,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
     @Override
     public void generateIncoming(int entities, int addressSize, int delay) {
-        if (this.isGateBurried()) return;
+        if (this.isGateBuried()) return;
         super.generateIncoming(entities, addressSize, delay);
     }
 
@@ -1338,7 +1338,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         DHD_TOP_LOCK(
                 1, "dhdLockPoO", JSGConfigOptionTypeEnum.BOOLEAN, JSGConfig.DialHomeDevice.visual.dhdLastOpen + "",
                 "Enable opening last chevron",
-                "while dialing milkyway gate with dhd",
+                "while dialing Milky Way gate with dhd",
                 " - ONLY FOR MW GATES - "
         ),
         ENABLE_FAST_DIAL(
@@ -1368,7 +1368,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                     add(new JSGConfigEnumEntry("Slow", "-1"));
                     add(new JSGConfigEnumEntry("Normal", "0"));
                     add(new JSGConfigEnumEntry("Fast", "1"));
-                }}, "Speed of pegasus gate dialing with DHD"
+                }}, "Speed of Pegasus gate dialing with DHD"
         ),
         SPIN_GATE_INCOMING(
                 7, "incomingSpin", JSGConfigOptionTypeEnum.BOOLEAN, "true",
@@ -1396,7 +1396,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
                 " - ONLY FOR MW ADDRESS/GATE - "
         ),
         ENABLE_BURY_STATE(
-                9, "enableBuryState", JSGConfigOptionTypeEnum.BOOLEAN, JSGConfig.Stargate.mechanics.enableBurriedState + "",
+                9, "enableBuryState", JSGConfigOptionTypeEnum.BOOLEAN, JSGConfig.Stargate.mechanics.enableBuriedState + "",
                 "Enable bury state for the gate?"
         ),
         TIME_LIMIT_MODE(
@@ -1432,7 +1432,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
         ),
         UNIVERSE_ORANGE_SHIELD(
                 15, "universeOrangeShield", JSGConfigOptionTypeEnum.BOOLEAN, "true",
-                "Should be universe gate's shield orange?"
+                "Should Universe gate's shield be orange?"
         );
 
         public final int id;
