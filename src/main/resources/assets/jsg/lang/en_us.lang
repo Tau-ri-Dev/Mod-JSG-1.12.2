@@ -400,7 +400,7 @@ tile.jsg.dhd_block.name=Milky Way Dial Home Device (DHD)
 tile.jsg.dhd_block.incoming_wormhole_warn=Unable to close an incoming wormhole
 tile.jsg.dhd_block.not_linked_warn=DHD is not linked to the gate
 tile.jsg.dhd_block.no_crystal_warn=DHD has no control crystal
-tile.jsg.dhd_block.no_enough_power=DHD requires at least 10,000uI to operate properly
+tile.jsg.dhd_block.not_enough_power=DHD requires at least 10,000uI to operate properly
 tile.jsg.dhd_block.computer_dial=Computer dial is in progress
 tile.jsg.dhd_block.not_enough_power=Insufficient power
 
