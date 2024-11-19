@@ -2042,7 +2042,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public SymbolInterface getSymbolFromNameIndex(Object nameIndex) throws IllegalArgumentException {
         SymbolInterface symbol = null;
 
-        if (nameIndex instanceof Integer) symbol = getSymbolType().valueOfSymbol((Integer) nameIndex);
+        if (nameIndex instanceof Double && (Double)nameIndex == Math.floor((Double)nameIndex)) symbol = getSymbolType().valueOfSymbol((int)(double) nameIndex);
+
+        else if (nameIndex instanceof Integer) symbol = getSymbolType().valueOfSymbol(nameIndex);
 
         else if (nameIndex instanceof byte[]) symbol = getSymbolType().fromEnglishName(new String((byte[]) nameIndex));
 
