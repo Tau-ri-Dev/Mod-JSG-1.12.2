@@ -512,7 +512,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     }
 
     public void refresh() {
-        for(SymbolTypeEnum s : SymbolTypeEnum.values()) {
+        for (SymbolTypeEnum s : SymbolTypeEnum.values()) {
             StargateAddress address = getStargateAddress(s);
             if (address == null) {
                 generateAddresses(true);
@@ -613,7 +613,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     protected void resetTargetIncomingAnimation() {
         if (connectedToGatePos != null) {
             StargateAbstractBaseTile targetGateTile = connectedToGatePos.getTileEntity();
-            if(targetGateTile != null) {
+            if (targetGateTile != null) {
                 targetGateTile.disconnectGate(true);
                 targetGateTile.stargateState = EnumStargateState.IDLE;
                 targetGateTile.markDirty();
@@ -781,7 +781,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
                 if (this instanceof StargateClassicBaseTile)
                     dialedAddress.addSymbol(getSymbolType().getOrigin());
 
-                if(getNetwork().getStargate(dialedAddress) != null)
+                if (getNetwork().getStargate(dialedAddress) != null)
                     Objects.requireNonNull(getNetwork().getStargate(dialedAddress)).getTileEntity().disconnectGate();
             }
 
@@ -1545,7 +1545,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     // Linking (sg generator)
     public abstract void setLinkedDHD(BlockPos dhdPos, int linkId);
 
-    public boolean isSpinning(){
+    public boolean isSpinning() {
         return false;
     }
 
@@ -1609,9 +1609,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
             case SOUND_UPDATE:
                 StateSoundPositionedUpdate s = (StateSoundPositionedUpdate) state;
-                for(Map.Entry<Integer, Boolean> e : s.soundMap.entrySet()){
+                for (Map.Entry<Integer, Boolean> e : s.soundMap.entrySet()) {
                     SoundPositionedEnum sound = SoundPositionedEnum.valueOf(e.getKey());
-                    if(sound == null) continue;
+                    if (sound == null) continue;
                     playPositionedSound(sound, e.getValue());
                 }
                 break;
@@ -1843,7 +1843,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
 
     protected abstract SmallEnergyStorage getEnergyStorage();
 
-    public SmallEnergyStorage getEnergyStorageForApi(){
+    public SmallEnergyStorage getEnergyStorageForApi() {
         return getEnergyStorage();
     }
 
@@ -1917,9 +1917,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         for (StargateAddress stargateAddress : gateAddressMap.values()) {
             // we don't want to copy address of gate to another gate -_-
-            if(stargateAddress == null) continue;
+            if (stargateAddress == null) continue;
             StargatePos pos = gatePosMap.get(stargateAddress.getSymbolType());
-            if(pos == null) continue;
+            if (pos == null) continue;
             compound.setTag("address_" + stargateAddress.getSymbolType(), stargateAddress.serializeNBT());
             compound.setTag("gatePos_" + stargateAddress.getSymbolType(), pos.serializeNBT());
         }
@@ -2042,9 +2042,10 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
     public SymbolInterface getSymbolFromNameIndex(Object nameIndex) throws IllegalArgumentException {
         SymbolInterface symbol = null;
 
-        if (nameIndex instanceof Double && (Double)nameIndex == Math.floor((Double)nameIndex)) symbol = getSymbolType().valueOfSymbol((int)(double) nameIndex);
+        if (nameIndex instanceof Double && (Double) nameIndex == Math.floor((Double) nameIndex))
+            symbol = getSymbolType().valueOfSymbol(((Double) nameIndex).intValue());
 
-        else if (nameIndex instanceof Integer) symbol = getSymbolType().valueOfSymbol(nameIndex);
+        else if (nameIndex instanceof Integer) symbol = getSymbolType().valueOfSymbol((Integer) nameIndex);
 
         else if (nameIndex instanceof byte[]) symbol = getSymbolType().fromEnglishName(new String((byte[]) nameIndex));
 

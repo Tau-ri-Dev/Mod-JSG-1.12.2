@@ -20,7 +20,6 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -2508,24 +2507,13 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         ArrayList<NearbyGate> addresses = new ArrayList<>();
 
-        Class<? extends TileEntity> tileClass;
-        switch (gateType) {
-            case MILKYWAY:
-                tileClass = StargateMilkyWayBaseTile.class;
-                break;
-            case UNIVERSE:
-                tileClass = StargateUniverseBaseTile.class;
-                break;
-            case PEGASUS:
-                tileClass = StargatePegasusBaseTile.class;
-                break;
-            default:
-                return addresses;
-        }
-
         for (Map.Entry<StargateAddress, StargatePos> entry : StargateNetwork.get(getFakeWorld()).getMap().get(gateType).entrySet()) {
 
             StargatePos stargatePos = entry.getValue();
+
+            if (!ignoreIfInstance && stargatePos.getGateSymbolType() != gateType)
+                continue;
+
             StargateAbstractBaseTile targetGateTile = stargatePos.getTileEntity();
 
             if (!(targetGateTile instanceof StargateClassicBaseTile))
@@ -2534,9 +2522,6 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
             StargateClassicBaseTile classicTile = (StargateClassicBaseTile) targetGateTile;
 
             if (!classicTile.isMerged())
-                continue;
-
-            if (!ignoreIfInstance && !tileClass.isInstance(classicTile))
                 continue;
 
             int targetDim = classicTile.getFakeWorld().provider.getDimension();
