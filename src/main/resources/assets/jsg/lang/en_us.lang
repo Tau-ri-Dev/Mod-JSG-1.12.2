@@ -96,45 +96,45 @@ advancement.beamer.title=Demolecularized
 advancement.beamer.desc=Obtain a beamer
 
 advancement.titanium.title=Getting harder and tougher
-advancement.titanium.desc=Obtain a titanium ingot
+advancement.titanium.desc=Obtain a Titanium ingot
 
 advancement.naquadah_raw.title=Naqua... What?
-advancement.naquadah_raw.desc=Craft a raw naquadah alloy ingot
+advancement.naquadah_raw.desc=Craft a raw Naquadah alloy ingot
 
 advancement.naquadah_alloy.title=Superconductor
-advancement.naquadah_alloy.desc=Craft a naquadah alloy ingot
+advancement.naquadah_alloy.desc=Craft a Naquadah alloy ingot
 
 advancement.trinium.title=Did you ask Xe´ls and T´akaya?!
-advancement.trinium.desc=Obtain a trinium ingot
+advancement.trinium.desc=Obtain a Trinium ingot
 
 advancement.unstable_eh_survive.title=For a moment there I thought we were in trouble
 advancement.unstable_eh_survive.desc=Enter an unstable wormhole and survive
 
 advancement.tokra_crystal.title=They live underground
-advancement.tokra_crystal.desc=Obtain tokra crystals
+advancement.tokra_crystal.desc=Obtain Tok'ra crystals
 
-advancement.beamer_crystal_laser.title=A particle accelerator firing through a Stargate?
+advancement.beamer_crystal_laser.title=A particle accelerator firing into a Stargate?
 advancement.beamer_crystal_laser.desc=Obtain a beamer laser crystal
 
-advancement.transportrings_goauld.title=Elevators are such a pain in a**
-advancement.transportrings_goauld.desc=Use goauld transport rings
+advancement.transportrings_goauld.title=Elevators are such a pain in the a**
+advancement.transportrings_goauld.desc=Use Goa'uld transport rings
 
 advancement.transportrings_ori.title=Plains of Celestis
-advancement.transportrings_ori.desc=Use ori transport rings
+advancement.transportrings_ori.desc=Use Ori transport rings
 
-advancement.transportrings_ancient.title=The original you might say
-advancement.transportrings_ancient.desc=Use ancient transport rings
+advancement.transportrings_ancient.title=The original, you might say
+advancement.transportrings_ancient.desc=Use Ancient transport rings
 
-advancement.assembler.title=The Ancient's factory
+advancement.assembler.title=The Ancients' factory
 advancement.assembler.desc=Craft an Ancient Assembler
 
-advancement.chamber.title=Grow, crystals, Grow!
+advancement.chamber.title=Grow, crystals, grow!
 advancement.chamber.desc=Craft a Crystal Chamber
 
-advancement.pcb.title=Crystal based technology
+advancement.pcb.title=Crystal-based technology
 advancement.pcb.desc=Craft a PCB Fabricator
 
-advancement.ore_washing.title=Mine, Wash, Smelt, Repeat.
+advancement.ore_washing.title=Mine, wash, smelt, repeat.
 advancement.ore_washing.desc=Craft an Ore Washing Machine
 
 advancement.chemicals.title=Is it Janus' secret lab?
@@ -310,6 +310,7 @@ item.jsg.gui.oc_address=Modem address
 item.jsg.gui.oc_port=Port
 item.jsg.gui.oc_params=Parameters
 item.jsg.gui.oc_port_invalid=Invalid port
+
 item.jsg.gdo.name=Garage Door Opener (GDO)
 item.jsg.gdo.not_linked=Not linked
 item.jsg.gdo.code_sender=Code
@@ -399,7 +400,7 @@ tile.jsg.dhd_block.name=Milky Way Dial Home Device (DHD)
 tile.jsg.dhd_block.incoming_wormhole_warn=Unable to close an incoming wormhole
 tile.jsg.dhd_block.not_linked_warn=DHD is not linked to the gate
 tile.jsg.dhd_block.no_crystal_warn=DHD has no control crystal
-tile.jsg.dhd_block.no_enough_power=DHD requires at least 10,000uI to operate properly
+tile.jsg.dhd_block.not_enough_power=DHD requires at least 10,000uI to operate properly
 tile.jsg.dhd_block.computer_dial=Computer dial is in progress
 tile.jsg.dhd_block.not_enough_power=Insufficient power
 
@@ -508,17 +509,17 @@ commands.sgquery.usage=/sgquery [(x y z) (x y z)] [dim=X] [map=Y] [id=Z]
 commands.sgquery.number_expected=Number expected
 commands.sgquery.no_map=No such map
 commands.sgquery.stargates=Stargates %s
-commands.sgquery.wrong_id=Wrong ID or no ID given
-commands.sgquery.wrong_map=Wrong map or no map given
-commands.sgquery.wrong_sender=Wrong sender (not a player)
-commands.sgquery.wrong_quantity=Wrong quantity of pages given
+commands.sgquery.wrong_id=Invalid ID or no ID given
+commands.sgquery.wrong_map=Invalid map or no map given
+commands.sgquery.wrong_sender=Invalid sender (not a player)
+commands.sgquery.wrong_quantity=Invalid quantity of pages given
 commands.sgquery.giving_page=Giving page to %s
 commands.sggivepage.usage=/sggivepage (player) (map=X) [biome=Y] (Symbol)x8/6
-commands.sggivepage.no_map=No map or wrong map given
+commands.sggivepage.no_map=Invalid map or no map given
 commands.sggivepage.give_page=Giving Page to %s
 commands.sgsetaddress.usage=/sgsetaddress (x y z) (map=X) (Symbol)x8
 commands.sgsetaddress.notstargate=Targeted block is not a Stargate Base
-commands.sgsetaddress.noaddressspace=No map or wrong map given
+commands.sgsetaddress.noaddressspace=Invalid map or no map given
 commands.sgsetaddress.wrongaddress=Address should be a space-separated list of 7 symbols (English names)
 commands.sgsetaddress.wrongsymbol=Wrong %s. symbol name
 commands.sgsetaddress.duplicatesymbol=Duplicate %s. symbol name
@@ -541,8 +542,8 @@ death.attack.irisDeath=%s slammed into the Iris
 death.attack.wrongSide=%s entered the wrong side of the gate
 death.attack.unstableEventHorizon=%s didn't make it to the other side
 
-death.attack.zatHit=%s was electrolyzed
-death.attack.staffHit=%s was melted using Ma'tok Staff Weapon
+death.attack.zatHit=%s was electrocuted
+death.attack.staffHit=%s was melted with a Ma'tok Staff Weapon
 
 # -------------------
 
@@ -711,7 +712,7 @@ gui.dhd.no_fuel=No fuel
 gui.stargate.milky_way_address=Milky Way address
 gui.stargate.pegasus_address=Pegasus address
 gui.stargate.universe_address=Universe address
-gui.stargate.iris_code=Iris Code
+gui.stargate.iris_code=Iris code
 gui.stargate.iris.help_title=Current mode:
 gui.stargate.iris.opened=Open
 gui.stargate.iris.closed=Closed
@@ -722,8 +723,8 @@ gui.stargate.iris.opened_help=Iris is permanently open
 gui.stargate.iris.closed_help=Iris is permanently closed
 gui.stargate.iris.auto_help=Iris automatically closes on incoming wormhole,
 gui.stargate.iris.auto1_help=it can be opened with GDO by sending code set in field
-gui.stargate.iris.oc_help=Iris can be controlled by open computers
-gui.stargate.iris.dialer_help=Iris can be controlled by universe dialer
+gui.stargate.iris.oc_help=Iris can be controlled by OpenComputers
+gui.stargate.iris.dialer_help=Iris can be controlled by Universe dialer
 
 gui.stargate.biome_overlay=Biome overlay
 gui.stargate.biome_overlay.help=Insert blocks to override
@@ -747,7 +748,7 @@ gui.stargate.info=Gate information
 gui.zpmhub.inProgress=ZPMs are moving!
 gui.zpmhub.slideDown=Engage ZPMs
 gui.zpmhub.slideUp=Disengage ZPMs
-gui.zpmhub.alert=Slots for ZPMs are locked!
+gui.zpmhub.alert=ZPM slots are locked!
 
 # capacitor
 gui.capacitor.name=Capacitor Bank
@@ -767,7 +768,7 @@ gui.beamer.beamer_link_status=Beamer link status:
 gui.beamer.beamer_link_ok=Beamer link ok
 gui.beamer.role_status=Role status:
 gui.beamer.role_ok=Role ok
-gui.beamer.disabled_target=Target beamer disabled
+gui.beamer.disabled_target=Target Beamer disabled
 gui.beamer.obstructed=Obstructed
 gui.beamer.obstructed_target=Obstructed (Target)
 gui.beamer.two_transmitters=Two transmitters
@@ -781,7 +782,7 @@ gui.beamer.disabled_by_logic_target=Disabled by logic (Target)
 gui.beamer.running=Running
 gui.beamer.no_crystal=No crystal
 gui.beamer.no_power=Not enough power
-gui.beamer.can_not_receive=Can not receive
+gui.beamer.can_not_receive=Cannot receive
 
 gui.beamer.transmit=Transmit
 gui.beamer.receive=Receive
@@ -828,19 +829,20 @@ config.jsg.address_edit=Open address edit menu
 
 jsg.subtitle.dhd_milkyway_press=DHD symbol pressed
 jsg.subtitle.dhd_milkyway_press_brb=DHD bright red button pressed
+
 jsg.subtitle.gate_milkyway_open=Stargate wormhole opens
 jsg.subtitle.gate_milkyway_close=Stargate wormhole closes
 jsg.subtitle.gate_milkyway_ring_roll=Stargate ring rolls
 jsg.subtitle.gate_milkyway_dial_fail=Stargate fails to connect
-jsg.subtitle.gate_orlin_broke=Stargate has broken
-jsg.subtitle.gate_orlin_dial_fail=Stargate fails to connect
 jsg.subtitle.gate_milkyway_dial_fail_computer=Stargate computer dialing fails
 jsg.subtitle.gate_milkyway_incoming=Stargate chevrons lock
 jsg.subtitle.gate_milkyway_chevron_shut=Stargate chevron shuts
 jsg.subtitle.gate_milkyway_chevron_open=Stargate chevron opens
 
+
 jsg.subtitle.dhd_pegasus_press=DHD symbol pressed
 jsg.subtitle.dhd_pegasus_press_brb=DHD bright blue button pressed
+
 jsg.subtitle.gate_pegasus_open=Stargate wormhole opens
 jsg.subtitle.gate_pegasus_close=Stargate wormhole closes
 jsg.subtitle.gate_pegasus_ring_roll=Stargate ring rolls
@@ -850,7 +852,11 @@ jsg.subtitle.gate_pegasus_incoming=Stargate chevrons lock
 jsg.subtitle.gate_pegasus_chevron_shut=Stargate chevron shuts
 jsg.subtitle.gate_pegasus_chevron_open=Stargate chevron opens
 
+
 jsg.subtitle.gate_orlin_dial=Orlin gate dials
+jsg.subtitle.gate_orlin_broke=Stargate has broken
+jsg.subtitle.gate_orlin_dial_fail=Stargate fails to connect
+
 
 jsg.subtitle.gate_universe_dial_start=Universe gate starts to dial
 jsg.subtitle.gate_universe_roll=Universe gate rolls
@@ -860,15 +866,18 @@ jsg.subtitle.gate_universe_chevron_top_lock=Universe gate top chevron locks
 jsg.subtitle.gate_universe_open=Universe gate wormhole opens
 jsg.subtitle.gate_universe_close=Universe gate wormhole closes
 
+
 jsg.subtitle.wormhole_loop=Stargate wormhole ripples
 jsg.subtitle.wormhole_go=Stargate wormhole receives traveller
 jsg.subtitle.wormhole_flicker=Stargate wormhole flickers
+
 jsg.subtitle.rings_transport=Transport rings activate
 jsg.subtitle.rings_controller_button=Transport rings controller button pressed
 
 jsg.subtitle.iris_hit=Thud against the iris
 jsg.subtitle.iris_opening=Iris opening
 jsg.subtitle.iris_closing=Iris closing
+
 jsg.subtitle.shield_hit=Thud against the shield
 jsg.subtitle.shield_opening=Shield opening
 jsg.subtitle.shield_closing=Shield closing
@@ -909,8 +918,8 @@ menu.ram.help=Help
 
 # tips
 menu.nether_gate=TIP: If you go into Nether, do not forget to save Nether's gate address!
-menu.energy=TIP: If you plug cables for gate into multiple gate's blocks, the gate will charge faster!
-menu.dhd=TIP: Do not forget that DHDs can be upgraded with Capacity and Efficiency upgrades!
-menu.gdo=TIP: If you install an iris on your gate, do not forget to sometimes check it's durability!
+menu.energy=TIP: If you plug power cables into multiple of the gate's blocks, the gate will charge faster!
+menu.dhd=TIP: Don't forget that DHDs can be upgraded with Capacity and Efficiency upgrades!
+menu.gdo=TIP: If you install an iris on your gate, keep an eye on its durability!
 
 # -------------------

@@ -488,12 +488,12 @@ public class JSGConfig {
             })
             @Config.RequiresMcRestart
             public boolean enableGateDisassembleWrench = true;
-            @Config.Name("Enable burried state for gates")
+            @Config.Name("Enable buried state for gates")
             @Config.Comment({
-                    "THIS OPTION CAN BE OVERRIDE BY SETTING IT IN STARGATE GUI",
+                    "THIS OPTION CAN BE OVERRIDDEN BY SETTING IT IN STARGATE GUI",
                     "SIDE: SERVER"
             })
-            public boolean enableBurriedState = true;
+            public boolean enableBuriedState = true;
 
             @Config.Name("Orlin's gate max open count")
             @Config.RangeInt(min = 0, max = 15000)

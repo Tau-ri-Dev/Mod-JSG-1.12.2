@@ -88,10 +88,10 @@ public class StargateClassicController extends StargateAbstractController {
     }
 
     /**
-     * @return if the gate is burried
+     * @return if the gate is buried
      */
-    public boolean isGateBurried() {
-        return getStargate().isGateBurried();
+    public boolean isGateBuried() {
+        return getStargate().isGateBuried();
     }
 
     /**
