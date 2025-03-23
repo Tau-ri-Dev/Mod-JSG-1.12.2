@@ -283,6 +283,11 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                 public boolean canReceive(){
                     return false;
                 }
+
+                @Override
+                public int extractEnergy(int maxExtract, boolean simulate) {
+                    return getEnergyStorage().extractEnergy(maxExtract, simulate);
+                }
             };
             return CapabilityEnergy.ENERGY.cast(normalStorage);
         }

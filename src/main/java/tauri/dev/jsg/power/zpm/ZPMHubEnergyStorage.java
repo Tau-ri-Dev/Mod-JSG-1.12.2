@@ -23,8 +23,10 @@ public class ZPMHubEnergyStorage extends ZPMEnergyStorage {
     public long getEnergyStored() {
         long energyStored = this.energy;
 
-        for (IEnergyStorageZPM storage : storages)
+        for (IEnergyStorageZPM storage : storages) {
+            if(storage == null) continue;
             energyStored += storage.getEnergyStored();
+        }
 
         return energyStored;
     }
@@ -33,8 +35,10 @@ public class ZPMHubEnergyStorage extends ZPMEnergyStorage {
     public long getMaxEnergyStored() {
         long maxEnergyStored = this.capacity;
 
-        for (IEnergyStorageZPM storage : storages)
+        for (IEnergyStorageZPM storage : storages) {
+            if(storage == null) continue;
             maxEnergyStored += storage.getMaxEnergyStored();
+        }
 
         return maxEnergyStored;
     }
@@ -51,6 +55,7 @@ public class ZPMHubEnergyStorage extends ZPMEnergyStorage {
         for (IEnergyStorageZPM storage : storages) {
             if (toExtract == 0)
                 return maxExtract;
+            if(storage == null) continue;
 
             toExtract -= storage.extractEnergy(toExtract, simulate);
         }
