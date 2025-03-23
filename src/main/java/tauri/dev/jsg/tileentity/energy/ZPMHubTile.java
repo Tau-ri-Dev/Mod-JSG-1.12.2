@@ -116,6 +116,11 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
     private final ZPMHubEnergyStorage energyStorage = new ZPMHubEnergyStorage(JSGConfig.ZPM.power.zpmHubMaxEnergyTransfer) {
 
         @Override
+        public boolean canExtract() {
+            return !isSlidingUp && !isAnimating;
+        }
+
+        @Override
         protected void onEnergyChanged() {
             markDirty();
             sendState(StateTypeEnum.RENDERER_UPDATE, getState(StateTypeEnum.RENDERER_UPDATE));
@@ -296,6 +301,11 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                 @Override
                 public boolean canReceive() {
                     return false;
+                }
+
+                @Override
+                public boolean canExtract() {
+                    return getEnergyStorage().canExtract();
                 }
 
                 @Override

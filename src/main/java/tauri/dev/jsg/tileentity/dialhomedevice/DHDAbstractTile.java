@@ -517,8 +517,6 @@ public abstract class DHDAbstractTile extends SidedTileEntity implements ILinkab
 
         if (compound.hasKey("linkedGate")) {
             linkedGate = BlockPos.fromLong(compound.getLong("linkedGate"));
-            if (linkedGate.equals(new BlockPos(0, 0, 0))) // 1.8 fix
-                linkedGate = null;
         }
 
         if (compound.hasKey("linkId")) {
