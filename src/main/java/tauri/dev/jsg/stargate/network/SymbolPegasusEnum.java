@@ -181,6 +181,7 @@ public enum SymbolPegasusEnum implements SymbolInterface {
             ID_MAP.put(symbol.id, symbol);
             ENGLISH_NAME_MAP.put(symbol.englishName.toLowerCase(), symbol);
         }
+        ENGLISH_NAME_MAP.put("point of origin", SUBIDO);
     }
 
     public static SymbolPegasusEnum valueOf(int id) {

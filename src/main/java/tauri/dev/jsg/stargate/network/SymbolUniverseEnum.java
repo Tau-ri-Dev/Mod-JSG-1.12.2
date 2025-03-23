@@ -223,6 +223,7 @@ public enum SymbolUniverseEnum implements SymbolInterface {
             ID_MAP.put(symbol.id, symbol);
             ENGLISH_NAME_MAP.put(symbol.englishName.toLowerCase(), symbol);
         }
+        ENGLISH_NAME_MAP.put("point of origin", G17);
     }
 
     public static SymbolUniverseEnum valueOf(int id) {

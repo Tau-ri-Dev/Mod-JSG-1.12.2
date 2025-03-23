@@ -377,8 +377,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         StargateAbstractBaseTile targetTile = targetGatePos.getTileEntity();
         if (targetTile instanceof StargateClassicBaseTile) {
             StargateClassicBaseTile classicTile = (StargateClassicBaseTile) targetTile;
-            if (classicTile.isGateBurried())
-                return StargateOpenResult.GATE_BURRIED;
+            if (classicTile.isGateBuried())
+                return StargateOpenResult.GATE_BURIED;
         }
 
         return StargateOpenResult.OK;
