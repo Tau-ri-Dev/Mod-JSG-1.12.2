@@ -85,6 +85,19 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
             return super.extractItem(slot, amount, simulate);
         }
 
+
+        @Nonnull
+        @Override
+        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+            if (!isSlidingUp || isAnimating) return stack;
+            if (stack.getItem() instanceof ItemBlock) {
+                ItemBlock itemBlock = (ItemBlock) stack.getItem();
+                if (itemBlock.getBlock() instanceof ZPMBlock)
+                    return super.insertItem(slot, stack, simulate);
+            }
+            return stack;
+        }
+
         @Override
         protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
             return 1;
@@ -274,13 +287,14 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
             return CapabilityEnergyZPM.ENERGY.cast(getEnergyStorage());
 
         if (capability == CapabilityEnergy.ENERGY) {
-            EnergyStorage normalStorage = new EnergyStorage((int) Math.min(getEnergyStorage().getMaxEnergyStored(), Integer.MAX_VALUE), getEnergyStorage().maxReceive, getEnergyStorage().maxExtract, (int) Math.min(getEnergyStorage().getEnergyStored(), Integer.MAX_VALUE)){
+            EnergyStorage normalStorage = new EnergyStorage((int) Math.min(getEnergyStorage().getMaxEnergyStored(), Integer.MAX_VALUE), getEnergyStorage().maxReceive, getEnergyStorage().maxExtract, (int) Math.min(getEnergyStorage().getEnergyStored(), Integer.MAX_VALUE)) {
                 @Override
-                public int receiveEnergy(int maxEnergy, boolean simulate){
+                public int receiveEnergy(int maxEnergy, boolean simulate) {
                     return 0;
                 }
+
                 @Override
-                public boolean canReceive(){
+                public boolean canReceive() {
                     return false;
                 }
 
@@ -323,11 +337,11 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
                 final ArrayList<Integer> levels = new ArrayList<>(3);
                 final ArrayList<ZPMRenderer.ZPMModelType> types = new ArrayList<>(3);
 
-                for(int i = 0; i < 3; i++){
-                    if(getContainerSize() > i){
+                for (int i = 0; i < 3; i++) {
+                    if (getContainerSize() > i) {
                         ItemStack stack = itemStackHandler.getStackInSlot(i);
                         IEnergyStorageZPM zpmStorage = stack.getCapability(CapabilityEnergyZPM.ENERGY, null);
-                        if(zpmStorage != null) {
+                        if (zpmStorage != null) {
                             levels.add(getZPMPowerLevel(zpmStorage.getEnergyStored(), zpmStorage.getMaxEnergyStored()));
                             types.add(ZPMRenderer.ZPMModelType.byStack(stack));
                             continue;
@@ -470,7 +484,7 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         retuning.add(isAnimating);
         retuning.add(isSlidingUp);
         retuning.add(getContainerSize());
-        for(int i = 0; i < getContainerSize(); i++){
+        for (int i = 0; i < getContainerSize(); i++) {
             retuning.add(!itemStackHandler.getStackInSlot(i).isEmpty());
         }
         return retuning.toArray();
@@ -486,9 +500,9 @@ public class ZPMHubTile extends TileEntity implements ITickable, ICapabilityProv
         List<Object> retuning = new ArrayList<>();
         retuning.add(true);
         retuning.add(getEnergyStorage().getEnergyStored());
-        for(int i = 0; i < getContainerSize(); i++){
+        for (int i = 0; i < getContainerSize(); i++) {
             IEnergyStorageZPM zpmStorage = itemStackHandler.getStackInSlot(i).getCapability(CapabilityEnergyZPM.ENERGY, null);
-            if(zpmStorage == null) {
+            if (zpmStorage == null) {
                 retuning.add("NULL!");
                 continue;
             }
