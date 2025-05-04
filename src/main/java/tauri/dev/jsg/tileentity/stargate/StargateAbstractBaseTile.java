@@ -1876,9 +1876,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(sourceDim, targetDim));
 
         if (dialedAddress.size() == 9)
-            energyRequired.mul(JSGConfig.Stargate.power.nineSymbolAddressMul);
+            energyRequired = energyRequired.mul(JSGConfig.Stargate.power.nineSymbolAddressMul);
         if (dialedAddress.size() == 8)
-            energyRequired.mul(JSGConfig.Stargate.power.eightSymbolAddressMul);
+            energyRequired = energyRequired.mul(JSGConfig.Stargate.power.eightSymbolAddressMul);
 
         //JSG.logger.info(String.format("Energy required to dial [distance=%,d, from=%s, to=%s] = %,d / keepAlive: %,d/t, stored=%,d", Math.round(distance), sourceDim, targetDim, energyRequired.energyToOpen, energyRequired.keepAlive, getEnergyStorage().getEnergyStored()));
 
