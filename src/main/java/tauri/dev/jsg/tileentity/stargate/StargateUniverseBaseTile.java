@@ -327,7 +327,7 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
      * @return energy
      */
     @Override
-    protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos) {
+    protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos, StargateAddressDynamic address) {
         if(dialingWithoutEnergy)
             return EnergyRequiredToOperate.free();
         BlockPos sPos = getFakePos();
@@ -354,10 +354,10 @@ public class StargateUniverseBaseTile extends StargateClassicBaseTile {
         EnergyRequiredToOperate energyRequired = EnergyRequiredToOperate.stargate();
         energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(sourceDim, targetDim));
 
-        if (dialedAddress.size() == 9)
-            energyRequired.mul(JSGConfig.Stargate.power.nineSymbolAddressMul);
-        if (dialedAddress.size() == 8)
-            energyRequired.mul(JSGConfig.Stargate.power.eightSymbolAddressMul);
+        if (address.size() == 9)
+            energyRequired = energyRequired.mul(JSGConfig.Stargate.power.nineSymbolAddressMul);
+        if (address.size() == 8)
+            energyRequired = energyRequired.mul(JSGConfig.Stargate.power.eightSymbolAddressMul);
 
         return energyRequired.mul(JSGConfig.Stargate.power.stargateUniverseEnergyMul);
     }

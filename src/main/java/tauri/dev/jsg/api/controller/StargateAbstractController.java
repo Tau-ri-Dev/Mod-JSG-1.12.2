@@ -56,10 +56,11 @@ public class StargateAbstractController {
 
     /**
      * @param targetGatePos - target gate pos
+     * @param address - used address
      * @return Energy required to operate gate
      */
-    public EnergyRequiredToOperate getEnergyRequired(StargatePos targetGatePos) {
-        return getStargate().getEnergyRequiredToDialForApi(targetGatePos);
+    public EnergyRequiredToOperate getEnergyRequired(StargatePos targetGatePos, StargateAddressDynamic address) {
+        return getStargate().getEnergyRequiredToDialForApi(targetGatePos, address);
     }
 
     /**

@@ -31,10 +31,7 @@ import tauri.dev.jsg.stargate.StargateClosedReasonEnum;
 import tauri.dev.jsg.stargate.StargateOpenResult;
 import tauri.dev.jsg.stargate.merging.StargateAbstractMergeHelper;
 import tauri.dev.jsg.stargate.merging.StargateOrlinMergeHelper;
-import tauri.dev.jsg.stargate.network.StargateNetwork;
-import tauri.dev.jsg.stargate.network.StargatePos;
-import tauri.dev.jsg.stargate.network.SymbolMilkyWayEnum;
-import tauri.dev.jsg.stargate.network.SymbolTypeEnum;
+import tauri.dev.jsg.stargate.network.*;
 import tauri.dev.jsg.state.State;
 import tauri.dev.jsg.state.StateTypeEnum;
 import tauri.dev.jsg.state.stargate.StargateOrlinSparkState;
@@ -178,7 +175,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
     // Redstone
 
     public EnergyRequiredToOperate getEnergyRequiredToDial() {
-        return getEnergyRequiredToDial(network.getStargate(dialedAddress));
+        return getEnergyRequiredToDial(network.getStargate(dialedAddress), dialedAddress);
     }
 
     @Override
@@ -382,7 +379,7 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
             case STARGATE_ORLIN_OPEN:
                 StargatePos targetGatePos = network.getStargate(dialedAddress);
 
-                if (targetGatePos != null && targetGatePos.getTileEntity() != null && hasEnergyToDial(targetGatePos)) {
+                if (targetGatePos != null && targetGatePos.getTileEntity() != null && hasEnergyToDial(targetGatePos, dialedAddress)) {
                     targetGatePos.getTileEntity().incomingWormhole(dialedAddress.size());
                 }
 
@@ -421,8 +418,8 @@ public class StargateOrlinBaseTile extends StargateAbstractBaseTile {
     }
 
     @Override
-    protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos) {
-        return super.getEnergyRequiredToDial(targetGatePos).mul(JSGConfig.Stargate.power.stargateOrlinEnergyMul).cap(JSGConfig.Stargate.power.stargateEnergyStorage / 4 - 1000000);
+    protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos, StargateAddressDynamic address) {
+        return super.getEnergyRequiredToDial(targetGatePos, address).mul(JSGConfig.Stargate.power.stargateOrlinEnergyMul).cap(JSGConfig.Stargate.power.stargateEnergyStorage / 4 - 1000000);
     }
 
     @Override

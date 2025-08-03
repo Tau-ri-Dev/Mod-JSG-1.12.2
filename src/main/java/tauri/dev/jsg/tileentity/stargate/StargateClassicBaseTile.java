@@ -420,10 +420,10 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
     }
 
     @Override
-    protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos) {
+    protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos, StargateAddressDynamic address) {
         if(dialingWithoutEnergy)
             return EnergyRequiredToOperate.free();
-        return super.getEnergyRequiredToDial(targetGatePos);
+        return super.getEnergyRequiredToDial(targetGatePos, address);
     }
 
     public abstract void addSymbolToAddressDHD(SymbolInterface symbol);
@@ -2862,7 +2862,7 @@ public abstract class StargateClassicBaseTile extends StargateAbstractBaseTile i
 
         if (!canDialAddress(stargateAddress)) return new Object[]{"address_malformed"};
 
-        EnergyRequiredToOperate energyRequired = getEnergyRequiredToDial(Objects.requireNonNull(network.getStargate(stargateAddress)));
+        EnergyRequiredToOperate energyRequired = getEnergyRequiredToDial(Objects.requireNonNull(network.getStargate(stargateAddress)), stargateAddress);
         Map<String, Object> energyMap = new HashMap<>(2);
 
         energyMap.put("open", energyRequired.energyToOpen);

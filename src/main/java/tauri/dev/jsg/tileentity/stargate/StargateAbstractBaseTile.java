@@ -372,7 +372,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         StargatePos targetGatePos = getNetwork().getStargate(address);
 
         if (targetGatePos == null) return StargateOpenResult.ADDRESS_MALFORMED;
-        if (!hasEnergyToDial(targetGatePos)) return StargateOpenResult.NOT_ENOUGH_POWER;
+        if (!hasEnergyToDial(targetGatePos, address)) return StargateOpenResult.NOT_ENOUGH_POWER;
 
         StargateAbstractBaseTile targetTile = targetGatePos.getTileEntity();
         if (targetTile instanceof StargateClassicBaseTile) {
@@ -728,7 +728,7 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         addTask(new ScheduledTask(EnumScheduledTask.STARGATE_ENGAGE));
 
         if (isInitiating) {
-            EnergyRequiredToOperate energyRequired = getEnergyRequiredToDial(targetGatePos);
+            EnergyRequiredToOperate energyRequired = getEnergyRequiredToDial(targetGatePos, dialedAddress);
             getEnergyStorage().extractEnergy(energyRequired.energyToOpen, false);
             keepAliveEnergyPerTick = energyRequired.keepAlive;
         }
@@ -1851,11 +1851,11 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         return getEnergyStorage().getEnergyStored();
     }
 
-    public EnergyRequiredToOperate getEnergyRequiredToDialForApi(StargatePos targetGatePos) {
-        return getEnergyRequiredToDial(targetGatePos);
+    public EnergyRequiredToOperate getEnergyRequiredToDialForApi(StargatePos targetGatePos, StargateAddressDynamic address) {
+        return getEnergyRequiredToDial(targetGatePos, address);
     }
 
-    protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos) {
+    protected EnergyRequiredToOperate getEnergyRequiredToDial(StargatePos targetGatePos, StargateAddressDynamic address) {
         BlockPos sPos = pos;
         BlockPos tPos = targetGatePos.gatePos;
 
@@ -1875,9 +1875,9 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
         EnergyRequiredToOperate energyRequired = EnergyRequiredToOperate.stargate();
         energyRequired = energyRequired.mul(distance).add(StargateDimensionConfig.getCost(sourceDim, targetDim));
 
-        if (dialedAddress.size() == 9)
+        if (address.size() == 9)
             energyRequired = energyRequired.mul(JSGConfig.Stargate.power.nineSymbolAddressMul);
-        if (dialedAddress.size() == 8)
+        if (address.size() == 8)
             energyRequired = energyRequired.mul(JSGConfig.Stargate.power.eightSymbolAddressMul);
 
         //JSG.logger.info(String.format("Energy required to dial [distance=%,d, from=%s, to=%s] = %,d / keepAlive: %,d/t, stored=%,d", Math.round(distance), sourceDim, targetDim, energyRequired.energyToOpen, energyRequired.keepAlive, getEnergyStorage().getEnergyStored()));
@@ -1889,8 +1889,8 @@ public abstract class StargateAbstractBaseTile extends TileEntity implements Sta
      * Checks is gate has sufficient power to dial across specified distance and dimension
      * It also sets energy draw for (possibly) outgoing wormhole
      */
-    public boolean hasEnergyToDial(StargatePos targetGatePos) {
-        EnergyRequiredToOperate energyRequired = getEnergyRequiredToDial(targetGatePos);
+    public boolean hasEnergyToDial(StargatePos targetGatePos, StargateAddressDynamic address) {
+        EnergyRequiredToOperate energyRequired = getEnergyRequiredToDial(targetGatePos, address);
 
         return getEnergyStorage().getEnergyStored() >= energyRequired.energyToOpen;
     }
